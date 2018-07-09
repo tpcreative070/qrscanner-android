@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlHeader"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:id="@+id/switch_camera"
+                android:layout_margin="10dp"
+                android:src="@drawable/baseline_switch_camera_white_36"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+
+            <ImageView
+                android:layout_margin="10dp"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/switch_camera"
+                android:src="@drawable/baseline_flash_off_white_36"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+
+        </RelativeLayout>
+
+
+        <ScrollView
+            android:layout_below="@+id/rlHeader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="60dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanBarcode"
+                    android:text="@string/scan_barcode" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanPDF417"
+                    android:text="Scan PDF417" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanBarcodeWithCustomizedRequestCode"
+                    android:text="@string/scan_barcode_with_request_code" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanBarcodeInverted"
+                    android:text="Scan Inverted" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanMixedBarcodes"
+                    android:text="Scan Normal and Inverted" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanBarcodeCustomLayout"
+                    android:text="@string/any_orientation" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanBarcodeFrontCamera"
+                    android:text="@string/front_camera" />
+
+                <fragment
+                    android:id="@+id/fragment_scan"
+                    android:name="tpcreative.co.qrscanner.ui.main.ScannerFragment$ScanFragment"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/fragment_scan" />
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanContinuous"
+                    android:text="@string/custom_activity" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanToolbar"
+                    android:text="@string/toolbar_activity" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanCustomScanner"
+                    android:text="@string/custom_scanner" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanMarginScanner"
+                    android:text="@string/scanner_with_margin" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scanWithTimeout"
+                    android:text="@string/scanner_with_timeout" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tabs"
+                    android:text="@string/tabs"/>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

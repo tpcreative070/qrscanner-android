@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-    <string name="app_name">Scanner QRCode</string>
+    <string name="app_name">QR Scanner</string>
     <string name="scan_barcode">Scan Barcode</string>
     <string name="scan_barcode_with_request_code">Scan Barcode with customized request code</string>
     <string name="any_orientation">1D Any Orientation</string>
@@ -16,5 +16,11 @@
     <string name="turn_off_flashlight">Turn off Flashlight</string>
     <string name="title_activity_tabbed_scanning">Tabbed Scanning</string>
     <string name="tabs">Tabs</string>
+
+    <string name="tab_1">History</string>
+    <string name="tab_2">Generate</string>
+    <string name="tab_3">Scanner</string>
+    <string name="tab_4">Reader</string>
+    <string name="tab_5">Settings</string>
 
 </resources>
