@@ -57,7 +57,7 @@ public class ViewfinderView extends View implements IViewFinder {
     protected List<ResultPoint> lastPossibleResultPoints;
     protected CameraPreview cameraPreview;
 
-    private final int mDefaultBorderColor = getResources().getColor(R.color.zxing_colorAccent);
+    private final int mDefaultBorderColor = getResources().getColor(R.color.zxing_colorBlueLight);
     private final int mDefaultBorderStrokeWidth = getResources().getInteger(R.integer.zxing_viewfinder_border_width);
     private final int mDefaultBorderLineLength = getResources().getInteger(R.integer.zxing_viewfinder_border_length);
 

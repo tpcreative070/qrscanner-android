@@ -54,7 +54,8 @@
             android:name=".TabbedScanning"
             android:label="@string/title_activity_tabbed_scanning"
             android:theme="@style/Theme.AppCompat" />
-        <activity android:name=".ui.review.ReviewActivity"></activity>
+        <activity android:name=".ui.review.ReviewActivity" />
+        <activity android:name=".ui.create.GenerateActivity"></activity>
     </application>
 
 </manifest>

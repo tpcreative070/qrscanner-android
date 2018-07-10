@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;
 
-public class ReaderFragment extends Fragment {
+public class SaverFragment extends Fragment {
 
-    private static final String TAG = ReaderFragment.class.getSimpleName();
+    private static final String TAG = SaverFragment.class.getSimpleName();
 
-    public static ReaderFragment newInstance(int index) {
-        ReaderFragment fragment = new ReaderFragment();
+    public static SaverFragment newInstance(int index) {
+        SaverFragment fragment = new SaverFragment();
         Bundle b = new Bundle();
         b.putInt("index", index);
         fragment.setArguments(b);
@@ -24,9 +24,8 @@ public class ReaderFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reader, container, false);
+        View view = inflater.inflate(R.layout.fragment_saver, container, false);
         ButterKnife.bind(this, view);
-
         return view;
     }
 

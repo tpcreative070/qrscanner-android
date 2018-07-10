@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.main;
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,9 +27,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingleTonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements SingleTonResponse.SingleTonResponseListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment currentFragment;
@@ -36,11 +38,13 @@ public class MainActivity extends BaseActivity {
     private AHBottomNavigation bottomNavigation;
     private AHBottomNavigationViewPager viewPager;
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
+    private ScannerFragment scannerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SingleTonResponse.getInstance().setListener(this);
 
         initUI();
         onAddPermission();
@@ -95,10 +99,10 @@ public class MainActivity extends BaseActivity {
         viewPager = findViewById(R.id.view_pager);
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.baseline_history_white_36, R.color.colorAccent);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.baseline_add_white_36, R.color.colorAccent);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.baseline_add_box_white_36, R.color.colorAccent);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_scanner, R.color.colorAccent);
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.baseline_photo_white_36, R.color.colorAccent);
-        AHBottomNavigationItem item5 = new AHBottomNavigationItem(R.string.tab_5, R.drawable.baseline_settings_white_48, R.color.colorAccent);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.baseline_save_alt_white_36, R.color.colorAccent);
+        AHBottomNavigationItem item5 = new AHBottomNavigationItem(R.string.tab_5, R.drawable.baseline_settings_white_36, R.color.colorAccent);
 
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
@@ -114,7 +118,7 @@ public class MainActivity extends BaseActivity {
         bottomNavigation.setTitleTextSizeInSp(15, 13);
 
         // Change colors
-        //bottomNavigation.setAccentColor(Color.parseColor("#F63D2B"));
+        bottomNavigation.setInactiveColor(getResources().getColor(R.color.material_gray_600));
         // bottomNavigation.setForceTint(true);
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
 
@@ -150,10 +154,23 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public void showScannerPosition() {
+        if (bottomNavigation!=null){
+            bottomNavigation.setCurrentItem(2);
+        }
+    }
+
+    @Override
+    public void showCreatePosition() {
+        if (bottomNavigation!=null){
+            bottomNavigation.setCurrentItem(1);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
     }
-
 
 }

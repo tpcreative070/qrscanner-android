@@ -11,7 +11,7 @@
         android:id="@+id/zxing_viewfinder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:zxing_viewfinder_laser="@color/zxing_possible_result_points"/>
+        app:zxing_viewfinder_laser="@color/zxing_colorAccent"/>
 
     <TextView
         android:gravity="center_horizontal"

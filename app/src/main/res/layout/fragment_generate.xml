@@ -12,11 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:text="Hello generate"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:id="@+id/rlTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:textSize="20sp"
+                style="@style/brandonBoldTextView"
+                android:text="@string/create"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <com.jaychang.srv.SimpleRecyclerView
+            android:layout_below="@+id/rlTitle"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srv_layoutMode="linearVertical"
+            app:srv_showDivider="false"
+            app:srv_showLastDivider="true"
+            app:srv_dividerOrientation="both"
+            app:srv_dividerColor="@color/colorAccent"/>
 
     </RelativeLayout>
 

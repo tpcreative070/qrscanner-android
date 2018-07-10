@@ -18,9 +18,14 @@
     <string name="tabs">Tabs</string>
 
     <string name="tab_1">History</string>
-    <string name="tab_2">Generate</string>
+    <string name="tab_2">Create</string>
     <string name="tab_3">Scanner</string>
-    <string name="tab_4">Reader</string>
+    <string name="tab_4">Save</string>
     <string name="tab_5">Settings</string>
+    <string name="create">Create</string>
+    <string name="scanner">Scanner</string>
+    <string name="history">History</string>
+    <string name="save">Save</string>
+    <string name="settings">Settings</string>
 
 </resources>

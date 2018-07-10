@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 
+import tpcreative.co.qrscanner.ui.create.GenerateFragment;
+
 /**
  *
  */
@@ -22,7 +24,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 		fragments.add(HistoryFragment.newInstance(0));
 		fragments.add(GenerateFragment.newInstance(1));
 		fragments.add(ScannerFragment.newInstance(2));
-		fragments.add(ReaderFragment.newInstance(3));
+		fragments.add(SaverFragment.newInstance(3));
 		fragments.add(SettingsFragment.newInstance(4));
 	}
 
@@ -57,7 +59,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 				currentFragment.onResume();
 				fragments.get(3).onPause();
 			}
-			else if (currentFragment instanceof  ReaderFragment){
+			else if (currentFragment instanceof SaverFragment){
 				Log.d(TAG,"reader");
 				currentFragment.onResume();
 			}

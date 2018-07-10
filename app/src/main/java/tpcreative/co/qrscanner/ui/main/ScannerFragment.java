@@ -14,9 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.TextClock;
 import android.widget.TextView;
-
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -25,13 +23,13 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingleTonResponse;
 import tpcreative.co.qrscanner.common.Utils;
 
 public class ScannerFragment extends Fragment {
@@ -50,8 +48,6 @@ public class ScannerFragment extends Fragment {
     ImageView switch_flashlight;
     private boolean isTurnOnFlash;
     private Animation mAnim = null;
-
-
     public static ScannerFragment newInstance(int index) {
         ScannerFragment fragment = new ScannerFragment();
         Bundle b = new Bundle();
@@ -168,6 +164,46 @@ public class ScannerFragment extends Fragment {
         view.startAnimation(mAnim);
     }
 
+    @OnClick(R.id.imgCreate)
+    public void onClickCreate(final View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                SingleTonResponse.getInstance().setCreatePosition();
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
+    }
+
+    @OnClick(R.id.imgGallery)
+    public void onClickGallery(final View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -177,6 +213,7 @@ public class ScannerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        SingleTonResponse.getInstance().setScannerPosition();
         Log.d(TAG,"onStart");
     }
 
@@ -226,6 +263,5 @@ public class ScannerFragment extends Fragment {
     public void onPause() {
         super.onPause();
     }
-
 
 }

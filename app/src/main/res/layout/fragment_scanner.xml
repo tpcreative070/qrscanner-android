@@ -20,7 +20,7 @@
                 android:layout_alignParentTop="true"
                 android:id="@+id/rlHeader"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="50dp">
                 <ImageView
                     android:layout_alignParentLeft="true"
                     android:layout_centerInParent="true"
@@ -32,7 +32,7 @@
                     android:src="@drawable/baseline_switch_camera_white_36"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="8dp"/>
+                    android:padding="2dp"/>
                 <ImageView
                     android:id="@+id/switch_flashlight"
                     android:layout_marginBottom="10dp"
@@ -44,7 +44,41 @@
                     android:src="@drawable/baseline_flash_off_white_36"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="8dp"/>
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:textSize="20sp"
+                    style="@style/brandonBoldTextView"
+                    android:text="@string/scanner"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <ImageView
+                    android:layout_toLeftOf="@+id/imgGallery"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/imgCreate"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/baseline_add_box_white_36"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="2dp"/>
+                <ImageView
+                    android:id="@+id/imgGallery"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/baseline_photo_white_36"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="2dp"/>
             </RelativeLayout>
         </com.journeyapps.barcodescanner.DecoratedBarcodeView>
     </RelativeLayout>

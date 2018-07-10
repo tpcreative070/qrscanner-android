@@ -44,7 +44,7 @@ public class ShowFragment extends Fragment {
 			return view;
 		}
 		else if(getArguments().getInt("index",0)==3) {
-			View view = inflater.inflate(R.layout.fragment_reader, container, false);
+			View view = inflater.inflate(R.layout.fragment_saver, container, false);
 			return view;
 		}
 		else  {
