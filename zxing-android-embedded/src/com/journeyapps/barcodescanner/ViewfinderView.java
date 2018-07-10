@@ -20,7 +20,9 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
@@ -35,7 +37,7 @@ import java.util.List;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public class ViewfinderView extends View {
+public class ViewfinderView extends View implements IViewFinder {
     protected static final String TAG = ViewfinderView.class.getSimpleName();
 
     protected static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
@@ -54,6 +56,13 @@ public class ViewfinderView extends View {
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
     protected CameraPreview cameraPreview;
+
+    private final int mDefaultBorderColor = getResources().getColor(R.color.zxing_colorAccent);
+    private final int mDefaultBorderStrokeWidth = getResources().getInteger(R.integer.zxing_viewfinder_border_width);
+    private final int mDefaultBorderLineLength = getResources().getInteger(R.integer.zxing_viewfinder_border_length);
+
+    protected Paint mBorderPaint;
+    protected int mBorderLineLength;
 
     // Cache the framingRect and previewFramingRect, so that we can still draw it after the preview
     // stopped.
@@ -86,7 +95,125 @@ public class ViewfinderView extends View {
         scannerAlpha = 0;
         possibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
         lastPossibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
+        init();
     }
+
+    private void init() {
+
+        //border paint
+        mBorderPaint = new Paint();
+        mBorderPaint.setColor(mDefaultBorderColor);
+        mBorderPaint.setStyle(Paint.Style.STROKE);
+        mBorderPaint.setStrokeWidth(mDefaultBorderStrokeWidth);
+        mBorderPaint.setAntiAlias(true);
+
+        mBorderLineLength = mDefaultBorderLineLength;
+    }
+
+
+
+    @Override
+    public void setBorderColor(int borderColor) {
+        mBorderPaint.setColor(borderColor);
+    }
+
+    @Override
+    public void setBorderStrokeWidth(int borderStrokeWidth) {
+        mBorderPaint.setStrokeWidth(borderStrokeWidth);
+    }
+
+    @Override
+    public void setBorderLineLength(int borderLineLength) {
+        mBorderLineLength = borderLineLength;
+    }
+
+
+
+    @Override
+    public void setBorderCornerRounded(boolean isBorderCornersRounded) {
+        if (isBorderCornersRounded) {
+            mBorderPaint.setStrokeJoin(Paint.Join.ROUND);
+        } else {
+            mBorderPaint.setStrokeJoin(Paint.Join.BEVEL);
+        }
+    }
+
+    @Override
+    public void setBorderAlpha(float alpha) {
+        int colorAlpha = (int) (255 * alpha);
+        mBorderPaint.setAlpha(colorAlpha);
+    }
+
+    @Override
+    public void setBorderCornerRadius(int borderCornersRadius) {
+        mBorderPaint.setPathEffect(new CornerPathEffect(borderCornersRadius));
+    }
+
+
+    //
+
+
+    @Override
+    public void setLaserColor(int laserColor) {
+
+    }
+
+    @Override
+    public void setMaskColor(int maskColor) {
+
+    }
+
+    @Override
+    public void setLaserEnabled(boolean isLaserEnabled) {
+
+    }
+
+    @Override
+    public void setViewFinderOffset(int offset) {
+
+    }
+
+    @Override
+    public void setSquareViewFinder(boolean isSquareViewFinder) {
+
+    }
+
+    @Override
+    public void setupViewFinder() {
+
+    }
+
+
+    public void drawViewFinderBorder(Canvas canvas) {
+        Rect framingRect = getFramingRect();
+
+        // Top-left corner
+        Path path = new Path();
+        path.moveTo(framingRect.left, framingRect.top + mBorderLineLength);
+        path.lineTo(framingRect.left, framingRect.top);
+        path.lineTo(framingRect.left + mBorderLineLength, framingRect.top);
+        canvas.drawPath(path, mBorderPaint);
+
+        // Top-right corner
+        path.moveTo(framingRect.right, framingRect.top + mBorderLineLength);
+        path.lineTo(framingRect.right, framingRect.top);
+        path.lineTo(framingRect.right - mBorderLineLength, framingRect.top);
+        canvas.drawPath(path, mBorderPaint);
+
+        // Bottom-right corner
+        path.moveTo(framingRect.right, framingRect.bottom - mBorderLineLength);
+        path.lineTo(framingRect.right, framingRect.bottom);
+        path.lineTo(framingRect.right - mBorderLineLength, framingRect.bottom);
+        canvas.drawPath(path, mBorderPaint);
+
+        // Bottom-left corner
+        path.moveTo(framingRect.left, framingRect.bottom - mBorderLineLength);
+        path.lineTo(framingRect.left, framingRect.bottom);
+        path.lineTo(framingRect.left + mBorderLineLength, framingRect.bottom);
+        canvas.drawPath(path, mBorderPaint);
+    }
+
+    //End
 
     public void setCameraPreview(CameraPreview view) {
         this.cameraPreview = view;
@@ -119,6 +246,13 @@ public class ViewfinderView extends View {
         });
     }
 
+
+
+    @Override
+    public Rect getFramingRect() {
+        return framingRect;
+    }
+
     protected void refreshSizes() {
         if(cameraPreview == null) {
             return;
@@ -137,6 +271,8 @@ public class ViewfinderView extends View {
         if (framingRect == null || previewFramingRect == null) {
             return;
         }
+
+
 
         final Rect frame = framingRect;
         final Rect previewFrame = previewFramingRect;
@@ -211,6 +347,8 @@ public class ViewfinderView extends View {
                     frame.top - POINT_SIZE,
                     frame.right + POINT_SIZE,
                     frame.bottom + POINT_SIZE);
+
+            drawViewFinderBorder(canvas);
         }
     }
 

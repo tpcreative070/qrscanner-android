@@ -1,35 +1,56 @@
 package tpcreative.co.qrscanner.ui.main;
-
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextClock;
+import android.widget.TextView;
 
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.BeepManager;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import tpcreative.co.qrscanner.AnyOrientationCaptureActivity;
-import tpcreative.co.qrscanner.ContinuousCaptureActivity;
-import tpcreative.co.qrscanner.CustomScannerActivity;
+import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.SmallCaptureActivity;
-import tpcreative.co.qrscanner.TabbedScanning;
-import tpcreative.co.qrscanner.ToolbarCaptureActivity;
+import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.Utils;
 
 public class ScannerFragment extends Fragment {
 
     private static final String TAG = ScannerFragment.class.getSimpleName();
-    public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+    private CaptureManager capture;
+    private DecoratedBarcodeView barcodeScannerView;
+    private BeepManager beepManager;
+    private CameraSettings cameraSettings = new CameraSettings();
+    private int typeCamera = 0 ;
+    private Fragment fragment;
+    private Unbinder butterKnife;
+    @BindView(R.id.zxing_status_view)
+    TextView zxing_status_view;
+    @BindView(R.id.switch_flashlight)
+    ImageView switch_flashlight;
+    private boolean isTurnOnFlash;
+    private Animation mAnim = null;
+
 
     public static ScannerFragment newInstance(int index) {
         ScannerFragment fragment = new ScannerFragment();
@@ -43,8 +64,108 @@ public class ScannerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_scanner, container, false);
-        ButterKnife.bind(this, view);
+        butterKnife = ButterKnife.bind(this, view);
+        fragment = this;
+        barcodeScannerView = (DecoratedBarcodeView)view.findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView.decodeContinuous(callback);
+        zxing_status_view.setVisibility(View.INVISIBLE);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_reg);
+
+        if (Utils.checkCameraBack(getContext())){
+            cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
+            typeCamera = 0;
+        }
+        else{
+            if (Utils.checkCameraFront(getContext())){
+                cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                typeCamera = 1;
+            }
+            else{
+                typeCamera = 2;
+            }
+        }
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
+        beepManager = new BeepManager(getActivity());
         return view;
+    }
+
+    public void switchCamera(final int type){
+        if (typeCamera==2){
+            return;
+        }
+        cameraSettings.setRequestedCameraId(type); // front/back/etc
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
+        barcodeScannerView.resume();
+    }
+
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            Log.d(TAG,"Call back :" + result.getText());
+            beepManager.playBeepSoundAndVibrate();
+            barcodeScannerView.pauseAndWait();
+            Navigator.onMoveToReview(fragment);
+        }
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
+
+    @OnClick(R.id.switch_camera)
+    public void switchCamera(View view){
+        Log.d(TAG,"on clicked here : " + cameraSettings.getRequestedCameraId());
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                barcodeScannerView.pauseAndWait();
+                if (cameraSettings.getRequestedCameraId()==0){
+                    switchCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                }
+                else{
+                    switchCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
+                }
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
+    }
+
+    @OnClick(R.id.switch_flashlight)
+    public void switchFlash(final View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (isTurnOnFlash){
+                    barcodeScannerView.setTorchOff();
+                    isTurnOnFlash = false;
+                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_off_white_36));
+                }
+                else{
+                    barcodeScannerView.setTorchOn();
+                    isTurnOnFlash = true;
+                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_on_white_36));
+                }
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
     }
 
     @Override
@@ -62,7 +183,11 @@ public class ScannerFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        butterKnife.unbind();
         Log.d(TAG,"onDestroy");
+        if (typeCamera!=2){
+            barcodeScannerView.pause();
+        }
     }
 
     @Override
@@ -71,178 +196,35 @@ public class ScannerFragment extends Fragment {
         Log.d(TAG,"onResume");
     }
 
-
-    @OnClick(R.id.scanBarcode)
-    public void scanBarcode(View view) {
-        IntentIntegrator.forFragment(this).initiateScan();
-    }
-
-    @OnClick(R.id.scanBarcodeWithCustomizedRequestCode)
-    public void scanBarcodeWithCustomizedRequestCode(View view) {
-        IntentIntegrator.forFragment(this).setRequestCode(CUSTOMIZED_REQUEST_CODE).initiateScan();
-    }
-
-    @OnClick(R.id.scanBarcodeInverted)
-    public void scanBarcodeInverted(View view) {
-        IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-        integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
-        integrator.initiateScan();
-    }
-
-    @OnClick(R.id.scanMixedBarcodes)
-    public void scanMixedBarcodes(View view) {
-        IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-        integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-        integrator.initiateScan();
-    }
-
-    @OnClick(R.id.scanBarcodeCustomLayout)
-    public void scanBarcodeCustomLayout(View view) {
-        IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-        integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt("Scan something");
-        integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
-        integrator.initiateScan();
-    }
-
-    @OnClick(R.id.scanPDF417)
-    public void scanPDF417(View view) {
-        IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.PDF_417);
-        integrator.setPrompt("Scan something");
-        integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
-        integrator.initiateScan();
-    }
-
-    @OnClick(R.id.scanBarcodeFrontCamera)
-    public void scanBarcodeFrontCamera(View view) {
-        IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-        integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
-        integrator.initiateScan();
-    }
-
-    @OnClick(R.id.scanContinuous)
-    public void scanContinuous(View view) {
-        Intent intent = new Intent(getActivity(), ContinuousCaptureActivity.class);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.scanToolbar)
-    public void scanToolbar(View view) {
-        IntentIntegrator.forFragment(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
-    }
-
-    @OnClick(R.id.scanCustomScanner)
-    public void scanCustomScanner(View view) {
-       IntentIntegrator.forFragment(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
-    }
-
-    @OnClick(R.id.scanMarginScanner)
-    public void scanMarginScanner(View view) {
-        IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-        integrator.setOrientationLocked(false);
-        integrator.setCaptureActivity(SmallCaptureActivity.class);
-        integrator.initiateScan();
-    }
-
-    @OnClick(R.id.scanWithTimeout)
-    public void scanWithTimeout(View view) {
-        IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-        integrator.setTimeout(8000);
-        integrator.initiateScan();
-    }
-
-    @OnClick(R.id.tabs)
-    public void tabs(View view) {
-        Intent intent = new Intent(getActivity(), TabbedScanning.class);
-        startActivity(intent);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"onActivityResult");
+        if (requestCode == 100) {
+            Log.d(TAG,"onActivityResult : 100 : " + resultCode);
+            barcodeScannerView.resume();
+        }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-        switch (requestCode) {
-            case CUSTOMIZED_REQUEST_CODE: {
-                Toast.makeText(getActivity(), "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
-                break;
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (barcodeScannerView != null) {
+            if (isVisibleToUser) {
+                if (typeCamera!=2){
+                    barcodeScannerView.resume();
+                }
+            } else {
+                if (typeCamera!=2){
+                    barcodeScannerView.pause();
+                }
             }
-            default:
-                break;
-        }
-
-        IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
-
-        if (result.getContents() == null) {
-            Log.d("MainActivity", "Cancelled scan");
-            Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_LONG).show();
-        } else {
-            Log.d("MainActivity", "Scanned " + result.getContents());
-            Toast.makeText(getActivity(), "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
         }
     }
 
-    /**
-     * Sample of scanning from a Fragment
-     */
-
-    public static class ScanFragment extends Fragment {
-        private String toast;
-
-        public ScanFragment() {
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            displayToast();
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_scan, container, false);
-            Button scan = (Button) view.findViewById(R.id.scan_from_fragment);
-            scan.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    scanFromFragment();
-                }
-            });
-            return view;
-        }
-
-        public void scanFromFragment() {
-            IntentIntegrator.forSupportFragment(this).initiateScan();
-        }
-
-        private void displayToast() {
-            if (getActivity() != null && toast != null) {
-                Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
-                toast = null;
-            }
-        }
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (result != null) {
-                if (result.getContents() == null) {
-                    toast = "Cancelled from fragment";
-                } else {
-                    toast = "Scanned from fragment: " + result.getContents();
-                }
-                // At this point we may or may not have a reference to the activity
-                displayToast();
-            }
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
 

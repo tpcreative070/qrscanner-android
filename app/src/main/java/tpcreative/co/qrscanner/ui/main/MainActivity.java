@@ -1,11 +1,16 @@
 package tpcreative.co.qrscanner.ui.main;
 import android.Manifest;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.widget.TextView;
+
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
@@ -18,9 +23,12 @@ import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.util.ArrayList;
 import java.util.List;
-import tpcreative.co.qrscanner.R;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.activity.BaseActivity;
+
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment currentFragment;
@@ -33,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initUI();
         onAddPermission();
     }
@@ -97,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationItems.add(item4);
         bottomNavigationItems.add(item5);
 
+
         bottomNavigation.addItems(bottomNavigationItems);
 
         bottomNavigation.setTranslucentNavigationEnabled(true);
@@ -138,5 +148,12 @@ public class MainActivity extends AppCompatActivity {
         currentFragment = adapter.getCurrentFragment();
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
+    }
+
 
 }

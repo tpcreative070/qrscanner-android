@@ -18,10 +18,10 @@ package com.google.zxing.integration.android;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.CaptureActivity;
@@ -80,8 +80,8 @@ public class IntentIntegrator {
     public static final Collection<String> ALL_CODE_TYPES = null;
 
     private final Activity activity;
-    private Fragment fragment;
-    private Fragment supportFragment;
+    private android.app.Fragment fragment;
+    private android.support.v4.app.Fragment supportFragment;
 
     private final Map<String, Object> moreExtras = new HashMap<>(3);
 

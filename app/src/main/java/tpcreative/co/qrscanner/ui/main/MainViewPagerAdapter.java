@@ -44,18 +44,27 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 			currentFragment = ((Fragment) object);
 			if (currentFragment instanceof HistoryFragment){
 				Log.d(TAG,"history");
+				currentFragment.onResume();
+				fragments.get(3).onPause();
 			}
 			else if (currentFragment instanceof GenerateFragment){
 				Log.d(TAG,"generate");
+				currentFragment.onResume();
+				fragments.get(3).onPause();
 			}
 			else if (currentFragment instanceof ScannerFragment){
 				Log.d(TAG,"scanner");
+				currentFragment.onResume();
+				fragments.get(3).onPause();
 			}
 			else if (currentFragment instanceof  ReaderFragment){
 				Log.d(TAG,"reader");
+				currentFragment.onResume();
 			}
 			else if (currentFragment instanceof SettingsFragment){
 				Log.d(TAG,"settings");
+				currentFragment.onResume();
+				fragments.get(3).onPause();
 			}
 		}
 		super.setPrimaryItem(container, position, object);

@@ -28,7 +28,7 @@ dependencies {
     implementation 'com.android.support:percent:' + appSupportVersion
     implementation 'com.android.support:design:' + appSupportVersion
     implementation 'com.android.support:cardview-v7:' + appSupportVersion
-    implementation 'com.android.support:recyclerview-v7:'  + appSupportVersion
+    implementation 'com.android.support:recyclerview-v7:' + appSupportVersion
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
@@ -50,6 +50,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    /*api project(':library')*/
+    implementation(name: 'library-release', ext: 'aar')
+
 }
 
 
@@ -63,4 +66,3 @@ configurations.all {
         }
     }
 }
-
