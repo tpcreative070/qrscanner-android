@@ -1,16 +1,11 @@
 package tpcreative.co.qrscanner.ui.main;
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -22,15 +17,18 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.snatik.storage.Storage;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingleTonResponse;
+import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
-public class MainActivity extends BaseActivity implements SingleTonResponse.SingleTonResponseListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment currentFragment;
@@ -39,13 +37,14 @@ public class MainActivity extends BaseActivity implements SingleTonResponse.Sing
     private AHBottomNavigationViewPager viewPager;
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private ScannerFragment scannerFragment;
+    private Storage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SingleTonResponse.getInstance().setListener(this);
-
+        SingletonResponse.getInstance().setListener(this);
+        storage = new Storage(getApplicationContext());
         initUI();
         onAddPermission();
     }
@@ -63,6 +62,7 @@ public class MainActivity extends BaseActivity implements SingleTonResponse.Sing
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
                             Log.d(TAG, "Permission is ready");
+                            storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());
                         }
                         else{
                             Log.d(TAG,"Permission is denied");
@@ -79,6 +79,7 @@ public class MainActivity extends BaseActivity implements SingleTonResponse.Sing
                         /* ... */
                         token.continuePermissionRequest();
                     }
+
                 })
                 .withErrorListener(new PermissionRequestErrorListener() {
                     @Override

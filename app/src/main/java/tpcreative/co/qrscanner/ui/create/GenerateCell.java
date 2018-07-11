@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jaychang.srv.SimpleCell;
@@ -54,10 +55,18 @@ public class GenerateCell extends SimpleCell<QRCodeType,GenerateCell.ViewHolder>
     - Bind data to widgets in our viewholder.
      */
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Context context, Object o) {
+    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i, @NonNull Context context, Object o) {
         final QRCodeType data = getItem();
         viewHolder.tvName.setText(data.name);
         viewHolder.imgIcon.setImageDrawable(context.getResources().getDrawable(data.res));
+        viewHolder.llRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener!=null){
+                    listener.onClickItem(i,false);
+                }
+            }
+        });
     }
     /**
      - Our ViewHolder class.
@@ -69,6 +78,8 @@ public class GenerateCell extends SimpleCell<QRCodeType,GenerateCell.ViewHolder>
         TextView tvName;
         @BindView(R.id.imgIcon)
         ImageView imgIcon;
+        @BindView(R.id.llRoot)
+        LinearLayout llRoot;
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/flContainer_review"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
     <RelativeLayout
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -10,6 +17,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.journeyapps.barcodescanner.DecoratedBarcodeView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,4 +90,5 @@
             </RelativeLayout>
         </com.journeyapps.barcodescanner.DecoratedBarcodeView>
     </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

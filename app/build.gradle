@@ -41,6 +41,13 @@ dependencies {
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.jaychang:simplerecyclerview:2.0.4'
 
+    /*Validation input*/
+    implementation 'com.basgeekball:awesome-validation:4.1'
+
+    /*Storage*/
+    implementation 'com.snatik:storage:2.1.0'
+
+
     implementation 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
 
@@ -53,6 +60,7 @@ dependencies {
 
     /*api project(':library')*/
     implementation(name: 'library-release', ext: 'aar')
+
 
 }
 

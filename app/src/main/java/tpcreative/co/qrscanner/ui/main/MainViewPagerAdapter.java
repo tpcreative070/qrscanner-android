@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import tpcreative.co.qrscanner.ui.create.GenerateFragment;
+import tpcreative.co.qrscanner.ui.history.HistoryFragment;
+import tpcreative.co.qrscanner.ui.save.SaverFragment;
+import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
+import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
 
 /**
  *

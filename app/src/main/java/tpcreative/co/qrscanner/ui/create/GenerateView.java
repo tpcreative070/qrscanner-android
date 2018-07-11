@@ -1,5 +1,7 @@
 package tpcreative.co.qrscanner.ui.create;
 
-public interface GenerateView {
+import android.content.Context;
 
+public interface GenerateView {
+    Context getContext();
 }

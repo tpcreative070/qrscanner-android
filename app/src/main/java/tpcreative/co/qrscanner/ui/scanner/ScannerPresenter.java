@@ -1,0 +1,21 @@
+package tpcreative.co.qrscanner.ui.scanner;
+import android.support.v4.app.Fragment;
+import java.util.ArrayList;
+import java.util.List;
+import tpcreative.co.qrscanner.common.presenter.Presenter;
+
+
+public class ScannerPresenter extends Presenter<ScannerView>{
+
+    protected List<Fragment> mFragment;
+
+    public ScannerPresenter(){
+        mFragment = new ArrayList<>();
+    }
+
+    public void setFragmentList(){
+        mFragment.clear();
+        mFragment.add(ScannerResultFragment.newInstance(14));
+    }
+
+}

@@ -27,5 +27,23 @@
     <string name="history">History</string>
     <string name="save">Save</string>
     <string name="settings">Settings</string>
+    <string name="email">Email</string>
+    <string name="message">Message</string>
+    <string name="location">Location</string>
+    <string name="event">Event</string>
+    <string name="contact">Contact</string>
+    <string name="telephone">Telephone</string>
+    <string name="text">Text</string>
+    <string name="wifi">Wifi</string>
+    <string name="url">Url</string>
+    <string name="object">Object</string>
+    <string name="email_address">Email address</string>
+    <string name="err_email">Please check email input</string>
+    <string name="err_tech_stacks">Something!!!</string>
+    <string name="err_object">Input an object</string>
+    <string name="err_message">Input a message</string>
+    <string name="to">To</string>
+    <string name="err_to">Please check phone number input</string>
+    <string name="review">Review</string>
 
 </resources>
