@@ -75,16 +75,17 @@
 
     <style name="brandonRegularTextView" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/brandon_reg</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">19sp</item>
     </style>
+
 
     <style name="brandonBoldTextView" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/brandon_bld</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="brandonRedBoldTextView" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/brandon_bld</item>
     </style>
-
 
 </resources>

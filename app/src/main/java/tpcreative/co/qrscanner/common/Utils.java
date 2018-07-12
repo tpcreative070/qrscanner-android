@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,6 +45,8 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
+
+    private UtilsListenner listenner;
 
     public static boolean mCreateAndSaveFileOverride(String fileName, String path_folder_name, String responseJson, boolean append) {
         final String newLine = System.getProperty("line.separator");
@@ -363,7 +366,7 @@ public class Utils {
         return result;
     }
 
-    public static void saveImage(final Bitmap finalBitmap) {
+    public static void saveImage(final Bitmap finalBitmap,String type,UtilsListenner listenner) {
 
         String root = QRScannerApplication.getInstance().getPathFolder();
         File myDir = new File(root);
@@ -371,7 +374,7 @@ public class Utils {
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "Image-"+ n +".jpg";
+        String fname = "Image-"+ type + n +".jpg";
         File file = new File (myDir, fname);
         if (file.exists ()) file.delete ();
         try {
@@ -379,6 +382,7 @@ public class Utils {
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
+            listenner.onSaved();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -393,6 +397,12 @@ public class Utils {
             sb.append(str).append(delimiter);
         return sb.substring(0, sb.length() - 1);
     }
+
+    public interface UtilsListenner {
+        void onSaved();
+    }
+
+
 
 
 

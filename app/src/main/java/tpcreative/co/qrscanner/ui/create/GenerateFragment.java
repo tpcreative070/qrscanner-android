@@ -69,6 +69,11 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
         return super.getContext();
     }
 
+    @Override
+    public void onSetView() {
+        bindData();
+    }
+
     private void bindData() {
         List<QRCodeType> Galaxys = presenter.mList;
         //CUSTOM SORT ACCORDING TO CATEGORIES
@@ -123,7 +128,6 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
     @Override
     public void onStart() {
         super.onStart();
-        bindData();
         Log.d(TAG,"onStart");
     }
 

@@ -15,13 +15,17 @@ public class ReviewPresenter extends Presenter<ReviewView>{
     private static final String TAG = ReviewPresenter.class.getSimpleName();
 
     public ReviewPresenter(){
-
+        create = new Create();
     }
 
     public void getIntent(Activity activity){
         ReviewView view = view();
         Bundle bundle = activity.getIntent().getExtras();
-        create = (Create) bundle.get("create");
+        final Create result = (Create) bundle.get("create");
+        if (result!=null){
+            create = result;
+            view.setView();
+        }
         Log.d(TAG,new Gson().toJson(create));
     }
 

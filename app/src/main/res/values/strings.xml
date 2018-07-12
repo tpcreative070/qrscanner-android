@@ -43,7 +43,24 @@
     <string name="err_object">Input an object</string>
     <string name="err_message">Input a message</string>
     <string name="to">To</string>
+    <string name="subject">Subject</string>
     <string name="err_to">Please check phone number input</string>
     <string name="review">Review</string>
+    <string name="fullName">Full Name</string>
+    <string name="address">Address</string>
+    <string name="phone">Phone</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="query">Query</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="beginTime">Begin Time</string>
+    <string name="endTime">End Time</string>
+    <string name="ssid">SSID</string>
+    <string name="password">Password</string>
+    <string name="networkEncryption">Network Encryption</string>
+    <string name="hidden">Hidden</string>
+    <string name="phoneNumber">Phone Number</string>
+    <string name="share">Share</string>
 
 </resources>

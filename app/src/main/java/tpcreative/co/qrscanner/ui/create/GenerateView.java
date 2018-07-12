@@ -4,4 +4,5 @@ import android.content.Context;
 
 public interface GenerateView {
     Context getContext();
+    void onSetView();
 }

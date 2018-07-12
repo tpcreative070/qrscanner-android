@@ -68,17 +68,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textSize="18sp"
                     style="@style/brandonBoldTextView"
                     android:text="@string/email_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <EditText
+                    android:singleLine="true"
                     android:id="@+id/edtEmail"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
-                    android:textSize="18sp"
-                    style="@style/brandonBoldTextView"
+                    style="@style/brandonRegularTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -91,16 +90,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textSize="18sp"
                     style="@style/brandonBoldTextView"
                     android:text="@string/object"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <EditText
+                    android:singleLine="true"
                     android:id="@+id/edtObject"
                     android:imeOptions="actionNext"
-                    android:textSize="18sp"
-                    style="@style/brandonBoldTextView"
+                    style="@style/brandonRegularTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -113,16 +111,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textSize="18sp"
                     style="@style/brandonBoldTextView"
                     android:text="@string/message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <EditText
                     android:id="@+id/edtMessage"
+                    android:singleLine="true"
                     android:imeOptions="actionDone"
-                    android:textSize="18sp"
-                    style="@style/brandonBoldTextView"
+                    style="@style/brandonRegularTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>

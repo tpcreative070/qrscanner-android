@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.review.ReviewActivity">
 
-
     <RelativeLayout
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,18 +41,45 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
             android:layout_below="@+id/rlButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
+                android:layout_marginTop="70dp"
                 android:layout_centerInParent="true"
+                android:layout_alignParentTop="true"
                 android:id="@+id/imgResult"
-                android:layout_width="150dp"
-                android:layout_height="150dp"/>
+                android:layout_width="250dp"
+                android:layout_height="250dp"/>
         </RelativeLayout>
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_marginBottom="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:background="@drawable/bg_generate_rounded"
+                style="@style/brandonBoldTextView"
+                android:text="@string/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
+            <Button
+                android:id="@+id/btnShare"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:background="@drawable/bg_generate_rounded"
+                style="@style/brandonBoldTextView"
+                android:text="@string/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>

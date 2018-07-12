@@ -199,7 +199,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                         break;
                     case URI:
                         create.createType = ParsedResultType.URI;
-                        create.createType = ParsedResultType.EMAIL_ADDRESS;
                         URIParsedResult urlResult = (URIParsedResult) resultHandler.getResult();
                         if (urlResult!=null){
                             url = (urlResult.getURI())==null ? "" : urlResult.getURI() ;
@@ -223,6 +222,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                             lat = geoParsedResult.getLatitude();
                             lon = geoParsedResult.getLongitude();
                             query = geoParsedResult.getQuery();
+                            String strNew = query.replace("q=", "");
+                            query = strNew;
+                            Log.d(TAG,new Gson().toJson(geoParsedResult));
                         }
                         catch (Exception e){
 

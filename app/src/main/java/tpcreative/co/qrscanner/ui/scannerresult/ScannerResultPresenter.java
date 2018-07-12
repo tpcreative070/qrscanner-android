@@ -21,6 +21,7 @@ public class ScannerResultPresenter extends Presenter<ScannerResultView>{
         if (data!=null){
             result = data;
         }
+        view.setView();
         Log.d(TAG,new Gson().toJson(result));
     }
 

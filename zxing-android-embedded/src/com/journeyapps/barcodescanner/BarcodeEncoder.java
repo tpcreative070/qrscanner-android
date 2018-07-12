@@ -36,7 +36,6 @@ public class BarcodeEncoder {
                 pixels[offset + x] = matrix.get(x, y) ? BLACK : WHITE;
             }
         }
-
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;

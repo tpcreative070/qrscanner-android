@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.google.zxing.client.result.ParsedResultType;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,6 +66,9 @@ public class MessageFragment extends Fragment{
     public void onCheck(){
         if (mAwesomeValidation.validate()){
             Create create = new Create();
+            create.phone = edtTo.getText().toString();
+            create.message = edtMessage.getText().toString();
+            create.createType = ParsedResultType.SMS;
             Navigator.onMoveToReview(getActivity(),create);
             Log.d(TAG,"Passed");
         }

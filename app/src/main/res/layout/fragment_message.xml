@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
     <RelativeLayout
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -51,7 +49,6 @@
                 android:padding="2dp"
                 android:src="@drawable/baseline_done_white_36"/>
 
-
         </RelativeLayout>
 
         <LinearLayout
@@ -69,17 +66,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textSize="18sp"
                     style="@style/brandonBoldTextView"
                     android:text="@string/to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <EditText
+                    android:singleLine="true"
                     android:id="@+id/edtTo"
                     android:imeOptions="actionNext"
                     android:inputType="phone"
-                    android:textSize="18sp"
-                    style="@style/brandonBoldTextView"
+                    style="@style/brandonRegularTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -92,20 +88,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textSize="18sp"
                     style="@style/brandonBoldTextView"
                     android:text="@string/message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <EditText
+                    android:singleLine="true"
                     android:id="@+id/edtMessage"
                     android:imeOptions="actionDone"
-                    android:textSize="18sp"
-                    style="@style/brandonBoldTextView"
+                    style="@style/brandonRegularTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+
         </LinearLayout>
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>

@@ -36,7 +36,7 @@ public class EmailFragment extends Fragment{
     @BindView(R.id.edtMessage)
     EditText edtMessage;
     private Unbinder unbinder;
-    private AwesomeValidation mAwesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+    private AwesomeValidation mAwesomeValidation ;
 
 
     public static EmailFragment newInstance(int index) {
@@ -97,6 +97,8 @@ public class EmailFragment extends Fragment{
     public void onStart() {
         super.onStart();
         Log.d(TAG,"onStart");
+        mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
+        mAwesomeValidation.clear();
         addValidationForEditText();
         clearUI();
     }
