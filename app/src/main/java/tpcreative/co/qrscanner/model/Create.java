@@ -1,4 +1,6 @@
 package tpcreative.co.qrscanner.model;
+import com.google.zxing.client.result.ParsedResultType;
+
 import java.io.Serializable;
 
 public class Create implements Serializable {
@@ -19,10 +21,12 @@ public class Create implements Serializable {
     public String address;
     public String text;
     public String ssId;
+    public boolean hidden;
     public String password;
     public String url;
-    public EnumCreateType createType;
-    public EnumNetworkType networkType;
+    public ParsedResultType createType;
+    public String networkEncryption;
+
 
     public Create(){
         email = "";
@@ -43,8 +47,7 @@ public class Create implements Serializable {
         ssId = "";
         password = "";
         url = "";
-        createType = EnumCreateType.EMAIL;
-        networkType = EnumNetworkType.NONE;
+        hidden = false;
+        createType = ParsedResultType.TEXT;
     }
-
 }

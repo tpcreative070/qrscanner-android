@@ -1,5 +1,6 @@
-package tpcreative.co.qrscanner.ui.scanner;
+package tpcreative.co.qrscanner.ui.scannerresult;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,11 +16,13 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonScanner;
+import tpcreative.co.qrscanner.model.Create;
 
-public class ScannerResultFragment extends Fragment{
+public class ScannerResultFragment extends Fragment implements ScannerResultView{
 
     private static final String TAG = ScannerResultFragment.class.getSimpleName();
     private Unbinder unbinder;
+    private ScannerResultPresenter presenter;
 
     public static ScannerResultFragment newInstance(int index) {
         ScannerResultFragment fragment = new ScannerResultFragment();
@@ -32,8 +35,11 @@ public class ScannerResultFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_review, container, false);
+        View view = inflater.inflate(R.layout.fragment_review, container,false);
         unbinder = ButterKnife.bind(this, view);
+        presenter = new ScannerResultPresenter();
+        presenter.bindView(this);
+        presenter.getIntent(getArguments());
         return view;
     }
 
@@ -43,7 +49,11 @@ public class ScannerResultFragment extends Fragment{
         FragmentTransaction ft = fm.beginTransaction();
         ft.remove(this).commit();
         SingletonScanner.getInstance().setVisible();
+
     }
+
+
+
 
     @Override
     public void onStart() {

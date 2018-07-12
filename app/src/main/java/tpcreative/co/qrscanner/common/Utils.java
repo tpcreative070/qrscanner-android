@@ -80,11 +80,17 @@ public class Utils {
 
     public static String convertMillisecondsToHMS(long millisecond) {
         Date date = new Date(millisecond);
-
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss a", Locale.getDefault());
         String dateFormatted = formatter.format(date);
         Log.d(TAG, "Millisecond : " + millisecond + " data formatted :" + dateFormatted);
         return dateFormatted;
+    }
+
+    public static String convertMillisecondsToDateTime(long millisecond) {
+        Date date = new Date(millisecond);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EE dd MMM, yyyy HH:mm:ss a", Locale.getDefault());
+        String result = dateFormat.format(date);
+        return result;
     }
 
     public static String getCurrentDate() {
@@ -377,6 +383,17 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
+    public static String convertStringArrayToString(String[] strArr, String delimiter) {
+        if (strArr==null){
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String str : strArr)
+            sb.append(str).append(delimiter);
+        return sb.substring(0, sb.length() - 1);
+    }
+
 
 
 

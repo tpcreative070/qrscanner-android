@@ -27,7 +27,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView {
         presenter.getIntent(this);
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.encodeBitmap("smsto:0979155109:hello", BarcodeFormat.QR_CODE, 400, 400);
+            Bitmap bitmap = barcodeEncoder.encodeBitmap("MECARD:N:Phong;ORG:tpcreative.co;TEL:0979155109;URL:http\\://tpcreative.co;EMAIL:tpcreative.co@gmail.com;ADR:447 xvnt;NOTE:phong;;", BarcodeFormat.QR_CODE, 400, 400);
             imgResult.setImageBitmap(bitmap);
             Utils.saveImage(bitmap);
         } catch(Exception e) {

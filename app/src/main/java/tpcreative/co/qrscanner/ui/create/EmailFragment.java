@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.google.zxing.client.result.ParsedResultType;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -70,7 +72,7 @@ public class EmailFragment extends Fragment{
             create.email = edtEmail.getText().toString().trim();
             create.subject = edtObject.getText().toString();
             create.message = edtMessage.getText().toString();
-            create.createType = EnumCreateType.EMAIL;
+            create.createType = ParsedResultType.EMAIL_ADDRESS;
             Navigator.onMoveToReview(getActivity(),create);
         }
         else{

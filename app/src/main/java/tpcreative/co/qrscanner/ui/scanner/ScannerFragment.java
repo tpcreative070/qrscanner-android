@@ -16,25 +16,41 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.google.gson.Gson;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
+import com.google.zxing.client.result.AddressBookParsedResult;
+import com.google.zxing.client.result.CalendarParsedResult;
+import com.google.zxing.client.result.EmailAddressParsedResult;
+import com.google.zxing.client.result.GeoParsedResult;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
+import com.google.zxing.client.result.SMSParsedResult;
+import com.google.zxing.client.result.TelParsedResult;
+import com.google.zxing.client.result.TextParsedResult;
+import com.google.zxing.client.result.URIParsedResult;
+import com.google.zxing.client.result.WifiParsedResult;
+import com.google.zxing.common.StringUtils;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.Util;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
+import com.journeyapps.barcodescanner.result.EmailAddressResultHandler;
+import com.journeyapps.barcodescanner.result.ResultHandler;
+import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.model.Create;
 
 public class ScannerFragment extends Fragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
 
@@ -105,14 +121,17 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.resume();
     }
 
-    public void replaceFragment(final int position){
+    public void replaceFragment(final int position,final Create create){
         setInvisible();
         FragmentManager fm = getFragmentManager();
+        fragment = presenter.mFragment.get(position);
+        Bundle arguments = new Bundle();
+        arguments.putSerializable("data",create);
+        fragment.setArguments(arguments);
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.flContainer_review,presenter.mFragment.get(position));
+        ft.replace(R.id.flContainer_review,fragment);
         ft.commit();
     }
-
 
     @Override
     public void setVisible() {
@@ -120,7 +139,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.resume();
     }
 
-    
+
     @Override
     public void setInvisible() {
         barcodeScannerView.pauseAndWait();
@@ -130,14 +149,153 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
-            Log.d(TAG,"Call back :" + result.getText() + "  type :" + result.getBarcodeFormat().name());
-            beepManager.playBeepSoundAndVibrate();
-            replaceFragment(0);
+            Log.d(TAG,"Call back :" + result.getText() + "  type :" );
+            ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
+                final ParsedResult parsedResult = resultHandler.getResult();
+                final Create create = new Create();
+                String address = "" ;
+                String fullName = "";
+                String email = "";
+                String phone = "";
+                String subject = "";
+                String message = "";
+                String url = "";
+                String ssId = "";
+                String networkEncryption = "";
+                String password = "";
+                double lat = 0;
+                double lon = 0;
+                String query  = "";
+                String title = "";
+                String location = "";
+                String description = "";
+                String startEvent = "";
+                String endEvent = "";
+                String text = "";
+                boolean hidden = false;
+
+                switch (parsedResult.getType()) {
+                    case ADDRESSBOOK:
+                        create.createType = ParsedResultType.ADDRESSBOOK;
+                        AddressBookParsedResult addressResult = (AddressBookParsedResult) resultHandler.getResult();
+                        if (addressResult!=null){
+                             address = Utils.convertStringArrayToString(addressResult.getAddresses(), ",");
+                             fullName = Utils.convertStringArrayToString(addressResult.getNames(), ",");
+                             email = Utils.convertStringArrayToString(addressResult.getEmails(), ",");
+                             phone = Utils.convertStringArrayToString(addressResult.getPhoneNumbers(), ",");
+                        }
+                        break;
+                    case EMAIL_ADDRESS:
+                        create.createType = ParsedResultType.EMAIL_ADDRESS;
+                        EmailAddressParsedResult emailAddress = (EmailAddressParsedResult) resultHandler.getResult();
+                        if (emailAddress!=null){
+                            email = Utils.convertStringArrayToString(emailAddress.getTos(), ",");
+                            subject = (emailAddress.getSubject())==null ? "" : emailAddress.getSubject() ;
+                            message = (emailAddress.getBody()) == null ? "" : emailAddress.getBody();
+                        }
+                        break;
+                    case PRODUCT:
+                        create.createType = ParsedResultType.PRODUCT;
+                        break;
+                    case URI:
+                        create.createType = ParsedResultType.URI;
+                        create.createType = ParsedResultType.EMAIL_ADDRESS;
+                        URIParsedResult urlResult = (URIParsedResult) resultHandler.getResult();
+                        if (urlResult!=null){
+                            url = (urlResult.getURI())==null ? "" : urlResult.getURI() ;
+                        }
+                        break;
+
+                    case WIFI:
+                        create.createType = ParsedResultType.WIFI;
+                        WifiParsedResult wifiResult = (WifiParsedResult)resultHandler.getResult();
+                        hidden = wifiResult.isHidden();
+                        ssId = (wifiResult.getSsid()) == null ? "" : wifiResult.getSsid();
+                        networkEncryption = (wifiResult.getNetworkEncryption())==null ? "" : wifiResult.getNetworkEncryption();
+                        password = (wifiResult.getPassword()) == null ? "" : wifiResult.getPassword();
+                        Log.d(TAG,"method : " + wifiResult.getNetworkEncryption() + " :" + wifiResult.getPhase2Method() + " :" +wifiResult.getPassword());
+                        break;
+
+                    case GEO:
+                        create.createType = ParsedResultType.GEO;
+                        try{
+                            GeoParsedResult geoParsedResult = (GeoParsedResult)resultHandler.getResult();
+                            lat = geoParsedResult.getLatitude();
+                            lon = geoParsedResult.getLongitude();
+                            query = geoParsedResult.getQuery();
+                        }
+                        catch (Exception e){
+
+                        }
+                        break;
+                    case TEL:
+                        create.createType = ParsedResultType.TEL;
+                        TelParsedResult telParsedResult = (TelParsedResult) resultHandler.getResult();
+                        phone = telParsedResult.getNumber();
+                        break;
+                    case SMS:
+                        create.createType = ParsedResultType.SMS;
+                        SMSParsedResult smsParsedResult = (SMSParsedResult) resultHandler.getResult();
+                        phone = Utils.convertStringArrayToString(smsParsedResult.getNumbers(), ",");
+                        message = (smsParsedResult.getBody()) == null ? "" : smsParsedResult.getBody();
+                        break;
+                    case CALENDAR:
+                        create.createType = ParsedResultType.CALENDAR;
+                        CalendarParsedResult calendarParsedResult = (CalendarParsedResult) resultHandler.getResult();
+
+                        String startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getStartTimestamp());
+                        String endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getEndTimestamp());
+
+                        title = (calendarParsedResult.getSummary()) == null ? "" : calendarParsedResult.getSummary();
+                        description = (calendarParsedResult.getDescription()) == null ? "" : calendarParsedResult.getDescription();
+                        location = (calendarParsedResult.getLocation()) == null ? "" : calendarParsedResult.getLocation();
+                        startEvent = startTime;
+                        endEvent = endTime;
+                        Log.d(TAG,startTime + " : " + endTime);
+
+                        break;
+                    case ISBN:
+                        create.createType = ParsedResultType.ISBN;
+                        break;
+                    default:
+                        create.createType = ParsedResultType.TEXT;
+                        TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
+                        text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
+
+                        break;
+                }
+
+                create.address = address;
+                create.fullName = fullName;
+                create.email = email;
+                create.phone = phone;
+                create.subject = subject;
+                create.message = message;
+                create.url = url;
+                create.hidden = hidden;
+                create.ssId = ssId;
+                create.networkEncryption = networkEncryption;
+                create.password = password;
+                create.lat = lat;
+                create.lon = lon;
+                create.query = query;
+                create.title = title;
+                create.location = location;
+                create.description = description;
+                create.startEvent = startEvent;
+                create.endEvent = endEvent;
+                create.text = text;
+
+                Log.d(TAG,new Gson().toJson(create));
+                beepManager.playBeepSoundAndVibrate();
+                replaceFragment(0,create);
+
         }
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
     };
+
 
     @OnClick(R.id.switch_camera)
     public void switchCamera(View view){
