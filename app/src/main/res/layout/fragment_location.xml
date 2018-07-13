@@ -1,45 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:id="@+id/rlButton"
             android:layout_width="match_parent"
             android:layout_height="50dp">
+
             <ImageView
                 android:id="@+id/imgArrowBack"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginLeft="2dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
                 android:padding="2dp"
                 android:src="@drawable/baseline_arrow_back_ios_white_48" />
 
             <TextView
                 android:id="@+id/tvTittle"
-                android:textSize="20sp"
                 style="@style/brandonBoldTextView"
-                android:text="@string/location"
-                android:gravity="center"
-                android:layout_centerInParent="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/location"
+                android:textSize="20sp" />
 
-       </RelativeLayout>
+            <ImageView
+                android:id="@+id/imgReview"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="10dp"
+                android:padding="2dp"
+                android:src="@drawable/baseline_done_white_36" />
 
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_margin="20dp"
+            android:padding="4dp"
+            android:background="@drawable/bg_location_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rlButton">
+
+            <ScrollView
+                android:scrollbars="none"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/map">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_item_rounded"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            style="@style/brandonBoldTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/latitude" />
+
+                        <EditText
+                            android:id="@+id/edtLatitude"
+                            style="@style/brandonRegularTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:inputType="numberDecimal"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_item_rounded"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            style="@style/brandonBoldTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/longitude" />
+
+                        <EditText
+                            android:id="@+id/edtLongitude"
+                            style="@style/brandonRegularTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:inputType="numberDecimal"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_item_rounded"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            style="@style/brandonBoldTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/query" />
+
+                        <EditText
+                            android:id="@+id/edtQuery"
+                            style="@style/brandonRegularTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:singleLine="true" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <fragment
+                android:layout_margin="5dp"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"/>
+        </RelativeLayout>
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>

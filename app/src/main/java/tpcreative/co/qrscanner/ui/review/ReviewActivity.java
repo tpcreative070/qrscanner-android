@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.ui.review;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,12 +9,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
 import butterknife.BindView;
-import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
@@ -75,7 +71,8 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case GEO:
-
+                code =  "geo:"+create.lat+","+create.lon+"?q="+create.query+"";
+                onGenerateReview(code);
                 break;
             case TEL:
                 break;
@@ -159,7 +156,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
             bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
             imgResult.setImageBitmap(bitmap);
         } catch(Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

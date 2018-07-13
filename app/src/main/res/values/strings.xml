@@ -62,5 +62,13 @@
     <string name="hidden">Hidden</string>
     <string name="phoneNumber">Phone Number</string>
     <string name="share">Share</string>
+    <string name="err_latitude">Please check latitude input</string>
+    <string name="err_longitude">Please check longitude input</string>
+    <string name="err_query">Please check query input</string>
+    <string name="gps_disabled">GPS disabled</string>
+    <string name="please_enable_gps">In order to use this app you need the GPS to be enabled.</string>
+    <string name="permission_required_toast">Location permission is required for this location.</string>
+    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API\'.</string>
 
 </resources>

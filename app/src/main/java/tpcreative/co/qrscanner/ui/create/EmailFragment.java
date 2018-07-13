@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.google.zxing.client.result.ParsedResultType;
 
 import butterknife.BindView;
@@ -82,8 +83,8 @@ public class EmailFragment extends Fragment{
 
     private void addValidationForEditText() {
         mAwesomeValidation.addValidation(getActivity(), R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtObject,"[a-zA-Z\\s]+",R.string.err_object);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtMessage,"[a-zA-Z\\s]+",R.string.err_message);
+        mAwesomeValidation.addValidation(getActivity(),R.id.edtObject,RegexTemplate.NOT_EMPTY,R.string.err_object);
+        mAwesomeValidation.addValidation(getActivity(),R.id.edtMessage, RegexTemplate.NOT_EMPTY,R.string.err_message);
     }
 
     public void clearUI(){
@@ -98,7 +99,6 @@ public class EmailFragment extends Fragment{
         super.onStart();
         Log.d(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
-        mAwesomeValidation.clear();
         addValidationForEditText();
         clearUI();
     }

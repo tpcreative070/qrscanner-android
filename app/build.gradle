@@ -9,6 +9,7 @@ android {
         versionCode appVersionCode
         versionName appVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -46,6 +47,10 @@ dependencies {
 
     /*Storage*/
     implementation 'com.snatik:storage:2.1.0'
+
+    /*Google map*/
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+
 
 
     implementation 'com.jakewharton:butterknife:8.7.0'
