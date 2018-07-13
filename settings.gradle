@@ -1,1 +1,1 @@
-include ':app', ':library',':zxing-android-embedded'
+include ':app', ':library',':zxing-android-embedded',':switchdatetime'

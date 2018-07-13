@@ -1,13 +1,7 @@
 package tpcreative.co.qrscanner.ui.create;
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -39,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.PermissionUtils;
@@ -47,10 +40,10 @@ import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
 
-public class LocationFragment extends Fragment implements LocationListener, GpsStatus.Listener ,GoogleMap.OnMyLocationButtonClickListener,
+public class LocationFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback,GoogleMap.OnMapClickListener{
+        ActivityCompat.OnRequestPermissionsResultCallback,GoogleMap.OnMapClickListener,LocationListener{
 
     private static final String TAG = LocationFragment.class.getSimpleName();
     private Unbinder unbinder;
@@ -61,20 +54,16 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
     @BindView(R.id.edtQuery)
     EditText edtQuery;
     private SupportMapFragment mapFragment ;
-
     private GoogleMap mMap;
-
-
-
-    private LocationManager mLocationManager;
     private AwesomeValidation mAwesomeValidation ;
     double currentLon=0 ;
     double currentLat=0 ;
     double lastLat = 0 ;
     double lastLon = 0 ;
-    private boolean isRunning;
     private boolean mPermissionDenied = false;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private LocationManager locationManager;
+    private boolean isRunning;
 
 
     public static LocationFragment newInstance(int index) {
@@ -90,12 +79,8 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_location, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        mLocationManager.addGpsStatusListener(this);
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
         return view;
     }
 
@@ -106,6 +91,7 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
         FragmentTransaction ft = fm.beginTransaction();
         ft.remove(this).commit();
         SingletonGenerate.getInstance().setVisible();
+        locationManager.removeUpdates(this);
     }
 
     @Override
@@ -117,6 +103,11 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
                 .title("New Marker")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         );
+
+        lastLat = latLng.latitude;
+        lastLon = latLng.longitude;
+        edtLatitude.setText(""+lastLat);
+        edtLongitude.setText(""+lastLon);
     }
 
     @OnClick(R.id.imgReview)
@@ -173,17 +164,10 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
     public void onResume() {
         super.onResume();
         Log.d(TAG,"onResume");
-        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            showGpsDisabledDialog();
-        }
-        mLocationManager.addGpsStatusListener(this);
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
         mapFragment.getMapAsync(this);
-        isRunning = false;
         currentLat = 0;
         currentLon = 0;
-
-
+        isRunning = false;
         if (mPermissionDenied) {
             // Permission was not granted, display error dialog.
             showMissingPermissionError();
@@ -195,51 +179,8 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
     public void onPause() {
         super.onPause();
         Log.d(TAG,"onPause");
-        mLocationManager.removeUpdates(this);
-        mLocationManager.removeGpsStatusListener(this);
-        mapFragment.getMapAsync(null);
+        locationManager.removeUpdates(this);
     }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        currentLat = location.getLatitude();
-        currentLon = location.getLongitude();
-        try {
-            if (!isRunning && (currentLat>0 || currentLon>0)){
-                isRunning = true;
-                edtLatitude.setText(""+currentLat);
-                edtLongitude.setText(""+currentLon);
-                lastLat = currentLat ;
-                lastLon = currentLon;
-                Log.d(TAG,"is running");
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        Log.d(TAG," - "+ currentLat);
-    }
-
-
-    @Override
-    public void onGpsStatusChanged (int event) {
-        Log.d(TAG,"onGpsStatusChanged");
-        switch (event) {
-            case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                break;
-            case GpsStatus.GPS_EVENT_STOPPED:
-                isRunning = false;
-                currentLon = 0;
-                currentLat = 0;
-                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    showGpsDisabledDialog();
-                }
-                break;
-            case GpsStatus.GPS_EVENT_FIRST_FIX:
-                break;
-        }
-    }
-
 
     @Override
     public void onStop() {
@@ -247,25 +188,58 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
         Log.d(TAG,"onStop");
     }
 
-    public void showGpsDisabledDialog(){
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext());
-        dialogBuilder.setTitle(R.string.gps_disabled);
-        dialogBuilder.setMessage(R.string.please_enable_gps);
-        dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
-            }
-        });
-        dialogBuilder.show();
-    }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG,"onDestroy");
         unbinder.unbind();
+        locationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+        mMap.setOnMyLocationButtonClickListener(this);
+        mMap.setOnMyLocationClickListener(this);
+        mMap.setOnMapClickListener(this);
+        locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        enableMyLocation();
+    }
+
+    /**
+     * Enables the My Location layer if the fine location permission has been granted.
+     */
+
+    private void enableMyLocation() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(getActivity(), LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+        } else if (mMap != null) {
+            // Access to the location has been granted to the app.
+            mMap.setMyLocationEnabled(true);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (!isRunning){
+            try {
+                lastLat = location.getLatitude();
+                lastLon = location.getLongitude();
+                edtLatitude.setText(""+lastLat);
+                edtLongitude.setText(""+lastLon);
+                if (location.hasAccuracy()){
+                    isRunning = true;
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            Log.d(TAG,"show position : " + lastLat + " - "+ lastLon);
+        }
     }
 
     @Override
@@ -283,43 +257,23 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
 
     }
 
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        mMap = map;
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
-        mMap.setOnMapClickListener(this);
-        enableMyLocation();
-    }
-
-    /**
-     * Enables the My Location layer if the fine location permission has been granted.
-     */
-
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
-            PermissionUtils.requestPermission(getActivity(), LOCATION_PERMISSION_REQUEST_CODE,
-                    Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (mMap != null) {
-            // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true);
-        }
-    }
-
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(getActivity(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
+        mMap.clear();
+        enableMyLocation();
+        isRunning = false;
         return false;
     }
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(getActivity(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
+        mMap.clear();
+        lastLat = location.getLatitude();
+        lastLon = location.getLongitude();
+        edtLatitude.setText(""+lastLat);
+        edtLongitude.setText(""+lastLon);
     }
 
     @Override
@@ -331,13 +285,13 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
         if (PermissionUtils.isPermissionGranted(permissions, grantResults,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
             // Enable the my location layer if the permission has been granted.
+            locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             enableMyLocation();
         } else {
             // Display the missing permission error dialog when the fragments resume.
             mPermissionDenied = true;
         }
     }
-
 
     /**
      * Displays a dialog with error message explaining that the location permission is missing.
@@ -346,7 +300,5 @@ public class LocationFragment extends Fragment implements LocationListener, GpsS
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getActivity().getSupportFragmentManager(), "dialog");
     }
-
-
 
 }

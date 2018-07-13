@@ -18,10 +18,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
@@ -47,6 +45,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         storage = new Storage(getApplicationContext());
         initUI();
         onAddPermission();
+
     }
 
     public void onAddPermission() {

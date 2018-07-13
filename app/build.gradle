@@ -66,6 +66,9 @@ dependencies {
     /*api project(':library')*/
     implementation(name: 'library-release', ext: 'aar')
 
+    /*DateTime picker*/
+    implementation project(':switchdatetime')
+
 
 }
 

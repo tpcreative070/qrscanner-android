@@ -31,6 +31,14 @@
         <item name="android:popupMenuStyle">@style/PopupMenuDark</item>
     </style>
 
+    <style name="MyAppCustomTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
 
 
     <style name="AppBaseThemeLight" parent="Theme.AppCompat.NoActionBar">

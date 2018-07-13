@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -35,6 +36,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -106,6 +108,13 @@ public class Utils {
     public static String getCurrentDateTime() {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("EE dd MMM, yyyy HH:mm:ss a", Locale.getDefault());
+        String result = dateFormat.format(date);
+        return result;
+    }
+
+    public static String getCurrentDatetimeEvent(){
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault());
         String result = dateFormat.format(date);
         return result;
     }
@@ -403,9 +412,6 @@ public class Utils {
     }
 
 
-    public static String getTypeInput(){
-        return "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\\\d])(?=.*[~`!@#\\\\$%\\\\^&\\\\*\\\\(\\\\)\\\\-_\\\\+=\\\\{\\\\}\\\\[\\\\]\\\\|\\\\;:\\\"<>,./\\\\?]).{8,}";
-    }
 
 
 
