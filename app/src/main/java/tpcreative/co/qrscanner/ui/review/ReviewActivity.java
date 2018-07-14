@@ -59,7 +59,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
        create = presenter.create;
         switch (create.createType){
             case ADDRESSBOOK:
-
                 code =   "MECARD:N:"+create.fullName+";TEL:"+create.phone+";EMAIL:"+create.email+";ADR:"+create.address+";";
                 save = new Save();
                 save.fullName = create.fullName;
@@ -168,7 +167,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 save.createType = create.createType.name();
                 onGenerateReview(code);
                 break;
-
         }
     }
 

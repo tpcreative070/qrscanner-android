@@ -36,6 +36,8 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 public class ScannerResultFragment extends Fragment implements ScannerResultView{
 
@@ -47,9 +49,8 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     TextView tvTitle;
 
 
-
-
     List<LinearLayout> mList = new ArrayList<>();
+    private History history = new History();
 
     /*Email*/
     @BindView(R.id.llEmail)
@@ -183,6 +184,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 contactAddress.setText(create.address);
                 contactPhone.setText(create.phone);
                 contactEmail.setText(create.email);
+
+                history = new History();
+                history.fullName = create.fullName;
+                history.address = create.address;
+                history.phone = create.phone;
+                history.email = create.email;
+                history.createType = create.createType.name();
+
                 onShowUI(llContact);
                 tvTitle.setText("AddressBook");
                 break;
@@ -190,6 +199,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 emailTo.setText(create.email);
                 emailSubject.setText(create.subject);
                 emailMessage.setText(create.message);
+
+
+                history = new History();
+                history.email = create.email;
+                history.subject = create.subject;
+                history.message = create.message;
+                history.createType = create.createType.name();
+
                 onShowUI(llEmail);
                 tvTitle.setText("Email");
                 break;
@@ -198,6 +215,11 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 break;
             case URI:
                 urlAddress.setText(create.url);
+
+                history = new History();
+                history.url = create.url;
+                history.createType = create.createType.name();
+
                 onShowUI(llURL);
                 tvTitle.setText("Url");
                 break;
@@ -207,6 +229,16 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 wifiPassword.setText(create.password);
                 wifiNetworkEncryption.setText(create.networkEncryption);
                 wifiHidden.setText(create.hidden ? "Yes" : "No");
+
+
+                history = new History();
+                history.ssId = create.ssId;
+                history.password = create.password;
+                history.networkEncryption = create.networkEncryption;
+                history.hidden = create.hidden;
+                history.createType = create.createType.name();
+
+
                 onShowUI(llWifi);
                 tvTitle.setText("Wifi");
                 break;
@@ -215,17 +247,37 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 locationLatitude.setText(""+create.lat);
                 locationLongitude.setText(""+create.lon);
                 locationQuery.setText(""+create.query);
+
+
+                history = new History();
+                history.lat = create.lat;
+                history.lon = create.lon;
+                history.query = create.query;
+                history.createType = create.createType.name();
+
+
                 onShowUI(llLocation);
                 tvTitle.setText("Location");
                 break;
             case TEL:
                 telephoneNumber.setText(create.phone);
+
+                history = new History();
+                history.phone = create.phone;
+                history.createType = create.createType.name();
+
                 onShowUI(llTelephone);
                 tvTitle.setText("Telephone");
                 break;
             case SMS:
                 smsTo.setText(create.phone);
                 smsMessage.setText(create.message);
+
+                history = new History();
+                history.phone = create.phone;
+                history.message = create.message;
+                history.createType = create.createType.name();
+
                 onShowUI(llSMS);
                 tvTitle.setText("SMS");
                 break;
@@ -236,6 +288,15 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 eventDescription.setText(create.description);
                 eventBeginTime.setText(create.startEvent);
                 eventEndTime.setText(create.endEvent);
+
+                history = new History();
+                history.title = create.title;
+                history.location = create.location;
+                history.description = create.description;
+                history.startEvent = create.startEvent;
+                history.endEvent = create.endEvent;
+                history.createType = create.createType.name();
+
                 onShowUI(llEvent);
                 tvTitle.setText("Calendar");
                 break;
@@ -243,7 +304,12 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 break;
             default:
+
                 textMessage.setText(create.text);
+                history = new History();
+                history.text = create.text;
+                history.createType = create.createType.name();
+
                 onShowUI(llText);
                 tvTitle.setText("Text");
                 break;
@@ -259,6 +325,9 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 index.setVisibility(View.GONE);
             }
         }
+        history.createDatetime = Utils.getCurrentDateTime();
+        history.key = InstanceGenerator.getInstance(getContext()).getUUId();
+        InstanceGenerator.getInstance(getContext()).onInsert(history);
     }
 
     @Override

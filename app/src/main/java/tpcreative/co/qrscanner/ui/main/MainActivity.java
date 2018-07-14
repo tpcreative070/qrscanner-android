@@ -18,12 +18,15 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
@@ -49,7 +52,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         onAddPermission();
 
         final List<Save> save = InstanceGenerator.getInstance(getApplicationContext()).getListSave();
+        final List<History> histories = InstanceGenerator.getInstance(getApplicationContext()).getList();
         Log.d(TAG,"List :" + new Gson().toJson(save));
+        Log.d(TAG,"List history : " + new Gson().toJson(histories));
 
     }
 

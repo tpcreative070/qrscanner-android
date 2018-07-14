@@ -33,7 +33,7 @@ public class Save {
     public String createDatetime;
 
     @Ignore
-    public DateCategories dateCategories;
+    public TypeCategories typeCategories;
     @Ignore
     private boolean isChecked;
     @Ignore
@@ -110,7 +110,7 @@ public class Save {
         this.url = "";
         this.createType = "";
         this.networkEncryption = "";
-        this.dateCategories = new DateCategories();
+        this.typeCategories = new TypeCategories();
     }
 
     @Ignore
@@ -167,12 +167,12 @@ public class Save {
 
     @Ignore
     public int getCategoryId() {
-        return dateCategories.getId();
+        return typeCategories.getId();
     }
 
     @Ignore
     public String getCategoryName() {
-        return dateCategories.getDate();
+        return typeCategories.getType();
     }
 
 }

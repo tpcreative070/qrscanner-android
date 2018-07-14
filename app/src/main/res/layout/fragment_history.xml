@@ -1,31 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/rlRoot"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
-            android:id="@+id/rlTitle"
+            android:id="@+id/settingstoolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/imgArrowBack"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:padding="8dp"
+                android:src="@drawable/baseline_arrow_back_ios_white_48" />
+
             <TextView
-                android:textSize="20sp"
                 style="@style/brandonBoldTextView"
-                android:text="@string/history"
-                android:gravity="center"
-                android:layout_centerInParent="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/history"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/tvCount"
+                style="@style/brandonBoldTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/imgArrowBack"
+                android:text="@string/default_count"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:id="@+id/llAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imgDelete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="7dp"
+                    android:src="@drawable/baseline_delete_white_48" />
+
+                <ImageView
+                    android:id="@+id/imgSelectAll"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="7dp"
+                    android:src="@drawable/baseline_select_all_white_48" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvDelete"
+                style="@style/brandonBoldTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="10dp"
+                android:padding="2dp"
+                android:text="@string/delete"
+                android:textSize="18sp" />
+
         </RelativeLayout>
 
-    </RelativeLayout>
 
+        <com.jaychang.srv.SimpleRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/settingstoolbar"
+            app:srv_dividerColor="@color/colorAccent"
+            app:srv_dividerOrientation="both"
+            app:srv_dividerPaddingBottom="5dp"
+            app:srv_dividerPaddingLeft="5dp"
+            app:srv_dividerPaddingRight="5dp"
+            app:srv_dividerPaddingTop="5dp"
+            app:srv_layoutMode="linearVertical"
+            app:srv_showDivider="true"
+            app:srv_showLastDivider="true" />
+
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
