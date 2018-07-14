@@ -16,8 +16,11 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 public class ReviewActivity extends BaseActivity implements ReviewView , View.OnClickListener ,Utils.UtilsListenner {
+
     @BindView(R.id.imgResult)
     ImageView imgResult;
     @BindView(R.id.btnSave)
@@ -32,6 +35,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     private Bitmap bitmap;
     private  String code ;
     private Animation mAnim = null;
+    private Save save = new Save();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,37 +59,116 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
        create = presenter.create;
         switch (create.createType){
             case ADDRESSBOOK:
+
+                code =   "MECARD:N:"+create.fullName+";TEL:"+create.phone+";EMAIL:"+create.email+";ADR:"+create.address+";";
+                save = new Save();
+                save.fullName = create.fullName;
+                save.phone = create.phone;
+                save.email = create.email;
+                save.address = create.address;
+                save.createType = create.createType.name();
+                onGenerateReview(code);
                 break;
+
             case EMAIL_ADDRESS:
                  code = "MATMSG:TO:"+create.email+";SUB:"+create.subject+";BODY:"+create.message+";";
+                 save = new Save();
+                 save.email = create.email;
+                 save.subject = create.subject;
+                 save.message = create.message;
+                 save.createType = create.createType.name();
                  onGenerateReview(code);
                 break;
+
             case PRODUCT:
 
                 break;
             case URI:
-
+                code = create.url;
+                save = new Save();
+                save.url = create.url;
+                save.createType = create.createType.name();
+                onGenerateReview(code);
                 break;
 
             case WIFI:
+                code = "WIFI:S:"+create.ssId+";T:"+create.password+";P:"+create.networkEncryption+";H:"+create.hidden+";";
+                save = new Save();
+                save.ssId = create.ssId;
+                save.password = create.password;
+                save.networkEncryption = create.networkEncryption;
+                save.hidden = create.hidden;
+                save.createType = create.createType.name();
+                onGenerateReview(code);
                 break;
 
             case GEO:
                 code =  "geo:"+create.lat+","+create.lon+"?q="+create.query+"";
+                save = new Save();
+                save.lat = create.lat;
+                save.lon = create.lon;
+                save.query = create.query;
+                save.createType = create.createType.name();
                 onGenerateReview(code);
                 break;
+
             case TEL:
+                code = "tel:"+create.phone+"";
+                save = new Save();
+                save.phone = create.phone;
+                save.createType = create.createType.name();
+                onGenerateReview(code);
                 break;
+
             case SMS:
                 code =  "smsto:"+create.phone+":"+create.message;
+                save = new Save();
+                save.phone = create.phone;
+                save.message = create.message;
+                save.createType = create.createType.name();
                 onGenerateReview(code);
                 break;
+
             case CALENDAR:
+
+                StringBuilder builder = new StringBuilder();
+                builder.append("BEGIN:VEVENT");
+                builder.append("\n");
+                builder.append("SUMMARY:"+create.title);
+                builder.append("\n");
+                builder.append("DTSTART:"+create.startEvent);
+                builder.append("\n");
+                builder.append("DTEND:"+create.endEvent);
+                builder.append("\n");
+                builder.append("LOCATION:"+create.location);
+                builder.append("\n");
+                builder.append("DESCRIPTION:"+create.description);
+                builder.append("\n");
+                builder.append("END:VEVENT");
+
+                save = new Save();
+                save.title = create.title;
+                save.startEvent = create.startEvent;
+                save.endEvent = create.endEvent;
+                save.location = create.location;
+                save.description = create.description;
+                save.createType = create.createType.name();
+
+                code =  builder.toString();
+                onGenerateReview(code);
                 break;
+
             case ISBN:
                 break;
+
             default:
+                code = create.text;
+                save = new Save();
+                save.text = create.text;
+                save.createType = create.createType.name();
+                onGenerateReview(code);
                 break;
+
         }
     }
 
@@ -148,6 +231,9 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     @Override
     public void onSaved() {
         Toast.makeText(this,"Saved image successfully",Toast.LENGTH_SHORT).show();
+        save.createType = Utils.getCurrentDateTime();
+        save.key = InstanceGenerator.getInstance(getContext()).getUUId();
+        InstanceGenerator.getInstance(getContext()).onInsert(save);
     }
 
     public void onGenerateReview(String code){

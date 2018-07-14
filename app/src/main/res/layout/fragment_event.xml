@@ -171,14 +171,15 @@
                             android:layout_height="wrap_content"
                             android:text="@string/beginTime" />
 
-                        <EditText
-                            android:enabled="false"
-                            android:id="@+id/edtBeginTime"
+                        <TextView
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:textSize="16sp"
+                            android:id="@+id/tvBeginTime"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:imeOptions="actionDone"
-                            android:singleLine="true" />
+                            android:layout_height="wrap_content"/>
                     </LinearLayout>
 
 
@@ -199,14 +200,16 @@
                             android:layout_height="wrap_content"
                             android:text="@string/endTime" />
 
-                        <EditText
-                            android:enabled="false"
-                            android:id="@+id/edtEndTime"
+                        <TextView
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:textSize="16sp"
+                            android:id="@+id/tvEndTime"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:imeOptions="actionDone"
-                            android:singleLine="true" />
+                            android:layout_height="wrap_content"/>
+
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>

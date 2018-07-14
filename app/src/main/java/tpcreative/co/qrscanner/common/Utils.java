@@ -119,6 +119,14 @@ public class Utils {
         return result;
     }
 
+    public static String getCurrentDatetimeEvent(long milliseconds){
+        Date date = new Date(milliseconds);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault());
+        String result = dateFormat.format(date);
+        return result;
+    }
+
+
 
     public static boolean checkCameraBack(Context context) {
         if (context.getPackageManager().hasSystemFeature(

@@ -39,15 +39,13 @@
     </style>
 
 
-
-
     <style name="AppBaseThemeLight" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/colorPrimaryDarkV1</item>
         <item name="android:textColorPrimary">@color/colorPrimaryDarkV1</item>
         <item name="android:textColorSecondary">@color/colorPrimaryDarkV1</item>
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/colorPrimaryDarkV1</item>
         <item name="android:popupMenuStyle">@style/PopupMenuLight</item>
     </style>
 
@@ -82,18 +80,18 @@
     </style>
 
     <style name="brandonRegularTextView" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/brandon_reg</item>
+        <item name="android:fontFamily">@font/brandon_regs</item>
         <item name="android:textSize">19sp</item>
     </style>
 
 
     <style name="brandonBoldTextView" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/brandon_bld</item>
+        <item name="android:fontFamily">@font/brandon_blds</item>
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="brandonRedBoldTextView" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/brandon_bld</item>
+        <item name="android:fontFamily">@font/brandon_blds</item>
     </style>
 
 </resources>

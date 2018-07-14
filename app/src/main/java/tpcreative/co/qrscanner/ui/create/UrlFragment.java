@@ -7,20 +7,34 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.zxing.client.result.ParsedResultType;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.model.Create;
 
 public class UrlFragment extends Fragment {
 
     private static final String TAG = UrlFragment.class.getSimpleName();
     private Unbinder unbinder;
+    AwesomeValidation mAwesomeValidation ;
+    @BindView(R.id.edtUrl)
+    EditText edtUrl;
 
     public static UrlFragment newInstance(int index) {
         UrlFragment fragment = new UrlFragment();
@@ -38,18 +52,46 @@ public class UrlFragment extends Fragment {
         return view;
     }
 
+
     @OnClick(R.id.imgArrowBack)
     public void CloseWindow(){
+        Utils.hideSoftKeyboard(getActivity());
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.remove(this).commit();
         SingletonGenerate.getInstance().setVisible();
     }
 
+    @OnClick(R.id.imgReview)
+    public void onCheck(){
+        if (mAwesomeValidation.validate()){
+            Log.d(TAG,"Passed");
+            Create create = new Create();
+            create.url = edtUrl.getText().toString().trim();
+            create.createType = ParsedResultType.URI;
+            Navigator.onMoveToReview(getActivity(),create);
+        }
+        else{
+            Log.d(TAG,"error");
+        }
+    }
+
+    private void addValidationForEditText() {
+        mAwesomeValidation.addValidation(getActivity(),R.id.edtText, Patterns.WEB_URL,R.string.err_url);
+    }
+
+    public void clearUI(){
+        edtUrl.requestFocus();
+        edtUrl.setText("");
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG,"onStart");
+        mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
+        addValidationForEditText();
+        clearUI();
     }
 
     @Override

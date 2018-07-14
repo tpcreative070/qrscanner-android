@@ -23,6 +23,9 @@
     <color name="material_red_a200">#FF5252</color>
     <color name="material_red_a400">#FF1744</color>
     <color name="material_red_a700">#D50000</color>
+    <color name="colorCircleClock">#B0BEC5</color>
+    <color name="colorContentBackground">#607D8B</color>
+
 
     <color name="material_orange_050">#FFF3E0</color>
     <color name="material_orange_100">#FFE0B2</color>

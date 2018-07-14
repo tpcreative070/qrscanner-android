@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
+import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -24,6 +24,8 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
@@ -45,6 +47,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         storage = new Storage(getApplicationContext());
         initUI();
         onAddPermission();
+
+        final List<Save> save = InstanceGenerator.getInstance(getApplicationContext()).getListSave();
+        Log.d(TAG,"List :" + new Gson().toJson(save));
 
     }
 

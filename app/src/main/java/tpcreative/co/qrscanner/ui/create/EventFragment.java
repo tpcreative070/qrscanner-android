@@ -1,6 +1,4 @@
 package tpcreative.co.qrscanner.ui.create;
-
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,20 +12,19 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.google.zxing.client.result.ParsedResultType;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,17 +49,23 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     EditText edtLocation;
     @BindView(R.id.edtDescription)
     EditText edtDescription;
-    @BindView(R.id.edtBeginTime)
-    EditText edtBeginTime;
-    @BindView(R.id.edtEndTime)
-    EditText edtEndTime;
+    @BindView(R.id.tvBeginTime)
+    TextView tvBeginTime;
+    @BindView(R.id.tvEndTime)
+    TextView tvEndTime;
     private AwesomeValidation mAwesomeValidation;
+    private long beginDateTimeMilliseconds = 0;
+    private long endDateTimeMilliseconds = 0;
+    private long currentMilliseconds = 0;
 
 
     /*Date time picker*/
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
     private static final String STATE_TEXTVIEW = "STATE_TEXTVIEW";
     private SwitchDateTimeDialogFragment dateTimeFragment;
+
+    private boolean isClick ;
+    private boolean isBegin;
 
 
     public static EventFragment newInstance(int index) {
@@ -80,6 +83,8 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
         unbinder = ButterKnife.bind(this, view);
         llEndTime.setOnClickListener(this);
         llBeginTime.setOnClickListener(this);
+        tvBeginTime.setOnClickListener(this);
+        tvEndTime.setOnClickListener(this);
         initDateTimePicker();
         return view;
     }
@@ -95,10 +100,58 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     @OnClick(R.id.imgReview)
     public void onCheck() {
         if (mAwesomeValidation.validate()) {
+
+            if (beginDateTimeMilliseconds == 0){
+                isBegin = true;
+                isClick = true;
+                dateTimeFragment.startAtCalendarView();
+                dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime);
+
+                Date date = new Date();
+                Calendar cal = Calendar.getInstance();
+                currentMilliseconds = date.getTime();
+                cal.setTime(date);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int days = cal.get(Calendar.DAY_OF_MONTH);
+                int hours = cal.get(Calendar.HOUR_OF_DAY);
+                int minutes = cal.get(Calendar.MINUTE);
+                dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
+                dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                return;
+            }
+
+            if (endDateTimeMilliseconds == 0){
+                isBegin = false;
+                isClick = true;
+                dateTimeFragment.startAtCalendarView();
+                dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime);
+
+                Date date = new Date();
+                Calendar cal = Calendar.getInstance();
+                currentMilliseconds = date.getTime();
+                cal.setTime(date);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int days = cal.get(Calendar.DAY_OF_MONTH);
+                int hours = cal.get(Calendar.HOUR_OF_DAY);
+                int minutes = cal.get(Calendar.MINUTE);
+                dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
+                dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                return;
+            }
+
+            if (beginDateTimeMilliseconds>endDateTimeMilliseconds){
+                Toast.makeText(getContext(),"Ending event data time must be greater than begin date time",Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Create create = new Create();
             create.title = edtTitle.getText().toString();
             create.location = edtLocation.getText().toString();
             create.description = edtDescription.getText().toString();
+            create.startEvent = Utils.getCurrentDatetimeEvent(beginDateTimeMilliseconds);
+            create.endEvent = Utils.getCurrentDatetimeEvent(endDateTimeMilliseconds);
             create.createType = ParsedResultType.CALENDAR;
             Navigator.onMoveToReview(getActivity(), create);
         } else {
@@ -110,14 +163,91 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.llBeginTime:{
-                dateTimeFragment.startAtCalendarView();
-                dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime);
-                dateTimeFragment.setDefaultDateTime(new GregorianCalendar(2017, Calendar.MARCH, 4, 15, 20).getTime());
-                dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+
+                if (!isClick) {
+                    isBegin = true;
+                    isClick = true;
+                    dateTimeFragment.startAtCalendarView();
+                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime);
+
+                    Date date = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    currentMilliseconds = date.getTime();
+                    cal.setTime(date);
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int days = cal.get(Calendar.DAY_OF_MONTH);
+                    int hours = cal.get(Calendar.HOUR_OF_DAY);
+                    int minutes = cal.get(Calendar.MINUTE);
+                    dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
+                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                }
                 break;
             }
             case R.id.llEndTime :{
 
+                if (!isClick) {
+                    isBegin = false;
+                    isClick = true;
+                    dateTimeFragment.startAtCalendarView();
+                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime);
+
+                    Date date = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    currentMilliseconds = date.getTime();
+                    cal.setTime(date);
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int days = cal.get(Calendar.DAY_OF_MONTH);
+                    int hours = cal.get(Calendar.HOUR_OF_DAY);
+                    int minutes = cal.get(Calendar.MINUTE);
+                    dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
+                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                }
+
+                break;
+            }
+            case  R.id.tvBeginTime : {
+                if (!isClick) {
+                    isBegin = true;
+                    isClick = true;
+                    dateTimeFragment.startAtCalendarView();
+                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime);
+
+                    Date date = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    currentMilliseconds = date.getTime();
+                    cal.setTime(date);
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int days = cal.get(Calendar.DAY_OF_MONTH);
+                    int hours = cal.get(Calendar.HOUR_OF_DAY);
+                    int minutes = cal.get(Calendar.MINUTE);
+                    dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
+                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+
+                }
+                break;
+            }
+            case  R.id.tvEndTime : {
+                if (!isClick) {
+                    isBegin = false;
+                    isClick = true;
+                    dateTimeFragment.startAtCalendarView();
+                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime);
+
+                    Date date = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    currentMilliseconds = date.getTime();
+                    cal.setTime(date);
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int days = cal.get(Calendar.DAY_OF_MONTH);
+                    int hours = cal.get(Calendar.HOUR_OF_DAY);
+                    int minutes = cal.get(Calendar.MINUTE);
+                    dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
+                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                }
                 break;
             }
             default:{
@@ -163,38 +293,57 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
         dateTimeFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener() {
             @Override
             public void onPositiveButtonClick(Date date) {
-
+                if (isBegin){
+                    if (currentMilliseconds>date.getTime()){
+                       Toast.makeText(getContext(),"Starting event data time must be greater than current date time",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        beginDateTimeMilliseconds = date.getTime();
+                        tvBeginTime.setText(myDateFormat.format(date));
+                    }
+                }
+                else{
+                    if (currentMilliseconds>date.getTime()){
+                        Toast.makeText(getContext(),"Ending event data time must be greater than current date time",Toast.LENGTH_SHORT).show();
+                    }
+                    else if(beginDateTimeMilliseconds >= date.getTime()){
+                        Toast.makeText(getContext(),"Ending event data time must be greater than begin date time",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        endDateTimeMilliseconds = date.getTime();
+                        tvEndTime.setText(myDateFormat.format(date));
+                    }
+                }
+                isClick = false;
             }
 
             @Override
             public void onNegativeButtonClick(Date date) {
                 // Do nothing
+                isClick = false;
             }
 
             @Override
             public void onNeutralButtonClick(Date date) {
                 // Optional if neutral button does'nt exists
-
+                isClick = false;
             }
         });
     }
-
-
 
     private void addValidationForEditText() {
         mAwesomeValidation.addValidation(getActivity(), R.id.edtTitle, RegexTemplate.NOT_EMPTY, R.string.err_title);
         mAwesomeValidation.addValidation(getActivity(), R.id.edtLocation, RegexTemplate.NOT_EMPTY, R.string.err_location);
         mAwesomeValidation.addValidation(getActivity(), R.id.edtDescription, RegexTemplate.NOT_EMPTY, R.string.err_description);
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtBeginTime, RegexTemplate.NOT_EMPTY, R.string.err_beginTime);
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtEndTime, RegexTemplate.NOT_EMPTY, R.string.err_endtime);
     }
 
     public void clearUI() {
         edtTitle.requestFocus();
+        edtTitle.setText("");
         edtLocation.setText("");
         edtDescription.setText("");
-        edtBeginTime.setText("");
-        edtEndTime.setText("");
+        tvBeginTime.setText("");
+        tvEndTime.setText("");
     }
 
     @Override

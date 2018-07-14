@@ -31,14 +31,11 @@ import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.TextParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;
-import com.google.zxing.common.StringUtils;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.Util;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
-import com.journeyapps.barcodescanner.result.EmailAddressResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
 import java.util.List;
@@ -92,7 +89,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView = (DecoratedBarcodeView)view.findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.decodeContinuous(callback);
         zxing_status_view.setVisibility(View.INVISIBLE);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_reg);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
 
         if (Utils.checkCameraBack(getContext())){
             cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);

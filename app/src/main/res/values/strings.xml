@@ -78,7 +78,13 @@
     <string name="err_description">Please check description input</string>
     <string name="err_beginTime">Please check date time format</string>
     <string name="err_endtime">Please check data time format</string>
+    <string name="err_fullName">Please check full name input</string>
+    <string name="err_address">Please check address input</string>
+    <string name="err_phone">Please check phone input</string>
+    <string name="err_text">Please check text input</string>
+    <string name="err_ssId">Please check SSID input</string>
+    <string name="err_password">Please check password input</string>
+    <string name="err_url">Please check url input</string>
     <string name="clean">Clean</string>
-
 
 </resources>

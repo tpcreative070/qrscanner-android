@@ -4,8 +4,8 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import java.util.UUID;
 
-@Entity(tableName = "history")
-public class History{
+@Entity(tableName = "save")
+public class Save {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String email;
@@ -39,29 +39,29 @@ public class History{
     @Ignore
     private boolean isDeleted;
 
-    public History(String key,
-                   String email,
-                   String subject ,
-                   String message,
-                   String phone,
-                   double lat,
-                   double lon,
-                   String query,
-                   String title,
-                   String location,
-                   String description,
-                   String startEvent,
-                   String endEvent,
-                   String fullName,
-                   String address,
-                   String text,
-                   String ssId,
-                   boolean hidden,
-                   String password,
-                   String url,
-                   String createType,
-                   String networkEncryption,
-                   String createDatetime){
+    public Save(String key,
+                String email,
+                String subject ,
+                String message,
+                String phone,
+                double lat,
+                double lon,
+                String query,
+                String title,
+                String location,
+                String description,
+                String startEvent,
+                String endEvent,
+                String fullName,
+                String address,
+                String text,
+                String ssId,
+                boolean hidden,
+                String password,
+                String url,
+                String createType,
+                String networkEncryption,
+                String createDatetime){
         this.key = key;
         this.email = email;
         this.subject = subject;
@@ -87,7 +87,7 @@ public class History{
         this.createDatetime = createDatetime;
     }
 
-    public History(){
+    public Save(){
         this.key = "";
         this.email = "";
         this.subject = "";

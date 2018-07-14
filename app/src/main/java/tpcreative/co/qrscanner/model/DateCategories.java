@@ -30,4 +30,5 @@ public class DateCategories {
         this.id = id;
         this.date = date;
     }
+
 }

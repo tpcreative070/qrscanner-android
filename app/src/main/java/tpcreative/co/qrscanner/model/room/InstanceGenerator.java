@@ -8,24 +8,27 @@ import android.util.Log;
 import java.util.List;
 import java.util.UUID;
 import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.Save;
 
-@Database(entities = {History.class}, version = 1, exportSchema = false)
-public abstract class HistoryGenerator  extends RoomDatabase {
+@Database(entities = {History.class, Save.class}, version = 1, exportSchema = false)
+public abstract class InstanceGenerator extends RoomDatabase {
 
     @Ignore
-    private static HistoryGenerator instance;
+    private static InstanceGenerator instance;
 
     @Ignore
     public abstract HistoryDao historyDao();
+    @Ignore
+    public abstract SaveDao saveDao();
 
 
     @Ignore
-    public static final String TAG = HistoryGenerator.class.getSimpleName();
+    public static final String TAG = InstanceGenerator.class.getSimpleName();
 
-    public static HistoryGenerator getInstance(Context context) {
+    public static InstanceGenerator getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    HistoryGenerator.class,
+                    InstanceGenerator.class,
                     "db-qr-scanner")
                     .allowMainThreadQueries()
                     .build();
@@ -75,6 +78,39 @@ public abstract class HistoryGenerator  extends RoomDatabase {
         return false;
     }
 
+
+    public synchronized void onInsert(Save cTalkManager){
+        try {
+            if (cTalkManager==null){
+                return;
+            }
+            instance.saveDao().insert(cTalkManager);
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+    }
+
+    public final synchronized List<Save> getListSave(){
+        try{
+            return instance.saveDao().loadAll();
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return null;
+    }
+
+    public final synchronized boolean onDelete(Save entity){
+        try{
+            instance.saveDao().delete(entity);
+            return true;
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return false;
+    }
 
 }
 
