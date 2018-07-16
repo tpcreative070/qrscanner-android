@@ -129,7 +129,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     }
 
-
     private void initUI() {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

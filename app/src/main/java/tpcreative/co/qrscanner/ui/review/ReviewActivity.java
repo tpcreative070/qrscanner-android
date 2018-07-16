@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.review;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
@@ -203,7 +205,8 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                     }
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                       finish();
+                        finish();
+                        SingletonCloseFragment.getInstance().setUpdateData(true);
                     }
                     @Override
                     public void onAnimationRepeat(Animation animation) {

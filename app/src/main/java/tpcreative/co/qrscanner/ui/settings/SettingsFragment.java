@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.settings;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -83,7 +84,9 @@ public class SettingsFragment extends Fragment {
 
         private MyPreference mVersionApp;
 
-        private MyPreference mPreferenceHelp;
+        private MyPreference mPreferencePremiumVersion;
+
+        private MyPreference myPreferenceShare;
 
         private MyPreference myPreferencePermissions;
 
@@ -134,6 +137,15 @@ public class SettingsFragment extends Fragment {
             };
         }
 
+
+        public void shareToSocial(String value){
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT,value);
+            startActivity(Intent.createChooser(intent, "Share"));
+        }
+
         private Preference.OnPreferenceClickListener createActionPreferenceClickListener() {
             return new Preference.OnPreferenceClickListener() {
                 @Override
@@ -144,6 +156,9 @@ public class SettingsFragment extends Fragment {
                         }
                         else if (preference.getKey().equals(getString(R.string.key_app_permissions))){
                             askPermission();
+                        }
+                        else if (preference.getKey().equals(getString(R.string.key_share))){
+                            shareToSocial("http://tpcreative.co");
                         }
                     }
 
@@ -163,15 +178,21 @@ public class SettingsFragment extends Fragment {
             mVersionApp.setSummary(String.format("v%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
             /*Help*/
-            mPreferenceHelp = (MyPreference)findPreference(getString(R.string.key_help));
-            mPreferenceHelp.setOnPreferenceChangeListener(createChangeListener());
-            mPreferenceHelp.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            mPreferencePremiumVersion = (MyPreference)findPreference(getString(R.string.key_premium_version));
+            mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
+            mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
             /*App Permissions*/
 
             myPreferencePermissions = (MyPreference) findPreference(getString(R.string.key_app_permissions));
             myPreferencePermissions.setOnPreferenceChangeListener(createChangeListener());
             myPreferencePermissions.setOnPreferenceClickListener(createActionPreferenceClickListener());
+
+            /*Share app*/
+
+            myPreferenceShare = (MyPreference) findPreference(getString(R.string.key_share));
+            myPreferenceShare.setOnPreferenceChangeListener(createChangeListener());
+            myPreferenceShare.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
         }
 

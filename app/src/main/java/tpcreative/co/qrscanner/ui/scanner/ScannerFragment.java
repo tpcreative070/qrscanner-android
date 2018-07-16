@@ -1,8 +1,13 @@
 package tpcreative.co.qrscanner.ui.scanner;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +22,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.client.result.AddressBookParsedResult;
@@ -31,6 +47,7 @@ import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.TextParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;
+import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
@@ -38,6 +55,10 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +89,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     private Animation mAnim = null;
     private ScannerPresenter presenter;
     private boolean isRunning;
+
 
     public static ScannerFragment newInstance(int index) {
         ScannerFragment fragment = new ScannerFragment();
@@ -392,7 +414,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
             }
             @Override
             public void onAnimationEnd(Animation animation) {
-
+                onGetGallery();
             }
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -437,11 +459,208 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG,"onActivityResult");
-        if (requestCode == 100) {
-            Log.d(TAG,"onActivityResult : 100 : " + resultCode);
-            //barcodeScannerView.resume();
+        Log.d(TAG,"onActivityResult : " + requestCode + " - " + resultCode);
+        if (resultCode == Activity.RESULT_OK && requestCode == 9999) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                Handler handler =  new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onRenderCode(selectedImage,imageStream);
+                    }
+                },1000);
+            } catch (FileNotFoundException  e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void onRenderCode(final Bitmap bitmap,final InputStream inputStream){
+        try{
+            int[] intArray = new int[bitmap.getWidth()*bitmap.getHeight()];
+            bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+            LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
+            BinaryBitmap mBitmap = new BinaryBitmap(new HybridBinarizer(source));
+            Reader reader = new MultiFormatReader();
+            try {
+                Result result = reader.decode(mBitmap);
+                onFilterResult(result);
+                inputStream.close();
+            }
+            catch (NotFoundException | IOException |ChecksumException e){
+                e.printStackTrace();
+                Toast.makeText(getActivity(),"Please Choose Pictures Is QRcode Or Barcode",Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (FormatException e){
+           e.printStackTrace();
+        }
+    }
+
+
+    public void onGetGallery(){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, 9999);
+    }
+
+    public void onFilterResult(Result result){
+        ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result);
+        final ParsedResult parsedResult = resultHandler.getResult();
+        final Create create = new Create();
+        String address = "" ;
+        String fullName = "";
+        String email = "";
+        String phone = "";
+        String subject = "";
+        String message = "";
+        String url = "";
+        String ssId = "";
+        String networkEncryption = "";
+        String password = "";
+        double lat = 0;
+        double lon = 0;
+        long startEventMilliseconds = 0;
+        long endEventMilliseconds = 0;
+        String query  = "";
+        String title = "";
+        String location = "";
+        String description = "";
+        String startEvent = "";
+        String endEvent = "";
+        String text = "";
+        boolean hidden = false;
+
+        switch (parsedResult.getType()) {
+            case ADDRESSBOOK:
+                create.createType = ParsedResultType.ADDRESSBOOK;
+                AddressBookParsedResult addressResult = (AddressBookParsedResult) resultHandler.getResult();
+                if (addressResult!=null){
+                    address = Utils.convertStringArrayToString(addressResult.getAddresses(), ",");
+                    fullName = Utils.convertStringArrayToString(addressResult.getNames(), ",");
+                    email = Utils.convertStringArrayToString(addressResult.getEmails(), ",");
+                    phone = Utils.convertStringArrayToString(addressResult.getPhoneNumbers(), ",");
+                }
+                break;
+            case EMAIL_ADDRESS:
+                create.createType = ParsedResultType.EMAIL_ADDRESS;
+                EmailAddressParsedResult emailAddress = (EmailAddressParsedResult) resultHandler.getResult();
+                if (emailAddress!=null){
+                    email = Utils.convertStringArrayToString(emailAddress.getTos(), ",");
+                    subject = (emailAddress.getSubject())==null ? "" : emailAddress.getSubject() ;
+                    message = (emailAddress.getBody()) == null ? "" : emailAddress.getBody();
+                }
+                break;
+            case PRODUCT:
+                create.createType = ParsedResultType.PRODUCT;
+                break;
+            case URI:
+                create.createType = ParsedResultType.URI;
+                URIParsedResult urlResult = (URIParsedResult) resultHandler.getResult();
+                if (urlResult!=null){
+                    url = (urlResult.getURI())==null ? "" : urlResult.getURI() ;
+                }
+                break;
+
+            case WIFI:
+                create.createType = ParsedResultType.WIFI;
+                WifiParsedResult wifiResult = (WifiParsedResult)resultHandler.getResult();
+                hidden = wifiResult.isHidden();
+                ssId = (wifiResult.getSsid()) == null ? "" : wifiResult.getSsid();
+                networkEncryption = (wifiResult.getNetworkEncryption())==null ? "" : wifiResult.getNetworkEncryption();
+                password = (wifiResult.getPassword()) == null ? "" : wifiResult.getPassword();
+                Log.d(TAG,"method : " + wifiResult.getNetworkEncryption() + " :" + wifiResult.getPhase2Method() + " :" +wifiResult.getPassword());
+                break;
+
+            case GEO:
+                create.createType = ParsedResultType.GEO;
+                try{
+                    GeoParsedResult geoParsedResult = (GeoParsedResult)resultHandler.getResult();
+                    lat = geoParsedResult.getLatitude();
+                    lon = geoParsedResult.getLongitude();
+                    query = geoParsedResult.getQuery();
+                    String strNew = query.replace("q=", "");
+                    query = strNew;
+                    Log.d(TAG,new Gson().toJson(geoParsedResult));
+                }
+                catch (Exception e){
+
+                }
+                break;
+            case TEL:
+                create.createType = ParsedResultType.TEL;
+                TelParsedResult telParsedResult = (TelParsedResult) resultHandler.getResult();
+                phone = telParsedResult.getNumber();
+                break;
+            case SMS:
+                create.createType = ParsedResultType.SMS;
+                SMSParsedResult smsParsedResult = (SMSParsedResult) resultHandler.getResult();
+                phone = Utils.convertStringArrayToString(smsParsedResult.getNumbers(), ",");
+                message = (smsParsedResult.getBody()) == null ? "" : smsParsedResult.getBody();
+                break;
+            case CALENDAR:
+                create.createType = ParsedResultType.CALENDAR;
+                CalendarParsedResult calendarParsedResult = (CalendarParsedResult) resultHandler.getResult();
+
+                String startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getStartTimestamp());
+                String endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getEndTimestamp());
+
+                title = (calendarParsedResult.getSummary()) == null ? "" : calendarParsedResult.getSummary();
+                description = (calendarParsedResult.getDescription()) == null ? "" : calendarParsedResult.getDescription();
+                location = (calendarParsedResult.getLocation()) == null ? "" : calendarParsedResult.getLocation();
+                startEvent = startTime;
+                endEvent = endTime;
+                startEventMilliseconds = calendarParsedResult.getStartTimestamp();
+                endEventMilliseconds = calendarParsedResult.getEndTimestamp();
+
+                Log.d(TAG,startTime + " : " + endTime);
+
+                break;
+            case ISBN:
+                create.createType = ParsedResultType.ISBN;
+                break;
+            default:
+                create.createType = ParsedResultType.TEXT;
+                TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
+                text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
+
+                break;
+        }
+
+        create.address = address;
+        create.fullName = fullName;
+        create.email = email;
+        create.phone = phone;
+        create.subject = subject;
+        create.message = message;
+        create.url = url;
+        create.hidden = hidden;
+        create.ssId = ssId;
+        create.networkEncryption = networkEncryption;
+        create.password = password;
+        create.lat = lat;
+        create.lon = lon;
+        create.query = query;
+        create.title = title;
+        create.location = location;
+        create.description = description;
+        create.startEvent = startEvent;
+        create.endEvent = endEvent;
+        create.startEventMilliseconds = startEventMilliseconds;
+        create.endEventMilliseconds = endEventMilliseconds;
+        create.text = text;
+
+
+        Log.d(TAG,new Gson().toJson(create));
+        beepManager.playBeepSoundAndVibrate();
+        replaceFragment(0,create);
     }
 
     @Override

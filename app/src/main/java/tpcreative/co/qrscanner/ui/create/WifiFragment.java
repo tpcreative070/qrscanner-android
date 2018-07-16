@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
@@ -67,11 +68,16 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
         radio0.setOnClickListener(this);
         radio1.setOnClickListener(this);
         radio2.setOnClickListener(this);
+        SingletonCloseFragment.getInstance().setUpdateData(false);
         return view;
     }
 
     @OnClick(R.id.imgArrowBack)
     public void CloseWindow(){
+       onCloseWindow();
+    }
+
+    public void onCloseWindow(){
         Utils.hideSoftKeyboard(getActivity());
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

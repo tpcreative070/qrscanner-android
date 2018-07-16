@@ -36,6 +36,7 @@ import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.PermissionUtils;
+import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
@@ -81,16 +82,13 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         unbinder = ButterKnife.bind(this, view);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        SingletonCloseFragment.getInstance().setUpdateData(false);
         return view;
     }
 
     @OnClick(R.id.imgArrowBack)
     public void CloseWindow(){
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        SingletonGenerate.getInstance().setVisible();
+        onCloseWindow();
         locationManager.removeUpdates(this);
     }
 
@@ -173,7 +171,22 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             showMissingPermissionError();
             mPermissionDenied = false;
         }
+
+        if (SingletonCloseFragment.getInstance().isCloseWindow()){
+            onCloseWindow();
+            SingletonCloseFragment.getInstance().setUpdateData(false);
+        }
+
     }
+
+    public void onCloseWindow(){
+        Utils.hideSoftKeyboard(getActivity());
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(this).commit();
+        SingletonGenerate.getInstance().setVisible();
+    }
+
 
     @Override
     public void onPause() {
@@ -195,6 +208,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         unbinder.unbind();
         locationManager.removeUpdates(this);
     }
+
 
     @Override
     public void onMapReady(GoogleMap map) {

@@ -22,6 +22,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
@@ -52,16 +53,13 @@ public class EmailFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_email, container, false);
         unbinder = ButterKnife.bind(this, view);
+        SingletonCloseFragment.getInstance().setUpdateData(false);
         return view;
     }
 
     @OnClick(R.id.imgArrowBack)
     public void CloseWindow(){
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        SingletonGenerate.getInstance().setVisible();
+       onCloseWindow();
     }
 
     @OnClick(R.id.imgReview)
@@ -121,10 +119,23 @@ public class EmailFragment extends Fragment{
         Log.d(TAG,"onDestroy");
     }
 
+    public void onCloseWindow(){
+        Utils.hideSoftKeyboard(getActivity());
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(this).commit();
+        SingletonGenerate.getInstance().setVisible();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        if (SingletonCloseFragment.getInstance().isCloseWindow()){
+            onCloseWindow();
+            SingletonCloseFragment.getInstance().setUpdateData(false);
+        }
         Log.d(TAG,"onResume");
     }
+
 
 }

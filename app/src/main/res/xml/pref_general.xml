@@ -3,14 +3,17 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto">
 
 
-
-
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/info">
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_help_outline_white_48"
-            android:title="@string/help"
-            android:key="@string/key_help"/>
+            android:title="@string/premium_version"
+            android:summary="@string/summary"
+            android:key="@string/key_premium_version">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/tpcreative"></intent>
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
