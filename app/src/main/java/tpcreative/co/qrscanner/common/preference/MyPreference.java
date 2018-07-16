@@ -41,9 +41,9 @@ public class MyPreference extends Preference {
         summaryView.setTypeface(typefaceSumary);
         titleView.setTypeface(typeface);
 
-        titleView.setTextColor(getContext().getResources().getColor(R.color.white));
+        titleView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
         summaryView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
-        imageView.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imageView.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
 
     }

@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.review;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +51,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         presenter = new ReviewPresenter();
         presenter.bindView(this);
         presenter.getIntent(this);
+        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override

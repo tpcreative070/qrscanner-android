@@ -3,6 +3,7 @@ package tpcreative.co.qrscanner.ui.scannerresult;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -151,6 +152,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @BindView(R.id.imgOpenApplication)
     ImageView imgOpenApplication;
 
+    /*Back button*/
+    @BindView(R.id.imgArrowBack)
+    ImageView imgArrowBack;
+
 
 
     public static ScannerResultFragment newInstance(int index) {
@@ -179,6 +184,8 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         presenter.bindView(this);
         presenter.getIntent(getArguments());
         SingletonHistory.getInstance().setUpdateData(true);
+        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgOpenApplication.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         return view;
     }
 

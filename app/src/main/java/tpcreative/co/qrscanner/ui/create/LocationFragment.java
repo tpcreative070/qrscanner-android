@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.create;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -54,6 +56,10 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     EditText edtLongitude;
     @BindView(R.id.edtQuery)
     EditText edtQuery;
+    @BindView(R.id.imgArrowBack)
+    ImageView imgArrowBack;
+    @BindView(R.id.imgReview)
+    ImageView imgReview;
     private SupportMapFragment mapFragment ;
     private GoogleMap mMap;
     private AwesomeValidation mAwesomeValidation ;
@@ -83,6 +89,9 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         SingletonCloseFragment.getInstance().setUpdateData(false);
+        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+
         return view;
     }
 

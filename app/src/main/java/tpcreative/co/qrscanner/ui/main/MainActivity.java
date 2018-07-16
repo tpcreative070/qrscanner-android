@@ -158,7 +158,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         bottomNavigation.setTitleTextSizeInSp(15, 13);
 
         // Change colors
-        bottomNavigation.setInactiveColor(getResources().getColor(R.color.material_gray_600));
+        bottomNavigation.setInactiveColor(getResources().getColor(R.color.colorBlueLight));
+        bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorDark));
         // bottomNavigation.setForceTint(true);
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
 

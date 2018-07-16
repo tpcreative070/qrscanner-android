@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -85,6 +86,13 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     TextView zxing_status_view;
     @BindView(R.id.switch_flashlight)
     ImageView switch_flashlight;
+    @BindView(R.id.imgGallery)
+    ImageView imgGallery;
+    @BindView(R.id.switch_camera)
+    ImageView switch_camera;
+    @BindView(R.id.imgCreate)
+    ImageView imgCreate;
+
     private boolean isTurnOnFlash;
     private Animation mAnim = null;
     private ScannerPresenter presenter;
@@ -113,6 +121,10 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.decodeContinuous(callback);
         zxing_status_view.setVisibility(View.INVISIBLE);
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
+        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
 
         if (Utils.checkCameraBack(getContext())){
             cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
@@ -369,11 +381,14 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                     barcodeScannerView.setTorchOff();
                     isTurnOnFlash = false;
                     switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_off_white_36));
+                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+
                 }
                 else{
                     barcodeScannerView.setTorchOn();
                     isTurnOnFlash = true;
                     switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_on_white_36));
+                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
                 }
             }
             @Override

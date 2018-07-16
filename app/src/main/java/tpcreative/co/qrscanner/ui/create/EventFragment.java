@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.create;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,10 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     TextView tvBeginTime;
     @BindView(R.id.tvEndTime)
     TextView tvEndTime;
+    @BindView(R.id.imgArrowBack)
+    ImageView imgArrowBack;
+    @BindView(R.id.imgReview)
+    ImageView imgReview;
     private AwesomeValidation mAwesomeValidation;
     private long beginDateTimeMilliseconds = 0;
     private long endDateTimeMilliseconds = 0;
@@ -88,6 +94,9 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
         tvEndTime.setOnClickListener(this);
         initDateTimePicker();
         SingletonCloseFragment.getInstance().setUpdateData(false);
+        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+
         return view;
     }
 

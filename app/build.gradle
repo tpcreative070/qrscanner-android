@@ -69,6 +69,12 @@ dependencies {
     /*DateTime picker*/
     implementation project(':switchdatetime')
 
+    /*Volley*/
+    implementation 'com.android.volley:volley:1.1.0'
+
+    /*Google admod*/
+    implementation 'com.google.android.gms:play-services-ads:12.0.1'
+
 
 }
 
