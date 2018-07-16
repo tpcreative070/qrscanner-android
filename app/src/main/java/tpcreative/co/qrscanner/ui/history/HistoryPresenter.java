@@ -1,5 +1,9 @@
 package tpcreative.co.qrscanner.ui.history;
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +56,7 @@ public class HistoryPresenter extends Presenter<HistoryView> {
         }
         this.mList.clear();
         this.mList.addAll(mList);
+
         return mList;
     }
 

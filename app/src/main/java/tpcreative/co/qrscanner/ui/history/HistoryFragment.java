@@ -3,6 +3,7 @@ package tpcreative.co.qrscanner.ui.history;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -95,6 +96,10 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         imgSelectAll.setOnClickListener(this);
         tvDelete.setOnClickListener(this);
         imgArrowBack.setOnClickListener(this);
+        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgSelectAll.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+
 
         return view;
     }
@@ -129,12 +134,12 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         List<History> Galaxys = presenter.mList;
         //CUSTOM SORT ACCORDING TO CATEGORIES
 
-        Collections.sort(Galaxys, new Comparator<History>() {
-            @Override
-            public int compare(History o1, History o2) {
-                return o2.getId() - o1.getId();
-            }
-        });
+//        Collections.sort(Galaxys, new Comparator<History>() {
+//            @Override
+//            public int compare(History o1, History o2) {
+//                return o2.getId() - o1.getId();
+//            }
+//        });
 
         List<HistoryCell> cells = new ArrayList<>();
         //LOOP THROUGH GALAXIES INSTANTIATING THEIR CELLS AND ADDING TO CELLS COLLECTION

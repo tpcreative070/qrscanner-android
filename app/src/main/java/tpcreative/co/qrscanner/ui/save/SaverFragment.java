@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.save;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -91,6 +92,11 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         tvDelete.setOnClickListener(this);
         imgArrowBack.setOnClickListener(this);
 
+        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgSelectAll.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+
+
         return view;
     }
 
@@ -124,12 +130,12 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         List<Save> Galaxys = presenter.mList;
         //CUSTOM SORT ACCORDING TO CATEGORIES
 
-        Collections.sort(Galaxys, new Comparator<Save>() {
-            @Override
-            public int compare(Save o1, Save o2) {
-                return o2.getId() - o1.getId();
-            }
-        });
+//        Collections.sort(Galaxys, new Comparator<Save>() {
+//            @Override
+//            public int compare(Save o1, Save o2) {
+//                return o2.getId() - o1.getId();
+//            }
+//        });
 
         List<SaveCell> cells = new ArrayList<>();
         //LOOP THROUGH GALAXIES INSTANTIATING THEIR CELLS AND ADDING TO CELLS COLLECTION
