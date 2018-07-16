@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
+
+
+
+
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/info">
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_help_outline_white_48"
+            android:title="@string/help"
+            android:key="@string/key_help"/>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_playlist_add_check_white_48"
+            android:title="@string/app_permission"
+            android:key="@string/key_app_permissions"/>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_security_white_48"
+            android:title="@string/privacy_policy"
+            android:key="@string/key_privacy_policy">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/tvPrimacyPolicy"></intent>
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:title="@string/give_rate"
+            android:icon="@drawable/baseline_star_rate_white_48"
+            android:key="@string/key_rate"/>
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_share_white_48"
+            android:title="@string/share"
+            android:key="@string/key_share">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/github"></intent>
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_label_white_48"
+            android:key="@string/key_version"
+            android:summary=""
+            android:title="@string/version"/>
+
+    </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
+</android.support.v7.preference.PreferenceScreen>

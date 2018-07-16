@@ -25,7 +25,6 @@ import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.model.EnumCreateType;
 
 public class EmailFragment extends Fragment{
 

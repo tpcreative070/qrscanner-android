@@ -48,6 +48,7 @@ import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumFragmentType;
 
 public class ScannerFragment extends Fragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
 
@@ -120,6 +121,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
     public void replaceFragment(final int position,final Create create){
         setInvisible();
+        create.fragmentType = EnumFragmentType.SCANNER;
         FragmentManager fm = getFragmentManager();
         fragment = presenter.mFragment.get(position);
         Bundle arguments = new Bundle();
@@ -162,6 +164,8 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 String password = "";
                 double lat = 0;
                 double lon = 0;
+                long startEventMilliseconds = 0;
+                long endEventMilliseconds = 0;
                 String query  = "";
                 String title = "";
                 String location = "";
@@ -250,6 +254,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                         location = (calendarParsedResult.getLocation()) == null ? "" : calendarParsedResult.getLocation();
                         startEvent = startTime;
                         endEvent = endTime;
+                        startEventMilliseconds = calendarParsedResult.getStartTimestamp();
+                        endEventMilliseconds = calendarParsedResult.getEndTimestamp();
+
                         Log.d(TAG,startTime + " : " + endTime);
 
                         break;
@@ -283,7 +290,10 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 create.description = description;
                 create.startEvent = startEvent;
                 create.endEvent = endEvent;
+                create.startEventMilliseconds = startEventMilliseconds;
+                create.endEventMilliseconds = endEventMilliseconds;
                 create.text = text;
+
 
                 Log.d(TAG,new Gson().toJson(create));
                 beepManager.playBeepSoundAndVibrate();

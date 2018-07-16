@@ -1,7 +1,13 @@
 package tpcreative.co.qrscanner.ui.scannerresult;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,9 +40,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonHistory;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
@@ -137,6 +147,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @BindView(R.id.urlAddress)
     TextView urlAddress;
 
+    /*Open application*/
+    @BindView(R.id.imgOpenApplication)
+    ImageView imgOpenApplication;
+
 
 
     public static ScannerResultFragment newInstance(int index) {
@@ -164,6 +178,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         presenter = new ScannerResultPresenter();
         presenter.bindView(this);
         presenter.getIntent(getArguments());
+        SingletonHistory.getInstance().setUpdateData(true);
         return view;
     }
 
@@ -172,8 +187,98 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.remove(this).commit();
-        SingletonScanner.getInstance().setVisible();
+        if (create!=null){
+            if (create.fragmentType == EnumFragmentType.SCANNER){
+                SingletonScanner.getInstance().setVisible();
+                SingletonHistory.getInstance().setUpdateData(true);
+            }
+            else if (create.fragmentType == EnumFragmentType.SAVER){
+                SingletonSave.getInstance().setVisible();
+            }
+            else if (create.fragmentType == EnumFragmentType.HISTORY){
+                SingletonHistory.getInstance().setVisible();
+            }
+        }
     }
+
+    @OnClick(R.id.imgOpenApplication)
+    public void openApplication(){
+        create = presenter.result;
+        switch (create.createType){
+            case ADDRESSBOOK:
+                Intent intentContact = new Intent();
+                intentContact.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
+                intentContact.setData(Uri.fromParts("tel", create.phone, null));
+                intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create.fullName);
+                intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create.address);
+                intentContact.putExtra(ContactsContract.Intents.Insert.PHONE,create.phone);
+                intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL,create.email);
+                startActivity(intentContact);
+                break;
+            case EMAIL_ADDRESS:
+                try{
+                    Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" +create.email));
+                    intent.putExtra(Intent.EXTRA_SUBJECT, create.subject);
+                    intent.putExtra(Intent.EXTRA_TEXT, create.message);
+                    startActivity(intent);
+                }catch(ActivityNotFoundException e){
+                    //TODO smth
+                }
+                break;
+            case PRODUCT:
+                break;
+            case URI:
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(create.url));
+                startActivity(browserIntent);
+
+                break;
+
+            case WIFI:
+                startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+                break;
+
+            case GEO:
+                String uri = "geo:"+create.lat+","+create.lon+"";
+                Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                intentMap.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                startActivity(intentMap);
+                break;
+            case TEL:
+
+                Intent intentPhoneCall=new Intent(Intent.ACTION_CALL,Uri.parse("tel:"+create.phone));
+                startActivity(intentPhoneCall);
+
+                break;
+            case SMS:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create.phone));
+                intent.putExtra("sms_body", create.message);
+                startActivity(intent);
+                break;
+            case CALENDAR:
+                Intent intentCalendar = new Intent(Intent.ACTION_INSERT);
+                intentCalendar.setData(CalendarContract.Events.CONTENT_URI);
+                intentCalendar.putExtra(CalendarContract.Events.TITLE, create.title);
+                intentCalendar.putExtra(CalendarContract.Events.DESCRIPTION, create.description);
+                intentCalendar.putExtra(CalendarContract.Events.EVENT_LOCATION, create.location);
+                intentCalendar.putExtra(CalendarContract.Events.ALL_DAY, false);
+                intentCalendar.putExtra(
+                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        create.startEventMilliseconds);
+                intentCalendar.putExtra(
+                        CalendarContract.EXTRA_EVENT_END_TIME,create.endEventMilliseconds);
+                startActivity(intentCalendar);
+
+                break;
+            case ISBN:
+
+                break;
+            default:
+                shareToSocial(create.text);
+                break;
+        }
+    }
+
 
     @Override
     public void setView() {
@@ -194,6 +299,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 onShowUI(llContact);
                 tvTitle.setText("AddressBook");
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_perm_contact_calendar_white_48));
                 break;
             case EMAIL_ADDRESS:
                 emailTo.setText(create.email);
@@ -209,6 +315,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 onShowUI(llEmail);
                 tvTitle.setText("Email");
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_email_white_48));
                 break;
             case PRODUCT:
 
@@ -222,6 +329,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 onShowUI(llURL);
                 tvTitle.setText("Url");
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_language_white_48));
                 break;
 
             case WIFI:
@@ -241,6 +349,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 onShowUI(llWifi);
                 tvTitle.setText("Wifi");
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_network_wifi_white_48));
                 break;
 
             case GEO:
@@ -258,6 +367,8 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 onShowUI(llLocation);
                 tvTitle.setText("Location");
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_location_on_white_48));
+
                 break;
             case TEL:
                 telephoneNumber.setText(create.phone);
@@ -268,6 +379,8 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 onShowUI(llTelephone);
                 tvTitle.setText("Telephone");
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_phone_white_48));
+
                 break;
             case SMS:
                 smsTo.setText(create.phone);
@@ -280,6 +393,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 onShowUI(llSMS);
                 tvTitle.setText("SMS");
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
                 break;
             case CALENDAR:
 
@@ -289,31 +403,43 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 eventBeginTime.setText(create.startEvent);
                 eventEndTime.setText(create.endEvent);
 
+
                 history = new History();
                 history.title = create.title;
                 history.location = create.location;
                 history.description = create.description;
                 history.startEvent = create.startEvent;
                 history.endEvent = create.endEvent;
+                history.startEventMilliseconds = create.startEventMilliseconds;
+                history.endEventMilliseconds = create.endEventMilliseconds;
                 history.createType = create.createType.name();
-
                 onShowUI(llEvent);
                 tvTitle.setText("Calendar");
+                Log.d(TAG,"start milliseconds : " + create.startEventMilliseconds);
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_event_white_48));
+
                 break;
             case ISBN:
 
                 break;
             default:
-
+                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
                 textMessage.setText(create.text);
                 history = new History();
                 history.text = create.text;
                 history.createType = create.createType.name();
-
                 onShowUI(llText);
                 tvTitle.setText("Text");
                 break;
         }
+    }
+
+    public void shareToSocial(String value){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,value);
+        startActivity(Intent.createChooser(intent, "Share"));
     }
 
     public void onShowUI(View view){
@@ -323,6 +449,11 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             }
             else {
                 index.setVisibility(View.GONE);
+            }
+        }
+        if (create!=null){
+            if (create.fragmentType == EnumFragmentType.HISTORY){
+                return;
             }
         }
         history.createDatetime = Utils.getCurrentDateTime();

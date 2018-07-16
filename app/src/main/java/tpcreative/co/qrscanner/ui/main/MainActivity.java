@@ -22,9 +22,12 @@ import com.snatik.storage.Storage;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
@@ -55,12 +58,14 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         final List<History> histories = InstanceGenerator.getInstance(getApplicationContext()).getList();
         Log.d(TAG,"List :" + new Gson().toJson(save));
         Log.d(TAG,"List history : " + new Gson().toJson(histories));
+        askPermission();
 
     }
 
     public void onAddPermission() {
         Dexter.withActivity(this)
                 .withPermissions(
+                        Manifest.permission.CALL_PHONE,
                         Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -96,6 +101,32 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                         Log.d(TAG, "error ask permission");
                     }
                 }).onSameThread().check();
+    }
+
+    public void askPermission(){
+        boolean isCheck = PrefsController.getBoolean(getString(R.string.key_already_load_app),false);
+        if (isCheck){
+            return;
+        }
+        PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this);
+        dialogBuilder.setTitle(R.string.app_permission);
+        StringBuilder builder = new StringBuilder();
+        builder.append("1. WRITE_EXTERNAL_STORAGE: Save history strip to local data");
+        builder.append("\n");
+        builder.append("2. READ_EXTERNAL_STORAGE: Reading ringtone");
+        builder.append("\n");
+        builder.append("3. INTERNET,CHANGE_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_STATE,ACCESS_NETWORK_STATE: Listener disconnect and connect in order to service for premium version");
+        builder.append("\n");
+        builder.append("4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Calculate speed base on GPS");
+        builder.append("\n");
+        builder.append("5. SYSTEM_ALERT_WINDOW, ACTION_MANAGE_OVERLAY_PERMISSION: Make app running outside when exit app");
+
+        dialogBuilder.setMessage(builder.toString());
+        dialogBuilder.setPositiveButton(R.string.got_it, null);
+        MaterialDialog dialog = dialogBuilder.create();
+        dialog.show();
+
     }
 
 

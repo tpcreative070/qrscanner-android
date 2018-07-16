@@ -20,6 +20,8 @@ public class Save {
     public String description;
     public String startEvent;
     public String endEvent;
+    public long   startEventMilliseconds;
+    public long   endEventMilliseconds;
     public String fullName;
     public String address;
     public String text;
@@ -52,6 +54,8 @@ public class Save {
                 String description,
                 String startEvent,
                 String endEvent,
+                long startEventMilliseconds,
+                long endEventMilliseconds,
                 String fullName,
                 String address,
                 String text,
@@ -74,6 +78,8 @@ public class Save {
         this.location = location;
         this.description = description;
         this.startEvent = startEvent;
+        this.startEventMilliseconds  = startEventMilliseconds;
+        this.endEventMilliseconds = endEventMilliseconds;
         this.endEvent = endEvent;
         this.fullName = fullName;
         this.address = address;
@@ -101,6 +107,8 @@ public class Save {
         this.description = "";
         this.startEvent = "";
         this.endEvent = "";
+        this.startEventMilliseconds = 0;
+        this.endEventMilliseconds = 0;
         this.fullName = "";
         this.address = "";
         this.text = "";

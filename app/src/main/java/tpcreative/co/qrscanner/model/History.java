@@ -20,6 +20,8 @@ public class History{
     public String description;
     public String startEvent;
     public String endEvent;
+    public long   startEventMilliseconds;
+    public long   endEventMilliseconds;
     public String fullName;
     public String address;
     public String text;
@@ -52,6 +54,8 @@ public class History{
                    String description,
                    String startEvent,
                    String endEvent,
+                   long   startEventMilliseconds,
+                   long   endEventMilliseconds,
                    String fullName,
                    String address,
                    String text,
@@ -75,6 +79,8 @@ public class History{
         this.description = description;
         this.startEvent = startEvent;
         this.endEvent = endEvent;
+        this.startEventMilliseconds = startEventMilliseconds;
+        this.endEventMilliseconds = endEventMilliseconds;
         this.fullName = fullName;
         this.address = address;
         this.text = text;
@@ -95,6 +101,8 @@ public class History{
         this.phone = "";
         this.lat = 0;
         this.lon = 0;
+        this.startEventMilliseconds = 0;
+        this.endEventMilliseconds = 0;
         this.query = "";
         this.title = "";
         this.location = "";

@@ -152,6 +152,8 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
             create.description = edtDescription.getText().toString();
             create.startEvent = Utils.getCurrentDatetimeEvent(beginDateTimeMilliseconds);
             create.endEvent = Utils.getCurrentDatetimeEvent(endDateTimeMilliseconds);
+            create.startEventMilliseconds = beginDateTimeMilliseconds;
+            create.endEventMilliseconds = endDateTimeMilliseconds;
             create.createType = ParsedResultType.CALENDAR;
             Navigator.onMoveToReview(getActivity(), create);
         } else {

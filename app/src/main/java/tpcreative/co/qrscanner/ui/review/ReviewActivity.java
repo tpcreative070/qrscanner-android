@@ -13,6 +13,7 @@ import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.model.Create;
@@ -129,7 +130,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case CALENDAR:
-
                 StringBuilder builder = new StringBuilder();
                 builder.append("BEGIN:VEVENT");
                 builder.append("\n");
@@ -229,7 +229,8 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     @Override
     public void onSaved() {
         Toast.makeText(this,"Saved image successfully",Toast.LENGTH_SHORT).show();
-        save.createType = Utils.getCurrentDateTime();
+        SingletonSave.getInstance().setUpdateData(true);
+        save.createDatetime = Utils.getCurrentDateTime();
         save.key = InstanceGenerator.getInstance(getContext()).getUUId();
         InstanceGenerator.getInstance(getContext()).onInsert(save);
     }

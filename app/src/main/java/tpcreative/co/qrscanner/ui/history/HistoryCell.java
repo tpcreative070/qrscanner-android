@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,23 +64,34 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
 
         if (data.isDeleted()){
             viewHolder.ckDelete.setVisibility(View.VISIBLE);
+            viewHolder.llCheckedBox.setVisibility(View.VISIBLE);
             viewHolder.imgShare.setVisibility(View.INVISIBLE);
         }
         else{
             viewHolder.ckDelete.setVisibility(View.INVISIBLE);
+            viewHolder.llCheckedBox.setVisibility(View.INVISIBLE);
             viewHolder.imgShare.setVisibility(View.VISIBLE);
+
         }
 
         Log.d(TAG,"position :" + i +" checked :" + data.isChecked());
         viewHolder.ckDelete.setChecked(data.isChecked());
 
-
-        viewHolder.lItem.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llCheckedBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (listener!=null){
                     viewHolder.ckDelete.setChecked(!getItem().isChecked());
                     listener.onClickItem(i,!getItem().isChecked());
+                }
+            }
+        });
+
+        viewHolder.lItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener!=null){
+                    listener.onClickItem(i);
                 }
             }
         });
@@ -113,15 +125,11 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
             viewHolder.tvContent.setText(data.text);
         }
 
-
-
-
         viewHolder.imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (listener!=null){
-                    //StringBuilder sb = new StringBuilder();
-                    //listener.onClickShare(sb.toString());
+                    listener.onClickShare(i);
                 }
             }
         });
@@ -143,6 +151,8 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
         ImageView imgShare;
         @BindView(R.id.lItem)
         LinearLayout lItem;
+        @BindView(R.id.llCheckedBox)
+        LinearLayout llCheckedBox;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -152,7 +162,8 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
 
     public  interface ItemSelectedListener{
         void onClickItem(int position, boolean isChecked);
-        void onClickShare(String value);
+        void onClickItem(int position);
+        void onClickShare(int  position);
     }
 }
 
