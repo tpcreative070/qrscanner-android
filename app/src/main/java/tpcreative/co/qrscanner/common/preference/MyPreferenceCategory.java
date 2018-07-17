@@ -29,7 +29,7 @@ public class MyPreferenceCategory extends PreferenceCategory {
         TextView titleView = (TextView) view.findViewById(android.R.id.title);
         titleView.setTextColor(getContext().getResources().getColor(R.color.colorRed));
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_bld);
-        titleView.setAllCaps(false);
+        titleView.setAllCaps(true);
         titleView.setTextSize(17);
         titleView.setTypeface(typeface);
     }

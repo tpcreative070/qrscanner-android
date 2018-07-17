@@ -91,6 +91,18 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
     }
 
+    public synchronized void onUpdate(Save cTalkManager){
+        try {
+            if (cTalkManager==null){
+                return;
+            }
+            instance.saveDao().update(cTalkManager);
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+    }
+
     public final synchronized List<Save> getListSave(){
         try{
             return instance.saveDao().loadAll();

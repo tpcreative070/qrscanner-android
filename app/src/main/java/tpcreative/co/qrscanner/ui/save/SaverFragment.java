@@ -1,5 +1,7 @@
 package tpcreative.co.qrscanner.ui.save;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,22 +25,38 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.result.ParsedResultType;
 import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.common.SingletonSave;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.ui.create.ContactFragment;
+import tpcreative.co.qrscanner.ui.create.EmailFragment;
+import tpcreative.co.qrscanner.ui.create.EventFragment;
+import tpcreative.co.qrscanner.ui.create.LocationFragment;
+import tpcreative.co.qrscanner.ui.create.MessageFragment;
+import tpcreative.co.qrscanner.ui.create.TelephoneFragment;
+import tpcreative.co.qrscanner.ui.create.TextFragment;
+import tpcreative.co.qrscanner.ui.create.UrlFragment;
+import tpcreative.co.qrscanner.ui.create.WifiFragment;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
-public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSelectedListener, View.OnClickListener, SingletonSave.SingletonSaveListener {
+public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSelectedListener, View.OnClickListener, SingletonSave.SingletonSaveListener,Utils.UtilsListener {
 
     private static final String TAG = SaverFragment.class.getSimpleName();
     private Unbinder unbinder;
@@ -65,6 +83,11 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     private boolean isSelected = false;
     private boolean isSelectedAll = false;
     private ScannerResultFragment fragment;
+    private Bitmap bitmap;
+    private  String code ;
+    private  Save share;
+    private  Save edit;
+
 
 
     public static SaverFragment newInstance(int index) {
@@ -84,6 +107,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         presenter = new SavePresenter();
         presenter.bindView(this);
         presenter.getListGroup();
+        presenter.setFragmentList();
         addRecyclerHeaders();
         bindData();
 
@@ -95,7 +119,6 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgSelectAll.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
 
         return view;
     }
@@ -145,7 +168,6 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
             cells.add(cell);
         }
         recyclerView.addCells(cells);
-
     }
 
 
@@ -221,79 +243,128 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
 
     @Override
     public void onClickShare(int position) {
-        final Save history = presenter.mList.get(position);
-        StringBuilder sb = new StringBuilder();
-        if (history.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
-            sb.append("Address :" + history.address);
-            sb.append("\n");
-            sb.append("FullName :" + history.fullName);
-            sb.append("\n");
-            sb.append("Email :" + history.email);
-            sb.append("\n");
-            sb.append("Phone :" + history.phone);
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.EMAIL_ADDRESS.name())) {
-            sb.append("Email :" + history.email);
-            sb.append("\n");
-            sb.append("Subject :" + history.subject);
-            sb.append("\n");
-            sb.append("Message :" + history.message);
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
+        share = presenter.mList.get(position);
+        if (share.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
+            code =   "MECARD:N:"+share.fullName+";TEL:"+share.phone+";EMAIL:"+share.email+";ADR:"+share.address+";";
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.EMAIL_ADDRESS.name())) {
+            code = "MATMSG:TO:"+share.email+";SUB:"+share.subject+";BODY:"+share.message+";";
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
 
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
-            sb.append("Url :" + history.url);
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.WIFI.name())) {
-
-            sb.append("SSId :" + history.ssId);
-            sb.append("\n");
-            sb.append("Password :" + history.password);
-            sb.append("\n");
-            sb.append("Network encryption :" + history.networkEncryption);
-            sb.append("\n");
-            sb.append("Hidden :" + history.hidden);
-
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.GEO.name())) {
-
-            sb.append("Latitude :" + history.lat);
-            sb.append("\n");
-            sb.append("Longitude :" + history.lon);
-            sb.append("\n");
-            sb.append("Query :" + history.query);
-
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.TEL.name())) {
-            sb.append("Phone :" + history.phone);
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.SMS.name())) {
-
-            sb.append("Phone :" + history.phone);
-            sb.append("\n");
-            sb.append("Message :" + history.message);
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.CALENDAR.name())) {
-
-            sb.append("Title :" + history.title);
-            sb.append("\n");
-            sb.append("Description :" + history.description);
-            sb.append("\n");
-            sb.append("Location :" + history.location);
-            sb.append("\n");
-            sb.append("Start event :" + history.startEvent);
-            sb.append("\n");
-            sb.append("End event :" + history.endEvent);
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
+            code = share.url;
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.WIFI.name())) {
+            code = "WIFI:S:"+share.ssId+";T:"+share.password+";P:"+share.networkEncryption+";H:"+share.hidden+";";
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.GEO.name())) {
+            code =  "geo:"+share.lat+","+share.lon+"?q="+share.query+"";
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.TEL.name())) {
+            code = "tel:"+share.phone+"";
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.SMS.name())) {
+            code =  "smsto:"+share.phone+":"+share.message;
+        } else if (share.createType.equalsIgnoreCase(ParsedResultType.CALENDAR.name())) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("BEGIN:VEVENT");
+            builder.append("\n");
+            builder.append("SUMMARY:"+share.title);
+            builder.append("\n");
+            builder.append("DTSTART:"+share.startEvent);
+            builder.append("\n");
+            builder.append("DTEND:"+share.endEvent);
+            builder.append("\n");
+            builder.append("LOCATION:"+share.location);
+            builder.append("\n");
+            builder.append("DESCRIPTION:"+share.description);
+            builder.append("\n");
+            builder.append("END:VEVENT");
+            code =  builder.toString();
         } else {
-            sb.append("Text :" + history.text);
+            code = share.text;
         }
-        shareToSocial(sb.toString());
+        onGenerateCode(code);
     }
 
-    public void shareToSocial(String value) {
+    @Override
+    public void onClickEdit(int position) {
+        edit = presenter.mList.get(position);
+        Log.d(TAG,"Edit : " + new Gson().toJson(edit));
+        if (edit.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
+            replaceFragment(presenter.mFragment.get(0),edit);
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.EMAIL_ADDRESS.name())) {
+            replaceFragment(presenter.mFragment.get(1),edit);
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
+
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
+            replaceFragment(presenter.mFragment.get(2),edit);
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.WIFI.name())) {
+            replaceFragment(presenter.mFragment.get(3),edit);
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.GEO.name())) {
+            replaceFragment(presenter.mFragment.get(4),edit);
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.TEL.name())) {
+            replaceFragment(presenter.mFragment.get(5),edit);
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.SMS.name())) {
+            replaceFragment(presenter.mFragment.get(6),edit);
+        } else if (edit.createType.equalsIgnoreCase(ParsedResultType.CALENDAR.name())) {
+            replaceFragment(presenter.mFragment.get(7),edit);
+        } else {
+            replaceFragment(presenter.mFragment.get(8),edit);
+        }
+    }
+
+    public void replaceFragment(final Fragment fragment,final Save data){
+        setInvisible();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        //ft.detach(presenter.mFragment.get(position));
+        //ft.attach(presenter.mFragment.get(position));
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data",data);
+        fragment.setArguments(bundle);
+        ft.replace(R.id.flContainer_save_review,fragment);
+        ft.commit();
+    }
+
+    public void shareToSocial(final Uri value) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, value);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, value);
         startActivity(Intent.createChooser(intent, "Share"));
+    }
+
+    public void onGenerateCode(String code){
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
+            Utils.saveImage(bitmap, EnumAction.SHARE,share.createType,code,this);
+
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onSaved(String path,EnumAction enumAction) {
+        Log.d(TAG,"path : " + path);
+        File file = new File(path);
+        if (file.isFile()){
+            Uri uri = Uri.fromFile(file);
+            shareToSocial(uri);
+        }
+        else{
+            Toast.makeText(getActivity(),"No Found File",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void setVisible() {
         rlRoot.setVisibility(View.VISIBLE);
+        if (SingletonSave.getInstance().isUpdateData()) {
+            if (presenter != null && recyclerView != null) {
+                presenter.getListGroup();
+                recyclerView.removeAllCells();
+                bindData();
+                SingletonSave.getInstance().setUpdateData(false);
+            }
+        }
     }
 
     @Override
@@ -518,6 +589,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         });
         builder.show();
     }
+
 
     @Override
     public void updateView() {

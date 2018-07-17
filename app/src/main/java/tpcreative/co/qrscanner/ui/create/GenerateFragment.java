@@ -10,24 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
-
 import com.jaychang.srv.SimpleRecyclerView;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
-import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.QRCodeType;
 
 public class GenerateFragment extends Fragment implements GenerateCell.ItemSelectedListener,GenerateView,SingletonGenerate.SingletonGenerateListener {
@@ -39,6 +31,7 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
     @BindView(R.id.tvTittle)
     TextView tvTittle;
     private GeneratePresenter presenter;
+
 
 
     public static GenerateFragment newInstance(int index) {

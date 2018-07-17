@@ -11,12 +11,15 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 
 import butterknife.BindView;
@@ -27,8 +30,11 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumImplement;
+import tpcreative.co.qrscanner.model.Save;
 
 public class EmailFragment extends Fragment{
 
@@ -45,6 +51,8 @@ public class EmailFragment extends Fragment{
     ImageView imgReview;
     private Unbinder unbinder;
     private AwesomeValidation mAwesomeValidation ;
+    private Save save;
+    private Animation mAnim = null;
 
 
     public static EmailFragment newInstance(int index) {
@@ -64,28 +72,70 @@ public class EmailFragment extends Fragment{
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
 
+        Bundle bundle = getArguments();
+        final Save mData = (Save) bundle.get("data");
+        if (mData!=null){
+            Log.d(TAG,new Gson().toJson(mData));
+            save = mData;
+            onSetData();
+        }
+        else{
+            Log.d(TAG,"Data is null");
+        }
+
         return view;
     }
 
     @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(){
-       onCloseWindow();
+    public void CloseWindow(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                onCloseWindow();
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
     }
 
     @OnClick(R.id.imgReview)
-    public void onCheck(){
-        if (mAwesomeValidation.validate()){
-            Log.d(TAG,"Passed");
-            Create create = new Create();
-            create.email = edtEmail.getText().toString().trim();
-            create.subject = edtObject.getText().toString();
-            create.message = edtMessage.getText().toString();
-            create.createType = ParsedResultType.EMAIL_ADDRESS;
-            Navigator.onMoveToReview(getActivity(),create);
-        }
-        else{
-            Log.d(TAG,"error");
-        }
+    public void onCheck(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mAwesomeValidation.validate()){
+                    Log.d(TAG,"Passed");
+                    Create create = new Create();
+                    create.email = edtEmail.getText().toString().trim();
+                    create.subject = edtObject.getText().toString();
+                    create.message = edtMessage.getText().toString();
+                    create.createType = ParsedResultType.EMAIL_ADDRESS;
+                    Navigator.onMoveToReview(getActivity(),create);
+                }
+                else{
+                    Log.d(TAG,"error");
+                }
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
+
     }
 
     private void addValidationForEditText() {
@@ -94,11 +144,35 @@ public class EmailFragment extends Fragment{
         mAwesomeValidation.addValidation(getActivity(),R.id.edtMessage, RegexTemplate.NOT_EMPTY,R.string.err_message);
     }
 
-    public void clearUI(){
+    public void FocusUI(){
+        edtEmail.requestFocus();
+    }
+
+    public void clearAndFocusUI(){
         edtEmail.requestFocus();
         edtEmail.setText("");
         edtObject.setText("");
         edtMessage.setText("");
+    }
+
+    public void onCloseWindow(){
+        clearAndFocusUI();
+        Utils.hideSoftKeyboard(getActivity());
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(this).commit();
+        if (save!=null){
+            SingletonSave.getInstance().setVisible();
+        }
+        else{
+            SingletonGenerate.getInstance().setVisible();
+        }
+    }
+
+    public void onSetData(){
+        edtEmail.setText(""+save.email);
+        edtObject.setText(""+save.subject);
+        edtMessage.setText(save.message);
     }
 
     @Override
@@ -107,7 +181,10 @@ public class EmailFragment extends Fragment{
         Log.d(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         addValidationForEditText();
-        clearUI();
+        if (save!=null){
+            onSetData();
+        }
+        FocusUI();
     }
 
     @Override
@@ -127,14 +204,6 @@ public class EmailFragment extends Fragment{
         super.onDestroy();
         unbinder.unbind();
         Log.d(TAG,"onDestroy");
-    }
-
-    public void onCloseWindow(){
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        SingletonGenerate.getInstance().setVisible();
     }
 
     @Override

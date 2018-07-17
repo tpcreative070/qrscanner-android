@@ -1,8 +1,7 @@
 package tpcreative.co.qrscanner.ui.scannerresult;
-
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -18,24 +17,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.google.zxing.client.result.AddressBookParsedResult;
-import com.google.zxing.client.result.CalendarParsedResult;
-import com.google.zxing.client.result.EmailAddressParsedResult;
-import com.google.zxing.client.result.GeoParsedResult;
-import com.google.zxing.client.result.ParsedResultType;
-import com.google.zxing.client.result.SMSParsedResult;
-import com.google.zxing.client.result.TelParsedResult;
-import com.google.zxing.client.result.TextParsedResult;
-import com.google.zxing.client.result.URIParsedResult;
-import com.google.zxing.client.result.WifiParsedResult;
-
+import android.widget.Toast;
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -46,11 +39,12 @@ import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
-public class ScannerResultFragment extends Fragment implements ScannerResultView{
+public class ScannerResultFragment extends Fragment implements ScannerResultView,Utils.UtilsListener{
 
     private static final String TAG = ScannerResultFragment.class.getSimpleName();
     private Unbinder unbinder;
@@ -156,6 +150,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @BindView(R.id.imgArrowBack)
     ImageView imgArrowBack;
 
+    private  String code ;
+    private Bitmap bitmap;
+    private Animation mAnim = null;
+
 
 
     public static ScannerResultFragment newInstance(int index) {
@@ -190,22 +188,40 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     }
 
     @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(){
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        if (create!=null){
-            if (create.fragmentType == EnumFragmentType.SCANNER){
-                SingletonScanner.getInstance().setVisible();
-                SingletonHistory.getInstance().setUpdateData(true);
+    public void CloseWindow(View view){
+
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
             }
-            else if (create.fragmentType == EnumFragmentType.SAVER){
-                SingletonSave.getInstance().setVisible();
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.remove(ScannerResultFragment.this).commit();
+                if (create!=null){
+                    if (create.fragmentType == EnumFragmentType.SCANNER){
+                        SingletonScanner.getInstance().setVisible();
+                        SingletonHistory.getInstance().setUpdateData(true);
+                    }
+                    else if (create.fragmentType == EnumFragmentType.SAVER){
+                        SingletonSave.getInstance().setVisible();
+                    }
+                    else if (create.fragmentType == EnumFragmentType.HISTORY){
+                        SingletonHistory.getInstance().setVisible();
+                    }
+                }
             }
-            else if (create.fragmentType == EnumFragmentType.HISTORY){
-                SingletonHistory.getInstance().setVisible();
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
             }
-        }
+        });
+        view.startAnimation(mAnim);
+
+
     }
 
     @OnClick(R.id.imgOpenApplication)
@@ -213,75 +229,155 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         create = presenter.result;
         switch (create.createType){
             case ADDRESSBOOK:
-                Intent intentContact = new Intent();
-                intentContact.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
-                intentContact.setData(Uri.fromParts("tel", create.phone, null));
-                intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create.fullName);
-                intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create.address);
-                intentContact.putExtra(ContactsContract.Intents.Insert.PHONE,create.phone);
-                intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL,create.email);
-                startActivity(intentContact);
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    Intent intentContact = new Intent();
+                    intentContact.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
+                    intentContact.setData(Uri.fromParts("tel", create.phone, null));
+                    intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create.fullName);
+                    intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create.address);
+                    intentContact.putExtra(ContactsContract.Intents.Insert.PHONE,create.phone);
+                    intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL,create.email);
+                    startActivity(intentContact);
+                }
+                else{
+                    code =   "MECARD:N:"+create.fullName+";TEL:"+create.phone+";EMAIL:"+create.email+";ADR:"+create.address+";";
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
+
                 break;
             case EMAIL_ADDRESS:
-                try{
-                    Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" +create.email));
-                    intent.putExtra(Intent.EXTRA_SUBJECT, create.subject);
-                    intent.putExtra(Intent.EXTRA_TEXT, create.message);
-                    startActivity(intent);
-                }catch(ActivityNotFoundException e){
-                    //TODO smth
+
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    try{
+                        Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" +create.email));
+                        intent.putExtra(Intent.EXTRA_SUBJECT, create.subject);
+                        intent.putExtra(Intent.EXTRA_TEXT, create.message);
+                        startActivity(intent);
+                    }catch(ActivityNotFoundException e){
+                        //TODO smth
+                    }
                 }
+                else{
+                    code = "MATMSG:TO:"+create.email+";SUB:"+create.subject+";BODY:"+create.message+";";
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
+
                 break;
             case PRODUCT:
                 break;
             case URI:
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(create.url));
-                startActivity(browserIntent);
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(create.url));
+                    startActivity(browserIntent);
+                }
+                else{
+                    code = create.url;
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
+
 
                 break;
-
             case WIFI:
-                startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
-                break;
 
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+                }
+                else{
+                    code = "WIFI:S:"+create.ssId+";T:"+create.password+";P:"+create.networkEncryption+";H:"+create.hidden+";";
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
+                break;
             case GEO:
-                String uri = "geo:"+create.lat+","+create.lon+"";
-                Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-                intentMap.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-                startActivity(intentMap);
+
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    String uri = "geo:"+create.lat+","+create.lon+"";
+                    Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                    intentMap.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                    startActivity(intentMap);
+                }
+                else{
+                    code =  "geo:"+create.lat+","+create.lon+"?q="+create.query+"";
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
+
+
                 break;
             case TEL:
 
-                Intent intentPhoneCall=new Intent(Intent.ACTION_CALL,Uri.parse("tel:"+create.phone));
-                startActivity(intentPhoneCall);
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    Intent intentPhoneCall=new Intent(Intent.ACTION_CALL,Uri.parse("tel:"+create.phone));
+                    startActivity(intentPhoneCall);
+                }
+                else{
+                    code = "tel:"+create.phone+"";
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
+
 
                 break;
             case SMS:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create.phone));
-                intent.putExtra("sms_body", create.message);
-                startActivity(intent);
+
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create.phone));
+                    intent.putExtra("sms_body", create.message);
+                    startActivity(intent);
+                }
+                else{
+                    code =  "smsto:"+create.phone+":"+create.message;
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
+
                 break;
             case CALENDAR:
-                Intent intentCalendar = new Intent(Intent.ACTION_INSERT);
-                intentCalendar.setData(CalendarContract.Events.CONTENT_URI);
-                intentCalendar.putExtra(CalendarContract.Events.TITLE, create.title);
-                intentCalendar.putExtra(CalendarContract.Events.DESCRIPTION, create.description);
-                intentCalendar.putExtra(CalendarContract.Events.EVENT_LOCATION, create.location);
-                intentCalendar.putExtra(CalendarContract.Events.ALL_DAY, false);
-                intentCalendar.putExtra(
-                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                        create.startEventMilliseconds);
-                intentCalendar.putExtra(
-                        CalendarContract.EXTRA_EVENT_END_TIME,create.endEventMilliseconds);
-                startActivity(intentCalendar);
+
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    Intent intentCalendar = new Intent(Intent.ACTION_INSERT);
+                    intentCalendar.setData(CalendarContract.Events.CONTENT_URI);
+                    intentCalendar.putExtra(CalendarContract.Events.TITLE, create.title);
+                    intentCalendar.putExtra(CalendarContract.Events.DESCRIPTION, create.description);
+                    intentCalendar.putExtra(CalendarContract.Events.EVENT_LOCATION, create.location);
+                    intentCalendar.putExtra(CalendarContract.Events.ALL_DAY, false);
+                    intentCalendar.putExtra(
+                            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                            create.startEventMilliseconds);
+                    intentCalendar.putExtra(
+                            CalendarContract.EXTRA_EVENT_END_TIME,create.endEventMilliseconds);
+                    startActivity(intentCalendar);
+                }
+                else{
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("BEGIN:VEVENT");
+                    builder.append("\n");
+                    builder.append("SUMMARY:"+create.title);
+                    builder.append("\n");
+                    builder.append("DTSTART:"+create.startEvent);
+                    builder.append("\n");
+                    builder.append("DTEND:"+create.endEvent);
+                    builder.append("\n");
+                    builder.append("LOCATION:"+create.location);
+                    builder.append("\n");
+                    builder.append("DESCRIPTION:"+create.description);
+                    builder.append("\n");
+                    builder.append("END:VEVENT");
+                    code =  builder.toString();
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
 
                 break;
             case ISBN:
 
                 break;
             default:
-                shareToSocial(create.text);
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
+                    intent.putExtra("sms_body", create.text);
+                    startActivity(intent);
+                }
+                else{
+                    code = create.text;
+                    onGenerateCode(code,EnumAction.SHARE);
+                }
                 break;
         }
     }
@@ -303,43 +399,58 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.phone = create.phone;
                 history.email = create.email;
                 history.createType = create.createType.name();
-
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_perm_contact_calendar_white_48));
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
                 onShowUI(llContact);
                 tvTitle.setText("AddressBook");
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_perm_contact_calendar_white_48));
                 break;
             case EMAIL_ADDRESS:
+
                 emailTo.setText(create.email);
                 emailSubject.setText(create.subject);
                 emailMessage.setText(create.message);
-
 
                 history = new History();
                 history.email = create.email;
                 history.subject = create.subject;
                 history.message = create.message;
                 history.createType = create.createType.name();
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_email_white_48));
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
 
                 onShowUI(llEmail);
                 tvTitle.setText("Email");
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_email_white_48));
                 break;
             case PRODUCT:
 
                 break;
             case URI:
-                urlAddress.setText(create.url);
 
+                urlAddress.setText(create.url);
                 history = new History();
                 history.url = create.url;
                 history.createType = create.createType.name();
 
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_language_white_48));
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
                 onShowUI(llURL);
                 tvTitle.setText("Url");
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_language_white_48));
                 break;
 
             case WIFI:
+
                 wifiSSID.setText(create.ssId);
                 wifiPassword.setText(create.password);
                 wifiNetworkEncryption.setText(create.networkEncryption);
@@ -352,18 +463,24 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.networkEncryption = create.networkEncryption;
                 history.hidden = create.hidden;
                 history.createType = create.createType.name();
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
 
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_network_wifi_white_48));
+
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
 
                 onShowUI(llWifi);
                 tvTitle.setText("Wifi");
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_network_wifi_white_48));
                 break;
 
             case GEO:
-                locationLatitude.setText(""+create.lat);
-                locationLongitude.setText(""+create.lon);
-                locationQuery.setText(""+create.query);
 
+                locationLatitude.setText("" + create.lat);
+                locationLongitude.setText("" + create.lon);
+                locationQuery.setText("" + create.query);
 
                 history = new History();
                 history.lat = create.lat;
@@ -371,25 +488,37 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.query = create.query;
                 history.createType = create.createType.name();
 
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_location_on_white_48));
+
+                }else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
 
                 onShowUI(llLocation);
                 tvTitle.setText("Location");
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_location_on_white_48));
 
                 break;
             case TEL:
-                telephoneNumber.setText(create.phone);
 
+                telephoneNumber.setText(create.phone);
                 history = new History();
                 history.phone = create.phone;
                 history.createType = create.createType.name();
 
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_phone_white_48));
+
+                }else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
+
                 onShowUI(llTelephone);
                 tvTitle.setText("Telephone");
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_phone_white_48));
 
                 break;
             case SMS:
+
                 smsTo.setText(create.phone);
                 smsMessage.setText(create.message);
 
@@ -398,17 +527,24 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.message = create.message;
                 history.createType = create.createType.name();
 
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
+
                 onShowUI(llSMS);
                 tvTitle.setText("SMS");
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
                 break;
             case CALENDAR:
 
                 eventTitle.setText(create.title);
                 eventLocation.setText(create.location);
                 eventDescription.setText(create.description);
-                eventBeginTime.setText(create.startEvent);
-                eventEndTime.setText(create.endEvent);
+                eventBeginTime.setText(Utils.convertMillisecondsToDateTime(create.startEventMilliseconds));
+                eventEndTime.setText(Utils.convertMillisecondsToDateTime(create.endEventMilliseconds));
 
 
                 history = new History();
@@ -420,33 +556,75 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.startEventMilliseconds = create.startEventMilliseconds;
                 history.endEventMilliseconds = create.endEventMilliseconds;
                 history.createType = create.createType.name();
+
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_event_white_48));
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
                 onShowUI(llEvent);
                 tvTitle.setText("Calendar");
                 Log.d(TAG,"start milliseconds : " + create.startEventMilliseconds);
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_event_white_48));
 
                 break;
             case ISBN:
 
                 break;
             default:
-                imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
                 textMessage.setText(create.text);
                 history = new History();
                 history.text = create.text;
                 history.createType = create.createType.name();
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
                 onShowUI(llText);
                 tvTitle.setText("Text");
                 break;
         }
     }
 
-    public void shareToSocial(String value){
+    @Override
+    public void onSaved(String path, EnumAction enumAction) {
+        switch (enumAction){
+            case SHARE:{
+                Log.d(TAG,"path : " + path);
+                File file = new File(path);
+                if (file.isFile()){
+                    Uri uri = Uri.fromFile(file);
+                    shareToSocial(uri);
+                }
+                else{
+                    Toast.makeText(getActivity(),"No Found File",Toast.LENGTH_SHORT).show();
+                }
+            }
+            default:{
+                break;
+            }
+        }
+    }
+
+    public void shareToSocial(final Uri value) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT,value);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, value);
         startActivity(Intent.createChooser(intent, "Share"));
+    }
+
+
+    public void onGenerateCode(String code,EnumAction enumAction){
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
+            Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
+        } catch(Exception e) {
+            Log.d(TAG,e.getMessage());
+        }
     }
 
     public void onShowUI(View view){
@@ -464,7 +642,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             }
         }
         history.createDatetime = Utils.getCurrentDateTime();
-        history.key = InstanceGenerator.getInstance(getContext()).getUUId();
         InstanceGenerator.getInstance(getContext()).onInsert(history);
     }
 

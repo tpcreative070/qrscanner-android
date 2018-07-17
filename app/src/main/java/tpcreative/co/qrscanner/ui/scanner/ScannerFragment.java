@@ -24,7 +24,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -56,7 +55,6 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -672,7 +670,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         create.endEventMilliseconds = endEventMilliseconds;
         create.text = text;
 
-
+        create.fragmentType = EnumFragmentType.SCANNER;
         Log.d(TAG,new Gson().toJson(create));
         beepManager.playBeepSoundAndVibrate();
         replaceFragment(0,create);

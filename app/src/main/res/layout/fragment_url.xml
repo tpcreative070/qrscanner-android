@@ -87,7 +87,7 @@
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/text" />
+                            android:text="@string/url" />
 
                         <EditText
                             android:id="@+id/edtUrl"

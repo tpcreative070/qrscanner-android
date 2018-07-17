@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -12,19 +11,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Handler;
-import android.provider.CalendarContract;
 import android.provider.Settings;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,19 +29,18 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 import java.util.TimeZone;
 
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.EnumAction;
 
 public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
 
-    private UtilsListenner listenner;
+    private UtilsListener listenner;
 
     public static boolean mCreateAndSaveFileOverride(String fileName, String path_folder_name, String responseJson, boolean append) {
         final String newLine = System.getProperty("line.separator");
@@ -126,8 +118,6 @@ public class Utils {
         return result;
     }
 
-
-
     public static boolean checkCameraBack(Context context) {
         if (context.getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA)) {
@@ -156,7 +146,6 @@ public class Utils {
         }
     }
 
-
     public static int getScreenHeight(Context c) {
         if (screenHeight == 0) {
             WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
@@ -180,7 +169,6 @@ public class Utils {
 
         return screenWidth;
     }
-
 
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
@@ -221,7 +209,6 @@ public class Utils {
 
     }
 
-
     public static double convertDollarsToCents(double dollars){
         return dollars * 100;
     }
@@ -247,7 +234,6 @@ public class Utils {
         }
     }
 
-
     @SuppressLint("SimpleDateFormat")
     public static String formatDateISO(Date date){
         TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -268,8 +254,6 @@ public class Utils {
         }
         return date;
     }
-
-
 
     public static String capitalize(String str) {
         return capitalize(str, (char[]) null);
@@ -383,23 +367,19 @@ public class Utils {
         return result;
     }
 
-    public static void saveImage(final Bitmap finalBitmap,String type,UtilsListenner listenner) {
+    public static void saveImage(final Bitmap finalBitmap,final EnumAction enumAction,final String type,final String code,UtilsListener listenner) {
 
         String root = QRScannerApplication.getInstance().getPathFolder();
         File myDir = new File(root);
         myDir.mkdirs();
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Image-"+ type + n +".jpg";
+        String fname = "Image-"+ type + code +".jpg";
         File file = new File (myDir, fname);
-        if (file.exists ()) file.delete ();
         try {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-            listenner.onSaved();
+            listenner.onSaved(file.getAbsolutePath(),enumAction);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -415,18 +395,8 @@ public class Utils {
         return sb.substring(0, sb.length() - 1);
     }
 
-    public interface UtilsListenner {
-        void onSaved();
+    public interface UtilsListener {
+        void onSaved(String path, EnumAction action);
     }
-
-
-
-
-
-
-
-
-
-
 
 }

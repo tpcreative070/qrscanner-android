@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.create;
 import android.graphics.PorterDuff;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -18,9 +21,9 @@ import android.widget.RadioGroup;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 
-import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,8 +32,11 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumImplement;
+import tpcreative.co.qrscanner.model.Save;
 
 public class WifiFragment extends Fragment implements View.OnClickListener{
 
@@ -54,8 +60,9 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
     ImageView imgArrowBack;
     @BindView(R.id.imgReview)
     ImageView imgReview;
-
     String typeEncrypt = "WPA";
+    private Save save;
+    private Animation mAnim = null;
 
     public static WifiFragment newInstance(int index) {
         WifiFragment fragment = new WifiFragment();
@@ -78,36 +85,75 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
 
+        Bundle bundle = getArguments();
+        final Save mData = (Save) bundle.get("data");
+        if (mData!=null){
+            Log.d(TAG,new Gson().toJson(mData));
+            save = mData;
+            onSetData();
+        }
+        else{
+            radio0.setChecked(true);
+            Log.d(TAG,"Data is null");
+        }
+
+        Log.d(TAG,"onCreateView");
+
         return view;
     }
 
     @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(){
-       onCloseWindow();
+    public void CloseWindow(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                onCloseWindow();
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
     }
 
-    public void onCloseWindow(){
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        SingletonGenerate.getInstance().setVisible();
-    }
 
     @OnClick(R.id.imgReview)
-    public void onCheck(){
-        if (mAwesomeValidation.validate()){
-            Log.d(TAG,"Passed");
-            Create create = new Create();
-            create.ssId = edtSSID.getText().toString().trim();
-            create.password = edtPassword.getText().toString();
-            create.networkEncryption = typeEncrypt;
-            create.createType = ParsedResultType.WIFI;
-            Navigator.onMoveToReview(getActivity(),create);
-        }
-        else{
-            Log.d(TAG,"error");
-        }
+    public void onCheck(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mAwesomeValidation.validate()){
+                    Log.d(TAG,"Passed");
+                    Create create = new Create();
+                    create.ssId = edtSSID.getText().toString().trim();
+                    create.password = edtPassword.getText().toString();
+                    create.networkEncryption = typeEncrypt;
+                    create.createType = ParsedResultType.WIFI;
+                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
+                    create.id = (save != null) ? save.id : 0 ;
+                    Navigator.onMoveToReview(getActivity(),create);
+                }
+                else{
+                    Log.d(TAG,"error");
+                }
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
     }
 
     private void addValidationForEditText() {
@@ -115,11 +161,42 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
         mAwesomeValidation.addValidation(getActivity(),R.id.edtPassword, RegexTemplate.NOT_EMPTY,R.string.err_password);
     }
 
-    public void clearUI(){
+    public void FocusUI(){
+        edtSSID.requestFocus();
+    }
+
+    public void clearAndFocusUI(){
         edtSSID.requestFocus();
         edtSSID.setText("");
         edtPassword.setText("");
-        radio0.setChecked(true);
+    }
+
+    public void onCloseWindow(){
+        clearAndFocusUI();
+        Utils.hideSoftKeyboard(getActivity());
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(this).commit();
+        if (save!=null){
+            SingletonSave.getInstance().setVisible();
+        }
+        else{
+            SingletonGenerate.getInstance().setVisible();
+        }
+    }
+
+    public void onSetData(){
+        Log.d(TAG,"onSetData : " + new Gson().toJson(save));
+        edtSSID.setText(save.ssId);
+        edtPassword.setText(save.password);
+        if (save.networkEncryption.equals("WPA")){
+            radio0.setChecked(true);
+        }
+        else if (save.networkEncryption.equals("WEP")){
+            radio1.setChecked(true);
+        }else{
+            radio2.setChecked(true);
+        }
     }
 
     @Override
@@ -128,7 +205,10 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
         Log.d(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         addValidationForEditText();
-        clearUI();
+        if (save!=null){
+            onSetData();
+        }
+        FocusUI();
     }
 
     @Override
@@ -154,6 +234,10 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
     public void onResume() {
         super.onResume();
         Log.d(TAG,"onResume");
+        if (SingletonCloseFragment.getInstance().isCloseWindow()){
+            onCloseWindow();
+            SingletonCloseFragment.getInstance().setUpdateData(false);
+        }
     }
 
     @Override

@@ -31,7 +31,6 @@ public class History{
     public String url;
     public String createType;
     public String networkEncryption;
-    public String key;
     public String createDatetime;
 
     @Ignore
@@ -41,7 +40,7 @@ public class History{
     @Ignore
     private boolean isDeleted;
 
-    public History(String key,
+    public History(
                    String email,
                    String subject ,
                    String message,
@@ -66,7 +65,6 @@ public class History{
                    String createType,
                    String networkEncryption,
                    String createDatetime){
-        this.key = key;
         this.email = email;
         this.subject = subject;
         this.message = message ;
@@ -94,7 +92,6 @@ public class History{
     }
 
     public History(){
-        this.key = "";
         this.email = "";
         this.subject = "";
         this.message = "" ;
@@ -140,18 +137,6 @@ public class History{
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
-
-
-    @Ignore
-    public String getKey() {
-        return key;
-    }
-
-    @Ignore
-    public void setKey(String key) {
-        this.key = key;
-    }
-
 
     @Ignore
     public int getId() {

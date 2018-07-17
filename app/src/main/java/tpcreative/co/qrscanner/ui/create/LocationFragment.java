@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,8 +43,11 @@ import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.PermissionUtils;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumImplement;
+import tpcreative.co.qrscanner.model.Save;
 
 public class LocationFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
@@ -71,6 +77,8 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private LocationManager locationManager;
     private boolean isRunning;
+    private Save save;
+    private Animation mAnim = null;
 
 
     public static LocationFragment newInstance(int index) {
@@ -92,14 +100,41 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
 
+        Bundle bundle = getArguments();
+        final Save mData = (Save) bundle.get("data");
+        if (mData!=null){
+            Log.d(TAG,new Gson().toJson(mData));
+            save = mData;
+            onSetData();
+        }
+        else{
+            Log.d(TAG,"Data is null");
+        }
+
         return view;
     }
 
     @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(){
-        onCloseWindow();
-        locationManager.removeUpdates(this);
+    public void CloseWindow(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                onCloseWindow();
+                locationManager.removeUpdates(LocationFragment.this);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
     }
+
 
     @Override
     public void onMapClick(LatLng latLng) {
@@ -118,43 +153,87 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     }
 
     @OnClick(R.id.imgReview)
-    public void onCheck(){
-        if (mAwesomeValidation.validate()){
-            Create create = new Create();
-            try {
-                if (lastLon ==0 || lastLon==0){
-                    Toast.makeText(getContext(),"Please enable GPS in order to get accurate lat and lon",Toast.LENGTH_SHORT).show();
+    public void onCheck(View view){
+
+
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mAwesomeValidation.validate()){
+                    Create create = new Create();
+                    try {
+                        if (lastLon ==0 || lastLon==0){
+                            Toast.makeText(getContext(),"Please enable GPS in order to get accurate lat and lon",Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            create.lat = lastLat;
+                            create.lon = lastLon;
+                            create.query = edtQuery.getText().toString();
+                            create.createType = ParsedResultType.GEO;
+                            create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
+                            create.id = (save != null) ? save.id : 0 ;
+                            Navigator.onMoveToReview(getActivity(),create);
+                            Log.d(TAG,"Passed");
+                        }
+
+                    }
+                    catch (Exception e){
+                        Log.d(TAG,"error :"+ e.getMessage());
+                    }
                 }
-                else {
-                    create.lat = lastLat;
-                    create.lon = lastLon;
-                    create.query = edtQuery.getText().toString();
-                    create.createType = ParsedResultType.GEO;
-                    Navigator.onMoveToReview(getActivity(),create);
-                    Log.d(TAG,"Passed");
+                else{
+                    Log.d(TAG,"error");
                 }
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
 
             }
-            catch (Exception e){
-                Log.d(TAG,"error :"+ e.getMessage());
-            }
-        }
-        else{
-            Log.d(TAG,"error");
-        }
+        });
+        view.startAnimation(mAnim);
+
     }
 
     private void addValidationForEditText() {
         mAwesomeValidation.addValidation(getActivity(), R.id.edtLatitude, RegexTemplate.NOT_EMPTY, R.string.err_email);
         mAwesomeValidation.addValidation(getActivity(),R.id.edtLongitude, RegexTemplate.NOT_EMPTY,R.string.err_object);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtQuery, RegexTemplate.NOT_EMPTY,R.string.err_message);
+        mAwesomeValidation.addValidation(getActivity(),R.id.edtQuery, RegexTemplate.NOT_EMPTY,R.string.err_query);
     }
 
-    public void clearUI(){
+    public void FocusUI(){
+        edtLatitude.requestFocus();
+    }
+
+    public void clearAndFocusUI(){
         edtLatitude.requestFocus();
         edtLatitude.setText("");
         edtLongitude.setText("");
         edtQuery.setText("");
+    }
+
+    public void onCloseWindow(){
+        clearAndFocusUI();
+        Utils.hideSoftKeyboard(getActivity());
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(this).commit();
+        if (save!=null){
+            SingletonSave.getInstance().setVisible();
+        }
+        else{
+            SingletonGenerate.getInstance().setVisible();
+        }
+    }
+
+    public void onSetData(){
+        edtLatitude.setText(""+save.lat);
+        edtLongitude.setText(""+save.lon);
+        edtQuery.setText(save.query);
     }
 
     @Override
@@ -164,7 +243,10 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         mAwesomeValidation.clear();
         addValidationForEditText();
-        clearUI();
+        if (save!=null){
+            onSetData();
+        }
+        FocusUI();
     }
 
     @Override
@@ -187,15 +269,6 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         }
 
     }
-
-    public void onCloseWindow(){
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        SingletonGenerate.getInstance().setVisible();
-    }
-
 
     @Override
     public void onPause() {

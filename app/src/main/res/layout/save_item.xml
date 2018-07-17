@@ -44,11 +44,11 @@
                 android:padding="10dp"
                 android:layout_marginRight="20dp"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/imgShare"
-                android:src="@drawable/baseline_share_white_48"
+                android:id="@+id/imgEdit"
+                android:src="@drawable/baseline_edit_white_48"
                 android:layout_centerInParent="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_width="45dp"
+                android:layout_height="45dp" />
 
             <LinearLayout
                 android:id="@+id/llCheckedBox"

@@ -25,8 +25,6 @@
     <color name="colorOrange">#ee6002</color>
     <color name="colorRed">#FF4081</color>
 
-
-
     <color name="inbox_primary">#4285f4</color>
     <color name="inbox_primary_dark">#3367d6</color>
     <color name="inbox_accent">#db4437</color>
@@ -170,4 +168,5 @@
     <color name="selector_blue_pressed">#442962FF</color>
     <color name="selector_purple_focused">#22AA00FF</color>
     <color name="selector_purple_pressed">#44AA00FF</color>
+
 </resources>

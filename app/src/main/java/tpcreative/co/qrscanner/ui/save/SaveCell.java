@@ -65,13 +65,12 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
         if (data.isDeleted()){
             viewHolder.ckDelete.setVisibility(View.VISIBLE);
             viewHolder.llCheckedBox.setVisibility(View.VISIBLE);
-            viewHolder.imgShare.setVisibility(View.INVISIBLE);
+            viewHolder.imgEdit.setVisibility(View.INVISIBLE);
         }
         else{
             viewHolder.ckDelete.setVisibility(View.INVISIBLE);
             viewHolder.llCheckedBox.setVisibility(View.INVISIBLE);
-            viewHolder.imgShare.setVisibility(View.VISIBLE);
-
+            viewHolder.imgEdit.setVisibility(View.VISIBLE);
         }
 
         Log.d(TAG,"position :" + i +" checked :" + data.isChecked());
@@ -125,11 +124,11 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
             viewHolder.tvContent.setText(data.text);
         }
 
-        viewHolder.imgShare.setOnClickListener(new View.OnClickListener() {
+        viewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (listener!=null){
-                    listener.onClickShare(i);
+                    listener.onClickEdit(i);
                 }
             }
         });
@@ -147,8 +146,8 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
         TextView tvContent;
         @BindView(R.id.ckDelete)
         CheckBox ckDelete;
-        @BindView(R.id.imgShare)
-        ImageView imgShare;
+        @BindView(R.id.imgEdit)
+        ImageView imgEdit;
         @BindView(R.id.lItem)
         LinearLayout lItem;
         @BindView(R.id.llCheckedBox)
@@ -164,6 +163,7 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
         void onClickItem(int position, boolean isChecked);
         void onClickItem(int position);
         void onClickShare(int position);
+        void onClickEdit(int position);
     }
 }
 

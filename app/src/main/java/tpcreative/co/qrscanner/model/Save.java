@@ -2,10 +2,12 @@ package tpcreative.co.qrscanner.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity(tableName = "save")
-public class Save {
+public class Save implements Serializable{
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String email;
@@ -31,7 +33,6 @@ public class Save {
     public String url;
     public String createType;
     public String networkEncryption;
-    public String key;
     public String createDatetime;
 
     @Ignore
@@ -41,7 +42,7 @@ public class Save {
     @Ignore
     private boolean isDeleted;
 
-    public Save(String key,
+    public Save(
                 String email,
                 String subject ,
                 String message,
@@ -66,7 +67,7 @@ public class Save {
                 String createType,
                 String networkEncryption,
                 String createDatetime){
-        this.key = key;
+
         this.email = email;
         this.subject = subject;
         this.message = message ;
@@ -94,7 +95,6 @@ public class Save {
     }
 
     public Save(){
-        this.key = "";
         this.email = "";
         this.subject = "";
         this.message = "" ;
@@ -139,17 +139,6 @@ public class Save {
     @Ignore
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
-    }
-
-
-    @Ignore
-    public String getKey() {
-        return key;
-    }
-
-    @Ignore
-    public void setKey(String key) {
-        this.key = key;
     }
 
 

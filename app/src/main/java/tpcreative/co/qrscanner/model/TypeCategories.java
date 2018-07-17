@@ -1,6 +1,8 @@
 package tpcreative.co.qrscanner.model;
 
-public class TypeCategories {
+import java.io.Serializable;
+
+public class TypeCategories implements Serializable{
     public int id;
 
     public int getId() {

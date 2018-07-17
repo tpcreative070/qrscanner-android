@@ -11,14 +11,15 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,8 +28,10 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.Save;
 
 public class ContactFragment extends Fragment{
 
@@ -47,8 +50,10 @@ public class ContactFragment extends Fragment{
     ImageView imgArrowBack;
     @BindView(R.id.imgReview)
     ImageView imgReview;
+    private Animation mAnim = null;
 
     private AwesomeValidation mAwesomeValidation ;
+    private Save save;
 
 
     public static ContactFragment newInstance(int index) {
@@ -68,29 +73,73 @@ public class ContactFragment extends Fragment{
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
 
+        Bundle bundle = getArguments();
+        final Save mData = (Save) bundle.get("data");
+        if (mData!=null){
+            Log.d(TAG,new Gson().toJson(mData));
+            save = mData;
+            onSetData();
+        }
+        else{
+            Log.d(TAG,"Data is null");
+        }
+
+        Log.d(TAG,"onCreateView");
+
         return view;
     }
 
     @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(){
-        onCloseWindow();
+    public void CloseWindow(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                onCloseWindow();
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
     }
 
     @OnClick(R.id.imgReview)
-    public void onCheck(){
-        if (mAwesomeValidation.validate()){
-            Log.d(TAG,"Passed");
-            Create create = new Create();
-            create.fullName = edtFullName.getText().toString().trim();
-            create.address = edtAddress.getText().toString();
-            create.phone = edtPhone.getText().toString();
-            create.email = edtEmail.getText().toString();
-            create.createType = ParsedResultType.ADDRESSBOOK;
-            Navigator.onMoveToReview(getActivity(),create);
-        }
-        else{
-            Log.d(TAG,"error");
-        }
+    public void onCheck(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mAwesomeValidation.validate()){
+                    Log.d(TAG,"Passed");
+                    Create create = new Create();
+                    create.fullName = edtFullName.getText().toString().trim();
+                    create.address = edtAddress.getText().toString();
+                    create.phone = edtPhone.getText().toString();
+                    create.email = edtEmail.getText().toString();
+                    create.createType = ParsedResultType.ADDRESSBOOK;
+                    Navigator.onMoveToReview(getActivity(),create);
+                }
+                else{
+                    Log.d(TAG,"error");
+                }
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
+
     }
 
     private void addValidationForEditText() {
@@ -100,12 +149,29 @@ public class ContactFragment extends Fragment{
         mAwesomeValidation.addValidation(getActivity(),R.id.edtEmail, Patterns.EMAIL_ADDRESS,R.string.err_email);
     }
 
-    public void clearUI(){
-        edtFullName.requestFocus();
-        edtFullName.setText("");
-        edtAddress.setText("");
-        edtPhone.setText("");
-        edtEmail.setText("");
+
+    public void FocusUI(){
+        edtEmail.requestFocus();
+    }
+
+    public void onCloseWindow(){
+        Utils.hideSoftKeyboard(getActivity());
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(this).commit();
+        if (save!=null){
+            SingletonSave.getInstance().setVisible();
+        }
+        else{
+            SingletonGenerate.getInstance().setVisible();
+        }
+    }
+
+    public void onSetData(){
+        edtFullName.setText(save.fullName);
+        edtAddress.setText(save.address);
+        edtPhone.setText(save.phone);
+        edtEmail.setText(save.email);
     }
 
     @Override
@@ -114,7 +180,10 @@ public class ContactFragment extends Fragment{
         Log.d(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         addValidationForEditText();
-        clearUI();
+        if (save!=null){
+            onSetData();
+        }
+        FocusUI();
     }
 
 
@@ -135,14 +204,6 @@ public class ContactFragment extends Fragment{
         super.onDestroy();
         Log.d(TAG,"onDestroy");
         unbinder.unbind();
-    }
-
-    public void onCloseWindow(){
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        SingletonGenerate.getInstance().setVisible();
     }
 
     @Override

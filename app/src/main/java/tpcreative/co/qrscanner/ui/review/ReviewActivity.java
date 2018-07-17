@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.io.File;
+
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
@@ -20,10 +24,12 @@ import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumAction;
+import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
-public class ReviewActivity extends BaseActivity implements ReviewView , View.OnClickListener ,Utils.UtilsListenner {
+public class ReviewActivity extends BaseActivity implements ReviewView , View.OnClickListener ,Utils.UtilsListener {
 
     @BindView(R.id.imgResult)
     ImageView imgResult;
@@ -46,7 +52,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         btnSave.setOnClickListener(this);
-        btnSave.setOnClickListener(this);
+        btnShare.setOnClickListener(this);
         imgArrowBack.setOnClickListener(this);
         presenter = new ReviewPresenter();
         presenter.bindView(this);
@@ -153,6 +159,8 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 save.title = create.title;
                 save.startEvent = create.startEvent;
                 save.endEvent = create.endEvent;
+                save.startEventMilliseconds = create.startEventMilliseconds;
+                save.endEventMilliseconds = create.endEventMilliseconds;
                 save.location = create.location;
                 save.description = create.description;
                 save.createType = create.createType.name();
@@ -187,7 +195,29 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         if (code!=null){
-                            onGenerateCode(code);
+                            onGenerateCode(code,EnumAction.SAVE);
+                        }
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                view.startAnimation(mAnim);
+                break;
+            }
+            case R.id.btnShare :{
+                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+                mAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        Log.d(TAG,"start");
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        if (code!=null){
+                           Log.d(TAG,"Share");
+                           onGenerateCode(code,EnumAction.SHARE);
                         }
                     }
                     @Override
@@ -209,6 +239,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                     public void onAnimationEnd(Animation animation) {
                         finish();
                         SingletonCloseFragment.getInstance().setUpdateData(true);
+                        SingletonSave.getInstance().setUpdateData(true);
                     }
                     @Override
                     public void onAnimationRepeat(Animation animation) {
@@ -220,24 +251,57 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         }
     }
 
-    public void onGenerateCode(String code){
+    public void onGenerateCode(String code,EnumAction enumAction){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
             imgResult.setImageBitmap(bitmap);
-            Utils.saveImage(bitmap,create.createType.name(),this);
+            Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
         } catch(Exception e) {
             Log.d(TAG,e.getMessage());
         }
     }
 
     @Override
-    public void onSaved() {
-        Toast.makeText(this,"Saved image successfully",Toast.LENGTH_SHORT).show();
-        SingletonSave.getInstance().setUpdateData(true);
-        save.createDatetime = Utils.getCurrentDateTime();
-        save.key = InstanceGenerator.getInstance(getContext()).getUUId();
-        InstanceGenerator.getInstance(getContext()).onInsert(save);
+    public void onSaved(String path, EnumAction enumAction) {
+        switch (enumAction){
+            case SAVE: {
+                Toast.makeText(this,"Saved image successfully",Toast.LENGTH_SHORT).show();
+                save.createDatetime = Utils.getCurrentDateTime();
+                if (create.enumImplement == EnumImplement.CREATE){
+                    InstanceGenerator.getInstance(getContext()).onInsert(save);
+                }
+                else if (create.enumImplement == EnumImplement.EDIT){
+                    save.id = create.id;
+                    InstanceGenerator.getInstance(getContext()).onUpdate(save);
+                }
+                SingletonSave.getInstance().setUpdateData(true);
+                break;
+            }
+            case SHARE:{
+                Log.d(TAG,"path : " + path);
+                File file = new File(path);
+                if (file.isFile()){
+                    Uri uri = Uri.fromFile(file);
+                    shareToSocial(uri);
+                }
+                else{
+                    Toast.makeText(this,"No Found File",Toast.LENGTH_SHORT).show();
+                }
+            }
+            default:{
+                break;
+            }
+        }
+
+    }
+
+    public void shareToSocial(final Uri value) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, value);
+        startActivity(Intent.createChooser(intent, "Share"));
     }
 
     public void onGenerateReview(String code){

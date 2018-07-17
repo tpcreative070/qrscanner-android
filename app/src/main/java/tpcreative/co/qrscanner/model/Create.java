@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 public class Create implements Serializable {
 
+    public int id;
     public String email;
     public String subject ;
     public String message;
@@ -29,6 +30,7 @@ public class Create implements Serializable {
     public ParsedResultType createType;
     public String networkEncryption;
     public EnumFragmentType fragmentType;
+    public EnumImplement enumImplement;
 
 
 
@@ -56,6 +58,7 @@ public class Create implements Serializable {
         hidden = false;
         createType = ParsedResultType.TEXT;
         fragmentType = EnumFragmentType.SCANNER;
-
+        enumImplement = EnumImplement.CREATE;
+        id = 0;
     }
 }
