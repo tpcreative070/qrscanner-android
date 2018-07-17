@@ -81,5 +81,10 @@ public class QRScannerApplication extends Application {
     public static synchronized QRScannerApplication getInstance() {
         return mInstance;
     }
+
+
+    public void setConnectivityListener(QRScannerReceiver.ConnectivityReceiverListener listener) {
+        QRScannerReceiver.connectivityReceiverListener = listener;
+    }
 }
 

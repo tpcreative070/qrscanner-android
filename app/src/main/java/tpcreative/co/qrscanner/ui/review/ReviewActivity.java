@@ -12,6 +12,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
@@ -46,6 +50,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     private  String code ;
     private Animation mAnim = null;
     private Save save = new Save();
+    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,38 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         presenter.bindView(this);
         presenter.getIntent(this);
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        onInitAds();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void onInitAds(){
+        mInterstitialAd = new InterstitialAd(this);
+        // set the ad unit ID
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+
+        // Load ads into Interstitial Ads
+        mInterstitialAd.loadAd(adRequest);
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            public void onAdLoaded() {
+                showInterstitial();
+            }
+        });
+    }
+
+    private void showInterstitial() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+    }
+
 
     @Override
     public Context getContext() {

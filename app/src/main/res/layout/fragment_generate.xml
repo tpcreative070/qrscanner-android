@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
     <RelativeLayout
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,7 +14,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <RelativeLayout
             android:id="@+id/rlTitle"
             android:layout_width="match_parent"
@@ -31,7 +28,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
-
         <com.jaychang.srv.SimpleRecyclerView
             android:layout_below="@+id/rlTitle"
             android:id="@+id/recyclerView"
@@ -42,6 +38,5 @@
             app:srv_showLastDivider="true"
             app:srv_dividerOrientation="both"
             app:srv_dividerColor="@color/colorAccent"/>
-
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

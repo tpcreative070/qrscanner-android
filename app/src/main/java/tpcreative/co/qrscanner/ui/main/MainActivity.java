@@ -6,9 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -18,23 +25,23 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerReceiver.ConnectivityReceiverListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment currentFragment;
@@ -44,6 +51,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private ScannerFragment scannerFragment;
     private Storage storage;
+    @BindView(R.id.adViewBanner)
+    AdView adViewBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Log.d(TAG,"List :" + new Gson().toJson(save));
         Log.d(TAG,"List history : " + new Gson().toJson(histories));
         askPermission();
-
+        addGoogleAdmods();
     }
 
     public void onAddPermission() {
@@ -102,6 +111,37 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     }
                 }).onSameThread().check();
     }
+
+
+    public void addGoogleAdmods(){
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adViewBanner.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+            }
+            @Override
+            public void onAdClosed() {
+                Toast.makeText(getApplicationContext(), "Ad is closed!", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                adViewBanner.setVisibility(View.GONE);
+                Log.d(TAG,"Ads failed");
+                Toast.makeText(getApplicationContext(), "Ad failed to load! error code: " + errorCode, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onAdLeftApplication() {
+                Toast.makeText(getApplicationContext(), "Ad left application!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+        });
+        adViewBanner.loadAd(adRequest);
+    }
+
 
     public void askPermission(){
         boolean isCheck = PrefsController.getBoolean(getString(R.string.key_already_load_app),false);
@@ -208,10 +248,56 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        QRScannerApplication.getInstance().setConnectivityListener(this);
+        if (adViewBanner != null) {
+            adViewBanner.resume();
+        }
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        Log.d(TAG,"Network changed :"+ isConnected);
+        if (isConnected){
+            if (adViewBanner!=null){
+                adViewBanner.setVisibility(View.VISIBLE);
+                adViewBanner.resume();
+            }
+        }
+        else {
+            if (adViewBanner!=null){
+                adViewBanner.setVisibility(View.GONE);
+                adViewBanner.pause();
+            }
+        }
+    }
+
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (adViewBanner != null) {
+            adViewBanner.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (adViewBanner != null) {
+            adViewBanner.destroy();
+        }
+    }
+
 
 }

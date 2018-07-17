@@ -3,13 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <FrameLayout
         android:id="@+id/flContainer_review"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
     <RelativeLayout
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +14,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <com.journeyapps.barcodescanner.DecoratedBarcodeView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +49,6 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
-
                 <TextView
                     android:textSize="20sp"
                     style="@style/brandonBoldTextView"
@@ -61,8 +56,6 @@
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
-
                 <ImageView
                     android:layout_toLeftOf="@+id/imgGallery"
                     android:layout_centerInParent="true"
@@ -90,5 +83,4 @@
             </RelativeLayout>
         </com.journeyapps.barcodescanner.DecoratedBarcodeView>
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>
