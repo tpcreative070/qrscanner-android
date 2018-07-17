@@ -7,9 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
@@ -27,7 +25,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
@@ -121,17 +118,16 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
             @Override
             public void onAdClosed() {
-                Toast.makeText(getApplicationContext(), "Ad is closed!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"Ad is closed!");
             }
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 adViewBanner.setVisibility(View.GONE);
-                Log.d(TAG,"Ads failed");
-                Toast.makeText(getApplicationContext(), "Ad failed to load! error code: " + errorCode, Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"Ad failed to load! error code: " + errorCode);
             }
             @Override
             public void onAdLeftApplication() {
-                Toast.makeText(getApplicationContext(), "Ad left application!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"Ad left application!");
             }
 
             @Override
@@ -282,7 +278,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
-    
+
     @Override
     protected void onPause() {
         super.onPause();

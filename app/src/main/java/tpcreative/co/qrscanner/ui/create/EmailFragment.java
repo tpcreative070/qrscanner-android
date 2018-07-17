@@ -123,6 +123,8 @@ public class EmailFragment extends Fragment{
                     create.subject = edtObject.getText().toString();
                     create.message = edtMessage.getText().toString();
                     create.createType = ParsedResultType.EMAIL_ADDRESS;
+                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
+                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(getActivity(),create);
                 }
                 else{

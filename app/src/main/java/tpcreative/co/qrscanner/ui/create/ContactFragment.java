@@ -31,6 +31,7 @@ import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
 public class ContactFragment extends Fragment{
@@ -127,6 +128,8 @@ public class ContactFragment extends Fragment{
                     create.phone = edtPhone.getText().toString();
                     create.email = edtEmail.getText().toString();
                     create.createType = ParsedResultType.ADDRESSBOOK;
+                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
+                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(getActivity(),create);
                 }
                 else{

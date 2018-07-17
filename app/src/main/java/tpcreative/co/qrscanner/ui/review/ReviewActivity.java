@@ -12,15 +12,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
 import java.io.File;
-
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
@@ -43,7 +40,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     Button btnShare;
     @BindView(R.id.imgArrowBack)
     ImageView imgArrowBack;
-
     private ReviewPresenter presenter;
     private Create create;
     private Bitmap bitmap;
@@ -73,15 +69,9 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
 
     public void onInitAds(){
         mInterstitialAd = new InterstitialAd(this);
-        // set the ad unit ID
         mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
-
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-
-        // Load ads into Interstitial Ads
+        AdRequest adRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(adRequest);
-
         mInterstitialAd.setAdListener(new AdListener() {
             public void onAdLoaded() {
                 showInterstitial();
@@ -290,7 +280,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     public void onGenerateCode(String code,EnumAction enumAction){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
+            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 800, 800);
             imgResult.setImageBitmap(bitmap);
             Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
         } catch(Exception e) {
@@ -326,6 +316,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 }
             }
             default:{
+                Log.d(TAG,"Other case");
                 break;
             }
         }
