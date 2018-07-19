@@ -37,6 +37,5 @@
                 app:adUnitId="@string/banner_home_footer_test">
             </com.google.android.gms.ads.AdView>
         </LinearLayout>
-
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
