@@ -1,14 +1,22 @@
 package com.journeyapps.barcodescanner;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.support.v4.content.res.ResourcesCompat;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.android.R;
 import com.google.zxing.common.BitMatrix;
 
 import java.util.Map;
+
+import static android.graphics.Color.WHITE;
 
 /**
  * Helper class for encoding barcodes as a Bitmap.
@@ -21,6 +29,7 @@ import java.util.Map;
 public class BarcodeEncoder {
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
+    private static final int test = 0x303F9F;
 
 
     public BarcodeEncoder() {
@@ -33,13 +42,30 @@ public class BarcodeEncoder {
         for (int y = 0; y < height; y++) {
             int offset = y * width;
             for (int x = 0; x < width; x++) {
-                pixels[offset + x] = matrix.get(x, y) ? BLACK : WHITE;
+                pixels[offset + x] = matrix.get(x, y) ? BLACK: WHITE;
             }
         }
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
     }
+
+
+    public Bitmap createBitmap(Context context,BitMatrix matrix) {
+        int width = matrix.getWidth();
+        int height = matrix.getHeight();
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+            int offset = y * width;
+            for (int x = 0; x < width; x++) {
+                pixels[offset + x] = matrix.get(x, y) ?  ResourcesCompat.getColor(context.getResources(),R.color.zxing_colorBlueLight,null) : WHITE;
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
+
 
     public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) throws WriterException {
         try {
@@ -68,5 +94,13 @@ public class BarcodeEncoder {
 
     public Bitmap encodeBitmap(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
         return createBitmap(encode(contents, format, width, height, hints));
+    }
+
+    public Bitmap encodeBitmap(Context context,String contents, BarcodeFormat format, int width, int height) throws WriterException {
+        return createBitmap(context,encode(contents, format, width, height));
+    }
+
+    public Bitmap encodeBitmap(Context context,String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
+        return createBitmap(context,encode(contents, format, width, height, hints));
     }
 }

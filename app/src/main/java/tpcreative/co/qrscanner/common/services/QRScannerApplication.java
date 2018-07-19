@@ -33,6 +33,7 @@ public class QRScannerApplication extends Application {
         MultiDex.install(getApplicationContext());
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory()+"/Pictures/QRScanner";
+        storage.createDirectory(pathFolder);
         new PrefsController.Builder()
                 .setContext(getApplicationContext())
                 .setMode(ContextWrapper.MODE_PRIVATE)

@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -373,8 +377,10 @@ public class Utils {
         File myDir = new File(root);
         myDir.mkdirs();
         String fname = "Image-"+ type + code +".jpg";
+        fname = fname.replace("/","");
         File file = new File (myDir, fname);
         try {
+            Log.d(TAG,"path :" + file.getAbsolutePath());
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
@@ -383,6 +389,22 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Bitmap changeBitmapColor(Bitmap sourceBitmap, int color) {
+        try{
+            Bitmap resultBitmap = sourceBitmap.copy(sourceBitmap.getConfig(),true);
+            Paint paint = new Paint();
+            ColorFilter filter = new LightingColorFilter(color, 1);
+            paint.setColorFilter(filter);
+            Canvas canvas = new Canvas(resultBitmap);
+            canvas.drawBitmap(resultBitmap, 0, 0, paint);
+            return resultBitmap;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static String convertStringArrayToString(String[] strArr, String delimiter) {

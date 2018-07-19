@@ -115,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/settingstoolbar"
-            app:srv_dividerColor="@color/colorAccent"
+            app:srv_dividerColor="@color/colorDark"
             app:srv_dividerOrientation="both"
             app:srv_dividerPaddingBottom="5dp"
             app:srv_dividerPaddingLeft="5dp"

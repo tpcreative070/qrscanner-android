@@ -32,6 +32,7 @@ import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 public class ReviewActivity extends BaseActivity implements ReviewView , View.OnClickListener ,Utils.UtilsListener {
 
+    protected static final String TAG = ReviewActivity.class.getSimpleName();
     @BindView(R.id.imgResult)
     ImageView imgResult;
     @BindView(R.id.btnSave)
@@ -47,6 +48,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     private Animation mAnim = null;
     private Save save = new Save();
     InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +282,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     public void onGenerateCode(String code,EnumAction enumAction){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 800, 800);
+            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
             imgResult.setImageBitmap(bitmap);
             Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
         } catch(Exception e) {
@@ -305,15 +307,17 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
             }
             case SHARE:{
-                Log.d(TAG,"path : " + path);
+
                 File file = new File(path);
                 if (file.isFile()){
+                    Log.d(TAG,"path : " + path);
                     Uri uri = Uri.fromFile(file);
                     shareToSocial(uri);
                 }
                 else{
                     Toast.makeText(this,"No Found File",Toast.LENGTH_SHORT).show();
                 }
+                break;
             }
             default:{
                 Log.d(TAG,"Other case");
@@ -324,6 +328,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     }
 
     public void shareToSocial(final Uri value) {
+        Log.d(TAG,"path call");
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
