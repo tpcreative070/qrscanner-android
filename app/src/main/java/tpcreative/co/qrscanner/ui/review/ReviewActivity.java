@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,6 +21,7 @@ import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.io.File;
 import butterknife.BindView;
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
@@ -311,8 +314,14 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 File file = new File(path);
                 if (file.isFile()){
                     Log.d(TAG,"path : " + path);
-                    Uri uri = Uri.fromFile(file);
-                    shareToSocial(uri);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+                        shareToSocial(uri);
+                    }
+                    else{
+                        Uri uri = Uri.fromFile(file);
+                        shareToSocial(uri);
+                    }
                 }
                 else{
                     Toast.makeText(this,"No Found File",Toast.LENGTH_SHORT).show();

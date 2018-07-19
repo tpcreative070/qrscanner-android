@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
@@ -13,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonSave;
@@ -595,8 +598,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 Log.d(TAG,"path : " + path);
                 File file = new File(path);
                 if (file.isFile()){
-                    Uri uri = Uri.fromFile(file);
-                    shareToSocial(uri);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                        shareToSocial(uri);
+                    }
+                    else{
+                        Uri uri = Uri.fromFile(file);
+                        shareToSocial(uri);
+                    }
                 }
                 else{
                     Toast.makeText(getActivity(),"No Found File",Toast.LENGTH_SHORT).show();
