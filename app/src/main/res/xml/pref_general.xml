@@ -12,7 +12,7 @@
             android:key="@string/key_premium_version">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="@string/tpcreative"></intent>
+                android:data="@string/scanner_app_pro"></intent>
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
@@ -35,16 +35,30 @@
             android:layout="@layout/custom_preferences_item"
             android:title="@string/give_rate"
             android:icon="@drawable/baseline_star_rate_white_48"
-            android:key="@string/key_rate"/>
+            android:key="@string/key_rate">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/scanner_app"></intent>
+
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:title="@string/give_rate"
+            android:icon="@drawable/baseline_star_rate_white_48"
+            android:key="@string/key_rate_pro">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/scanner_app_pro"></intent>
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_share_white_48"
             android:title="@string/share"
-            android:key="@string/key_share">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/github"></intent>
-        </tpcreative.co.qrscanner.common.preference.MyPreference>
+            android:key="@string/key_share"/>
+
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"

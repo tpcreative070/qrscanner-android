@@ -3,6 +3,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.solver.GoalRow;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.preference.Preference;
@@ -90,6 +91,9 @@ public class SettingsFragment extends Fragment {
 
         private MyPreference myPreferencePermissions;
 
+        private MyPreference myPreferenceRate;
+        private MyPreference myPreferenceRatePro;
+
         /**
          * Initializes the preference, which allows to change the app's theme.
          */
@@ -132,13 +136,12 @@ public class SettingsFragment extends Fragment {
                 public boolean onPreferenceChange(final Preference preference, final Object newValue) {
 
                     if (preference instanceof MyPreference){
-                    }
 
+                    }
                     return true;
                 }
             };
         }
-
 
         public void shareToSocial(String value){
             Intent intent = new Intent();
@@ -160,7 +163,12 @@ public class SettingsFragment extends Fragment {
                             askPermission();
                         }
                         else if (preference.getKey().equals(getString(R.string.key_share))){
-                            shareToSocial("http://tpcreative.co");
+                            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) ||BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))){
+                                shareToSocial(getString(R.string.scanner_app_pro));
+                            }
+                            else{
+                                shareToSocial(getString(R.string.scanner_app));
+                            }
                         }
                     }
 
@@ -179,10 +187,18 @@ public class SettingsFragment extends Fragment {
             mVersionApp = (MyPreference) findPreference(getString(R.string.key_version));
             mVersionApp.setSummary(String.format("v%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
-            /*Help*/
+            /*Premium*/
             mPreferencePremiumVersion = (MyPreference)findPreference(getString(R.string.key_premium_version));
-            mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
-            mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            //mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
+            //mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
+
+            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) ||BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))){
+                mPreferencePremiumVersion.setVisible(false);
+            }
+            else{
+                mPreferencePremiumVersion.setVisible(true);
+            }
+
 
             /*App Permissions*/
 
@@ -196,13 +212,37 @@ public class SettingsFragment extends Fragment {
             myPreferenceShare.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceShare.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
+            /*Rate*/
+
+            myPreferenceRate = (MyPreference) findPreference(getString(R.string.key_rate));
+            //myPreferenceRate.setOnPreferenceChangeListener(createChangeListener());
+           // myPreferenceRate.setOnPreferenceClickListener(createActionPreferenceClickListener());
+
+            /*Rate Pro*/
+            myPreferenceRatePro = (MyPreference) findPreference(getString(R.string.key_rate_pro));
+            //myPreferenceRatePro.setOnPreferenceChangeListener(createChangeListener());
+           // myPreferenceRatePro.setOnPreferenceClickListener(createActionPreferenceClickListener());
+
+
+            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))){
+                myPreferenceRatePro.setVisible(true);
+                myPreferenceRate.setVisible(false);
+            }
+            else{
+                myPreferenceRatePro.setVisible(false);
+                myPreferenceRate.setVisible(true);
+            }
+
         }
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.pref_general);
         }
+
+
     }
+
 
 
 }

@@ -104,6 +104,7 @@
     <string name="key_help">help</string>
     <string name="key_privacy_policy">privacy_policy</string>
     <string name="key_rate">rate</string>
+    <string name="key_rate_pro">rate_pro</string>
     <string name="key_share">share</string>
     <string name="key_version">version</string>
     <string name="app_permission">App permissions</string>
@@ -122,5 +123,10 @@
     <string name="interstitial_full_screen_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="freedevelop">freedevelop</string>
     <string name="freerelease">freerelease</string>
+    <string name="release">release</string>
+    <string name="debug">debug</string>
+    <string name="scanner_app">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner.free.release</string>
+    <string name="scanner_app_pro">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner</string>
+
 
 </resources>

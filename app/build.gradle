@@ -14,7 +14,6 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            buildConfigField "String", "build_environment", "release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -25,7 +24,6 @@ android {
         }
 
         freerelease {
-            initWith(buildTypes.debug)
             applicationIdSuffix ".free.release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }

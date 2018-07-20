@@ -517,7 +517,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         }
     }
 
-
     public void onGetGallery(){
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
