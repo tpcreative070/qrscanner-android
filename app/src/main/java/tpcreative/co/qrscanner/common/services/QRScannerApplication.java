@@ -1,7 +1,11 @@
 package tpcreative.co.qrscanner.common.services;
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.ContextWrapper;
+import android.os.Bundle;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -16,7 +20,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
  *
  */
 
-public class QRScannerApplication extends Application {
+public class QRScannerApplication extends MultiDexApplication implements  MultiDexApplication.ActivityLifecycleCallbacks {
 
     private static QRScannerApplication mInstance;
     private String pathFolder;
@@ -30,7 +34,6 @@ public class QRScannerApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        MultiDex.install(getApplicationContext());
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory()+"/Pictures/QRScanner";
         storage.createDirectory(pathFolder);
@@ -46,8 +49,50 @@ public class QRScannerApplication extends Application {
             PrefsController.putBoolean(getString(R.string.key_not_first_running),true);
         }
 
+        registerActivityLifecycleCallbacks(this);
+
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
+    }
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {

@@ -14,10 +14,25 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField "String", "build_environment", "release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        freedevelop {
+            initWith(buildTypes.debug)
+            applicationIdSuffix ".free.develop"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+
+        freerelease {
+            initWith(buildTypes.debug)
+            applicationIdSuffix ".free.release"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+
     }
 }
+
 
 dependencies {
     def room_version = "1.1.1"
@@ -36,8 +51,6 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.code.gson:gson:+'
-    implementation project(':library')
-    implementation project(':zxing-android-embedded')
     implementation 'com.google.zxing:core:3.3.3'
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.jaychang:simplerecyclerview:2.0.4'
@@ -49,7 +62,7 @@ dependencies {
     implementation 'com.snatik:storage:2.1.0'
 
     /*Google map*/
-    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.0'
 
 
 
@@ -66,14 +79,34 @@ dependencies {
     /*api project(':library')*/
     implementation(name: 'library-release', ext: 'aar')
 
-    /*DateTime picker*/
+    implementation(name: 'library-release-tab',ext:'aar');
+
+    /*Note : Go the both*/
+    implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
+    implementation(name : 'switchdatetime-release',ext :'aar');
+
+    implementation(name : 'zxing-android-embedded-release',ext:'aar');
+
+
+    /*DateTime picker
     implementation project(':switchdatetime')
+    */
+
+    /*Tab
+    implementation project(':library')
+
+    */
+
+    /*Zxing
+    implementation project(':zxing-android-embedded')
+
+    */
 
     /*Volley*/
     implementation 'com.android.volley:volley:1.1.0'
 
     /*Google admod*/
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    implementation 'com.google.android.gms:play-services-ads:15.0.0'
 
 
 }

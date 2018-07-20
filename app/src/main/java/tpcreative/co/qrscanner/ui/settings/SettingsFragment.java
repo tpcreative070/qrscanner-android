@@ -107,9 +107,11 @@ public class SettingsFragment extends Fragment {
             builder.append("\n");
             builder.append("3. INTERNET,CHANGE_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_STATE,ACCESS_NETWORK_STATE: Listener disconnect and connect in order to service for premium version");
             builder.append("\n");
-            builder.append("4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Calculate speed base on GPS");
+            builder.append("4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location");
             builder.append("\n");
-            builder.append("5. SYSTEM_ALERT_WINDOW, ACTION_MANAGE_OVERLAY_PERMISSION: Make app running outside when exit app");
+            builder.append("5. android.permission.CAMERA: Scanner code");
+            builder.append("\n");
+            builder.append("6. android.permission.CALL_PHONE: Share QRCode to your phone call");
             dialogBuilder.setMessage(builder.toString());
             dialogBuilder.setPositiveButton(R.string.got_it, null);
             MaterialDialog dialog = dialogBuilder.create();

@@ -1,18 +1,22 @@
 package tpcreative.co.qrscanner.ui.main;
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
@@ -27,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
@@ -48,13 +53,17 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private ScannerFragment scannerFragment;
     private Storage storage;
-    @BindView(R.id.adViewBanner)
+    @BindView(R.id.rlAds)
+    RelativeLayout rlAds;
     AdView adViewBanner;
+
+    private QRScannerReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initAds();
         SingletonResponse.getInstance().setListener(this);
         storage = new Storage(getApplicationContext());
         initUI();
@@ -65,7 +74,34 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Log.d(TAG,"List :" + new Gson().toJson(save));
         Log.d(TAG,"List history : " + new Gson().toJson(histories));
         askPermission();
-        addGoogleAdmods();
+    }
+
+    public void initAds(){
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
+            adViewBanner = new AdView(this);
+            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
+        }
+        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
+            adViewBanner = new AdView(this);
+            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
+        }
+        else{
+            Log.d(TAG,"Premium Version");
+        }
+    }
+
+    public void onInitReceiver(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            receiver =new QRScannerReceiver();
+            registerReceiver(receiver,
+                    new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
     }
 
     public void onAddPermission() {
@@ -154,9 +190,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         builder.append("\n");
         builder.append("3. INTERNET,CHANGE_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_STATE,ACCESS_NETWORK_STATE: Listener disconnect and connect in order to service for premium version");
         builder.append("\n");
-        builder.append("4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Calculate speed base on GPS");
+        builder.append("4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location");
         builder.append("\n");
-        builder.append("5. SYSTEM_ALERT_WINDOW, ACTION_MANAGE_OVERLAY_PERMISSION: Make app running outside when exit app");
+        builder.append("5. android.permission.CAMERA: Scanner code");
+        builder.append("\n");
+        builder.append("6. android.permission.CALL_PHONE: Share QRCode to your phone call");
 
         dialogBuilder.setMessage(builder.toString());
         dialogBuilder.setPositiveButton(R.string.got_it, null);
@@ -259,6 +297,13 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (adViewBanner != null) {
             adViewBanner.resume();
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (receiver==null){
+                onInitReceiver();
+            }
+        }
+
     }
 
     @Override
@@ -293,6 +338,13 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (adViewBanner != null) {
             adViewBanner.destroy();
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (receiver!=null){
+                unregisterReceiver(receiver);
+            }
+        }
+
     }
 
 
