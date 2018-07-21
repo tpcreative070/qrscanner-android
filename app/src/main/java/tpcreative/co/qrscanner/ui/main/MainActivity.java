@@ -303,26 +303,36 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 onInitReceiver();
             }
         }
-
     }
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         Log.d(TAG,"Network changed :"+ isConnected);
-        if (isConnected){
-            if (adViewBanner!=null){
-                adViewBanner.setVisibility(View.VISIBLE);
-                adViewBanner.resume();
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
+            if (isConnected){
+                if (adViewBanner!=null){
+                    adViewBanner.resume();
+                }
+            }
+            else {
+                if (adViewBanner!=null){
+                    adViewBanner.pause();
+                }
             }
         }
-        else {
-            if (adViewBanner!=null){
-                adViewBanner.setVisibility(View.GONE);
-                adViewBanner.pause();
+        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
+            if (isConnected){
+                if (adViewBanner!=null){
+                    adViewBanner.resume();
+                }
+            }
+            else {
+                if (adViewBanner!=null){
+                    adViewBanner.pause();
+                }
             }
         }
     }
-
 
     @Override
     protected void onPause() {
@@ -344,8 +354,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 unregisterReceiver(receiver);
             }
         }
-
     }
-
 
 }
