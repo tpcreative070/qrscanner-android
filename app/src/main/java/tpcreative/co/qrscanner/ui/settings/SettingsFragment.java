@@ -1,5 +1,7 @@
 package tpcreative.co.qrscanner.ui.settings;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -94,6 +96,9 @@ public class SettingsFragment extends Fragment {
         private MyPreference myPreferenceRate;
         private MyPreference myPreferenceRatePro;
 
+        private MyPreference myPreferenceSupport;
+
+
         /**
          * Initializes the preference, which allows to change the app's theme.
          */
@@ -134,9 +139,7 @@ public class SettingsFragment extends Fragment {
             return new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(final Preference preference, final Object newValue) {
-
                     if (preference instanceof MyPreference){
-
                     }
                     return true;
                 }
@@ -170,6 +173,16 @@ public class SettingsFragment extends Fragment {
                                 shareToSocial(getString(R.string.scanner_app));
                             }
                         }
+                        else if (preference.getKey().equals(getString(R.string.key_support))){
+                             try{
+                                 Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" +"tpcreative.co@gmail.com"));
+                                 intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support");
+                                 intent.putExtra(Intent.EXTRA_TEXT, "");
+                                 startActivity(intent);
+                             }catch(ActivityNotFoundException e){
+                                 //TODO smth
+                             }
+                         }
                     }
 
                     return true;
@@ -222,6 +235,11 @@ public class SettingsFragment extends Fragment {
             myPreferenceRatePro = (MyPreference) findPreference(getString(R.string.key_rate_pro));
             //myPreferenceRatePro.setOnPreferenceChangeListener(createChangeListener());
            // myPreferenceRatePro.setOnPreferenceClickListener(createActionPreferenceClickListener());
+
+            /*Support*/
+            myPreferenceSupport = (MyPreference) findPreference(getString(R.string.key_support));
+            myPreferenceSupport.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceSupport.setOnPreferenceChangeListener(createChangeListener());
 
 
             if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))){

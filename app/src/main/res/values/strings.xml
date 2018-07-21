@@ -128,5 +128,8 @@
     <string name="scanner_app">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner.free.release</string>
     <string name="scanner_app_pro">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner</string>
 
+    <string name="key_support">key_support</string>
+    <string name="support">Support</string>
+
 
 </resources>

@@ -77,14 +77,13 @@ dependencies {
     /*api project(':library')*/
     implementation(name: 'library-release', ext: 'aar')
 
-    implementation(name: 'library-release-tab',ext:'aar');
+    implementation(name: 'library-release-tab', ext: 'aar');
 
     /*Note : Go the both*/
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
-    implementation(name : 'switchdatetime-release',ext :'aar');
+    implementation(name: 'switchdatetime-release', ext: 'aar');
 
-    implementation(name : 'zxing-android-embedded-release',ext:'aar');
-
+    implementation(name: 'zxing-android-embedded-release', ext: 'aar');
 
     /*DateTime picker
     implementation project(':switchdatetime')
