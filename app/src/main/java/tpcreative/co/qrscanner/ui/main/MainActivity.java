@@ -34,6 +34,7 @@ import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
+import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -56,7 +57,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @BindView(R.id.rlAds)
     RelativeLayout rlAds;
     AdView adViewBanner;
-
     private QRScannerReceiver receiver;
 
     @Override
@@ -118,6 +118,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
                             Log.d(TAG, "Permission is ready");
+                            boolean isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh),false);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
+                               SingletonScanner.getInstance().setVisible();
+                               PrefsController.putBoolean(getString(R.string.key_refresh),true);
+                            }
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());
                         }
                         else{
@@ -129,13 +134,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                             Log.d(TAG, "request permission is failed");
                         }
                     }
-
                     @Override
                     public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
                         /* ... */
                         token.continuePermissionRequest();
                     }
-
                 })
                 .withErrorListener(new PermissionRequestErrorListener() {
                     @Override
@@ -282,8 +285,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -348,7 +349,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (adViewBanner != null) {
             adViewBanner.destroy();
         }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver!=null){
                 unregisterReceiver(receiver);

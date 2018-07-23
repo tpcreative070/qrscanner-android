@@ -11,8 +11,10 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.snatik.storage.Storage;
 
+import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 
@@ -33,6 +35,7 @@ public class QRScannerApplication extends MultiDexApplication implements  MultiD
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         mInstance = this;
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory()+"/Pictures/QRScanner";

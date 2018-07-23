@@ -170,7 +170,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.resume();
     }
 
-
     @Override
     public void setInvisible() {
         barcodeScannerView.pauseAndWait();
