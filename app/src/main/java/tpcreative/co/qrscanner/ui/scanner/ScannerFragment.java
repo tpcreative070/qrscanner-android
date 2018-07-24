@@ -256,7 +256,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                             query = geoParsedResult.getQuery();
                             String strNew = query.replace("q=", "");
                             query = strNew;
-                            Log.d(TAG,new Gson().toJson(geoParsedResult));
                         }
                         catch (Exception e){
 
@@ -325,8 +324,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 create.endEventMilliseconds = endEventMilliseconds;
                 create.text = text;
 
-
-                Log.d(TAG,new Gson().toJson(create));
                 beepManager.playBeepSoundAndVibrate();
                 replaceFragment(0,create);
 
@@ -599,7 +596,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                     query = geoParsedResult.getQuery();
                     String strNew = query.replace("q=", "");
                     query = strNew;
-                    Log.d(TAG,new Gson().toJson(geoParsedResult));
                 }
                 catch (Exception e){
 
@@ -669,7 +665,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         create.text = text;
 
         create.fragmentType = EnumFragmentType.SCANNER;
-        Log.d(TAG,new Gson().toJson(create));
         beepManager.playBeepSoundAndVibrate();
         replaceFragment(0,create);
     }

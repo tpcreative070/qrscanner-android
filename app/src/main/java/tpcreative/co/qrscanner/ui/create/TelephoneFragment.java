@@ -70,7 +70,6 @@ public class TelephoneFragment extends Fragment{
         Bundle bundle = getArguments();
         final Save mData = (Save) bundle.get("data");
         if (mData!=null){
-            Log.d(TAG,new Gson().toJson(mData));
             save = mData;
             onSetData();
         }

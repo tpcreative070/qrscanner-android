@@ -88,7 +88,6 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
         Bundle bundle = getArguments();
         final Save mData = (Save) bundle.get("data");
         if (mData!=null){
-            Log.d(TAG,new Gson().toJson(mData));
             save = mData;
             onSetData();
         }
@@ -186,7 +185,6 @@ public class WifiFragment extends Fragment implements View.OnClickListener{
     }
 
     public void onSetData(){
-        Log.d(TAG,"onSetData : " + new Gson().toJson(save));
         edtSSID.setText(save.ssId);
         edtPassword.setText(save.password);
         if (save.networkEncryption.equals("WPA")){

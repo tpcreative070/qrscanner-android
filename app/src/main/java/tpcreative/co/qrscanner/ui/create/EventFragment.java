@@ -109,7 +109,6 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
         Bundle bundle = getArguments();
         final Save mData = (Save) bundle.get("data");
         if (mData!=null){
-            Log.d(TAG,new Gson().toJson(mData));
             save = mData;
             onSetData();
         }
@@ -440,7 +439,6 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     }
 
     public void onSetData(){
-        Log.d(TAG,"onSetData " + new Gson().toJson(save));
         edtTitle.setText(""+save.title);
         edtDescription.setText(""+save.description);
         edtLocation.setText(save.location);

@@ -1,11 +1,9 @@
 package tpcreative.co.qrscanner.ui.review;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.google.gson.Gson;
-
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.model.Create;
 
@@ -26,9 +24,10 @@ public class ReviewPresenter extends Presenter<ReviewView>{
             create = result;
             view.setView();
         }
-        Log.d(TAG,new Gson().toJson(create));
+
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, new Gson().toJson(create));
+        }
     }
-
-
 
 }

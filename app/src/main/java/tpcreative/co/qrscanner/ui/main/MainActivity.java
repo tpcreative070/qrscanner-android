@@ -71,8 +71,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
         final List<Save> save = InstanceGenerator.getInstance(getApplicationContext()).getListSave();
         final List<History> histories = InstanceGenerator.getInstance(getApplicationContext()).getList();
-        Log.d(TAG,"List :" + new Gson().toJson(save));
-        Log.d(TAG,"List history : " + new Gson().toJson(histories));
         askPermission();
     }
 

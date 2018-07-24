@@ -285,7 +285,6 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     @Override
     public void onClickEdit(int position) {
         edit = presenter.mList.get(position);
-        Log.d(TAG,"Edit : " + new Gson().toJson(edit));
         if (edit.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
             replaceFragment(presenter.mFragment.get(0),edit);
         } else if (edit.createType.equalsIgnoreCase(ParsedResultType.EMAIL_ADDRESS.name())) {
