@@ -20,6 +20,7 @@ import de.mrapp.android.dialog.MaterialDialog;
 import de.mrapp.android.preference.ListPreference;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.preference.MyPreference;
 
@@ -98,6 +99,8 @@ public class SettingsFragment extends Fragment {
 
         private MyPreference myPreferenceSupport;
 
+        private MyPreference myPreferenceHelp;
+
 
         /**
          * Initializes the preference, which allows to change the app's theme.
@@ -160,9 +163,7 @@ public class SettingsFragment extends Fragment {
                 public boolean onPreferenceClick(Preference preference) {
 
                      if (preference instanceof MyPreference){
-                        if (preference.getKey().equals(getString(R.string.key_help))){
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_app_permissions))){
+                         if (preference.getKey().equals(getString(R.string.key_app_permissions))){
                             askPermission();
                         }
                         else if (preference.getKey().equals(getString(R.string.key_share))){
@@ -183,6 +184,10 @@ public class SettingsFragment extends Fragment {
                                  //TODO smth
                              }
                          }
+                         else if (preference.getKey().equals(getString(R.string.key_help))){
+                            Log.d(TAG,"action here");
+                            Navigator.onMoveToHelp(getContext());
+                        }
                     }
 
                     return true;
@@ -251,16 +256,16 @@ public class SettingsFragment extends Fragment {
                 myPreferenceRate.setVisible(true);
             }
 
+            /*Help*/
+            myPreferenceHelp = (MyPreference) findPreference(getString(R.string.key_help));
+            myPreferenceHelp.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceHelp.setOnPreferenceChangeListener(createChangeListener());
+
         }
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.pref_general);
         }
-
-
     }
-
-
-
 }

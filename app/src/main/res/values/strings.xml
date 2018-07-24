@@ -108,6 +108,8 @@
     <string name="key_share">share</string>
     <string name="key_version">version</string>
     <string name="key_refresh">refresh</string>
+    <string name="key_support">support</string>
+    <string name="support">Support</string>
     <string name="app_permission">App permissions</string>
     <string name="github" translatable="false">https://github.com/flyingrub/SpeedMeter</string>
     <string name="version">QRScanner Version</string>
@@ -129,8 +131,9 @@
     <string name="scanner_app">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner.free.release</string>
     <string name="scanner_app_pro">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner</string>
 
-    <string name="key_support">key_support</string>
-    <string name="support">Support</string>
+
+    <string name="barcode_guide">Barcode Scanner users the camera on your phone to read barcode and look up product information such as prices and reviews etc...</string>
+    <string name="barcode_2d_guide">It also reads 2D barcode such as QR Codes ad Data Matrix. These can contain links to web numbers and email addresses, and more.</string>
 
 
 </resources>
