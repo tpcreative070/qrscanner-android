@@ -349,7 +349,14 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
             }
         }
+    }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        SingletonCloseFragment.getInstance().setUpdateData(true);
+        SingletonSave.getInstance().setUpdateData(true);
+        super.onBackPressed();
     }
 
     public void shareToSocial(final Uri value) {
