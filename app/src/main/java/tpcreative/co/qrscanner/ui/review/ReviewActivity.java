@@ -13,10 +13,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.io.File;
@@ -50,7 +52,10 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     private  String code ;
     private Animation mAnim = null;
     private Save save = new Save();
-    InterstitialAd mInterstitialAd;
+
+    @BindView(R.id.rlAds)
+    RelativeLayout rlAds;
+    AdView adViewBanner;
 
 
     @Override
@@ -64,48 +69,80 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         presenter.bindView(this);
         presenter.getIntent(this);
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        onInitAds();
+        initAds();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    public void onInitAds(){
+    
+    public void initAds(){
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mInterstitialAd.loadAd(adRequest);
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    showInterstitial();
-                }
-            });
+            adViewBanner = new AdView(this);
+            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
         }
         else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mInterstitialAd.loadAd(adRequest);
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    showInterstitial();
-                }
-            });
+            adViewBanner = new AdView(this);
+            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
         }
         else{
             Log.d(TAG,"Premium Version");
         }
     }
 
-    private void showInterstitial() {
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
+    public void addGoogleAdmods(){
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adViewBanner.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+            }
+            @Override
+            public void onAdClosed() {
+                Log.d(TAG,"Ad is closed!");
+            }
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                adViewBanner.setVisibility(View.GONE);
+                Log.d(TAG,"Ad failed to load! error code: " + errorCode);
+            }
+            @Override
+            public void onAdLeftApplication() {
+                Log.d(TAG,"Ad left application!");
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+        });
+        adViewBanner.loadAd(adRequest);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adViewBanner != null) {
+            adViewBanner.resume();
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (adViewBanner != null) {
+            adViewBanner.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (adViewBanner != null) {
+            adViewBanner.destroy();
+        }
+    }
 
     @Override
     public Context getContext() {

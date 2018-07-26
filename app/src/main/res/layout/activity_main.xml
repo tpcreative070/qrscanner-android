@@ -38,6 +38,5 @@
                 android:layout_height="wrap_content">
             </RelativeLayout>
         </LinearLayout>
-
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
