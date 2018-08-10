@@ -71,7 +71,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         initAds();
     }
-    
+
     public void initAds(){
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
             adViewBanner = new AdView(this);

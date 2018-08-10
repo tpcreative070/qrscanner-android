@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.ViewGroup;
 import java.util.ArrayList;
-
 import tpcreative.co.qrscanner.ui.create.GenerateFragment;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;

@@ -119,9 +119,9 @@
     <string name="tpcreative">http://tpcreative.co</string>
     <string name="query_input">Input a query</string>
 
-    <string name="admob_app_id">ca-app-pub-5761918081158067~5495426921</string>
-    <string name="banner_home_footer">ca-app-pub-5761918081158067/9271020409</string>
-    <string name="interstitial_full_screen">ca-app-pub-5761918081158067/3160482594</string>
+    <string name="admob_app_id">ca-app-pub-5858643177329332~3185073297</string>
+    <string name="banner_home_footer">ca-app-pub-5858643177329332/8712732149</string>
+    <string name="interstitial_full_screen">ca-app-pub-5858643177329332/7399650477</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="interstitial_full_screen_test">ca-app-pub-3940256099942544/1033173712</string>
 
