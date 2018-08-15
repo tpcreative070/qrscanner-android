@@ -646,10 +646,15 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             }
         }
         if (create!=null){
-            if (create.fragmentType == EnumFragmentType.HISTORY){
+            if (create.fragmentType == EnumFragmentType.SAVER){
                 return;
             }
         }
+
+        Log.d(TAG,"History :" + (history != null ? true : false));
+        Log.d(TAG,"Create :" + (create != null ? true : false));
+        Log.d(TAG,"fragmentType :" + (create.fragmentType));
+
         history.createDatetime = Utils.getCurrentDateTime();
         InstanceGenerator.getInstance(getContext()).onInsert(history);
     }

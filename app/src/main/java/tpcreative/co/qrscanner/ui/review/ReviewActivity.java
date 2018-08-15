@@ -350,7 +350,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     public void onSaved(String path, EnumAction enumAction) {
         switch (enumAction){
             case SAVE: {
-                Toast.makeText(this,"Saved image successfully",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Saved image successfully :" + path,Toast.LENGTH_SHORT).show();
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE){
                     InstanceGenerator.getInstance(getContext()).onInsert(save);
