@@ -13,6 +13,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.MobileAds;
 import com.snatik.storage.Storage;
 import io.fabric.sdk.android.Fabric;
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 
@@ -34,7 +35,11 @@ public class QRScannerApplication extends MultiDexApplication implements  MultiD
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
-        MobileAds.initialize(this, getString(R.string.admob_app_id));
+
+        if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))){
+            MobileAds.initialize(this, getString(R.string.admob_app_id));
+        }
+
         mInstance = this;
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory()+"/Pictures/QRScanner";
