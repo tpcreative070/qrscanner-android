@@ -19,6 +19,6 @@ public interface HistoryDao {
     @Delete
     void delete(History... history);
 
-    @Query("Select * FROM history")
+    @Query("Select * FROM history ORDER BY id DESC")
     List<History> loadAll();
 }

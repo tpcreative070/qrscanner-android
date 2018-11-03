@@ -90,7 +90,13 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
             @Override
             public void onClick(View view) {
                 if (listener!=null){
-                    listener.onClickItem(i);
+                    if (listener.isDeleted()){
+                        viewHolder.ckDelete.setChecked(!getItem().isChecked());
+                        listener.onClickItem(i,!getItem().isChecked());
+                    }
+                    else{
+                        listener.onClickItem(i);
+                    }
                 }
             }
         });
@@ -164,6 +170,8 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
         void onClickItem(int position);
         void onClickShare(int position);
         void onClickEdit(int position);
+        boolean isDeleted();
+
     }
 }
 

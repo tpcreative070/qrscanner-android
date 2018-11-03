@@ -91,7 +91,13 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
             @Override
             public void onClick(View view) {
                 if (listener!=null){
-                    listener.onClickItem(i);
+                    if (listener.isDeleted()){
+                        viewHolder.ckDelete.setChecked(!getItem().isChecked());
+                        listener.onClickItem(i,!getItem().isChecked());
+                    }
+                    else{
+                        listener.onClickItem(i);
+                    }
                 }
             }
         });
@@ -164,6 +170,7 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
         void onClickItem(int position, boolean isChecked);
         void onClickItem(int position);
         void onClickShare(int  position);
+        boolean isDeleted();
     }
 }
 

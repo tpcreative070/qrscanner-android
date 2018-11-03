@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.history;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,24 +19,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.zxing.client.result.ParsedResultType;
 import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonHistory;
-import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.History;
@@ -70,6 +63,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
     SimpleRecyclerView recyclerView;
     private HistoryPresenter presenter;
     private boolean isSelected = false;
+    private boolean isDeleted;
     private boolean isSelectedAll = false;
     private ScannerResultFragment fragment;
 
@@ -106,6 +100,10 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         return view;
     }
 
+    @Override
+    public boolean isDeleted() {
+        return isDeleted;
+    }
 
     private void addRecyclerHeaders() {
         SectionHeaderProvider<History> sh = new SimpleSectionHeaderProvider<History>() {
@@ -352,6 +350,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
 
                             Log.d(TAG, "onBackPressed !!!" + isSelected);
                             isSelected = false;
+                            isDeleted = false;
                             tvDelete.setVisibility(View.VISIBLE);
                             llAction.setVisibility(View.GONE);
                             tvCount.setVisibility(View.INVISIBLE);
@@ -391,6 +390,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
                         bindData();
                         tvCount.setText("" + presenter.getCheckedCount());
                         isSelected = true;
+                        isDeleted = true;
                         llAction.setVisibility(View.VISIBLE);
                         tvCount.setVisibility(View.VISIBLE);
                         tvDelete.setVisibility(View.GONE);
@@ -507,7 +507,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
     public void dialogDelete() {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext());
         builder.setTitle(getString(R.string.delete));
-        builder.setMessage(getString(R.string.dialog_delete));
+        builder.setMessage(String.format(getString(R.string.dialog_delete),presenter.getCheckedCount()+""));
         builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -521,8 +521,10 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
                 tvCount.setText("");
                 isSelectedAll = false;
                 isSelected = false;
+                isDeleted = false;
                 llAction.setVisibility(View.INVISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
+                imgArrowBack.setVisibility(View.INVISIBLE);
             }
         });
         builder.show();

@@ -26,8 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.result.ParsedResultType;
@@ -35,13 +33,11 @@ import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
@@ -50,15 +46,6 @@ import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.ui.create.ContactFragment;
-import tpcreative.co.qrscanner.ui.create.EmailFragment;
-import tpcreative.co.qrscanner.ui.create.EventFragment;
-import tpcreative.co.qrscanner.ui.create.LocationFragment;
-import tpcreative.co.qrscanner.ui.create.MessageFragment;
-import tpcreative.co.qrscanner.ui.create.TelephoneFragment;
-import tpcreative.co.qrscanner.ui.create.TextFragment;
-import tpcreative.co.qrscanner.ui.create.UrlFragment;
-import tpcreative.co.qrscanner.ui.create.WifiFragment;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
 public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSelectedListener, View.OnClickListener, SingletonSave.SingletonSaveListener,Utils.UtilsListener {
@@ -94,7 +81,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     private  String code ;
     private  Save share;
     private  Save edit;
-
+    private boolean isDeleted;
 
 
     public static SaverFragment newInstance(int index) {
@@ -141,12 +128,10 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                 textView.setText(history.getCategoryName());
                 return view;
             }
-
             @Override
             public boolean isSameSection(@NonNull Save history, @NonNull Save nextHistory) {
                 return history.getCategoryId() == nextHistory.getCategoryId();
             }
-
             // Optional, whether the header is sticky, default false
             @Override
             public boolean isSticky() {
@@ -164,7 +149,6 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
             cell.setListener(this);
             cells.add(cell);
         }
-
         if (mListItems!=null){
             if (mListItems.size()>0){
                 tvNotFoundItems.setVisibility(View.INVISIBLE);
@@ -177,6 +161,10 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         recyclerView.addCells(cells);
     }
 
+    @Override
+    public boolean isDeleted() {
+        return isDeleted;
+    }
 
     @Override
     public Context getContext() {
@@ -425,6 +413,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
 
                             Log.d(TAG, "onBackPressed !!!" + isSelected);
                             isSelected = false;
+                            isDeleted = false;
                             tvDelete.setVisibility(View.VISIBLE);
                             llAction.setVisibility(View.GONE);
                             tvCount.setVisibility(View.INVISIBLE);
@@ -464,6 +453,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                         bindData();
                         tvCount.setText("" + presenter.getCheckedCount());
                         isSelected = true;
+                        isDeleted = true;
                         llAction.setVisibility(View.VISIBLE);
                         tvCount.setVisibility(View.VISIBLE);
                         tvDelete.setVisibility(View.GONE);
@@ -578,7 +568,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     public void dialogDelete() {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext());
         builder.setTitle(getString(R.string.delete));
-        builder.setMessage(getString(R.string.dialog_delete));
+        builder.setMessage(String.format(getString(R.string.dialog_delete),presenter.getCheckedCount()+""));
         builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -592,8 +582,10 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                 tvCount.setText("");
                 isSelectedAll = false;
                 isSelected = false;
+                isDeleted = false;
                 llAction.setVisibility(View.INVISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
+                imgArrowBack.setVisibility(View.INVISIBLE);
             }
         });
         builder.show();
@@ -609,25 +601,25 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop");
+        Utils.Log(TAG, "onStop");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart");
+        Utils.Log(TAG, "onStart");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
+        Utils.Log(TAG, "onDestroy");
         unbinder.unbind();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
+        Utils.Log(TAG, "onResume");
     }
 }

@@ -9,9 +9,6 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
-/**
- * Created by Pankaj on 03-11-2017.
- */
 
 public class Theme implements Serializable {
     private int id;
@@ -94,7 +91,7 @@ public class Theme implements Serializable {
         catch (Exception e){
             e.printStackTrace();
         }
-        return new Theme(0, R.color.black, R.color.colorPrimaryDark, R.color.colorButton);
+        return new Theme(0, R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorButton);
     }
 
 
@@ -129,6 +126,5 @@ public class Theme implements Serializable {
         }
         return new ArrayList<>();
     }
-
 
 }

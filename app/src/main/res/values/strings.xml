@@ -88,7 +88,7 @@
     <string name="delete">Delete</string>
     <string name="default_count">0</string>
     <string name="clean">Clean</string>
-    <string name="dialog_delete">Are you sure you want to delete ?</string>
+    <string name="dialog_delete">Are you sure you want to delete %1$s items?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="help">Help</string>
@@ -112,7 +112,7 @@
     <string name="support">Support</string>
     <string name="app_permission">App permissions</string>
     <string name="github" translatable="false">https://github.com/flyingrub/SpeedMeter</string>
-    <string name="version">QRScanner Version</string>
+    <string name="version">QRScanner version</string>
     <string name="premium_version">Premium version</string>
     <string name="key_premium_version">premium_version</string>
     <string name="summary">Premium version will be removed advertising</string>

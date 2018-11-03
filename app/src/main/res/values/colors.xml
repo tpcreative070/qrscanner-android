@@ -26,6 +26,8 @@
     <color name="colorBlueDark">#76FF03</color>
     <color name="colorYellowDark">#827717</color>
     <color name="colorBlueLight">#84FFFF</color>
+    <color name="colorBlueLIGHT">#42ffff</color>
+    <color name="colorBLUELIGHT">#0bffff</color>
     <color name="colorOrange">#ee6002</color>
     <color name="colorRed">#FF4081</color>
     <color name="black">#FF000000</color>
