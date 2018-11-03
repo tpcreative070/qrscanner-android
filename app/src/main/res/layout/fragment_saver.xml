@@ -125,5 +125,16 @@
             app:srv_showDivider="true"
             app:srv_showLastDivider="true" />
 
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/tvNotFoundItems"
+            style="@style/brandonBoldTextView"
+            android:textSize="@dimen/medium"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:text="@string/items_not_found"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

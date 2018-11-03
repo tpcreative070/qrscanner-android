@@ -141,7 +141,6 @@ public class ContactFragment extends Fragment{
             }
         });
         view.startAnimation(mAnim);
-
     }
 
     private void addValidationForEditText() {
@@ -150,7 +149,6 @@ public class ContactFragment extends Fragment{
         mAwesomeValidation.addValidation(getActivity(),R.id.edtPhone, Patterns.PHONE,R.string.err_phone);
         mAwesomeValidation.addValidation(getActivity(),R.id.edtEmail, Patterns.EMAIL_ADDRESS,R.string.err_email);
     }
-
 
     public void FocusUI(){
         edtEmail.requestFocus();

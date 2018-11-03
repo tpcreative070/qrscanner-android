@@ -1,23 +1,31 @@
 package tpcreative.co.qrscanner.common.preference;
+
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
-import de.mrapp.android.preference.Preference;
+
 import tpcreative.co.qrscanner.R;
 
 
 public class MyPreference extends Preference {
 
     private Context context;
+    private ImageView imageViewCover;
+    private MyPreferenceListener listener;
+
+    public void setListener(MyPreferenceListener listener) {
+        this.listener = listener;
+    }
 
     public MyPreference(Context context) {
         super(context);
-        this.context = context ;
+        this.context = context;
     }
 
     public MyPreference(Context context, AttributeSet attrs) {
@@ -25,7 +33,7 @@ public class MyPreference extends Preference {
         this.context = context;
     }
 
-    public MyPreference(Context context, AttributeSet attrs,int defStyle) {
+    public MyPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
     }
@@ -45,7 +53,21 @@ public class MyPreference extends Preference {
         summaryView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
         imageView.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
-
+        imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
+        if (listener != null) {
+            listener.onUpdatePreference();
+        }
     }
+
+
+    public ImageView getImageView() {
+        return imageViewCover;
+    }
+
+
+    public interface MyPreferenceListener {
+        void onUpdatePreference();
+    }
+
 
 }

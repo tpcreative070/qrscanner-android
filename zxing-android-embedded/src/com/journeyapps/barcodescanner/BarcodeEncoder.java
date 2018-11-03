@@ -29,8 +29,6 @@ import static android.graphics.Color.WHITE;
 public class BarcodeEncoder {
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    private static final int test = 0x303F9F;
-
 
     public BarcodeEncoder() {
     }
@@ -51,14 +49,14 @@ public class BarcodeEncoder {
     }
 
 
-    public Bitmap createBitmap(Context context,BitMatrix matrix) {
+    public Bitmap createBitmap(Context context,int res,BitMatrix matrix) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
             int offset = y * width;
             for (int x = 0; x < width; x++) {
-                pixels[offset + x] = matrix.get(x, y) ?  ResourcesCompat.getColor(context.getResources(),R.color.zxing_colorBlueLight,null) : WHITE;
+                pixels[offset + x] = matrix.get(x, y) ?  ResourcesCompat.getColor(context.getResources(),res,null) : WHITE;
             }
         }
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -96,11 +94,11 @@ public class BarcodeEncoder {
         return createBitmap(encode(contents, format, width, height, hints));
     }
 
-    public Bitmap encodeBitmap(Context context,String contents, BarcodeFormat format, int width, int height) throws WriterException {
-        return createBitmap(context,encode(contents, format, width, height));
+    public Bitmap encodeBitmap(Context context,int res,String contents, BarcodeFormat format, int width, int height) throws WriterException {
+        return createBitmap(context,res,encode(contents, format, width, height));
     }
 
-    public Bitmap encodeBitmap(Context context,String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
-        return createBitmap(context,encode(contents, format, width, height, hints));
+    public Bitmap encodeBitmap(Context context,int res,String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
+        return createBitmap(context,res,encode(contents, format, width, height, hints));
     }
 }

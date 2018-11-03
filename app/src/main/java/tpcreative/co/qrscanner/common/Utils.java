@@ -5,16 +5,21 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +27,10 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
+import com.google.gson.Gson;
+import com.snatik.storage.helpers.SizeUnit;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,9 +43,16 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.crypto.Cipher;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.EnumAction;
 
@@ -371,13 +387,14 @@ public class Utils {
         return result;
     }
 
-    public static void saveImage(final Bitmap finalBitmap,final EnumAction enumAction,final String type,final String code,UtilsListener listenner) {
 
+    public static void saveImage(final Bitmap finalBitmap,final EnumAction enumAction,final String type,final String code,UtilsListener listenner) {
         String root = QRScannerApplication.getInstance().getPathFolder();
         File myDir = new File(root);
         myDir.mkdirs();
-        String fname = "Image-"+ type + code +".jpg";
+        String fname = "Image_"+ type + code +".jpg";
         fname = fname.replace("/","");
+        fname = fname.replace(":","");
         File file = new File (myDir, fname);
         try {
             Log.d(TAG,"path :" + file.getAbsolutePath());
@@ -420,5 +437,12 @@ public class Utils {
     public interface UtilsListener {
         void onSaved(String path, EnumAction action);
     }
+
+    public static void Log(final String TAG,final String message){
+        if (BuildConfig.DEBUG){
+            Log.d(TAG,message);
+        }
+    }
+
 
 }

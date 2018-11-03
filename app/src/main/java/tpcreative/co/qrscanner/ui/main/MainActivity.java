@@ -25,6 +25,7 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.DialogOnAnyDeniedMultiplePermissionsListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
 import tpcreative.co.qrscanner.model.History;
@@ -67,11 +69,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         SingletonResponse.getInstance().setListener(this);
         storage = new Storage(getApplicationContext());
         initUI();
-        onAddPermission();
-
+        onAddPermissionCamera();
         final List<Save> save = InstanceGenerator.getInstance(getApplicationContext()).getListSave();
         final List<History> histories = InstanceGenerator.getInstance(getApplicationContext()).getList();
         askPermission();
+        ServiceManager.getInstance().onStartService();
     }
 
     public void initAds(){
@@ -102,26 +104,24 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
-    public void onAddPermission() {
+    public void onAddPermissionCamera() {
         Dexter.withActivity(this)
                 .withPermissions(
-                        Manifest.permission.CALL_PHONE,
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        Manifest.permission.CAMERA)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
+
                             Log.d(TAG, "Permission is ready");
                             boolean isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh),false);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
-                               SingletonScanner.getInstance().setVisible();
-                               PrefsController.putBoolean(getString(R.string.key_refresh),true);
+                                SingletonScanner.getInstance().setVisible();
+                                PrefsController.putBoolean(getString(R.string.key_refresh),true);
                             }
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());
+                          // Do something here
+
                         }
                         else{
                             Log.d(TAG,"Permission is denied");
@@ -213,11 +213,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         bottomNavigation = findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.view_pager);
 
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.baseline_history_white_36, R.color.colorAccent);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.baseline_add_box_white_36, R.color.colorAccent);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.baseline_history_white_48, R.color.colorAccent);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.baseline_add_box_white_48, R.color.colorAccent);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_scanner, R.color.colorAccent);
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.baseline_save_alt_white_36, R.color.colorAccent);
-        AHBottomNavigationItem item5 = new AHBottomNavigationItem(R.string.tab_5, R.drawable.baseline_settings_white_36, R.color.colorAccent);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.baseline_save_alt_white_48, R.color.colorAccent);
+        AHBottomNavigationItem item5 = new AHBottomNavigationItem(R.string.tab_5, R.drawable.baseline_settings_white_48, R.color.colorAccent);
 
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
@@ -352,6 +352,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 unregisterReceiver(receiver);
             }
         }
+        PrefsController.putBoolean(getString(R.string.key_second_loads),true);
+        ServiceManager.getInstance().onDismissServices();
     }
 
 }

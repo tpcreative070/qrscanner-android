@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.review;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,19 +21,40 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
+import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.controller.ServiceManager;
+import tpcreative.co.qrscanner.common.controller.SingletonManagerProcessing;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 public class ReviewActivity extends BaseActivity implements ReviewView , View.OnClickListener ,Utils.UtilsListener {
@@ -52,7 +74,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     private  String code ;
     private Animation mAnim = null;
     private Save save = new Save();
-
+    private Disposable subscriptions;
     @BindView(R.id.rlAds)
     RelativeLayout rlAds;
     AdView adViewBanner;
@@ -141,6 +163,9 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         super.onDestroy();
         if (adViewBanner != null) {
             adViewBanner.destroy();
+        }
+        if (subscriptions!=null){
+            subscriptions.dispose();
         }
     }
 
@@ -266,6 +291,40 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         }
     }
 
+    public void onAddPermissionSave() {
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            onGenerateCode(code,EnumAction.SAVE);
+                        }
+                        else{
+                            Log.d(TAG,"Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Log.d(TAG, "request permission is failed");
+                        }
+                    }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -279,7 +338,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         if (code!=null){
-                            onGenerateCode(code,EnumAction.SAVE);
+                            onAddPermissionSave();
                         }
                     }
                     @Override
@@ -338,19 +397,25 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     public void onGenerateCode(String code,EnumAction enumAction){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
-            imgResult.setImageBitmap(bitmap);
-            Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
-        } catch(Exception e) {
-            Log.d(TAG,e.getMessage());
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.MARGIN, 2);
+            Theme theme = Theme.getInstance().getThemeInfo();
+            Utils.Log(TAG,"Starting save items 0");
+            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
+            Utils.saveImage(bitmap,enumAction,create.createType.name(),code,ReviewActivity.this);
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
+
     @Override
     public void onSaved(String path, EnumAction enumAction) {
+        Utils.Log(TAG,"Saved successful");
         switch (enumAction){
             case SAVE: {
-                Toast.makeText(this,"Saved image successfully :" + path,Toast.LENGTH_SHORT).show();
+                Toast.makeText(ReviewActivity.this,"Saved image successfully :" + path,Toast.LENGTH_SHORT).show();
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE){
                     InstanceGenerator.getInstance(getContext()).onInsert(save);
@@ -386,6 +451,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
             }
         }
+
     }
 
     @Override
@@ -408,10 +474,15 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     public void onGenerateReview(String code){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.MARGIN, 2);
+            Theme theme = Theme.getInstance().getThemeInfo();
+            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 200, 200,hints);
             imgResult.setImageBitmap(bitmap);
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }

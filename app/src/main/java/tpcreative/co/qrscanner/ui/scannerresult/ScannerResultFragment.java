@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.scannerresult;
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,10 +28,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,6 +58,7 @@ import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 public class ScannerResultFragment extends Fragment implements ScannerResultView,Utils.UtilsListener{
@@ -223,168 +237,223 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             }
         });
         view.startAnimation(mAnim);
-
-
     }
 
     @OnClick(R.id.imgOpenApplication)
     public void openApplication(){
-        create = presenter.result;
-        switch (create.createType){
-            case ADDRESSBOOK:
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    Intent intentContact = new Intent();
-                    intentContact.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
-                    intentContact.setData(Uri.fromParts("tel", create.phone, null));
-                    intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create.fullName);
-                    intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create.address);
-                    intentContact.putExtra(ContactsContract.Intents.Insert.PHONE,create.phone);
-                    intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL,create.email);
-                    startActivity(intentContact);
-                }
-                else{
-                    code =   "MECARD:N:"+create.fullName+";TEL:"+create.phone+";EMAIL:"+create.email+";ADR:"+create.address+";";
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-
-                break;
-            case EMAIL_ADDRESS:
-
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    try{
-                        Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" +create.email));
-                        intent.putExtra(Intent.EXTRA_SUBJECT, create.subject);
-                        intent.putExtra(Intent.EXTRA_TEXT, create.message);
-                        startActivity(intent);
-                    }catch(ActivityNotFoundException e){
-                        //TODO smth
-                    }
-                }
-                else{
-                    code = "MATMSG:TO:"+create.email+";SUB:"+create.subject+";BODY:"+create.message+";";
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-
-                break;
-            case PRODUCT:
-                break;
-            case URI:
-
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(create.url));
-                    startActivity(browserIntent);
-                }
-                else{
-                    code = create.url;
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-
-
-                break;
-            case WIFI:
-
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
-                }
-                else{
-                    code = "WIFI:S:"+create.ssId+";T:"+create.password+";P:"+create.networkEncryption+";H:"+create.hidden+";";
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-                break;
-            case GEO:
-
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    String uri = "geo:"+create.lat+","+create.lon+"";
-                    Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-                    intentMap.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-                    startActivity(intentMap);
-                }
-                else{
-                    code =  "geo:"+create.lat+","+create.lon+"?q="+create.query+"";
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-
-
-                break;
-            case TEL:
-
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    Intent intentPhoneCall=new Intent(Intent.ACTION_CALL,Uri.parse("tel:"+create.phone));
-                    startActivity(intentPhoneCall);
-                }
-                else{
-                    code = "tel:"+create.phone+"";
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-
-
-                break;
-            case SMS:
-
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create.phone));
-                    intent.putExtra("sms_body", create.message);
-                    startActivity(intent);
-                }
-                else{
-                    code =  "smsto:"+create.phone+":"+create.message;
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-
-                break;
-            case CALENDAR:
-
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    Intent intentCalendar = new Intent(Intent.ACTION_INSERT);
-                    intentCalendar.setData(CalendarContract.Events.CONTENT_URI);
-                    intentCalendar.putExtra(CalendarContract.Events.TITLE, create.title);
-                    intentCalendar.putExtra(CalendarContract.Events.DESCRIPTION, create.description);
-                    intentCalendar.putExtra(CalendarContract.Events.EVENT_LOCATION, create.location);
-                    intentCalendar.putExtra(CalendarContract.Events.ALL_DAY, false);
-                    intentCalendar.putExtra(
-                            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                            create.startEventMilliseconds);
-                    intentCalendar.putExtra(
-                            CalendarContract.EXTRA_EVENT_END_TIME,create.endEventMilliseconds);
-                    startActivity(intentCalendar);
-                }
-                else{
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("BEGIN:VEVENT");
-                    builder.append("\n");
-                    builder.append("SUMMARY:"+create.title);
-                    builder.append("\n");
-                    builder.append("DTSTART:"+create.startEvent);
-                    builder.append("\n");
-                    builder.append("DTEND:"+create.endEvent);
-                    builder.append("\n");
-                    builder.append("LOCATION:"+create.location);
-                    builder.append("\n");
-                    builder.append("DESCRIPTION:"+create.description);
-                    builder.append("\n");
-                    builder.append("END:VEVENT");
-                    code =  builder.toString();
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-
-                break;
-            case ISBN:
-
-                break;
-            default:
-                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
-                    intent.putExtra("sms_body", create.text);
-                    startActivity(intent);
-                }
-                else{
-                    code = create.text;
-                    onGenerateCode(code,EnumAction.SHARE);
-                }
-                break;
-        }
+       onAddPermissionSave();
     }
 
+    public void onAddPermissionPhoneCall() {
+        Dexter.withActivity(getActivity())
+                .withPermissions(
+                        Manifest.permission.CALL_PHONE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            Utils.Log(TAG,"Action here phone call");
+                            if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                Intent intentPhoneCall = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + create.phone));
+                                startActivity(intentPhoneCall);
+                            } else {
+                                code = "tel:" + create.phone + "";
+                                onGenerateCode(code, EnumAction.SHARE);
+                            }
+                        }
+                        else{
+                            Log.d(TAG,"Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Log.d(TAG, "request permission is failed");
+                        }
+                    }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
+    }
+
+    public void onAddPermissionSave() {
+        Dexter.withActivity(getActivity())
+                .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            create = presenter.result;
+                            try {
+                                switch (create.createType) {
+                                    case ADDRESSBOOK:
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            Intent intentContact = new Intent();
+                                            intentContact.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
+                                            intentContact.setData(Uri.fromParts("tel", create.phone, null));
+                                            intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create.fullName);
+                                            intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create.address);
+                                            intentContact.putExtra(ContactsContract.Intents.Insert.PHONE, create.phone);
+                                            intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL, create.email);
+                                            startActivity(intentContact);
+                                        } else {
+                                            code = "MECARD:N:" + create.fullName + ";TEL:" + create.phone + ";EMAIL:" + create.email + ";ADR:" + create.address + ";";
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+
+                                        break;
+                                    case EMAIL_ADDRESS:
+
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            try {
+                                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + create.email));
+                                                intent.putExtra(Intent.EXTRA_SUBJECT, create.subject);
+                                                intent.putExtra(Intent.EXTRA_TEXT, create.message);
+                                                startActivity(intent);
+                                            } catch (ActivityNotFoundException e) {
+                                                //TODO smth
+                                            }
+                                        } else {
+                                            code = "MATMSG:TO:" + create.email + ";SUB:" + create.subject + ";BODY:" + create.message + ";";
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+
+                                        break;
+                                    case PRODUCT:
+                                        break;
+                                    case URI:
+
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(create.url));
+                                            startActivity(browserIntent);
+                                        } else {
+                                            code = create.url;
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+
+
+                                        break;
+                                    case WIFI:
+
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+                                        } else {
+                                            code = "WIFI:S:" + create.ssId + ";T:" + create.password + ";P:" + create.networkEncryption + ";H:" + create.hidden + ";";
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+                                        break;
+                                    case GEO:
+
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            String uri = "geo:" + create.lat + "," + create.lon + "";
+                                            Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                                            intentMap.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                                            startActivity(intentMap);
+                                        } else {
+                                            code = "geo:" + create.lat + "," + create.lon + "?q=" + create.query + "";
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+                                        break;
+                                    case TEL:
+                                        onAddPermissionPhoneCall();
+                                        break;
+                                    case SMS:
+
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create.phone));
+                                            intent.putExtra("sms_body", create.message);
+                                            startActivity(intent);
+                                        } else {
+                                            code = "smsto:" + create.phone + ":" + create.message;
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+
+                                        break;
+                                    case CALENDAR:
+
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            Intent intentCalendar = new Intent(Intent.ACTION_INSERT);
+                                            intentCalendar.setData(CalendarContract.Events.CONTENT_URI);
+                                            intentCalendar.putExtra(CalendarContract.Events.TITLE, create.title);
+                                            intentCalendar.putExtra(CalendarContract.Events.DESCRIPTION, create.description);
+                                            intentCalendar.putExtra(CalendarContract.Events.EVENT_LOCATION, create.location);
+                                            intentCalendar.putExtra(CalendarContract.Events.ALL_DAY, false);
+                                            intentCalendar.putExtra(
+                                                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                                    create.startEventMilliseconds);
+                                            intentCalendar.putExtra(
+                                                    CalendarContract.EXTRA_EVENT_END_TIME, create.endEventMilliseconds);
+                                            startActivity(intentCalendar);
+                                        } else {
+                                            StringBuilder builder = new StringBuilder();
+                                            builder.append("BEGIN:VEVENT");
+                                            builder.append("\n");
+                                            builder.append("SUMMARY:" + create.title);
+                                            builder.append("\n");
+                                            builder.append("DTSTART:" + create.startEvent);
+                                            builder.append("\n");
+                                            builder.append("DTEND:" + create.endEvent);
+                                            builder.append("\n");
+                                            builder.append("LOCATION:" + create.location);
+                                            builder.append("\n");
+                                            builder.append("DESCRIPTION:" + create.description);
+                                            builder.append("\n");
+                                            builder.append("END:VEVENT");
+                                            code = builder.toString();
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+
+                                        break;
+                                    case ISBN:
+
+                                        break;
+                                    default:
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
+                                            intent.putExtra("sms_body", create.text);
+                                            startActivity(intent);
+                                        } else {
+                                            code = create.text;
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
+                                        break;
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            Log.d(TAG,"Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Log.d(TAG, "request permission is failed");
+                        }
+                    }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
+    }
 
     @Override
     public void setView() {
@@ -629,7 +698,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     public void onGenerateCode(String code,EnumAction enumAction){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.MARGIN, 2);
+            Theme theme = Theme.getInstance().getThemeInfo();
+            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
             Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
         } catch(Exception e) {
             Log.d(TAG,e.getMessage());

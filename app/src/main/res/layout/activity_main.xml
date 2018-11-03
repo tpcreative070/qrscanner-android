@@ -30,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"/>
             <RelativeLayout
+                android:visibility="gone"
                 android:gravity="center"
                 android:id="@+id/rlAds"
                 android:layout_centerInParent="true"

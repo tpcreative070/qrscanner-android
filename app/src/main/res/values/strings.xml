@@ -137,5 +137,38 @@
     <string name="barcode_guide">Barcode Scanner users the camera on your phone to read barcode and look up product information such as prices and reviews etc...</string>
     <string name="barcode_2d_guide">It also reads 2D barcode such as QR Codes ad Data Matrix. These can contain links to web numbers and email addresses, and more.</string>
 
+    <string name="url_developer">http://192.168.1.2:8082</string>
+    <string name="url_live">http://tpcreative.me:8082</string>
+
+    <string name="key_device_id">device_id</string>
+    <string name="key_device_type">device_type</string>
+    <string name="key_manufacturer">manufacturer</string>
+    <string name="key_name_model">name_model</string>
+    <string name="key_version_sync">version</string>
+    <string name="key_version_app">Version</string>
+    <string name="key_versionRelease">versionRelease</string>
+    <string name="key_appVersionRelease">appVersionRelease</string>
+    <string name="key_code">code</string>
+    <string name="key_verify_account">verify_account</string>
+    <string name="key_super_safe_version">SuperSafe: %1$s</string>
+    <string name="device_type">Android</string>
+    <string name="key_locale">locale</string>
+    <string name="key_scan">Scan</string>
+    <string name="key_advance_features">Advance Features</string>
+    <string name="key_vibrate">Vibrate</string>
+    <string name="key_beep">Beep</string>
+    <string name="key_theme">Theme</string>
+    <string name="key_color_code">Change code color</string>
+    <string name="key_size_code">Change resolution file size</string>
+    <string name="Change_file_color">Change File Color</string>
+    <string name="key_theme_object">theme_object</string>
+    <string name="key_theme_list">theme_list</string>
+    <string name="key_is_first_gallery">is first gallery</string>
+    <string name="tap_here_to_scan_code_from_gallery">Tap here to scan code from Gallery.</string>
+    <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QR code from your Gallery.</string>
+    <string name="key_second_loads">second loads</string>
+    <string name="progressing">Progressing...</string>
+    <string name="importing">Importing...</string>
+    <string name="items_not_found">Items Not Found</string>
 
 </resources>

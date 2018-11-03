@@ -1,12 +1,17 @@
 package tpcreative.co.qrscanner.ui.scanner;
+import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -24,6 +29,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -55,6 +63,15 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,6 +84,8 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 
@@ -139,6 +158,15 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         }
         barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
         beepManager = new BeepManager(getActivity());
+
+        final boolean  isFirstGalleryLoad = PrefsController.getBoolean(getString(R.string.key_is_first_gallery),false);
+        final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
+        if (isSecondLoad){
+            if (!isFirstGalleryLoad){
+                onSuggestionScanner();
+            }
+        }
+
         return view;
     }
 
@@ -151,17 +179,67 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.resume();
     }
 
+
+    public void onAddPermissionGallery() {
+        Dexter.withActivity(getActivity())
+                .withPermissions(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            onGetGallery();
+                        }
+                        else{
+                            Log.d(TAG,"Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Log.d(TAG, "request permission is failed");
+                        }
+                    }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
+    }
+
+    public void onBeepAndVibrate(){
+        if (beepManager==null){
+            return;
+        }
+        boolean isBeep = PrefsController.getBoolean(getString(R.string.key_beep),false);
+        boolean isVibrate = PrefsController.getBoolean(getString(R.string.key_vibrate),false);
+        beepManager.setBeepEnabled(isBeep);
+        beepManager.setVibrateEnabled(isVibrate);
+    }
+
     public void replaceFragment(final int position,final Create create){
-        setInvisible();
-        create.fragmentType = EnumFragmentType.SCANNER;
-        FragmentManager fm = getFragmentManager();
-        fragment = presenter.mFragment.get(position);
-        Bundle arguments = new Bundle();
-        arguments.putSerializable("data",create);
-        fragment.setArguments(arguments);
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.flContainer_review,fragment);
-        ft.commit();
+        try {
+            setInvisible();
+            create.fragmentType = EnumFragmentType.SCANNER;
+            FragmentManager fm = getFragmentManager();
+            fragment = presenter.mFragment.get(position);
+            Bundle arguments = new Bundle();
+            arguments.putSerializable("data", create);
+            fragment.setArguments(arguments);
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.flContainer_review, fragment);
+            ft.commit();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -175,6 +253,56 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.pauseAndWait();
         barcodeScannerView.setVisibility(View.INVISIBLE);
     }
+
+
+    public void onSuggestionScanner(){
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(imgGallery, getString(R.string.tap_here_to_scan_code_from_gallery), getString(R.string.tap_here_to_scan_code_from_gallery_description))
+                        .titleTextSize(25)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextColor(R.color.md_light_blue_200)
+                        .descriptionTextSize(17)
+                        .outerCircleColor(R.color.colorButton)
+                        .transparentTarget(true)
+                        .targetCircleColor(R.color.white)
+                        .cancelable(true)
+                        .dimColor(R.color.white),
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+                        onAddPermissionGallery();
+                        view.dismiss(true);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
+                        Utils.Log(TAG,"onTargetClick");
+                    }
+
+                    @Override
+                    public void onOuterCircleClick(TapTargetView view) {
+                        super.onOuterCircleClick(view);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
+                        view.dismiss(true);
+                        Utils.Log(TAG,"onOuterCircleClick");
+                    }
+
+                    @Override
+                    public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                        super.onTargetDismissed(view, userInitiated);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
+                        view.dismiss(true);
+                        Utils.Log(TAG,"onTargetDismissed");
+                    }
+
+                    @Override
+                    public void onTargetCancel(TapTargetView view) {
+                        super.onTargetCancel(view);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
+                        view.dismiss(true);
+                        Utils.Log(TAG,"onTargetCancel");
+                    }
+                });
+    }
+
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -374,14 +502,14 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 if (isTurnOnFlash){
                     barcodeScannerView.setTorchOff();
                     isTurnOnFlash = false;
-                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_off_white_36));
+                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_off_white_48));
                     switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
 
                 }
                 else{
                     barcodeScannerView.setTorchOn();
                     isTurnOnFlash = true;
-                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_on_white_36));
+                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_on_white_48));
                     switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
                 }
             }
@@ -423,7 +551,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
             }
             @Override
             public void onAnimationEnd(Animation animation) {
-                onGetGallery();
+               onAddPermissionGallery();
             }
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -675,6 +803,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         if (barcodeScannerView != null) {
             if (isVisibleToUser) {
                 if (typeCamera!=2){
+                    onBeepAndVibrate();
                     barcodeScannerView.resume();
                 }
             } else {

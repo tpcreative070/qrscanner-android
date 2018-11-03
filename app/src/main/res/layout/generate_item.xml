@@ -37,7 +37,7 @@
             android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:src="@drawable/baseline_add_box_white_36" />
+            android:src="@drawable/baseline_add_box_white_48" />
 
     </RelativeLayout>
 </LinearLayout>

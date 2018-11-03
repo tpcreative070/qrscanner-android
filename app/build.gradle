@@ -31,7 +31,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-
         freedevelop {
             initWith(buildTypes.debug)
             applicationIdSuffix ".free.develop"
@@ -42,7 +41,12 @@ android {
             applicationIdSuffix ".free.release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+    }
 
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -91,35 +95,51 @@ dependencies {
     /*api project(':library')*/
     implementation(name: 'library-release', ext: 'aar')
 
-    implementation(name: 'library-release-tab', ext: 'aar');
-
     /*Note : Go the both*/
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
-    implementation(name: 'switchdatetime-release', ext: 'aar');
 
-    implementation(name: 'zxing-android-embedded-release', ext: 'aar');
-
-    /*DateTime picker
+    /*DateTime picker*/
     implementation project(':switchdatetime')
-    */
 
-    /*Tab
+
+    /*Tab button*/
     implementation project(':library')
 
-    */
+    /*Progress dialog*/
+    implementation project(':library-progress-dialog')
 
-    /*Zxing
+    /*Zxing*/
     implementation project(':zxing-android-embedded')
 
+    /*Glide
+      implementation 'com.github.bumptech.glide:glide:' + glide
     */
 
-    /*Volley*/
-    implementation 'com.android.volley:volley:1.1.0'
+    /*Circle Design*/
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+
+    /*taptargetviewlibrary*/
+    implementation project(':taptargetviewlibrary')
 
     /*Google admod*/
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
+    }
+
+    /*Retrofit and RXJava 2*/
+    implementation 'com.jakewharton.timber:timber:4.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    implementation('com.squareup.retrofit2:converter-simplexml:2.4.0') {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
     }
 
 

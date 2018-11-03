@@ -62,6 +62,8 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
     LinearLayout llAction;
     @BindView(R.id.rlRoot)
     RelativeLayout rlRoot;
+    @BindView(R.id.tvNotFoundItems)
+    TextView tvNotFoundItems;
     private Animation mAnim = null;
 
     @BindView(R.id.recyclerView)
@@ -131,23 +133,24 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
     }
 
     private void bindData() {
-        List<History> Galaxys = presenter.mList;
-        //CUSTOM SORT ACCORDING TO CATEGORIES
-
-//        Collections.sort(Galaxys, new Comparator<History>() {
-//            @Override
-//            public int compare(History o1, History o2) {
-//                return o2.getId() - o1.getId();
-//            }
-//        });
-
+        List<History> mListItems = presenter.mList;
         List<HistoryCell> cells = new ArrayList<>();
         //LOOP THROUGH GALAXIES INSTANTIATING THEIR CELLS AND ADDING TO CELLS COLLECTION
-        for (History galaxy : Galaxys) {
-            HistoryCell cell = new HistoryCell(galaxy);
+        for (History items : mListItems) {
+            HistoryCell cell = new HistoryCell(items);
             cell.setListener(this);
             cells.add(cell);
         }
+
+        if (mListItems!=null){
+            if (mListItems.size()>0){
+                tvNotFoundItems.setVisibility(View.INVISIBLE);
+            }
+            else {
+                tvNotFoundItems.setVisibility(View.VISIBLE);
+            }
+        }
+
         recyclerView.addCells(cells);
 
     }

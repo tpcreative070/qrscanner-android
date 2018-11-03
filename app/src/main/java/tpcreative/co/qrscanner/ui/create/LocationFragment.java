@@ -1,12 +1,15 @@
 package tpcreative.co.qrscanner.ui.create;
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -38,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.PermissionUtils;
@@ -132,6 +136,26 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             }
         });
         view.startAnimation(mAnim);
+    }
+
+
+    public void showGpsWarningDialog(){
+        try {
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.gps_disabled));
+            builder.setMessage("Please turn on your location or GPS to get exactly position");
+            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            builder.show();
+        }
+        catch (Exception e){
+
+        }
     }
 
 
@@ -267,6 +291,11 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             SingletonCloseFragment.getInstance().setUpdateData(false);
         }
 
+        locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            showGpsWarningDialog();
+        }
+
     }
 
     @Override
@@ -289,7 +318,6 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         unbinder.unbind();
         locationManager.removeUpdates(this);
     }
-
 
     @Override
     public void onMapReady(GoogleMap map) {

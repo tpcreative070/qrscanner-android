@@ -1,11 +1,11 @@
 package tpcreative.co.qrscanner.ui.settings;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.solver.GoalRow;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.preference.Preference;
@@ -14,21 +14,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+import java.util.EnumMap;
+import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
-import de.mrapp.android.preference.ListPreference;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonSettings;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.preference.MyPreference;
+import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
+import tpcreative.co.qrscanner.model.Theme;
 
 public class SettingsFragment extends Fragment {
 
     private static final String TAG = SettingsFragment.class.getSimpleName();
     private static final String FRAGMENT_TAG = SettingsFragmentPreference.class.getSimpleName() + "::fragmentTag";
     private Unbinder unbinder;
+
 
     public static SettingsFragment newInstance(int index) {
         SettingsFragment fragment = new SettingsFragment();
@@ -50,41 +59,37 @@ public class SettingsFragment extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
-
         return view;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Log.d(TAG, "onStop");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart");
+        Log.d(TAG, "onStart");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy");
+        Log.d(TAG, "onDestroy");
         unbinder.unbind();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume");
+        Log.d(TAG, "onResume");
     }
 
 
-    public static class SettingsFragmentPreference extends PreferenceFragmentCompat {
+    public static class SettingsFragmentPreference extends PreferenceFragmentCompat implements SingletonSettings.SingletonSettingsListener{
 
-        /**
-         * The {@link ListPreference}.
-         */
 
         private MyPreference mVersionApp;
 
@@ -101,15 +106,33 @@ public class SettingsFragment extends Fragment {
 
         private MyPreference myPreferenceHelp;
 
+        private MySwitchPreference mySwitchPreferenceVibrate;
+
+        private MyPreference myPreferenceFileSize;
+
+        private MyPreference myPreferenceTheme;
+
+        private MyPreference myPreferenceFileColor;
+        private Bitmap bitmap;
+
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            SingletonSettings.getInstance().setListener(this);
+        }
+
+        @Override
+        public void onUpdated() {
+            onGenerateReview("123");
+        }
 
         /**
          * Initializes the preference, which allows to change the app's theme.
          */
 
-
-
-        public void askPermission(){
-            PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
+        public void askPermission() {
+            PrefsController.putBoolean(getString(R.string.key_already_load_app), true);
             MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext());
             dialogBuilder.setTitle(R.string.app_permission);
             StringBuilder builder = new StringBuilder();
@@ -142,18 +165,18 @@ public class SettingsFragment extends Fragment {
             return new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(final Preference preference, final Object newValue) {
-                    if (preference instanceof MyPreference){
+                    if (preference instanceof MyPreference) {
                     }
                     return true;
                 }
             };
         }
 
-        public void shareToSocial(String value){
+        public void shareToSocial(String value) {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT,value);
+            intent.putExtra(Intent.EXTRA_TEXT, value);
             startActivity(Intent.createChooser(intent, "Share"));
         }
 
@@ -162,37 +185,34 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 
-                     if (preference instanceof MyPreference){
-                         if (preference.getKey().equals(getString(R.string.key_app_permissions))){
+                    if (preference instanceof MyPreference) {
+                        if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
                             askPermission();
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_share))){
-                            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) ||BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))){
+                        } else if (preference.getKey().equals(getString(R.string.key_share))) {
+                            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))) {
                                 shareToSocial(getString(R.string.scanner_app_pro));
-                            }
-                            else{
+                            } else {
                                 shareToSocial(getString(R.string.scanner_app));
                             }
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_support))){
-                             try{
-                                 Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" +"tpcreative.co@gmail.com"));
-                                 intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support");
-                                 intent.putExtra(Intent.EXTRA_TEXT, "");
-                                 startActivity(intent);
-                             }catch(ActivityNotFoundException e){
-                                 //TODO smth
-                             }
-                         }
-                         else if (preference.getKey().equals(getString(R.string.key_help))){
-                            Log.d(TAG,"action here");
+                        } else if (preference.getKey().equals(getString(R.string.key_support))) {
+                            try {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "tpcreative.co@gmail.com"));
+                                intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support");
+                                intent.putExtra(Intent.EXTRA_TEXT, "");
+                                startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                //TODO smth
+                            }
+                        } else if (preference.getKey().equals(getString(R.string.key_help))) {
+                            Log.d(TAG, "action here");
                             Navigator.onMoveToHelp(getContext());
                         }
+                        else if (preference.getKey().equals(getString(R.string.key_color_code))){
+                            Navigator.onMoveToChangeFileColor(getActivity());
+                        }
                     }
-
                     return true;
                 }
-
             };
         }
 
@@ -206,17 +226,15 @@ public class SettingsFragment extends Fragment {
             mVersionApp.setSummary(String.format("v%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
             /*Premium*/
-            mPreferencePremiumVersion = (MyPreference)findPreference(getString(R.string.key_premium_version));
+            mPreferencePremiumVersion = (MyPreference) findPreference(getString(R.string.key_premium_version));
             //mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
             //mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
-            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) ||BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))){
+            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))) {
+                mPreferencePremiumVersion.setVisible(false);
+            } else {
                 mPreferencePremiumVersion.setVisible(false);
             }
-            else{
-                mPreferencePremiumVersion.setVisible(true);
-            }
-
 
             /*App Permissions*/
 
@@ -234,12 +252,12 @@ public class SettingsFragment extends Fragment {
 
             myPreferenceRate = (MyPreference) findPreference(getString(R.string.key_rate));
             //myPreferenceRate.setOnPreferenceChangeListener(createChangeListener());
-           // myPreferenceRate.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            // myPreferenceRate.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
             /*Rate Pro*/
             myPreferenceRatePro = (MyPreference) findPreference(getString(R.string.key_rate_pro));
             //myPreferenceRatePro.setOnPreferenceChangeListener(createChangeListener());
-           // myPreferenceRatePro.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            // myPreferenceRatePro.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
             /*Support*/
             myPreferenceSupport = (MyPreference) findPreference(getString(R.string.key_support));
@@ -247,11 +265,10 @@ public class SettingsFragment extends Fragment {
             myPreferenceSupport.setOnPreferenceChangeListener(createChangeListener());
 
 
-            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))){
+            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))) {
                 myPreferenceRatePro.setVisible(true);
                 myPreferenceRate.setVisible(false);
-            }
-            else{
+            } else {
                 myPreferenceRatePro.setVisible(false);
                 myPreferenceRate.setVisible(true);
             }
@@ -261,11 +278,64 @@ public class SettingsFragment extends Fragment {
             myPreferenceHelp.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceHelp.setOnPreferenceChangeListener(createChangeListener());
 
+            /*Vibrate*/
+            mySwitchPreferenceVibrate = (MySwitchPreference) findPreference(getString(R.string.key_vibrate));
+            mySwitchPreferenceVibrate.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            mySwitchPreferenceVibrate.setOnPreferenceChangeListener(createChangeListener());
+
+            /*Theme*/
+            myPreferenceTheme = (MyPreference) findPreference(getString(R.string.key_theme));
+            myPreferenceTheme.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceTheme.setOnPreferenceChangeListener(createChangeListener());
+            myPreferenceTheme.setVisible(false);
+
+            /*File size*/
+            myPreferenceFileSize = (MyPreference) findPreference(getString(R.string.key_size_code));
+            myPreferenceFileSize.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceFileSize.setOnPreferenceChangeListener(createChangeListener());
+            myPreferenceFileSize.setVisible(false);
+
+            /*File color*/
+            myPreferenceFileColor = (MyPreference) findPreference(getString(R.string.key_color_code));
+            myPreferenceFileColor.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceFileColor.setOnPreferenceChangeListener(createChangeListener());
+
+            myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {
+                @Override
+                public void onUpdatePreference() {
+                    if (myPreferenceFileColor.getImageView() != null) {
+                       onGenerateReview("123");
+                    } else {
+                        Utils.Log(TAG, "Log album cover is null.........");
+                    }
+                }
+            });
+        }
+
+        public void onGenerateReview(String code){
+            try {
+                if (myPreferenceFileColor==null){
+                    if (myPreferenceFileColor.getImageView()==null){
+                        return;
+                    }
+                    return;
+                }
+                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+                hints.put(EncodeHintType.MARGIN, 2);
+                Theme theme = Theme.getInstance().getThemeInfo();
+                bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 100, 100,hints);
+                myPreferenceFileColor.getImageView().setImageBitmap(bitmap);
+                Utils.Log(TAG,"onGenerateReview");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.pref_general);
         }
+
     }
 }

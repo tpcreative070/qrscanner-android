@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 
 import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 
@@ -23,6 +24,11 @@ public class Navigator {
 
     public static void onMoveToHelp(Context context){
         Intent intent = new Intent(context, HelpActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void onMoveToChangeFileColor(Context context){
+        Intent intent = new Intent(context, ChangeFileColorActivity.class);
         context.startActivity(intent);
     }
 

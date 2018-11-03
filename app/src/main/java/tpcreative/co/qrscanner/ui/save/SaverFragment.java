@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.result.ParsedResultType;
 import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
@@ -37,7 +38,10 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
@@ -45,6 +49,7 @@ import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.create.ContactFragment;
 import tpcreative.co.qrscanner.ui.create.EmailFragment;
 import tpcreative.co.qrscanner.ui.create.EventFragment;
@@ -75,6 +80,8 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     LinearLayout llAction;
     @BindView(R.id.rlRoot)
     RelativeLayout rlRoot;
+    @BindView(R.id.tvNotFoundItems)
+    TextView tvNotFoundItems;
     private Animation mAnim = null;
 
     @BindView(R.id.recyclerView)
@@ -150,23 +157,23 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     }
 
     private void bindData() {
-        List<Save> Galaxys = presenter.mList;
-        //CUSTOM SORT ACCORDING TO CATEGORIES
-
-//        Collections.sort(Galaxys, new Comparator<Save>() {
-//            @Override
-//            public int compare(Save o1, Save o2) {
-//                return o2.getId() - o1.getId();
-//            }
-//        });
-
+        List<Save> mListItems = presenter.mList;
         List<SaveCell> cells = new ArrayList<>();
-        //LOOP THROUGH GALAXIES INSTANTIATING THEIR CELLS AND ADDING TO CELLS COLLECTION
-        for (Save galaxy : Galaxys) {
-            SaveCell cell = new SaveCell(galaxy);
+        for (Save items : mListItems) {
+            SaveCell cell = new SaveCell(items);
             cell.setListener(this);
             cells.add(cell);
         }
+
+        if (mListItems!=null){
+            if (mListItems.size()>0){
+                tvNotFoundItems.setVisibility(View.INVISIBLE);
+            }
+            else {
+                tvNotFoundItems.setVisibility(View.VISIBLE);
+            }
+        }
+
         recyclerView.addCells(cells);
     }
 
@@ -332,7 +339,10 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     public void onGenerateCode(String code){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.encodeBitmap(code, BarcodeFormat.QR_CODE, 400, 400);
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.MARGIN, 2);
+            Theme theme = Theme.getInstance().getThemeInfo();
+            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
             Utils.saveImage(bitmap, EnumAction.SHARE,share.createType,code,this);
 
         } catch(Exception e) {
