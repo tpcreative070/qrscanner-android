@@ -5,7 +5,10 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
@@ -16,6 +19,8 @@ public class Theme implements Serializable {
     private int primaryDarkColor;
     private int accentColor;
     public boolean isCheck;
+
+    private static final String TAG = Theme.class.getSimpleName();
 
     private static Theme instance ;
 
@@ -111,13 +116,17 @@ public class Theme implements Serializable {
     public List<Theme> getList(){
         try{
             final List<Theme> value = getDefaultThemeList();
-            if (value!=null){
+            final int current_code_version = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),0);
+            if (value!=null && current_code_version == BuildConfig.VERSION_CODE){
+                Utils.Log(TAG,"Already install this version");
                 return value;
             }
             else{
                final List<Theme> mList = new ArrayList<>();
                mList.addAll(ThemeUtil.getThemeList());
                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list),new Gson().toJson(mList));
+               PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),BuildConfig.VERSION_CODE);
+                Utils.Log(TAG,"New install this version");
                return mList;
             }
         }

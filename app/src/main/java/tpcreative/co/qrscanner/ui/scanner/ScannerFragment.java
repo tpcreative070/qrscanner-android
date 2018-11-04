@@ -555,6 +555,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     @Override
     public void onStop() {
         super.onStop();
+        if (barcodeScannerView!=null){
+            barcodeScannerView.pauseAndWait();
+        }
         Log.d(TAG,"onStop");
     }
 
@@ -592,7 +595,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
             try {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream,null,options);
                 Handler handler =  new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -603,10 +608,12 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
             } catch (FileNotFoundException  e) {
                 e.printStackTrace();
                 Utils.Log(TAG,"Something went wrong");
+                barcodeScannerView.resume();
             }
 
         }else {
             Utils.Log(TAG,"You haven't picked Image");
+            barcodeScannerView.resume();
         }
     }
 
@@ -624,11 +631,13 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
             }
             catch (NotFoundException | IOException |ChecksumException e){
                 e.printStackTrace();
-                Toast.makeText(getActivity(),"Please Choose Pictures Is QRcode Or Barcode",Toast.LENGTH_SHORT).show();
+                barcodeScannerView.resume();
+                Toast.makeText(getActivity(),"Please Choose Pictures Is QRCode Or BarCode",Toast.LENGTH_LONG).show();
             }
         }
         catch (FormatException e){
            e.printStackTrace();
+            barcodeScannerView.resume();
         }
     }
 
@@ -745,9 +754,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 endEvent = endTime;
                 startEventMilliseconds = calendarParsedResult.getStartTimestamp();
                 endEventMilliseconds = calendarParsedResult.getEndTimestamp();
-
                 Log.d(TAG,startTime + " : " + endTime);
-
                 break;
             case ISBN:
                 create.createType = ParsedResultType.ISBN;

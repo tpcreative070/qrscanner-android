@@ -170,5 +170,6 @@
     <string name="progressing">Progressing...</string>
     <string name="importing">Importing...</string>
     <string name="items_not_found">Items Not Found</string>
+    <string name="key_current_code_version"></string>
 
 </resources>
