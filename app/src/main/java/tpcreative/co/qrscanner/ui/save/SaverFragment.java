@@ -330,7 +330,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
+            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
             Utils.saveImage(bitmap, EnumAction.SHARE,share.createType,code,this);
 
         } catch(Exception e) {

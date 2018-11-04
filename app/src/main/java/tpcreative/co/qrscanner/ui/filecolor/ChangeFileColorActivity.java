@@ -191,7 +191,7 @@ public class ChangeFileColorActivity extends BaseActivity implements BaseView  ,
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 100, 100,hints);
+            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 100, 100,hints);
             imgResult.setImageBitmap(bitmap);
         } catch(Exception e) {
             e.printStackTrace();

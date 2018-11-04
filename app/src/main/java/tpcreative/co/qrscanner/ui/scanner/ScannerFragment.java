@@ -77,6 +77,7 @@ import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.common.controller.SingletonManagerProcessing;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 
@@ -157,7 +158,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 onSuggestionScanner();
             }
         }
-
+        onHandlerIntent();
         return view;
     }
 
@@ -632,7 +633,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
             catch (NotFoundException | IOException |ChecksumException e){
                 e.printStackTrace();
                 barcodeScannerView.resume();
-                Toast.makeText(getActivity(),"Please Choose Pictures Is QRCode Or BarCode",Toast.LENGTH_LONG).show();
+                Utils.showGotItSnackbar(getView(),R.string.please_choose_correctly_format);
             }
         }
         catch (FormatException e){
@@ -815,6 +816,50 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+
+    /*Share File To QRScanner*/
+    void onHandlerIntent(){
+        try {
+            Intent intent = getActivity().getIntent();
+            String action = intent.getAction();
+            String type = intent.getType();
+            Utils.Log(TAG,"original type :"+ type);
+            if (Intent.ACTION_SEND.equals(action) && type != null ) {
+                handleSendSingleItem(intent);
+            }
+        }
+        catch (Exception e){
+            Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
+            e.printStackTrace();
+        }
+    }
+
+    void handleSendSingleItem(Intent intent) {
+        try {
+            Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (imageUri != null) {
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream,null,options);
+                Handler handler =  new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onRenderCode(selectedImage,imageStream);
+                    }
+                },1000);
+            }
+            else{
+                Utils.showGotItSnackbar(getView(),R.string.can_not_support_this_format);
+            }
+        }
+        catch (Exception e){
+            Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
+            e.printStackTrace();
+        }
     }
 
 }

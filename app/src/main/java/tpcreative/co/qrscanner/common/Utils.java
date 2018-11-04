@@ -13,6 +13,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.media.ExifInterface;
@@ -21,12 +22,17 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.StringRes;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.snatik.storage.helpers.SizeUnit;
@@ -53,6 +59,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.BuildConfig;
+import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.EnumAction;
 
@@ -85,6 +92,38 @@ public class Utils {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static void showGotItSnackbar(final View view, final @StringRes int text) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                multilineSnackbar(
+                        Snackbar.make(
+                                view, text, BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                .setAction(R.string.got_it, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                ).show();
+            }
+        }, 200);
+    }
+
+    private static Snackbar multilineSnackbar(Snackbar snackbar) {
+        TextView textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_reg);
+        textView.setMaxLines(5);
+        textView.setTypeface(typeface);
+        textView.setTextSize(20);
+
+        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action);
+        snackbarActionTextView.setTypeface(typeface);
+        snackbarActionTextView.setTextSize(16);
+
+        return snackbar;
     }
 
 

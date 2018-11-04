@@ -55,7 +55,7 @@ public class ChangeFileColorAdapter extends BaseAdapter<Theme, BaseHolder> {
             super.bind(data, position);
             mPosition = position;
             //imgTheme.setBackgroundColor(data.getPrimaryColor());
-            imgTheme.setImageResource(data.getPrimaryColor());
+            imgTheme.setImageResource(data.getPrimaryDarkColor());
             if (data.isCheck){
                 imgChecked.setVisibility(View.VISIBLE);
             }

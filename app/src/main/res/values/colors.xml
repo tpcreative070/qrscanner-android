@@ -296,6 +296,7 @@
     <color name="primaryColorLime">#CDDC39</color>
     <color name="primaryLightColorLime">#F0F4C3</color>
     <color name="primaryDarkColorLime">#AFB42B</color>
+    <color name="primaryDarkColorLimeStrong">#818d00</color>
     <color name="secondaryColorLime">#7C4DFF</color>
     <color name="secondaryLightColorLime">#ae94f5</color>
     <color name="secondaryDarkColorLime">#4f2cb3</color>
@@ -316,6 +317,7 @@
     <color name="primaryColorAmber">#FFC107</color>
     <color name="primaryLightColorAmber">#FFECB3</color>
     <color name="primaryDarkColorAmber">#FFA000</color>
+    <color name="primaryDarkColorAmberStrong">#ed5400</color>
     <color name="secondaryColorAmber">#03A9F4</color>
     <color name="secondaryLightColorAmber">#65c4ef</color>
     <color name="secondaryDarkColorAmber">#1e87b6</color>

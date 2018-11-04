@@ -401,7 +401,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
             Utils.Log(TAG,"Starting save items 0");
-            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
+            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
             Utils.saveImage(bitmap,enumAction,create.createType.name(),code,ReviewActivity.this);
         }
         catch (Exception e){
@@ -477,7 +477,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 200, 200,hints);
+            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 200, 200,hints);
             imgResult.setImageBitmap(bitmap);
         } catch(Exception e) {
             e.printStackTrace();

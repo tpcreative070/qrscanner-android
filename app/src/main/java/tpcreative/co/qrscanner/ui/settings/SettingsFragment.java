@@ -136,9 +136,9 @@ public class SettingsFragment extends Fragment {
             MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext());
             dialogBuilder.setTitle(R.string.app_permission);
             StringBuilder builder = new StringBuilder();
-            builder.append("1. WRITE_EXTERNAL_STORAGE: Save history strip to local data");
+            builder.append("1. WRITE_EXTERNAL_STORAGE: Save QRCode to SDCard");
             builder.append("\n");
-            builder.append("2. READ_EXTERNAL_STORAGE: Reading ringtone");
+            builder.append("2. READ_EXTERNAL_STORAGE: Load QRCode from SDCard");
             builder.append("\n");
             builder.append("3. INTERNET,CHANGE_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_STATE,ACCESS_NETWORK_STATE: Listener disconnect and connect in order to service for premium version");
             builder.append("\n");
@@ -324,7 +324,7 @@ public class SettingsFragment extends Fragment {
                 Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
                 hints.put(EncodeHintType.MARGIN, 2);
                 Theme theme = Theme.getInstance().getThemeInfo();
-                bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryColor(),code, BarcodeFormat.QR_CODE, 100, 100,hints);
+                bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 100, 100,hints);
                 myPreferenceFileColor.getImageView().setImageBitmap(bitmap);
                 Utils.Log(TAG,"onGenerateReview");
             } catch(Exception e) {

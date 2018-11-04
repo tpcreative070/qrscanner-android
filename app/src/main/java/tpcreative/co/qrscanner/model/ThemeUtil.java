@@ -19,8 +19,8 @@ public class ThemeUtil {
         themeArrayList.add(new Theme(6,R.color.primaryColorCyan, R.color.primaryDarkColorCyan, R.color.secondaryColorCyan));
         themeArrayList.add(new Theme(7,R.color.primaryColorTeal, R.color.primaryDarkColorTeal, R.color.secondaryColorTeal));
         themeArrayList.add(new Theme(8,R.color.primaryColorLightGreen, R.color.primaryDarkColorLightGreen, R.color.secondaryColorLightGreen));
-        themeArrayList.add(new Theme(9,R.color.primaryColorLime, R.color.primaryDarkColorLime, R.color.secondaryColorLime));
-        themeArrayList.add(new Theme(10,R.color.primaryColorAmber, R.color.primaryDarkColorAmber, R.color.secondaryColorAmber));
+        themeArrayList.add(new Theme(9,R.color.primaryColorLime, R.color.primaryDarkColorLimeStrong, R.color.secondaryColorLime));
+        themeArrayList.add(new Theme(10,R.color.primaryColorAmber, R.color.primaryDarkColorAmberStrong, R.color.secondaryColorAmber));
         themeArrayList.add(new Theme(11,R.color.primaryColorBrown, R.color.primaryDarkColorBrown, R.color.secondaryColorBrown));
         return themeArrayList;
     }

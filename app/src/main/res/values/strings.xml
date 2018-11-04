@@ -99,6 +99,11 @@
     <string name="key_not_first_running">first_running</string>
     <string name="key_already_load_app">already_load_app</string>
     <string name="got_it">OK, GOT IT</string>
+    <string name="error_occurred_importing">Error occurred importing</string>
+    <string name="please_choose_correctly_format">Please choose pictures is QRCode or BarCode</string>
+    <string name="alert_end_event">Ending event data time must be greater than begin date time</string>
+    <string name="alert_start_event">Starting event data time must be greater than current date time</string>
+    <string name="can_not_support_this_format">Can not support this format file</string>
     <string name="info">Information</string>
     <string name="tvPrimacyPolicy">https://sites.google.com/view/tpcreative/home</string>
     <string name="key_help">help</string>
