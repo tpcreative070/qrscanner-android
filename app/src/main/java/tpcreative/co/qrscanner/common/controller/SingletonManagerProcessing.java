@@ -20,7 +20,7 @@ public class SingletonManagerProcessing {
     }
 
 
-    public void onStartProgressing(Activity activity){
+    public void onStartProgressing(Activity activity,int res){
         try{
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -28,7 +28,7 @@ public class SingletonManagerProcessing {
                     if (dialog==null){
                         dialog = new SpotsDialog.Builder()
                                 .setContext(activity)
-                                .setMessage(QRScannerApplication.getInstance().getString(R.string.progressing))
+                                .setMessage(QRScannerApplication.getInstance().getString(res))
                                 .setCancelable(true)
                                 .build();
                     }

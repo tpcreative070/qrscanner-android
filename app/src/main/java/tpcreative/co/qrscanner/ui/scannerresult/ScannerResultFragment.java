@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,7 +36,6 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -54,6 +52,7 @@ import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.controller.SingletonManagerProcessing;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -528,7 +527,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 wifiNetworkEncryption.setText(create.networkEncryption);
                 wifiHidden.setText(create.hidden ? "Yes" : "No");
 
-
                 history = new History();
                 history.ssId = create.ssId;
                 history.password = create.password;
@@ -761,4 +759,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         super.onResume();
         Log.d(TAG,"onResume");
     }
+
+
+
 }

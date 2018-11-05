@@ -268,33 +268,33 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);      // This call is optional
                         onAddPermissionGallery();
-                        view.dismiss(true);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
                         Utils.Log(TAG,"onTargetClick");
+                        view.dismiss(true);
                     }
 
                     @Override
                     public void onOuterCircleClick(TapTargetView view) {
                         super.onOuterCircleClick(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        view.dismiss(true);
                         Utils.Log(TAG,"onOuterCircleClick");
+                        view.dismiss(true);
                     }
 
                     @Override
                     public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
                         super.onTargetDismissed(view, userInitiated);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        view.dismiss(true);
                         Utils.Log(TAG,"onTargetDismissed");
+                        view.dismiss(true);
                     }
 
                     @Override
                     public void onTargetCancel(TapTargetView view) {
                         super.onTargetCancel(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        view.dismiss(true);
                         Utils.Log(TAG,"onTargetCancel");
+                        view.dismiss(true);
                     }
                 });
     }

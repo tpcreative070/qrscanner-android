@@ -186,4 +186,7 @@
     <string name="choose_files">Where the files store(Check item -> choose share icon).</string>
     <string name="choose_qrscanner_app">Choose QR Scanner app(select app -> waiting for great result ^^).</string>
 
+    <string name="connected_wifi_successful">Wifi Connected Was Successful</string>
+    <string name="connected_wifi_failed">Wifi Connected Was Failed</string>
+    <string name="connecting">Connecting</string>
 </resources>

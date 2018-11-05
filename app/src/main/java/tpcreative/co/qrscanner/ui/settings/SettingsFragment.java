@@ -385,28 +385,28 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);      // This call is optional
-                        view.dismiss(true);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         Navigator.onMoveToHelp(getContext());
                         Utils.Log(TAG,"onTargetClick");
+                        view.dismiss(true);
                     }
 
                     @Override
                     public void onOuterCircleClick(TapTargetView view) {
                         super.onOuterCircleClick(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
-                        view.dismiss(true);
                         llAction.setVisibility(View.INVISIBLE);
                         Utils.Log(TAG,"onOuterCircleClick");
+                        view.dismiss(true);
                     }
 
                     @Override
                     public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
                         super.onTargetDismissed(view, userInitiated);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
-                        view.dismiss(true);
                         llAction.setVisibility(View.INVISIBLE);
                         Utils.Log(TAG,"onTargetDismissed");
+                        view.dismiss(true);
                     }
 
                     @Override
@@ -414,8 +414,8 @@ public class SettingsFragment extends Fragment {
                         super.onTargetCancel(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         llAction.setVisibility(View.INVISIBLE);
-                        view.dismiss(true);
                         Utils.Log(TAG,"onTargetCancel");
+                        view.dismiss(true);
                     }
                 });
     }

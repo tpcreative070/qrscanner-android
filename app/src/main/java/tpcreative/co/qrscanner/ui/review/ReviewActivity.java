@@ -211,7 +211,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case WIFI:
-                code = "WIFI:S:"+create.ssId+";T:"+create.password+";P:"+create.networkEncryption+";H:"+create.hidden+";";
+                code = "WIFI:S:"+create.ssId+";T:"+create.networkEncryption+";P:"+create.password+";H:"+create.hidden+";";
                 save = new Save();
                 save.ssId = create.ssId;
                 save.password = create.password;
