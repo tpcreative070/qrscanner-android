@@ -78,6 +78,7 @@ import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.SingletonManagerProcessing;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 
@@ -248,12 +249,15 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
 
     public void onSuggestionScanner(){
+        Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_reg);
         TapTargetView.showFor(getActivity(),                 // `this` is an Activity
                 TapTarget.forView(imgGallery, getString(R.string.tap_here_to_scan_code_from_gallery), getString(R.string.tap_here_to_scan_code_from_gallery_description))
                         .titleTextSize(25)
                         .titleTextColor(R.color.white)
                         .descriptionTextColor(R.color.md_light_blue_200)
                         .descriptionTextSize(17)
+                        .titleTypeface(typeface)
+                        .descriptionTypeface(typeface)
                         .outerCircleColor(R.color.colorButton)
                         .transparentTarget(true)
                         .targetCircleColor(R.color.white)

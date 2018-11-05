@@ -2,40 +2,52 @@ package tpcreative.co.qrscanner.ui.settings;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.EnumMap;
 import java.util.Map;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.preference.MyPreference;
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Theme;
 
 public class SettingsFragment extends Fragment {
 
     private static final String TAG = SettingsFragment.class.getSimpleName();
     private static final String FRAGMENT_TAG = SettingsFragmentPreference.class.getSimpleName() + "::fragmentTag";
+    @BindView(R.id.llAction)
+    LinearLayout llAction;
     private Unbinder unbinder;
 
 
@@ -60,6 +72,21 @@ public class SettingsFragment extends Fragment {
         transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            boolean isTip = PrefsController.getBoolean(getString(R.string.key_is_first_help),false);
+            if (!isTip){
+                llAction.setVisibility(View.VISIBLE);
+                onSuggestionTips();
+            }
+            Log.d(TAG, "isVisible");
+        } else {
+            Log.d(TAG, "isInVisible");
+        }
     }
 
     @Override
@@ -278,6 +305,7 @@ public class SettingsFragment extends Fragment {
             myPreferenceHelp.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceHelp.setOnPreferenceChangeListener(createChangeListener());
 
+
             /*Vibrate*/
             mySwitchPreferenceVibrate = (MySwitchPreference) findPreference(getString(R.string.key_vibrate));
             mySwitchPreferenceVibrate.setOnPreferenceClickListener(createActionPreferenceClickListener());
@@ -336,6 +364,63 @@ public class SettingsFragment extends Fragment {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.pref_general);
         }
-
     }
+
+    public void onSuggestionTips(){
+        Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_reg);
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(llAction, getString(R.string.tap_here_to_discover_how_to_scan), getString(R.string.tap_here_to_discover_how_to_scan_description))
+                        .titleTextSize(25)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextColor(R.color.black)
+                        .titleTypeface(typeface)
+                        .descriptionTypeface(typeface)
+                        .descriptionTextSize(17)
+                        .outerCircleColor(R.color.colorButton)
+                        .transparentTarget(true)
+                        .targetCircleColor(R.color.white)
+                        .cancelable(true)
+                        .dimColor(R.color.white),
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+                        view.dismiss(true);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
+                        Navigator.onMoveToHelp(getContext());
+                        Utils.Log(TAG,"onTargetClick");
+                    }
+
+                    @Override
+                    public void onOuterCircleClick(TapTargetView view) {
+                        super.onOuterCircleClick(view);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
+                        view.dismiss(true);
+                        llAction.setVisibility(View.INVISIBLE);
+                        Utils.Log(TAG,"onOuterCircleClick");
+                    }
+
+                    @Override
+                    public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                        super.onTargetDismissed(view, userInitiated);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
+                        view.dismiss(true);
+                        llAction.setVisibility(View.INVISIBLE);
+                        Utils.Log(TAG,"onTargetDismissed");
+                    }
+
+                    @Override
+                    public void onTargetCancel(TapTargetView view) {
+                        super.onTargetCancel(view);
+                        PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
+                        llAction.setVisibility(View.INVISIBLE);
+                        view.dismiss(true);
+                        Utils.Log(TAG,"onTargetCancel");
+                    }
+                });
+    }
+
+
+
+
 }

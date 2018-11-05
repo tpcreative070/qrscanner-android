@@ -169,12 +169,21 @@
     <string name="key_theme_object">theme_object</string>
     <string name="key_theme_list">theme_list</string>
     <string name="key_is_first_gallery">is first gallery</string>
+    <string name="key_is_first_help">is first_help</string>
     <string name="tap_here_to_scan_code_from_gallery">Tap here to scan code from Gallery.</string>
     <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QR code from your Gallery.</string>
+    <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
+    <string name="tap_here_to_discover_how_to_scan_description">This tips will help you to use this app more effective.</string>
+
     <string name="key_second_loads">second loads</string>
+    <string name="key_second_visit_settings">second visit settings</string>
     <string name="progressing">Progressing...</string>
     <string name="importing">Importing...</string>
     <string name="items_not_found">Items Not Found</string>
     <string name="key_current_code_version"></string>
+    <string name="scan_code_via_Camera">Scan BarCode And QRCode Via Camera.</string>
+    <string name="scan_code_via_Gallery">Scan BarCode And QRCode From Gallery.</string>
+    <string name="choose_files">Where the files store(Check item -> choose share icon).</string>
+    <string name="choose_qrscanner_app">Choose QR Scanner app(select app -> waiting for great result ^^).</string>
 
 </resources>
