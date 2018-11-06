@@ -113,7 +113,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
             onSetData();
         }
         else{
-            Log.d(TAG,"Data is null");
+            Utils.Log(TAG,"Data is null");
         }
 
 
@@ -142,8 +142,6 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
 
     @OnClick(R.id.imgReview)
     public void onCheck(View view) {
-
-
 
         mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
         mAnim.setAnimationListener(new Animation.AnimationListener() {
@@ -196,13 +194,13 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                     }
 
                     if (beginDateTimeMilliseconds>endDateTimeMilliseconds){
-                        Toast.makeText(getContext(),"Ending event data time must be greater than begin date time",Toast.LENGTH_SHORT).show();
+                        Utils.showGotItSnackbar(getView(),"Ending event data time must be greater than begin date time");
                         return;
                     }
 
                     long currentTime = System.currentTimeMillis();
                     if (beginDateTimeMilliseconds <= currentTime){
-                        Toast.makeText(getContext(),"Starting event data time must be greater than current date time",Toast.LENGTH_SHORT).show();
+                        Utils.showGotItSnackbar(getView(),"Starting event data time must be greater than current date time");
                         return;
                     }
 
@@ -219,7 +217,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                     create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(getActivity(), create);
                 } else {
-                    Log.d(TAG, "error");
+                    Utils.Log(TAG, "error");
                 }
             }
             @Override
@@ -368,7 +366,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
             public void onPositiveButtonClick(Date date) {
                 if (isBegin){
                     if (currentMilliseconds>date.getTime()){
-                       Toast.makeText(getContext(),"Starting event data time must be greater than current date time",Toast.LENGTH_SHORT).show();
+                        Utils.showGotItSnackbar(getView(),"Starting event data time must be greater than current date time");
                     }
                     else {
                         beginDateTimeMilliseconds = date.getTime();
@@ -377,10 +375,10 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                 }
                 else{
                     if (currentMilliseconds>date.getTime()){
-                        Toast.makeText(getContext(),"Ending event data time must be greater than current date time",Toast.LENGTH_SHORT).show();
+                        Utils.showGotItSnackbar(getView(),"Ending event data time must be greater than current date time");
                     }
                     else if(beginDateTimeMilliseconds >= date.getTime()){
-                        Toast.makeText(getContext(),"Ending event data time must be greater than begin date time",Toast.LENGTH_SHORT).show();
+                        Utils.showGotItSnackbar(getView(),"Ending event data time must be greater than begin date time");
                     }
                     else {
                         endDateTimeMilliseconds = date.getTime();
@@ -451,7 +449,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart");
+        Utils.Log(TAG, "onStart");
         mAwesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         mAwesomeValidation.clear();
         addValidationForEditText();
@@ -459,25 +457,25 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
             onSetData();
         }
         FocusUI();
-        Log.d(TAG,"current time : " + Utils.getCurrentDatetimeEvent());
+        Utils.Log(TAG,"current time : " + Utils.getCurrentDatetimeEvent());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop");
+        Utils.Log(TAG, "onStop");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause");
+        Utils.Log(TAG, "onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
+        Utils.Log(TAG, "onDestroy");
         unbinder.unbind();
     }
 
@@ -489,7 +487,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
             onCloseWindow();
             SingletonCloseFragment.getInstance().setUpdateData(false);
         }
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 
 }

@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.result.ParsedResultType;
@@ -347,13 +347,15 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
             shareToSocial(uri);
         }
         else{
-            Toast.makeText(getActivity(),"No Found File",Toast.LENGTH_SHORT).show();
+            Utils.showGotItSnackbar(getView(),R.string.no_items_found);
         }
     }
 
     @Override
     public void setVisible() {
-        rlRoot.setVisibility(View.VISIBLE);
+        if (rlRoot!=null){
+            rlRoot.setVisibility(View.VISIBLE);
+        }
         if (SingletonSave.getInstance().isUpdateData()) {
             if (presenter != null && recyclerView != null) {
                 presenter.getListGroup();
@@ -366,7 +368,9 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
 
     @Override
     public void setInvisible() {
-        rlRoot.setVisibility(View.GONE);
+        if (rlRoot!=null){
+            rlRoot.setVisibility(View.GONE);
+        }
     }
 
     public void replaceFragment(final Create create) {

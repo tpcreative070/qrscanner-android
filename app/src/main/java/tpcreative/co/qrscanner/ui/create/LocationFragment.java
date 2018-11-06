@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,17 +26,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,7 +111,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             onSetData();
         }
         else{
-            Log.d(TAG,"Data is null");
+            Utils.Log(TAG,"Data is null");
         }
 
         return view;
@@ -161,7 +161,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.d(TAG,"lat : "+ latLng.latitude +" - lon :"+ latLng.longitude);
+        Utils.Log(TAG,"lat : "+ latLng.latitude +" - lon :"+ latLng.longitude);
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng( latLng.latitude,    latLng.longitude))
@@ -191,7 +191,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
                     Create create = new Create();
                     try {
                         if (lastLon ==0 || lastLon==0){
-                            Toast.makeText(getContext(),"Please enable GPS in order to get accurate lat and lon",Toast.LENGTH_SHORT).show();
+                            Utils.showGotItSnackbar(getView(),"Please enable GPS in order to get accurate lat and lon");
                         }
                         else {
                             create.lat = lastLat;
@@ -201,16 +201,15 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
                             create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                             create.id = (save != null) ? save.id : 0 ;
                             Navigator.onMoveToReview(getActivity(),create);
-                            Log.d(TAG,"Passed");
                         }
 
                     }
                     catch (Exception e){
-                        Log.d(TAG,"error :"+ e.getMessage());
+                        Utils.Log(TAG,"error :"+ e.getMessage());
                     }
                 }
                 else{
-                    Log.d(TAG,"error");
+                    Utils.Log(TAG,"error");
                 }
             }
             @Override
@@ -262,7 +261,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart");
+        Utils.Log(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         mAwesomeValidation.clear();
         addValidationForEditText();
@@ -275,7 +274,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
         mapFragment.getMapAsync(this);
         currentLat = 0;
         currentLon = 0;
@@ -301,32 +300,63 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG,"onPause");
+        Utils.Log(TAG,"onPause");
         locationManager.removeUpdates(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy");
+        Utils.Log(TAG,"onDestroy");
         unbinder.unbind();
         locationManager.removeUpdates(this);
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
-        mMap = map;
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
-        mMap.setOnMapClickListener(this);
-        locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        enableMyLocation();
+        try {
+            mMap = map;
+            Utils.Log(TAG,"Map ready for services");
+            mMap.setOnMyLocationButtonClickListener(this);
+            mMap.setOnMyLocationClickListener(this);
+            mMap.setOnMapClickListener(this);
+            locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            enableMyLocation();
+
+
+            if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }else{
+                if(!mMap.isMyLocationEnabled())
+                    mMap.setMyLocationEnabled(true);
+                Location myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                if (myLocation == null) {
+                    Criteria criteria = new Criteria();
+                    criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+                    String provider = locationManager.getBestProvider(criteria, true);
+                    myLocation = locationManager.getLastKnownLocation(provider);
+                }
+
+                if(myLocation!=null){
+                    LatLng userLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    lastLat = myLocation.getLatitude();
+                    lastLon = myLocation.getLongitude();
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14), 1500, null);
+                    edtLatitude.setText(""+lastLat);
+                    edtLongitude.setText(""+lastLon);
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -361,7 +391,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             catch (Exception e){
                 e.printStackTrace();
             }
-            Log.d(TAG,"show position : " + lastLat + " - "+ lastLon);
+            Utils.Log(TAG,"show position : " + lastLat + " - "+ lastLon);
         }
     }
 
@@ -419,6 +449,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     /**
      * Displays a dialog with error message explaining that the location permission is missing.
      */
+
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getActivity().getSupportFragmentManager(), "dialog");

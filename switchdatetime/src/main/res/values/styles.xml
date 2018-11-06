@@ -56,8 +56,8 @@
     <style name="Theme.SwitchDateTime.Time">
         <item name="timeCircleColor">@color/colorCircleClock</item>
         <item name="timeCenterColor">@color/colorAccent</item>
-        <item name="timeAmPmBackgroundColor">@color/colorAccent</item>
-        <item name="timeAmPmSelectBackgroundColor">@color/material_green_800</item> <!-- Alpha is apply-->
+        <item name="timeAmPmBackgroundColor">@color/material_teal_100</item>
+        <item name="timeAmPmSelectBackgroundColor">@color/colorAccent</item> <!-- Alpha is apply-->
         <item name="timeAmPmTextColor">@color/white</item>
         <item name="timeSelectorColor">@color/white</item>
         <item name="timeCircularNumbersColor">@color/colorBlueLight</item>

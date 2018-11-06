@@ -110,7 +110,7 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
             viewHolder.tvContent.setText(data.message);
         }
         else if (data.createType.equals(ParsedResultType.GEO.name())){
-            viewHolder.tvContent.setText(data.lat + "," + data.lon);
+            viewHolder.tvContent.setText(data.lat + "," + data.lon+"("+data.query+")");
         }
         else if (data.createType.equals(ParsedResultType.CALENDAR.name())){
             viewHolder.tvContent.setText(data.title);

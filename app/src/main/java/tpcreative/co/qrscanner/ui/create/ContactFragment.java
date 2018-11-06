@@ -81,10 +81,10 @@ public class ContactFragment extends Fragment{
             onSetData();
         }
         else{
-            Log.d(TAG,"Data is null");
+            Utils.Log(TAG,"Data is null");
         }
 
-        Log.d(TAG,"onCreateView");
+        Utils.Log(TAG,"onCreateView");
 
         return view;
     }
@@ -120,7 +120,7 @@ public class ContactFragment extends Fragment{
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (mAwesomeValidation.validate()){
-                    Log.d(TAG,"Passed");
+                    Utils.Log(TAG,"Passed");
                     Create create = new Create();
                     create.fullName = edtFullName.getText().toString().trim();
                     create.address = edtAddress.getText().toString();
@@ -132,7 +132,7 @@ public class ContactFragment extends Fragment{
                     Navigator.onMoveToReview(getActivity(),create);
                 }
                 else{
-                    Log.d(TAG,"error");
+                    Utils.Log(TAG,"error");
                 }
             }
             @Override
@@ -177,7 +177,7 @@ public class ContactFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart");
+        Utils.Log(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         addValidationForEditText();
         if (save!=null){
@@ -190,19 +190,19 @@ public class ContactFragment extends Fragment{
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG,"onPause");
+        Utils.Log(TAG,"onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy");
+        Utils.Log(TAG,"onDestroy");
         unbinder.unbind();
     }
 
@@ -213,7 +213,7 @@ public class ContactFragment extends Fragment{
             onCloseWindow();
             SingletonCloseFragment.getInstance().setUpdateData(false);
         }
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 
 }

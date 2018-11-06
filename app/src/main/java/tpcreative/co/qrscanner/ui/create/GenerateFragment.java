@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.QRCodeType;
 
 public class GenerateFragment extends Fragment implements GenerateCell.ItemSelectedListener,GenerateView,SingletonGenerate.SingletonGenerateListener {
@@ -115,25 +116,25 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart");
+        Utils.Log(TAG,"onStart");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        Log.d(TAG,"onDestroy");
+        Utils.Log(TAG,"onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 }

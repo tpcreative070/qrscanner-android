@@ -25,7 +25,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
@@ -52,7 +51,6 @@ import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.common.controller.SingletonManagerProcessing;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -261,12 +259,12 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                             }
                         }
                         else{
-                            Log.d(TAG,"Permission is denied");
+                            Utils.Log(TAG,"Permission is denied");
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed");
+                            Utils.Log(TAG, "request permission is failed");
                         }
                     }
                     @Override
@@ -278,7 +276,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 .withErrorListener(new PermissionRequestErrorListener() {
                     @Override
                     public void onError(DexterError error) {
-                        Log.d(TAG, "error ask permission");
+                        Utils.Log(TAG, "error ask permission");
                     }
                 }).onSameThread().check();
     }
@@ -432,12 +430,12 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                             }
                         }
                         else{
-                            Log.d(TAG,"Permission is denied");
+                            Utils.Log(TAG,"Permission is denied");
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed");
+                            Utils.Log(TAG, "request permission is failed");
                         }
                     }
                     @Override
@@ -635,7 +633,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 }
                 onShowUI(llEvent);
                 tvTitle.setText("Calendar");
-                Log.d(TAG,"start milliseconds : " + create.startEventMilliseconds);
+                Utils.Log(TAG,"start milliseconds : " + create.startEventMilliseconds);
 
                 break;
             case ISBN:
@@ -662,7 +660,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     public void onSaved(String path, EnumAction enumAction) {
         switch (enumAction){
             case SHARE:{
-                Log.d(TAG,"path : " + path);
+                Utils.Log(TAG,"path : " + path);
                 File file = new File(path);
                 if (file.isFile()){
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -675,7 +673,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                     }
                 }
                 else{
-                    Toast.makeText(getActivity(),"No Found File",Toast.LENGTH_SHORT).show();
+                    Utils.showGotItSnackbar(getView(),R.string.no_items_found);
                 }
             }
             default:{
@@ -702,7 +700,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
             Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
         } catch(Exception e) {
-            Log.d(TAG,e.getMessage());
+            Utils.Log(TAG,e.getMessage());
         }
     }
 
@@ -721,9 +719,9 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             }
         }
 
-        Log.d(TAG,"History :" + (history != null ? true : false));
-        Log.d(TAG,"Create :" + (create != null ? true : false));
-        Log.d(TAG,"fragmentType :" + (create.fragmentType));
+        Utils.Log(TAG,"History :" + (history != null ? true : false));
+        Utils.Log(TAG,"Create :" + (create != null ? true : false));
+        Utils.Log(TAG,"fragmentType :" + (create.fragmentType));
 
         history.createDatetime = Utils.getCurrentDateTime();
         InstanceGenerator.getInstance(getContext()).onInsert(history);
@@ -732,32 +730,32 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart");
+        Utils.Log(TAG,"onStart");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG,"onPause");
+        Utils.Log(TAG,"onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy");
+        Utils.Log(TAG,"onDestroy");
         unbinder.unbind();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 
 

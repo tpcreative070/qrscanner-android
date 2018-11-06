@@ -77,7 +77,7 @@ public class MessageFragment extends Fragment{
             onSetData();
         }
         else{
-            Log.d(TAG,"Data is null");
+            Utils.Log(TAG,"Data is null");
         }
 
         return view;
@@ -122,10 +122,10 @@ public class MessageFragment extends Fragment{
                     create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                     create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(getActivity(),create);
-                    Log.d(TAG,"Passed");
+                    Utils.Log(TAG,"Passed");
                 }
                 else{
-                    Log.d(TAG,"error");
+                    Utils.Log(TAG,"error");
                 }
             }
             @Override
@@ -174,7 +174,7 @@ public class MessageFragment extends Fragment{
     public void onStart() {
         super.onStart();
         mAwesomeValidation  = new AwesomeValidation(ValidationStyle.BASIC);
-        Log.d(TAG,"onStart");
+        Utils.Log(TAG,"onStart");
         addValidationForEditText();
         if (save!=null){
             onSetData();
@@ -186,13 +186,13 @@ public class MessageFragment extends Fragment{
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG,"onPause");
+        Utils.Log(TAG,"onPause");
     }
 
     @Override
@@ -209,7 +209,7 @@ public class MessageFragment extends Fragment{
             onCloseWindow();
             SingletonCloseFragment.getInstance().setUpdateData(false);
         }
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 
 }

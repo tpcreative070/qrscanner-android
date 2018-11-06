@@ -39,9 +39,9 @@ public class TimeAmPmCirclesView extends View {
     private static final String TAG = "AmPmCirclesView";
 
     // Alpha level of blue color for selected circle.
-    private static final int SELECTED_ALPHA = 51;
+    private static final int SELECTED_ALPHA = 255;
     // Alpha level of blue color for pressed circle.
-    private static final int PRESSED_ALPHA = 175;
+    private static final int PRESSED_ALPHA = 255;
 
     private final Paint mPaint = new Paint();
     private int mBackgroundColor = Color.WHITE;

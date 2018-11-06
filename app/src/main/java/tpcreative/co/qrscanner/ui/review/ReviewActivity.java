@@ -15,7 +15,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -31,25 +30,17 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
-import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
-import tpcreative.co.qrscanner.common.controller.ServiceManager;
-import tpcreative.co.qrscanner.common.controller.SingletonManagerProcessing;
-import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumImplement;
@@ -415,7 +406,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         Utils.Log(TAG,"Saved successful");
         switch (enumAction){
             case SAVE: {
-                Toast.makeText(ReviewActivity.this,"Saved image successfully :" + path,Toast.LENGTH_SHORT).show();
+                Utils.showGotItSnackbar(btnSave,"Saved image successfully => Path: " + path);
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE){
                     InstanceGenerator.getInstance(getContext()).onInsert(save);
@@ -428,7 +419,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
             }
             case SHARE:{
-
                 File file = new File(path);
                 if (file.isFile()){
                     Log.d(TAG,"path : " + path);
@@ -442,7 +432,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                     }
                 }
                 else{
-                    Toast.makeText(this,"No Found File",Toast.LENGTH_SHORT).show();
+                    Utils.showGotItSnackbar(btnSave,R.string.no_items_found);
                 }
                 break;
             }

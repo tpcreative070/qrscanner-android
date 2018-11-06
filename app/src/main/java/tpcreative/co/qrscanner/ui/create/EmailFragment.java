@@ -15,13 +15,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -79,7 +76,7 @@ public class EmailFragment extends Fragment{
             onSetData();
         }
         else{
-            Log.d(TAG,"Data is null");
+            Utils.Log(TAG,"Data is null");
         }
 
         return view;
@@ -116,7 +113,7 @@ public class EmailFragment extends Fragment{
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (mAwesomeValidation.validate()){
-                    Log.d(TAG,"Passed");
+                    Utils.Log(TAG,"Passed");
                     Create create = new Create();
                     create.email = edtEmail.getText().toString().trim();
                     create.subject = edtObject.getText().toString();
@@ -127,7 +124,7 @@ public class EmailFragment extends Fragment{
                     Navigator.onMoveToReview(getActivity(),create);
                 }
                 else{
-                    Log.d(TAG,"error");
+                    Utils.Log(TAG,"error");
                 }
             }
             @Override
@@ -179,7 +176,7 @@ public class EmailFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart");
+        Utils.Log(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         addValidationForEditText();
         if (save!=null){
@@ -191,20 +188,20 @@ public class EmailFragment extends Fragment{
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG,"onPause");
+        Utils.Log(TAG,"onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        Log.d(TAG,"onDestroy");
+        Utils.Log(TAG,"onDestroy");
     }
 
     @Override
@@ -214,7 +211,7 @@ public class EmailFragment extends Fragment{
             onCloseWindow();
             SingletonCloseFragment.getInstance().setUpdateData(false);
         }
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 
 

@@ -112,6 +112,24 @@ public class Utils {
         }, 200);
     }
 
+    public static void showGotItSnackbar(final View view, final String text) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                multilineSnackbar(
+                        Snackbar.make(
+                                view, text, BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                .setAction(R.string.got_it, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                ).show();
+            }
+        }, 200);
+    }
+
     private static Snackbar multilineSnackbar(Snackbar snackbar) {
         TextView textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_reg);

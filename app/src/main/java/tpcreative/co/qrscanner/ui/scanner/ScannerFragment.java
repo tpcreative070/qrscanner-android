@@ -24,7 +24,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.zxing.BinaryBitmap;
@@ -237,14 +236,18 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
     @Override
     public void setVisible() {
-        barcodeScannerView.setVisibility(View.VISIBLE);
-        barcodeScannerView.resume();
+        if (barcodeScannerView!=null){
+            barcodeScannerView.setVisibility(View.VISIBLE);
+            barcodeScannerView.resume();
+        }
     }
 
     @Override
     public void setInvisible() {
-        barcodeScannerView.pauseAndWait();
-        barcodeScannerView.setVisibility(View.INVISIBLE);
+        if (barcodeScannerView!=null){
+            barcodeScannerView.pauseAndWait();
+            barcodeScannerView.setVisibility(View.INVISIBLE);
+        }
     }
 
 

@@ -102,16 +102,16 @@
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_help_outline_white_48"
-            android:title="@string/support"
-            android:key="@string/key_support"/>
-
-
-        <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_live_help_white_48"
             android:title="@string/help"
             android:key="@string/key_help"/>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_help_outline_white_48"
+            android:title="@string/support"
+            android:summary="@string/support_detail"
+            android:key="@string/key_support"/>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"

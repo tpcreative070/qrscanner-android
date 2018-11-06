@@ -103,7 +103,7 @@
     <string name="please_choose_correctly_format">Please choose pictures is QRCode or BarCode</string>
     <string name="alert_end_event">Ending event data time must be greater than begin date time</string>
     <string name="alert_start_event">Starting event data time must be greater than current date time</string>
-    <string name="can_not_support_this_format">Can not support this format file</string>
+    <string name="can_not_support_this_format">Can not support this file format</string>
     <string name="info">Information</string>
     <string name="tvPrimacyPolicy">https://sites.google.com/view/tpcreative/home</string>
     <string name="key_help">help</string>
@@ -115,6 +115,7 @@
     <string name="key_refresh">refresh</string>
     <string name="key_support">support</string>
     <string name="support">Support</string>
+    <string name="support_detail">Report issues</string>
     <string name="app_permission">App permissions</string>
     <string name="github" translatable="false">https://github.com/flyingrub/SpeedMeter</string>
     <string name="version">QRScanner version</string>
@@ -179,7 +180,7 @@
     <string name="key_second_visit_settings">second visit settings</string>
     <string name="progressing">Progressing...</string>
     <string name="importing">Importing...</string>
-    <string name="items_not_found">Items Not Found</string>
+    <string name="no_items_found">No Items Found</string>
     <string name="key_current_code_version"></string>
     <string name="scan_code_via_Camera">Scan BarCode And QRCode Via Camera.</string>
     <string name="scan_code_via_Gallery">Scan BarCode And QRCode From Gallery.</string>

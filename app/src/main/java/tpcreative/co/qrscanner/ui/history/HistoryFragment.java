@@ -298,12 +298,16 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
 
     @Override
     public void setVisible() {
-        rlRoot.setVisibility(View.VISIBLE);
+        if(rlRoot!=null){
+            rlRoot.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void setInvisible() {
-        rlRoot.setVisibility(View.GONE);
+        if (rlRoot!=null){
+            rlRoot.setVisibility(View.GONE);
+        }
     }
 
     public void replaceFragment(final Create create) {
