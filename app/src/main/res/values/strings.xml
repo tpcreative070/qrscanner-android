@@ -172,7 +172,7 @@
     <string name="key_is_first_gallery">is first gallery</string>
     <string name="key_is_first_help">is first_help</string>
     <string name="tap_here_to_scan_code_from_gallery">Tap here to scan code from Gallery.</string>
-    <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QR code from your Gallery.</string>
+    <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QRcode from your Gallery.</string>
     <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
     <string name="tap_here_to_discover_how_to_scan_description">This tips will help you to use this app more effective.</string>
 
@@ -190,4 +190,11 @@
     <string name="connected_wifi_successful">Wifi Connected Was Successful</string>
     <string name="connected_wifi_failed">Wifi Connected Was Failed</string>
     <string name="connecting">Connecting</string>
+    <string name="we_are_a_team">We are an enthusiastic mobile team. We are working very hard to give you the best free applications. Your 5 stars review is worth more than all money. Please write a nice review in Google play to encourage us!</string>
+
+    <string name="dislike_it">Dislike it</string>
+    <string name="no_thanks">No, thanks</string>
+    <string name="rate_app_5_stars">Rate app 5 stars</string>
+    <string name="qrscanner_live">tpcreative.co.qrscanner.free.release</string>
+    <string name="qrscanner_live_pro">tpcreative.co.qrscanner</string>
 </resources>

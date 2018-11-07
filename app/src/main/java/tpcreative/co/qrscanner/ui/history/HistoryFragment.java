@@ -24,6 +24,8 @@ import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -148,9 +150,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
                 tvNotFoundItems.setVisibility(View.VISIBLE);
             }
         }
-
         recyclerView.addCells(cells);
-
     }
 
 

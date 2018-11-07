@@ -623,7 +623,7 @@ public class TapTargetView extends View {
     ViewUtil.removeOnGlobalLayoutListener(getViewTreeObserver(), globalLayoutListener);
     visible = false;
 
-    if (listener != null) {
+    if (listener != null && this!=null) {
       listener.onTargetDismissed(this, userInitiated);
     }
   }

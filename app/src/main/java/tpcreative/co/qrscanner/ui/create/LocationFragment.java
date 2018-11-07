@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,14 +19,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
@@ -49,9 +54,11 @@ import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.ui.main.MainActivity;
 
 public class LocationFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
@@ -139,24 +146,41 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     }
 
 
-    public void showGpsWarningDialog(){
-        try {
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
-            builder.setTitle(getString(R.string.gps_disabled));
-            builder.setMessage("Please turn on your location or GPS to get exactly position");
-            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
+    public void showGpsWarningDialog() {
+        PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext());
+        dialogBuilder.setTitle(getString(R.string.gps_disabled));
+        dialogBuilder.setMessage("Please turn on your location or GPS to get exactly position");
+        dialogBuilder.setPadding(40,40,40,0);
+        dialogBuilder.setMargin(60,0,60,0);
+        dialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        MaterialDialog dialog = dialogBuilder.create();
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Utils.Log(TAG,"action here");
+                Button positive = dialog.findViewById(android.R.id.button1);
+                TextView title = dialog.findViewById(android.R.id.title);
+                TextView message = dialog.findViewById(android.R.id.message);
+                if (positive!=null && title!=null && message !=null){
+                    Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
+                    Utils.Log(TAG,"button # null");
+                    positive.setTypeface(typeface,Typeface.BOLD);
+                    title.setTypeface(typeface,Typeface.BOLD);
+                    message.setTypeface(typeface);
+                    message.setTextSize(18);
                 }
-            });
-            builder.show();
-        }
-        catch (Exception e){
-
-        }
+            }
+        });
+        dialog.show();
     }
+
 
 
     @Override

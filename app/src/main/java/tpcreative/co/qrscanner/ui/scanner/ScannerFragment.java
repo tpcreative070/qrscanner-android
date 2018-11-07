@@ -278,6 +278,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
                     @Override
                     public void onOuterCircleClick(TapTargetView view) {
+                        if (view==null){
+                            return;
+                        }
                         super.onOuterCircleClick(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
                         Utils.Log(TAG,"onOuterCircleClick");
@@ -286,6 +289,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
                     @Override
                     public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                        if (view==null){
+                            return;
+                        }
                         super.onTargetDismissed(view, userInitiated);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
                         Utils.Log(TAG,"onTargetDismissed");
@@ -294,6 +300,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
                     @Override
                     public void onTargetCancel(TapTargetView view) {
+                        if (view==null){
+                            return;
+                        }
                         super.onTargetCancel(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
                         Utils.Log(TAG,"onTargetCancel");
@@ -592,6 +601,11 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     @Override
     public void onResume() {
         super.onResume();
+        if (barcodeScannerView!=null){
+            if (!barcodeScannerView.isActivated()) {
+                barcodeScannerView.resume();
+            }
+        }
         Log.d(TAG,"onResume");
     }
 

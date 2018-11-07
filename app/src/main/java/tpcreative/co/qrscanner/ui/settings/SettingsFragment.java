@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.settings;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -16,7 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
@@ -162,23 +165,29 @@ public class SettingsFragment extends Fragment {
             PrefsController.putBoolean(getString(R.string.key_already_load_app), true);
             MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext());
             dialogBuilder.setTitle(R.string.app_permission);
-            StringBuilder builder = new StringBuilder();
-            builder.append("1. WRITE_EXTERNAL_STORAGE: Save QRCode to SDCard");
-            builder.append("\n");
-            builder.append("2. READ_EXTERNAL_STORAGE: Load QRCode from SDCard");
-            builder.append("\n");
-            builder.append("3. INTERNET,CHANGE_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_STATE,ACCESS_NETWORK_STATE: Listener disconnect and connect in order to service for premium version");
-            builder.append("\n");
-            builder.append("4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location");
-            builder.append("\n");
-            builder.append("5. android.permission.CAMERA: Scanner code");
-            builder.append("\n");
-            builder.append("6. android.permission.CALL_PHONE: Share QRCode to your phone call");
-            dialogBuilder.setMessage(builder.toString());
+            dialogBuilder.setPadding(40,40,40,0);
+            dialogBuilder.setMargin(60,0,60,0);
+            dialogBuilder.setCustomMessage(R.layout.custom_body_permission);
             dialogBuilder.setPositiveButton(R.string.got_it, null);
             MaterialDialog dialog = dialogBuilder.create();
+
+            dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Utils.Log(TAG,"action here");
+                    Button positive = dialog.findViewById(android.R.id.button1);
+                    TextView title = dialog.findViewById(android.R.id.title);
+                    if (positive!=null && title!=null){
+                        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_bld);
+                        Utils.Log(TAG,"button # null");
+                        positive.setTypeface(typeface,Typeface.BOLD);
+                        title.setTypeface(typeface,Typeface.BOLD);
+                    }
+                }
+            });
             dialog.show();
         }
+
 
         /**
          * Creates and returns a listener, which allows to adapt the app's theme, when the value of the
@@ -237,6 +246,12 @@ public class SettingsFragment extends Fragment {
                         else if (preference.getKey().equals(getString(R.string.key_color_code))){
                             Navigator.onMoveToChangeFileColor(getActivity());
                         }
+                        else if (preference.getKey().equals(getString(R.string.key_rate))){
+                            onRateApp();
+                        }
+                        else if (preference.getKey().equals(getString(R.string.key_rate_pro))){
+                            onRateProApp();
+                        }
                     }
                     return true;
                 }
@@ -278,8 +293,8 @@ public class SettingsFragment extends Fragment {
             /*Rate*/
 
             myPreferenceRate = (MyPreference) findPreference(getString(R.string.key_rate));
-            //myPreferenceRate.setOnPreferenceChangeListener(createChangeListener());
-            // myPreferenceRate.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceRate.setOnPreferenceChangeListener(createChangeListener());
+            myPreferenceRate.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
             /*Rate Pro*/
             myPreferenceRatePro = (MyPreference) findPreference(getString(R.string.key_rate_pro));
@@ -364,6 +379,40 @@ public class SettingsFragment extends Fragment {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.pref_general);
         }
+
+        public void onRateApp() {
+            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live));
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live))));
+            }
+        }
+
+
+        public void onRateProApp() {
+            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live_pro));
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live_pro))));
+            }
+        }
+
     }
 
     public void onSuggestionTips(){
@@ -384,6 +433,9 @@ public class SettingsFragment extends Fragment {
                 new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
                     @Override
                     public void onTargetClick(TapTargetView view) {
+                        if (view==null){
+                            return;
+                        }
                         super.onTargetClick(view);      // This call is optional
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         Navigator.onMoveToHelp(getContext());
@@ -393,6 +445,9 @@ public class SettingsFragment extends Fragment {
 
                     @Override
                     public void onOuterCircleClick(TapTargetView view) {
+                        if (view==null){
+                            return;
+                        }
                         super.onOuterCircleClick(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         llAction.setVisibility(View.INVISIBLE);
@@ -402,6 +457,9 @@ public class SettingsFragment extends Fragment {
 
                     @Override
                     public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                        if (view==null){
+                            return;
+                        }
                         super.onTargetDismissed(view, userInitiated);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         llAction.setVisibility(View.INVISIBLE);
@@ -411,6 +469,9 @@ public class SettingsFragment extends Fragment {
 
                     @Override
                     public void onTargetCancel(TapTargetView view) {
+                        if (view==null){
+                            return;
+                        }
                         super.onTargetCancel(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         llAction.setVisibility(View.INVISIBLE);
@@ -419,8 +480,6 @@ public class SettingsFragment extends Fragment {
                     }
                 });
     }
-
-
 
 
 }

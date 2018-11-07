@@ -406,7 +406,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         Utils.Log(TAG,"Saved successful");
         switch (enumAction){
             case SAVE: {
-                Utils.showGotItSnackbar(btnSave,"Saved image successfully => Path: " + path);
+                Utils.showGotItSnackbar(btnSave,"Saved code successful => Path: " + path);
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE){
                     InstanceGenerator.getInstance(getContext()).onInsert(save);
@@ -437,7 +437,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
             }
             default:{
-                Log.d(TAG,"Other case");
+                Utils.Log(TAG,"Other case");
                 break;
             }
         }

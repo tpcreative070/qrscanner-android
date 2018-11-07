@@ -77,10 +77,6 @@
             android:title="@string/give_rate"
             android:icon="@drawable/baseline_star_rate_white_48"
             android:key="@string/key_rate">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/scanner_app"></intent>
-
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
@@ -88,9 +84,6 @@
             android:title="@string/give_rate"
             android:icon="@drawable/baseline_star_rate_white_48"
             android:key="@string/key_rate_pro">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/scanner_app_pro"></intent>
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
 

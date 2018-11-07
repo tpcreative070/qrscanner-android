@@ -67,6 +67,16 @@ public abstract class InstanceGenerator extends RoomDatabase {
         return null;
     }
 
+    public final synchronized List<History> getListLatest(){
+        try{
+            return instance.historyDao().loadLatestItems();
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return null;
+    }
+
     public final synchronized boolean onDelete(History entity){
         try{
             instance.historyDao().delete(entity);

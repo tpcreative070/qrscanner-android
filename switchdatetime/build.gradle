@@ -28,10 +28,8 @@ android {
     }
 }
 
-def supportVersion = "27.0.2"
-
 dependencies {
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:appcompat-v7:"+appSupportVersion
+    implementation "com.android.support:recyclerview-v7:"+appSupportVersion
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
 }

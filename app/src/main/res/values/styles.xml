@@ -79,6 +79,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
     <style name="brandonRegularTextView" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/brandon_regs</item>
         <item name="android:textSize">19sp</item>

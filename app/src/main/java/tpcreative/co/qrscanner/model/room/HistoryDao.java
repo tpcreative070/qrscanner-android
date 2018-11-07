@@ -21,4 +21,8 @@ public interface HistoryDao {
 
     @Query("Select * FROM history ORDER BY id DESC")
     List<History> loadAll();
+
+    @Query("Select * FROM history ORDER BY id DESC LIMIT 10")
+    List<History> loadLatestItems();
+
 }

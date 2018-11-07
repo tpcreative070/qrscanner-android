@@ -1,23 +1,22 @@
 package tpcreative.co.qrscanner.ui.main;
 import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
+import android.widget.TextView;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
@@ -25,29 +24,6 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Reader;
-import com.google.zxing.Result;
-import com.google.zxing.client.result.AddressBookParsedResult;
-import com.google.zxing.client.result.CalendarParsedResult;
-import com.google.zxing.client.result.EmailAddressParsedResult;
-import com.google.zxing.client.result.GeoParsedResult;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ParsedResultType;
-import com.google.zxing.client.result.SMSParsedResult;
-import com.google.zxing.client.result.TelParsedResult;
-import com.google.zxing.client.result.TextParsedResult;
-import com.google.zxing.client.result.URIParsedResult;
-import com.google.zxing.client.result.WifiParsedResult;
-import com.google.zxing.common.HybridBinarizer;
-import com.journeyapps.barcodescanner.result.ResultHandler;
-import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -56,18 +32,12 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.PathUtil;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
@@ -76,11 +46,6 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
-import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.model.EnumFragmentType;
-import tpcreative.co.qrscanner.model.History;
-import tpcreative.co.qrscanner.model.Save;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerReceiver.ConnectivityReceiverListener{
@@ -211,7 +176,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
 
-    public void askPermission(){
+
+    public void askPermission() {
         boolean isCheck = PrefsController.getBoolean(getString(R.string.key_already_load_app),false);
         if (isCheck){
             return;
@@ -219,25 +185,29 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
         MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this);
         dialogBuilder.setTitle(R.string.app_permission);
-        StringBuilder builder = new StringBuilder();
-        builder.append("1. WRITE_EXTERNAL_STORAGE: Save QRCode to SDCard");
-        builder.append("\n");
-        builder.append("2. READ_EXTERNAL_STORAGE: Load QRCode from SDCard");
-        builder.append("\n");
-        builder.append("3. INTERNET,CHANGE_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_STATE,ACCESS_NETWORK_STATE: Listener disconnect and connect in order to service for premium version");
-        builder.append("\n");
-        builder.append("4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location");
-        builder.append("\n");
-        builder.append("5. android.permission.CAMERA: Scanner code");
-        builder.append("\n");
-        builder.append("6. android.permission.CALL_PHONE: Share QRCode to your phone call");
-
-        dialogBuilder.setMessage(builder.toString());
+        dialogBuilder.setPadding(40,40,40,0);
+        dialogBuilder.setMargin(60,0,60,0);
+        dialogBuilder.setCustomMessage(R.layout.custom_body_permission);
         dialogBuilder.setPositiveButton(R.string.got_it, null);
         MaterialDialog dialog = dialogBuilder.create();
-        dialog.show();
 
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Utils.Log(TAG,"action here");
+                Button positive = dialog.findViewById(android.R.id.button1);
+                TextView title = dialog.findViewById(android.R.id.title);
+                if (positive!=null && title!=null){
+                    Typeface typeface = ResourcesCompat.getFont(MainActivity.this, R.font.brandon_bld);
+                    Utils.Log(TAG,"button # null");
+                    positive.setTypeface(typeface,Typeface.BOLD);
+                    title.setTypeface(typeface,Typeface.BOLD);
+                }
+            }
+        });
+        dialog.show();
     }
+
 
     private void initUI() {
 
@@ -378,6 +348,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Utils.Log(TAG,"Destroy");
         if (adViewBanner != null) {
             adViewBanner.destroy();
         }
@@ -389,5 +360,87 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         PrefsController.putBoolean(getString(R.string.key_second_loads),true);
         ServiceManager.getInstance().onDismissServices();
     }
+
+
+    @Override
+    public void onBackPressed() {
+        Utils.Log(TAG,"onBackPressed");
+        final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
+        if (isPressed){
+            super.onBackPressed();
+        }
+        else{
+            final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
+            if (isSecondLoad){
+                showEncourage();
+            }
+            else{
+                super.onBackPressed();
+            }
+        }
+    }
+
+    public void showEncourage(){
+        try {
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+            builder.setHeaderBackground(R.drawable.back);
+            builder.setPadding(40,40,40,0);
+            builder.setMargin(60,0,60,0);
+            builder.showHeader(true);
+            builder.setCustomMessage(R.layout.custom_body);
+            builder.setCustomHeader(R.layout.custom_header);
+            builder.setPositiveButton(getString(R.string.rate_app_5_stars), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    onRateApp();
+                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
+                }
+            });
+
+            builder.setNegativeButton(getText(R.string.no_thanks), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
+                    finish();
+                }
+            });
+
+            MaterialDialog dialog = builder.show();
+            builder.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Utils.Log(TAG,"action here");
+                    Button positive = dialog.findViewById(android.R.id.button1);
+                    Button negative = dialog.findViewById(android.R.id.button2);
+                    if (positive!=null && negative!=null){
+                        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
+                        Utils.Log(TAG,"button # null");
+                        positive.setTypeface(typeface,Typeface.BOLD);
+                        negative.setTypeface(typeface,Typeface.BOLD);
+                    }
+                }
+            });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void onRateApp() {
+        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live));
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live))));
+        }
+    }
+
 
 }
