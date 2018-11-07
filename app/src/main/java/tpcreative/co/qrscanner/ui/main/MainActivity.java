@@ -46,6 +46,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
+import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerReceiver.ConnectivityReceiverListener{
@@ -74,6 +75,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         onAddPermissionCamera();
         askPermission();
         ServiceManager.getInstance().onStartService();
+        Theme.getInstance().getList();
         Utils.copyToClipboard("Hello");
     }
 
@@ -304,6 +306,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 onInitReceiver();
             }
         }
+
     }
 
     @Override

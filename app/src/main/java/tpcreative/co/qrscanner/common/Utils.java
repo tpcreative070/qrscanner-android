@@ -48,6 +48,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -60,8 +61,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.EnumAction;
+import tpcreative.co.qrscanner.model.Theme;
+import tpcreative.co.qrscanner.model.ThemeUtil;
 
 public class Utils {
 
@@ -507,6 +511,19 @@ public class Utils {
         android.content.ClipData clip = android.content.ClipData
                 .newPlainText(QRScannerApplication.getInstance().getString(R.string.my_clipboad), copyText);
         clipboard.setPrimaryClip(clip);
+    }
+
+
+    public static void onUpdateVersionRateAlert(){
+        try{
+            final int current_code_version = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),0);
+            if (current_code_version != BuildConfig.VERSION_CODE){
+                PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.we_are_a_team),false);
+            }
+        }
+        catch (Exception e){
+                e.printStackTrace();
+        }
     }
 
 }
