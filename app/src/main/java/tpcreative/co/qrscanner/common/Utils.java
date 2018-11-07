@@ -501,5 +501,12 @@ public class Utils {
         }
     }
 
+    public static void copyToClipboard(String copyText) {
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
+                QRScannerApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
+        android.content.ClipData clip = android.content.ClipData
+                .newPlainText(QRScannerApplication.getInstance().getString(R.string.my_clipboad), copyText);
+        clipboard.setPrimaryClip(clip);
+    }
 
 }

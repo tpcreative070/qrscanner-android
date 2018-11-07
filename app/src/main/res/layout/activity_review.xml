@@ -61,8 +61,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
+                android:textSize="@dimen/medium_x"
+                android:textAllCaps="false"
                 android:id="@+id/btnSave"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="30dp"
                 android:gravity="center"
                 android:background="@drawable/bg_generate_rounded"
                 style="@style/brandonBoldTextView"
@@ -71,8 +73,10 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:textSize="@dimen/medium_x"
+                android:textAllCaps="false"
                 android:id="@+id/btnShare"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:gravity="center"
                 android:background="@drawable/bg_generate_rounded"
                 style="@style/brandonBoldTextView"

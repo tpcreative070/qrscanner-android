@@ -648,18 +648,50 @@
             </ScrollView>
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
+            android:weightSum="2"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="60dp"
             android:id="@+id/rlFooter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
-            <ImageView
-                android:id="@+id/imgOpenApplication"
-                android:layout_centerInParent="true"
-                android:layout_width="60dp"
-                android:layout_height="60dp" />
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_marginRight="30dp"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/imgOpenApplication"
+                    android:layout_centerInParent="true"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="@dimen/medium_x"
+                    android:layout_marginLeft="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/btnClipboard"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/bg_generate_rounded"
+                    style="@style/brandonBoldTextView"
+                    android:text="@string/my_clipboad"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

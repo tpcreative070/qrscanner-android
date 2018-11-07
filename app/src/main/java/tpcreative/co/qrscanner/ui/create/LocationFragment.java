@@ -148,7 +148,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
 
     public void showGpsWarningDialog() {
         PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext());
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
         dialogBuilder.setTitle(getString(R.string.gps_disabled));
         dialogBuilder.setMessage("Please turn on your location or GPS to get exactly position");
         dialogBuilder.setPadding(40,40,40,0);
@@ -164,23 +164,21 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Utils.Log(TAG,"action here");
                 Button positive = dialog.findViewById(android.R.id.button1);
                 TextView title = dialog.findViewById(android.R.id.title);
-                TextView message = dialog.findViewById(android.R.id.message);
-                if (positive!=null && title!=null && message !=null){
+                TextView content = dialog.findViewById(android.R.id.message);
+                if (positive!=null && title!=null){
                     Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
-                    Utils.Log(TAG,"button # null");
-                    positive.setTypeface(typeface,Typeface.BOLD);
                     title.setTypeface(typeface,Typeface.BOLD);
-                    message.setTypeface(typeface);
-                    message.setTextSize(18);
+                    positive.setTypeface(typeface,Typeface.BOLD);
+                    positive.setTextSize(14);
+                    content.setTypeface(typeface);
+                    content.setTextSize(18);
                 }
             }
         });
         dialog.show();
     }
-
 
 
     @Override

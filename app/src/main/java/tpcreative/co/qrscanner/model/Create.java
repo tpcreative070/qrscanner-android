@@ -61,4 +61,32 @@ public class Create implements Serializable {
         enumImplement = EnumImplement.CREATE;
         id = 0;
     }
+
+    public Create(String title){
+        email = "";
+        subject = "";
+        message = "";
+        phone = "";
+        lat = 0.0;
+        lon = 0.0;
+        startEventMilliseconds = 0;
+        endEventMilliseconds = 0;
+        query = "";
+        this.title = title;
+        location = "";
+        description = "";
+        startEvent = "";
+        endEvent = "";
+        fullName = "";
+        address = "";
+        text = "";
+        ssId = "";
+        password = "";
+        url = "";
+        hidden = false;
+        createType = ParsedResultType.TEXT;
+        fragmentType = EnumFragmentType.SCANNER;
+        enumImplement = EnumImplement.CREATE;
+        id = 0;
+    }
 }

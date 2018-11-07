@@ -1,9 +1,11 @@
 package tpcreative.co.qrscanner.ui.scannerresult;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -16,12 +18,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonHistory;
@@ -457,6 +462,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         create = presenter.result;
         switch (create.createType){
             case ADDRESSBOOK:
+
+
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("fullName",create.fullName);
+                presenter.hashClipboard.put("address",create.address);
+                presenter.hashClipboard.put("phone",create.phone);
+                presenter.hashClipboard.put("email",create.email);
+
                 contactFullName.setText(create.fullName);
                 contactAddress.setText(create.address);
                 contactPhone.setText(create.phone);
@@ -478,6 +491,12 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 tvTitle.setText("AddressBook");
                 break;
             case EMAIL_ADDRESS:
+
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("email",create.email);
+                presenter.hashClipboard.put("subject",create.subject);
+                presenter.hashClipboard.put("message",create.message);
+
 
                 emailTo.setText(create.email);
                 emailSubject.setText(create.subject);
@@ -503,6 +522,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 break;
             case URI:
 
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("url",create.url);
+
+
                 urlAddress.setText(create.url);
                 history = new History();
                 history.url = create.url;
@@ -519,6 +542,12 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 break;
 
             case WIFI:
+
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("ssId",create.ssId);
+                presenter.hashClipboard.put("password",create.password);
+                presenter.hashClipboard.put("networkEncryption",create.networkEncryption);
+                presenter.hashClipboard.put("hidden",create.hidden ? "Yes" : "No");
 
                 wifiSSID.setText(create.ssId);
                 wifiPassword.setText(create.password);
@@ -546,6 +575,12 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
             case GEO:
 
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("lat",create.lat+"");
+                presenter.hashClipboard.put("lon",create.lon+"");
+                presenter.hashClipboard.put("query",create.query);
+
+
                 locationLatitude.setText("" + create.lat);
                 locationLongitude.setText("" + create.lon);
                 locationQuery.setText("" + create.query);
@@ -569,6 +604,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 break;
             case TEL:
 
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("phone",create.phone);
+
+
                 telephoneNumber.setText(create.phone);
                 history = new History();
                 history.phone = create.phone;
@@ -586,6 +625,12 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 break;
             case SMS:
+
+
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("phone",create.phone);
+                presenter.hashClipboard.put("message",create.message);
+
 
                 smsTo.setText(create.phone);
                 smsMessage.setText(create.message);
@@ -607,6 +652,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 tvTitle.setText("SMS");
                 break;
             case CALENDAR:
+
+
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("title",create.title);
+                presenter.hashClipboard.put("location",create.location);
+                presenter.hashClipboard.put("description",create.description);
+                presenter.hashClipboard.put("startEventMilliseconds",Utils.convertMillisecondsToDateTime(create.startEventMilliseconds));
+                presenter.hashClipboard.put("endEventMilliseconds",Utils.convertMillisecondsToDateTime(create.endEventMilliseconds));
 
                 eventTitle.setText(create.title);
                 eventLocation.setText(create.location);
@@ -640,6 +693,11 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 break;
             default:
+
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("text",create.text);
+
+
                 textMessage.setText(create.text);
                 history = new History();
                 history.text = create.text;
@@ -757,6 +815,93 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         super.onResume();
         Utils.Log(TAG,"onResume");
     }
+
+    public void onClipboardDialog() {
+        presenter.hashClipboardResult.clear();
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+        dialogBuilder.setTitle(R.string.copy_items);
+        dialogBuilder.setPadding(40,40,40,0);
+        dialogBuilder.setMargin(60,0,60,0);
+        dialogBuilder.setMessage(R.string.choose_which_items_you_want_to_copy);
+        final List<String>list = new ArrayList<>();
+        for (Map.Entry<String,String> hash : presenter.hashClipboard.entrySet()){
+            list.add(hash.getValue());
+        }
+
+        CharSequence[] cs = list.toArray(new CharSequence[list.size()]);
+        dialogBuilder.setMultiChoiceItems(cs, new boolean[]{false, false, false}, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                if (b){
+                    presenter.hashClipboardResult.put(i,list.get(i));
+                }
+                else{
+                    presenter.hashClipboardResult.remove(i);
+                }
+            }
+        });
+        dialogBuilder.setPositiveButton(R.string.copy, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (presenter.hashClipboardResult!=null &&presenter.hashClipboardResult.size()>0){
+                    Utils.copyToClipboard(presenter.getResult(presenter.hashClipboardResult));
+                    Utils.showGotItSnackbar(getView(),R.string.copied_successful);
+                }
+            }
+        });
+        dialogBuilder.setNegativeButton(R.string.zxing_button_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        MaterialDialog dialog = dialogBuilder.create();
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Utils.Log(TAG,"action here");
+                Button positive = dialog.findViewById(android.R.id.button1);
+                Button negative = dialog.findViewById(android.R.id.button2);
+                TextView title = dialog.findViewById(android.R.id.title);
+                TextView content = dialog.findViewById(android.R.id.message);
+                if (positive!=null && negative!=null && title!=null && content!=null){
+                    Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
+                    title.setTypeface(typeface,Typeface.BOLD);
+                    positive.setTypeface(typeface,Typeface.BOLD);
+                    negative.setTypeface(typeface,Typeface.BOLD);
+                    positive.setTextSize(14);
+                    negative.setTextSize(14);
+                    content.setTypeface(typeface);
+                    content.setTextSize(18);
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    @OnClick(R.id.btnClipboard)
+    public void onClickedClipboard(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (presenter.hashClipboard!=null && presenter.hashClipboard.size()>=0){
+                    onClipboardDialog();
+                }
+
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
+    }
+
 
 
 

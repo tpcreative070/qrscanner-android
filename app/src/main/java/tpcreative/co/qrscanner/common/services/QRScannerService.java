@@ -98,6 +98,9 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
 
     public void onSyncAuthor(){
         Log.d(TAG,"info onSignUp");
+        if (BuildConfig.DEBUG){
+            return;
+        }
         BaseView view = view();
         if (view == null) {
             return;

@@ -74,6 +74,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         onAddPermissionCamera();
         askPermission();
         ServiceManager.getInstance().onStartService();
+        Utils.copyToClipboard("Hello");
     }
 
     public void initAds(){
@@ -183,7 +184,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             return;
         }
         PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
         dialogBuilder.setTitle(R.string.app_permission);
         dialogBuilder.setPadding(40,40,40,0);
         dialogBuilder.setMargin(60,0,60,0);
@@ -194,14 +195,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Utils.Log(TAG,"action here");
                 Button positive = dialog.findViewById(android.R.id.button1);
-                TextView title = dialog.findViewById(android.R.id.title);
-                if (positive!=null && title!=null){
-                    Typeface typeface = ResourcesCompat.getFont(MainActivity.this, R.font.brandon_bld);
-                    Utils.Log(TAG,"button # null");
+                if (positive!=null){
+                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
                     positive.setTypeface(typeface,Typeface.BOLD);
-                    title.setTypeface(typeface,Typeface.BOLD);
+                    positive.setTextSize(14);
                 }
             }
         });
@@ -382,7 +380,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     public void showEncourage(){
         try {
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
             builder.setHeaderBackground(R.drawable.back);
             builder.setPadding(40,40,40,0);
             builder.setMargin(60,0,60,0);
@@ -409,14 +407,14 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             builder.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialogInterface) {
-                    Utils.Log(TAG,"action here");
                     Button positive = dialog.findViewById(android.R.id.button1);
                     Button negative = dialog.findViewById(android.R.id.button2);
                     if (positive!=null && negative!=null){
                         Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
-                        Utils.Log(TAG,"button # null");
                         positive.setTypeface(typeface,Typeface.BOLD);
                         negative.setTypeface(typeface,Typeface.BOLD);
+                        positive.setTextSize(14);
+                        negative.setTextSize(14);
                     }
                 }
             });

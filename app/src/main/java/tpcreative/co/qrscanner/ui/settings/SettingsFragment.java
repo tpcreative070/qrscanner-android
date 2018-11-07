@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.zxing.BarcodeFormat;
@@ -28,7 +27,6 @@ import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.EnumMap;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -36,7 +34,6 @@ import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
@@ -163,25 +160,21 @@ public class SettingsFragment extends Fragment {
 
         public void askPermission() {
             PrefsController.putBoolean(getString(R.string.key_already_load_app), true);
-            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext());
+            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
             dialogBuilder.setTitle(R.string.app_permission);
             dialogBuilder.setPadding(40,40,40,0);
             dialogBuilder.setMargin(60,0,60,0);
             dialogBuilder.setCustomMessage(R.layout.custom_body_permission);
             dialogBuilder.setPositiveButton(R.string.got_it, null);
             MaterialDialog dialog = dialogBuilder.create();
-
             dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialogInterface) {
-                    Utils.Log(TAG,"action here");
                     Button positive = dialog.findViewById(android.R.id.button1);
-                    TextView title = dialog.findViewById(android.R.id.title);
-                    if (positive!=null && title!=null){
-                        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_bld);
-                        Utils.Log(TAG,"button # null");
+                    if (positive!=null){
+                        Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
                         positive.setTypeface(typeface,Typeface.BOLD);
-                        title.setTypeface(typeface,Typeface.BOLD);
+                        positive.setTextSize(14);
                     }
                 }
             });

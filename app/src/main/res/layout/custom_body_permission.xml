@@ -16,7 +16,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_gravity="center"
-                    android:textSize="@dimen/small"
+                    android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
@@ -27,7 +27,7 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:textSize="@dimen/small"
+                    android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
@@ -37,8 +37,9 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/small"
+                    android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
@@ -49,7 +50,7 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:textSize="@dimen/small"
+                    android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
                     android:textColor="@color/grey_dark"
                     android:text="4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location"
@@ -58,7 +59,7 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:textSize="@dimen/small"
+                    android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
@@ -71,7 +72,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:textSize="@dimen/small"
+                    android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
                     android:textColor="@color/grey_dark"
                     android:text="6. android.permission.CALL_PHONE: Share QRCode to your phone call"

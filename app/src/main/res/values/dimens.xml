@@ -12,6 +12,7 @@
     <!--Text size -->
     <dimen name="small">14sp</dimen>
     <dimen name="medium">18sp</dimen>
+    <dimen name="medium_16">16dp</dimen>
     <dimen name="medium_x">20sp</dimen>
     <dimen name="large">22sp</dimen>
 </resources>

@@ -99,6 +99,7 @@
     <string name="key_not_first_running">first_running</string>
     <string name="key_already_load_app">already_load_app</string>
     <string name="got_it">OK, GOT IT</string>
+    <string name="copy">Copy</string>
     <string name="error_occurred_importing">Error occurred importing</string>
     <string name="please_choose_correctly_format">Please choose pictures is QRCode or BarCode</string>
     <string name="alert_end_event">Ending event data time must be greater than begin date time</string>
@@ -197,4 +198,10 @@
     <string name="rate_app_5_stars">Rate app 5 stars</string>
     <string name="qrscanner_live">tpcreative.co.qrscanner.free.release</string>
     <string name="qrscanner_live_pro">tpcreative.co.qrscanner</string>
+    <string name="my_clipboad">Clipboard</string>
+    <string name="copied_successful">Copied items successful</string>
+
+
+    <string name="copy_items">Copy items</string>
+    <string name="choose_which_items_you_want_to_copy">Choose which items you want to copy.</string>
 </resources>
