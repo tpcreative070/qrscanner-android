@@ -658,17 +658,27 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
             <RelativeLayout
+                android:id="@+id/rlShare"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_marginRight="30dp"
+                <RelativeLayout
+                    android:layout_marginRight="@dimen/margin"
                     android:layout_alignParentRight="true"
-                    android:id="@+id/imgOpenApplication"
-                    android:layout_centerInParent="true"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
+                    android:background="@drawable/bg_generate_rounded"
+                    android:layout_width="@dimen/width"
+                    android:layout_height="@dimen/height">
+
+                    <ImageView
+                        android:padding="6dp"
+                        android:id="@+id/imgOpenApplication"
+                        android:layout_centerInParent="true"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                </RelativeLayout>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -678,19 +688,19 @@
                 android:layout_height="wrap_content">
 
                 <Button
+                    android:layout_marginLeft="@dimen/margin"
+                    android:layout_alignParentLeft="true"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textSize="@dimen/medium_x"
-                    android:layout_marginLeft="40dp"
-                    android:layout_alignParentLeft="true"
                     android:id="@+id/btnClipboard"
                     android:layout_centerInParent="true"
                     android:background="@drawable/bg_generate_rounded"
                     style="@style/brandonBoldTextView"
                     android:text="@string/my_clipboad"
                     android:textAllCaps="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="@dimen/width"
+                    android:layout_height="@dimen/height" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

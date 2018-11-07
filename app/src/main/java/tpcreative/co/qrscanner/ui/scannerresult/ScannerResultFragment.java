@@ -241,9 +241,24 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         view.startAnimation(mAnim);
     }
 
-    @OnClick(R.id.imgOpenApplication)
-    public void openApplication(){
-       onAddPermissionSave();
+    @OnClick(R.id.rlShare)
+    public void openApplication(View view){
+        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG,"start");
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                onAddPermissionSave();
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(mAnim);
     }
 
     public void onAddPermissionPhoneCall() {

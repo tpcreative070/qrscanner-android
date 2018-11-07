@@ -15,4 +15,7 @@
     <dimen name="medium_16">16dp</dimen>
     <dimen name="medium_x">20sp</dimen>
     <dimen name="large">22sp</dimen>
+    <dimen name="width">100dp</dimen>
+    <dimen name="height">50dp</dimen>
+    <dimen name="margin">30dp</dimen>
 </resources>
