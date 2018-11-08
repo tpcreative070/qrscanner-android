@@ -18,9 +18,11 @@ import retrofit2.HttpException;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.presenter.PresenterService;
+import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.EnumStatus;
 
 public class QRScannerService extends PresenterService<BaseView> implements QRScannerReceiver.ConnectivityReceiverListener {
@@ -141,6 +143,51 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                         Log.d(TAG, "Can not call" + throwable.getMessage());
                     }
                     view.onStopLoading(EnumStatus.AUTHOR_SYNC);
+                }));
+    }
+
+    public void onCheckVersion(){
+        Log.d(TAG,"onCheckVersion");
+        BaseView view = view();
+        if (view == null) {
+            return;
+        }
+        if (NetworkUtil.pingIpAddress(view.getContext())) {
+            return;
+        }
+        if (subscriptions == null) {
+            return;
+        }
+
+        subscriptions.add(QRScannerApplication.serverAPI.onCheckVersion()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(__ -> view.onStartLoading(EnumStatus.CHECK_VERSION))
+                .subscribe(onResponse -> {
+                    if (onResponse!=null){
+                        if (onResponse.version!=null){
+                            view.onSuccessful("Successful",EnumStatus.CHECK_VERSION);
+                            final Author author = Author.getInstance().getAuthorInfo();
+                            author.version = onResponse.version;
+                            PrefsController.putString(getString(R.string.key_author),new Gson().toJson(author) );
+                        }
+                    }
+                    view.onStopLoading(EnumStatus.CHECK_VERSION);
+                    Log.d(TAG, "Body : " + new Gson().toJson(onResponse));
+                }, throwable -> {
+                    if (throwable instanceof HttpException) {
+                        ResponseBody bodys = ((HttpException) throwable).response().errorBody();
+                        try {
+                            Log.d(TAG,"error" +bodys.string());
+                            String msg = new Gson().toJson(bodys.string());
+                            Log.d(TAG, msg);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.d(TAG, "Can not call" + throwable.getMessage());
+                    }
+                    view.onStopLoading(EnumStatus.CHECK_VERSION);
                 }));
     }
 

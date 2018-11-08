@@ -82,6 +82,7 @@ public enum EnumStatus {
         USER_INFO,
         CHECKOUT,
         AUTHOR_SYNC,
+        CHECK_VERSION,
         OTHER
 
 }

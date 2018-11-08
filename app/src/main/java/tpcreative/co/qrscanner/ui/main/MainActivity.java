@@ -33,20 +33,26 @@ import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
+import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
+import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Theme;
+import tpcreative.co.qrscanner.model.Version;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerReceiver.ConnectivityReceiverListener{
@@ -179,7 +185,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
 
-
     public void askPermission() {
         boolean isCheck = PrefsController.getBoolean(getString(R.string.key_already_load_app),false);
         if (isCheck){
@@ -198,8 +203,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 Button positive = dialog.findViewById(android.R.id.button1);
-                if (positive!=null){
+                TextView title = dialog.findViewById(android.R.id.title);
+                if (positive!=null && title!=null){
                     Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
+                    title.setTypeface(typeface,Typeface.BOLD);
                     positive.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);
                 }
@@ -207,7 +214,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         });
         dialog.show();
     }
-
 
     private void initUI() {
 
@@ -297,6 +303,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     protected void onResume() {
         super.onResume();
         QRScannerApplication.getInstance().setConnectivityListener(this);
+        onCheckVersionApp();
         if (adViewBanner != null) {
             adViewBanner.resume();
         }
@@ -443,5 +450,80 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
+
+    public void onCheckVersionApp(){
+        final boolean askLatestVersion = PrefsController.getBoolean(getString(R.string.key_auto_ask_update),false);
+        if (!askLatestVersion){
+            return;
+        }
+        try {
+            final Author author = Author.getInstance().getAuthorInfo();
+            if (author!=null){
+                if (author.version!=null){
+                    final Version version = author.version;
+                    if (!version.version_name.equals(BuildConfig.VERSION_NAME)){
+                        if (version.release){
+                            HashMap<Object,String> hashMap = version.content;
+                            if (hashMap!=null && hashMap.size()>0){
+                                List<String> list = new ArrayList<>();
+                                for (Map.Entry<Object,String> hash : hashMap.entrySet()){
+                                    list.add(hash.getValue());
+                                }
+                                askUpdateAppDialog(version.title,list);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void askUpdateAppDialog(String title, List<String>list) {
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setPadding(40,40,40,0);
+        dialogBuilder.setMargin(60,0,60,0);
+        dialogBuilder.setPositiveButton(R.string.upgrade_now, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                onRateApp();
+            }
+        });
+        CharSequence[] cs = list.toArray(new CharSequence[list.size()]);
+        dialogBuilder.setItems(cs, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialogBuilder.setNegativeButton(R.string.upgrade_later, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SingletonSettings.getInstance().onUpdateSharePreference(false);
+            }
+        });
+
+        MaterialDialog dialog = dialogBuilder.create();
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button positive = dialog.findViewById(android.R.id.button1);
+                Button negative = dialog.findViewById(android.R.id.button2);
+                TextView title = dialog.findViewById(android.R.id.title);
+                if (positive!=null &&  negative!=null && title!=null){
+                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
+                    title.setTypeface(typeface,Typeface.BOLD);
+                    positive.setTypeface(typeface,Typeface.BOLD);
+                    positive.setTextSize(14);
+                    negative.setTypeface(typeface,Typeface.BOLD);
+                    negative.setTextSize(14);
+                }
+            }
+        });
+        dialog.show();
+    }
 
 }

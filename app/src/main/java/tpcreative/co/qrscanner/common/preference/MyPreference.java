@@ -50,7 +50,7 @@ public class MyPreference extends Preference {
         titleView.setTypeface(typeface);
 
         titleView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
-        summaryView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
+        summaryView.setTextColor(getContext().getResources().getColor(R.color.white));
         imageView.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
@@ -58,7 +58,6 @@ public class MyPreference extends Preference {
             listener.onUpdatePreference();
         }
     }
-
 
     public ImageView getImageView() {
         return imageViewCover;

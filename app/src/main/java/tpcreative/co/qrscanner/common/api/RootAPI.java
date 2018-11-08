@@ -11,6 +11,7 @@ public interface RootAPI{
 
     String CHECKOUT = "/api/checkout/syncDevices";
     String AUTHOR = "/api/author/syncDevices";
+    String CHECK_VERSION = "/api/author/version";
 
     @FormUrlEncoded
     @POST(CHECKOUT)
@@ -20,6 +21,10 @@ public interface RootAPI{
     @FormUrlEncoded
     @POST(AUTHOR)
     Observable<BaseResponse> onAuthor(@FieldMap Map<String, String> request);
+
+
+    @POST(CHECK_VERSION)
+    Observable<BaseResponse> onCheckVersion();
 
 
 }

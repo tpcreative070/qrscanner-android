@@ -160,18 +160,27 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
                 startActivity(intent);
             }
         });
+        dialogBuilder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
         MaterialDialog dialog = dialogBuilder.create();
         dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 Button positive = dialog.findViewById(android.R.id.button1);
+                Button negative = dialog.findViewById(android.R.id.button2);
                 TextView title = dialog.findViewById(android.R.id.title);
                 TextView content = dialog.findViewById(android.R.id.message);
-                if (positive!=null && title!=null){
+                if (positive!=null && negative!=null && title!=null){
                     Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
                     positive.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);
+                    negative.setTypeface(typeface,Typeface.BOLD);
+                    negative.setTextSize(14);
                     content.setTypeface(typeface);
                     content.setTextSize(18);
                 }

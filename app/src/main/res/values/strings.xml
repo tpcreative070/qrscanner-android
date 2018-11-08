@@ -118,6 +118,7 @@
     <string name="support">Support</string>
     <string name="support_detail">Report issues</string>
     <string name="app_permission">App permissions</string>
+    <string name="update_app">Update app</string>
     <string name="github" translatable="false">https://github.com/flyingrub/SpeedMeter</string>
     <string name="version">QRScanner version</string>
     <string name="premium_version">Premium version</string>
@@ -166,6 +167,7 @@
     <string name="key_beep">Beep</string>
     <string name="key_theme">Theme</string>
     <string name="key_color_code">Change code color</string>
+    <string name="key_color_code_detail">Make QR codes in multi colors</string>
     <string name="key_size_code">Change resolution file size</string>
     <string name="Change_file_color">Change File Color</string>
     <string name="key_theme_object">theme_object</string>
@@ -204,4 +206,12 @@
 
     <string name="copy_items">Copy items</string>
     <string name="choose_which_items_you_want_to_copy">Choose which items you want to copy.</string>
+    <string name="key_author">Author</string>
+    <string name="key_check_version_app">Check version app</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="upgrade_later">Upgrade later</string>
+    <string name="count_later">count_later</string>
+    <string name="key_auto_ask_update">Ask latest version</string>
+    <string name="key_auto_ask_update_detail">When We have the latest version. App will be prompted automatically by an alert message</string>
+
 </resources>

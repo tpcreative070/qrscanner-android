@@ -31,8 +31,18 @@
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_palette_white_48"
             android:title="@string/key_color_code"
-            android:key="@string/key_color_code">
+            android:key="@string/key_color_code"
+            android:summary="@string/key_color_code_detail">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_notifications_active_white"
+            android:title="@string/key_auto_ask_update"
+            android:key="@string/key_auto_ask_update"
+            android:defaultValue="true"
+            android:summary="@string/key_auto_ask_update_detail">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"

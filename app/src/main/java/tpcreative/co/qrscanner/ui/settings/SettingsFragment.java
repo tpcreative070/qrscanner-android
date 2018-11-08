@@ -134,12 +134,15 @@ public class SettingsFragment extends Fragment {
         private MyPreference myPreferenceHelp;
 
         private MySwitchPreference mySwitchPreferenceVibrate;
+        private MySwitchPreference mySwitchPreferenceAskUpdate;
 
         private MyPreference myPreferenceFileSize;
 
         private MyPreference myPreferenceTheme;
 
         private MyPreference myPreferenceFileColor;
+
+
         private Bitmap bitmap;
 
 
@@ -152,6 +155,14 @@ public class SettingsFragment extends Fragment {
         @Override
         public void onUpdated() {
             onGenerateReview("123");
+        }
+
+        @Override
+        public void onUpdatedSharePreferences(boolean value) {
+           if (mySwitchPreferenceAskUpdate!=null){
+               PrefsController.putBoolean(getString(R.string.key_auto_ask_update),value);
+               mySwitchPreferenceAskUpdate.setChecked(value);
+           }
         }
 
         /**
@@ -171,8 +182,10 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onShow(DialogInterface dialogInterface) {
                     Button positive = dialog.findViewById(android.R.id.button1);
-                    if (positive!=null){
+                    TextView title = dialog.findViewById(android.R.id.title);
+                    if (positive!=null && title!=null){
                         Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
+                        title.setTypeface(typeface,Typeface.BOLD);
                         positive.setTypeface(typeface,Typeface.BOLD);
                         positive.setTextSize(14);
                     }
@@ -258,7 +271,7 @@ public class SettingsFragment extends Fragment {
             /*Version**/
 
             mVersionApp = (MyPreference) findPreference(getString(R.string.key_version));
-            mVersionApp.setSummary(String.format("v%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            mVersionApp.setSummary(String.format("Version: %s", BuildConfig.VERSION_NAME));
 
             /*Premium*/
             mPreferencePremiumVersion = (MyPreference) findPreference(getString(R.string.key_premium_version));
@@ -346,6 +359,11 @@ public class SettingsFragment extends Fragment {
                     }
                 }
             });
+
+            /*Vibrate*/
+            mySwitchPreferenceAskUpdate = (MySwitchPreference) findPreference(getString(R.string.key_auto_ask_update));
+            mySwitchPreferenceAskUpdate.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            mySwitchPreferenceAskUpdate.setOnPreferenceChangeListener(createChangeListener());
         }
 
         public void onGenerateReview(String code){

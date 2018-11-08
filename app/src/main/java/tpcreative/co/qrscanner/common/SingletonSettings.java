@@ -26,7 +26,14 @@ public class SingletonSettings {
         }
     }
 
+    public void onUpdateSharePreference(boolean value){
+        if (listener!=null){
+            listener.onUpdatedSharePreferences(value);
+        }
+    }
+
     public interface SingletonSettingsListener{
         void onUpdated();
+        void onUpdatedSharePreferences(boolean value);
     }
 }

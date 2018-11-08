@@ -49,7 +49,7 @@
                 android:layout_below="@android:id/title"
                 android:layout_alignStart="@android:id/title"
                 android:textColor="?android:attr/textColorSecondary"
-                android:maxLines="2"/>
+                android:maxLines="3"/>
 
         </RelativeLayout>
 

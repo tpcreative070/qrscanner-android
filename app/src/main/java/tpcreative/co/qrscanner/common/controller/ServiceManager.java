@@ -37,6 +37,7 @@ public class ServiceManager implements BaseView {
             myService = ((QRScannerService.LocalBinder) binder).getService();
             myService.bindView(ServiceManager.this);
             myService.onSyncAuthor();
+            myService.onCheckVersion();
         }
         //binder comes from server to communicate with method's of
         public void onServiceDisconnected(ComponentName className) {
@@ -99,6 +100,15 @@ public class ServiceManager implements BaseView {
     public void onAuthorSync() {
         if (myService != null) {
             myService.onSyncAuthor();
+        } else {
+            Utils.Log(TAG, "My services is null");
+        }
+    }
+
+    /*Author info*/
+    public void onCheckVersion() {
+        if (myService != null) {
+            myService.onCheckVersion();
         } else {
             Utils.Log(TAG, "My services is null");
         }
@@ -167,6 +177,7 @@ public class ServiceManager implements BaseView {
         switch (status) {
             case CONNECTED: {
                 onAuthorSync();
+                onCheckVersion();
                 break;
             }
         }
