@@ -444,21 +444,16 @@ public class SettingsFragment extends Fragment {
                 new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
                     @Override
                     public void onTargetClick(TapTargetView view) {
-                        if (view==null){
-                            return;
-                        }
                         super.onTargetClick(view);      // This call is optional
-                        PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         Navigator.onMoveToHelp(getContext());
+                        PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
+                        llAction.setVisibility(View.INVISIBLE);
                         Utils.Log(TAG,"onTargetClick");
                         view.dismiss(true);
                     }
 
                     @Override
                     public void onOuterCircleClick(TapTargetView view) {
-                        if (view==null){
-                            return;
-                        }
                         super.onOuterCircleClick(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         llAction.setVisibility(View.INVISIBLE);
@@ -468,26 +463,16 @@ public class SettingsFragment extends Fragment {
 
                     @Override
                     public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
-                        if (view==null){
-                            return;
-                        }
                         super.onTargetDismissed(view, userInitiated);
-                        PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
-                        llAction.setVisibility(View.INVISIBLE);
                         Utils.Log(TAG,"onTargetDismissed");
-                        view.dismiss(true);
                     }
 
                     @Override
                     public void onTargetCancel(TapTargetView view) {
-                        if (view==null){
-                            return;
-                        }
                         super.onTargetCancel(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_help),true);
                         llAction.setVisibility(View.INVISIBLE);
                         Utils.Log(TAG,"onTargetCancel");
-                        view.dismiss(true);
                     }
                 });
     }

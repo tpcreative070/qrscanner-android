@@ -105,6 +105,11 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         }
     }
 
+    @Override
+    public void onCatch() {
+        onBackPressed();
+    }
+
     public void addGoogleAdmods(){
         AdRequest adRequest = new AdRequest.Builder().build();
         adViewBanner.setAdListener(new AdListener() {

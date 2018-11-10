@@ -461,7 +461,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             if (author!=null){
                 if (author.version!=null){
                     final Version version = author.version;
-                    if (!version.version_name.equals(BuildConfig.VERSION_NAME)){
+                    if (version.version_code>BuildConfig.VERSION_CODE){
                         if (version.release){
                             HashMap<Object,String> hashMap = version.content;
                             if (hashMap!=null && hashMap.size()>0){
@@ -472,6 +472,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                                 askUpdateAppDialog(version.title,list);
                             }
                         }
+                    }
+                    else{
+                        Utils.Log(TAG,"This is latest app version");
                     }
                 }
             }

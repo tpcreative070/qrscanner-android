@@ -43,7 +43,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="@color/grey_dark"
-                    android:text="3. INTERNET,CHANGE_NETWORK_STATE: In order to check latest version app"
+                    android:text="3. INTERNET,CHANGE_NETWORK_STATE: In order to check latest app version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
 import butterknife.ButterKnife;
+import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
@@ -17,7 +19,7 @@ public class Navigator {
     public static void onMoveToReview(Activity context, Create create){
         Intent intent = new Intent(context, ReviewActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("create",create);
+        bundle.putSerializable(QRScannerApplication.getInstance().getString(R.string.key_create_intent),create);
         intent.putExtras(bundle);
         context.startActivityForResult(intent,1000);
     }

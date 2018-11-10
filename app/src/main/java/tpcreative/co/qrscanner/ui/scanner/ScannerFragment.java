@@ -275,41 +275,29 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                         super.onTargetClick(view);      // This call is optional
                         onAddPermissionGallery();
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        Utils.Log(TAG,"onTargetClick");
                         view.dismiss(true);
+                        Utils.Log(TAG,"onTargetClick");
                     }
 
                     @Override
                     public void onOuterCircleClick(TapTargetView view) {
-                        if (view==null){
-                            return;
-                        }
                         super.onOuterCircleClick(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        Utils.Log(TAG,"onOuterCircleClick");
                         view.dismiss(true);
+                        Utils.Log(TAG,"onOuterCircleClick");
                     }
 
                     @Override
                     public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
-                        if (view==null){
-                            return;
-                        }
                         super.onTargetDismissed(view, userInitiated);
-                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
                         Utils.Log(TAG,"onTargetDismissed");
-                        view.dismiss(true);
                     }
 
                     @Override
                     public void onTargetCancel(TapTargetView view) {
-                        if (view==null){
-                            return;
-                        }
                         super.onTargetCancel(view);
                         PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
                         Utils.Log(TAG,"onTargetCancel");
-                        view.dismiss(true);
                     }
                 });
     }

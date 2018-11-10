@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.util.Log;
 import com.google.gson.Gson;
 import tpcreative.co.qrscanner.BuildConfig;
+import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 
 public class ReviewPresenter extends Presenter<ReviewView>{
@@ -18,15 +20,21 @@ public class ReviewPresenter extends Presenter<ReviewView>{
 
     public void getIntent(Activity activity){
         ReviewView view = view();
-        Bundle bundle = activity.getIntent().getExtras();
-        final Create result = (Create) bundle.get("create");
-        if (result!=null){
-            create = result;
-            view.setView();
+        try {
+            Bundle bundle = activity.getIntent().getExtras();
+            final Create result = (Create) bundle.get(QRScannerApplication.getInstance().getString(R.string.key_create_intent));
+            if (result!=null){
+                create = result;
+                view.setView();
+            }
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, new Gson().toJson(create));
+            }
         }
-
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, new Gson().toJson(create));
+        catch (Exception e){
+            if (view!=null){
+                view.onCatch();
+            }
         }
     }
 

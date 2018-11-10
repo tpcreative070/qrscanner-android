@@ -5,5 +5,6 @@ public interface ReviewView {
 
     Context getContext();
     void setView();
+    void onCatch();
 
 }

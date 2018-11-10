@@ -213,5 +213,6 @@
     <string name="count_later">count_later</string>
     <string name="key_auto_ask_update">Ask latest version</string>
     <string name="key_auto_ask_update_detail">When We have the latest version. App will be prompted automatically by an alert message</string>
+    <string name="key_create_intent">create_intent</string>
 
 </resources>
