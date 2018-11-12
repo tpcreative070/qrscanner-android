@@ -24,7 +24,7 @@
     <style name="AppBaseThemeDark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorDark</item>
         <item name="colorPrimaryDark">@color/colorDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorBlueLight</item>
         <item name="android:textColorPrimary">@color/colorBlueLight</item>
         <item name="android:textColorSecondary">@color/colorBlueLight</item>
         <item name="android:windowBackground">@color/colorDark</item>
