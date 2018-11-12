@@ -171,7 +171,7 @@ public class SettingsFragment extends Fragment {
 
         public void askPermission() {
             PrefsController.putBoolean(getString(R.string.key_already_load_app), true);
-            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.DarkDialogTheme);
             dialogBuilder.setTitle(R.string.app_permission);
             dialogBuilder.setPadding(40,40,40,0);
             dialogBuilder.setMargin(60,0,60,0);
@@ -186,6 +186,7 @@ public class SettingsFragment extends Fragment {
                     if (positive!=null && title!=null){
                         Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
                         title.setTypeface(typeface,Typeface.BOLD);
+                        title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
                         positive.setTypeface(typeface,Typeface.BOLD);
                         positive.setTextSize(14);
                     }

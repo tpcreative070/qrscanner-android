@@ -77,7 +77,7 @@
     <style name="DarkDialogTheme" parent="@style/MaterialDialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorBlueLight</item>
         <item name="android:fontFamily">@font/brandon_regs</item>
     </style>
 

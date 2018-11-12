@@ -153,7 +153,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
 
     public void showGpsWarningDialog() {
         PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.DarkDialogTheme);
         dialogBuilder.setTitle(getString(R.string.gps_disabled));
         dialogBuilder.setMessage("Please turn on your location or GPS to get exactly position");
         dialogBuilder.setPadding(40,40,40,0);
@@ -182,6 +182,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
                 if (positive!=null && negative!=null && title!=null){
                     Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
+                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
                     positive.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);
                     negative.setTypeface(typeface,Typeface.BOLD);

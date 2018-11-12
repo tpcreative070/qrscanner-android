@@ -56,6 +56,7 @@ import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -833,7 +834,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
     public void onClipboardDialog() {
         presenter.hashClipboardResult.clear();
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.DarkDialogTheme);
         dialogBuilder.setTitle(R.string.copy_items);
         dialogBuilder.setPadding(40,40,40,0);
         dialogBuilder.setMargin(60,0,60,0);
@@ -882,6 +883,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 if (positive!=null && negative!=null && title!=null && content!=null){
                     Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
+                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
                     positive.setTypeface(typeface,Typeface.BOLD);
                     negative.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);

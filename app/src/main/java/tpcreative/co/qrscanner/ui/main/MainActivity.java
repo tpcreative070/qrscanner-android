@@ -191,7 +191,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             return;
         }
         PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
         dialogBuilder.setTitle(R.string.app_permission);
         dialogBuilder.setPadding(40,40,40,0);
         dialogBuilder.setMargin(60,0,60,0);
@@ -207,6 +207,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 if (positive!=null && title!=null){
                     Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
+                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
                     positive.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);
                 }
@@ -390,7 +391,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     public void showEncourage(){
         try {
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
             builder.setHeaderBackground(R.drawable.back);
             builder.setPadding(40,40,40,0);
             builder.setMargin(60,0,60,0);
@@ -485,7 +486,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     public void askUpdateAppDialog(String title, List<String>list) {
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
         dialogBuilder.setTitle(title);
         dialogBuilder.setPadding(40,40,40,0);
         dialogBuilder.setMargin(60,0,60,0);
@@ -519,6 +520,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 if (positive!=null &&  negative!=null && title!=null){
                     Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
+                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
                     positive.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);
                     negative.setTypeface(typeface,Typeface.BOLD);

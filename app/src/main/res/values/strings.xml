@@ -177,7 +177,7 @@
     <string name="tap_here_to_scan_code_from_gallery">Tap here to scan code from Gallery.</string>
     <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QRcode from your Gallery.</string>
     <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
-    <string name="tap_here_to_discover_how_to_scan_description">This tips will help you to use this app more effective.</string>
+    <string name="tap_here_to_discover_how_to_scan_description">This tips will help you to use this app more efficient.</string>
 
     <string name="key_second_loads">second loads</string>
     <string name="key_second_visit_settings">second visit settings</string>

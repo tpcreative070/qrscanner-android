@@ -20,7 +20,6 @@
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:textColor="@color/grey_dark"
                     android:text="1. WRITE_EXTERNAL_STORAGE: Save QRCode to SDCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -31,7 +30,6 @@
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:textColor="@color/grey_dark"
                     android:text="2. READ_EXTERNAL_STORAGE: Load QRCode from SDCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -42,7 +40,6 @@
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:textColor="@color/grey_dark"
                     android:text="3. INTERNET,CHANGE_NETWORK_STATE: In order to check latest app version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -51,7 +48,6 @@
                     android:layout_gravity="center"
                     android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
-                    android:textColor="@color/grey_dark"
                     android:text="4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -62,7 +58,6 @@
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:textColor="@color/grey_dark"
                     android:text="5. android.permission.CAMERA: Scanner code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -73,7 +68,6 @@
                     android:layout_marginBottom="4dp"
                     android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
-                    android:textColor="@color/grey_dark"
                     android:text="6. android.permission.CALL_PHONE: Share QRCode to your phone call"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

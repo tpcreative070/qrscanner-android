@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.filecolor;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -55,6 +56,8 @@ public class ChangeFileColorActivity extends BaseActivity implements BaseView  ,
         presenter.bindView(this);
         presenter.getData();
         imgArrowBack.setOnClickListener(this);
+        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+
     }
 
 
