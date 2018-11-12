@@ -55,6 +55,7 @@ import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
@@ -121,6 +122,10 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             Utils.Log(TAG,"Data is null");
         }
 
+        locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            showGpsWarningDialog();
+        }
         return view;
     }
 
@@ -175,7 +180,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
                 TextView title = dialog.findViewById(android.R.id.title);
                 TextView content = dialog.findViewById(android.R.id.message);
                 if (positive!=null && negative!=null && title!=null){
-                    Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
+                    Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
                     positive.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);
@@ -320,12 +325,6 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             onCloseWindow();
             SingletonCloseFragment.getInstance().setUpdateData(false);
         }
-
-        locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            showGpsWarningDialog();
-        }
-
     }
 
     @Override

@@ -13,3 +13,4 @@ public class BaseResponse implements Serializable {
         return new Gson().toJson(this);
     }
 }
+
