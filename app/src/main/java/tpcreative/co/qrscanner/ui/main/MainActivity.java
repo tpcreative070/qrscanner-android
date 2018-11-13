@@ -442,7 +442,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                                 for (Map.Entry<Object,String> hash : hashMap.entrySet()){
                                     list.add(hash.getValue());
                                 }
-                                askUpdateAppDialog(version.title +"("+version.version_name+")",list);
+                                askUpdateAppDialog(version.title,list);
                             }
                         }
                     }
