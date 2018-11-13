@@ -7,6 +7,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,11 +53,12 @@ public class MyPreference extends Preference {
         titleView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
         summaryView.setTextColor(getContext().getResources().getColor(R.color.white));
         imageView.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-
         imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
+        imageViewCover.setVisibility(View.INVISIBLE);
         if (listener != null) {
             listener.onUpdatePreference();
         }
+
     }
 
     public ImageView getImageView() {

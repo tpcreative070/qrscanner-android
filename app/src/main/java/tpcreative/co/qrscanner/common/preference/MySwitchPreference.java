@@ -56,6 +56,8 @@ public class MySwitchPreference extends CheckBoxPreference {
         titleView.setTypeface(typeface);
         titleView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
         summaryView.setTextColor(getContext().getResources().getColor(R.color.white));
+        ImageView imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
+        imageViewCover.setVisibility(View.INVISIBLE);
         checkBox.setVisibility(View.VISIBLE);
     }
 

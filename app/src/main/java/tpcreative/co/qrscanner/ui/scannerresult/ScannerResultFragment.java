@@ -56,6 +56,7 @@ import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
@@ -728,6 +729,16 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 tvTitle.setText("Text");
                 break;
         }
+
+        try {
+            final boolean autoCopy = PrefsController.getBoolean(getString(R.string.key_copy_to_clipboard),false);
+            if (autoCopy){
+                Utils.copyToClipboard(presenter.getResult(presenter.hashClipboard));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -840,7 +851,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         dialogBuilder.setMargin(60,0,60,0);
         dialogBuilder.setMessage(R.string.choose_which_items_you_want_to_copy);
         final List<String>list = new ArrayList<>();
-        for (Map.Entry<String,String> hash : presenter.hashClipboard.entrySet()){
+        for (Map.Entry<Object,String> hash : presenter.hashClipboard.entrySet()){
             list.add(hash.getValue());
         }
 

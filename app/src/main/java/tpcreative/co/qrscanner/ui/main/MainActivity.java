@@ -79,7 +79,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         storage = new Storage(getApplicationContext());
         initUI();
         onAddPermissionCamera();
-        askPermission();
         ServiceManager.getInstance().onStartService();
         Theme.getInstance().getList();
         Utils.copyToClipboard("Hello");

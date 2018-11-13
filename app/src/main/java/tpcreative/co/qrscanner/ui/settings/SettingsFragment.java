@@ -381,6 +381,7 @@ public class SettingsFragment extends Fragment {
                 Theme theme = Theme.getInstance().getThemeInfo();
                 bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 100, 100,hints);
                 myPreferenceFileColor.getImageView().setImageBitmap(bitmap);
+                myPreferenceFileColor.getImageView().setVisibility(View.VISIBLE);
                 Utils.Log(TAG,"onGenerateReview");
             } catch(Exception e) {
                 e.printStackTrace();

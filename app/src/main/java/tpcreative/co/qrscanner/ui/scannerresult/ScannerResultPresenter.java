@@ -13,8 +13,8 @@ import tpcreative.co.qrscanner.model.Create;
 public class ScannerResultPresenter extends Presenter<ScannerResultView>{
 
     protected Create result;
-    protected HashMap<String,String>hashClipboard = new HashMap<>();
-    protected HashMap<Integer,String>hashClipboardResult = new HashMap<>();
+    protected HashMap<Object,String>hashClipboard = new HashMap<>();
+    protected HashMap<Object,String>hashClipboardResult = new HashMap<>();
     protected StringBuilder stringBuilderClipboard = new StringBuilder();
     private static final String TAG = ScannerResultPresenter.class.getSimpleName();
 
@@ -35,10 +35,11 @@ public class ScannerResultPresenter extends Presenter<ScannerResultView>{
         }
     }
 
-    public String getResult(HashMap<Integer,String> value){
+    public String getResult(HashMap<Object,String> value){
+        stringBuilderClipboard = new StringBuilder();
         if (value!=null && value.size()>0) {
             int i = 1;
-            for (Map.Entry<Integer, String> index : value.entrySet()) {
+            for (Map.Entry<Object, String> index : value.entrySet()) {
                 if (i == value.size()) {
                     stringBuilderClipboard.append(index.getValue());
                 } else {
