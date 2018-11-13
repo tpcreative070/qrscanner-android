@@ -17,6 +17,7 @@ import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.network.NetworkUtil;
@@ -170,6 +171,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                             final Author author = Author.getInstance().getAuthorInfo();
                             author.version = onResponse.version;
                             PrefsController.putString(getString(R.string.key_author),new Gson().toJson(author) );
+                            SingletonResponse.getInstance().onAlertLatestVersion();
                         }
                     }
                     view.onStopLoading(EnumStatus.CHECK_VERSION);

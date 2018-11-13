@@ -55,7 +55,7 @@ import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.Version;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerReceiver.ConnectivityReceiverListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment currentFragment;
@@ -184,37 +184,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
 
-    public void askPermission() {
-        boolean isCheck = PrefsController.getBoolean(getString(R.string.key_already_load_app),false);
-        if (isCheck){
-            return;
-        }
-        PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
-        dialogBuilder.setTitle(R.string.app_permission);
-        dialogBuilder.setPadding(40,40,40,0);
-        dialogBuilder.setMargin(60,0,60,0);
-        dialogBuilder.setCustomMessage(R.layout.custom_body_permission);
-        dialogBuilder.setPositiveButton(R.string.got_it, null);
-        MaterialDialog dialog = dialogBuilder.create();
-
-        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button positive = dialog.findViewById(android.R.id.button1);
-                TextView title = dialog.findViewById(android.R.id.title);
-                if (positive!=null && title!=null){
-                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
-                    title.setTypeface(typeface,Typeface.BOLD);
-                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
-                    positive.setTypeface(typeface,Typeface.BOLD);
-                    positive.setTextSize(14);
-                }
-            }
-        });
-        dialog.show();
-    }
-
     private void initUI() {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -294,6 +263,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     @Override
+    public void showAlertLatestVersion() {
+        onCheckVersionApp();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
@@ -302,8 +276,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     protected void onResume() {
         super.onResume();
-        QRScannerApplication.getInstance().setConnectivityListener(this);
-        onCheckVersionApp();
         if (adViewBanner != null) {
             adViewBanner.resume();
         }
@@ -315,6 +287,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
 
     }
+
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
@@ -469,7 +442,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                                 for (Map.Entry<Object,String> hash : hashMap.entrySet()){
                                     list.add(hash.getValue());
                                 }
-                                askUpdateAppDialog(version.title,list);
+                                askUpdateAppDialog(version.title +"("+version.version_name+")",list);
                             }
                         }
                     }

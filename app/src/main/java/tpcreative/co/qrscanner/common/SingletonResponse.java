@@ -32,9 +32,23 @@ public class SingletonResponse {
         }
     }
 
+    public void onAlertLatestVersion(){
+        if (listener!=null){
+            listener.showAlertLatestVersion();
+        }
+    }
+
+    public void onNetworkConnectionChanged(boolean isConntected){
+        if (listener!=null){
+            listener.onNetworkConnectionChanged(isConntected);
+        }
+    }
+
     public interface SingleTonResponseListener{
         void showScannerPosition();
         void showCreatePosition();
+        void showAlertLatestVersion();
+        void onNetworkConnectionChanged(boolean isConnected);
     }
 
 

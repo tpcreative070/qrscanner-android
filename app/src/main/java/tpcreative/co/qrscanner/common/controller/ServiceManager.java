@@ -17,6 +17,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -178,6 +179,7 @@ public class ServiceManager implements BaseView {
             case CONNECTED: {
                 onAuthorSync();
                 onCheckVersion();
+                SingletonResponse.getInstance().onNetworkConnectionChanged(true);
                 break;
             }
         }
