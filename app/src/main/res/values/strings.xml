@@ -205,7 +205,7 @@
 
 
     <string name="copy_items">Copy items</string>
-    <string name="choose_which_items_you_want_to_copy">Choose which items you want to copy.</string>
+    <string name="choose_which_items_you_want_to_copy">Select which items you want to copy.</string>
     <string name="key_author">Author</string>
     <string name="key_check_version_app">Check version app</string>
     <string name="upgrade_now">Upgrade now</string>

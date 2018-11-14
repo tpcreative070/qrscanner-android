@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -799,7 +798,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             }
         }
         if (create!=null){
-            if (create.fragmentType == EnumFragmentType.SAVER){
+            if (create.fragmentType != EnumFragmentType.SCANNER){
                 return;
             }
         }
