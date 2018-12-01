@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,8 +39,10 @@ import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.preference.MyPreference;
+import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory;
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Theme;
 
 public class SettingsFragment extends Fragment {
@@ -141,6 +144,10 @@ public class SettingsFragment extends Fragment {
         private MyPreference myPreferenceTheme;
 
         private MyPreference myPreferenceFileColor;
+
+        private MyPreference myPreferenceSuperSafe;
+
+        private MyPreferenceCategory myPreferenceCategoryFamilyApps;
 
 
         private Bitmap bitmap;
@@ -259,6 +266,9 @@ public class SettingsFragment extends Fragment {
                         else if (preference.getKey().equals(getString(R.string.key_rate_pro))){
                             onRateProApp();
                         }
+                        else if (preference.getKey().equals(getString(R.string.key_supersafe))){
+                            onSuperSafe();
+                        }
                     }
                     return true;
                 }
@@ -350,6 +360,7 @@ public class SettingsFragment extends Fragment {
             myPreferenceFileColor.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceFileColor.setOnPreferenceChangeListener(createChangeListener());
 
+
             myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {
                 @Override
                 public void onUpdatePreference() {
@@ -360,6 +371,45 @@ public class SettingsFragment extends Fragment {
                     }
                 }
             });
+
+            myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
+            myPreferenceCategoryFamilyApps.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceCategoryFamilyApps.setOnPreferenceChangeListener(createChangeListener());
+
+            /*SuperSafe*/
+            myPreferenceSuperSafe = (MyPreference) findPreference(getString(R.string.key_supersafe));
+            myPreferenceSuperSafe.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceSuperSafe.setOnPreferenceChangeListener(createChangeListener());
+            myPreferenceSuperSafe.setListener(new MyPreference.MyPreferenceListener() {
+                @Override
+                public void onUpdatePreference() {
+                    if (myPreferenceSuperSafe.getImgSuperSafe()!=null){
+                        myPreferenceSuperSafe.getImgSuperSafe().setImageResource(R.drawable.ic_supersafe_launcher);
+                        myPreferenceSuperSafe.getImgSuperSafe().setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            final Author author = Author.getInstance().getAuthorInfo();
+            if (author!=null){
+                if (author.version!=null){
+                    if (author.version.isShowFamilyApps){
+                        myPreferenceCategoryFamilyApps.setVisible(true);
+                        myPreferenceSuperSafe.setVisible(true);
+                    }
+                    else {
+                        myPreferenceCategoryFamilyApps.setVisible(false);
+                        myPreferenceSuperSafe.setVisible(false);
+                    }
+                }else {
+                    myPreferenceCategoryFamilyApps.setVisible(false);
+                    myPreferenceSuperSafe.setVisible(false);
+                }
+            }
+            else{
+                myPreferenceCategoryFamilyApps.setVisible(false);
+                myPreferenceSuperSafe.setVisible(false);
+            }
 
             /*Vibrate*/
             mySwitchPreferenceAskUpdate = (MySwitchPreference) findPreference(getString(R.string.key_auto_ask_update));
@@ -406,6 +456,23 @@ public class SettingsFragment extends Fragment {
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live))));
+            }
+        }
+
+
+        public void onSuperSafe() {
+            Uri uri = Uri.parse("market://details?id=" + getString(R.string.supersafe_live));
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.supersafe_live))));
             }
         }
 

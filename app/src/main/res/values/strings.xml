@@ -73,6 +73,9 @@
     <string name="wpa_wpa2">WPA/WPA2</string>
     <string name="wep">WEP</string>
     <string name="none">None</string>
+    <string name="key_family_apps">Family Apps</string>
+    <string name="key_supersafe">SuperSafe</string>
+    <string name="key_supersafe_detail">Keep safe: Private photos, videos, audios and files</string>
     <string name="err_title">Please check title input</string>
     <string name="err_location">Please check location input</string>
     <string name="err_description">Please check description input</string>
@@ -199,6 +202,7 @@
     <string name="no_thanks">No, thanks</string>
     <string name="rate_app_5_stars">Rate app 5 stars</string>
     <string name="qrscanner_live">tpcreative.co.qrscanner.free.release</string>
+    <string name="supersafe_live">co.tpcreative.supersafe</string>
     <string name="qrscanner_live_pro">tpcreative.co.qrscanner</string>
     <string name="my_clipboad">Clipboard</string>
     <string name="copied_successful">Copied items successful</string>

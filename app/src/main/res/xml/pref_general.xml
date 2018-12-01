@@ -19,6 +19,16 @@
 
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_family_apps" android:key="@string/key_family_apps">
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_security_white_48"
+            android:title="@string/key_supersafe"
+            android:key="@string/key_supersafe"
+            android:summary="@string/key_supersafe_detail">
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+    </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
+
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_advance_features">
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"

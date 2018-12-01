@@ -18,6 +18,7 @@ public class MyPreference extends Preference {
 
     private Context context;
     private ImageView imageViewCover;
+    private ImageView imgSuperSafe;
     private MyPreferenceListener listener;
 
     public void setListener(MyPreferenceListener listener) {
@@ -54,7 +55,9 @@ public class MyPreference extends Preference {
         summaryView.setTextColor(getContext().getResources().getColor(R.color.white));
         imageView.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
+        imgSuperSafe = (ImageView) view.findViewById(R.id.imgSuperSafe);
         imageViewCover.setVisibility(View.INVISIBLE);
+        imgSuperSafe.setVisibility(View.INVISIBLE);
         if (listener != null) {
             listener.onUpdatePreference();
         }
@@ -65,6 +68,9 @@ public class MyPreference extends Preference {
         return imageViewCover;
     }
 
+    public ImageView getImgSuperSafe() {
+        return imgSuperSafe;
+    }
 
     public interface MyPreferenceListener {
         void onUpdatePreference();
