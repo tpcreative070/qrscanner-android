@@ -312,14 +312,16 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     public void onResume() {
         super.onResume();
         Utils.Log(TAG,"onResume");
-        mapFragment.getMapAsync(this);
+
         currentLat = 0;
         currentLon = 0;
         isRunning = false;
-        if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError();
-            mPermissionDenied = false;
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+          Utils.Log(TAG,"Permission is request");
+        }
+        else{
+            Utils.Log(TAG,"Permission is ready");
+            mapFragment.getMapAsync(this);
         }
 
         if (SingletonCloseFragment.getInstance().isCloseWindow()){
@@ -481,9 +483,6 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
      * Displays a dialog with error message explaining that the location permission is missing.
      */
 
-    private void showMissingPermissionError() {
-        PermissionUtils.PermissionDeniedDialog
-                .newInstance(true).show(getActivity().getSupportFragmentManager(), "dialog");
-    }
+
 
 }

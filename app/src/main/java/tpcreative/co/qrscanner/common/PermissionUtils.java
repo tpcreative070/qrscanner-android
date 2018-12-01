@@ -35,6 +35,7 @@ import tpcreative.co.qrscanner.R;
  */
 public abstract class PermissionUtils {
 
+    private static final String TAG = PermissionUtils.class.getSimpleName();
     /**
      * Requests the fine location permission. If a rationale with an additional explanation should
      * be shown to the user, displays a dialog that triggers the request.
@@ -43,8 +44,9 @@ public abstract class PermissionUtils {
                                          String permission, boolean finishActivity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             // Display a dialog with rationale.
-            PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity)
-                    .show(activity.getSupportFragmentManager(), "dialog");
+//            PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity)
+//                    .show(activity.getSupportFragmentManager(), "dialog");
+            Utils.Log(TAG,"Alert Permission");
         } else {
             // Location permission has not been granted yet, request it.
             ActivityCompat.requestPermissions(activity, new String[]{permission}, requestId);
@@ -153,7 +155,6 @@ public abstract class PermissionUtils {
             Bundle arguments = getArguments();
             final int requestCode = arguments.getInt(ARGUMENT_PERMISSION_REQUEST_CODE);
             mFinishActivity = arguments.getBoolean(ARGUMENT_FINISH_ACTIVITY);
-
             return new AlertDialog.Builder(getActivity())
                     .setMessage(R.string.permission_rationale_location)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -174,13 +175,6 @@ public abstract class PermissionUtils {
         @Override
         public void onDismiss(DialogInterface dialog) {
             super.onDismiss(dialog);
-            if (mFinishActivity) {
-                Toast.makeText(getActivity(),
-                        R.string.permission_required_toast,
-                        Toast.LENGTH_SHORT)
-                        .show();
-                getActivity().finish();
-            }
         }
     }
 }
