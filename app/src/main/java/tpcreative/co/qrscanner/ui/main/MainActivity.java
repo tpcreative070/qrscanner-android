@@ -372,7 +372,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             builder.setPositiveButton(getString(R.string.rate_app_5_stars), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    onRateApp();
+                    if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live))){
+                        onRateApp();
+                    }
+                    else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+                        onRateAppPro();
+                    }
                     PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
                 }
             });
@@ -422,6 +427,22 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
+    public void onRateAppPro() {
+        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live_pro));
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live_pro))));
+        }
+    }
+
 
     public void onCheckVersionApp(){
         final boolean askLatestVersion = PrefsController.getBoolean(getString(R.string.key_auto_ask_update),false);
@@ -464,7 +485,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         dialogBuilder.setPositiveButton(R.string.upgrade_now, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                onRateApp();
+                if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live))){
+                    onRateApp();
+                }
+                else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+                    onRateAppPro();
+                }
             }
         });
         CharSequence[] cs = list.toArray(new CharSequence[list.size()]);
