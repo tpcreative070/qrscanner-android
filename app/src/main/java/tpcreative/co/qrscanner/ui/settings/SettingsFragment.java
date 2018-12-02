@@ -261,7 +261,12 @@ public class SettingsFragment extends Fragment {
                             Navigator.onMoveToChangeFileColor(getActivity());
                         }
                         else if (preference.getKey().equals(getString(R.string.key_rate))){
-                            onRateApp();
+                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live))){
+                                onRateApp();
+                            }
+                            else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+                                onRateProApp();
+                            }
                         }
                         else if (preference.getKey().equals(getString(R.string.key_rate_pro))){
                             onRateProApp();
