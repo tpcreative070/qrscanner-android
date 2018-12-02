@@ -130,7 +130,6 @@ public class SettingsFragment extends Fragment {
         private MyPreference myPreferencePermissions;
 
         private MyPreference myPreferenceRate;
-        private MyPreference myPreferenceRatePro;
 
         private MyPreference myPreferenceSupport;
 
@@ -265,11 +264,10 @@ public class SettingsFragment extends Fragment {
                                 onRateApp();
                             }
                             else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+                                Utils.Log(TAG,"pro here");
                                 onRateProApp();
                             }
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_rate_pro))){
-                            onRateProApp();
+                            Utils.Log(TAG,"pro here???");
                         }
                         else if (preference.getKey().equals(getString(R.string.key_supersafe))){
                             onSuperSafe();
@@ -318,24 +316,12 @@ public class SettingsFragment extends Fragment {
             myPreferenceRate.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceRate.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
-            /*Rate Pro*/
-            myPreferenceRatePro = (MyPreference) findPreference(getString(R.string.key_rate_pro));
-            //myPreferenceRatePro.setOnPreferenceChangeListener(createChangeListener());
-            // myPreferenceRatePro.setOnPreferenceClickListener(createActionPreferenceClickListener());
-
             /*Support*/
             myPreferenceSupport = (MyPreference) findPreference(getString(R.string.key_support));
             myPreferenceSupport.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceSupport.setOnPreferenceChangeListener(createChangeListener());
 
 
-            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))) {
-                myPreferenceRatePro.setVisible(true);
-                myPreferenceRate.setVisible(false);
-            } else {
-                myPreferenceRatePro.setVisible(false);
-                myPreferenceRate.setVisible(true);
-            }
 
             /*Help*/
             myPreferenceHelp = (MyPreference) findPreference(getString(R.string.key_help));
@@ -448,21 +434,7 @@ public class SettingsFragment extends Fragment {
             addPreferencesFromResource(R.xml.pref_general);
         }
 
-        public void onRateApp() {
-            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live));
-            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-            // To count with Play market backstack, After pressing back button,
-            // to taken back to our application, we need to add following flags to intent.
-            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            try {
-                startActivity(goToMarket);
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live))));
-            }
-        }
+
 
 
         public void onSuperSafe() {
@@ -478,6 +450,22 @@ public class SettingsFragment extends Fragment {
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.supersafe_live))));
+            }
+        }
+
+        public void onRateApp() {
+            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live));
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live))));
             }
         }
 

@@ -110,13 +110,6 @@
             android:key="@string/key_rate">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
-        <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
-            android:title="@string/give_rate"
-            android:icon="@drawable/baseline_star_rate_white_48"
-            android:key="@string/key_rate_pro">
-        </tpcreative.co.qrscanner.common.preference.MyPreference>
-
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
