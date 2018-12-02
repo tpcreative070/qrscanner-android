@@ -81,7 +81,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         onAddPermissionCamera();
         ServiceManager.getInstance().onStartService();
         Theme.getInstance().getList();
-        Utils.copyToClipboard("Hello");
     }
 
     public void initAds(){

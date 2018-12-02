@@ -421,10 +421,13 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                         create.createType = ParsedResultType.ISBN;
                         break;
                     default:
-                        create.createType = ParsedResultType.TEXT;
-                        TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
-                        text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
-
+                        try {
+                            create.createType = ParsedResultType.TEXT;
+                            TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
+                            text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         break;
                 }
 
