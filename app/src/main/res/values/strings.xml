@@ -159,6 +159,7 @@
     <string name="key_version_app">Version</string>
     <string name="key_versionRelease">versionRelease</string>
     <string name="key_appVersionRelease">appVersionRelease</string>
+    <string name="key_pay">pay</string>
     <string name="key_code">code</string>
     <string name="key_verify_account">verify_account</string>
     <string name="key_super_safe_version">SuperSafe: %1$s</string>

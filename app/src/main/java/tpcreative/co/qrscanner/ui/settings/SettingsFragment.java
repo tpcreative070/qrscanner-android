@@ -264,10 +264,8 @@ public class SettingsFragment extends Fragment {
                                 onRateApp();
                             }
                             else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
-                                Utils.Log(TAG,"pro here");
                                 onRateProApp();
                             }
-                            Utils.Log(TAG,"pro here???");
                         }
                         else if (preference.getKey().equals(getString(R.string.key_supersafe))){
                             onSuperSafe();

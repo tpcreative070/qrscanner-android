@@ -115,6 +115,12 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             return;
         }
 
+        boolean isPay = false;
+
+        if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+            isPay = true;
+        }
+
         Map<String,String> hash = new HashMap<>();
         hash.put(getString(R.string.key_device_id), QRScannerApplication.getInstance().getDeviceId());
         hash.put(getString(R.string.key_device_type),getString(R.string.device_type));
@@ -123,6 +129,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         hash.put(getString(R.string.key_version_sync),""+ QRScannerApplication.getInstance().getVersion());
         hash.put(getString(R.string.key_versionRelease), QRScannerApplication.getInstance().getVersionRelease());
         hash.put(getString(R.string.key_appVersionRelease), BuildConfig.VERSION_NAME);
+        hash.put(getString(R.string.key_pay),""+isPay);
         subscriptions.add(QRScannerApplication.serverAPI.onAuthor(hash)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
