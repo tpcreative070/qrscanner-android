@@ -188,7 +188,7 @@ public class Chip extends FrameLayout {
      */
     private void obtainTextColor(@NonNull final TypedArray typedArray) {
         int defaultColor = ContextCompat.getColor(getContext(), R.color.chip_text_color_light);
-        setTextColor(typedArray.getColor(R.styleable.Chip_android_textColor, defaultColor));
+        setTextColor(typedArray.getColor(R.styleable.Chips_android_textColor, defaultColor));
     }
 
     /**
@@ -200,7 +200,7 @@ public class Chip extends FrameLayout {
      */
     private void obtainColor(@NonNull final TypedArray typedArray) {
         int defaultColor = ContextCompat.getColor(getContext(), R.color.chip_color_light);
-        setColor(typedArray.getColor(R.styleable.Chip_android_color, defaultColor));
+        setColor(typedArray.getColor(R.styleable.Chips_android_color, defaultColor));
     }
 
     /**
@@ -211,7 +211,7 @@ public class Chip extends FrameLayout {
      *         TypedArray}. The typed array may not be null
      */
     private void obtainIcon(@NonNull final TypedArray typedArray) {
-        setIcon(typedArray.getDrawable(R.styleable.Chip_android_icon));
+        setIcon(typedArray.getDrawable(R.styleable.Chips_android_icon));
     }
 
     /**
@@ -223,7 +223,7 @@ public class Chip extends FrameLayout {
      *         null
      */
     private void obtainClosable(@NonNull final TypedArray typedArray) {
-        setClosable(typedArray.getBoolean(R.styleable.Chip_closable, false));
+        setClosable(typedArray.getBoolean(R.styleable.Chips_closable, false));
     }
 
     /**
@@ -235,7 +235,7 @@ public class Chip extends FrameLayout {
      *         may not be null
      */
     private void obtainCloseIcon(@NonNull final TypedArray typedArray) {
-        Drawable icon = typedArray.getDrawable(R.styleable.Chip_closeButtonIcon);
+        Drawable icon = typedArray.getDrawable(R.styleable.Chips_closeButtonIcon);
 
         if (icon != null) {
             setCloseButtonIcon(icon);

@@ -534,7 +534,7 @@ public class DialogPreference extends Preference
      *         {@link TypedArray}. The typed array may not be null
      */
     private void obtainDialogTheme(@NonNull final TypedArray typedArray) {
-        int themeId = typedArray.getResourceId(R.styleable.DialogPreference_dialogThemeResource, 0);
+        int themeId = typedArray.getResourceId(R.styleable.DialogPreferences_dialogThemeResource, 0);
 
         if (themeId == 0) {
             TypedValue typedValue = new TypedValue();
@@ -557,7 +557,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogFullscreen(@NonNull final TypedArray typedArray) {
         setDialogFullscreen(
-                typedArray.getBoolean(R.styleable.DialogPreference_dialogFullscreen, false));
+                typedArray.getBoolean(R.styleable.DialogPreferences_dialogFullscreen, false));
     }
 
     /**
@@ -568,7 +568,7 @@ public class DialogPreference extends Preference
      *         {@link TypedArray}. The typed array may not be null
      */
     private void obtainDialogGravity(@NonNull final TypedArray typedArray) {
-        int gravity = typedArray.getInteger(R.styleable.DialogPreference_dialogGravity, -1);
+        int gravity = typedArray.getInteger(R.styleable.DialogPreferences_dialogGravity, -1);
         setDialogGravity(gravity);
     }
 
@@ -584,7 +584,7 @@ public class DialogPreference extends Preference
 
         try {
             width = typedArray
-                    .getDimensionPixelSize(R.styleable.DialogPreference_dialogWidth, width);
+                    .getDimensionPixelSize(R.styleable.DialogPreferences_dialogWidth, width);
         } catch (Resources.NotFoundException | UnsupportedOperationException e) {
             width = typedArray.getInteger(0, width);
         }
@@ -606,7 +606,7 @@ public class DialogPreference extends Preference
 
         try {
             height = typedArray
-                    .getDimensionPixelSize(R.styleable.DialogPreference_dialogHeight, height);
+                    .getDimensionPixelSize(R.styleable.DialogPreferences_dialogHeight, height);
         } catch (Resources.NotFoundException | UnsupportedOperationException e) {
             height = typedArray.getInteger(0, height);
         }
@@ -626,7 +626,7 @@ public class DialogPreference extends Preference
     private void obtainDialogMaxWidth(@NonNull final TypedArray typedArray) {
         try {
             int maxWidth = typedArray
-                    .getDimensionPixelSize(R.styleable.DialogPreference_dialogMaxWidth, -1);
+                    .getDimensionPixelSize(R.styleable.DialogPreferences_dialogMaxWidth, -1);
 
             if (maxWidth != -1) {
                 setDialogMaxWidth(maxWidth);
@@ -646,7 +646,7 @@ public class DialogPreference extends Preference
     private void obtainDialogMaxHeight(@NonNull final TypedArray typedArray) {
         try {
             int maxHeight = typedArray
-                    .getDimensionPixelSize(R.styleable.DialogPreference_dialogMaxHeight, -1);
+                    .getDimensionPixelSize(R.styleable.DialogPreferences_dialogMaxHeight, -1);
 
             if (maxHeight != -1) {
                 setDialogMaxHeight(maxHeight);
@@ -668,14 +668,14 @@ public class DialogPreference extends Preference
                 getContext().getResources().getDimensionPixelSize(R.dimen.dialog_horizontal_margin);
         int defaultVerticalMargin =
                 getContext().getResources().getDimensionPixelSize(R.dimen.dialog_vertical_margin);
-        int left = typedArray.getDimensionPixelSize(R.styleable.DialogPreference_dialogMarginLeft,
+        int left = typedArray.getDimensionPixelSize(R.styleable.DialogPreferences_dialogMarginLeft,
                 defaultHorizontalMargin);
-        int top = typedArray.getDimensionPixelSize(R.styleable.DialogPreference_dialogMarginTop,
+        int top = typedArray.getDimensionPixelSize(R.styleable.DialogPreferences_dialogMarginTop,
                 defaultVerticalMargin);
-        int right = typedArray.getDimensionPixelSize(R.styleable.DialogPreference_dialogMarginRight,
+        int right = typedArray.getDimensionPixelSize(R.styleable.DialogPreferences_dialogMarginRight,
                 defaultHorizontalMargin);
         int bottom = typedArray
-                .getDimensionPixelSize(R.styleable.DialogPreference_dialogMarginBottom,
+                .getDimensionPixelSize(R.styleable.DialogPreferences_dialogMarginBottom,
                         defaultVerticalMargin);
         setDialogMargin(left, top, right, bottom);
     }
@@ -696,15 +696,15 @@ public class DialogPreference extends Preference
                 getContext().getResources().getDimensionPixelSize(R.dimen.dialog_right_padding);
         int defaultBottomPadding =
                 getContext().getResources().getDimensionPixelSize(R.dimen.dialog_bottom_padding);
-        int left = typedArray.getDimensionPixelSize(R.styleable.DialogPreference_dialogPaddingLeft,
+        int left = typedArray.getDimensionPixelSize(R.styleable.DialogPreferences_dialogPaddingLeft,
                 defaultLeftPadding);
-        int top = typedArray.getDimensionPixelSize(R.styleable.DialogPreference_dialogPaddingTop,
+        int top = typedArray.getDimensionPixelSize(R.styleable.DialogPreferences_dialogPaddingTop,
                 defaultTopPadding);
         int right = typedArray
-                .getDimensionPixelSize(R.styleable.DialogPreference_dialogPaddingRight,
+                .getDimensionPixelSize(R.styleable.DialogPreferences_dialogPaddingRight,
                         defaultRightPadding);
         int bottom = typedArray
-                .getDimensionPixelSize(R.styleable.DialogPreference_dialogPaddingBottom,
+                .getDimensionPixelSize(R.styleable.DialogPreferences_dialogPaddingBottom,
                         defaultBottomPadding);
         setDialogPadding(left, top, right, bottom);
     }
@@ -720,13 +720,13 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogFitsSystemWindows(@NonNull final TypedArray typedArray) {
         boolean left = typedArray
-                .getBoolean(R.styleable.DialogPreference_dialogFitsSystemWindowsLeft, true);
+                .getBoolean(R.styleable.DialogPreferences_dialogFitsSystemWindowsLeft, true);
         boolean top = typedArray
-                .getBoolean(R.styleable.DialogPreference_dialogFitsSystemWindowsTop, true);
+                .getBoolean(R.styleable.DialogPreferences_dialogFitsSystemWindowsTop, true);
         boolean right = typedArray
-                .getBoolean(R.styleable.DialogPreference_dialogFitsSystemWindowsRight, true);
+                .getBoolean(R.styleable.DialogPreferences_dialogFitsSystemWindowsRight, true);
         boolean bottom = typedArray
-                .getBoolean(R.styleable.DialogPreference_dialogFitsSystemWindowsBottom, true);
+                .getBoolean(R.styleable.DialogPreferences_dialogFitsSystemWindowsBottom, true);
         setDialogFitsSystemWindows(left, top, right, bottom);
     }
 
@@ -782,7 +782,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogIconTintList(@NonNull final TypedArray typedArray) {
         setDialogIconTintList(
-                typedArray.getColorStateList(R.styleable.DialogPreference_dialogIconTint));
+                typedArray.getColorStateList(R.styleable.DialogPreferences_dialogIconTint));
     }
 
     /**
@@ -820,7 +820,7 @@ public class DialogPreference extends Preference
      *         {@link TypedArray}. The typed array may not be null
      */
     private void obtainDialogTitleColor(@NonNull final TypedArray typedArray) {
-        setDialogTitleColor(typedArray.getColor(R.styleable.DialogPreference_dialogTitleColor, -1));
+        setDialogTitleColor(typedArray.getColor(R.styleable.DialogPreferences_dialogTitleColor, -1));
     }
 
     /**
@@ -833,7 +833,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogMessageColor(@NonNull final TypedArray typedArray) {
         setDialogMessageColor(
-                typedArray.getColor(R.styleable.DialogPreference_dialogMessageColor, -1));
+                typedArray.getColor(R.styleable.DialogPreferences_dialogMessageColor, -1));
     }
 
     /**
@@ -846,7 +846,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogButtonTextColor(@NonNull final TypedArray typedArray) {
         setDialogButtonTextColor(
-                typedArray.getColor(R.styleable.DialogPreference_dialogButtonTextColor, -1));
+                typedArray.getColor(R.styleable.DialogPreferences_dialogButtonTextColor, -1));
     }
 
     /**
@@ -859,7 +859,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogDisabledButtonTextColor(@NonNull final TypedArray typedArray) {
         setDialogDisabledButtonTextColor(typedArray
-                .getColor(R.styleable.DialogPreference_dialogDisabledButtonTextColor, -1));
+                .getColor(R.styleable.DialogPreferences_dialogDisabledButtonTextColor, -1));
     }
 
     /**
@@ -872,12 +872,12 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogBackground(@NonNull final TypedArray typedArray) {
         int resourceId =
-                typedArray.getResourceId(R.styleable.DialogPreference_dialogBackground, -1);
+                typedArray.getResourceId(R.styleable.DialogPreferences_dialogBackground, -1);
 
         if (resourceId != -1) {
             setDialogBackground(resourceId);
         } else {
-            int color = typedArray.getColor(R.styleable.DialogPreference_dialogBackground, -1);
+            int color = typedArray.getColor(R.styleable.DialogPreferences_dialogBackground, -1);
 
             if (color != -1) {
                 setDialogBackgroundColor(color);
@@ -895,7 +895,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogWindowBackground(@NonNull final TypedArray typedArray) {
         int resourceId =
-                typedArray.getResourceId(R.styleable.DialogPreference_dialogWindowBackground, -1);
+                typedArray.getResourceId(R.styleable.DialogPreferences_dialogWindowBackground, -1);
 
         if (resourceId != -1) {
             setDialogWindowBackground(resourceId);
@@ -916,7 +916,7 @@ public class DialogPreference extends Preference
         boolean defaultValue = getContext().getResources()
                 .getBoolean(R.bool.dialog_preference_default_show_value_as_summary);
         showValueAsSummary(typedArray
-                .getBoolean(R.styleable.DialogPreference_showValueAsSummary, defaultValue));
+                .getBoolean(R.styleable.DialogPreferences_showValueAsSummary, defaultValue));
     }
 
     /**
@@ -931,7 +931,7 @@ public class DialogPreference extends Preference
         boolean defaultValue = getContext().getResources()
                 .getBoolean(R.bool.dialog_preference_default_show_dialog_header);
         showDialogHeader(
-                typedArray.getBoolean(R.styleable.DialogPreference_showDialogHeader, defaultValue));
+                typedArray.getBoolean(R.styleable.DialogPreferences_showDialogHeader, defaultValue));
     }
 
     /**
@@ -944,13 +944,13 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogHeaderBackground(@NonNull final TypedArray typedArray) {
         int resourceId =
-                typedArray.getResourceId(R.styleable.DialogPreference_dialogHeaderBackground, -1);
+                typedArray.getResourceId(R.styleable.DialogPreferences_dialogHeaderBackground, -1);
 
         if (resourceId != -1) {
             setDialogHeaderBackground(resourceId);
         } else {
             int color =
-                    typedArray.getColor(R.styleable.DialogPreference_dialogHeaderBackground, -1);
+                    typedArray.getColor(R.styleable.DialogPreferences_dialogHeaderBackground, -1);
 
             if (color != -1) {
                 setDialogHeaderBackgroundColor(color);
@@ -968,7 +968,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogHeaderIcon(@NonNull final TypedArray typedArray) {
         int resourceId =
-                typedArray.getResourceId(R.styleable.DialogPreference_dialogHeaderIcon, -1);
+                typedArray.getResourceId(R.styleable.DialogPreferences_dialogHeaderIcon, -1);
 
         if (resourceId != -1) {
             setDialogHeaderIcon(resourceId);
@@ -985,7 +985,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogHeaderIconTintList(@NonNull final TypedArray typedArray) {
         setDialogHeaderIconTintList(
-                typedArray.getColorStateList(R.styleable.DialogPreference_dialogHeaderIconTint));
+                typedArray.getColorStateList(R.styleable.DialogPreferences_dialogHeaderIconTint));
     }
 
     /**
@@ -1001,7 +1001,7 @@ public class DialogPreference extends Preference
         boolean defaultValue = getContext().getResources()
                 .getBoolean(R.bool.dialog_preference_default_show_dialog_button_bar_divider);
         showDialogButtonBarDivider(typedArray
-                .getBoolean(R.styleable.DialogPreference_showDialogButtonBarDivider, defaultValue));
+                .getBoolean(R.styleable.DialogPreferences_showDialogButtonBarDivider, defaultValue));
     }
 
     /**
@@ -1015,7 +1015,7 @@ public class DialogPreference extends Preference
     private void obtainDialogButtonBarDividerColor(@NonNull final TypedArray typedArray) {
         int defaultValue = ContextCompat.getColor(getContext(), R.color.divider_color_light);
         setDialogDividerColor(
-                typedArray.getColor(R.styleable.DialogPreference_dialogDividerColor, defaultValue));
+                typedArray.getColor(R.styleable.DialogPreferences_dialogDividerColor, defaultValue));
     }
 
     /**
@@ -1028,7 +1028,7 @@ public class DialogPreference extends Preference
      */
     private void obtainDialogButtonBarDividerMargin(@NonNull final TypedArray typedArray) {
         setDialogDividerMargin(typedArray
-                .getDimensionPixelSize(R.styleable.DialogPreference_dialogDividerMargin, 0));
+                .getDimensionPixelSize(R.styleable.DialogPreferences_dialogDividerMargin, 0));
     }
 
     /**
@@ -1042,7 +1042,7 @@ public class DialogPreference extends Preference
      */
     private void obtainShowDialogDividersOnScroll(@NonNull final TypedArray typedArray) {
         showDialogDividersOnScroll(typedArray
-                .getBoolean(R.styleable.DialogPreference_showDialogDividersOnScroll, true));
+                .getBoolean(R.styleable.DialogPreferences_showDialogDividersOnScroll, true));
     }
 
     /**
@@ -1053,14 +1053,14 @@ public class DialogPreference extends Preference
      *         class {@link TypedArray}. The typed array may not be null
      */
     private void obtainDialogScrollableArea(@NonNull final TypedArray typedArray) {
-        int topIndex = typedArray.getInt(R.styleable.DialogPreference_dialogScrollableAreaTop, -1);
+        int topIndex = typedArray.getInt(R.styleable.DialogPreferences_dialogScrollableAreaTop, -1);
         Area top = null;
         Area bottom = null;
 
         if (topIndex != -1) {
             top = Area.fromIndex(topIndex);
             int bottomIndex =
-                    typedArray.getInt(R.styleable.DialogPreference_dialogScrollableAreaBottom, -1);
+                    typedArray.getInt(R.styleable.DialogPreferences_dialogScrollableAreaBottom, -1);
 
             if (bottomIndex != -1) {
                 bottom = Area.fromIndex(bottomIndex);

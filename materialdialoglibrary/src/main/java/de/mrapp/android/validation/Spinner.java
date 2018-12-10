@@ -189,7 +189,7 @@ public class Spinner extends AbstractValidateableView<android.widget.Spinner, Ob
      *         TypedArray}. The typed array may not be null
      */
     private void obtainHint(@NonNull final TypedArray typedArray) {
-        setHint(typedArray.getText(R.styleable.Spinner_android_hint));
+        setHint(typedArray.getText(R.styleable.Spinners_android_hint));
     }
 
     /**
@@ -202,7 +202,7 @@ public class Spinner extends AbstractValidateableView<android.widget.Spinner, Ob
      */
     private void obtainHintColor(@NonNull final TypedArray typedArray) {
         ColorStateList colors =
-                typedArray.getColorStateList(R.styleable.Spinner_android_textColorHint);
+                typedArray.getColorStateList(R.styleable.Spinners_android_textColorHint);
 
         if (colors == null) {
             TypedArray styledAttributes = getContext().getTheme()
@@ -225,21 +225,21 @@ public class Spinner extends AbstractValidateableView<android.widget.Spinner, Ob
         for (int i = 0; i < typedArray.getIndexCount(); i++) {
             int index = typedArray.getIndex(i);
 
-            if (index == R.styleable.Spinner_android_dropDownHorizontalOffset) {
+            if (index == R.styleable.Spinners_android_dropDownHorizontalOffset) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     setDropDownHorizontalOffset(
                             typedArray.getDimensionPixelSize(index, getDropDownHorizontalOffset()));
                 }
-            } else if (index == R.styleable.Spinner_android_dropDownVerticalOffset) {
+            } else if (index == R.styleable.Spinners_android_dropDownVerticalOffset) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     setDropDownVerticalOffset(
                             typedArray.getDimensionPixelSize(index, getDropDownVerticalOffset()));
                 }
-            } else if (index == R.styleable.Spinner_dropDownWidth) {
+            } else if (index == R.styleable.Spinners_dropDownWidth) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     setDropDownWidth(typedArray.getLayoutDimension(index, getDropDownWidth()));
                 }
-            } else if (index == R.styleable.Spinner_popupBackground) {
+            } else if (index == R.styleable.Spinners_popupBackground) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     Drawable popupBackground = typedArray.getDrawable(index);
 
@@ -247,7 +247,7 @@ public class Spinner extends AbstractValidateableView<android.widget.Spinner, Ob
                         setPopupBackgroundDrawable(popupBackground);
                     }
                 }
-            } else if (index == R.styleable.Spinner_prompt) {
+            } else if (index == R.styleable.Spinners_prompt) {
                 String prompt = typedArray.getString(index);
 
                 if (prompt != null) {

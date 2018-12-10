@@ -164,14 +164,14 @@ public abstract class AbstractListPreference extends DialogPreference {
      *         class {@link TypedArray}. The typed array may not be null
      */
     private void obtainDialogScrollableArea(@NonNull final TypedArray typedArray) {
-        int topIndex = typedArray.getInt(R.styleable.DialogPreference_dialogScrollableAreaTop, -1);
+        int topIndex = typedArray.getInt(R.styleable.DialogPreferences_dialogScrollableAreaTop, -1);
         ScrollableArea.Area top = null;
         ScrollableArea.Area bottom = null;
 
         if (topIndex != -1) {
             top = ScrollableArea.Area.fromIndex(topIndex);
             int bottomIndex =
-                    typedArray.getInt(R.styleable.DialogPreference_dialogScrollableAreaBottom, -1);
+                    typedArray.getInt(R.styleable.DialogPreferences_dialogScrollableAreaBottom, -1);
 
             if (bottomIndex != -1) {
                 bottom = ScrollableArea.Area.fromIndex(bottomIndex);

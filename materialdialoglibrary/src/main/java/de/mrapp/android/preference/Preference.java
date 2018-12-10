@@ -127,7 +127,7 @@ public class Preference extends android.support.v7.preference.Preference {
      *         class {@link TypedArray}. The typed array may not be null
      */
     private void obtainTint(@NonNull final TypedArray typedArray) {
-        setIconTintList(typedArray.getColorStateList(R.styleable.Preference_android_tint));
+        setIconTintList(typedArray.getColorStateList(R.styleable.Preferences_android_tint));
     }
 
     /**

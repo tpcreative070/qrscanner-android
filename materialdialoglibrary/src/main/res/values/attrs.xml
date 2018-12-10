@@ -29,11 +29,11 @@ License.
     </declare-styleable>
 
     <!-- Preferences -->
-    <declare-styleable name="Preference">
+    <declare-styleable name="Preferences">
         <attr name="android:icon"/>
         <attr name="android:tint"/>
     </declare-styleable>
-    <declare-styleable name="DialogPreference">
+    <declare-styleable name="DialogPreferences">
         <attr name="dialogFullscreen" format="boolean"/>
         <attr name="dialogGravity" format="integer">
             <enum name="center" value="0x000011"/>
@@ -178,7 +178,7 @@ License.
         <attr name="android:summaryOff"/>
         <attr name="android:disableDependentsState"/>
     </declare-styleable>
-    <declare-styleable name="SwitchPreference">
+    <declare-styleable name="SwitchPreferences">
         <attr name="android:switchTextOn"/>
         <attr name="android:switchTextOff"/>
     </declare-styleable>
@@ -342,7 +342,7 @@ License.
             <enum name="large" value="2"/>
         </attr>
     </declare-styleable>
-    <declare-styleable name="Chip">
+    <declare-styleable name="Chips">
         <attr name="android:text"/>
         <attr name="android:icon"/>
         <attr name="android:textColor"/>
@@ -415,7 +415,7 @@ License.
     <declare-styleable name="PasswordEditText">
         <attr name="passwordVerificationPrefix" format="string"/>
     </declare-styleable>
-    <declare-styleable name="Spinner">
+    <declare-styleable name="Spinners">
         <attr name="dropDownWidth" format="dimension"/>
         <attr name="popupBackground" format="reference"/>
         <attr name="prompt" format="string"/>

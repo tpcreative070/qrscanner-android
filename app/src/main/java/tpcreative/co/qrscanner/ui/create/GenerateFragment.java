@@ -98,14 +98,25 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
 
     @Override
     public void setVisible() {
-        recyclerView.setVisibility(View.VISIBLE);
-        tvTittle.setVisibility(View.VISIBLE);
+        try {
+            recyclerView.setVisibility(View.VISIBLE);
+            tvTittle.setVisibility(View.VISIBLE);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void setInvisible() {
-        recyclerView.setVisibility(View.INVISIBLE);
-        tvTittle.setVisibility(View.INVISIBLE);
+        try {
+            recyclerView.setVisibility(View.INVISIBLE);
+            tvTittle.setVisibility(View.INVISIBLE);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

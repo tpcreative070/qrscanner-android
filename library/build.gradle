@@ -2,15 +2,17 @@ apply plugin: 'com.android.library'
 
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '28.0.0'
 
+
+    compileSdkVersion appCompileSdkVersion
+    buildToolsVersion appBuildToolsVersion
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 41
-        versionName "2.2.0"
+        minSdkVersion appMinSdkVersion
+        targetSdkVersion appTargetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,5 +31,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:design:'+appSupportVersion
 }
