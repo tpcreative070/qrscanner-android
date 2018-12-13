@@ -245,7 +245,7 @@ public class SettingsFragment extends Fragment {
                             }
                         } else if (preference.getKey().equals(getString(R.string.key_support))) {
                             try {
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "tpcreative.co@gmail.com"));
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
                                 intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support");
                                 intent.putExtra(Intent.EXTRA_TEXT, "");
                                 startActivity(intent);

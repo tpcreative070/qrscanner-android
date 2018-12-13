@@ -2,7 +2,8 @@
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto">
 
-    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_scan">
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_scan"
+        android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MySwitchPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_vibration_white_48"
@@ -19,7 +20,8 @@
 
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
-    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_family_apps" android:key="@string/key_family_apps">
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_family_apps" android:key="@string/key_family_apps"
+        android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_security_white_48"
@@ -29,7 +31,8 @@
         </tpcreative.co.qrscanner.common.preference.MyPreference>
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
-    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_advance_features">
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_advance_features"
+        android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_opacity_white_48"
@@ -75,7 +78,8 @@
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
 
-    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/info">
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/info"
+        android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_stars_white_48"
