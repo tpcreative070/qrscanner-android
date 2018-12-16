@@ -162,6 +162,20 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @BindView(R.id.urlAddress)
     TextView urlAddress;
 
+    /*ISBN*/
+    @BindView(R.id.llISBN)
+    LinearLayout llISBN;
+    @BindView(R.id.textISBN)
+    TextView textISBN;
+
+
+
+    /*Product*/
+    @BindView(R.id.llProduct)
+    LinearLayout llProduct;
+    @BindView(R.id.textProduct)
+    TextView textProduct;
+
     /*Open application*/
     @BindView(R.id.imgOpenApplication)
     ImageView imgOpenApplication;
@@ -173,7 +187,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     private  String code ;
     private Bitmap bitmap;
     private Animation mAnim = null;
-
 
 
     public static ScannerResultFragment newInstance(int index) {
@@ -198,6 +211,8 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         mList.add(llTelephone);
         mList.add(llText);
         mList.add(llURL);
+        mList.add(llProduct);
+        mList.add(llISBN);
         presenter = new ScannerResultPresenter();
         presenter.bindView(this);
         presenter.getIntent(getArguments());
@@ -348,6 +363,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                                         break;
                                     case PRODUCT:
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
+                                            intent.putExtra("sms_body", create.productId);
+                                            startActivity(intent);
+                                        } else {
+                                            code = create.productId;
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
                                         break;
                                     case URI:
 
@@ -358,7 +381,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                                             code = create.url;
                                             onGenerateCode(code, EnumAction.SHARE);
                                         }
-
 
                                         break;
                                     case WIFI:
@@ -433,7 +455,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                                         break;
                                     case ISBN:
-
+                                        if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
+                                            intent.putExtra("sms_body", create.ISBN);
+                                            startActivity(intent);
+                                        } else {
+                                            code = create.ISBN;
+                                            onGenerateCode(code, EnumAction.SHARE);
+                                        }
                                         break;
                                     default:
                                         if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
@@ -534,7 +563,20 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 tvTitle.setText("Email");
                 break;
             case PRODUCT:
-
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("productId",create.productId);
+                textProduct.setText(create.productId);
+                history = new History();
+                history.text = create.productId;
+                history.createType = create.createType.name();
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
+                onShowUI(llProduct);
+                tvTitle.setText("Product");
                 break;
             case URI:
 
@@ -706,14 +748,24 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
                 break;
             case ISBN:
-
+                /*Put item to HashClipboard*/
+                presenter.hashClipboard.put("ISBN",create.ISBN);
+                textISBN.setText(create.ISBN);
+                history = new History();
+                history.text = create.ISBN;
+                history.createType = create.createType.name();
+                if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                }
+                else{
+                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                }
+                onShowUI(llISBN);
+                tvTitle.setText("ISBN");
                 break;
             default:
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("text",create.text);
-
-
                 textMessage.setText(create.text);
                 history = new History();
                 history.text = create.text;
@@ -725,7 +777,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                     imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
                 onShowUI(llText);
-                tvTitle.setText("Text");
+                tvTitle.setText("Product");
                 break;
         }
 

@@ -25,13 +25,36 @@ public abstract class InstanceGenerator extends RoomDatabase {
     @Ignore
     public static final String TAG = InstanceGenerator.class.getSimpleName();
 
+
+//    static final Migration MIGRATION_1_2 = new Migration(2, 3) {
+//        @Override
+//        public void migrate(SupportSQLiteDatabase database) {
+//            database.execSQL("ALTER TABLE save "
+//                    + " ADD COLUMN productId TEXT");
+//        }
+//    };
+//
+//    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+//        @Override
+//        public void migrate(SupportSQLiteDatabase database) {
+//            database.execSQL("ALTER TABLE history "
+//                    + " ADD COLUMN productId TEXT");
+//        }
+//    };
+
     public static InstanceGenerator getInstance(Context context) {
         if (instance == null) {
+
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     InstanceGenerator.class,
                     "db-qr-scanner")
                     .allowMainThreadQueries()
                     .build();
+//            instance = Room.databaseBuilder(QRScannerApplication.getInstance(), InstanceGenerator.class, "db-qr-scanner")
+//                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
+//                    .allowMainThreadQueries()
+//                    .build();
+
         }
         return instance;
     }

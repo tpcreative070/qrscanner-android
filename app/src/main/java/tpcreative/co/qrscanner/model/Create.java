@@ -23,6 +23,8 @@ public class Create implements Serializable {
     public String fullName;
     public String address;
     public String text;
+    public String productId;
+    public String ISBN;
     public String ssId;
     public boolean hidden;
     public String password;

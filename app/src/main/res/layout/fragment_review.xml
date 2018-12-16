@@ -614,6 +614,73 @@
 
                     </LinearLayout>
 
+
+                    <!-- Product -->
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/llProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/brandonBoldTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product_id"/>
+
+                        <TextView
+                            android:id="@+id/textProduct"
+                            style="@style/brandonRegularTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="15dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/grey_lighter" />
+
+                    </LinearLayout>
+
+                    <!-- ISBN -->
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/llISBN"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/brandonBoldTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/isbs"/>
+
+                        <TextView
+                            android:id="@+id/textISBN"
+                            style="@style/brandonRegularTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="15dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/grey_lighter" />
+
+                    </LinearLayout>
+
+
+
                     <!-- Url -->
 
                     <LinearLayout

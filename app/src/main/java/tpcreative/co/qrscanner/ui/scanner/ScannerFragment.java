@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.gson.Gson;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -43,8 +44,10 @@ import com.google.zxing.client.result.AddressBookParsedResult;
 import com.google.zxing.client.result.CalendarParsedResult;
 import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.GeoParsedResult;
+import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
+import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.SMSParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.TextParsedResult;
@@ -56,6 +59,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
+import com.journeyapps.barcodescanner.result.ISBNResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
 import com.karumi.dexter.Dexter;
@@ -331,8 +335,11 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 String startEvent = "";
                 String endEvent = "";
                 String text = "";
+                String productId = "";
+                String ISBN = "";
                 boolean hidden = false;
 
+                Utils.Log(TAG,"Type response "+ parsedResult.getType());
                 switch (parsedResult.getType()) {
                     case ADDRESSBOOK:
                         create.createType = ParsedResultType.ADDRESSBOOK;
@@ -355,6 +362,9 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                         break;
                     case PRODUCT:
                         create.createType = ParsedResultType.PRODUCT;
+                        ProductParsedResult productResult = (ProductParsedResult) resultHandler.getResult();
+                        productId = (productResult.getProductID()) == null ? "" : productResult.getProductID();
+                        Utils.Log(TAG,"Product "+new Gson().toJson(productResult));
                         break;
                     case URI:
                         create.createType = ParsedResultType.URI;
@@ -419,9 +429,13 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                         break;
                     case ISBN:
                         create.createType = ParsedResultType.ISBN;
+                        ISBNParsedResult isbParsedResult = (ISBNParsedResult) resultHandler.getResult();
+                        ISBN = (isbParsedResult.getISBN()) == null ? "" : isbParsedResult.getISBN();
+                        Utils.Log(TAG,"Result filter "+ new Gson().toJson(isbParsedResult));
                         break;
                     default:
                         try {
+                            Utils.Log(TAG,"Default value");
                             create.createType = ParsedResultType.TEXT;
                             TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
                             text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
@@ -452,8 +466,11 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 create.endEvent = endEvent;
                 create.startEventMilliseconds = startEventMilliseconds;
                 create.endEventMilliseconds = endEventMilliseconds;
-                create.text = text;
 
+
+                create.text = text;
+                create.productId = productId;
+                create.ISBN = ISBN;
                 beepManager.playBeepSoundAndVibrate();
                 replaceFragment(0,create);
 
@@ -677,6 +694,8 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         String ssId = "";
         String networkEncryption = "";
         String password = "";
+        String productId = "";
+        String ISBN = "";
         double lat = 0;
         double lon = 0;
         long startEventMilliseconds = 0;
@@ -690,6 +709,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         String text = "";
         boolean hidden = false;
 
+        Utils.Log(TAG,"Type "+parsedResult.getType().name());
         switch (parsedResult.getType()) {
             case ADDRESSBOOK:
                 create.createType = ParsedResultType.ADDRESSBOOK;
@@ -712,6 +732,8 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 break;
             case PRODUCT:
                 create.createType = ParsedResultType.PRODUCT;
+                ProductParsedResult productResult = (ProductParsedResult) resultHandler.getResult();
+                productId = (productResult.getProductID()) == null ? "" : productResult.getProductID();
                 break;
             case URI:
                 create.createType = ParsedResultType.URI;
@@ -774,12 +796,14 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 break;
             case ISBN:
                 create.createType = ParsedResultType.ISBN;
+                ISBNParsedResult isbParsedResult = (ISBNParsedResult) resultHandler.getResult();
+                ISBN = (isbParsedResult.getISBN()) == null ? "" : isbParsedResult.getISBN();
+                Utils.Log(TAG,"Result filter "+ new Gson().toJson(isbParsedResult));
                 break;
             default:
                 create.createType = ParsedResultType.TEXT;
                 TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
                 text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
-
                 break;
         }
 
@@ -805,6 +829,8 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         create.startEventMilliseconds = startEventMilliseconds;
         create.endEventMilliseconds = endEventMilliseconds;
         create.text = text;
+        create.productId = productId;
+        create.ISBN = ISBN;
 
         create.fragmentType = EnumFragmentType.SCANNER;
         beepManager.playBeepSoundAndVibrate();

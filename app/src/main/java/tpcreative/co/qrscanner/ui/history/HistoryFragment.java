@@ -187,6 +187,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
             create.createType = ParsedResultType.EMAIL_ADDRESS;
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
             create.createType = ParsedResultType.PRODUCT;
+            create.productId = history.text;
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
             create.url = history.url;
             create.createType = ParsedResultType.URI;
@@ -217,7 +218,12 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
             create.startEventMilliseconds = history.startEventMilliseconds;
             create.endEventMilliseconds = history.endEventMilliseconds;
             create.createType = ParsedResultType.CALENDAR;
-        } else {
+        }
+        else if (history.createType.equalsIgnoreCase(ParsedResultType.ISBN.name())){
+            create.ISBN = history.text;
+            create.createType = ParsedResultType.ISBN;
+        }
+        else {
             create.text = history.text;
             create.createType = ParsedResultType.TEXT;
         }
@@ -243,7 +249,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
             sb.append("\n");
             sb.append("Message :"+ history.message);
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
-
+            sb.append("ProductId :"+history.text);
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
             sb.append("Url :"+history.url);
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.WIFI.name())) {
@@ -282,7 +288,11 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
             sb.append("Start event :"+history.startEvent);
             sb.append("\n");
             sb.append("End event :"+ history.endEvent);
-        } else {
+        }
+        else if (history.createType.equalsIgnoreCase(ParsedResultType.ISBN.name())){
+            sb.append("ISBN :"+history.text);
+        }
+        else {
             sb.append("Text :"+history.text);
         }
         shareToSocial(sb.toString());

@@ -34,6 +34,8 @@
     <string name="contact">Contact</string>
     <string name="telephone">Telephone</string>
     <string name="text">Text</string>
+    <string name="product_id">Product Id</string>
+    <string name="isbs">ISBN</string>
     <string name="wifi">Wifi</string>
     <string name="url">Url</string>
     <string name="object">Object</string>
