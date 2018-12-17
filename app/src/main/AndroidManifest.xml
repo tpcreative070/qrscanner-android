@@ -10,10 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
 
     <application
         android:name=".common.services.QRScannerApplication"
@@ -26,18 +24,18 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*"/>
-            </intent-filter>
 
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.review.ReviewActivity"
@@ -73,7 +71,8 @@
         <service android:name=".common.services.QRScannerService" />
 
         <activity android:name=".ui.help.HelpActivity" />
-        <activity android:name=".ui.filecolor.ChangeFileColorActivity"></activity>
+        <activity android:name=".ui.filecolor.ChangeFileColorActivity" />
+        <activity android:name=".ui.pro.ProVersionActivity"></activity>
     </application>
 
 </manifest>

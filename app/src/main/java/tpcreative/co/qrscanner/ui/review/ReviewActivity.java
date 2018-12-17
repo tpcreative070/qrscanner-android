@@ -15,6 +15,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -34,13 +37,17 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumImplement;
@@ -69,6 +76,8 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     @BindView(R.id.rlAds)
     RelativeLayout rlAds;
     AdView adViewBanner;
+    @BindView(R.id.rlAdsRoot)
+    RelativeLayout rlAdsRoot;
 
 
     @Override
@@ -88,15 +97,15 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     public void initAds(){
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
             adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         }
         else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer));
+            adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            adViewBanner.setAdUnitId(getString(R.string.banner_review));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         }
@@ -138,11 +147,31 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         adViewBanner.loadAd(adRequest);
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
         if (adViewBanner != null) {
             adViewBanner.resume();
+        }
+
+        final Author author = Author.getInstance().getAuthorInfo();
+        if (author!=null){
+            if (author.version!=null){
+                if (author.version.isAds){
+                    rlAdsRoot.setVisibility(View.VISIBLE);
+                }
+                else{
+                    rlAdsRoot.setVisibility(View.GONE);
+                }
+            }
+            else{
+                rlAdsRoot.setVisibility(View.GONE);
+            }
+        }
+        else{
+            rlAdsRoot.setVisibility(View.GONE);
         }
     }
 
@@ -386,6 +415,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                     }
                 });
                 view.startAnimation(mAnim);
+                break;
             }
         }
     }
@@ -403,6 +433,15 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @OnClick(R.id.rlRemove)
+    public void onClickedRemoveAds(View view){
+        Navigator.onMoveProVersion(this);
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Remove ads")
+                .putContentType("Preparing remove ads")
+                .putContentId(System.currentTimeMillis() + "-"+QRScannerApplication.getInstance().getDeviceId()));
     }
 
 

@@ -96,7 +96,7 @@ public class Theme implements Serializable {
         catch (Exception e){
             e.printStackTrace();
         }
-        return new Theme(0, R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorButton);
+        return new Theme(0, R.color.black, R.color.colorDark, R.color.colorButton);
     }
 
 

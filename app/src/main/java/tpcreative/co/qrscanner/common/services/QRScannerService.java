@@ -117,7 +117,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
 
         boolean isPay = false;
 
-        if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+        if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
             isPay = true;
         }
 

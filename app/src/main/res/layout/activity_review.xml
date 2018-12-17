@@ -7,94 +7,141 @@
     tools:context=".ui.review.ReviewActivity">
 
     <RelativeLayout
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:id="@+id/rlButton"
             android:layout_width="match_parent"
             android:layout_height="50dp">
+
             <ImageView
                 android:id="@+id/imgArrowBack"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="2dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:padding="2dp"
                 android:src="@drawable/baseline_arrow_back_ios_white_48" />
 
             <TextView
                 android:id="@+id/tvTittle"
-                android:textSize="20sp"
                 style="@style/brandonBoldTextView"
-                android:text="@string/review"
-                android:gravity="center"
-                android:layout_centerInParent="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_below="@+id/rlButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_marginTop="70dp"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_alignParentTop="true"
-                android:id="@+id/imgResult"
-                android:layout_width="@dimen/icon_size_200"
-                android:layout_height="@dimen/icon_size_200"/>
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:layout_marginBottom="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:textSize="@dimen/medium_x"
-                android:textAllCaps="false"
-                android:id="@+id/btnSave"
-                android:layout_marginRight="@dimen/margin"
                 android:gravity="center"
-                android:background="@drawable/bg_generate_rounded"
-                style="@style/brandonBoldTextView"
-                android:text="@string/save"
-                android:layout_width="@dimen/width"
-                android:layout_height="@dimen/height"/>
+                android:text="@string/review"
+                android:textSize="20sp" />
 
-            <Button
-                android:textSize="@dimen/medium_x"
-                android:textAllCaps="false"
-                android:id="@+id/btnShare"
-                android:layout_marginLeft="@dimen/margin"
-                android:gravity="center"
-                android:background="@drawable/bg_generate_rounded"
-                style="@style/brandonBoldTextView"
-                android:text="@string/share"
-                android:layout_width="@dimen/width"
-                android:layout_height="@dimen/height" />
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:visibility="gone"
-            android:gravity="center"
-            android:id="@+id/rlAds"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
         </RelativeLayout>
 
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rlButton"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/rlButton"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rlResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgResult"
+                        android:layout_width="@dimen/icon_size_200"
+                        android:layout_height="@dimen/icon_size_200"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="70dp" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llAction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlResult"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="60dp"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnSave"
+                        style="@style/brandonBoldTextView"
+                        android:layout_width="@dimen/width"
+                        android:layout_height="@dimen/height"
+                        android:layout_marginRight="@dimen/margin"
+                        android:background="@drawable/bg_generate_rounded"
+                        android:gravity="center"
+                        android:text="@string/save"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/medium_x" />
+
+                    <Button
+                        android:id="@+id/btnShare"
+                        style="@style/brandonBoldTextView"
+                        android:layout_width="@dimen/width"
+                        android:layout_height="@dimen/height"
+                        android:layout_marginLeft="@dimen/margin"
+                        android:background="@drawable/bg_generate_rounded"
+                        android:gravity="center"
+                        android:text="@string/share"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/medium_x" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rlAdsRoot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center">
+
+                    <RelativeLayout
+                        android:id="@+id/rlAds"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/rlRemove"
+                        android:gravity="center"></RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rlRemove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:background="?attr/colorPrimary">
+
+                        <ImageView
+                            android:id="@+id/imgRemove"
+                            android:layout_width="@dimen/icon_size_25"
+                            android:layout_height="@dimen/icon_size_30"
+                            android:layout_centerInParent="true"
+                            android:paddingRight="5dp"
+                            android:src="@drawable/baseline_close_white_48"
+                            android:tint="?attr/colorAccent" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

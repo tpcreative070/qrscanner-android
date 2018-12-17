@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
+import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 
 public class Navigator {
@@ -31,6 +32,11 @@ public class Navigator {
 
     public static void onMoveToChangeFileColor(Context context){
         Intent intent = new Intent(context, ChangeFileColorActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void onMoveProVersion(Context context){
+        Intent intent = new Intent(context,ProVersionActivity.class);
         context.startActivity(intent);
     }
 

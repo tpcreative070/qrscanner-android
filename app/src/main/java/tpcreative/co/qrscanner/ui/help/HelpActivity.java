@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.help;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -11,6 +12,7 @@ import butterknife.OnClick;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.model.Author;
 
 public class HelpActivity extends BaseActivity {
 
@@ -22,7 +24,19 @@ public class HelpActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);imgArrowBack.setColorFilter(getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        onInitAds();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final Author author = Author.getInstance().getAuthorInfo();
+        if (author!=null){
+            if (author.version!=null){
+                if (author.version.isAds){
+                    onInitAds();
+                }
+            }
+        }
     }
 
     public void onInitAds(){

@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -38,9 +40,11 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.SingletonSettings;
@@ -68,6 +72,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @BindView(R.id.rlAds)
     RelativeLayout rlAds;
     AdView adViewBanner;
+    @BindView(R.id.rlAdsRoot)
+    RelativeLayout rlAdsRoot;
     private QRScannerReceiver receiver;
 
     @Override
@@ -86,14 +92,14 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void initAds(){
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdSize(AdSize.FULL_BANNER);
             adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         }
         else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdSize(AdSize.FULL_BANNER);
             adViewBanner.setAdUnitId(getString(R.string.banner_home_footer));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
@@ -284,7 +290,23 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 onInitReceiver();
             }
         }
-
+        final Author author = Author.getInstance().getAuthorInfo();
+        if (author!=null){
+            if (author.version!=null){
+                if (author.version.isAds){
+                    rlAdsRoot.setVisibility(View.VISIBLE);
+                }
+                else{
+                    rlAdsRoot.setVisibility(View.GONE);
+                }
+            }
+            else{
+                rlAdsRoot.setVisibility(View.GONE);
+            }
+        }
+        else{
+            rlAdsRoot.setVisibility(View.GONE);
+        }
     }
 
 
@@ -345,74 +367,21 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onBackPressed() {
         Utils.Log(TAG,"onBackPressed");
-        final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
-        if (isPressed){
-            super.onBackPressed();
-        }
-        else{
-            final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
-            if (isSecondLoad){
-                showEncourage();
-            }
-            else{
-                super.onBackPressed();
-            }
-        }
+        super.onBackPressed();
     }
 
-    public void showEncourage(){
-        try {
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
-            builder.setHeaderBackground(R.drawable.back);
-            builder.setPadding(40,40,40,0);
-            builder.setMargin(60,0,60,0);
-            builder.showHeader(true);
-            builder.setCustomMessage(R.layout.custom_body);
-            builder.setCustomHeader(R.layout.custom_header);
-            builder.setPositiveButton(getString(R.string.rate_app_5_stars), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live))){
-                        onRateApp();
-                    }
-                    else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
-                        onRateAppPro();
-                    }
-                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
-                }
-            });
-
-            builder.setNegativeButton(getText(R.string.no_thanks), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
-                    finish();
-                }
-            });
-
-            MaterialDialog dialog = builder.show();
-            builder.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialogInterface) {
-                    Button positive = dialog.findViewById(android.R.id.button1);
-                    Button negative = dialog.findViewById(android.R.id.button2);
-                    if (positive!=null && negative!=null){
-                        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
-                        positive.setTypeface(typeface,Typeface.BOLD);
-                        negative.setTypeface(typeface,Typeface.BOLD);
-                        positive.setTextSize(14);
-                        negative.setTextSize(14);
-                    }
-                }
-            });
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+    @OnClick(R.id.rlRemove)
+    public void onClickedRemoveAds(View view){
+        Navigator.onMoveProVersion(this);
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Remove ads")
+                .putContentType("Preparing remove ads")
+                .putContentId(System.currentTimeMillis() + "-"+QRScannerApplication.getInstance().getDeviceId()));
     }
+
 
     public void onRateApp() {
-        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live));
+        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release));
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market backstack, After pressing back button,
         // to taken back to our application, we need to add following flags to intent.
@@ -423,12 +392,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live))));
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_free_release))));
         }
     }
 
     public void onRateAppPro() {
-        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live_pro));
+        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release));
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market backstack, After pressing back button,
         // to taken back to our application, we need to add following flags to intent.
@@ -439,7 +408,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live_pro))));
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
         }
     }
 
@@ -485,10 +454,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         dialogBuilder.setPositiveButton(R.string.upgrade_now, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live))){
+                if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_free_release))){
                     onRateApp();
                 }
-                else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+                else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
                     onRateAppPro();
                 }
             }

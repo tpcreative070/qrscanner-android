@@ -97,13 +97,12 @@ dependencies {
 
     /*Material Dialog*/
     implementation project(':materialdialoglibrary')
-    
+
     /*Note : Go the both*/
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
 
     /*DateTime picker*/
     implementation project(':switchdatetime')
-
 
     /*Tab button*/
     implementation project(':library')
@@ -120,7 +119,6 @@ dependencies {
 
     /*Circle Design*/
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-
 
     /*taptargetviewlibrary*/
     implementation project(':taptargetviewlibrary')

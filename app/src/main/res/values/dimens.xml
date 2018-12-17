@@ -5,6 +5,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="image_size_custom_60">60dp</dimen>
     <dimen name="icon_size_30">30dp</dimen>
+    <dimen name="icon_size_25">25dp</dimen>
+    <dimen name="icon_size_20">20dp</dimen>
     <dimen name="icon_size_200">200dp</dimen>
     <dimen name="icon_size_100">100dp</dimen>
 

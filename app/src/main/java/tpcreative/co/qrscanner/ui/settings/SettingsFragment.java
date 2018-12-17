@@ -238,7 +238,7 @@ public class SettingsFragment extends Fragment {
                         if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
                             askPermission();
                         } else if (preference.getKey().equals(getString(R.string.key_share))) {
-                            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))) {
+                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
                                 shareToSocial(getString(R.string.scanner_app_pro));
                             } else {
                                 shareToSocial(getString(R.string.scanner_app));
@@ -260,15 +260,18 @@ public class SettingsFragment extends Fragment {
                             Navigator.onMoveToChangeFileColor(getActivity());
                         }
                         else if (preference.getKey().equals(getString(R.string.key_rate))){
-                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live))){
+                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_free_release))){
                                 onRateApp();
                             }
-                            else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_live_pro))){
+                            else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
                                 onRateProApp();
                             }
                         }
                         else if (preference.getKey().equals(getString(R.string.key_supersafe))){
                             onSuperSafe();
+                        }
+                        else if (preference.getKey().equals(getString(R.string.key_premium_version))){
+                            Navigator.onMoveProVersion(getContext());
                         }
                     }
                     return true;
@@ -287,13 +290,13 @@ public class SettingsFragment extends Fragment {
 
             /*Premium*/
             mPreferencePremiumVersion = (MyPreference) findPreference(getString(R.string.key_premium_version));
-            //mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
-            //mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
+            mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
-            if (BuildConfig.BUILD_TYPE.equals(getString(R.string.release)) || BuildConfig.BUILD_TYPE.equals(getString(R.string.debug))) {
+            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
                 mPreferencePremiumVersion.setVisible(false);
             } else {
-                mPreferencePremiumVersion.setVisible(false);
+                mPreferencePremiumVersion.setVisible(true);
             }
 
             /*App Permissions*/
@@ -360,6 +363,13 @@ public class SettingsFragment extends Fragment {
                     }
                 }
             });
+
+            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
+                myPreferenceFileColor.setVisible(true);
+            } else {
+                myPreferenceFileColor.setVisible(false);
+            }
+
 
             myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
             myPreferenceCategoryFamilyApps.setOnPreferenceClickListener(createActionPreferenceClickListener());
@@ -433,8 +443,6 @@ public class SettingsFragment extends Fragment {
         }
 
 
-
-
         public void onSuperSafe() {
             Uri uri = Uri.parse("market://details?id=" + getString(R.string.supersafe_live));
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -452,7 +460,7 @@ public class SettingsFragment extends Fragment {
         }
 
         public void onRateApp() {
-            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live));
+            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release));
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
             // To count with Play market backstack, After pressing back button,
             // to taken back to our application, we need to add following flags to intent.
@@ -463,13 +471,13 @@ public class SettingsFragment extends Fragment {
                 startActivity(goToMarket);
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live))));
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_free_release))));
             }
         }
 
 
         public void onRateProApp() {
-            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_live_pro));
+            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release));
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
             // To count with Play market backstack, After pressing back button,
             // to taken back to our application, we need to add following flags to intent.
@@ -480,7 +488,7 @@ public class SettingsFragment extends Fragment {
                 startActivity(goToMarket);
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_live_pro))));
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
             }
         }
 
