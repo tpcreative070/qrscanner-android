@@ -33,7 +33,9 @@ public class HelpActivity extends BaseActivity {
         if (author!=null){
             if (author.version!=null){
                 if (author.version.isAds){
-                    onInitAds();
+                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+                        onInitAds();
+                    }
                 }
             }
         }

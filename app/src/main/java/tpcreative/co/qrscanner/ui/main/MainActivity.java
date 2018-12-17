@@ -291,20 +291,22 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         }
         final Author author = Author.getInstance().getAuthorInfo();
-        if (author!=null){
-            if (author.version!=null){
-                if (author.version.isAds){
-                    rlAdsRoot.setVisibility(View.VISIBLE);
-                }
-                else{
+        if (author != null) {
+            if (author.version != null) {
+                if (author.version.isAds) {
+                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+                        rlAdsRoot.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        rlAdsRoot.setVisibility(View.GONE);
+                    }
+                } else {
                     rlAdsRoot.setVisibility(View.GONE);
                 }
-            }
-            else{
+            } else {
                 rlAdsRoot.setVisibility(View.GONE);
             }
-        }
-        else{
+        } else {
             rlAdsRoot.setVisibility(View.GONE);
         }
     }

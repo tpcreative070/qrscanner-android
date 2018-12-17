@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.review;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +33,12 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
 import java.io.File;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
@@ -55,7 +58,7 @@ import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
-public class ReviewActivity extends BaseActivity implements ReviewView , View.OnClickListener ,Utils.UtilsListener {
+public class ReviewActivity extends BaseActivity implements ReviewView, View.OnClickListener, Utils.UtilsListener {
 
     protected static final String TAG = ReviewActivity.class.getSimpleName();
     @BindView(R.id.imgResult)
@@ -69,7 +72,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     private ReviewPresenter presenter;
     private Create create;
     private Bitmap bitmap;
-    private  String code ;
+    private String code;
     private Animation mAnim = null;
     private Save save = new Save();
     private Disposable subscriptions;
@@ -94,23 +97,21 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         initAds();
     }
 
-    public void initAds(){
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
+    public void initAds() {
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
             adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
             adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
-        }
-        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
+        } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
             adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
             adViewBanner.setAdUnitId(getString(R.string.banner_review));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
-        }
-        else{
-            Log.d(TAG,"Premium Version");
+        } else {
+            Log.d(TAG, "Premium Version");
         }
     }
 
@@ -119,24 +120,27 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         onBackPressed();
     }
 
-    public void addGoogleAdmods(){
+    public void addGoogleAdmods() {
         AdRequest adRequest = new AdRequest.Builder().build();
         adViewBanner.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
             }
+
             @Override
             public void onAdClosed() {
-                Log.d(TAG,"Ad is closed!");
+                Log.d(TAG, "Ad is closed!");
             }
+
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 adViewBanner.setVisibility(View.GONE);
-                Log.d(TAG,"Ad failed to load! error code: " + errorCode);
+                Log.d(TAG, "Ad failed to load! error code: " + errorCode);
             }
+
             @Override
             public void onAdLeftApplication() {
-                Log.d(TAG,"Ad left application!");
+                Log.d(TAG, "Ad left application!");
             }
 
             @Override
@@ -148,29 +152,29 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
         if (adViewBanner != null) {
             adViewBanner.resume();
         }
-
         final Author author = Author.getInstance().getAuthorInfo();
-        if (author!=null){
-            if (author.version!=null){
-                if (author.version.isAds){
-                    rlAdsRoot.setVisibility(View.VISIBLE);
-                }
-                else{
+        if (author != null) {
+            if (author.version != null) {
+                if (author.version.isAds) {
+                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+                        rlAdsRoot.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        rlAdsRoot.setVisibility(View.GONE);
+                    }
+                } else {
                     rlAdsRoot.setVisibility(View.GONE);
                 }
-            }
-            else{
+            } else {
                 rlAdsRoot.setVisibility(View.GONE);
             }
-        }
-        else{
+        } else {
             rlAdsRoot.setVisibility(View.GONE);
         }
     }
@@ -189,7 +193,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         if (adViewBanner != null) {
             adViewBanner.destroy();
         }
-        if (subscriptions!=null){
+        if (subscriptions != null) {
             subscriptions.dispose();
         }
     }
@@ -201,10 +205,10 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
 
     @Override
     public void setView() {
-       create = presenter.create;
-        switch (create.createType){
+        create = presenter.create;
+        switch (create.createType) {
             case ADDRESSBOOK:
-                code =   "MECARD:N:"+create.fullName+";TEL:"+create.phone+";EMAIL:"+create.email+";ADR:"+create.address+";";
+                code = "MECARD:N:" + create.fullName + ";TEL:" + create.phone + ";EMAIL:" + create.email + ";ADR:" + create.address + ";";
                 save = new Save();
                 save.fullName = create.fullName;
                 save.phone = create.phone;
@@ -215,13 +219,13 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case EMAIL_ADDRESS:
-                 code = "MATMSG:TO:"+create.email+";SUB:"+create.subject+";BODY:"+create.message+";";
-                 save = new Save();
-                 save.email = create.email;
-                 save.subject = create.subject;
-                 save.message = create.message;
-                 save.createType = create.createType.name();
-                 onGenerateReview(code);
+                code = "MATMSG:TO:" + create.email + ";SUB:" + create.subject + ";BODY:" + create.message + ";";
+                save = new Save();
+                save.email = create.email;
+                save.subject = create.subject;
+                save.message = create.message;
+                save.createType = create.createType.name();
+                onGenerateReview(code);
                 break;
 
             case PRODUCT:
@@ -236,7 +240,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case WIFI:
-                code = "WIFI:S:"+create.ssId+";T:"+create.networkEncryption+";P:"+create.password+";H:"+create.hidden+";";
+                code = "WIFI:S:" + create.ssId + ";T:" + create.networkEncryption + ";P:" + create.password + ";H:" + create.hidden + ";";
                 save = new Save();
                 save.ssId = create.ssId;
                 save.password = create.password;
@@ -247,7 +251,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case GEO:
-                code =  "geo:"+create.lat+","+create.lon+"?q="+create.query+"";
+                code = "geo:" + create.lat + "," + create.lon + "?q=" + create.query + "";
                 save = new Save();
                 save.lat = create.lat;
                 save.lon = create.lon;
@@ -257,7 +261,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case TEL:
-                code = "tel:"+create.phone+"";
+                code = "tel:" + create.phone + "";
                 save = new Save();
                 save.phone = create.phone;
                 save.createType = create.createType.name();
@@ -265,7 +269,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 break;
 
             case SMS:
-                code =  "smsto:"+create.phone+":"+create.message;
+                code = "smsto:" + create.phone + ":" + create.message;
                 save = new Save();
                 save.phone = create.phone;
                 save.message = create.message;
@@ -277,15 +281,15 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 StringBuilder builder = new StringBuilder();
                 builder.append("BEGIN:VEVENT");
                 builder.append("\n");
-                builder.append("SUMMARY:"+create.title);
+                builder.append("SUMMARY:" + create.title);
                 builder.append("\n");
-                builder.append("DTSTART:"+create.startEvent);
+                builder.append("DTSTART:" + create.startEvent);
                 builder.append("\n");
-                builder.append("DTEND:"+create.endEvent);
+                builder.append("DTEND:" + create.endEvent);
                 builder.append("\n");
-                builder.append("LOCATION:"+create.location);
+                builder.append("LOCATION:" + create.location);
                 builder.append("\n");
-                builder.append("DESCRIPTION:"+create.description);
+                builder.append("DESCRIPTION:" + create.description);
                 builder.append("\n");
                 builder.append("END:VEVENT");
 
@@ -299,7 +303,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 save.description = create.description;
                 save.createType = create.createType.name();
 
-                code =  builder.toString();
+                code = builder.toString();
                 onGenerateReview(code);
                 break;
 
@@ -325,10 +329,9 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
-                            onGenerateCode(code,EnumAction.SAVE);
-                        }
-                        else{
-                            Log.d(TAG,"Permission is denied");
+                            onGenerateCode(code, EnumAction.SAVE);
+                        } else {
+                            Log.d(TAG, "Permission is denied");
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
@@ -336,6 +339,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                             Log.d(TAG, "request permission is failed");
                         }
                     }
+
                     @Override
                     public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
                         /* ... */
@@ -352,20 +356,22 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.btnSave:{
+        switch (view.getId()) {
+            case R.id.btnSave: {
                 mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
                 mAnim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        Log.d(TAG,"start");
+                        Log.d(TAG, "start");
                     }
+
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        if (code!=null){
+                        if (code != null) {
                             onAddPermissionSave();
                         }
                     }
+
                     @Override
                     public void onAnimationRepeat(Animation animation) {
 
@@ -374,20 +380,22 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 view.startAnimation(mAnim);
                 break;
             }
-            case R.id.btnShare :{
+            case R.id.btnShare: {
                 mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
                 mAnim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        Log.d(TAG,"start");
+                        Log.d(TAG, "start");
                     }
+
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        if (code!=null){
-                           Log.d(TAG,"Share");
-                           onGenerateCode(code,EnumAction.SHARE);
+                        if (code != null) {
+                            Log.d(TAG, "Share");
+                            onGenerateCode(code, EnumAction.SHARE);
                         }
                     }
+
                     @Override
                     public void onAnimationRepeat(Animation animation) {
 
@@ -396,19 +404,21 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
                 view.startAnimation(mAnim);
                 break;
             }
-            case R.id.imgArrowBack : {
+            case R.id.imgArrowBack: {
                 mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
                 mAnim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        Log.d(TAG,"start");
+                        Log.d(TAG, "start");
                     }
+
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         finish();
                         SingletonCloseFragment.getInstance().setUpdateData(true);
                         SingletonSave.getInstance().setUpdateData(true);
                     }
+
                     @Override
                     public void onAnimationRepeat(Animation animation) {
 
@@ -420,68 +430,64 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         }
     }
 
-    public void onGenerateCode(String code,EnumAction enumAction){
+    public void onGenerateCode(String code, EnumAction enumAction) {
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            Utils.Log(TAG,"Starting save items 0");
-            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
-            Utils.saveImage(bitmap,enumAction,create.createType.name(),code,ReviewActivity.this);
-        }
-        catch (Exception e){
+            Utils.Log(TAG, "Starting save items 0");
+            bitmap = barcodeEncoder.encodeBitmap(this, theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 400, 400, hints);
+            Utils.saveImage(bitmap, enumAction, create.createType.name(), code, ReviewActivity.this);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @OnClick(R.id.rlRemove)
-    public void onClickedRemoveAds(View view){
+    public void onClickedRemoveAds(View view) {
         Navigator.onMoveProVersion(this);
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName("Remove ads")
                 .putContentType("Preparing remove ads")
-                .putContentId(System.currentTimeMillis() + "-"+QRScannerApplication.getInstance().getDeviceId()));
+                .putContentId(System.currentTimeMillis() + "-" + QRScannerApplication.getInstance().getDeviceId()));
     }
 
 
     @Override
     public void onSaved(String path, EnumAction enumAction) {
-        Utils.Log(TAG,"Saved successful");
-        switch (enumAction){
+        Utils.Log(TAG, "Saved successful");
+        switch (enumAction) {
             case SAVE: {
-                Utils.showGotItSnackbar(btnSave,"Saved code successful => Path: " + path);
+                Utils.showGotItSnackbar(btnSave, "Saved code successful => Path: " + path);
                 save.createDatetime = Utils.getCurrentDateTime();
-                if (create.enumImplement == EnumImplement.CREATE){
+                if (create.enumImplement == EnumImplement.CREATE) {
                     InstanceGenerator.getInstance(getContext()).onInsert(save);
-                }
-                else if (create.enumImplement == EnumImplement.EDIT){
+                } else if (create.enumImplement == EnumImplement.EDIT) {
                     save.id = create.id;
                     InstanceGenerator.getInstance(getContext()).onUpdate(save);
                 }
                 SingletonSave.getInstance().setUpdateData(true);
                 break;
             }
-            case SHARE:{
+            case SHARE: {
                 File file = new File(path);
-                if (file.isFile()){
-                    Log.d(TAG,"path : " + path);
+                if (file.isFile()) {
+                    Log.d(TAG, "path : " + path);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
                         shareToSocial(uri);
-                    }
-                    else{
+                    } else {
                         Uri uri = Uri.fromFile(file);
                         shareToSocial(uri);
                     }
-                }
-                else{
-                    Utils.showGotItSnackbar(btnSave,R.string.no_items_found);
+                } else {
+                    Utils.showGotItSnackbar(btnSave, R.string.no_items_found);
                 }
                 break;
             }
-            default:{
-                Utils.Log(TAG,"Other case");
+            default: {
+                Utils.Log(TAG, "Other case");
                 break;
             }
         }
@@ -497,7 +503,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
     }
 
     public void shareToSocial(final Uri value) {
-        Log.d(TAG,"path call");
+        Log.d(TAG, "path call");
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
@@ -505,15 +511,15 @@ public class ReviewActivity extends BaseActivity implements ReviewView , View.On
         startActivity(Intent.createChooser(intent, "Share"));
     }
 
-    public void onGenerateReview(String code){
+    public void onGenerateReview(String code) {
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 200, 200,hints);
+            bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 200, 200, hints);
             imgResult.setImageBitmap(bitmap);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
