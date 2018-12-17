@@ -40,6 +40,20 @@
                 android:text="@string/review"
                 android:textSize="20sp" />
 
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:id="@+id/imgPrint"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"
+                android:src="@drawable/baseline_print_white_48" />
+
+
         </RelativeLayout>
 
 

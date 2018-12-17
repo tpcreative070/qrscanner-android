@@ -4,11 +4,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
+import android.support.v4.print.PrintHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -69,6 +71,8 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     Button btnShare;
     @BindView(R.id.imgArrowBack)
     ImageView imgArrowBack;
+    @BindView(R.id.imgPrint)
+    ImageView imgPrint;
     private ReviewPresenter presenter;
     private Create create;
     private Bitmap bitmap;
@@ -83,6 +87,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     RelativeLayout rlAdsRoot;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,10 +95,12 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
         btnSave.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         imgArrowBack.setOnClickListener(this);
+        imgPrint.setOnClickListener(this);
         presenter = new ReviewPresenter();
         presenter.bindView(this);
         presenter.getIntent(this);
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgPrint.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         initAds();
     }
 
@@ -149,6 +156,12 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
             }
         });
         adViewBanner.loadAd(adRequest);
+    }
+
+
+    @OnClick(R.id.imgPrint)
+    public void onPrint(){
+
     }
 
 
@@ -320,7 +333,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
         }
     }
 
-    public void onAddPermissionSave() {
+    public void onAddPermissionSave(final EnumAction enumAction) {
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -329,7 +342,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
-                            onGenerateCode(code, EnumAction.SAVE);
+                            onGenerateCode(code,enumAction);
                         } else {
                             Log.d(TAG, "Permission is denied");
                         }
@@ -368,10 +381,9 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         if (code != null) {
-                            onAddPermissionSave();
+                            onAddPermissionSave(EnumAction.SAVE);
                         }
                     }
-
                     @Override
                     public void onAnimationRepeat(Animation animation) {
 
@@ -419,6 +431,28 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                         SingletonSave.getInstance().setUpdateData(true);
                     }
 
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                view.startAnimation(mAnim);
+                break;
+            }
+            case R.id.imgPrint:{
+                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+                mAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        Log.d(TAG, "start");
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        if (code != null) {
+                            onAddPermissionSave(EnumAction.PRINT);
+                        }
+                    }
                     @Override
                     public void onAnimationRepeat(Animation animation) {
 
@@ -485,12 +519,30 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                 }
                 break;
             }
+            case PRINT:{
+                onPhotoPrint(path);
+                break;
+            }
             default: {
                 Utils.Log(TAG, "Other case");
                 break;
             }
         }
+    }
 
+
+    private void onPhotoPrint(String path) {
+        try {
+            PrintHelper photoPrinter = new PrintHelper(this);
+            photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            photoPrinter.printBitmap(Utils.getCurrentDate(),bitmap);
+        }catch (Exception e){
+            Answers.getInstance().logContentView(new ContentViewEvent()
+                    .putContentName("Printer "+ReviewActivity.class.getSimpleName())
+                    .putContentType("Error "+e.getMessage())
+                    .putContentId(System.currentTimeMillis() + "-" + QRScannerApplication.getInstance().getDeviceId()));
+        }
     }
 
     @Override

@@ -1,9 +1,12 @@
 package tpcreative.co.qrscanner.ui.pro;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.print.PrintHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -68,6 +71,7 @@ public class ProVersionActivity extends BaseActivity implements View.OnClickList
             }
         }
     }
+
 
     public void onUpgradeNow() {
         Answers.getInstance().logContentView(new ContentViewEvent()
