@@ -246,6 +246,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         if (barcodeScannerView!=null){
             barcodeScannerView.setVisibility(View.VISIBLE);
             barcodeScannerView.resume();
+
         }
     }
 

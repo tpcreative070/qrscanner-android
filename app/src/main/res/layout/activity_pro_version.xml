@@ -78,6 +78,7 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textSize="@dimen/medium_16"
                         android:textColor="@color/white"
                         style="@style/brandonRegularTextView"
                         android:text="@string/no_advertising"
@@ -106,6 +107,7 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textSize="@dimen/medium_16"
                         android:textColor="@color/white"
                         style="@style/brandonRegularTextView"
                         android:text="@string/additional_app_theme"
@@ -132,6 +134,7 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textSize="@dimen/medium_16"
                         android:textColor="@color/white"
                         style="@style/brandonRegularTextView"
                         android:text="@string/key_color_code_detail"
@@ -158,6 +161,7 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textSize="@dimen/medium_16"
                         android:textColor="@color/white"
                         style="@style/brandonRegularTextView"
                         android:text="@string/happy_developer"
@@ -179,7 +183,7 @@
                     android:layout_height="wrap_content">
 
                     <Button
-                        android:textSize="@dimen/medium"
+                        android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:id="@+id/btnUpgradeNow"
                         android:text="@string/upgrade_to_pro_version"
@@ -187,7 +191,6 @@
                         android:src="@drawable/baseline_mood_white_48"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/height"/>
-
                 </LinearLayout>
 
             </LinearLayout>

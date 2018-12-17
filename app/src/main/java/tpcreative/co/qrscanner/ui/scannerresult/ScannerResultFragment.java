@@ -224,7 +224,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
     @OnClick(R.id.imgArrowBack)
     public void CloseWindow(View view){
-
         mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
         mAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
