@@ -50,6 +50,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                style="@style/brandonRegularTextView"
                 android:text="@string/features"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -77,6 +78,8 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textColor="@color/white"
+                        style="@style/brandonRegularTextView"
                         android:text="@string/no_advertising"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
@@ -103,6 +106,8 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textColor="@color/white"
+                        style="@style/brandonRegularTextView"
                         android:text="@string/additional_app_theme"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
@@ -127,6 +132,8 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textColor="@color/white"
+                        style="@style/brandonRegularTextView"
                         android:text="@string/key_color_code_detail"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
@@ -151,6 +158,8 @@
                         android:layout_height="@dimen/icon_size_30"/>
 
                     <TextView
+                        android:textColor="@color/white"
+                        style="@style/brandonRegularTextView"
                         android:text="@string/happy_developer"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
@@ -170,6 +179,8 @@
                     android:layout_height="wrap_content">
 
                     <Button
+                        android:textSize="@dimen/medium"
+                        style="@style/brandonRegularTextView"
                         android:id="@+id/btnUpgradeNow"
                         android:text="@string/upgrade_to_pro_version"
                         android:background="@drawable/bg_generate_rounded"
