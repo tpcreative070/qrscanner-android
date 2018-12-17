@@ -24,11 +24,6 @@ public class HelpActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);imgArrowBack.setColorFilter(getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         final Author author = Author.getInstance().getAuthorInfo();
         if (author!=null){
             if (author.version!=null){
@@ -39,6 +34,11 @@ public class HelpActivity extends BaseActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void onInitAds(){
