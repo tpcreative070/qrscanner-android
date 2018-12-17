@@ -72,7 +72,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -92,7 +96,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -112,7 +120,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -145,7 +157,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -165,7 +181,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -197,7 +217,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -217,7 +241,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -238,7 +266,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -258,7 +290,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -291,7 +327,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -311,7 +351,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -332,7 +376,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -364,7 +412,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -384,7 +436,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -405,7 +461,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -425,7 +485,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -445,7 +509,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -478,7 +546,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -498,7 +570,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -519,7 +595,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -539,7 +619,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -571,7 +655,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -603,7 +691,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -636,7 +728,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -668,7 +764,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -701,7 +801,11 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="15dp" />
+                            android:textColor="@color/white"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
 
                         <View
                             android:layout_width="match_parent"
@@ -711,6 +815,44 @@
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
+
+
+
+                    <RelativeLayout
+                        android:id="@+id/rlAdsRoot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerInParent="true"
+                        android:gravity="center">
+
+                        <RelativeLayout
+                            android:id="@+id/rlAds"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/rlRemove"
+                            android:gravity="center"></RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_marginRight="10dp"
+                            android:id="@+id/rlRemove"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true"
+                            android:background="?attr/colorPrimary">
+
+                            <ImageView
+                                android:id="@+id/imgRemove"
+                                android:layout_width="@dimen/icon_size_20"
+                                android:layout_height="@dimen/icon_size_30"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/baseline_close_white_48"
+                                android:tint="?attr/colorAccent" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+
                 </LinearLayout>
             </ScrollView>
         </RelativeLayout>
@@ -719,7 +861,7 @@
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="40dp"
             android:id="@+id/rlFooter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

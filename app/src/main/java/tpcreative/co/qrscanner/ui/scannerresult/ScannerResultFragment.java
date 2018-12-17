@@ -28,7 +28,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
@@ -51,12 +59,14 @@ import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -188,6 +198,13 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     private Bitmap bitmap;
     private Animation mAnim = null;
 
+    @BindView(R.id.rlAds)
+    RelativeLayout rlAds;
+    AdView adViewBanner;
+    @BindView(R.id.rlAdsRoot)
+    RelativeLayout rlAdsRoot;
+
+
 
     public static ScannerResultFragment newInstance(int index) {
         ScannerResultFragment fragment = new ScannerResultFragment();
@@ -219,8 +236,59 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         SingletonHistory.getInstance().setUpdateData(true);
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgOpenApplication.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        initAds();
         return view;
     }
+
+    public void initAds() {
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
+            adViewBanner = new AdView(getContext());
+            adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
+        } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
+            adViewBanner = new AdView(getContext());
+            adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            adViewBanner.setAdUnitId(getString(R.string.banner_result));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
+        } else {
+            Log.d(TAG, "Premium Version");
+        }
+    }
+
+    public void addGoogleAdmods() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adViewBanner.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+            }
+
+            @Override
+            public void onAdClosed() {
+                Log.d(TAG, "Ad is closed!");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                adViewBanner.setVisibility(View.GONE);
+                Log.d(TAG, "Ad failed to load! error code: " + errorCode);
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                Log.d(TAG, "Ad left application!");
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+        });
+        adViewBanner.loadAd(adRequest);
+    }
+
 
     @OnClick(R.id.imgArrowBack)
     public void CloseWindow(View view){
@@ -825,6 +893,15 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         startActivity(Intent.createChooser(intent, "Share"));
     }
 
+    @OnClick(R.id.rlRemove)
+    public void onClickedRemoveAds(View view) {
+        Navigator.onMoveProVersion(getContext());
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Remove ads "+ScannerResultFragment.class.getSimpleName() )
+                .putContentType("Preparing remove ads")
+                .putContentId(System.currentTimeMillis() + "-" + QRScannerApplication.getInstance().getDeviceId()));
+    }
+
 
     public void onGenerateCode(String code,EnumAction enumAction){
         try {
@@ -877,6 +954,9 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @Override
     public void onPause() {
         super.onPause();
+        if (adViewBanner != null) {
+            adViewBanner.pause();
+        }
         Utils.Log(TAG,"onPause");
     }
 
@@ -885,12 +965,40 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
         unbinder.unbind();
+        if (adViewBanner != null) {
+            adViewBanner.destroy();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Utils.Log(TAG,"onResume");
+
+
+        if (adViewBanner != null) {
+            adViewBanner.resume();
+        }
+        final Author author = Author.getInstance().getAuthorInfo();
+        if (author != null) {
+            if (author.version != null) {
+                if (author.version.isAds) {
+                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+                        rlAdsRoot.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        rlAdsRoot.setVisibility(View.GONE);
+                    }
+                } else {
+                    rlAdsRoot.setVisibility(View.GONE);
+                }
+            } else {
+                rlAdsRoot.setVisibility(View.GONE);
+            }
+        } else {
+            rlAdsRoot.setVisibility(View.GONE);
+        }
+
     }
 
     public void onClipboardDialog() {
