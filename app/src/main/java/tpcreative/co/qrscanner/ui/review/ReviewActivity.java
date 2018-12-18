@@ -51,7 +51,9 @@ import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
@@ -114,7 +116,30 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
         } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
             adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
-            adViewBanner.setAdUnitId(getString(R.string.banner_review));
+
+
+            final String preference = PrefsController.getString(getString(R.string.key_banner_review),null);
+            if (preference!=null){
+                adViewBanner.setAdUnitId(preference);
+            }
+            final Author author = Author.getInstance().getAuthorInfo();
+            if (author!=null){
+                if (author.version!=null){
+                    final Ads ads = author.version.ads;
+                    if (ads!=null){
+                        String banner_review = ads.banner_review;
+                        if (banner_review!=null){
+                            if (preference!=null){
+                                if (!banner_review.equals(preference)){
+                                    adViewBanner.setAdUnitId(banner_review);
+                                    PrefsController.putString(getString(R.string.key_banner_review),banner_review);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         } else {

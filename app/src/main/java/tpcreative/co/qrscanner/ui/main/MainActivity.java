@@ -54,6 +54,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
+import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.Version;
@@ -100,7 +101,29 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
             adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.FULL_BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer));
+
+            final String preference = PrefsController.getString(getString(R.string.key_banner_home_footer),null);
+            if (preference!=null){
+                adViewBanner.setAdUnitId(preference);
+            }
+            final Author author = Author.getInstance().getAuthorInfo();
+            if (author!=null){
+                if (author.version!=null){
+                    final Ads ads = author.version.ads;
+                    if (ads!=null){
+                        String banner_home_footer = ads.banner_home_footer;
+                        if (banner_home_footer!=null){
+                            if (preference!=null){
+                                if (!banner_home_footer.equals(preference)){
+                                    adViewBanner.setAdUnitId(banner_home_footer);
+                                    PrefsController.putString(getString(R.string.key_banner_home_footer),banner_home_footer);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         }
@@ -352,6 +375,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        QRScannerApplication.getInstance().onUpdatedAds();
         Utils.Log(TAG,"Destroy");
         if (adViewBanner != null) {
             adViewBanner.destroy();

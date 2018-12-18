@@ -11,6 +11,7 @@ public class Author implements Serializable{
     private static Author instance;
     public Version version;
 
+
     private static final String TAG = Author.class.getSimpleName();
 
     public static Author getInstance(){

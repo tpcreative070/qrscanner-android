@@ -178,7 +178,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.resume();
     }
 
-
     public void onAddPermissionGallery() {
         Dexter.withActivity(getActivity())
                 .withPermissions(

@@ -12,6 +12,8 @@ import butterknife.OnClick;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
 
 public class HelpActivity extends BaseActivity {
@@ -55,7 +57,28 @@ public class HelpActivity extends BaseActivity {
         }
         else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
             mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
+
+            final String preference = PrefsController.getString(getString(R.string.key_interstitial_full_screen),null);
+            if (preference!=null){
+                mInterstitialAd.setAdUnitId(preference);
+            }
+            final Author author = Author.getInstance().getAuthorInfo();
+            if (author!=null){
+                if (author.version!=null){
+                    final Ads ads = author.version.ads;
+                    if (ads!=null){
+                        String interstitial_full_screen = ads.interstitial_full_screen;
+                        if (interstitial_full_screen!=null){
+                            if (preference!=null){
+                                if (!interstitial_full_screen.equals(preference)){
+                                    mInterstitialAd.setAdUnitId(interstitial_full_screen);
+                                    PrefsController.putString(getString(R.string.key_interstitial_full_screen),interstitial_full_screen);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             AdRequest adRequest = new AdRequest.Builder().build();
             mInterstitialAd.loadAd(adRequest);
             mInterstitialAd.setAdListener(new AdListener() {

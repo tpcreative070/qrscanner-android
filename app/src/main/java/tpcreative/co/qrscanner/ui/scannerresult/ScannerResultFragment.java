@@ -66,6 +66,7 @@ import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
@@ -250,9 +251,33 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
             adViewBanner = new AdView(getContext());
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
-            adViewBanner.setAdUnitId(getString(R.string.banner_result));
+
+
+            final String preference = PrefsController.getString(getString(R.string.key_banner_result),null);
+            if (preference!=null){
+                adViewBanner.setAdUnitId(preference);
+            }
+            final Author author = Author.getInstance().getAuthorInfo();
+            if (author!=null){
+                if (author.version!=null){
+                    final Ads ads = author.version.ads;
+                    if (ads!=null){
+                        String banner_result = ads.banner_result;
+                        if (banner_result!=null){
+                            if (preference!=null){
+                                if (!banner_result.equals(preference)){
+                                    adViewBanner.setAdUnitId(banner_result);
+                                    PrefsController.putString(getString(R.string.key_banner_result),banner_result);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
+
         } else {
             Log.d(TAG, "Premium Version");
         }

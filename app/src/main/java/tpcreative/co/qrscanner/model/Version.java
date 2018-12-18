@@ -11,5 +11,6 @@ public class Version implements Serializable{
     public boolean isProVersion;
     public String version_name;
     public int version_code;
+    public Ads ads;
     public HashMap<Object,String>content;
 }
