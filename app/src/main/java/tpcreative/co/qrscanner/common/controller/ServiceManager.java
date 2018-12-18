@@ -10,13 +10,22 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.zxing.client.result.ParsedResultType;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
@@ -201,10 +210,14 @@ public class ServiceManager implements BaseView {
                         final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
                         String arrStr1[] = {
                                 "FormatType",
+                                "Url",
+                                "Text",
+                                "ProductId",
+                                "ISBN",
+                                "Phone",
                                 "Email",
                                 "Subject",
                                 "Message",
-                                "Phone",
                                 "Latitude",
                                 "Longitude",
                                 "Query",
@@ -215,24 +228,26 @@ public class ServiceManager implements BaseView {
                                 "EndEvent",
                                 "FullName",
                                 "Address",
-                                "Text",
                                 "SSId",
-                                "Hidden",
                                 "Password",
-                                "Url",
                                 "NetworkEncryption",
-                                "CreatedDateTime"
+                                "CreatedDateTime",
                         };
+
                         csvWrite.writeNext(arrStr1);
                         for (History index : listHistory) {
                             String value[] = {
                                     index.createType,
+                                    index.url,
+                                    index.createType.equalsIgnoreCase(ParsedResultType.TEXT.name()) ? index.text : "",
+                                    index.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name()) ? index.text : "" ,
+                                    index.createType.equalsIgnoreCase(ParsedResultType.ISBN.name()) ? index.text : "",
+                                    index.phone,
                                     index.email,
                                     index.subject,
                                     index.message,
-                                    index.phone,
-                                    index.lat + "",
-                                    index.lon + "",
+                                    (index.lat == 0) ? "" : index.lat +"",
+                                    (index.lon == 0) ? "" : index.lon +"",
                                     index.query,
                                     index.title,
                                     index.location,
@@ -241,11 +256,8 @@ public class ServiceManager implements BaseView {
                                     index.endEvent,
                                     index.fullName,
                                     index.address,
-                                    index.text,
                                     index.ssId,
-                                    index.hidden + "",
                                     index.password,
-                                    index.url,
                                     index.networkEncryption,
                                     index.createDatetime};
                             csvWrite.writeNext(value);
@@ -256,10 +268,14 @@ public class ServiceManager implements BaseView {
                         final List<Save> listSaver = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getListSave();
                         String arrStr1[] = {
                                 "FormatType",
+                                "Url",
+                                "Text",
+                                "ProductId",
+                                "ISBN",
+                                "Phone",
                                 "Email",
                                 "Subject",
                                 "Message",
-                                "Phone",
                                 "Latitude",
                                 "Longitude",
                                 "Query",
@@ -270,11 +286,8 @@ public class ServiceManager implements BaseView {
                                 "EndEvent",
                                 "FullName",
                                 "Address",
-                                "Text",
                                 "SSId",
-                                "Hidden",
                                 "Password",
-                                "Url",
                                 "NetworkEncryption",
                                 "CreatedDateTime"
                         };
@@ -282,12 +295,16 @@ public class ServiceManager implements BaseView {
                         for (Save index : listSaver) {
                             String value[] = {
                                     index.createType,
+                                    index.url,
+                                    index.createType.equalsIgnoreCase(ParsedResultType.TEXT.name()) ? index.text : "",
+                                    index.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name()) ? index.text : "" ,
+                                    index.createType.equalsIgnoreCase(ParsedResultType.ISBN.name()) ? index.text : "",
+                                    index.phone,
                                     index.email,
                                     index.subject,
                                     index.message,
-                                    index.phone,
-                                    index.lat + "",
-                                    index.lon + "",
+                                    (index.lat == 0) ? "" : index.lat +"",
+                                    (index.lon == 0) ? "" : index.lon +"",
                                     index.query,
                                     index.title,
                                     index.location,
@@ -296,11 +313,8 @@ public class ServiceManager implements BaseView {
                                     index.endEvent,
                                     index.fullName,
                                     index.address,
-                                    index.text,
                                     index.ssId,
-                                    index.hidden + "",
                                     index.password,
-                                    index.url,
                                     index.networkEncryption,
                                     index.createDatetime};
                             csvWrite.writeNext(value);

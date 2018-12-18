@@ -224,6 +224,7 @@
     <string name="no_advertising">No advertising</string>
     <string name="additional_app_theme">Additional app theme(Light)</string>
     <string name="happy_developer">Happy developer</string>
+    <string name="smart_export_csv">Smart detect column: Exporting to CSV</string>
     <string name="upgrade_to_pro_version">UPGRADE TO PRO VERSION</string>
     <string name="pro_version">Pro Version</string>
 
@@ -240,6 +241,32 @@
     <string name="key_create_intent">create_intent</string>
     <string name="key_copy_to_clipboard">Copy to clipboard</string>
     <string name="key_copy_to_clipboard_detail">Content of code will be saved automatically to clipboard</string>
+
+
+    <!--CSV-->
+    <string name="CSV_FormatType">FormatType</string>
+    <string name="CSV_Email">Email</string>
+    <string name="CSV_Subject">Subject</string>
+    <string name="CSV_Message">Message</string>
+    <string name="CSV_Phone">Phone</string>
+    <string name="CSV_Latitude">Latitude</string>
+    <string name="CSV_Longitude">Longitude</string>
+    <string name="CSV_Query">Query</string>
+    <string name="CSV_Title">Title</string>
+    <string name="CSV_Location">Location</string>
+    <string name="CSV_Description">Description</string>
+    <string name="CSV_Address">Address</string>
+    <string name="CSV_ProductId">ProductId</string>
+    <string name="CSV_ISBN">ISBN</string>
+    <string name="CSV_StartEvent">StartEvent</string>
+    <string name="CSV_EndEvent">EndEvent</string>
+    <string name="CSV_FullName">FullName</string>
+    <string name="CSV_Text">Text</string>
+    <string name="CSV_SSId">SSId</string>
+    <string name="CSV_Password">Password</string>
+    <string name="CSV_NetworkEncryption">NetworkEncryption</string>
+    <string name="CSV_Url">Url</string>
+    <string name="CSV_CreatedDateTime">CreatedDateTime</string>
 
 
 </resources>

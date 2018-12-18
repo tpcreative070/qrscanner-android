@@ -61,7 +61,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
                 <LinearLayout
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
@@ -110,7 +109,7 @@
                         android:textSize="@dimen/medium_16"
                         android:textColor="@color/white"
                         style="@style/brandonRegularTextView"
-                        android:text="@string/additional_app_theme"
+                        android:text="@string/smart_export_csv"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
                         android:layout_width="match_parent"
