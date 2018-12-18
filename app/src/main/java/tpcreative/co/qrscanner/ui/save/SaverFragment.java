@@ -439,6 +439,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                             isSelected = false;
                             isDeleted = false;
                             tvDelete.setVisibility(View.VISIBLE);
+                            tvCSV.setVisibility(View.VISIBLE);
                             llAction.setVisibility(View.GONE);
                             tvCount.setVisibility(View.INVISIBLE);
                             imgArrowBack.setVisibility(View.INVISIBLE);
@@ -488,6 +489,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                         llAction.setVisibility(View.VISIBLE);
                         tvCount.setVisibility(View.VISIBLE);
                         tvDelete.setVisibility(View.GONE);
+                        tvCSV.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -695,6 +697,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                 isDeleted = false;
                 llAction.setVisibility(View.INVISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
+                tvCSV.setVisibility(View.VISIBLE);
                 imgArrowBack.setVisibility(View.INVISIBLE);
             }
         });
