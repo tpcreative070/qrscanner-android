@@ -88,6 +88,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         onAddPermissionCamera();
         ServiceManager.getInstance().onStartService();
         Theme.getInstance().getList();
+
+
+        //ServiceManager.getInstance().
+
     }
 
     public void initAds(){

@@ -39,6 +39,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public static RootAPI serverAPI;
     private static String url;
     private boolean isLive;
+    private Activity activity;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
 
     @Override
@@ -93,17 +94,27 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
 
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
-
+        if (activity==null){
+            this.activity = activity;
+        }
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-
+        if (activity==null){
+            this.activity = activity;
+        }
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
+        if (activity==null){
+            this.activity = activity;
+        }
+    }
 
+    public Activity getActivity() {
+        return activity;
     }
 
     @Override

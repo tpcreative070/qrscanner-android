@@ -78,6 +78,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/phoneNumber" />
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtPhone"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"

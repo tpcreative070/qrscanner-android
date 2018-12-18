@@ -90,6 +90,7 @@
                             android:text="@string/url" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtUrl"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"

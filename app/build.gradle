@@ -138,9 +138,8 @@ dependencies {
     }
 
 
-    /*CSV
-    implementation 'com.opencsv:opencsv:4.4'
-    */
+    /*CSV*/
+    implementation files('libs/opencsv-4.4.jar')
 
 }
 

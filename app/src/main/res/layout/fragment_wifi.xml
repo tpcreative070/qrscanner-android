@@ -90,6 +90,7 @@
                             android:text="@string/ssid" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtSSID"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -118,6 +119,7 @@
                             android:text="@string/password" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtPassword"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"

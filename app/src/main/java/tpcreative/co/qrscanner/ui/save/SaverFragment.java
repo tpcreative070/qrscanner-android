@@ -1,17 +1,21 @@
 package tpcreative.co.qrscanner.ui.save;
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,6 +37,14 @@ import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -41,11 +53,15 @@ import java.util.Map;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.controller.ServiceManager;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
+import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.Theme;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
 public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSelectedListener, View.OnClickListener, SingletonSave.SingletonSaveListener,Utils.UtilsListener {
@@ -69,6 +85,9 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     RelativeLayout rlRoot;
     @BindView(R.id.tvNotFoundItems)
     TextView tvNotFoundItems;
+    @BindView(R.id.tvCSV)
+    TextView tvCSV;
+
     private Animation mAnim = null;
 
     @BindView(R.id.recyclerView)
@@ -109,6 +128,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         imgSelectAll.setOnClickListener(this);
         tvDelete.setOnClickListener(this);
         imgArrowBack.setOnClickListener(this);
+        tvCSV.setOnClickListener(this);
 
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
@@ -435,8 +455,6 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
             }
 
             case R.id.tvDelete: {
-                imgArrowBack.setVisibility(View.VISIBLE);
-                tvCount.setVisibility(View.VISIBLE);
                 mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
                 mAnim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -446,7 +464,16 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
+                        final List<Save> listSaver = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getListSave();
+                        if (listSaver==null){
+                            return;
+                        }
+                        if (listSaver.size()==0){
+                            return;
+                        }
 
+                        imgArrowBack.setVisibility(View.VISIBLE);
+                        tvCount.setVisibility(View.VISIBLE);
                         final List<Save> list = presenter.getListGroup();
                         presenter.mList.clear();
                         for (Save index : list) {
@@ -480,7 +507,6 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                     @Override
                     public void onAnimationStart(Animation animation) {
                         Log.d(TAG, "start");
-
                         final List<Save> list = presenter.getListGroup();
                         presenter.mList.clear();
                         if (isSelectedAll) {
@@ -544,11 +570,91 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
                 view.startAnimation(mAnim);
                 break;
             }
+            case R.id.tvCSV :{
+                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+                mAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        final List<Save> listSaver = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getListSave();
+                        if (listSaver==null){
+                            return;
+                        }
+                        if (listSaver.size()==0){
+                            return;
+                        }
+                        onAddPermissionSave();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                view.startAnimation(mAnim);
+                break;
+            }
+
 
             default: {
                 break;
             }
         }
+    }
+
+
+    public void onAddPermissionSave() {
+        Dexter.withActivity(getActivity())
+                .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            ServiceManager.getInstance().onExportDatabaseCSVTask(EnumFragmentType.SAVER, new ServiceManager.ServiceManagerListener() {
+                                @Override
+                                public void onExportingSVCCompleted(String path) {
+                                    File file = new File(path);
+                                    if (file.isFile()) {
+                                        Log.d(TAG, "path : " + path);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                                            shareToSocial(uri);
+                                        } else {
+                                            Uri uri = Uri.fromFile(file);
+                                            shareToSocial(uri);
+                                        }
+                                    }
+                                }
+                            });
+
+                        } else {
+                            Log.d(TAG, "Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Log.d(TAG, "request permission is failed");
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
     }
 
     @Override

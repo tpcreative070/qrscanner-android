@@ -1,18 +1,18 @@
 package tpcreative.co.qrscanner.common.controller;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileOutputStream;
+import com.opencsv.CSVWriter;
+import java.io.FileWriter;
 import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -22,8 +22,12 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerService;
-import tpcreative.co.qrscanner.model.EnumAction;
+import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.EnumStatus;
+import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+
 
 public class ServiceManager implements BaseView {
 
@@ -40,6 +44,7 @@ public class ServiceManager implements BaseView {
             myService.onSyncAuthor();
             myService.onCheckVersion();
         }
+
         //binder comes from server to communicate with method's of
         public void onServiceDisconnected(ComponentName className) {
             Log.d(TAG, "disconnected");
@@ -60,9 +65,9 @@ public class ServiceManager implements BaseView {
     }
 
     private void doBindService() {
-       if (myService!=null){
-           return;
-       }
+        if (myService != null) {
+            return;
+        }
         Intent intent = null;
         intent = new Intent(mContext, QRScannerService.class);
         intent.putExtra(TAG, "Message");
@@ -185,39 +190,148 @@ public class ServiceManager implements BaseView {
         }
     }
 
-    public void saveImage(final Bitmap finalBitmap, final EnumAction enumAction, final String type, final String code, Utils.UtilsListener listenner) {
+    public void onExportDatabaseCSVTask(EnumFragmentType enumFragmentType, ServiceManagerListener ls) {
         subscriptions = Observable.create(subscriber -> {
-            String root = QRScannerApplication.getInstance().getPathFolder();
-            File myDir = new File(root);
-            myDir.mkdirs();
-            String fName = "Image_"+ type + code +".jpg";
-            fName = fName.replace("/","");
-            fName = fName.replace(":","");
-            File file = new File (myDir, fName);
+            String path = QRScannerApplication.getInstance().getPathFolder() + "/" + System.currentTimeMillis() + ".csv";
+            CSVWriter csvWrite = null;
             try {
-                Log.d(TAG,"path :" + file.getAbsolutePath());
-                FileOutputStream out = new FileOutputStream(file);
-                finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
+                csvWrite = new CSVWriter(new FileWriter(path));
+                switch (enumFragmentType) {
+                    case HISTORY: {
+                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                        String arrStr1[] = {
+                                "FormatType",
+                                "Email",
+                                "Subject",
+                                "Message",
+                                "Phone",
+                                "Latitude",
+                                "Longitude",
+                                "Query",
+                                "Title",
+                                "Location",
+                                "Description",
+                                "StartEvent",
+                                "EndEvent",
+                                "FullName",
+                                "Address",
+                                "Text",
+                                "SSId",
+                                "Hidden",
+                                "Password",
+                                "Url",
+                                "NetworkEncryption",
+                                "CreatedDateTime"
+                        };
+                        csvWrite.writeNext(arrStr1);
+                        for (History index : listHistory) {
+                            String value[] = {
+                                    index.createType,
+                                    index.email,
+                                    index.subject,
+                                    index.message,
+                                    index.phone,
+                                    index.lat + "",
+                                    index.lon + "",
+                                    index.query,
+                                    index.title,
+                                    index.location,
+                                    index.description,
+                                    index.startEvent,
+                                    index.endEvent,
+                                    index.fullName,
+                                    index.address,
+                                    index.text,
+                                    index.ssId,
+                                    index.hidden + "",
+                                    index.password,
+                                    index.url,
+                                    index.networkEncryption,
+                                    index.createDatetime};
+                            csvWrite.writeNext(value);
+                        }
+                        break;
+                    }
+                    case SAVER: {
+                        final List<Save> listSaver = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getListSave();
+                        String arrStr1[] = {
+                                "FormatType",
+                                "Email",
+                                "Subject",
+                                "Message",
+                                "Phone",
+                                "Latitude",
+                                "Longitude",
+                                "Query",
+                                "Title",
+                                "Location",
+                                "Description",
+                                "StartEvent",
+                                "EndEvent",
+                                "FullName",
+                                "Address",
+                                "Text",
+                                "SSId",
+                                "Hidden",
+                                "Password",
+                                "Url",
+                                "NetworkEncryption",
+                                "CreatedDateTime"
+                        };
+                        csvWrite.writeNext(arrStr1);
+                        for (Save index : listSaver) {
+                            String value[] = {
+                                    index.createType,
+                                    index.email,
+                                    index.subject,
+                                    index.message,
+                                    index.phone,
+                                    index.lat + "",
+                                    index.lon + "",
+                                    index.query,
+                                    index.title,
+                                    index.location,
+                                    index.description,
+                                    index.startEvent,
+                                    index.endEvent,
+                                    index.fullName,
+                                    index.address,
+                                    index.text,
+                                    index.ssId,
+                                    index.hidden + "",
+                                    index.password,
+                                    index.url,
+                                    index.networkEncryption,
+                                    index.createDatetime};
+                            csvWrite.writeNext(value);
+                        }
+                        break;
+                    }
+                    default:{
+                        Utils.Log(TAG,"NoThing");
+                        break;
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally {
-                listenner.onSaved(file.getAbsolutePath(),enumAction);
+            } finally {
+                subscriber.onNext(true);
+                subscriber.onComplete();
+                csvWrite.flush();
+                csvWrite.close();
+                ls.onExportingSVCCompleted(path);
             }
         })
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
                 .subscribe(response -> {
+                    Utils.Log(TAG, "Exporting cvs done");
                 });
     }
 
-    public static void saveImage() {
-
-
+    public interface ServiceManagerListener {
+        void onExportingSVCCompleted(String path);
     }
-
 
 }

@@ -1,14 +1,18 @@
 package tpcreative.co.qrscanner.ui.history;
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,15 @@ import com.google.zxing.client.result.ParsedResultType;
 import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,11 +44,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
+import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonHistory;
+import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.controller.ServiceManager;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
 public class HistoryFragment extends Fragment implements HistoryView, HistoryCell.ItemSelectedListener, View.OnClickListener, SingletonHistory.SingletonHistoryListener {
@@ -59,6 +78,8 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
     RelativeLayout rlRoot;
     @BindView(R.id.tvNotFoundItems)
     TextView tvNotFoundItems;
+    @BindView(R.id.tvCSV)
+    TextView tvCSV;
     private Animation mAnim = null;
 
     @BindView(R.id.recyclerView)
@@ -93,6 +114,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         imgDelete.setOnClickListener(this);
         imgSelectAll.setOnClickListener(this);
         tvDelete.setOnClickListener(this);
+        tvCSV.setOnClickListener(this);
         imgArrowBack.setOnClickListener(this);
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
@@ -304,6 +326,15 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         startActivity(Intent.createChooser(intent, "Share"));
     }
 
+    public void shareToSocial(final Uri value) {
+        Log.d(TAG, "path call");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, value);
+        startActivity(Intent.createChooser(intent, "Share"));
+    }
+
     @Override
     public void setVisible() {
         if(rlRoot!=null){
@@ -364,6 +395,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
                             isSelected = false;
                             isDeleted = false;
                             tvDelete.setVisibility(View.VISIBLE);
+                            tvCSV.setVisibility(View.VISIBLE);
                             llAction.setVisibility(View.GONE);
                             tvCount.setVisibility(View.INVISIBLE);
                             imgArrowBack.setVisibility(View.INVISIBLE);
@@ -380,8 +412,6 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
             }
 
             case R.id.tvDelete: {
-                imgArrowBack.setVisibility(View.VISIBLE);
-                tvCount.setVisibility(View.VISIBLE);
                 mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
                 mAnim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -392,6 +422,16 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
                     @Override
                     public void onAnimationEnd(Animation animation) {
 
+                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                        if (listHistory==null){
+                            return;
+                        }
+                        if (listHistory.size()==0){
+                            return;
+                        }
+
+                        imgArrowBack.setVisibility(View.VISIBLE);
+                        tvCount.setVisibility(View.VISIBLE);
                         final List<History> list = presenter.getListGroup();
                         presenter.mList.clear();
                         for (History index : list) {
@@ -406,6 +446,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
                         llAction.setVisibility(View.VISIBLE);
                         tvCount.setVisibility(View.VISIBLE);
                         tvDelete.setVisibility(View.GONE);
+                        tvCSV.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -464,16 +505,51 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
             }
 
             case R.id.imgDelete: {
-                imgArrowBack.setVisibility(View.VISIBLE);
-                tvCount.setVisibility(View.VISIBLE);
                 mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
                 mAnim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
+                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                        if (listHistory==null){
+                            return;
+                        }
+                        if (listHistory.size()==0){
+                            return;
+                        }
+                        imgArrowBack.setVisibility(View.VISIBLE);
+                        tvCount.setVisibility(View.VISIBLE);
                         Log.d(TAG, "start");
                         if (presenter.getCheckedCount() > 0) {
                             dialogDelete();
                         }
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                view.startAnimation(mAnim);
+                break;
+            }
+            case R.id.tvCSV :{
+                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+                mAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                        if (listHistory==null){
+                            return;
+                        }
+                        if (listHistory.size()==0){
+                            return;
+                        }
+                        onAddPermissionSave();
                     }
 
                     @Override
@@ -495,6 +571,59 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
             }
         }
     }
+
+
+    public void onAddPermissionSave() {
+        Dexter.withActivity(getActivity())
+                .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            ServiceManager.getInstance().onExportDatabaseCSVTask(EnumFragmentType.HISTORY, new ServiceManager.ServiceManagerListener() {
+                                @Override
+                                public void onExportingSVCCompleted(String path) {
+                                    File file = new File(path);
+                                    if (file.isFile()) {
+                                        Log.d(TAG, "path : " + path);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                                            shareToSocial(uri);
+                                        } else {
+                                            Uri uri = Uri.fromFile(file);
+                                            shareToSocial(uri);
+                                        }
+                                    }
+                                }
+                            });
+
+                        } else {
+                            Log.d(TAG, "Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Log.d(TAG, "request permission is failed");
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
+    }
+
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -536,6 +665,7 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
                 isDeleted = false;
                 llAction.setVisibility(View.INVISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
+                tvCSV.setVisibility(View.VISIBLE);
                 imgArrowBack.setVisibility(View.INVISIBLE);
             }
         });

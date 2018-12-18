@@ -90,6 +90,7 @@
                             android:text="@string/title" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtTitle"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -118,6 +119,7 @@
                             android:text="@string/location" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtLocation"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -144,6 +146,7 @@
                             android:text="@string/description" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtDescription"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -172,6 +175,7 @@
                             android:text="@string/beginTime" />
 
                         <TextView
+                            android:textColor="@color/white"
                             android:paddingLeft="5dp"
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
@@ -201,6 +205,7 @@
                             android:text="@string/endTime" />
 
                         <TextView
+                            android:textColor="@color/white"
                             android:paddingLeft="5dp"
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"

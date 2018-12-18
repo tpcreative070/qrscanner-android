@@ -92,6 +92,7 @@
                             android:text="@string/latitude" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtLatitude"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -119,6 +120,7 @@
                             android:text="@string/longitude" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtLongitude"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -146,6 +148,7 @@
                             android:text="@string/query" />
 
                         <EditText
+                            android:textColor="@color/white"
                             android:id="@+id/edtQuery"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"

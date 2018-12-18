@@ -91,6 +91,7 @@
     <string name="err_password">Please check password input</string>
     <string name="err_url">Please check url input</string>
     <string name="delete">Delete</string>
+    <string name="csv">CSV</string>
     <string name="default_count">0</string>
     <string name="clean">Clean</string>
     <string name="dialog_delete">Are you sure you want to delete %1$s items?</string>
