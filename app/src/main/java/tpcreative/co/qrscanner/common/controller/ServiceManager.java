@@ -201,7 +201,7 @@ public class ServiceManager implements BaseView {
 
     public void onExportDatabaseCSVTask(EnumFragmentType enumFragmentType, ServiceManagerListener ls) {
         subscriptions = Observable.create(subscriber -> {
-            String path = QRScannerApplication.getInstance().getPathFolder() + "/" + System.currentTimeMillis() + ".csv";
+            String path = QRScannerApplication.getInstance().getPathFolder() + "/" +enumFragmentType.name()+"_"+ System.currentTimeMillis() + ".csv";
             CSVWriter csvWrite = null;
             try {
                 csvWrite = new CSVWriter(new FileWriter(path));
@@ -252,8 +252,8 @@ public class ServiceManager implements BaseView {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    index.startEvent,
-                                    index.endEvent,
+                                    index.startEvent.equals("") ? "" : Utils.convertMillisecondsToDateTime(index.startEventMilliseconds),
+                                    index.endEvent.equals("") ? "" :Utils.convertMillisecondsToDateTime(index.endEventMilliseconds),
                                     index.fullName,
                                     index.address,
                                     index.ssId,
@@ -309,8 +309,8 @@ public class ServiceManager implements BaseView {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    index.startEvent,
-                                    index.endEvent,
+                                    index.startEvent.equals("") ? "" : Utils.convertMillisecondsToDateTime(index.startEventMilliseconds),
+                                    index.endEvent.equals("") ? "" : Utils.convertMillisecondsToDateTime(index.endEventMilliseconds),
                                     index.fullName,
                                     index.address,
                                     index.ssId,
