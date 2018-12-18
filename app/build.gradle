@@ -91,10 +91,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    /*api project(':library')
-    implementation(name: 'library-release', ext: 'aar')
-    */
-
     /*Material Dialog*/
     implementation project(':materialdialoglibrary')
 
@@ -106,9 +102,6 @@ dependencies {
 
     /*Tab button*/
     implementation project(':library')
-
-    /*Progress dialog*/
-    implementation project(':library-progress-dialog')
 
     /*Zxing*/
     implementation project(':zxing-android-embedded')
@@ -122,6 +115,7 @@ dependencies {
 
     /*taptargetviewlibrary*/
     implementation project(':taptargetviewlibrary')
+
 
     /*Google admod*/
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
@@ -142,6 +136,11 @@ dependencies {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
+
+
+    /*CSV
+    implementation 'com.opencsv:opencsv:4.4'
+    */
 
 }
 

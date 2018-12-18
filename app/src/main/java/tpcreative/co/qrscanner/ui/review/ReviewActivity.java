@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -88,12 +89,15 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
 
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+        scrollView.smoothScrollTo(0,0);
         btnSave.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         imgArrowBack.setOnClickListener(this);
@@ -131,7 +135,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                         if (banner_review!=null){
                             if (preference!=null){
                                 if (!banner_review.equals(preference)){
-                                    adViewBanner.setAdUnitId(banner_review);
                                     PrefsController.putString(getString(R.string.key_banner_review),banner_review);
                                 }
                             }

@@ -115,7 +115,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                         if (banner_home_footer!=null){
                             if (preference!=null){
                                 if (!banner_home_footer.equals(preference)){
-                                    adViewBanner.setAdUnitId(banner_home_footer);
                                     PrefsController.putString(getString(R.string.key_banner_home_footer),banner_home_footer);
                                 }
                             }

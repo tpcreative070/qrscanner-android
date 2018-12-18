@@ -56,8 +56,8 @@ public class HelpActivity extends BaseActivity {
             });
         }
         else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
-            mInterstitialAd = new InterstitialAd(this);
 
+            mInterstitialAd = new InterstitialAd(this);
             final String preference = PrefsController.getString(getString(R.string.key_interstitial_full_screen),null);
             if (preference!=null){
                 mInterstitialAd.setAdUnitId(preference);
@@ -71,7 +71,6 @@ public class HelpActivity extends BaseActivity {
                         if (interstitial_full_screen!=null){
                             if (preference!=null){
                                 if (!interstitial_full_screen.equals(preference)){
-                                    mInterstitialAd.setAdUnitId(interstitial_full_screen);
                                     PrefsController.putString(getString(R.string.key_interstitial_full_screen),interstitial_full_screen);
                                 }
                             }

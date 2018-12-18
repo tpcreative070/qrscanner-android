@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
@@ -205,6 +206,9 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
 
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
+
 
 
     public static ScannerResultFragment newInstance(int index) {
@@ -220,6 +224,8 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review, container,false);
         unbinder = ButterKnife.bind(this, view);
+        scrollView.smoothScrollTo(0,0);
+
         mList.add(llEmail);
         mList.add(llSMS);
         mList.add(llContact);
@@ -266,7 +272,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                         if (banner_result!=null){
                             if (preference!=null){
                                 if (!banner_result.equals(preference)){
-                                    adViewBanner.setAdUnitId(banner_result);
                                     PrefsController.putString(getString(R.string.key_banner_result),banner_result);
                                 }
                             }

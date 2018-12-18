@@ -141,7 +141,6 @@
     <string name="interstitial_full_screen_test">ca-app-pub-3940256099942544/1033173712</string>
 
 
-
     <string name="key_admob_app_id">admob_app_id</string>
     <string name="key_banner_home_footer">banner_home_footer</string>
     <string name="key_banner_review">banner_review</string>
@@ -240,8 +239,6 @@
     <string name="key_create_intent">create_intent</string>
     <string name="key_copy_to_clipboard">Copy to clipboard</string>
     <string name="key_copy_to_clipboard_detail">Content of code will be saved automatically to clipboard</string>
-
-
 
 
 </resources>

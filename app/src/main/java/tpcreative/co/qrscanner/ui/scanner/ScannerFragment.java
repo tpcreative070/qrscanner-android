@@ -157,14 +157,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         }
         barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
         beepManager = new BeepManager(getActivity());
-
-        final boolean  isFirstGalleryLoad = PrefsController.getBoolean(getString(R.string.key_is_first_gallery),false);
-        final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
-        if (isSecondLoad){
-            if (!isFirstGalleryLoad){
-                onSuggestionScanner();
-            }
-        }
         onHandlerIntent();
         return view;
     }
@@ -255,55 +247,6 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
             barcodeScannerView.pauseAndWait();
             barcodeScannerView.setVisibility(View.INVISIBLE);
         }
-    }
-
-
-    public void onSuggestionScanner(){
-        Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_reg);
-        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
-                TapTarget.forView(imgGallery, getString(R.string.tap_here_to_scan_code_from_gallery), getString(R.string.tap_here_to_scan_code_from_gallery_description))
-                        .titleTextSize(25)
-                        .titleTextColor(R.color.white)
-                        .descriptionTextColor(R.color.md_light_blue_200)
-                        .descriptionTextSize(17)
-                        .titleTypeface(typeface)
-                        .descriptionTypeface(typeface)
-                        .outerCircleColor(R.color.colorButton)
-                        .transparentTarget(true)
-                        .targetCircleColor(R.color.white)
-                        .cancelable(true)
-                        .dimColor(R.color.white),
-                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);      // This call is optional
-                        onAddPermissionGallery();
-                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        view.dismiss(true);
-                        Utils.Log(TAG,"onTargetClick");
-                    }
-
-                    @Override
-                    public void onOuterCircleClick(TapTargetView view) {
-                        super.onOuterCircleClick(view);
-                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        view.dismiss(true);
-                        Utils.Log(TAG,"onOuterCircleClick");
-                    }
-
-                    @Override
-                    public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
-                        super.onTargetDismissed(view, userInitiated);
-                        Utils.Log(TAG,"onTargetDismissed");
-                    }
-
-                    @Override
-                    public void onTargetCancel(TapTargetView view) {
-                        super.onTargetCancel(view);
-                        PrefsController.putBoolean(getString(R.string.key_is_first_gallery),true);
-                        Utils.Log(TAG,"onTargetCancel");
-                    }
-                });
     }
 
 
