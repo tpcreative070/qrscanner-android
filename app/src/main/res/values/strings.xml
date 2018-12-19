@@ -241,6 +241,8 @@
     <string name="key_create_intent">create_intent</string>
     <string name="key_copy_to_clipboard">Copy to clipboard</string>
     <string name="key_copy_to_clipboard_detail">Content of code will be saved automatically to clipboard</string>
+    <string name="key_auto_navigate_to_browser">Open websites automatically</string>
+    <string name="key_auto_navigate_to_browser_detail">Auto navigate to Web Browser</string>
     <string name="database_name">db-qr-scanner</string>
 
     <!--CSV-->

@@ -67,13 +67,14 @@
             android:summary="@string/key_copy_to_clipboard_detail">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 
-
-        <tpcreative.co.qrscanner.common.preference.MyPreference
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            android:defaultValue="false"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_photo_size_select_large_white_48"
-            android:title="@string/key_size_code"
-            android:key="@string/key_size_code">
-        </tpcreative.co.qrscanner.common.preference.MyPreference>
+            android:icon="@drawable/baseline_language_white_48"
+            android:title="@string/key_auto_navigate_to_browser"
+            android:summary="@string/key_auto_navigate_to_browser_detail"
+            android:key="@string/key_auto_navigate_to_browser">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 

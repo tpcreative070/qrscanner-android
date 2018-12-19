@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -137,8 +136,6 @@ public class SettingsFragment extends Fragment {
 
         private MySwitchPreference mySwitchPreferenceVibrate;
         private MySwitchPreference mySwitchPreferenceAskUpdate;
-
-        private MyPreference myPreferenceFileSize;
 
         private MyPreference myPreferenceTheme;
 
@@ -341,11 +338,6 @@ public class SettingsFragment extends Fragment {
             myPreferenceTheme.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceTheme.setVisible(false);
 
-            /*File size*/
-            myPreferenceFileSize = (MyPreference) findPreference(getString(R.string.key_size_code));
-            myPreferenceFileSize.setOnPreferenceClickListener(createActionPreferenceClickListener());
-            myPreferenceFileSize.setOnPreferenceChangeListener(createChangeListener());
-            myPreferenceFileSize.setVisible(false);
 
             /*File color*/
             myPreferenceFileColor = (MyPreference) findPreference(getString(R.string.key_color_code));
@@ -475,7 +467,6 @@ public class SettingsFragment extends Fragment {
             }
         }
 
-
         public void onRateProApp() {
             Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release));
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -491,7 +482,6 @@ public class SettingsFragment extends Fragment {
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
             }
         }
-
     }
 
     public void onSuggestionTips(){
@@ -544,6 +534,5 @@ public class SettingsFragment extends Fragment {
                     }
                 });
     }
-
 
 }

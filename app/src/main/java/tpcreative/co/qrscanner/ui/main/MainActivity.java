@@ -387,7 +387,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         ServiceManager.getInstance().onDismissServices();
     }
 
-
     @Override
     public void onBackPressed() {
         Utils.Log(TAG,"onBackPressed");

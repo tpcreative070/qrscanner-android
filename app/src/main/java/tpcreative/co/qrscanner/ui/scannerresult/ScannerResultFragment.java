@@ -713,6 +713,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 }
                 onShowUI(llURL);
                 tvTitle.setText("Url");
+                final boolean isAutoOpening = PrefsController.getBoolean(getString(R.string.key_auto_navigate_to_browser),false);
+                if (isAutoOpening){
+                    onOpenWebSites(create.url);
+                }
                 break;
 
             case WIFI:
@@ -1115,4 +1119,18 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         view.startAnimation(mAnim);
     }
 
+
+    public void onOpenWebSites(String url){
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setPackage("com.android.chrome");
+        try {
+            startActivity(i);
+        } catch (ActivityNotFoundException e) {
+            // Chrome is probably not installed
+            // Try with the default browser
+            i.setPackage(null);
+            startActivity(i);
+        }
+    }
 }
