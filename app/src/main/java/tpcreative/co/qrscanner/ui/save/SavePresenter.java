@@ -53,6 +53,9 @@ public class SavePresenter extends Presenter<SaveView> {
     public Map<String,Save> getUniqueList(){
         SaveView view = view();
         final List<Save> histories = InstanceGenerator.getInstance(view.getContext()).getListSave();
+        if (histories==null){
+            return new HashMap<>();
+        }
         Map<String,Save> hashMap = new HashMap<>();
         for (Save index : histories){
             hashMap.put(index.createType,index);

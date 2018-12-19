@@ -1,12 +1,17 @@
 package tpcreative.co.qrscanner.model.room;
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.util.Log;
 import java.util.List;
 import java.util.UUID;
+
+import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 
@@ -26,35 +31,35 @@ public abstract class InstanceGenerator extends RoomDatabase {
     public static final String TAG = InstanceGenerator.class.getSimpleName();
 
 
-//    static final Migration MIGRATION_1_2 = new Migration(2, 3) {
+//    static final Migration MIGRATION_1_2 = new Migration(1,2) {
 //        @Override
 //        public void migrate(SupportSQLiteDatabase database) {
-//            database.execSQL("ALTER TABLE save "
-//                    + " ADD COLUMN productId TEXT");
+//            database.execSQL("ALTER TABLE save"
+//                    + " ADD COLUMN 'barcodeFormat' TEXT NOT NULL DEFAULT '' ");
 //        }
 //    };
 //
-//    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+//    static final Migration MIGRATION_2_3 = new Migration(2,3) {
 //        @Override
 //        public void migrate(SupportSQLiteDatabase database) {
-//            database.execSQL("ALTER TABLE history "
-//                    + " ADD COLUMN productId TEXT");
+//            database.execSQL("ALTER TABLE history"
+//                    + " ADD COLUMN 'barcodeFormat' TEXT NOT NULL DEFAULT '' ");
 //        }
 //    };
 
     public static InstanceGenerator getInstance(Context context) {
         if (instance == null) {
+            instance = Room.databaseBuilder(context,
+                     InstanceGenerator.class,
+                     context.getString(R.string.database_name))
+                     .allowMainThreadQueries()
+                     .build();
 
-            instance = Room.databaseBuilder(context.getApplicationContext(),
-                    InstanceGenerator.class,
-                    "db-qr-scanner")
-                    .allowMainThreadQueries()
-                    .build();
-//            instance = Room.databaseBuilder(QRScannerApplication.getInstance(), InstanceGenerator.class, "db-qr-scanner")
+//            instance = Room.databaseBuilder(context,
+//                     InstanceGenerator.class,context.getString(R.string.database_name))
 //                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
 //                    .allowMainThreadQueries()
 //                    .build();
-
         }
         return instance;
     }

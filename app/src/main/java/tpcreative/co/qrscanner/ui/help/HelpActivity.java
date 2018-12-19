@@ -26,16 +26,16 @@ public class HelpActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);imgArrowBack.setColorFilter(getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        final Author author = Author.getInstance().getAuthorInfo();
-        if (author!=null){
-            if (author.version!=null){
-                if (author.version.isAds){
-                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-                        onInitAds();
-                    }
-                }
-            }
-        }
+//        final Author author = Author.getInstance().getAuthorInfo();
+//        if (author!=null){
+//            if (author.version!=null){
+//                if (author.version.isAds){
+//                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+//                        //onInitAds();
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -43,59 +43,59 @@ public class HelpActivity extends BaseActivity {
         super.onResume();
     }
 
-    public void onInitAds(){
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mInterstitialAd.loadAd(adRequest);
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    showInterstitial();
-                }
-            });
-        }
-        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
+//    public void onInitAds(){
+//        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
+//            mInterstitialAd = new InterstitialAd(this);
+//            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
+//            AdRequest adRequest = new AdRequest.Builder().build();
+//            mInterstitialAd.loadAd(adRequest);
+//            mInterstitialAd.setAdListener(new AdListener() {
+//                public void onAdLoaded() {
+//                    showInterstitial();
+//                }
+//            });
+//        }
+//        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
+//
+//            mInterstitialAd = new InterstitialAd(this);
+//            final String preference = PrefsController.getString(getString(R.string.key_interstitial_full_screen),null);
+//            if (preference!=null){
+//                mInterstitialAd.setAdUnitId(preference);
+//            }
+//            final Author author = Author.getInstance().getAuthorInfo();
+//            if (author!=null){
+//                if (author.version!=null){
+//                    final Ads ads = author.version.ads;
+//                    if (ads!=null){
+//                        String interstitial_full_screen = ads.interstitial_full_screen;
+//                        if (interstitial_full_screen!=null){
+//                            if (preference!=null){
+//                                if (!interstitial_full_screen.equals(preference)){
+//                                    PrefsController.putString(getString(R.string.key_interstitial_full_screen),interstitial_full_screen);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            AdRequest adRequest = new AdRequest.Builder().build();
+//            mInterstitialAd.loadAd(adRequest);
+//            mInterstitialAd.setAdListener(new AdListener() {
+//                public void onAdLoaded() {
+//                    showInterstitial();
+//                }
+//            });
+//        }
+//        else{
+//            Log.d(TAG,"Premium Version");
+//        }
+//    }
 
-            mInterstitialAd = new InterstitialAd(this);
-            final String preference = PrefsController.getString(getString(R.string.key_interstitial_full_screen),null);
-            if (preference!=null){
-                mInterstitialAd.setAdUnitId(preference);
-            }
-            final Author author = Author.getInstance().getAuthorInfo();
-            if (author!=null){
-                if (author.version!=null){
-                    final Ads ads = author.version.ads;
-                    if (ads!=null){
-                        String interstitial_full_screen = ads.interstitial_full_screen;
-                        if (interstitial_full_screen!=null){
-                            if (preference!=null){
-                                if (!interstitial_full_screen.equals(preference)){
-                                    PrefsController.putString(getString(R.string.key_interstitial_full_screen),interstitial_full_screen);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mInterstitialAd.loadAd(adRequest);
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    showInterstitial();
-                }
-            });
-        }
-        else{
-            Log.d(TAG,"Premium Version");
-        }
-    }
-
-    private void showInterstitial() {
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        }
-    }
+//    private void showInterstitial() {
+//        if (mInterstitialAd.isLoaded()) {
+//            mInterstitialAd.show();
+//        }
+//    }
 
     @OnClick(R.id.imgArrowBack)
     public void onArrowBack(){

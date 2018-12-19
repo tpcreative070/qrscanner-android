@@ -93,14 +93,14 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void initAds(){
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.FULL_BANNER);
+            adViewBanner.setAdSize(AdSize.BANNER);
             adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         }
         else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.FULL_BANNER);
+            adViewBanner.setAdSize(AdSize.BANNER);
 
             final String preference = PrefsController.getString(getString(R.string.key_banner_home_footer),null);
             if (preference!=null){

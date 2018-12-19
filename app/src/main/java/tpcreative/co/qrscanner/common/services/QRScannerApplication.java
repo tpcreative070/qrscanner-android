@@ -24,6 +24,7 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
 import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 /**
  *
@@ -46,6 +47,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+        InstanceGenerator.getInstance(this);
         isLive = true;
 
         if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {

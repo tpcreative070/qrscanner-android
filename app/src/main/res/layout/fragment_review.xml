@@ -835,7 +835,7 @@
                             android:gravity="center"></RelativeLayout>
 
                         <RelativeLayout
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="0dp"
                             android:id="@+id/rlRemove"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -845,8 +845,9 @@
 
                             <ImageView
                                 android:id="@+id/imgRemove"
-                                android:layout_width="@dimen/icon_size_20"
-                                android:layout_height="@dimen/icon_size_30"
+                                android:padding="6dp"
+                                android:layout_width="@dimen/icon_size_45"
+                                android:layout_height="@dimen/icon_size_45"
                                 android:layout_centerInParent="true"
                                 android:src="@drawable/baseline_close_white_48"
                                 android:tint="?attr/colorAccent" />

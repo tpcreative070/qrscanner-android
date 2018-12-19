@@ -2,6 +2,9 @@ package tpcreative.co.qrscanner.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+
+import com.google.zxing.BarcodeFormat;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -33,6 +36,7 @@ public class Save implements Serializable{
     public String createType;
     public String networkEncryption;
     public String createDatetime;
+    //public String barcodeFormat;
 
     @Ignore
     public TypeCategories typeCategories;
@@ -91,6 +95,7 @@ public class Save implements Serializable{
         this.createType = createType;
         this.networkEncryption = networkEncryption;
         this.createDatetime = createDatetime;
+        //this.barcodeFormat = BarcodeFormat.QR_CODE.name();
     }
 
     public Save(){
@@ -118,6 +123,7 @@ public class Save implements Serializable{
         this.createType = "";
         this.networkEncryption = "";
         this.typeCategories = new TypeCategories();
+        //this.barcodeFormat = BarcodeFormat.QR_CODE.name();
     }
 
     @Ignore

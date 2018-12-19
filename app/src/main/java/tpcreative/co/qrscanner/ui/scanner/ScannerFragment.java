@@ -253,7 +253,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
-            Log.d(TAG,"Call back :" + result.getText() + "  type :" );
+            Utils.Log(TAG,"Call back :" + result.getText() + "  type :"  +result.getBarcodeFormat().name());
             ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
                 final ParsedResult parsedResult = resultHandler.getResult();
                 final Create create = new Create();

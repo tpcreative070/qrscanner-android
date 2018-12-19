@@ -26,6 +26,9 @@ public class HistoryPresenter extends Presenter<HistoryView> {
     public Map<String,History> getUniqueList(){
         HistoryView view = view();
         final List<History> histories = InstanceGenerator.getInstance(view.getContext()).getList();
+        if (histories==null){
+            return new HashMap<>();
+        }
         Map<String,History> hashMap = new HashMap<>();
         for (History index : histories){
             hashMap.put(index.createType,index);

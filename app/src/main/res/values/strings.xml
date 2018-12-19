@@ -241,7 +241,7 @@
     <string name="key_create_intent">create_intent</string>
     <string name="key_copy_to_clipboard">Copy to clipboard</string>
     <string name="key_copy_to_clipboard_detail">Content of code will be saved automatically to clipboard</string>
-
+    <string name="database_name">db-qr-scanner</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>
@@ -267,6 +267,7 @@
     <string name="CSV_NetworkEncryption">NetworkEncryption</string>
     <string name="CSV_Url">Url</string>
     <string name="CSV_CreatedDateTime">CreatedDateTime</string>
+
 
 
 </resources>
