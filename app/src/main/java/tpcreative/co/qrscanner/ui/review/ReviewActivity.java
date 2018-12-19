@@ -158,6 +158,26 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
         adViewBanner.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
+                Utils.Log(TAG,"Loaded successful");
+                final Author author = Author.getInstance().getAuthorInfo();
+                if (author != null) {
+                    if (author.version != null) {
+                        if (author.version.isAds) {
+                            if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+                                rlAdsRoot.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                rlAdsRoot.setVisibility(View.GONE);
+                            }
+                        } else {
+                            rlAdsRoot.setVisibility(View.GONE);
+                        }
+                    } else {
+                        rlAdsRoot.setVisibility(View.GONE);
+                    }
+                } else {
+                    rlAdsRoot.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -197,25 +217,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
         super.onResume();
         if (adViewBanner != null) {
             adViewBanner.resume();
-        }
-        final Author author = Author.getInstance().getAuthorInfo();
-        if (author != null) {
-            if (author.version != null) {
-                if (author.version.isAds) {
-                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-                        rlAdsRoot.setVisibility(View.VISIBLE);
-                    }
-                    else{
-                        rlAdsRoot.setVisibility(View.GONE);
-                    }
-                } else {
-                    rlAdsRoot.setVisibility(View.GONE);
-                }
-            } else {
-                rlAdsRoot.setVisibility(View.GONE);
-            }
-        } else {
-            rlAdsRoot.setVisibility(View.GONE);
         }
     }
 

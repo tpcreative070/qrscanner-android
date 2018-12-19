@@ -291,6 +291,26 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         adViewBanner.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
+                Utils.Log(TAG,"Loaded successful");
+                final Author author = Author.getInstance().getAuthorInfo();
+                if (author != null) {
+                    if (author.version != null) {
+                        if (author.version.isAds) {
+                            if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+                                rlAdsRoot.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                rlAdsRoot.setVisibility(View.GONE);
+                            }
+                        } else {
+                            rlAdsRoot.setVisibility(View.GONE);
+                        }
+                    } else {
+                        rlAdsRoot.setVisibility(View.GONE);
+                    }
+                } else {
+                    rlAdsRoot.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -1003,31 +1023,9 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     public void onResume() {
         super.onResume();
         Utils.Log(TAG,"onResume");
-
-
         if (adViewBanner != null) {
             adViewBanner.resume();
         }
-        final Author author = Author.getInstance().getAuthorInfo();
-        if (author != null) {
-            if (author.version != null) {
-                if (author.version.isAds) {
-                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-                        rlAdsRoot.setVisibility(View.VISIBLE);
-                    }
-                    else{
-                        rlAdsRoot.setVisibility(View.GONE);
-                    }
-                } else {
-                    rlAdsRoot.setVisibility(View.GONE);
-                }
-            } else {
-                rlAdsRoot.setVisibility(View.GONE);
-            }
-        } else {
-            rlAdsRoot.setVisibility(View.GONE);
-        }
-
     }
 
     public void onClipboardDialog() {
@@ -1116,8 +1114,5 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         });
         view.startAnimation(mAnim);
     }
-
-
-
 
 }

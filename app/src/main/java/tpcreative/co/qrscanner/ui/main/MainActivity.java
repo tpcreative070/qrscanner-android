@@ -122,7 +122,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     }
                 }
             }
-
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         }
@@ -147,7 +146,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
-
                             Log.d(TAG, "Permission is ready");
                             boolean isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh),false);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
@@ -156,7 +154,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                             }
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());
                           // Do something here
-
                         }
                         else{
                             Log.d(TAG,"Permission is denied");
@@ -187,6 +184,26 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         adViewBanner.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
+                Utils.Log(TAG,"Loading");
+                final Author author = Author.getInstance().getAuthorInfo();
+                if (author != null) {
+                    if (author.version != null) {
+                        if (author.version.isAds) {
+                            if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
+                                rlAdsRoot.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                rlAdsRoot.setVisibility(View.GONE);
+                            }
+                        } else {
+                            rlAdsRoot.setVisibility(View.GONE);
+                        }
+                    } else {
+                        rlAdsRoot.setVisibility(View.GONE);
+                    }
+                } else {
+                    rlAdsRoot.setVisibility(View.GONE);
+                }
             }
             @Override
             public void onAdClosed() {
@@ -312,25 +329,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             if (receiver==null){
                 onInitReceiver();
             }
-        }
-        final Author author = Author.getInstance().getAuthorInfo();
-        if (author != null) {
-            if (author.version != null) {
-                if (author.version.isAds) {
-                    if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-                        rlAdsRoot.setVisibility(View.VISIBLE);
-                    }
-                    else{
-                        rlAdsRoot.setVisibility(View.GONE);
-                    }
-                } else {
-                    rlAdsRoot.setVisibility(View.GONE);
-                }
-            } else {
-                rlAdsRoot.setVisibility(View.GONE);
-            }
-        } else {
-            rlAdsRoot.setVisibility(View.GONE);
         }
     }
 
