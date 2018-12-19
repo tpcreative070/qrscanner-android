@@ -258,7 +258,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             adViewBanner = new AdView(getContext());
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
 
-
             final String preference = PrefsController.getString(getString(R.string.key_banner_result),null);
             if (preference!=null){
                 adViewBanner.setAdUnitId(preference);
@@ -279,7 +278,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                     }
                 }
             }
-
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
 

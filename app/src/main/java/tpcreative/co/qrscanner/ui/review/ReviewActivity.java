@@ -121,7 +121,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
             adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
 
-
             final String preference = PrefsController.getString(getString(R.string.key_banner_review),null);
             if (preference!=null){
                 adViewBanner.setAdUnitId(preference);
@@ -142,7 +141,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                     }
                 }
             }
-
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         } else {
