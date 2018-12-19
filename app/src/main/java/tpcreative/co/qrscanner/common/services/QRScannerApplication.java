@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.services;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -8,13 +7,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.MobileAds;
 import com.snatik.storage.Storage;
-
 import java.util.HashMap;
-
 import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;

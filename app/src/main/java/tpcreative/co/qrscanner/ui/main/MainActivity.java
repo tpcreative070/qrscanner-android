@@ -195,6 +195,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 adViewBanner.setVisibility(View.GONE);
+                rlAdsRoot.setVisibility(View.GONE);
                 Log.d(TAG,"Ad failed to load! error code: " + errorCode);
             }
             @Override

@@ -301,6 +301,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 adViewBanner.setVisibility(View.GONE);
+                rlAdsRoot.setVisibility(View.GONE);
                 Log.d(TAG, "Ad failed to load! error code: " + errorCode);
             }
 

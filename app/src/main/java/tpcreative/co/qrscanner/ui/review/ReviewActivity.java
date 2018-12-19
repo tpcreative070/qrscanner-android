@@ -168,6 +168,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 adViewBanner.setVisibility(View.GONE);
+                rlAdsRoot.setVisibility(View.GONE);
                 Log.d(TAG, "Ad failed to load! error code: " + errorCode);
             }
 
