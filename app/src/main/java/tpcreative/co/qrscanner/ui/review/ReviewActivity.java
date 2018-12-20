@@ -518,8 +518,15 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     @Override
     public void onSaved(String path, EnumAction enumAction) {
         Utils.Log(TAG, "Saved successful");
+
+
         switch (enumAction) {
             case SAVE: {
+
+                /*Adding new columns*/
+                save.barcodeFormat = BarcodeFormat.QR_CODE.name();
+                save.favorite = false;
+
                 Utils.showGotItSnackbar(btnSave, "Saved code successful => Path: " + path);
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE) {

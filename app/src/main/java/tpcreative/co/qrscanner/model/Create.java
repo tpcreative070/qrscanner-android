@@ -2,6 +2,9 @@ package tpcreative.co.qrscanner.model;
 import com.google.zxing.client.result.ParsedResultType;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import tpcreative.co.qrscanner.common.Utils;
 
 public class Create implements Serializable {
 
@@ -29,12 +32,13 @@ public class Create implements Serializable {
     public boolean hidden;
     public String password;
     public String url;
+    public String barcodeFormat;
+    public boolean favorite;
+    public String updatedDateTime ;
     public ParsedResultType createType;
     public String networkEncryption;
     public EnumFragmentType fragmentType;
     public EnumImplement enumImplement;
-
-
 
     public Create(){
         email = "";
@@ -62,6 +66,10 @@ public class Create implements Serializable {
         fragmentType = EnumFragmentType.SCANNER;
         enumImplement = EnumImplement.CREATE;
         id = 0;
+        this.barcodeFormat = "";
+        this.favorite =false;
+        this.updatedDateTime = Utils.getCurrentDateTimeSort();
+
     }
 
     public Create(String title){
@@ -90,5 +98,8 @@ public class Create implements Serializable {
         fragmentType = EnumFragmentType.SCANNER;
         enumImplement = EnumImplement.CREATE;
         id = 0;
+        this.barcodeFormat = "";
+        this.favorite =false;
+        this.updatedDateTime = Utils.getCurrentDateTimeSort();
     }
 }

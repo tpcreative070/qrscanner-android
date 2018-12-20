@@ -19,7 +19,7 @@ public interface HistoryDao {
     @Delete
     void delete(History... history);
 
-    @Query("Select * FROM history ORDER BY id DESC")
+    @Query("Select * FROM history ORDER BY updatedDateTime DESC")
     List<History> loadAll();
 
     @Query("Select * FROM history ORDER BY id DESC LIMIT 10")

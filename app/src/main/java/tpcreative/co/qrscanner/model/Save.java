@@ -2,11 +2,15 @@ package tpcreative.co.qrscanner.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.net.Uri;
 
 import com.google.zxing.BarcodeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
+
+import tpcreative.co.qrscanner.common.Utils;
 
 @Entity(tableName = "save")
 public class Save implements Serializable{
@@ -36,7 +40,9 @@ public class Save implements Serializable{
     public String createType;
     public String networkEncryption;
     public String createDatetime;
-    //public String barcodeFormat;
+    public String barcodeFormat;
+    public boolean favorite;
+    public String updatedDateTime;
 
     @Ignore
     public TypeCategories typeCategories;
@@ -69,7 +75,7 @@ public class Save implements Serializable{
                 String url,
                 String createType,
                 String networkEncryption,
-                String createDatetime){
+                String createDatetime,BarcodeFormat barcodeFormat,String updatedDateTime){
 
         this.email = email;
         this.subject = subject;
@@ -95,7 +101,9 @@ public class Save implements Serializable{
         this.createType = createType;
         this.networkEncryption = networkEncryption;
         this.createDatetime = createDatetime;
-        //this.barcodeFormat = BarcodeFormat.QR_CODE.name();
+        this.barcodeFormat = barcodeFormat.name();
+        this.favorite = false;
+        this.updatedDateTime = updatedDateTime;
     }
 
     public Save(){
@@ -123,7 +131,9 @@ public class Save implements Serializable{
         this.createType = "";
         this.networkEncryption = "";
         this.typeCategories = new TypeCategories();
-        //this.barcodeFormat = BarcodeFormat.QR_CODE.name();
+        this.barcodeFormat = BarcodeFormat.QR_CODE.name();
+        this.favorite = false;
+        this.updatedDateTime = Utils.getCurrentDateTimeSort();
     }
 
     @Ignore

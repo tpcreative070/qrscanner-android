@@ -1,12 +1,16 @@
 package tpcreative.co.qrscanner.ui.history;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.TypeCategories;
@@ -17,6 +21,7 @@ public class HistoryPresenter extends Presenter<HistoryView> {
     protected List<TypeCategories> mListCategories;
     protected List<History> mList;
     private int i = 0;
+    private static final String TAG = HistoryPresenter.class.getSimpleName();
 
     public HistoryPresenter(){
         mListCategories = new ArrayList<>();
@@ -29,6 +34,9 @@ public class HistoryPresenter extends Presenter<HistoryView> {
         if (histories==null){
             return new HashMap<>();
         }
+
+        Utils.Log(TAG,new Gson().toJson(histories));
+
         Map<String,History> hashMap = new HashMap<>();
         for (History index : histories){
             hashMap.put(index.createType,index);

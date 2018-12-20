@@ -9,13 +9,12 @@ import android.content.Context;
 import android.util.Log;
 import java.util.List;
 import java.util.UUID;
-
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 
-@Database(entities = {History.class, Save.class}, version = 1, exportSchema = false)
+@Database(entities = {History.class, Save.class}, version = 2, exportSchema = false)
 public abstract class InstanceGenerator extends RoomDatabase {
 
     @Ignore
@@ -26,40 +25,36 @@ public abstract class InstanceGenerator extends RoomDatabase {
     @Ignore
     public abstract SaveDao saveDao();
 
-
     @Ignore
     public static final String TAG = InstanceGenerator.class.getSimpleName();
 
+    static final Migration MIGRATION_1_2 = new Migration(1,2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE 'save' ADD COLUMN  'barcodeFormat' TEXT");
+            database.execSQL("ALTER TABLE 'save' ADD COLUMN  'favorite' INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE 'save' ADD COLUMN  'updatedDateTime' TEXT");
 
-//    static final Migration MIGRATION_1_2 = new Migration(1,2) {
-//        @Override
-//        public void migrate(SupportSQLiteDatabase database) {
-//            database.execSQL("ALTER TABLE save"
-//                    + " ADD COLUMN 'barcodeFormat' TEXT NOT NULL DEFAULT '' ");
-//        }
-//    };
-//
-//    static final Migration MIGRATION_2_3 = new Migration(2,3) {
-//        @Override
-//        public void migrate(SupportSQLiteDatabase database) {
-//            database.execSQL("ALTER TABLE history"
-//                    + " ADD COLUMN 'barcodeFormat' TEXT NOT NULL DEFAULT '' ");
-//        }
-//    };
+            database.execSQL("ALTER TABLE 'history' ADD COLUMN  'barcodeFormat' TEXT");
+            database.execSQL("ALTER TABLE 'history' ADD COLUMN  'favorite' INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE 'history' ADD COLUMN  'updatedDateTime' TEXT");
+        }
+    };
+
 
     public static InstanceGenerator getInstance(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(context,
-                     InstanceGenerator.class,
-                     context.getString(R.string.database_name))
-                     .allowMainThreadQueries()
-                     .build();
-
 //            instance = Room.databaseBuilder(context,
-//                     InstanceGenerator.class,context.getString(R.string.database_name))
-//                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
-//                    .allowMainThreadQueries()
-//                    .build();
+//                     InstanceGenerator.class,
+//                     context.getString(R.string.database_name))
+//                     .allowMainThreadQueries()
+//                     .build();
+
+            instance = Room.databaseBuilder(context,
+                     InstanceGenerator.class,context.getString(R.string.database_name))
+                    .addMigrations(MIGRATION_1_2)
+                    .allowMainThreadQueries()
+                    .build();
         }
         return instance;
     }

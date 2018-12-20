@@ -185,6 +185,13 @@ public class Utils {
         return result;
     }
 
+    public static String getCurrentDateTimeSort() {
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String result = dateFormat.format(date);
+        return result;
+    }
+
     public static String getCurrentDatetimeEvent(){
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault());

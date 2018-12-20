@@ -489,10 +489,8 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                                         }
                                         break;
                                     case URI:
-
                                         if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
-                                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(create.url));
-                                            startActivity(browserIntent);
+                                           onOpenWebSites(create.url);
                                         } else {
                                             code = create.url;
                                             onGenerateCode(code, EnumAction.SHARE);
@@ -621,9 +619,9 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @Override
     public void setView() {
         create = presenter.result;
+
         switch (create.createType){
             case ADDRESSBOOK:
-
 
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("fullName",create.fullName);
@@ -987,6 +985,10 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         Utils.Log(TAG,"History :" + (history != null ? true : false));
         Utils.Log(TAG,"Create :" + (create != null ? true : false));
         Utils.Log(TAG,"fragmentType :" + (create.fragmentType));
+
+        /*Adding new columns*/
+        history.barcodeFormat = create.barcodeFormat;
+        history.favorite = create.favorite;
 
         history.createDatetime = Utils.getCurrentDateTime();
         InstanceGenerator.getInstance(getContext()).onInsert(history);

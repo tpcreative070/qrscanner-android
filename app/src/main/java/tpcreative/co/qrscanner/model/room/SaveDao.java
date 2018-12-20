@@ -22,6 +22,6 @@ public interface SaveDao {
     @Delete
     void delete(Save... saves);
 
-    @Query("Select * FROM save ORDER BY id DESC")
+    @Query("Select * FROM save ORDER BY updatedDateTime DESC")
     List<Save> loadAll();
 }

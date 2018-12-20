@@ -2,11 +2,14 @@ package tpcreative.co.qrscanner.ui.save;
 
 import android.support.v4.app.Fragment;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
@@ -25,10 +28,13 @@ import tpcreative.co.qrscanner.ui.history.HistoryView;
 
 public class SavePresenter extends Presenter<SaveView> {
 
+    private final String TAG = SavePresenter.class.getSimpleName();
+
     protected List<TypeCategories> mListCategories;
     protected List<Save> mList;
     protected List<Fragment> mFragment;
     private int i = 0;
+
 
     public SavePresenter(){
         mListCategories = new ArrayList<>();
@@ -52,12 +58,15 @@ public class SavePresenter extends Presenter<SaveView> {
 
     public Map<String,Save> getUniqueList(){
         SaveView view = view();
-        final List<Save> histories = InstanceGenerator.getInstance(view.getContext()).getListSave();
-        if (histories==null){
+        final List<Save> saver = InstanceGenerator.getInstance(view.getContext()).getListSave();
+        if (saver==null){
             return new HashMap<>();
         }
+
+        Utils.Log(TAG,new Gson().toJson(saver));
+
         Map<String,Save> hashMap = new HashMap<>();
-        for (Save index : histories){
+        for (Save index : saver){
             hashMap.put(index.createType,index);
         }
 

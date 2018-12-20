@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -282,6 +283,7 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 String ISBN = "";
                 boolean hidden = false;
 
+
                 Utils.Log(TAG,"Type response "+ parsedResult.getType());
                 switch (parsedResult.getType()) {
                     case ADDRESSBOOK:
@@ -414,6 +416,14 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
                 create.text = text;
                 create.productId = productId;
                 create.ISBN = ISBN;
+
+                 /*Adding new columns*/
+                create.barcodeFormat = BarcodeFormat.QR_CODE.name();
+                create.favorite = false;
+                if (result.getBarcodeFormat()!=null){
+                    create.barcodeFormat = result.getBarcodeFormat().name();
+                }
+
                 beepManager.playBeepSoundAndVibrate();
                 replaceFragment(0,create);
 

@@ -5,7 +5,10 @@ import android.arch.persistence.room.PrimaryKey;
 
 import com.google.zxing.BarcodeFormat;
 
+import java.util.Date;
 import java.util.UUID;
+
+import tpcreative.co.qrscanner.common.Utils;
 
 @Entity(tableName = "history")
 public class History{
@@ -35,7 +38,9 @@ public class History{
     public String createType;
     public String networkEncryption;
     public String createDatetime;
-    //public String barcodeFormat;
+    public String barcodeFormat;
+    public boolean favorite;
+    public String updatedDateTime;
 
     @Ignore
     public TypeCategories typeCategories;
@@ -68,7 +73,7 @@ public class History{
                    String url,
                    String createType,
                    String networkEncryption,
-                   String createDatetime){
+                   String createDatetime,BarcodeFormat barcodeFormat,String updatedDateTime){
         this.email = email;
         this.subject = subject;
         this.message = message ;
@@ -93,7 +98,9 @@ public class History{
         this.createType = createType;
         this.networkEncryption = networkEncryption;
         this.createDatetime = createDatetime;
-        //this.barcodeFormat = BarcodeFormat.QR_CODE.name();
+        this.barcodeFormat = barcodeFormat.name();
+        this.favorite = false;
+        this.updatedDateTime = updatedDateTime ;
     }
 
     public History(){
@@ -121,7 +128,9 @@ public class History{
         this.createType = "";
         this.networkEncryption = "";
         this.typeCategories = new TypeCategories();
-        //this.barcodeFormat = BarcodeFormat.QR_CODE.name();
+        this.barcodeFormat = BarcodeFormat.QR_CODE.name();
+        this.favorite = false;
+        this.updatedDateTime = Utils.getCurrentDateTimeSort();
     }
 
     @Ignore
