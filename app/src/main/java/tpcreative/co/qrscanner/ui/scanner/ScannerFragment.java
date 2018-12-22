@@ -26,6 +26,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
@@ -92,13 +95,6 @@ import tpcreative.co.qrscanner.model.EnumFragmentType;
 public class ScannerFragment extends Fragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
 
     private static final String TAG = ScannerFragment.class.getSimpleName();
-    private CaptureManager capture;
-    private DecoratedBarcodeView barcodeScannerView;
-    private BeepManager beepManager;
-    private CameraSettings cameraSettings = new CameraSettings();
-    private int typeCamera = 0 ;
-    private Fragment fragment;
-    private Unbinder butterKnife;
     @BindView(R.id.zxing_status_view)
     TextView zxing_status_view;
     @BindView(R.id.switch_flashlight)
@@ -109,151 +105,21 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     ImageView switch_camera;
     @BindView(R.id.imgCreate)
     ImageView imgCreate;
-
+    private CaptureManager capture;
+    private DecoratedBarcodeView barcodeScannerView;
+    private BeepManager beepManager;
+    private CameraSettings cameraSettings = new CameraSettings();
+    private int typeCamera = 0 ;
+    private Fragment fragment;
+    private Unbinder butterKnife;
     private boolean isTurnOnFlash;
     private Animation mAnim = null;
     private ScannerPresenter presenter;
     private boolean isRunning;
-
-
-    public static ScannerFragment newInstance(int index) {
-        ScannerFragment fragment = new ScannerFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_scanner, container, false);
-        butterKnife = ButterKnife.bind(this, view);
-        SingletonScanner.getInstance().setListener(this);
-        presenter = new ScannerPresenter();
-        presenter.bindView(this);
-        presenter.setFragmentList();
-        fragment = this;
-        barcodeScannerView = (DecoratedBarcodeView)view.findViewById(R.id.zxing_barcode_scanner);
-        barcodeScannerView.decodeContinuous(callback);
-        zxing_status_view.setVisibility(View.INVISIBLE);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
-        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
-        if (Utils.checkCameraBack(getContext())){
-            cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
-            typeCamera = 0;
-        }
-        else{
-            if (Utils.checkCameraFront(getContext())){
-                cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
-                typeCamera = 1;
-            }
-            else{
-                typeCamera = 2;
-            }
-        }
-        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
-        beepManager = new BeepManager(getActivity());
-        onHandlerIntent();
-        return view;
-    }
-
-    public void switchCamera(final int type){
-        if (typeCamera==2){
-            return;
-        }
-        cameraSettings.setRequestedCameraId(type); // front/back/etc
-        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
-        barcodeScannerView.resume();
-    }
-
-    public void onAddPermissionGallery() {
-        Dexter.withActivity(getActivity())
-                .withPermissions(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
-                            onGetGallery();
-                        }
-                        else{
-                            Log.d(TAG,"Permission is denied");
-                        }
-                        // check for permanent denial of any permission
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed");
-                        }
-                    }
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        /* ... */
-                        token.continuePermissionRequest();
-                    }
-                })
-                .withErrorListener(new PermissionRequestErrorListener() {
-                    @Override
-                    public void onError(DexterError error) {
-                        Log.d(TAG, "error ask permission");
-                    }
-                }).onSameThread().check();
-    }
-
-    public void onBeepAndVibrate(){
-        if (beepManager==null){
-            return;
-        }
-        boolean isBeep = PrefsController.getBoolean(getString(R.string.key_beep),false);
-        boolean isVibrate = PrefsController.getBoolean(getString(R.string.key_vibrate),false);
-        beepManager.setBeepEnabled(isBeep);
-        beepManager.setVibrateEnabled(isVibrate);
-    }
-
-    public void replaceFragment(final int position,final Create create){
-        try {
-            setInvisible();
-            create.fragmentType = EnumFragmentType.SCANNER;
-            FragmentManager fm = getFragmentManager();
-            fragment = presenter.mFragment.get(position);
-            Bundle arguments = new Bundle();
-            arguments.putSerializable("data", create);
-            fragment.setArguments(arguments);
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.flContainer_review, fragment);
-            ft.commit();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void setVisible() {
-        if (barcodeScannerView!=null){
-            barcodeScannerView.setVisibility(View.VISIBLE);
-            barcodeScannerView.resume();
-
-        }
-    }
-
-    @Override
-    public void setInvisible() {
-        if (barcodeScannerView!=null){
-            barcodeScannerView.pauseAndWait();
-            barcodeScannerView.setVisibility(View.INVISIBLE);
-        }
-    }
-
-
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
+            try {
             Utils.Log(TAG,"Call back :" + result.getText() + "  type :"  +result.getBarcodeFormat().name());
             ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
                 final ParsedResult parsedResult = resultHandler.getResult();
@@ -426,13 +292,153 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
                 beepManager.playBeepSoundAndVibrate();
                 replaceFragment(0,create);
-
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                Answers.getInstance().logContentView(new ContentViewEvent()
+                        .putContentName("ScannerFragment Error")
+                        .putContentType("Content "+e.getMessage())
+                        .putContentId(System.currentTimeMillis() + "-"+QRScannerApplication.getInstance().getDeviceId()));
+            }
         }
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
     };
 
+    public static ScannerFragment newInstance(int index) {
+        ScannerFragment fragment = new ScannerFragment();
+        Bundle b = new Bundle();
+        b.putInt("index", index);
+        fragment.setArguments(b);
+        return fragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_scanner, container, false);
+        butterKnife = ButterKnife.bind(this, view);
+        SingletonScanner.getInstance().setListener(this);
+        presenter = new ScannerPresenter();
+        presenter.bindView(this);
+        presenter.setFragmentList();
+        fragment = this;
+        barcodeScannerView = (DecoratedBarcodeView)view.findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView.decodeContinuous(callback);
+        zxing_status_view.setVisibility(View.INVISIBLE);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
+        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+
+        if (Utils.checkCameraBack(getContext())){
+            cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
+            typeCamera = 0;
+        }
+        else{
+            if (Utils.checkCameraFront(getContext())){
+                cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                typeCamera = 1;
+            }
+            else{
+                typeCamera = 2;
+            }
+        }
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
+        beepManager = new BeepManager(getActivity());
+        onHandlerIntent();
+        return view;
+    }
+
+    public void switchCamera(final int type){
+        if (typeCamera==2){
+            return;
+        }
+        cameraSettings.setRequestedCameraId(type); // front/back/etc
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
+        barcodeScannerView.resume();
+    }
+
+    public void onAddPermissionGallery() {
+        Dexter.withActivity(getActivity())
+                .withPermissions(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            onGetGallery();
+                        }
+                        else{
+                            Log.d(TAG,"Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Log.d(TAG, "request permission is failed");
+                        }
+                    }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
+    }
+
+    public void onBeepAndVibrate(){
+        if (beepManager==null){
+            return;
+        }
+        boolean isBeep = PrefsController.getBoolean(getString(R.string.key_beep),false);
+        boolean isVibrate = PrefsController.getBoolean(getString(R.string.key_vibrate),false);
+        beepManager.setBeepEnabled(isBeep);
+        beepManager.setVibrateEnabled(isVibrate);
+    }
+
+    public void replaceFragment(final int position,final Create create){
+        try {
+            setInvisible();
+            create.fragmentType = EnumFragmentType.SCANNER;
+            FragmentManager fm = getFragmentManager();
+            fragment = presenter.mFragment.get(position);
+            Bundle arguments = new Bundle();
+            arguments.putSerializable("data", create);
+            fragment.setArguments(arguments);
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.flContainer_review, fragment);
+            ft.commit();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setVisible() {
+        if (barcodeScannerView!=null){
+            barcodeScannerView.setVisibility(View.VISIBLE);
+            barcodeScannerView.resume();
+
+        }
+    }
+
+    @Override
+    public void setInvisible() {
+        if (barcodeScannerView!=null){
+            barcodeScannerView.pauseAndWait();
+            barcodeScannerView.setVisibility(View.INVISIBLE);
+        }
+    }
 
     @OnClick(R.id.switch_camera)
     public void switchCamera(View view){
