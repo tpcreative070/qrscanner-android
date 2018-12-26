@@ -70,18 +70,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private ScannerFragment scannerFragment;
     private Storage storage;
-    @BindView(R.id.rlAds)
-    RelativeLayout rlAds;
-    AdView adViewBanner;
-    @BindView(R.id.rlAdsRoot)
-    RelativeLayout rlAdsRoot;
     private QRScannerReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initAds();
         SingletonResponse.getInstance().setListener(this);
         storage = new Storage(getApplicationContext());
         initUI();
@@ -90,45 +84,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Theme.getInstance().getList();
     }
 
-    public void initAds(){
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        }
-        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-
-            final String preference = PrefsController.getString(getString(R.string.key_banner_home_footer),null);
-            if (preference!=null){
-                adViewBanner.setAdUnitId(preference);
-            }
-            final Author author = Author.getInstance().getAuthorInfo();
-            if (author!=null){
-                if (author.version!=null){
-                    final Ads ads = author.version.ads;
-                    if (ads!=null){
-                        String banner_home_footer = ads.banner_home_footer;
-                        if (banner_home_footer!=null){
-                            if (preference!=null){
-                                if (!banner_home_footer.equals(preference)){
-                                    PrefsController.putString(getString(R.string.key_banner_home_footer),banner_home_footer);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        }
-        else{
-            Log.d(TAG,"Premium Version");
-        }
-    }
 
     public void onInitReceiver(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -179,54 +134,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
 
-    public void addGoogleAdmods(){
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adViewBanner.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Utils.Log(TAG,"Loading");
-                final Author author = Author.getInstance().getAuthorInfo();
-                if (author != null) {
-                    if (author.version != null) {
-                        if (author.version.isAds) {
-                            if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-                                rlAdsRoot.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                rlAdsRoot.setVisibility(View.GONE);
-                            }
-                        } else {
-                            rlAdsRoot.setVisibility(View.GONE);
-                        }
-                    } else {
-                        rlAdsRoot.setVisibility(View.GONE);
-                    }
-                } else {
-                    rlAdsRoot.setVisibility(View.GONE);
-                }
-            }
-            @Override
-            public void onAdClosed() {
-                Log.d(TAG,"Ad is closed!");
-            }
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                adViewBanner.setVisibility(View.GONE);
-                rlAdsRoot.setVisibility(View.GONE);
-                Log.d(TAG,"Ad failed to load! error code: " + errorCode);
-            }
-            @Override
-            public void onAdLeftApplication() {
-                Log.d(TAG,"Ad left application!");
-            }
-
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-            }
-        });
-        adViewBanner.loadAd(adRequest);
-    }
 
 
     private void initUI() {
@@ -321,10 +228,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     protected void onResume() {
         super.onResume();
-        if (adViewBanner != null) {
-            adViewBanner.resume();
-        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver==null){
                 onInitReceiver();
@@ -336,38 +239,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         Log.d(TAG,"Network changed :"+ isConnected);
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))){
-            if (isConnected){
-                if (adViewBanner!=null){
-                    adViewBanner.resume();
-                }
-            }
-            else {
-                if (adViewBanner!=null){
-                    adViewBanner.pause();
-                }
-            }
-        }
-        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))){
-            if (isConnected){
-                if (adViewBanner!=null){
-                    adViewBanner.resume();
-                }
-            }
-            else {
-                if (adViewBanner!=null){
-                    adViewBanner.pause();
-                }
-            }
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (adViewBanner != null) {
-            adViewBanner.pause();
-        }
     }
 
     @Override
@@ -375,9 +251,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         super.onDestroy();
         QRScannerApplication.getInstance().onUpdatedAds();
         Utils.Log(TAG,"Destroy");
-        if (adViewBanner != null) {
-            adViewBanner.destroy();
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver!=null){
                 unregisterReceiver(receiver);
@@ -392,16 +265,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Utils.Log(TAG,"onBackPressed");
         super.onBackPressed();
     }
-
-    @OnClick(R.id.rlRemove)
-    public void onClickedRemoveAds(View view){
-        Navigator.onMoveProVersion(this);
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Remove ads")
-                .putContentType("Preparing remove ads")
-                .putContentId(System.currentTimeMillis() + "-"+QRScannerApplication.getInstance().getDeviceId()));
-    }
-
 
     public void onRateApp() {
         Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release));

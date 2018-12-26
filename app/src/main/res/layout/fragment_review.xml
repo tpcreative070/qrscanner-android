@@ -22,10 +22,10 @@
                 android:id="@+id/imgArrowBack"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="2dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:padding="2dp"
                 android:src="@drawable/baseline_arrow_back_ios_white_48" />
 
@@ -48,6 +48,7 @@
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -55,12 +56,12 @@
 
                     <!-- Email -->
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
@@ -73,17 +74,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp"/>
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
@@ -97,17 +98,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
@@ -121,17 +122,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
@@ -140,12 +141,12 @@
                     <!-- SMS -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llSMS"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
@@ -158,17 +159,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
@@ -182,17 +183,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
                     </LinearLayout>
 
@@ -200,35 +201,35 @@
                     <!-- Contact -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llContact"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/fullName"/>
+                            android:text="@string/fullName" />
 
                         <TextView
                             android:id="@+id/contactFullName"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
@@ -242,17 +243,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
 
@@ -267,17 +268,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
@@ -291,17 +292,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
@@ -310,35 +311,35 @@
                     <!-- Location -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/latitude"/>
+                            android:text="@string/latitude" />
 
                         <TextView
                             android:id="@+id/locationLatitude"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
@@ -352,17 +353,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
 
@@ -377,17 +378,17 @@
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
                     </LinearLayout>
 
@@ -395,59 +396,59 @@
                     <!-- Event -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llEvent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/title"/>
+                            android:text="@string/title" />
 
                         <TextView
                             android:id="@+id/eventTitle"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/location"/>
+                            android:text="@string/location" />
 
                         <TextView
                             android:id="@+id/eventLocation"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp"/>
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
 
@@ -455,72 +456,72 @@
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/description"/>
+                            android:text="@string/description" />
 
                         <TextView
                             android:id="@+id/eventDescription"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/beginTime"/>
+                            android:text="@string/beginTime" />
 
                         <TextView
                             android:id="@+id/eventBeginTime"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/endTime"/>
+                            android:text="@string/endTime" />
 
                         <TextView
                             android:id="@+id/eventEndTime"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
@@ -529,59 +530,59 @@
                     <!-- Wifi -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llWifi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/ssid"/>
+                            android:text="@string/ssid" />
 
                         <TextView
                             android:id="@+id/wifiSSID"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp"/>
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/password"/>
+                            android:text="@string/password" />
 
                         <TextView
                             android:id="@+id/wifiPassword"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
 
@@ -589,48 +590,48 @@
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/networkEncryption"/>
+                            android:text="@string/networkEncryption" />
 
                         <TextView
                             android:id="@+id/wifiNetworkEncryption"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/hidden"/>
+                            android:text="@string/hidden" />
 
                         <TextView
                             android:id="@+id/wifiHidden"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
                     </LinearLayout>
 
@@ -638,35 +639,35 @@
                     <!-- Phone number -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llTelephone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/phoneNumber"/>
+                            android:text="@string/phoneNumber" />
 
                         <TextView
                             android:id="@+id/telephoneNumber"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
@@ -685,24 +686,24 @@
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/text"/>
+                            android:text="@string/text" />
 
                         <TextView
                             android:id="@+id/textMessage"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
@@ -711,35 +712,35 @@
                     <!-- Product -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llProduct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/product_id"/>
+                            android:text="@string/product_id" />
 
                         <TextView
                             android:id="@+id/textProduct"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
@@ -747,39 +748,38 @@
                     <!-- ISBN -->
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/llISBN"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/isbs"/>
+                            android:text="@string/isbs" />
 
                         <TextView
                             android:id="@+id/textISBN"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp"/>
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
-
 
 
                     <!-- Url -->
@@ -795,39 +795,38 @@
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/url"/>
+                            android:text="@string/url" />
 
                         <TextView
                             android:id="@+id/urlAddress"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
                             android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:textColor="@color/white" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@color/grey_lighter" />
 
                     </LinearLayout>
 
-
-
                     <RelativeLayout
-                        android:visibility="gone"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="15dp"
                         android:id="@+id/rlAdsRoot"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_centerInParent="true"
-                        android:gravity="center">
-
+                        android:gravity="center"
+                        android:visibility="gone">
                         <RelativeLayout
                             android:id="@+id/rlAds"
                             android:layout_width="match_parent"
@@ -835,84 +834,66 @@
                             android:layout_toLeftOf="@+id/rlRemove"
                             android:gravity="center"></RelativeLayout>
 
-                        <RelativeLayout
-                            android:layout_marginRight="0dp"
-                            android:id="@+id/rlRemove"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentRight="true"
-                            android:background="?attr/colorPrimary">
-
-                            <ImageView
-                                android:id="@+id/imgRemove"
-                                android:padding="6dp"
-                                android:layout_width="@dimen/icon_size_45"
-                                android:layout_height="@dimen/icon_size_45"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/baseline_close_white_48"
-                                android:tint="?attr/colorAccent" />
-                        </RelativeLayout>
                     </RelativeLayout>
-
-
                 </LinearLayout>
             </ScrollView>
         </RelativeLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="40dp"
             android:id="@+id/rlFooter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
             <RelativeLayout
                 android:id="@+id/rlShare"
-                android:layout_gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
                 <RelativeLayout
-                    android:layout_marginRight="@dimen/margin"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/bg_generate_rounded"
                     android:layout_width="@dimen/width"
-                    android:layout_height="@dimen/height">
+                    android:layout_height="@dimen/height"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/margin"
+                    android:background="@drawable/bg_generate_rounded">
 
                     <ImageView
-                        android:padding="6dp"
                         android:id="@+id/imgOpenApplication"
-                        android:layout_centerInParent="true"
                         android:layout_width="60dp"
-                        android:layout_height="60dp" />
+                        android:layout_height="60dp"
+                        android:layout_centerInParent="true"
+                        android:padding="6dp" />
 
                 </RelativeLayout>
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1">
 
                 <Button
-                    android:layout_marginLeft="@dimen/margin"
+                    android:id="@+id/btnClipboard"
+                    style="@style/brandonBoldTextView"
+                    android:layout_width="@dimen/width"
+                    android:layout_height="@dimen/height"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="@dimen/margin"
+                    android:background="@drawable/bg_generate_rounded"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textSize="@dimen/medium_x"
-                    android:id="@+id/btnClipboard"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/bg_generate_rounded"
-                    style="@style/brandonBoldTextView"
                     android:text="@string/my_clipboad"
                     android:textAllCaps="false"
-                    android:layout_width="@dimen/width"
-                    android:layout_height="@dimen/height" />
+                    android:textSize="@dimen/medium_x" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

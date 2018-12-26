@@ -944,16 +944,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         startActivity(Intent.createChooser(intent, "Share"));
     }
 
-    @OnClick(R.id.rlRemove)
-    public void onClickedRemoveAds(View view) {
-        Navigator.onMoveProVersion(getContext());
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Remove ads "+ScannerResultFragment.class.getSimpleName() )
-                .putContentType("Preparing remove ads")
-                .putContentId(System.currentTimeMillis() + "-" + QRScannerApplication.getInstance().getDeviceId()));
-    }
-
-
     public void onGenerateCode(String code,EnumAction enumAction){
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();

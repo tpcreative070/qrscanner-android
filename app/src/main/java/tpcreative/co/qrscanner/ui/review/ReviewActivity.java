@@ -506,15 +506,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
         }
     }
 
-    @OnClick(R.id.rlRemove)
-    public void onClickedRemoveAds(View view) {
-        Navigator.onMoveProVersion(this);
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Remove ads "+ReviewActivity.class.getSimpleName())
-                .putContentType("Preparing remove ads")
-                .putContentId(System.currentTimeMillis() + "-" + QRScannerApplication.getInstance().getDeviceId()));
-    }
-
     @Override
     public void onSaved(String path, EnumAction enumAction) {
         Utils.Log(TAG, "Saved successful");
