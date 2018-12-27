@@ -317,11 +317,18 @@ public class ServiceManager implements BaseView {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                subscriber.onNext(true);
-                subscriber.onComplete();
-                csvWrite.flush();
-                csvWrite.close();
-                ls.onExportingSVCCompleted(path);
+                try {
+                    subscriber.onNext(true);
+                    subscriber.onComplete();
+                    if (csvWrite!=null){
+                        csvWrite.flush();
+                        csvWrite.close();
+                        ls.onExportingSVCCompleted(path);
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         })
                 .subscribeOn(Schedulers.computation())
