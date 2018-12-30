@@ -62,9 +62,11 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                 .build();
 
         PrefsController.putString(getString(R.string.key_admob_app_id), getString(R.string.admob_app_id));
-        PrefsController.putString(getString(R.string.key_banner_home_footer),getString(R.string.banner_home_footer));
         PrefsController.putString(getString(R.string.key_banner_review),getString(R.string.banner_review));
         PrefsController.putString(getString(R.string.key_banner_result),getString(R.string.banner_result));
+        PrefsController.putString(getString(R.string.key_banner_result_scanner),getString(R.string.banner_result_scanner));
+        PrefsController.putString(getString(R.string.key_banner_result_saved),getString(R.string.banner_result_saved));
+        PrefsController.putString(getString(R.string.key_banner_result_history),getString(R.string.banner_result_history));
         PrefsController.putString(getString(R.string.key_interstitial_full_screen),getString(R.string.interstitial_full_screen));
 
 

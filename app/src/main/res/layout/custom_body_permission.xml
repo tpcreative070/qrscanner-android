@@ -38,16 +38,6 @@
                     android:layout_gravity="center"
                     android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="3. INTERNET,CHANGE_NETWORK_STATE: In order to check latest app version"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/medium_16"
-                    style="@style/brandonRegularTextView"
                     android:text="4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

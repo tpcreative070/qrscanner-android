@@ -258,26 +258,94 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             adViewBanner = new AdView(getContext());
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
 
-            final String preference = PrefsController.getString(getString(R.string.key_banner_result),null);
-            if (preference!=null){
-                adViewBanner.setAdUnitId(preference);
-            }
-            final Author author = Author.getInstance().getAuthorInfo();
-            if (author!=null){
-                if (author.version!=null){
-                    final Ads ads = author.version.ads;
-                    if (ads!=null){
-                        String banner_result = ads.banner_result;
-                        if (banner_result!=null){
+
+            if (presenter.result!=null){
+                final EnumFragmentType type = presenter.result.fragmentType;
+                String preference ;
+                final Author author = Author.getInstance().getAuthorInfo();
+
+                if (type!=null){
+                    switch (type){
+                        case SCANNER:{
+
+                            preference = PrefsController.getString(getString(R.string.key_banner_result_scanner),null);
                             if (preference!=null){
-                                if (!banner_result.equals(preference)){
-                                    PrefsController.putString(getString(R.string.key_banner_result),banner_result);
+                                adViewBanner.setAdUnitId(preference);
+                            }
+
+                            if (author!=null){
+                                if (author.version!=null){
+                                    final Ads ads = author.version.ads;
+                                    if (ads!=null){
+                                        String result = ads.banner_result_scanner;
+                                        if (result!=null){
+                                            if (preference!=null){
+                                                if (!result.equals(preference)){
+                                                    PrefsController.putString(getString(R.string.key_banner_result_scanner),result);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
+
+                            break;
+
+                        }
+                        case SAVER:{
+
+                            preference = PrefsController.getString(getString(R.string.key_banner_result_saved),null);
+                            if (preference!=null){
+                                adViewBanner.setAdUnitId(preference);
+                            }
+
+                            if (author!=null){
+                                if (author.version!=null){
+                                    final Ads ads = author.version.ads;
+                                    if (ads!=null){
+                                        String result = ads.banner_result_saved;
+                                        if (result!=null){
+                                            if (preference!=null){
+                                                if (!result.equals(preference)){
+                                                    PrefsController.putString(getString(R.string.key_banner_result_saved),result);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            break;
+                        }
+                        case HISTORY:{
+
+                            preference = PrefsController.getString(getString(R.string.key_banner_result_history),null);
+                            if (preference!=null){
+                                adViewBanner.setAdUnitId(preference);
+                            }
+
+                            if (author!=null){
+                                if (author.version!=null){
+                                    final Ads ads = author.version.ads;
+                                    if (ads!=null){
+                                        String result = ads.banner_result_history;
+                                        if (result!=null){
+                                            if (preference!=null){
+                                                if (!result.equals(preference)){
+                                                    PrefsController.putString(getString(R.string.key_banner_result_history),result);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            break;
                         }
                     }
                 }
             }
+
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
 

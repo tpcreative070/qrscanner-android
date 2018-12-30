@@ -611,6 +611,12 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
     public void onRenderCode(final Bitmap bitmap,final InputStream inputStream){
         try{
+            if(bitmap==null){
+                return;
+            }
+            if (inputStream==null){
+                return;
+            }
             int[] intArray = new int[bitmap.getWidth()*bitmap.getHeight()];
             bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
             LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);

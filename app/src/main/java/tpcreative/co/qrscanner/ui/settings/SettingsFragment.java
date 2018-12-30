@@ -135,7 +135,6 @@ public class SettingsFragment extends Fragment {
         private MyPreference myPreferenceHelp;
 
         private MySwitchPreference mySwitchPreferenceVibrate;
-        private MySwitchPreference mySwitchPreferenceAskUpdate;
 
         private MyPreference myPreferenceTheme;
 
@@ -162,10 +161,7 @@ public class SettingsFragment extends Fragment {
 
         @Override
         public void onUpdatedSharePreferences(boolean value) {
-           if (mySwitchPreferenceAskUpdate!=null){
-               PrefsController.putBoolean(getString(R.string.key_auto_ask_update),value);
-               mySwitchPreferenceAskUpdate.setChecked(value);
-           }
+
         }
 
         /**
@@ -402,10 +398,6 @@ public class SettingsFragment extends Fragment {
                 myPreferenceSuperSafe.setVisible(false);
             }
 
-            /*Vibrate*/
-            mySwitchPreferenceAskUpdate = (MySwitchPreference) findPreference(getString(R.string.key_auto_ask_update));
-            mySwitchPreferenceAskUpdate.setOnPreferenceClickListener(createActionPreferenceClickListener());
-            mySwitchPreferenceAskUpdate.setOnPreferenceChangeListener(createChangeListener());
         }
 
         public void onGenerateReview(String code){

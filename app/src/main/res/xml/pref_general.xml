@@ -50,16 +50,6 @@
 
         <tpcreative.co.qrscanner.common.preference.MySwitchPreference
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_notifications_active_white"
-            android:title="@string/key_auto_ask_update"
-            android:key="@string/key_auto_ask_update"
-            android:defaultValue="true"
-            android:summary="@string/key_auto_ask_update_detail">
-        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
-
-
-        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_filter_none_white_48"
             android:title="@string/key_copy_to_clipboard"
             android:key="@string/key_copy_to_clipboard"

@@ -13,19 +13,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -35,16 +27,10 @@ import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.SingletonSettings;
@@ -54,10 +40,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
-import tpcreative.co.qrscanner.model.Ads;
-import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.model.Version;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
@@ -216,7 +199,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void showAlertLatestVersion() {
-        onCheckVersionApp();
+        QRScannerApplication.getInstance().onUpdatedAds();
+        Utils.Log(TAG,"Checking new version...");
     }
 
     @Override
@@ -249,7 +233,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        QRScannerApplication.getInstance().onUpdatedAds();
         Utils.Log(TAG,"Destroy");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver!=null){
@@ -299,38 +282,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
 
-    public void onCheckVersionApp(){
-        final boolean askLatestVersion = PrefsController.getBoolean(getString(R.string.key_auto_ask_update),false);
-        if (!askLatestVersion){
-            return;
-        }
-        try {
-            final Author author = Author.getInstance().getAuthorInfo();
-            if (author!=null){
-                if (author.version!=null){
-                    final Version version = author.version;
-                    if (version.version_code>BuildConfig.VERSION_CODE){
-                        if (version.release){
-                            HashMap<Object,String> hashMap = version.content;
-                            if (hashMap!=null && hashMap.size()>0){
-                                List<String> list = new ArrayList<>();
-                                for (Map.Entry<Object,String> hash : hashMap.entrySet()){
-                                    list.add(hash.getValue());
-                                }
-                                askUpdateAppDialog(version.title,list);
-                            }
-                        }
-                    }
-                    else{
-                        Utils.Log(TAG,"This is latest app version");
-                    }
-                }
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     public void askUpdateAppDialog(String title, List<String>list) {
         MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
