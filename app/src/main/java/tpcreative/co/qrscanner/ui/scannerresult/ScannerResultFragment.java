@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -1179,7 +1180,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         view.startAnimation(mAnim);
     }
 
-
     public void onOpenWebSites(String url){
         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1189,8 +1189,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         } catch (ActivityNotFoundException e) {
             // Chrome is probably not installed
             // Try with the default browser
-            i.setPackage(null);
-            startActivity(i);
+            try {
+                i.setPackage(null);
+                startActivity(i);
+            }
+            catch (Exception ex){
+                Toast.makeText(getActivity(),"Can not open the link",Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 }
