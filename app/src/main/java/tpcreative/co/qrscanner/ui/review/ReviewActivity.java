@@ -125,22 +125,27 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
             if (preference!=null){
                 adViewBanner.setAdUnitId(preference);
             }
-            final Author author = Author.getInstance().getAuthorInfo();
-            if (author!=null){
-                if (author.version!=null){
-                    final Ads ads = author.version.ads;
-                    if (ads!=null){
-                        String banner_review = ads.banner_review;
-                        if (banner_review!=null){
-                            if (preference!=null){
-                                if (!banner_review.equals(preference)){
-                                    PrefsController.putString(getString(R.string.key_banner_review),banner_review);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+
+
+//            final Author author = Author.getInstance().getAuthorInfo();
+//            if (author!=null){
+//                if (author.version!=null){
+//                    final Ads ads = author.version.ads;
+//                    if (ads!=null){
+//                        String banner_review = ads.banner_review;
+//                        if (banner_review!=null){
+//                            if (preference!=null){
+//                                if (!banner_review.equals(preference)){
+//                                    PrefsController.putString(getString(R.string.key_banner_review),banner_review);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
+
+
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         } else {

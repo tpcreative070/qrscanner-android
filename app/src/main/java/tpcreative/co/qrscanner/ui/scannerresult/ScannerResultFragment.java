@@ -274,21 +274,21 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                                 adViewBanner.setAdUnitId(preference);
                             }
 
-                            if (author!=null){
-                                if (author.version!=null){
-                                    final Ads ads = author.version.ads;
-                                    if (ads!=null){
-                                        String result = ads.banner_result_scanner;
-                                        if (result!=null){
-                                            if (preference!=null){
-                                                if (!result.equals(preference)){
-                                                    PrefsController.putString(getString(R.string.key_banner_result_scanner),result);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+//                            if (author!=null){
+//                                if (author.version!=null){
+//                                    final Ads ads = author.version.ads;
+//                                    if (ads!=null){
+//                                        String result = ads.banner_result_scanner;
+//                                        if (result!=null){
+//                                            if (preference!=null){
+//                                                if (!result.equals(preference)){
+//                                                    PrefsController.putString(getString(R.string.key_banner_result_scanner),result);
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
 
                             break;
 
@@ -300,23 +300,24 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                                 adViewBanner.setAdUnitId(preference);
                             }
 
-                            if (author!=null){
-                                if (author.version!=null){
-                                    final Ads ads = author.version.ads;
-                                    if (ads!=null){
-                                        String result = ads.banner_result_saved;
-                                        if (result!=null){
-                                            if (preference!=null){
-                                                if (!result.equals(preference)){
-                                                    PrefsController.putString(getString(R.string.key_banner_result_saved),result);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
 
-                            break;
+//                            if (author!=null){
+//                                if (author.version!=null){
+//                                    final Ads ads = author.version.ads;
+//                                    if (ads!=null){
+//                                        String result = ads.banner_result_saved;
+//                                        if (result!=null){
+//                                            if (preference!=null){
+//                                                if (!result.equals(preference)){
+//                                                    PrefsController.putString(getString(R.string.key_banner_result_saved),result);
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+
+                             break;
                         }
                         case HISTORY:{
 
@@ -325,21 +326,21 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                                 adViewBanner.setAdUnitId(preference);
                             }
 
-                            if (author!=null){
-                                if (author.version!=null){
-                                    final Ads ads = author.version.ads;
-                                    if (ads!=null){
-                                        String result = ads.banner_result_history;
-                                        if (result!=null){
-                                            if (preference!=null){
-                                                if (!result.equals(preference)){
-                                                    PrefsController.putString(getString(R.string.key_banner_result_history),result);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+//                            if (author!=null){
+//                                if (author.version!=null){
+//                                    final Ads ads = author.version.ads;
+//                                    if (ads!=null){
+//                                        String result = ads.banner_result_history;
+//                                        if (result!=null){
+//                                            if (preference!=null){
+//                                                if (!result.equals(preference)){
+//                                                    PrefsController.putString(getString(R.string.key_banner_result_history),result);
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
 
                             break;
                         }
@@ -440,6 +441,19 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             }
         });
         view.startAnimation(mAnim);
+    }
+
+
+    @OnClick(R.id.tvReport)
+    public void onReportIssues(View view){
+        try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
+                intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support(Report issues)");
+                intent.putExtra(Intent.EXTRA_TEXT, "");
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                //TODO smth
+        }
     }
 
     @OnClick(R.id.rlShare)

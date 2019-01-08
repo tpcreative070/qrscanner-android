@@ -30,11 +30,27 @@
                 android:src="@drawable/baseline_arrow_back_ios_white_48" />
 
             <TextView
+                android:textSize="20sp"
                 android:id="@+id/tvTitle"
                 style="@style/brandonBoldTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
+
+
+            <TextView
+                android:layout_marginRight="20dp"
+                android:textSize="18sp"
+                android:text="@string/report_issue"
+                android:id="@+id/tvReport"
+                style="@style/brandonBoldTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true" />
+
+
+
         </RelativeLayout>
 
         <RelativeLayout

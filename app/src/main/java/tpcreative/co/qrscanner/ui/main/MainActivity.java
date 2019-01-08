@@ -199,7 +199,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void showAlertLatestVersion() {
-        QRScannerApplication.getInstance().onUpdatedAds();
+        //QRScannerApplication.getInstance().onUpdatedAds();
         Utils.Log(TAG,"Checking new version...");
     }
 
@@ -246,7 +246,25 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onBackPressed() {
         Utils.Log(TAG,"onBackPressed");
-        super.onBackPressed();
+        final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
+        if (isPressed){
+            super.onBackPressed();
+        }
+        else{
+            final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
+            if (isSecondLoad){
+                final boolean isPositive = PrefsController.getBoolean(getString(R.string.we_are_a_team_positive),false);
+                if (!isPositive){
+                    showEncourage();
+                }
+                else {
+                    super.onBackPressed();
+                }
+            }
+            else{
+                super.onBackPressed();
+            }
+        }
     }
 
     public void onRateApp() {
@@ -332,6 +350,58 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         });
         dialog.show();
+    }
+
+    public void showEncourage(){
+        try {
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+            builder.setHeaderBackground(R.drawable.back);
+            builder.setPadding(40,40,40,0);
+            builder.setMargin(60,0,60,0);
+            builder.showHeader(true);
+            builder.setCustomMessage(R.layout.custom_body);
+            builder.setCustomHeader(R.layout.custom_header);
+            builder.setPositiveButton(getString(R.string.rate_app_5_stars), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_free_release))){
+                        onRateApp();
+                    }
+                    else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
+                        onRateAppPro();
+                    }
+                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
+                    PrefsController.putBoolean(getString(R.string.we_are_a_team_positive),true);
+                }
+            });
+
+            builder.setNegativeButton(getText(R.string.no_thanks), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
+                    finish();
+                }
+            });
+
+            MaterialDialog dialog = builder.show();
+            builder.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Button positive = dialog.findViewById(android.R.id.button1);
+                    Button negative = dialog.findViewById(android.R.id.button2);
+                    if (positive!=null && negative!=null){
+                        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
+                        positive.setTypeface(typeface,Typeface.BOLD);
+                        negative.setTypeface(typeface,Typeface.BOLD);
+                        positive.setTextSize(14);
+                        negative.setTextSize(14);
+                    }
+                }
+            });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

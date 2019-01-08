@@ -215,6 +215,8 @@
     <string name="connected_wifi_failed">Wifi Connected Was Failed</string>
     <string name="connecting">Connecting</string>
     <string name="we_are_a_team">We are an enthusiastic mobile team. We are working very hard to give you the best application. Your 5 stars review is good way to encourage us to release more helpful apps!</string>
+    <string name="we_are_a_team_positive">we_are_a_team_positive</string>
+    <string name="report_issue">Report</string>
 
     <string name="dislike_it">Dislike it</string>
     <string name="no_thanks">No, thanks</string>
