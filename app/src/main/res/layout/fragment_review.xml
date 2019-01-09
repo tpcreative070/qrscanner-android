@@ -833,6 +833,67 @@
 
                     </LinearLayout>
 
+
+
+                    <LinearLayout
+                        android:id="@+id/rlFooter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="30dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <RelativeLayout
+                            android:id="@+id/rlShare"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1">
+
+                            <RelativeLayout
+                                android:layout_width="@dimen/width"
+                                android:layout_height="@dimen/height"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/margin"
+                                android:background="@drawable/bg_generate_rounded">
+
+                                <ImageView
+                                    android:id="@+id/imgOpenApplication"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:layout_centerInParent="true"
+                                    android:padding="6dp" />
+
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1">
+
+                            <Button
+                                android:id="@+id/btnClipboard"
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="@dimen/width"
+                                android:layout_height="@dimen/height"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginLeft="@dimen/margin"
+                                android:background="@drawable/bg_generate_rounded"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/my_clipboad"
+                                android:textAllCaps="false"
+                                android:textSize="@dimen/medium_x" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+
                     <RelativeLayout
                         android:layout_marginBottom="15dp"
                         android:layout_marginTop="15dp"
@@ -841,8 +902,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:visibility="gone">
+                        android:gravity="center">
                         <RelativeLayout
                             android:id="@+id/rlAds"
                             android:layout_width="match_parent"
@@ -855,62 +915,9 @@
             </ScrollView>
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/rlFooter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="40dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
 
-            <RelativeLayout
-                android:id="@+id/rlShare"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1">
 
-                <RelativeLayout
-                    android:layout_width="@dimen/width"
-                    android:layout_height="@dimen/height"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/margin"
-                    android:background="@drawable/bg_generate_rounded">
 
-                    <ImageView
-                        android:id="@+id/imgOpenApplication"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_centerInParent="true"
-                        android:padding="6dp" />
 
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1">
-
-                <Button
-                    android:id="@+id/btnClipboard"
-                    style="@style/brandonBoldTextView"
-                    android:layout_width="@dimen/width"
-                    android:layout_height="@dimen/height"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/margin"
-                    android:background="@drawable/bg_generate_rounded"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@string/my_clipboad"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/medium_x" />
-            </RelativeLayout>
-        </LinearLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

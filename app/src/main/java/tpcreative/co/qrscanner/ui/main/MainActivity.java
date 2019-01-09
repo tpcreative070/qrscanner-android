@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
+import com.google.android.gms.ads.AdView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -54,6 +55,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private ScannerFragment scannerFragment;
     private Storage storage;
     private QRScannerReceiver receiver;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

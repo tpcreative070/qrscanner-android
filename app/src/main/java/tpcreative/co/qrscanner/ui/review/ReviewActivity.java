@@ -126,7 +126,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                 adViewBanner.setAdUnitId(preference);
             }
 
-
 //            final Author author = Author.getInstance().getAuthorInfo();
 //            if (author!=null){
 //                if (author.version!=null){
@@ -143,7 +142,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
 //                    }
 //                }
 //            }
-
 
 
             rlAds.addView(adViewBanner);
@@ -164,25 +162,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
             @Override
             public void onAdLoaded() {
                 Utils.Log(TAG,"Loaded successful");
-                final Author author = Author.getInstance().getAuthorInfo();
-                if (author != null) {
-                    if (author.version != null) {
-                        if (author.version.isAds) {
-                            if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-                                rlAdsRoot.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                rlAdsRoot.setVisibility(View.GONE);
-                            }
-                        } else {
-                            rlAdsRoot.setVisibility(View.GONE);
-                        }
-                    } else {
-                        rlAdsRoot.setVisibility(View.GONE);
-                    }
-                } else {
-                    rlAdsRoot.setVisibility(View.GONE);
-                }
             }
 
             @Override
@@ -192,8 +171,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                adViewBanner.setVisibility(View.GONE);
-                rlAdsRoot.setVisibility(View.GONE);
                 Log.d(TAG, "Ad failed to load! error code: " + errorCode);
             }
 
