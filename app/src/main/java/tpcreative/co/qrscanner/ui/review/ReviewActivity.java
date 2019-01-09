@@ -148,6 +148,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
             addGoogleAdmods();
         } else {
             Log.d(TAG, "Premium Version");
+            rlAdsRoot.setVisibility(View.GONE);
         }
     }
 

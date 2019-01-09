@@ -352,6 +352,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             addGoogleAdmods();
 
         } else {
+            rlAdsRoot.setVisibility(View.GONE);
             Log.d(TAG, "Premium Version");
         }
     }
