@@ -16,12 +16,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -54,6 +58,8 @@ import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
@@ -61,23 +67,18 @@ import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 
-public class LocationFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener,
+public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback,GoogleMap.OnMapClickListener,LocationListener{
 
     private static final String TAG = LocationFragment.class.getSimpleName();
-    private Unbinder unbinder;
     @BindView(R.id.edtLatitude)
     EditText edtLatitude;
     @BindView(R.id.edtLongitude)
     EditText edtLongitude;
     @BindView(R.id.edtQuery)
     EditText edtQuery;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgReview)
-    ImageView imgReview;
     private SupportMapFragment mapFragment ;
     private GoogleMap mMap;
     private AwesomeValidation mAwesomeValidation ;
@@ -90,30 +91,21 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     private LocationManager locationManager;
     private boolean isRunning;
     private Save save;
-    private Animation mAnim = null;
 
 
-    public static LocationFragment newInstance(int index) {
-        LocationFragment fragment = new LocationFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_location, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        SingletonCloseFragment.getInstance().setUpdateData(false);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
-        Bundle bundle = getArguments();
-        final Save mData = (Save) bundle.get("data");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_location);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);;
+        Bundle bundle = getIntent().getExtras();
+        final Save mData = (Save) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -122,38 +114,16 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             Utils.Log(TAG,"Data is null");
         }
 
-        locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager  = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             showGpsWarningDialog();
         }
-        return view;
+        onDrawOverLay(this);
     }
-
-    @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onCloseWindow();
-                locationManager.removeUpdates(LocationFragment.this);
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
-    }
-
 
     public void showGpsWarningDialog() {
         PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.DarkDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
         dialogBuilder.setTitle(getString(R.string.gps_disabled));
         dialogBuilder.setMessage("Please turn on your location or GPS to get exactly position");
         dialogBuilder.setPadding(40,40,40,0);
@@ -212,23 +182,21 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         edtLongitude.setText(""+lastLon);
     }
 
-    @OnClick(R.id.imgReview)
-    public void onCheck(View view){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_select, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Create create = new Create();
                     try {
                         if (lastLon ==0 || lastLon==0){
-                            Utils.showGotItSnackbar(getView(),"Please enable GPS in order to get accurate lat and lon");
+                            Utils.showGotItSnackbar(edtLatitude,"Please enable GPS in order to get accurate lat and lon");
                         }
                         else {
                             create.lat = lastLat;
@@ -237,7 +205,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
                             create.createType = ParsedResultType.GEO;
                             create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                             create.id = (save != null) ? save.id : 0 ;
-                            Navigator.onMoveToReview(getActivity(),create);
+                            Navigator.onMoveToReview(this,create);
                         }
 
                     }
@@ -248,20 +216,17 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
                 else{
                     Utils.Log(TAG,"error");
                 }
+                return true;
             }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
-
+        }
+        return super.onOptionsItemSelected(item);
     }
 
+
     private void addValidationForEditText() {
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtLatitude, RegexTemplate.NOT_EMPTY, R.string.err_email);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtLongitude, RegexTemplate.NOT_EMPTY,R.string.err_object);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtQuery, RegexTemplate.NOT_EMPTY,R.string.err_query);
+        mAwesomeValidation.addValidation(this, R.id.edtLatitude, RegexTemplate.NOT_EMPTY, R.string.err_email);
+        mAwesomeValidation.addValidation(this,R.id.edtLongitude, RegexTemplate.NOT_EMPTY,R.string.err_object);
+        mAwesomeValidation.addValidation(this,R.id.edtQuery, RegexTemplate.NOT_EMPTY,R.string.err_query);
     }
 
     public void FocusUI(){
@@ -273,20 +238,6 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         edtLatitude.setText("");
         edtLongitude.setText("");
         edtQuery.setText("");
-    }
-
-    public void onCloseWindow(){
-        clearAndFocusUI();
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        if (save!=null){
-            SingletonSave.getInstance().setVisible();
-        }
-        else{
-            SingletonGenerate.getInstance().setVisible();
-        }
     }
 
     public void onSetData(){
@@ -316,17 +267,12 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         currentLat = 0;
         currentLon = 0;
         isRunning = false;
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
           Utils.Log(TAG,"Permission is request");
         }
         else{
             Utils.Log(TAG,"Permission is ready");
             mapFragment.getMapAsync(this);
-        }
-
-        if (SingletonCloseFragment.getInstance().isCloseWindow()){
-            onCloseWindow();
-            SingletonCloseFragment.getInstance().setUpdateData(false);
         }
     }
 
@@ -347,7 +293,6 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
     public void onDestroy() {
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
-        unbinder.unbind();
         locationManager.removeUpdates(this);
     }
 
@@ -359,12 +304,12 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
             mMap.setOnMapClickListener(this);
-            locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            locationManager  = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             enableMyLocation();
 
 
-            if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }else{
                 if(!mMap.isMyLocationEnabled())
                     mMap.setMyLocationEnabled(true);
@@ -397,10 +342,10 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
      */
 
     private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
-            PermissionUtils.requestPermission(getActivity(), LOCATION_PERMISSION_REQUEST_CODE,
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION, true);
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
@@ -471,7 +416,7 @@ public class LocationFragment extends Fragment implements GoogleMap.OnMyLocation
         if (PermissionUtils.isPermissionGranted(permissions, grantResults,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
             // Enable the my location layer if the permission has been granted.
-            locationManager  = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            locationManager  = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             enableMyLocation();
         } else {
             // Display the missing permission error dialog when the fragments resume.

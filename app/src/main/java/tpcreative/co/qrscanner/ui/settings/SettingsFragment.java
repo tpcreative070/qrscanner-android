@@ -33,6 +33,7 @@ import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
@@ -44,14 +45,12 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Theme;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends BaseFragment {
 
     private static final String TAG = SettingsFragment.class.getSimpleName();
     private static final String FRAGMENT_TAG = SettingsFragmentPreference.class.getSimpleName() + "::fragmentTag";
     @BindView(R.id.llAction)
     LinearLayout llAction;
-    private Unbinder unbinder;
-
 
     public static SettingsFragment newInstance(int index) {
         SettingsFragment fragment = new SettingsFragment();
@@ -61,11 +60,21 @@ public class SettingsFragment extends Fragment {
         return fragment;
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup viewGroup) {
+        View view = inflater.inflate(R.layout.fragment_settings, viewGroup, false);
+        return view;
+    }
+
+    @Override
+    protected void work() {
+        super.work();
         Fragment fragment = getChildFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         if (fragment == null) {
             fragment = Fragment.instantiate(getContext(), SettingsFragmentPreference.class.getName());
@@ -73,7 +82,6 @@ public class SettingsFragment extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
-        return view;
     }
 
     @Override
@@ -107,7 +115,6 @@ public class SettingsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-        unbinder.unbind();
     }
 
     @Override

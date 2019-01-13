@@ -6,9 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -29,11 +32,13 @@ import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
-public class EmailFragment extends Fragment{
+public class EmailFragment extends BaseActivitySlide {
 
     private static final String TAG = EmailFragment.class.getSimpleName();
     @BindView(R.id.edtEmail)
@@ -42,35 +47,18 @@ public class EmailFragment extends Fragment{
     EditText edtObject;
     @BindView(R.id.edtMessage)
     EditText edtMessage;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgReview)
-    ImageView imgReview;
-    private Unbinder unbinder;
     private AwesomeValidation mAwesomeValidation ;
     private Save save;
-    private Animation mAnim = null;
 
-
-    public static EmailFragment newInstance(int index) {
-        EmailFragment fragment = new EmailFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_email, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        SingletonCloseFragment.getInstance().setUpdateData(false);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
-        Bundle bundle = getArguments();
-        final Save mData = (Save) bundle.get("data");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_email);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Bundle bundle = getIntent().getExtras();
+        final Save mData = (Save) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -78,40 +66,19 @@ public class EmailFragment extends Fragment{
         else{
             Utils.Log(TAG,"Data is null");
         }
-
-        return view;
+        onDrawOverLay(this);
     }
 
-    @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onCloseWindow();
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_select, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    @OnClick(R.id.imgReview)
-    public void onCheck(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
                     Create create = new Create();
@@ -121,50 +88,26 @@ public class EmailFragment extends Fragment{
                     create.createType = ParsedResultType.EMAIL_ADDRESS;
                     create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                     create.id = (save != null) ? save.id : 0 ;
-                    Navigator.onMoveToReview(getActivity(),create);
+                    Navigator.onMoveToReview(EmailFragment.this,create);
                 }
                 else{
                     Utils.Log(TAG,"error");
                 }
+                return true;
             }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
-
+        }
+        return super.onOptionsItemSelected(item);
     }
 
+
     private void addValidationForEditText() {
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtObject,RegexTemplate.NOT_EMPTY,R.string.err_object);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtMessage, RegexTemplate.NOT_EMPTY,R.string.err_message);
+        mAwesomeValidation.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email);
+        mAwesomeValidation.addValidation(this,R.id.edtObject,RegexTemplate.NOT_EMPTY,R.string.err_object);
+        mAwesomeValidation.addValidation(this,R.id.edtMessage, RegexTemplate.NOT_EMPTY,R.string.err_message);
     }
 
     public void FocusUI(){
         edtEmail.requestFocus();
-    }
-
-    public void clearAndFocusUI(){
-        edtEmail.requestFocus();
-        edtEmail.setText("");
-        edtObject.setText("");
-        edtMessage.setText("");
-    }
-
-    public void onCloseWindow(){
-        clearAndFocusUI();
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        if (save!=null){
-            SingletonSave.getInstance().setVisible();
-        }
-        else{
-            SingletonGenerate.getInstance().setVisible();
-        }
     }
 
     public void onSetData(){
@@ -200,17 +143,13 @@ public class EmailFragment extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
         Utils.Log(TAG,"onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (SingletonCloseFragment.getInstance().isCloseWindow()){
-            onCloseWindow();
-            SingletonCloseFragment.getInstance().setUpdateData(false);
-        }
+        Utils.hideSoftKeyboard(this);
         Utils.Log(TAG,"onResume");
     }
 

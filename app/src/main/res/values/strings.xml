@@ -195,6 +195,8 @@
     <string name="key_theme_list">theme_list</string>
     <string name="key_is_first_gallery">is first gallery</string>
     <string name="key_is_first_help">is first_help</string>
+    <string name="key_data">data</string>
+    <string name="select">Select</string>
     <string name="tap_here_to_scan_code_from_gallery">Tap here to scan code from Gallery.</string>
     <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QRcode from your Gallery.</string>
     <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
@@ -274,7 +276,6 @@
     <string name="CSV_NetworkEncryption">NetworkEncryption</string>
     <string name="CSV_Url">Url</string>
     <string name="CSV_CreatedDateTime">CreatedDateTime</string>
-
 
 
 </resources>

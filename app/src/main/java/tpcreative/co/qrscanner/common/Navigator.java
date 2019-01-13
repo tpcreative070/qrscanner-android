@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
 import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
@@ -37,6 +38,14 @@ public class Navigator {
 
     public static void onMoveProVersion(Context context){
         Intent intent = new Intent(context,ProVersionActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static  <T> void onGenerateView(Activity context, Save save,Class<T> clazz ){
+        Intent intent = new Intent(context,clazz);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QRScannerApplication.getInstance().getString(R.string.key_data),save);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 

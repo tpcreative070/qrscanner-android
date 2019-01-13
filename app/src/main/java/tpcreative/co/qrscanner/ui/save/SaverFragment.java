@@ -51,6 +51,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import de.mrapp.android.dialog.MaterialDialog;
+import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
@@ -64,11 +65,9 @@ import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
-public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSelectedListener, View.OnClickListener, SingletonSave.SingletonSaveListener,Utils.UtilsListener {
+public class SaverFragment extends BaseFragment implements SaveView, SaveCell.ItemSelectedListener, View.OnClickListener, SingletonSave.SingletonSaveListener,Utils.UtilsListener {
 
     private static final String TAG = SaverFragment.class.getSimpleName();
-    private Unbinder unbinder;
-
     @BindView(R.id.imgArrowBack)
     ImageView imgArrowBack;
     @BindView(R.id.imgDelete)
@@ -111,11 +110,20 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_saver, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup viewGroup) {
+        View view = inflater.inflate(R.layout.fragment_saver, viewGroup, false);
+        return view;
+    }
+
+    @Override
+    protected void work() {
+        super.work();
         SingletonSave.getInstance().setListener(this);
         presenter = new SavePresenter();
         presenter.bindView(this);
@@ -134,9 +142,7 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
         imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgSelectAll.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
 
-        return view;
     }
-
 
     private void addRecyclerHeaders() {
         SectionHeaderProvider<Save> sh = new SimpleSectionHeaderProvider<Save>() {
@@ -727,7 +733,6 @@ public class SaverFragment extends Fragment implements SaveView, SaveCell.ItemSe
     public void onDestroy() {
         super.onDestroy();
         Utils.Log(TAG, "onDestroy");
-        unbinder.unbind();
     }
 
     @Override

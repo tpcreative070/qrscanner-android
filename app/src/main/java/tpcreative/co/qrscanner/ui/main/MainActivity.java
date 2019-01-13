@@ -4,21 +4,23 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationViewPager;
-import com.google.android.gms.ads.AdView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -27,8 +29,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.snatik.storage.Storage;
-import java.util.ArrayList;
 import java.util.List;
+import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
@@ -42,32 +44,62 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
+
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment currentFragment;
     private MainViewPagerAdapter adapter;
-    private AHBottomNavigation bottomNavigation;
-    private AHBottomNavigationViewPager viewPager;
-    private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
-    private ScannerFragment scannerFragment;
     private Storage storage;
     private QRScannerReceiver receiver;
+    @BindView(R.id.tabs)
+    TabLayout tabLayout;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.appBar)
+    AppBarLayout appBar;
 
-
+    private int[] tabIcons = {
+            R.drawable.baseline_history_white_48,
+            R.drawable.baseline_add_box_white_48,
+            R.drawable.ic_scanner,
+            R.drawable.baseline_save_alt_white_48,
+            R.drawable.baseline_settings_white_48,
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().hide();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         SingletonResponse.getInstance().setListener(this);
         storage = new Storage(getApplicationContext());
-        initUI();
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(2);
+        setupTabIcons();
         onAddPermissionCamera();
         ServiceManager.getInstance().onStartService();
         Theme.getInstance().getList();
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        viewPager.setOffscreenPageLimit(5);
+        adapter = new MainViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+    }
+
+    private void setupTabIcons() {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+        tabLayout.getTabAt(3).setIcon(tabIcons[3]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+        tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
     }
 
 
@@ -128,7 +160,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         }
 
-        bottomNavigation = findViewById(R.id.bottom_navigation);
+       // bottomNavigation = findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.view_pager);
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.baseline_history_white_48, R.color.colorAccent);
@@ -137,48 +169,42 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.baseline_save_alt_white_48, R.color.colorAccent);
         AHBottomNavigationItem item5 = new AHBottomNavigationItem(R.string.tab_5, R.drawable.baseline_settings_white_48, R.color.colorAccent);
 
-        bottomNavigationItems.add(item1);
-        bottomNavigationItems.add(item2);
-        bottomNavigationItems.add(item3);
-        bottomNavigationItems.add(item4);
-        bottomNavigationItems.add(item5);
+//        bottomNavigationItems.add(item1);
+//        bottomNavigationItems.add(item2);
+//        bottomNavigationItems.add(item3);
+//        bottomNavigationItems.add(item4);
+//        bottomNavigationItems.add(item5);
+//
+//
+//        bottomNavigation.addItems(bottomNavigationItems);
+//
+//        bottomNavigation.setTranslucentNavigationEnabled(true);
+//
+//        bottomNavigation.setTitleTextSizeInSp(15, 13);
+//
+//        // Change colors
+//        bottomNavigation.setInactiveColor(getResources().getColor(R.color.colorBlueLight));
+//        bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorDark));
+//        // bottomNavigation.setForceTint(true);
+//        bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
+//
+//        // bottomNavigation.setColored(true);
+//
+//        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+//            @Override
+//            public boolean onTabSelected(int position, boolean wasSelected) {
+//                if (currentFragment == null) {
+//                    currentFragment = adapter.getCurrentFragment();
+//                }
+//                viewPager.setCurrentItem(position, false);
+//                if (currentFragment == null) {
+//                    return true;
+//                }
+//                return true;
+//            }
+//        });
 
 
-        bottomNavigation.addItems(bottomNavigationItems);
-
-        bottomNavigation.setTranslucentNavigationEnabled(true);
-
-        bottomNavigation.setTitleTextSizeInSp(15, 13);
-
-        // Change colors
-        bottomNavigation.setInactiveColor(getResources().getColor(R.color.colorBlueLight));
-        bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorDark));
-        // bottomNavigation.setForceTint(true);
-        bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
-
-        // bottomNavigation.setColored(true);
-
-        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-            @Override
-            public boolean onTabSelected(int position, boolean wasSelected) {
-                if (currentFragment == null) {
-                    currentFragment = adapter.getCurrentFragment();
-                }
-                viewPager.setCurrentItem(position, false);
-                if (currentFragment == null) {
-                    return true;
-                }
-                return true;
-            }
-        });
-
-		/*
-		bottomNavigation.setOnNavigationPositionListener(new AHBottomNavigation.OnNavigationPositionListener() {
-			@Override public void onPositionChange(int y) {
-				Log.d("DemoActivity", "BottomNavigation Position: " + y);
-			}
-		});
-		*/
 
         viewPager.setOffscreenPageLimit(4);
         adapter = new MainViewPagerAdapter(getSupportFragmentManager());
@@ -188,16 +214,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void showScannerPosition() {
-        if (bottomNavigation!=null){
-            bottomNavigation.setCurrentItem(2);
-        }
+
     }
 
     @Override
     public void showCreatePosition() {
-        if (bottomNavigation!=null){
-            bottomNavigation.setCurrentItem(1);
-        }
+
     }
 
     @Override

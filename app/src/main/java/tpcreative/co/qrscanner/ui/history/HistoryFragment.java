@@ -46,6 +46,7 @@ import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
@@ -57,11 +58,9 @@ import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
-public class HistoryFragment extends Fragment implements HistoryView, HistoryCell.ItemSelectedListener, View.OnClickListener, SingletonHistory.SingletonHistoryListener {
+public class HistoryFragment extends BaseFragment implements HistoryView, HistoryCell.ItemSelectedListener, View.OnClickListener, SingletonHistory.SingletonHistoryListener {
 
     private static final String TAG = HistoryFragment.class.getSimpleName();
-    private Unbinder unbinder;
-
     @BindView(R.id.imgArrowBack)
     ImageView imgArrowBack;
     @BindView(R.id.imgDelete)
@@ -90,7 +89,6 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
     private boolean isSelectedAll = false;
     private ScannerResultFragment fragment;
 
-
     public static HistoryFragment newInstance(int index) {
         HistoryFragment fragment = new HistoryFragment();
         Bundle b = new Bundle();
@@ -99,11 +97,20 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup viewGroup) {
+        View view = inflater.inflate(R.layout.fragment_history, viewGroup, false);
+        return view;
+    }
+
+    @Override
+    protected void work() {
+        super.work();
         SingletonHistory.getInstance().setListener(this);
         presenter = new HistoryPresenter();
         presenter.bindView(this);
@@ -119,7 +126,6 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         imgSelectAll.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        return view;
     }
 
     @Override
@@ -172,7 +178,6 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
         }
         recyclerView.addCells(cells);
     }
-
 
     @Override
     public Context getContext() {
@@ -694,7 +699,6 @@ public class HistoryFragment extends Fragment implements HistoryView, HistoryCel
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-        unbinder.unbind();
     }
 
     @Override

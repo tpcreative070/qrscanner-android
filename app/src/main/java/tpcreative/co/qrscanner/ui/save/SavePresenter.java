@@ -45,12 +45,9 @@ public class SavePresenter extends Presenter<SaveView> {
     public void setFragmentList(){
         mFragment.clear();
         mFragment.add(ContactFragment.newInstance(5));
-        mFragment.add(EmailFragment.newInstance(6));
         mFragment.add(UrlFragment.newInstance(7));
         mFragment.add(WifiFragment.newInstance(8));
-        mFragment.add(LocationFragment.newInstance(9));
         mFragment.add(TelephoneFragment.newInstance(10));
-        mFragment.add(MessageFragment.newInstance(11));
         mFragment.add(EventFragment.newInstance(12));
         mFragment.add(TextFragment.newInstance(13));
     }

@@ -20,9 +20,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Dark.NoActionBar.FullScreen">
+        android:theme="@style/AppThemeSlide">
         <activity
             android:name=".ui.main.MainActivity"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,9 +71,26 @@
 
         <service android:name=".common.services.QRScannerService" />
 
-        <activity android:name=".ui.help.HelpActivity" />
-        <activity android:name=".ui.filecolor.ChangeFileColorActivity" />
-        <activity android:name=".ui.pro.ProVersionActivity" />
+        <activity android:name=".ui.help.HelpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.filecolor.ChangeFileColorActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.pro.ProVersionActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.create.EmailFragment"
+            android:label="@string/email"
+            android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".ui.create.MessageFragment"
+            android:label="@string/message"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".ui.create.LocationFragment"
+            android:label="@string/location"
+            android:screenOrientation="portrait"
+            ></activity>
+
 
     </application>
 

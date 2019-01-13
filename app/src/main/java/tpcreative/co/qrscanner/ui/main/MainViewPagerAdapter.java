@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.main;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,12 +19,20 @@ import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
 public class MainViewPagerAdapter extends FragmentPagerAdapter {
 
 	private ArrayList<Fragment> fragments = new ArrayList<>();
+	private ArrayList<String> arrayList = new ArrayList<>();
+
 	private static final String TAG = MainViewPagerAdapter.class.getSimpleName();
 	private Fragment currentFragment;
 
 	public MainViewPagerAdapter(FragmentManager fm) {
 		super(fm);
 		fragments.clear();
+		arrayList.clear();
+		arrayList.add("History");
+		arrayList.add("Create");
+		arrayList.add("Scanner");
+		arrayList.add("Save");
+		arrayList.add("Settings");
 		fragments.add(HistoryFragment.newInstance(0));
 		fragments.add(GenerateFragment.newInstance(1));
 		fragments.add(ScannerFragment.newInstance(2));
@@ -82,4 +91,12 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getCurrentFragment() {
 		return currentFragment;
 	}
+
+
+	@Nullable
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return arrayList.get(position);
+	}
+
 }

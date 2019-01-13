@@ -18,22 +18,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import de.mrapp.android.dialog.animation.BackgroundAnimation;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.BaseFragment;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.QRCodeType;
 
-public class GenerateFragment extends Fragment implements GenerateCell.ItemSelectedListener,GenerateView,SingletonGenerate.SingletonGenerateListener {
+public class GenerateFragment extends BaseFragment implements GenerateCell.ItemSelectedListener,GenerateView,SingletonGenerate.SingletonGenerateListener {
 
     private static final String TAG = GenerateFragment.class.getSimpleName();
-    private Unbinder unbinder;
     @BindView(R.id.recyclerView)
     SimpleRecyclerView recyclerView;
-    @BindView(R.id.tvTittle)
-    TextView tvTittle;
     private GeneratePresenter presenter;
-
-
 
     public static GenerateFragment newInstance(int index) {
         GenerateFragment fragment = new GenerateFragment();
@@ -44,17 +42,25 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
     }
 
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_generate, container, false);
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup viewGroup) {
+        View view = inflater.inflate(R.layout.fragment_generate, viewGroup, false);
+        return view;
+    }
+
+    @Override
+    protected void work() {
+        super.work();
         SingletonGenerate.getInstance().setListener(this);
-        unbinder = ButterKnife.bind(this, view);
         presenter = new GeneratePresenter();
         presenter.bindView(this);
         presenter.setList();
         presenter.setFragmentList();
-        return view;
     }
 
     @Nullable
@@ -84,38 +90,30 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
     @Override
     public void onClickItem(int position, boolean isChecked) {
         setInvisible();
-        replaceFragment(position);
+        switch (position){
+            case 0:{
+                Navigator.onGenerateView(getActivity(),null,EmailFragment.class);
+                break;
+            }
+            case 1 :{
+                Navigator.onGenerateView(getActivity(),null,MessageFragment.class);
+                break;
+            }
+            case 2 :{
+                Navigator.onGenerateView(getActivity(),null,LocationFragment.class);
+                break;
+            }
+        }
     }
 
-    public void replaceFragment(final int position){
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        //ft.detach(presenter.mFragment.get(position));
-        //ft.attach(presenter.mFragment.get(position));
-        ft.replace(R.id.flContainer,presenter.mFragment.get(position));
-        ft.commit();
-    }
 
     @Override
     public void setVisible() {
-        try {
-            recyclerView.setVisibility(View.VISIBLE);
-            tvTittle.setVisibility(View.VISIBLE);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     @Override
     public void setInvisible() {
-        try {
-            recyclerView.setVisibility(View.INVISIBLE);
-            tvTittle.setVisibility(View.INVISIBLE);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
 
     }
 
@@ -139,7 +137,6 @@ public class GenerateFragment extends Fragment implements GenerateCell.ItemSelec
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
         Utils.Log(TAG,"onDestroy");
     }
 

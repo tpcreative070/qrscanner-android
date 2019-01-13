@@ -116,7 +116,6 @@ dependencies {
     /*taptargetviewlibrary*/
     implementation project(':taptargetviewlibrary')
 
-
     /*Google admod*/
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
@@ -137,9 +136,12 @@ dependencies {
         exclude group: 'stax', module: 'stax'
     }
 
-
     /*CSV*/
     implementation files('libs/opencsv-4.4.jar')
+
+    /*Swipe activity*/
+    implementation project(':slibrlibrary')
+    implementation 'com.52inc:52Kit-core:0.5.1'
 
 }
 

@@ -7,9 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -33,11 +36,13 @@ import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
-public class MessageFragment extends Fragment{
+public class MessageFragment extends BaseActivitySlide {
 
     private static final String TAG = MessageFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
@@ -45,32 +50,18 @@ public class MessageFragment extends Fragment{
     EditText edtTo;
     @BindView(R.id.edtMessage)
     EditText edtMessage;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgReview)
-    ImageView imgReview;
-    private Unbinder unbinder;
     private Save save;
-    private Animation mAnim = null;
 
-    public static MessageFragment newInstance(int index) {
-        MessageFragment fragment = new MessageFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_message, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        SingletonCloseFragment.getInstance().setUpdateData(false);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_message);
 
-        Bundle bundle = getArguments();
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Bundle bundle = getIntent().getExtras();
         final Save mData = (Save) bundle.get("data");
         if (mData!=null){
             save = mData;
@@ -79,41 +70,20 @@ public class MessageFragment extends Fragment{
         else{
             Utils.Log(TAG,"Data is null");
         }
-
-        return view;
-    }
-
-    @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onCloseWindow();
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
+        onDrawOverLay(this);
     }
 
 
-    @OnClick(R.id.imgReview)
-    public void onCheck(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_select, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Create create = new Create();
                     create.phone = edtTo.getText().toString();
@@ -121,49 +91,27 @@ public class MessageFragment extends Fragment{
                     create.createType = ParsedResultType.SMS;
                     create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                     create.id = (save != null) ? save.id : 0 ;
-                    Navigator.onMoveToReview(getActivity(),create);
+                    Navigator.onMoveToReview(this,create);
                     Utils.Log(TAG,"Passed");
                 }
                 else{
                     Utils.Log(TAG,"error");
                 }
+                return true;
             }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void addValidationForEditText() {
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtTo, Patterns.PHONE, R.string.err_to);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtMessage, RegexTemplate.NOT_EMPTY,R.string.err_message);
+        mAwesomeValidation.addValidation(this, R.id.edtTo, Patterns.PHONE, R.string.err_to);
+        mAwesomeValidation.addValidation(this,R.id.edtMessage, RegexTemplate.NOT_EMPTY,R.string.err_message);
     }
 
     public void FocusUI(){
         edtTo.requestFocus();
     }
 
-    public void clearAndFocusUI(){
-        edtTo.requestFocus();
-        edtTo.setText("");
-        edtMessage.setText("");
-    }
-
-    public void onCloseWindow(){
-        clearAndFocusUI();
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        if (save!=null){
-            SingletonSave.getInstance().setVisible();
-        }
-        else{
-            SingletonGenerate.getInstance().setVisible();
-        }
-    }
 
     public void onSetData(){
         edtTo.setText(save.phone);
@@ -199,16 +147,11 @@ public class MessageFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG,"onDestroy");
-        unbinder.unbind();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (SingletonCloseFragment.getInstance().isCloseWindow()){
-            onCloseWindow();
-            SingletonCloseFragment.getInstance().setUpdateData(false);
-        }
         Utils.Log(TAG,"onResume");
     }
 

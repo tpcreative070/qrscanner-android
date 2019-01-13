@@ -1,58 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_collapseMode="pin" />
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp">
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
 
     <RelativeLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <RelativeLayout
-            android:id="@+id/rlButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <ImageView
-                android:id="@+id/imgArrowBack"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:padding="2dp"
-                android:src="@drawable/baseline_arrow_back_ios_white_48" />
-
-            <TextView
-                android:id="@+id/tvTittle"
-                style="@style/brandonBoldTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="@string/location"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:id="@+id/imgReview"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginTop="10dp"
-                android:padding="2dp"
-                android:src="@drawable/baseline_done_white_48" />
-
-        </RelativeLayout>
 
 
         <RelativeLayout
@@ -92,7 +78,6 @@
                             android:text="@string/latitude" />
 
                         <EditText
-                            android:textColor="@color/white"
                             android:id="@+id/edtLatitude"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -120,7 +105,6 @@
                             android:text="@string/longitude" />
 
                         <EditText
-                            android:textColor="@color/white"
                             android:id="@+id/edtLongitude"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -148,7 +132,6 @@
                             android:text="@string/query" />
 
                         <EditText
-                            android:textColor="@color/white"
                             android:id="@+id/edtQuery"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -169,4 +152,4 @@
                 android:layout_gravity="center"/>
         </RelativeLayout>
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -84,6 +84,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
@@ -92,7 +93,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 
-public class ScannerFragment extends Fragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
+public class ScannerFragment extends BaseFragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
 
     private static final String TAG = ScannerFragment.class.getSimpleName();
     @BindView(R.id.zxing_status_view)
@@ -105,13 +106,13 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     ImageView switch_camera;
     @BindView(R.id.imgCreate)
     ImageView imgCreate;
+    @BindView(R.id.zxing_barcode_scanner)
+    DecoratedBarcodeView barcodeScannerView;
     private CaptureManager capture;
-    private DecoratedBarcodeView barcodeScannerView;
     private BeepManager beepManager;
     private CameraSettings cameraSettings = new CameraSettings();
     private int typeCamera = 0 ;
     private Fragment fragment;
-    private Unbinder butterKnife;
     private boolean isTurnOnFlash;
     private Animation mAnim = null;
     private ScannerPresenter presenter;
@@ -314,17 +315,26 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         return fragment;
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_scanner, container, false);
-        butterKnife = ButterKnife.bind(this, view);
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup viewGroup) {
+        View view = inflater.inflate(R.layout.fragment_scanner, viewGroup, false);
+        return view;
+    }
+
+    @Override
+    protected void work() {
+        super.work();
         SingletonScanner.getInstance().setListener(this);
         presenter = new ScannerPresenter();
         presenter.bindView(this);
         presenter.setFragmentList();
         fragment = this;
-        barcodeScannerView = (DecoratedBarcodeView)view.findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.decodeContinuous(callback);
         zxing_status_view.setVisibility(View.INVISIBLE);
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
@@ -349,7 +359,12 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
         barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
         beepManager = new BeepManager(getActivity());
         onHandlerIntent();
-        return view;
+
+        if (barcodeScannerView!=null){
+            if (!barcodeScannerView.isActivated()) {
+                barcodeScannerView.resume();
+            }
+        }
     }
 
     public void switchCamera(final int type){
@@ -425,19 +440,18 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
 
     @Override
     public void setVisible() {
-        if (barcodeScannerView!=null){
-            barcodeScannerView.setVisibility(View.VISIBLE);
-            barcodeScannerView.resume();
-
-        }
+//        if (barcodeScannerView!=null){
+//            barcodeScannerView.setVisibility(View.VISIBLE);
+//            barcodeScannerView.resume();
+//        }
     }
 
     @Override
     public void setInvisible() {
-        if (barcodeScannerView!=null){
-            barcodeScannerView.pauseAndWait();
-            barcodeScannerView.setVisibility(View.INVISIBLE);
-        }
+//        if (barcodeScannerView!=null){
+//            barcodeScannerView.pauseAndWait();
+//            barcodeScannerView.setVisibility(View.INVISIBLE);
+//        }
     }
 
     @OnClick(R.id.switch_camera)
@@ -561,21 +575,17 @@ public class ScannerFragment extends Fragment implements SingletonScanner.Single
     @Override
     public void onDestroy() {
         super.onDestroy();
-        butterKnife.unbind();
         Log.d(TAG,"onDestroy");
         if (typeCamera!=2){
-            barcodeScannerView.pause();
+            if (barcodeScannerView!=null){
+                barcodeScannerView.pause();
+            }
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (barcodeScannerView!=null){
-            if (!barcodeScannerView.isActivated()) {
-                barcodeScannerView.resume();
-            }
-        }
         Log.d(TAG,"onResume");
     }
 

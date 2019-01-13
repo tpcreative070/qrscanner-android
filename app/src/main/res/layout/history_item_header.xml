@@ -16,7 +16,7 @@
             android:id="@+id/tvHeader"
             android:textSize="17sp"
             android:text="Header"
-            android:textColor="@color/colorRed"
+            android:textColor="?attr/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </RelativeLayout>

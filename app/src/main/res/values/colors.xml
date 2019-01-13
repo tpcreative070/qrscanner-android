@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="colorPrimary">#22aeae</color>
+    <color name="colorPrimaryDark">#0d7979</color>
     <color name="colorPrimaryV1">#3F51B5</color>
     <color name="colorPrimaryDarkV1">#303F9F</color>
     <color name="colorAccentV1">#FF4081</color>
     <color name="ColorBlueV1">#7ED321</color>
     <color name="ColorRedV1">#f91806</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#e19704</color>
     <color name="grey_lighter">#E0E0E0</color>
     <color name="grey_light">#9E9E9E</color>
     <color name="grey_dark">#424242</color>
@@ -19,8 +21,6 @@
     <color name="blue">#1E88E5</color>
     <color name="blue_dark">#01579B</color>
     <color name="white">#FFF</color>
-    <color name="colorPrimary">#F50057</color>
-    <color name="colorPrimaryDark">#C51162</color>
     <color name="colorDark">#000000</color>
     <color name="colorBlue">#1DE9B6</color>
     <color name="colorBlueDark">#76FF03</color>
@@ -37,6 +37,7 @@
     <color name="inbox_accent">#db4437</color>
 
     <!-- Material Color Palette -->
+    <color name="material_default">#757575</color>
     <color name="material_gray_050">#FAFAFA</color>
     <color name="material_gray_100">#F5F5F5</color>
     <color name="material_gray_200">#EEEEEE</color>

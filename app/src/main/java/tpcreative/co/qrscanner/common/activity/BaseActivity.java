@@ -1,5 +1,9 @@
 package tpcreative.co.qrscanner.common.activity;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBar;
@@ -8,6 +12,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.ftinc.kit.util.SizeUtils;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrListener;
+import com.r0adkll.slidr.model.SlidrPosition;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
@@ -25,17 +36,22 @@ public class BaseActivity extends AppCompatActivity {
         onStartCount = 1;
         if (savedInstanceState == null) // 1st time
         {
-            this.overridePendingTransition(R.anim.anim_slide_in_left,
-                    R.anim.anim_slide_out_left);
+           // this.overridePendingTransition(R.anim.anim_slide_in_left,
+           //         R.anim.anim_slide_out_left);
         } else // already created so reverse animation
         {
             onStartCount = 2;
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
+
 
     protected float getRandom(float range, float startsfrom) {
         return (float) (Math.random() * range) + startsfrom;
     }
+
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
