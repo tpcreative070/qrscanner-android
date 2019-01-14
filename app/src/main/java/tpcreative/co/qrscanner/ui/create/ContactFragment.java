@@ -1,44 +1,29 @@
 package tpcreative.co.qrscanner.ui.create;
-import android.graphics.PorterDuff;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonCloseFragment;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
-public class ContactFragment extends Fragment{
+public class ContactFragment extends BaseActivitySlide {
 
     private static final String TAG = ContactFragment.class.getSimpleName();
-    private Unbinder unbinder;
-
     @BindView(R.id.edtFullName)
     EditText edtFullName;
     @BindView(R.id.edtAddress)
@@ -47,35 +32,19 @@ public class ContactFragment extends Fragment{
     EditText edtPhone;
     @BindView(R.id.edtEmail)
     EditText edtEmail;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgReview)
-    ImageView imgReview;
-    private Animation mAnim = null;
-
     private AwesomeValidation mAwesomeValidation ;
     private Save save;
 
 
-    public static ContactFragment newInstance(int index) {
-        ContactFragment fragment = new ContactFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contact, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        SingletonCloseFragment.getInstance().setUpdateData(false);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
-        Bundle bundle = getArguments();
-        final Save mData = (Save) bundle.get("data");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_contact);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Bundle bundle = getIntent().getExtras();
+        final Save mData = (Save) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -83,42 +52,20 @@ public class ContactFragment extends Fragment{
         else{
             Utils.Log(TAG,"Data is null");
         }
-
-        Utils.Log(TAG,"onCreateView");
-
-        return view;
+        onDrawOverLay(this);
     }
 
-    @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onCloseWindow();
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
 
-            }
-        });
-        view.startAnimation(mAnim);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_select, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    @OnClick(R.id.imgReview)
-    public void onCheck(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
                     Create create = new Create();
@@ -129,43 +76,29 @@ public class ContactFragment extends Fragment{
                     create.createType = ParsedResultType.ADDRESSBOOK;
                     create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                     create.id = (save != null) ? save.id : 0 ;
-                    Navigator.onMoveToReview(getActivity(),create);
+                    Navigator.onMoveToReview(this,create);
                 }
                 else{
                     Utils.Log(TAG,"error");
                 }
+                return true;
             }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
+
     private void addValidationForEditText() {
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtFullName, RegexTemplate.NOT_EMPTY, R.string.err_fullName);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtAddress, RegexTemplate.NOT_EMPTY,R.string.err_address);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtPhone, Patterns.PHONE,R.string.err_phone);
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtEmail, Patterns.EMAIL_ADDRESS,R.string.err_email);
+        mAwesomeValidation.addValidation(this, R.id.edtFullName, RegexTemplate.NOT_EMPTY, R.string.err_fullName);
+        mAwesomeValidation.addValidation(this,R.id.edtAddress, RegexTemplate.NOT_EMPTY,R.string.err_address);
+        mAwesomeValidation.addValidation(this,R.id.edtPhone, Patterns.PHONE,R.string.err_phone);
+        mAwesomeValidation.addValidation(this,R.id.edtEmail, Patterns.EMAIL_ADDRESS,R.string.err_email);
     }
 
     public void FocusUI(){
-        edtEmail.requestFocus();
+        edtFullName.requestFocus();
     }
 
-    public void onCloseWindow(){
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        if (save!=null){
-            SingletonSave.getInstance().setVisible();
-        }
-        else{
-            SingletonGenerate.getInstance().setVisible();
-        }
-    }
 
     public void onSetData(){
         edtFullName.setText(save.fullName);
@@ -203,17 +136,25 @@ public class ContactFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
-        unbinder.unbind();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (SingletonCloseFragment.getInstance().isCloseWindow()){
-            onCloseWindow();
-            SingletonCloseFragment.getInstance().setUpdateData(false);
-        }
         Utils.Log(TAG,"onResume");
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
+            Utils.Log(TAG,"Finish...........");
+            if (data!=null){
+                SingletonSave.getInstance().reLoadData();
+            }
+            finish();
+        }
+    }
+
 
 }

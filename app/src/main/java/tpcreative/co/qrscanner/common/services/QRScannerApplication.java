@@ -21,6 +21,7 @@ import tpcreative.co.qrscanner.common.network.Dependencies;
 import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.ui.main.MainActivity;
 
 /**
  *
@@ -36,7 +37,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public static RootAPI serverAPI;
     private static String url;
     private boolean isLive;
-    private Activity activity;
+    private MainActivity activity;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
 
     @Override
@@ -94,26 +95,26 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
 
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
-        if (activity==null){
-            this.activity = activity;
+        if (activity instanceof MainActivity){
+            this.activity = (MainActivity) activity;
         }
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-        if (activity==null){
-            this.activity = activity;
+        if (activity instanceof MainActivity){
+            this.activity = (MainActivity) activity;
         }
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        if (activity==null){
-            this.activity = activity;
+        if (activity instanceof MainActivity){
+            this.activity = (MainActivity) activity;
         }
     }
 
-    public Activity getActivity() {
+    public MainActivity getActivity() {
         return activity;
     }
 

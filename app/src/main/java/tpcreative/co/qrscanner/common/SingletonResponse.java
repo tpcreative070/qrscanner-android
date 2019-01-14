@@ -51,5 +51,4 @@ public class SingletonResponse {
         void onNetworkConnectionChanged(boolean isConnected);
     }
 
-
 }

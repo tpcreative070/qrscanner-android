@@ -43,7 +43,7 @@
             android:layout_weight="0.3"
             android:layout_height="match_parent">
             <ImageView
-                android:tint="@color/colorDark"
+                android:tint="?attr/colorAccent"
                 android:padding="10dp"
                 android:layout_marginRight="20dp"
                 android:layout_alignParentEnd="true"

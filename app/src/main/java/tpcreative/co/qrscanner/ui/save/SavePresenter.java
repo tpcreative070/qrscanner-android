@@ -1,30 +1,15 @@
 package tpcreative.co.qrscanner.ui.save;
-
 import android.support.v4.app.Fragment;
-
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
-import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.TypeCategories;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
-import tpcreative.co.qrscanner.ui.create.ContactFragment;
-import tpcreative.co.qrscanner.ui.create.EmailFragment;
-import tpcreative.co.qrscanner.ui.create.EventFragment;
-import tpcreative.co.qrscanner.ui.create.LocationFragment;
-import tpcreative.co.qrscanner.ui.create.MessageFragment;
-import tpcreative.co.qrscanner.ui.create.TelephoneFragment;
-import tpcreative.co.qrscanner.ui.create.TextFragment;
-import tpcreative.co.qrscanner.ui.create.UrlFragment;
-import tpcreative.co.qrscanner.ui.create.WifiFragment;
-import tpcreative.co.qrscanner.ui.history.HistoryView;
 
 public class SavePresenter extends Presenter<SaveView> {
 
@@ -41,17 +26,6 @@ public class SavePresenter extends Presenter<SaveView> {
         mList = new ArrayList<>();
         mFragment = new ArrayList<>();
     }
-
-    public void setFragmentList(){
-        mFragment.clear();
-        mFragment.add(ContactFragment.newInstance(5));
-        mFragment.add(UrlFragment.newInstance(7));
-        mFragment.add(WifiFragment.newInstance(8));
-        mFragment.add(TelephoneFragment.newInstance(10));
-        mFragment.add(EventFragment.newInstance(12));
-        mFragment.add(TextFragment.newInstance(13));
-    }
-
 
     public Map<String,Save> getUniqueList(){
         SaveView view = view();

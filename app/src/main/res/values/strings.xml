@@ -197,6 +197,8 @@
     <string name="key_is_first_help">is first_help</string>
     <string name="key_data">data</string>
     <string name="select">Select</string>
+    <string name="print">Print</string>
+    <string name="report">Report</string>
     <string name="tap_here_to_scan_code_from_gallery">Tap here to scan code from Gallery.</string>
     <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QRcode from your Gallery.</string>
     <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
@@ -238,6 +240,7 @@
     <string name="pro_version">Pro Version</string>
 
 
+    <string name="selected">selected</string>
     <string name="copy_items">Copy items</string>
     <string name="choose_which_items_you_want_to_copy">Select which items you want to copy.</string>
     <string name="key_author">Author</string>

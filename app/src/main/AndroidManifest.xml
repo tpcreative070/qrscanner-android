@@ -91,6 +91,40 @@
             android:screenOrientation="portrait"
             ></activity>
 
+        <activity android:name=".ui.create.EventFragment"
+            android:label="@string/event"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".ui.create.ContactFragment"
+            android:label="@string/contact"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".ui.create.TelephoneFragment"
+            android:label="@string/telephone"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".ui.create.TextFragment"
+            android:label="@string/text"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".ui.create.WifiFragment"
+            android:label="@string/wifi"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".ui.create.UrlFragment"
+            android:label="@string/url"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".ui.scannerresult.ScannerResultFragment"
+            android:screenOrientation="portrait"
+            ></activity>
+
 
     </application>
 

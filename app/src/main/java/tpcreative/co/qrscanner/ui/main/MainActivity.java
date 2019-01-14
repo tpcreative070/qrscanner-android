@@ -4,8 +4,10 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -15,12 +17,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -28,12 +32,15 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 import com.snatik.storage.Storage;
 import java.util.List;
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.SingletonSettings;
@@ -43,7 +50,11 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
+import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Theme;
+import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.ui.history.HistoryFragment;
+import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
@@ -62,6 +73,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @BindView(R.id.appBar)
     AppBarLayout appBar;
 
+    @BindView(R.id.speedDial)
+    SpeedDialView mSpeedDialView;
+
+
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
             R.drawable.baseline_add_box_white_48,
@@ -69,6 +84,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             R.drawable.baseline_save_alt_white_48,
             R.drawable.baseline_settings_white_48,
     };
+
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,16 +102,42 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(2);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            tab.setCustomView(getTabView(i));
+        }
         setupTabIcons();
         onAddPermissionCamera();
         ServiceManager.getInstance().onStartService();
         Theme.getInstance().getList();
+        initSpeedDial();
+    }
+
+    public void onShowFloatingButton(Fragment fragment){
+
+       if (fragment instanceof HistoryFragment){
+           if (mSpeedDialView!=null){
+               mSpeedDialView.show();
+           }
+       }
+       else if (fragment instanceof SaverFragment){
+           if (mSpeedDialView!=null){
+               mSpeedDialView.show();
+           }
+       }
+       else{
+           if (mSpeedDialView!=null){
+               mSpeedDialView.hide();
+           }
+       }
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
         viewPager.setOffscreenPageLimit(5);
         adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+        currentFragment = adapter.getCurrentFragment();
     }
 
     private void setupTabIcons() {
@@ -102,12 +148,66 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
     }
 
+    public View getTabView(int position) {
+        View view= LayoutInflater.from(QRScannerApplication.getInstance()).inflate(R.layout.custom_tab_items, null);
+        TextView textView= (TextView) view.findViewById(R.id.textView);
+        textView.setText(adapter.getPageTitle(position));
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+        imageView .setImageResource(tabIcons[position]);
+        return view;
+    }
+
+
+    private void initSpeedDial() {
+        Utils.Log(TAG, "Init floating button");
+        Drawable drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_select_all_white_48);
+        mSpeedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id
+                .fab_track, drawable)
+                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, getTheme()))
+                .setLabel(getString(R.string.select))
+                .setLabelColor(Color.WHITE)
+                .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
+                        getTheme()))
+                .create());
+
+        drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_subtitles_white_48);
+        mSpeedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_csv, drawable)
+                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary,
+                        getTheme()))
+                .setLabel(R.string.csv)
+                .setLabelColor(getResources().getColor(R.color.white))
+                .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
+                        getTheme()))
+                .create());
+
+
+        //Set option fabs clicklisteners.
+        mSpeedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+            @Override
+            public boolean onActionSelected(SpeedDialActionItem actionItem) {
+                final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                switch (actionItem.getId()) {
+                    case R.id.fab_track:
+                        SingletonMain.getInstance().isShowDeleteAction(true);
+                        return false; // false will close it without animation
+                    case R.id.fab_csv:
+                        SingletonMain.getInstance().isShowDeleteAction(false);
+                        return false; // closes without animation (same as mSpeedDialView.close(false); return false;)
+                }
+                return true; // To keep the Speed Dial open
+            }
+        });
+
+        mSpeedDialView.show();
+    }
+
+
+
 
     public void onInitReceiver(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             receiver =new QRScannerReceiver();
-            registerReceiver(receiver,
-                    new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+            registerReceiver(receiver,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
     }
 
@@ -151,67 +251,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 }).onSameThread().check();
     }
 
-
-
-
-    private void initUI() {
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        }
-
-       // bottomNavigation = findViewById(R.id.bottom_navigation);
-        viewPager = findViewById(R.id.view_pager);
-
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.baseline_history_white_48, R.color.colorAccent);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.baseline_add_box_white_48, R.color.colorAccent);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_scanner, R.color.colorAccent);
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.baseline_save_alt_white_48, R.color.colorAccent);
-        AHBottomNavigationItem item5 = new AHBottomNavigationItem(R.string.tab_5, R.drawable.baseline_settings_white_48, R.color.colorAccent);
-
-//        bottomNavigationItems.add(item1);
-//        bottomNavigationItems.add(item2);
-//        bottomNavigationItems.add(item3);
-//        bottomNavigationItems.add(item4);
-//        bottomNavigationItems.add(item5);
-//
-//
-//        bottomNavigation.addItems(bottomNavigationItems);
-//
-//        bottomNavigation.setTranslucentNavigationEnabled(true);
-//
-//        bottomNavigation.setTitleTextSizeInSp(15, 13);
-//
-//        // Change colors
-//        bottomNavigation.setInactiveColor(getResources().getColor(R.color.colorBlueLight));
-//        bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorDark));
-//        // bottomNavigation.setForceTint(true);
-//        bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
-//
-//        // bottomNavigation.setColored(true);
-//
-//        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-//            @Override
-//            public boolean onTabSelected(int position, boolean wasSelected) {
-//                if (currentFragment == null) {
-//                    currentFragment = adapter.getCurrentFragment();
-//                }
-//                viewPager.setCurrentItem(position, false);
-//                if (currentFragment == null) {
-//                    return true;
-//                }
-//                return true;
-//            }
-//        });
-
-
-
-        viewPager.setOffscreenPageLimit(4);
-        adapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        currentFragment = adapter.getCurrentFragment();
-    }
-
     @Override
     public void showScannerPosition() {
 
@@ -243,7 +282,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         }
     }
-
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
@@ -366,7 +404,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 if (positive!=null &&  negative!=null && title!=null){
                     Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
-                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
+                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.black));
                     positive.setTypeface(typeface,Typeface.BOLD);
                     positive.setTextSize(14);
                     negative.setTypeface(typeface,Typeface.BOLD);

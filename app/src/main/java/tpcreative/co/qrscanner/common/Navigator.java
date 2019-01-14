@@ -18,12 +18,16 @@ import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 
 public class Navigator {
 
+    public static final int CREATE = 1000;
+    public static final int SCANNER = 1001;
+
+
     public static void onMoveToReview(Activity context, Create create){
         Intent intent = new Intent(context, ReviewActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(QRScannerApplication.getInstance().getString(R.string.key_create_intent),create);
         intent.putExtras(bundle);
-        context.startActivityForResult(intent,1000);
+        context.startActivityForResult(intent,CREATE);
     }
 
     public static void onMoveToHelp(Context context){
@@ -47,6 +51,14 @@ public class Navigator {
         bundle.putSerializable(QRScannerApplication.getInstance().getString(R.string.key_data),save);
         intent.putExtras(bundle);
         context.startActivity(intent);
+    }
+
+    public static  <T> void onResultView(Activity context, Create save,Class<T> clazz ){
+        Intent intent = new Intent(context,clazz);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QRScannerApplication.getInstance().getString(R.string.key_data),save);
+        intent.putExtras(bundle);
+        context.startActivityForResult(intent,SCANNER);
     }
 
 }

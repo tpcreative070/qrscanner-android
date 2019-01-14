@@ -25,36 +25,35 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:fontFamily">@font/brandon_regs</item>
     </style>
 
 
     <!-- Header Background -->
     <style name="Theme.SwitchDateTime.HeaderBackground">
-        <item name="android:background">@color/colorDark</item>
+        <item name="android:background">@color/white</item>
     </style>
 
     <!-- Content Background -->
     <style name="Theme.SwitchDateTime.ContentBackground">
-        <item name="android:background">@color/colorContentBackground</item>
+        <item name="android:background">@color/material_teal_200</item>
     </style>
 
     <!-- Title -->
     <style name="Theme.SwitchDateTime.TitleDateTimeLabelText">
         <item name="android:textSize">@dimen/title_date_time_label_text</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?attr/colorAccent</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Icon -->
     <style name="Theme.SwitchDateTime.IconDateTimeSwitch">
         <item name="android:src">@drawable/baseline_invert_colors_white_48</item>
-        <item name="tint">@color/white</item>
+        <item name="tint">?attr/colorAccent</item>
     </style>
 
     <!-- Time  -->
     <style name="Theme.SwitchDateTime.Time">
-        <item name="timeCircleColor">@color/colorCircleClock</item>
+        <item name="timeCircleColor">?attr/colorAccent</item>
         <item name="timeCenterColor">@color/colorAccent</item>
         <item name="timeAmPmBackgroundColor">@color/material_teal_100</item>
         <item name="timeAmPmSelectBackgroundColor">@color/colorAccent</item> <!-- Alpha is apply-->

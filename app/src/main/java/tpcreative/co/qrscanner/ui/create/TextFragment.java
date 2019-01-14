@@ -1,71 +1,43 @@
 package tpcreative.co.qrscanner.ui.create;
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageView;
+
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.google.zxing.client.result.ParsedResultType;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonCloseFragment;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
-public class TextFragment extends Fragment{
+public class TextFragment extends BaseActivitySlide {
 
     private static final String TAG = TextFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
-    private Unbinder unbinder;
     @BindView(R.id.edtText)
     EditText editText;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgReview)
-    ImageView imgReview;
     private Save save;
-    private Animation mAnim = null;
 
-    public static TextFragment newInstance(int index) {
-        TextFragment fragment = new TextFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_text, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        SingletonCloseFragment.getInstance().setUpdateData(false);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
-        Bundle bundle = getArguments();
-        final Save mData = (Save) bundle.get("data");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_text);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Bundle bundle = getIntent().getExtras();
+        final Save mData = (Save) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -73,42 +45,19 @@ public class TextFragment extends Fragment{
         else{
             Utils.Log(TAG,"Data is null");
         }
-
-        return view;
+        onDrawOverLay(this);
     }
 
-    @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onCloseWindow();
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_select, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-
-    @OnClick(R.id.imgReview)
-    public void onCheck(View view){
-
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
                     Create create = new Create();
@@ -116,49 +65,25 @@ public class TextFragment extends Fragment{
                     create.createType = ParsedResultType.TEXT;
                     create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                     create.id = (save != null) ? save.id : 0 ;
-                    Navigator.onMoveToReview(getActivity(),create);
+                    Navigator.onMoveToReview(this,create);
                 }
                 else{
                     Utils.Log(TAG,"error");
                 }
+                return true;
             }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
-
-
-
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void addValidationForEditText() {
-        mAwesomeValidation.addValidation(getActivity(),R.id.edtText, RegexTemplate.NOT_EMPTY,R.string.err_text);
+        mAwesomeValidation.addValidation(this,R.id.edtText, RegexTemplate.NOT_EMPTY,R.string.err_text);
     }
 
     public void FocusUI(){
         editText.requestFocus();
     }
 
-    public void clearAndFocusUI(){
-        editText.requestFocus();
-        editText.setText("");
-    }
-
-    public void onCloseWindow(){
-        clearAndFocusUI();
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        if (save!=null){
-            SingletonSave.getInstance().setVisible();
-        }
-        else{
-            SingletonGenerate.getInstance().setVisible();
-        }
-    }
 
     public void onSetData(){
         editText.setText(save.text);
@@ -192,25 +117,24 @@ public class TextFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
-        unbinder.unbind();
     }
-
-
 
     @Override
     public void onResume() {
         super.onResume();
-        if (SingletonCloseFragment.getInstance().isCloseWindow()){
-            onCloseWindow();
-            SingletonCloseFragment.getInstance().setUpdateData(false);
-        }
         Utils.Log(TAG,"onResume");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Utils.Log(TAG,"onActivityResult");
+        if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
+            Utils.Log(TAG,"Finish...........");
+            if (data!=null){
+                SingletonSave.getInstance().reLoadData();
+            }
+            finish();
+        }
     }
 
 }

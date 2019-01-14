@@ -48,14 +48,6 @@ public class MySwitchPreference extends CheckBoxPreference {
     public void onBindViewHolder(PreferenceViewHolder view) {
         super.onBindViewHolder(view);
         SwitchCompat checkBox = (SwitchCompat) view.findViewById(android.R.id.checkbox);
-        TextView titleView = (TextView) view.findViewById(android.R.id.title);
-        TextView summaryView = (TextView) view.findViewById(android.R.id.summary);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_bld);
-        Typeface typefaceSumary = ResourcesCompat.getFont(getContext(), R.font.brandon_reg);
-        summaryView.setTypeface(typefaceSumary);
-        titleView.setTypeface(typeface);
-        titleView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
-        summaryView.setTextColor(getContext().getResources().getColor(R.color.white));
         ImageView imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
         imageViewCover.setVisibility(View.INVISIBLE);
         checkBox.setVisibility(View.VISIBLE);

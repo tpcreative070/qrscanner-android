@@ -14,9 +14,4 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         mFragment = new ArrayList<>();
     }
 
-    public void setFragmentList(){
-        mFragment.clear();
-        mFragment.add(ScannerResultFragment.newInstance(14));
-    }
-
 }

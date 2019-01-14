@@ -22,6 +22,7 @@ import com.jaychang.srv.SimpleViewHolder;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 
@@ -93,11 +94,28 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
                     if (listener.isDeleted()){
                         viewHolder.ckDelete.setChecked(!getItem().isChecked());
                         listener.onClickItem(i,!getItem().isChecked());
+                        Utils.Log(TAG,"delete");
                     }
                     else{
                         listener.onClickItem(i);
+                        Utils.Log(TAG,"on clicked");
                     }
                 }
+                else {
+                    Utils.Log(TAG,"???");
+                }
+            }
+        });
+
+        viewHolder.lItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (listener!=null){
+                    if (!listener.isDeleted()){
+                        listener.onLongClickItem(i);
+                    }
+                }
+                return false;
             }
         });
 
@@ -168,6 +186,7 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
     public  interface ItemSelectedListener{
         void onClickItem(int position, boolean isChecked);
         void onClickItem(int position);
+        void onLongClickItem(int position);
         void onClickShare(int position);
         void onClickEdit(int position);
         boolean isDeleted();

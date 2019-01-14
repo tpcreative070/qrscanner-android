@@ -3,7 +3,6 @@ package tpcreative.co.qrscanner.common;
 public class SingletonSave {
     private static SingletonSave instance ;
     private SingletonSaveListener listener;
-    private boolean isUpdateDate;
 
     public static SingletonSave getInstance(){
         if (instance==null){
@@ -20,29 +19,15 @@ public class SingletonSave {
         this.listener = listener;
     }
 
-    public void setVisible(){
+    public void reLoadData(){
         if (listener!=null){
-            listener.setVisible();
+            listener.reLoadData();
         }
-    }
-
-    public void setInvisible(){
-        if (listener!=null){
-            listener.setInvisible();
-        }
-    }
-
-    public void setUpdateData(boolean isUpdateDate){
-        this.isUpdateDate = isUpdateDate;
-    }
-
-    public boolean isUpdateData() {
-        return isUpdateDate;
     }
 
     public interface SingletonSaveListener{
-        void setVisible();
-        void setInvisible();
+        void reLoadData();
     }
+
 
 }

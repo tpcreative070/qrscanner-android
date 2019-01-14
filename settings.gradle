@@ -1,1 +1,1 @@
-include ':app', 'library','zxing-android-embedded','switchdatetime','taptargetviewlibrary','library-progress-dialog','materialdialoglibrary','slibrlibrary'
+include ':app','zxing-android-embedded','switchdatetime','library-progress-dialog','materialdialoglibrary','slibrlibrary','floatingbuttonlibrary'

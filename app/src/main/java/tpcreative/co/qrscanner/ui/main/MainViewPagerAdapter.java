@@ -4,8 +4,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
+
+import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.ui.create.GenerateFragment;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
@@ -23,6 +31,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 
 	private static final String TAG = MainViewPagerAdapter.class.getSimpleName();
 	private Fragment currentFragment;
+
 
 	public MainViewPagerAdapter(FragmentManager fm) {
 		super(fm);
@@ -83,6 +92,9 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 		}
 		super.setPrimaryItem(container, position, object);
 	}
+
+
+
 
 	/**
 	 * Get the current fragment

@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -12,17 +11,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -32,9 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -55,20 +47,14 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonHistory;
-import tpcreative.co.qrscanner.common.SingletonSave;
-import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
-import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
@@ -77,16 +63,12 @@ import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
-public class ScannerResultFragment extends Fragment implements ScannerResultView,Utils.UtilsListener{
+
+public class ScannerResultFragment extends BaseActivitySlide implements ScannerResultView,Utils.UtilsListener{
 
     private static final String TAG = ScannerResultFragment.class.getSimpleName();
-    private Unbinder unbinder;
     private ScannerResultPresenter presenter;
     private Create create;
-    @BindView(R.id.tvTitle)
-    TextView tvTitle;
-
-
     List<LinearLayout> mList = new ArrayList<>();
     private History history = new History();
 
@@ -193,10 +175,6 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @BindView(R.id.imgOpenApplication)
     ImageView imgOpenApplication;
 
-    /*Back button*/
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-
     private  String code ;
     private Bitmap bitmap;
     private Animation mAnim = null;
@@ -210,23 +188,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     @BindView(R.id.scrollView)
     ScrollView scrollView;
 
-
-
-    public static ScannerResultFragment newInstance(int index) {
-        ScannerResultFragment fragment = new ScannerResultFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_review, container,false);
-        unbinder = ButterKnife.bind(this, view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_review);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         scrollView.smoothScrollTo(0,0);
-
         mList.add(llEmail);
         mList.add(llSMS);
         mList.add(llContact);
@@ -240,23 +209,44 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         mList.add(llISBN);
         presenter = new ScannerResultPresenter();
         presenter.bindView(this);
-        presenter.getIntent(getArguments());
-        SingletonHistory.getInstance().setUpdateData(true);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgOpenApplication.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        presenter.getIntent(this);
         initAds();
-        return view;
+        onDrawOverLay(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_result, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_report:{
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support(Report issues)");
+                    intent.putExtra(Intent.EXTRA_TEXT, "");
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    //TODO smth
+                }
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void initAds() {
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
-            adViewBanner = new AdView(getContext());
+            adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
             adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
-            adViewBanner = new AdView(getContext());
+            adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
 
 
@@ -389,56 +379,9 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     }
 
 
-    @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.remove(ScannerResultFragment.this).commit();
-                if (create!=null){
-                    if (create.fragmentType == EnumFragmentType.SCANNER){
-                        SingletonScanner.getInstance().setVisible();
-                        SingletonHistory.getInstance().setUpdateData(true);
-                    }
-                    else if (create.fragmentType == EnumFragmentType.SAVER){
-                        SingletonSave.getInstance().setVisible();
-                    }
-                    else if (create.fragmentType == EnumFragmentType.HISTORY){
-                        SingletonHistory.getInstance().setVisible();
-                    }
-                }
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
-    }
-
-
-    @OnClick(R.id.tvReport)
-    public void onReportIssues(View view){
-        try {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
-                intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support(Report issues)");
-                intent.putExtra(Intent.EXTRA_TEXT, "");
-                startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                //TODO smth
-        }
-    }
-
     @OnClick(R.id.rlShare)
     public void openApplication(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim = AnimationUtils.loadAnimation(this, R.anim.anomation_click_item);
         mAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -457,7 +400,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     }
 
     public void onAddPermissionPhoneCall() {
-        Dexter.withActivity(getActivity())
+        Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.CALL_PHONE)
                 .withListener(new MultiplePermissionsListener() {
@@ -497,7 +440,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     }
 
     public void onAddPermissionSave() {
-        Dexter.withActivity(getActivity())
+        Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -704,13 +647,13 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.email = create.email;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_perm_contact_calendar_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_perm_contact_calendar_white_48));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
                 onShowUI(llContact);
-                tvTitle.setText("AddressBook");
+                setTitle("AddressBook");
                 break;
             case EMAIL_ADDRESS:
 
@@ -730,14 +673,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.message = create.message;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_email_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_email_white_48));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
 
                 onShowUI(llEmail);
-                tvTitle.setText("Email");
+                setTitle("Email");
                 break;
             case PRODUCT:
                 /*Put item to HashClipboard*/
@@ -747,13 +690,13 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.text = create.productId;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
                 onShowUI(llProduct);
-                tvTitle.setText("Product");
+                setTitle("Product");
                 break;
             case URI:
 
@@ -767,13 +710,13 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_language_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_language_white_48));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
                 onShowUI(llURL);
-                tvTitle.setText("Url");
+                setTitle("Url");
                 final boolean isAutoOpening = PrefsController.getBoolean(getString(R.string.key_auto_navigate_to_browser),false);
                 if (isAutoOpening){
                     onOpenWebSites(create.url);
@@ -801,15 +744,15 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
 
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_network_wifi_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_network_wifi_white_48));
 
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
 
                 onShowUI(llWifi);
-                tvTitle.setText("Wifi");
+                setTitle("Wifi");
                 break;
 
             case GEO:
@@ -831,15 +774,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_location_on_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_location_on_white_48));
 
                 }else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
 
                 onShowUI(llLocation);
-                tvTitle.setText("Location");
-
+                setTitle("Location");
                 break;
             case TEL:
 
@@ -853,14 +795,14 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_phone_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_phone_white_48));
 
                 }else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
 
                 onShowUI(llTelephone);
-                tvTitle.setText("Telephone");
+                setTitle("Telephone");
 
                 break;
             case SMS:
@@ -880,15 +822,15 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
 
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
 
                 onShowUI(llSMS);
-                tvTitle.setText("SMS");
+                setTitle("SMS");
                 break;
             case CALENDAR:
 
@@ -918,13 +860,13 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_event_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_event_white_48));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
                 onShowUI(llEvent);
-                tvTitle.setText("Calendar");
+                setTitle("Calendar");
                 Utils.Log(TAG,"start milliseconds : " + create.startEventMilliseconds);
 
                 break;
@@ -936,13 +878,13 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.text = create.ISBN;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
                 onShowUI(llISBN);
-                tvTitle.setText("ISBN");
+                setTitle("ISBN");
                 break;
             default:
                 /*Put item to HashClipboard*/
@@ -952,13 +894,13 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 history.text = create.text;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
                 }
                 onShowUI(llText);
-                tvTitle.setText("Product");
+                setTitle("Text");
                 break;
         }
 
@@ -981,7 +923,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 File file = new File(path);
                 if (file.isFile()){
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
                         shareToSocial(uri);
                     }
                     else{
@@ -990,7 +932,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                     }
                 }
                 else{
-                    Utils.showGotItSnackbar(getView(),R.string.no_items_found);
+                    Utils.showGotItSnackbar(telephoneNumber,R.string.no_items_found);
                 }
             }
             default:{
@@ -1013,7 +955,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(getContext(),theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
+            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
             Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
         } catch(Exception e) {
             Utils.Log(TAG,e.getMessage());
@@ -1044,7 +986,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
         history.favorite = create.favorite;
 
         history.createDatetime = Utils.getCurrentDateTime();
-        InstanceGenerator.getInstance(getContext()).onInsert(history);
+        InstanceGenerator.getInstance(this).onInsert(history);
     }
 
     @Override
@@ -1072,10 +1014,19 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
     public void onDestroy() {
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
-        unbinder.unbind();
         if (adViewBanner != null) {
             adViewBanner.destroy();
         }
+        if (presenter.result!=null){
+            switch (presenter.result.fragmentType){
+                case SCANNER:{
+                    Intent intent = getIntent();
+                    setResult(RESULT_OK,intent);
+                    break;
+                }
+            }
+        }
+
     }
 
     @Override
@@ -1089,7 +1040,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
     public void onClipboardDialog() {
         presenter.hashClipboardResult.clear();
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.DarkDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
         dialogBuilder.setTitle(R.string.copy_items);
         dialogBuilder.setPadding(40,40,40,0);
         dialogBuilder.setMargin(60,0,60,0);
@@ -1116,7 +1067,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (presenter.hashClipboardResult!=null &&presenter.hashClipboardResult.size()>0){
                     Utils.copyToClipboard(presenter.getResult(presenter.hashClipboardResult));
-                    Utils.showGotItSnackbar(getView(),R.string.copied_successful);
+                    Utils.showGotItSnackbar(emailMessage,R.string.copied_successful);
                 }
             }
         });
@@ -1136,7 +1087,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 TextView title = dialog.findViewById(android.R.id.title);
                 TextView content = dialog.findViewById(android.R.id.message);
                 if (positive!=null && negative!=null && title!=null && content!=null){
-                    Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.brandon_bld);
+                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
                     title.setTypeface(typeface,Typeface.BOLD);
                     title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
                     positive.setTypeface(typeface,Typeface.BOLD);
@@ -1153,7 +1104,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
 
     @OnClick(R.id.btnClipboard)
     public void onClickedClipboard(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
+        mAnim = AnimationUtils.loadAnimation(this, R.anim.anomation_click_item);
         mAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -1188,7 +1139,7 @@ public class ScannerResultFragment extends Fragment implements ScannerResultView
                 startActivity(i);
             }
             catch (Exception ex){
-                Toast.makeText(getActivity(),"Can not open the link",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Can not open the link",Toast.LENGTH_SHORT).show();
             }
         }
     }

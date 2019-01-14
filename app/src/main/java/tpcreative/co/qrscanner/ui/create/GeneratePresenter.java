@@ -16,15 +16,6 @@ public class GeneratePresenter extends Presenter<GenerateView>{
         mFragment = new ArrayList<>();
     }
 
-    public void setFragmentList(){
-        mFragment.clear();
-        mFragment.add(EventFragment.newInstance(8));
-        mFragment.add(ContactFragment.newInstance(9));
-        mFragment.add(TelephoneFragment.newInstance(10));
-        mFragment.add(TextFragment.newInstance(11));
-        mFragment.add(WifiFragment.newInstance(12));
-        mFragment.add(UrlFragment.newInstance(13));
-    }
 
     public void setList(){
         GenerateView view = view();

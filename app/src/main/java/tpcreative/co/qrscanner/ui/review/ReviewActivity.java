@@ -5,13 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.support.v4.print.PrintHelper;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -43,19 +45,14 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonCloseFragment;
-import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
-import tpcreative.co.qrscanner.model.Ads;
-import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumImplement;
@@ -63,7 +60,7 @@ import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
-public class ReviewActivity extends BaseActivity implements ReviewView, View.OnClickListener, Utils.UtilsListener {
+public class ReviewActivity extends BaseActivitySlide implements ReviewView, View.OnClickListener, Utils.UtilsListener {
 
     protected static final String TAG = ReviewActivity.class.getSimpleName();
     @BindView(R.id.imgResult)
@@ -72,10 +69,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     Button btnSave;
     @BindView(R.id.btnShare)
     Button btnShare;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgPrint)
-    ImageView imgPrint;
     private ReviewPresenter presenter;
     private Create create;
     private Bitmap bitmap;
@@ -88,26 +81,25 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     AdView adViewBanner;
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
-
     @BindView(R.id.scrollView)
     ScrollView scrollView;
-
+    public boolean isCreate ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         scrollView.smoothScrollTo(0,0);
         btnSave.setOnClickListener(this);
         btnShare.setOnClickListener(this);
-        imgArrowBack.setOnClickListener(this);
-        imgPrint.setOnClickListener(this);
         presenter = new ReviewPresenter();
         presenter.bindView(this);
         presenter.getIntent(this);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgPrint.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
         initAds();
+        onDrawOverLay(this);
     }
 
     public void initAds() {
@@ -186,12 +178,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
             }
         });
         adViewBanner.loadAd(adRequest);
-    }
-
-
-    @OnClick(R.id.imgPrint)
-    public void onPrint(){
-
     }
 
 
@@ -379,6 +365,26 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_review, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_print:{
+                if (code != null) {
+                    onAddPermissionSave(EnumAction.PRINT);
+                }
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSave: {
@@ -427,51 +433,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                 view.startAnimation(mAnim);
                 break;
             }
-            case R.id.imgArrowBack: {
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG, "start");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        finish();
-                        SingletonCloseFragment.getInstance().setUpdateData(true);
-                        SingletonSave.getInstance().setUpdateData(true);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-            case R.id.imgPrint:{
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG, "start");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (code != null) {
-                            onAddPermissionSave(EnumAction.PRINT);
-                        }
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
         }
     }
 
@@ -492,8 +453,9 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     @Override
     public void onSaved(String path, EnumAction enumAction) {
         Utils.Log(TAG, "Saved successful");
-
-
+        Intent intent = getIntent();
+        setResult(RESULT_OK,intent);
+        Utils.Log(TAG,"RESULT_OK");
         switch (enumAction) {
             case SAVE: {
 
@@ -509,7 +471,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
                     save.id = create.id;
                     InstanceGenerator.getInstance(getContext()).onUpdate(save);
                 }
-                SingletonSave.getInstance().setUpdateData(true);
                 break;
             }
             case SHARE: {
@@ -557,8 +518,6 @@ public class ReviewActivity extends BaseActivity implements ReviewView, View.OnC
     @Override
     public void onBackPressed() {
         finish();
-        SingletonCloseFragment.getInstance().setUpdateData(true);
-        SingletonSave.getInstance().setUpdateData(true);
         super.onBackPressed();
     }
 

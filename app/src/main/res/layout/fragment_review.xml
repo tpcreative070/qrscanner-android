@@ -1,57 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_collapseMode="pin" />
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp">
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+
+
     <RelativeLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <RelativeLayout
-            android:id="@+id/rlButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <ImageView
-                android:id="@+id/imgArrowBack"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:padding="2dp"
-                android:src="@drawable/baseline_arrow_back_ios_white_48" />
-
-            <TextView
-                android:textSize="20sp"
-                android:id="@+id/tvTitle"
-                style="@style/brandonBoldTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-
-
-            <TextView
-                android:layout_marginRight="20dp"
-                android:textSize="18sp"
-                android:text="@string/report_issue"
-                android:id="@+id/tvReport"
-                style="@style/brandonBoldTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true" />
-
-
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -93,7 +83,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -117,7 +107,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -141,7 +131,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -178,7 +168,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -202,7 +192,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -238,7 +228,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -262,7 +252,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -287,7 +277,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -311,7 +301,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -348,7 +338,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -372,7 +362,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -397,7 +387,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -433,7 +423,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -457,7 +447,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -482,7 +472,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -506,7 +496,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -530,7 +520,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -567,7 +557,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -591,7 +581,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -616,7 +606,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -640,7 +630,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -676,7 +666,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -712,7 +702,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -749,7 +739,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -785,7 +775,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -821,7 +811,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/material_gray_600" />
 
                         <View
                             android:layout_width="match_parent"
@@ -859,6 +849,7 @@
                                 android:background="@drawable/bg_generate_rounded">
 
                                 <ImageView
+                                    android:tint="@color/material_gray_700"
                                     android:id="@+id/imgOpenApplication"
                                     android:layout_width="60dp"
                                     android:layout_height="60dp"
@@ -888,7 +879,7 @@
                                 android:paddingRight="10dp"
                                 android:text="@string/my_clipboad"
                                 android:textAllCaps="false"
-                                android:textSize="@dimen/medium_x" />
+                                android:textSize="@dimen/medium" />
                         </RelativeLayout>
                     </LinearLayout>
 
@@ -915,9 +906,5 @@
             </ScrollView>
         </RelativeLayout>
 
-
-
-
-
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

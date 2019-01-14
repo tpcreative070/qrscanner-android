@@ -49,13 +49,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
-                <TextView
-                    android:textSize="20sp"
-                    style="@style/brandonBoldTextView"
-                    android:text="@string/scanner"
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+
                 <ImageView
                     android:layout_toLeftOf="@+id/imgGallery"
                     android:layout_centerInParent="true"
@@ -64,7 +58,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/baseline_add_box_white_48"
+                    android:src="@drawable/baseline_help_white_48"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>

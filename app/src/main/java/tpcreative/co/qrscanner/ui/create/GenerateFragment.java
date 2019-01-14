@@ -24,7 +24,9 @@ import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.QRCodeType;
+import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class GenerateFragment extends BaseFragment implements GenerateCell.ItemSelectedListener,GenerateView,SingletonGenerate.SingletonGenerateListener {
 
@@ -60,7 +62,17 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
         presenter = new GeneratePresenter();
         presenter.bindView(this);
         presenter.setList();
-        presenter.setFragmentList();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(GenerateFragment.this);
+            Log.d(TAG, "isVisible");
+        } else {
+            Log.d(TAG, "isInVisible");
+        }
     }
 
     @Nullable
@@ -102,10 +114,32 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
             case 2 :{
                 Navigator.onGenerateView(getActivity(),null,LocationFragment.class);
                 break;
+            }case 3:{
+                Navigator.onGenerateView(getActivity(),null,EventFragment.class);
+                break;
+            }
+            case 4:{
+                Navigator.onGenerateView(getActivity(),null,ContactFragment.class);
+                break;
+            }
+            case 5:{
+                Navigator.onGenerateView(getActivity(),null,TelephoneFragment.class);
+                break;
+            }
+            case 6:{
+                Navigator.onGenerateView(getActivity(),null,TextFragment.class);
+                break;
+            }
+            case 7:{
+                Navigator.onGenerateView(getActivity(),null,WifiFragment.class);
+                break;
+            }
+            case 8:{
+                Navigator.onGenerateView(getActivity(),null,UrlFragment.class);
+                break;
             }
         }
     }
-
 
     @Override
     public void setVisible() {

@@ -27,11 +27,9 @@ public class MyPreferenceCategory extends PreferenceCategory {
     public void onBindViewHolder(PreferenceViewHolder view) {
         super.onBindViewHolder(view);
         TextView titleView = (TextView) view.findViewById(android.R.id.title);
-        titleView.setTextColor(getContext().getResources().getColor(R.color.colorRed));
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_bld);
+        titleView.setTextColor(getContext().getResources().getColor(R.color.colorPrimary));
         titleView.setAllCaps(true);
         titleView.setTextSize(17);
-        titleView.setTypeface(typeface);
     }
 
 }

@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.ui.scanner;
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,8 +10,6 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,14 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -63,7 +56,6 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
-import com.journeyapps.barcodescanner.result.ISBNResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
 import com.karumi.dexter.Dexter;
@@ -76,15 +68,13 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
-import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
+import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
@@ -92,6 +82,8 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
+import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
 
 public class ScannerFragment extends BaseFragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
 
@@ -292,7 +284,10 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 }
 
                 beepManager.playBeepSoundAndVibrate();
-                replaceFragment(0,create);
+                if (barcodeScannerView!=null){
+                       barcodeScannerView.pauseAndWait();
+                }
+                Navigator.onResultView(getActivity(),create,ScannerResultFragment.class);
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -333,15 +328,14 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         SingletonScanner.getInstance().setListener(this);
         presenter = new ScannerPresenter();
         presenter.bindView(this);
-        presenter.setFragmentList();
         fragment = this;
         barcodeScannerView.decodeContinuous(callback);
         zxing_status_view.setVisibility(View.INVISIBLE);
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
-        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
 
         if (Utils.checkCameraBack(getContext())){
             cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
@@ -385,6 +379,9 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
+                            if (barcodeScannerView!=null){
+                                barcodeScannerView.pauseAndWait();
+                            }
                             onGetGallery();
                         }
                         else{
@@ -420,38 +417,20 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         beepManager.setVibrateEnabled(isVibrate);
     }
 
-    public void replaceFragment(final int position,final Create create){
-        try {
-            setInvisible();
-            create.fragmentType = EnumFragmentType.SCANNER;
-            FragmentManager fm = getFragmentManager();
-            fragment = presenter.mFragment.get(position);
-            Bundle arguments = new Bundle();
-            arguments.putSerializable("data", create);
-            fragment.setArguments(arguments);
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.flContainer_review, fragment);
-            ft.commit();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void setVisible() {
-//        if (barcodeScannerView!=null){
-//            barcodeScannerView.setVisibility(View.VISIBLE);
-//            barcodeScannerView.resume();
-//        }
+        if (barcodeScannerView!=null){
+            barcodeScannerView.setVisibility(View.VISIBLE);
+            barcodeScannerView.resume();
+        }
     }
 
     @Override
     public void setInvisible() {
-//        if (barcodeScannerView!=null){
-//            barcodeScannerView.pauseAndWait();
-//            barcodeScannerView.setVisibility(View.INVISIBLE);
-//        }
+        if (barcodeScannerView!=null){
+            barcodeScannerView.pauseAndWait();
+            barcodeScannerView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @OnClick(R.id.switch_camera)
@@ -495,14 +474,14 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                     barcodeScannerView.setTorchOff();
                     isTurnOnFlash = false;
                     switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_off_white_48));
-                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
 
                 }
                 else{
                     barcodeScannerView.setTorchOn();
                     isTurnOnFlash = true;
                     switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_on_white_48));
-                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
                 }
             }
             @Override
@@ -523,7 +502,10 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             }
             @Override
             public void onAnimationEnd(Animation animation) {
-                SingletonResponse.getInstance().setCreatePosition();
+                if (barcodeScannerView!=null){
+                    barcodeScannerView.pauseAndWait();
+                }
+                Navigator.onMoveToHelp(getContext());
             }
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -610,12 +592,16 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             } catch (FileNotFoundException  e) {
                 e.printStackTrace();
                 Utils.Log(TAG,"Something went wrong");
-                barcodeScannerView.resume();
+                setVisible();
             }
 
-        }else {
+        }
+        else if (resultCode == Activity.RESULT_OK && requestCode == Navigator.SCANNER){
+            setVisible();
+        }
+        else {
             Utils.Log(TAG,"You haven't picked Image");
-            barcodeScannerView.resume();
+            setVisible();
         }
     }
 
@@ -809,12 +795,22 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
 
         create.fragmentType = EnumFragmentType.SCANNER;
         beepManager.playBeepSoundAndVibrate();
-        replaceFragment(0,create);
+        if (barcodeScannerView!=null){
+            barcodeScannerView.pauseAndWait();
+        }
+        Navigator.onResultView(getActivity(),create,ScannerResultFragment.class);
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(ScannerFragment.this);
+            Log.d(TAG, "isVisible");
+        } else {
+            Log.d(TAG, "isInVisible");
+        }
+
         if (barcodeScannerView != null) {
             if (isVisibleToUser) {
                 if (typeCamera!=2){
@@ -877,6 +873,8 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             e.printStackTrace();
         }
     }
+
+
 
 
 }

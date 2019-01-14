@@ -43,17 +43,6 @@ public class MyPreference extends Preference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder view) {
         super.onBindViewHolder(view);
-        TextView titleView = (TextView) view.findViewById(android.R.id.title);
-        TextView summaryView = (TextView) view.findViewById(android.R.id.summary);
-        ImageView imageView = (ImageView) view.findViewById(android.R.id.icon);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_bld);
-        Typeface typefaceSumary = ResourcesCompat.getFont(getContext(), R.font.brandon_reg);
-        summaryView.setTypeface(typefaceSumary);
-        titleView.setTypeface(typeface);
-
-        titleView.setTextColor(getContext().getResources().getColor(R.color.colorBlueLight));
-        summaryView.setTextColor(getContext().getResources().getColor(R.color.white));
-        imageView.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
         imgSuperSafe = (ImageView) view.findViewById(R.id.imgSuperSafe);
         imageViewCover.setVisibility(View.INVISIBLE);

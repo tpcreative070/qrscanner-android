@@ -136,15 +136,11 @@ public class Utils {
 
     private static Snackbar multilineSnackbar(Snackbar snackbar) {
         TextView textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        Typeface typeface = ResourcesCompat.getFont(QRScannerApplication.getInstance(), R.font.brandon_reg);
         textView.setMaxLines(5);
-        textView.setTypeface(typeface);
-        textView.setTextSize(20);
+        textView.setTextSize(17);
 
         TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action);
-        snackbarActionTextView.setTypeface(typeface);
         snackbarActionTextView.setTextSize(16);
-
         return snackbar;
     }
 

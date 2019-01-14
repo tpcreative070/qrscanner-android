@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonCloseFragment;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
@@ -91,8 +90,6 @@ public class ChangeFileColorActivity extends BaseActivity implements BaseView  ,
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         finish();
-                        SingletonCloseFragment.getInstance().setUpdateData(true);
-                        SingletonSave.getInstance().setUpdateData(true);
                     }
                     @Override
                     public void onAnimationRepeat(Animation animation) {

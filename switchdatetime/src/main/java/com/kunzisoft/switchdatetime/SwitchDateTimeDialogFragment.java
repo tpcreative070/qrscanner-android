@@ -355,6 +355,10 @@ public class SwitchDateTimeDialogFragment extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         startAtPosition = UNDEFINED_POSITION;
+        if (mListener != null) {
+            if(mListener instanceof OnButtonWithNeutralClickListener)
+                ((OnButtonWithNeutralClickListener) mListener).onDismiss();
+        }
     }
 
     /**
@@ -603,6 +607,8 @@ public class SwitchDateTimeDialogFragment extends DialogFragment {
      */
     public interface OnButtonWithNeutralClickListener extends OnButtonClickListener {
         void onNeutralButtonClick(Date date);
+        void onDismiss();
+
     }
 
     /**

@@ -1,27 +1,19 @@
 package tpcreative.co.qrscanner.ui.create;
-import android.graphics.PorterDuff;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import java.text.SimpleDateFormat;
@@ -32,23 +24,18 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonCloseFragment;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
-public class EventFragment extends Fragment implements View.OnClickListener  {
+public class EventFragment extends BaseActivitySlide implements View.OnClickListener  {
 
     private static final String TAG = EventFragment.class.getSimpleName();
-    private Unbinder unbinder;
     @BindView(R.id.llBeginTime)
     LinearLayout llBeginTime;
     @BindView(R.id.llEndTime)
@@ -63,20 +50,14 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     TextView tvBeginTime;
     @BindView(R.id.tvEndTime)
     TextView tvEndTime;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgReview)
-    ImageView imgReview;
     private AwesomeValidation mAwesomeValidation;
     private long beginDateTimeMilliseconds = 0;
     private long endDateTimeMilliseconds = 0;
     private long currentMilliseconds = 0;
-    private Animation mAnim = null;
 
 
     /*Date time picker*/
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
-    private static final String STATE_TEXTVIEW = "STATE_TEXTVIEW";
     private SwitchDateTimeDialogFragment dateTimeFragment;
 
     private boolean isClick ;
@@ -84,30 +65,20 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     private Save save;
 
 
-    public static EventFragment newInstance(int index) {
-        EventFragment fragment = new EventFragment();
-        Bundle b = new Bundle();
-        b.putInt("index", index);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_event, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_event);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         llEndTime.setOnClickListener(this);
         llBeginTime.setOnClickListener(this);
         tvBeginTime.setOnClickListener(this);
         tvEndTime.setOnClickListener(this);
         initDateTimePicker();
-        SingletonCloseFragment.getInstance().setUpdateData(false);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgReview.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
-        Bundle bundle = getArguments();
-        final Save mData = (Save) bundle.get("data");
+        Bundle bundle = getIntent().getExtras();
+        final Save mData = (Save) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -115,42 +86,19 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
         else{
             Utils.Log(TAG,"Data is null");
         }
-
-
-        return view;
+        onDrawOverLay(this);
     }
 
-    @OnClick(R.id.imgArrowBack)
-    public void CloseWindow(View view){
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onCloseWindow();
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_select, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    @OnClick(R.id.imgReview)
-    public void onCheck(View view) {
-
-        mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()) {
 
                     if (beginDateTimeMilliseconds == 0){
@@ -169,8 +117,8 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                         int hours = cal.get(Calendar.HOUR_OF_DAY);
                         int minutes = cal.get(Calendar.MINUTE);
                         dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
-                        dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
-                        return;
+                        dateTimeFragment.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
+                        return true;
                     }
 
                     if (endDateTimeMilliseconds == 0){
@@ -189,19 +137,19 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                         int hours = cal.get(Calendar.HOUR_OF_DAY);
                         int minutes = cal.get(Calendar.MINUTE);
                         dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
-                        dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
-                        return;
+                        dateTimeFragment.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
+                        return true;
                     }
 
                     if (beginDateTimeMilliseconds>endDateTimeMilliseconds){
-                        Utils.showGotItSnackbar(getView(),"Ending event data time must be greater than begin date time");
-                        return;
+                        Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
+                        return true;
                     }
 
                     long currentTime = System.currentTimeMillis();
                     if (beginDateTimeMilliseconds <= currentTime){
-                        Utils.showGotItSnackbar(getView(),"Starting event data time must be greater than current date time");
-                        return;
+                        Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
+                        return true;
                     }
 
                     Create create = new Create();
@@ -215,26 +163,21 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                     create.createType = ParsedResultType.CALENDAR;
                     create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
                     create.id = (save != null) ? save.id : 0 ;
-                    Navigator.onMoveToReview(getActivity(), create);
+                    Navigator.onMoveToReview(this, create);
                 } else {
                     Utils.Log(TAG, "error");
                 }
+                return true;
             }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
-
-
+        }
+        return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.llBeginTime:{
-
                 if (!isClick) {
                     isBegin = true;
                     isClick = true;
@@ -251,12 +194,11 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                     int hours = cal.get(Calendar.HOUR_OF_DAY);
                     int minutes = cal.get(Calendar.MINUTE);
                     dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
-                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                    dateTimeFragment.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
                 }
                 break;
             }
             case R.id.llEndTime :{
-
                 if (!isClick) {
                     isBegin = false;
                     isClick = true;
@@ -273,7 +215,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                     int hours = cal.get(Calendar.HOUR_OF_DAY);
                     int minutes = cal.get(Calendar.MINUTE);
                     dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
-                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                    dateTimeFragment.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
                 }
 
                 break;
@@ -295,7 +237,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                     int hours = cal.get(Calendar.HOUR_OF_DAY);
                     int minutes = cal.get(Calendar.MINUTE);
                     dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
-                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                    dateTimeFragment.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
 
                 }
                 break;
@@ -317,7 +259,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                     int hours = cal.get(Calendar.HOUR_OF_DAY);
                     int minutes = cal.get(Calendar.MINUTE);
                     dateTimeFragment.setDefaultDateTime(new GregorianCalendar(year, month, days, hours, minutes).getTime());
-                    dateTimeFragment.show(getChildFragmentManager(), TAG_DATETIME_FRAGMENT);
+                    dateTimeFragment.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
                 }
                 break;
             }
@@ -331,7 +273,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
 
     public void initDateTimePicker(){
         // Construct SwitchDateTimePicker
-        dateTimeFragment = (SwitchDateTimeDialogFragment) getChildFragmentManager().findFragmentByTag(TAG_DATETIME_FRAGMENT);
+        dateTimeFragment = (SwitchDateTimeDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_DATETIME_FRAGMENT);
         if(dateTimeFragment == null) {
             dateTimeFragment = SwitchDateTimeDialogFragment.newInstance(
                     getString(R.string.label_datetime_dialog),
@@ -366,7 +308,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
             public void onPositiveButtonClick(Date date) {
                 if (isBegin){
                     if (currentMilliseconds>date.getTime()){
-                        Utils.showGotItSnackbar(getView(),"Starting event data time must be greater than current date time");
+                        Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
                     }
                     else {
                         beginDateTimeMilliseconds = date.getTime();
@@ -375,10 +317,10 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                 }
                 else{
                     if (currentMilliseconds>date.getTime()){
-                        Utils.showGotItSnackbar(getView(),"Ending event data time must be greater than current date time");
+                        Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than current date time");
                     }
                     else if(beginDateTimeMilliseconds >= date.getTime()){
-                        Utils.showGotItSnackbar(getView(),"Ending event data time must be greater than begin date time");
+                        Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
                     }
                     else {
                         endDateTimeMilliseconds = date.getTime();
@@ -399,13 +341,18 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
                 // Optional if neutral button does'nt exists
                 isClick = false;
             }
+
+            @Override
+            public void onDismiss() {
+                isClick = false;
+            }
         });
     }
 
     private void addValidationForEditText() {
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtTitle, RegexTemplate.NOT_EMPTY, R.string.err_title);
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtLocation, RegexTemplate.NOT_EMPTY, R.string.err_location);
-        mAwesomeValidation.addValidation(getActivity(), R.id.edtDescription, RegexTemplate.NOT_EMPTY, R.string.err_description);
+        mAwesomeValidation.addValidation(this, R.id.edtTitle, RegexTemplate.NOT_EMPTY, R.string.err_title);
+        mAwesomeValidation.addValidation(this, R.id.edtLocation, RegexTemplate.NOT_EMPTY, R.string.err_location);
+        mAwesomeValidation.addValidation(this, R.id.edtDescription, RegexTemplate.NOT_EMPTY, R.string.err_description);
     }
 
 
@@ -413,28 +360,6 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
         edtTitle.requestFocus();
     }
 
-    public void clearAndFocusUI(){
-        edtTitle.requestFocus();
-        edtTitle.setText("");
-        edtLocation.setText("");
-        edtDescription.setText("");
-        tvBeginTime.setText("");
-        tvEndTime.setText("");
-    }
-
-    public void onCloseWindow(){
-        clearAndFocusUI();
-        Utils.hideSoftKeyboard(getActivity());
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this).commit();
-        if (save!=null){
-            SingletonSave.getInstance().setVisible();
-        }
-        else{
-            SingletonGenerate.getInstance().setVisible();
-        }
-    }
 
     public void onSetData(){
         edtTitle.setText(""+save.title);
@@ -469,6 +394,7 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     @Override
     public void onPause() {
         super.onPause();
+        isClick = false;
         Utils.Log(TAG, "onPause");
     }
 
@@ -476,18 +402,25 @@ public class EventFragment extends Fragment implements View.OnClickListener  {
     public void onDestroy() {
         super.onDestroy();
         Utils.Log(TAG, "onDestroy");
-        unbinder.unbind();
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
-        if (SingletonCloseFragment.getInstance().isCloseWindow()){
-            onCloseWindow();
-            SingletonCloseFragment.getInstance().setUpdateData(false);
-        }
         Utils.Log(TAG,"onResume");
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
+            Utils.Log(TAG,"Finish...........");
+            if (data!=null){
+                SingletonSave.getInstance().reLoadData();
+            }
+            finish();
+        }
+    }
+
 
 }

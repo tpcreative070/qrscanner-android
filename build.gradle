@@ -36,6 +36,7 @@ subprojects {
     ext.appSupportVersion = "28.0.0"
     ext.appCompileSdkVersion = 28
     ext.appBuildToolsVersion = "28.0.3"
+    ext.build_versions_java_version = 1.8
     ext.appTargetSdkVersion = 28
     ext.glide = "4.7.1"
 }

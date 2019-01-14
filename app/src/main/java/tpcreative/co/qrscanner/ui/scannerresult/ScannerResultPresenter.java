@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.scannerresult;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import com.google.gson.Gson;
@@ -7,7 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tpcreative.co.qrscanner.BuildConfig;
+import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 
 public class ScannerResultPresenter extends Presenter<ScannerResultView>{
@@ -22,10 +25,10 @@ public class ScannerResultPresenter extends Presenter<ScannerResultView>{
         result = new Create();
     }
 
-    public void getIntent(Bundle bundle){
+    public void getIntent(Activity activity){
         ScannerResultView view = view();
-        Bundle arguments = bundle;
-        final Create data = (Create) arguments.get("data");
+        Bundle bundle = activity.getIntent().getExtras();
+        final Create data = (Create) bundle.get(QRScannerApplication.getInstance().getString(R.string.key_data));
         if (data!=null){
             result = data;
         }

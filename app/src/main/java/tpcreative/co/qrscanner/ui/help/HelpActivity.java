@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.help;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,21 +12,25 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.model.Ads;
 import tpcreative.co.qrscanner.model.Author;
 
-public class HelpActivity extends BaseActivity {
+public class HelpActivity extends BaseActivitySlide {
 
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
     InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help);imgArrowBack.setColorFilter(getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        setContentView(R.layout.activity_help);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        onDrawOverLay(this);
 //        final Author author = Author.getInstance().getAuthorInfo();
 //        if (author!=null){
 //            if (author.version!=null){
@@ -36,6 +41,12 @@ public class HelpActivity extends BaseActivity {
 //                }
 //            }
 //        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SingletonScanner.getInstance().setVisible();
     }
 
     @Override
@@ -96,10 +107,5 @@ public class HelpActivity extends BaseActivity {
 //            mInterstitialAd.show();
 //        }
 //    }
-
-    @OnClick(R.id.imgArrowBack)
-    public void onArrowBack(){
-        finish();
-    }
 
 }

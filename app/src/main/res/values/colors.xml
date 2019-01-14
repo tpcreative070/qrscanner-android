@@ -9,6 +9,7 @@
     <color name="ColorBlueV1">#7ED321</color>
     <color name="ColorRedV1">#f91806</color>
     <color name="colorAccent">#e19704</color>
+    <color name="colorAccentDark">#ab7304</color>
     <color name="grey_lighter">#E0E0E0</color>
     <color name="grey_light">#9E9E9E</color>
     <color name="grey_dark">#424242</color>

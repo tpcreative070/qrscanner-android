@@ -3,24 +3,26 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.PorterDuff;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.content.res.AppCompatResources;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.zxing.client.result.ParsedResultType;
@@ -34,60 +36,136 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonHistory;
+import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.ui.save.SaverFragment;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
-public class HistoryFragment extends BaseFragment implements HistoryView, HistoryCell.ItemSelectedListener, View.OnClickListener, SingletonHistory.SingletonHistoryListener {
+public class HistoryFragment extends BaseFragment implements HistoryView, HistoryCell.ItemSelectedListener, SingletonHistory.SingletonHistoryListener,SingletonMain.SingleTonMainListener {
 
     private static final String TAG = HistoryFragment.class.getSimpleName();
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
-    @BindView(R.id.imgDelete)
-    ImageView imgDelete;
-    @BindView(R.id.imgSelectAll)
-    ImageView imgSelectAll;
-    @BindView(R.id.tvDelete)
-    TextView tvDelete;
-    @BindView(R.id.tvCount)
-    TextView tvCount;
-    @BindView(R.id.llAction)
-    LinearLayout llAction;
     @BindView(R.id.rlRoot)
     RelativeLayout rlRoot;
     @BindView(R.id.tvNotFoundItems)
     TextView tvNotFoundItems;
-    @BindView(R.id.tvCSV)
-    TextView tvCSV;
-    private Animation mAnim = null;
+
 
     @BindView(R.id.recyclerView)
     SimpleRecyclerView recyclerView;
     private HistoryPresenter presenter;
-    private boolean isSelected = false;
+
     private boolean isDeleted;
     private boolean isSelectedAll = false;
-    private ScannerResultFragment fragment;
+    private ActionMode actionMode;
+
+
+    private ActionMode.Callback callback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater menuInflater = mode.getMenuInflater();
+            menuInflater.inflate(R.menu.menu_select_all, menu);
+            actionMode = mode;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = QRScannerApplication.getInstance().getActivity().getWindow();
+                window.setStatusBarColor(ContextCompat.getColor(getContext(),R.color.colorAccentDark));
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int i = item.getItemId();
+
+            switch (item.getItemId()){
+                case R.id.menu_item_select_all:{
+                    final List<History> list = presenter.getListGroup();
+                    presenter.mList.clear();
+                    if (isSelectedAll) {
+                        for (History index : list) {
+                            index.setDeleted(true);
+                            index.setChecked(false);
+                            presenter.mList.add(index);
+                        }
+                        isSelectedAll = false;
+                    } else {
+                        for (History index : list) {
+                            index.setDeleted(true);
+                            index.setChecked(true);
+                            presenter.mList.add(index);
+                        }
+                        isSelectedAll = true;
+                    }
+
+                    if (actionMode!=null){
+                        actionMode.setTitle(presenter.getCheckedCount() + " " + getString(R.string.selected));
+                    }
+
+                    recyclerView.removeAllCells();
+                    bindData();
+                    return true;
+                }
+                case R.id.menu_item_delete:{
+                    final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                    if (listHistory==null){
+                        return false;
+                    }
+                    if (listHistory.size()==0){
+                        return false;
+                    }
+                    Log.d(TAG, "start");
+                    if (presenter.getCheckedCount() > 0) {
+                        dialogDelete();
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            actionMode = null;
+            isSelectedAll = false;
+            final List<History> list = presenter.getListGroup();
+            presenter.mList.clear();
+            for (History index : list) {
+                index.setDeleted(false);
+                presenter.mList.add(index);
+            }
+            recyclerView.removeAllCells();
+            bindData();
+            isDeleted = false;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = QRScannerApplication.getInstance().getActivity().getWindow();
+                window.setStatusBarColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
+            }
+        }
+    };
 
     public static HistoryFragment newInstance(int index) {
         HistoryFragment fragment = new HistoryFragment();
@@ -117,16 +195,9 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         presenter.getListGroup();
         addRecyclerHeaders();
         bindData();
-
-        imgDelete.setOnClickListener(this);
-        imgSelectAll.setOnClickListener(this);
-        tvDelete.setOnClickListener(this);
-        tvCSV.setOnClickListener(this);
-        imgArrowBack.setOnClickListener(this);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgDelete.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-        imgSelectAll.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
     }
+
+
 
     @Override
     public boolean isDeleted() {
@@ -184,19 +255,86 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         return getActivity();
     }
 
-
     @Override
     public void onClickItem(int position, boolean isChecked) {
         Log.d(TAG, "position : " + position + " - " + isChecked);
         boolean result = presenter.mList.get(position).isDeleted();
         presenter.mList.get(position).setChecked(isChecked);
         if (result) {
-            tvCount.setText("" + presenter.getCheckedCount());
+            if (actionMode!=null){
+                actionMode.setTitle(presenter.getCheckedCount() + " " + getString(R.string.selected));
+            }
         }
+    }
+
+
+    @Override
+    public void isShowDeleteAction(boolean isDelete) {
+        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+        if (isDelete) {
+            if (actionMode == null) {
+                actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);
+            }
+            if (listHistory == null) {
+
+                return;
+
+            }
+            if (listHistory.size() == 0) {
+
+                return;
+            }
+
+            final List<History> list = presenter.getListGroup();
+            presenter.mList.clear();
+            for (History index : list) {
+                index.setDeleted(true);
+                presenter.mList.add(index);
+            }
+            recyclerView.removeAllCells();
+            bindData();
+            isDeleted = true;
+        } else {
+            if (listHistory == null) {
+                return;
+            }
+            if (listHistory.size() == 0) {
+                return;
+            }
+            onAddPermissionSave();
+        }
+    }
+
+
+    @Override
+    public void onLongClickItem(int position){
+        if (actionMode == null) {
+            actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);
+        }
+
+        final List<History> list = presenter.getListGroup();
+        presenter.mList.clear();
+        for (History index : list) {
+            index.setDeleted(true);
+            presenter.mList.add(index);
+        }
+
+        presenter.mList.get(position).setChecked(true);
+        if (actionMode!=null){
+            actionMode.setTitle(presenter.getCheckedCount() + " " + getString(R.string.selected));
+        }
+        recyclerView.removeAllCells();
+        bindData();
+        isDeleted = true;
     }
 
     @Override
     public void onClickItem(int position) {
+
+        if (actionMode!=null){
+            return;
+        }
+
         final Create create = new Create();
         final History history = presenter.mList.get(position);
         if (history.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
@@ -252,7 +390,8 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
             create.text = history.text;
             create.createType = ParsedResultType.TEXT;
         }
-        replaceFragment(create);
+
+        Navigator.onResultView(getActivity(),create,ScannerResultFragment.class);
     }
 
     @Override
@@ -340,243 +479,11 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         startActivity(Intent.createChooser(intent, "Share"));
     }
 
-    @Override
-    public void setVisible() {
-        if(rlRoot!=null){
-            rlRoot.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
-    public void setInvisible() {
-        if (rlRoot!=null){
-            rlRoot.setVisibility(View.GONE);
-        }
+    public void reLoadData() {
+
     }
-
-    public void replaceFragment(final Create create) {
-        setInvisible();
-        create.fragmentType = EnumFragmentType.HISTORY;
-        Log.d(TAG, "navigation");
-        FragmentManager fm = getFragmentManager();
-        fragment = ScannerResultFragment.newInstance(14);
-        Bundle arguments = new Bundle();
-        arguments.putSerializable("data", create);
-        fragment.setArguments(arguments);
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.flContainer_history_review, fragment);
-        ft.commit();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.imgArrowBack: {
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG, "start");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (!isSelected) {
-                            imgArrowBack.setVisibility(View.INVISIBLE);
-                            tvCount.setVisibility(View.INVISIBLE);
-                        } else {
-                            isSelectedAll = false;
-                            final List<History> list = presenter.getListGroup();
-                            presenter.mList.clear();
-                            for (History index : list) {
-                                index.setDeleted(false);
-                                presenter.mList.add(index);
-                            }
-                            recyclerView.removeAllCells();
-                            bindData();
-                            tvCount.setText("" + presenter.getCheckedCount());
-
-                            Log.d(TAG, "onBackPressed !!!" + isSelected);
-                            isSelected = false;
-                            isDeleted = false;
-                            tvDelete.setVisibility(View.VISIBLE);
-                            tvCSV.setVisibility(View.VISIBLE);
-                            llAction.setVisibility(View.GONE);
-                            tvCount.setVisibility(View.INVISIBLE);
-                            imgArrowBack.setVisibility(View.INVISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-
-            case R.id.tvDelete: {
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG, "start");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-
-                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
-                        if (listHistory==null){
-                            return;
-                        }
-                        if (listHistory.size()==0){
-                            return;
-                        }
-
-                        imgArrowBack.setVisibility(View.VISIBLE);
-                        tvCount.setVisibility(View.VISIBLE);
-                        final List<History> list = presenter.getListGroup();
-                        presenter.mList.clear();
-                        for (History index : list) {
-                            index.setDeleted(true);
-                            presenter.mList.add(index);
-                        }
-                        recyclerView.removeAllCells();
-                        bindData();
-                        tvCount.setText("" + presenter.getCheckedCount());
-                        isSelected = true;
-                        isDeleted = true;
-                        llAction.setVisibility(View.VISIBLE);
-                        tvCount.setVisibility(View.VISIBLE);
-                        tvDelete.setVisibility(View.GONE);
-                        tvCSV.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-
-            case R.id.imgSelectAll: {
-                imgArrowBack.setVisibility(View.VISIBLE);
-                tvCount.setVisibility(View.VISIBLE);
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG, "start");
-
-                        final List<History> list = presenter.getListGroup();
-                        presenter.mList.clear();
-                        if (isSelectedAll) {
-                            for (History index : list) {
-                                index.setDeleted(true);
-                                index.setChecked(false);
-                                presenter.mList.add(index);
-                            }
-                            isSelectedAll = false;
-                            tvCount.setText("0");
-                        } else {
-                            for (History index : list) {
-                                index.setDeleted(true);
-                                index.setChecked(true);
-                                presenter.mList.add(index);
-                            }
-                            isSelectedAll = true;
-                        }
-
-                        recyclerView.removeAllCells();
-                        bindData();
-                        tvCount.setText("" + presenter.getCheckedCount());
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-
-            case R.id.imgDelete: {
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
-                        if (listHistory==null){
-                            return;
-                        }
-                        if (listHistory.size()==0){
-                            return;
-                        }
-                        imgArrowBack.setVisibility(View.VISIBLE);
-                        tvCount.setVisibility(View.VISIBLE);
-                        Log.d(TAG, "start");
-                        if (presenter.getCheckedCount() > 0) {
-                            dialogDelete();
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-            case R.id.tvCSV :{
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
-                        if (listHistory==null){
-                            return;
-                        }
-                        if (listHistory.size()==0){
-                            return;
-                        }
-                        onAddPermissionSave();
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-
-            default: {
-                break;
-            }
-        }
-    }
-
 
     public void onAddPermissionSave() {
         Dexter.withActivity(getActivity())
@@ -633,19 +540,18 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Log.d(TAG,"Update view : " + SingletonHistory.getInstance().isUpdateData());
         if (isVisibleToUser) {
-            if (SingletonHistory.getInstance().isUpdateData()) {
-                if (presenter !=null && recyclerView !=null){
-                    presenter.getListGroup();
-                    recyclerView.removeAllCells();
-                    bindData();
-                    SingletonHistory.getInstance().setUpdateData(false);
-                }
+            if (presenter !=null && recyclerView !=null){
+                presenter.getListGroup();
+                recyclerView.removeAllCells();
+                bindData();
             }
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);
             Log.d(TAG,"isVisible");
+            SingletonMain.getInstance().setListener(this);
         }
         else{
+            SingletonMain.getInstance().setListener(null);
             Log.d(TAG,"isInVisible");
         }
     }
@@ -664,14 +570,11 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 presenter.deleteItem();
-                tvCount.setText("");
                 isSelectedAll = false;
-                isSelected = false;
                 isDeleted = false;
-                llAction.setVisibility(View.INVISIBLE);
-                tvDelete.setVisibility(View.VISIBLE);
-                tvCSV.setVisibility(View.VISIBLE);
-                imgArrowBack.setVisibility(View.INVISIBLE);
+                if (actionMode!=null){
+                    actionMode.finish();
+                }
             }
         });
         builder.show();
@@ -706,4 +609,6 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         super.onResume();
         Log.d(TAG, "onResume");
     }
+
+
 }

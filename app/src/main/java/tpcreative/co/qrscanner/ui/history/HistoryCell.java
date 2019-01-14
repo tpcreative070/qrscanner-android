@@ -102,6 +102,18 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
             }
         });
 
+        viewHolder.lItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (listener!=null){
+                    if (!listener.isDeleted()){
+                        listener.onLongClickItem(i);
+                    }
+                }
+                return false;
+            }
+        });
+
         viewHolder.tvTime.setText(data.createDatetime);
 
         if (data.createType.equals(ParsedResultType.EMAIL_ADDRESS.name())){
@@ -169,6 +181,7 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
     public  interface ItemSelectedListener{
         void onClickItem(int position, boolean isChecked);
         void onClickItem(int position);
+        void onLongClickItem(int position);
         void onClickShare(int  position);
         boolean isDeleted();
     }
