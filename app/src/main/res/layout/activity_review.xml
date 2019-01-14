@@ -80,24 +80,26 @@
                     android:gravity="center">
 
                     <Button
+                        android:textColor="@color/white"
                         android:id="@+id/btnSave"
                         style="@style/brandonBoldTextView"
                         android:layout_width="@dimen/width"
                         android:layout_height="@dimen/height"
                         android:layout_marginRight="@dimen/margin"
-                        android:background="@drawable/bg_generate_rounded"
+                        android:background="@drawable/bg_button"
                         android:gravity="center"
                         android:text="@string/save"
                         android:textAllCaps="false"
                         android:textSize="@dimen/medium_x" />
 
                     <Button
+                        android:textColor="@color/white"
                         android:id="@+id/btnShare"
                         style="@style/brandonBoldTextView"
                         android:layout_width="@dimen/width"
                         android:layout_height="@dimen/height"
                         android:layout_marginLeft="@dimen/margin"
-                        android:background="@drawable/bg_generate_rounded"
+                        android:background="@drawable/bg_button"
                         android:gravity="center"
                         android:text="@string/share"
                         android:textAllCaps="false"
@@ -107,6 +109,7 @@
 
 
                 <RelativeLayout
+                    android:background="@drawable/bg_generate_rounded"
                     android:layout_gravity="center"
                     android:id="@+id/rlAdsRoot"
                     android:layout_height="300dp"

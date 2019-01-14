@@ -46,8 +46,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/rlButton"
-            android:layout_marginTop="20dp">
+            android:layout_below="@+id/rlButton">
 
             <ScrollView
                 android:id="@+id/scrollView"
@@ -846,10 +845,10 @@
                                 android:layout_height="@dimen/height"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginRight="@dimen/margin"
-                                android:background="@drawable/bg_generate_rounded">
+                                android:background="@drawable/bg_button">
 
                                 <ImageView
-                                    android:tint="@color/material_gray_700"
+                                    android:tint="@color/white"
                                     android:id="@+id/imgOpenApplication"
                                     android:layout_width="60dp"
                                     android:layout_height="60dp"
@@ -867,6 +866,7 @@
                             android:layout_weight="1">
 
                             <Button
+                                android:textColor="@color/white"
                                 android:id="@+id/btnClipboard"
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="@dimen/width"
@@ -874,7 +874,7 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_centerInParent="true"
                                 android:layout_marginLeft="@dimen/margin"
-                                android:background="@drawable/bg_generate_rounded"
+                                android:background="@drawable/bg_button"
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
                                 android:text="@string/my_clipboad"
@@ -885,8 +885,8 @@
 
 
                     <RelativeLayout
+                        android:background="@drawable/bg_generate_rounded"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="15dp"
                         android:id="@+id/rlAdsRoot"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"

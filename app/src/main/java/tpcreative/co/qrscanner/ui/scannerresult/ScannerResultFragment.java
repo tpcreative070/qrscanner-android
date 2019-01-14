@@ -1040,7 +1040,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
 
     public void onClipboardDialog() {
         presenter.hashClipboardResult.clear();
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
         dialogBuilder.setTitle(R.string.copy_items);
         dialogBuilder.setPadding(40,40,40,0);
         dialogBuilder.setMargin(60,0,60,0);
@@ -1087,14 +1087,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 TextView title = dialog.findViewById(android.R.id.title);
                 TextView content = dialog.findViewById(android.R.id.message);
                 if (positive!=null && negative!=null && title!=null && content!=null){
-                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
-                    title.setTypeface(typeface,Typeface.BOLD);
-                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.colorBlueLight));
-                    positive.setTypeface(typeface,Typeface.BOLD);
-                    negative.setTypeface(typeface,Typeface.BOLD);
+                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.black));
+                    content.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.material_gray_700));
                     positive.setTextSize(14);
                     negative.setTextSize(14);
-                    content.setTypeface(typeface);
                     content.setTextSize(18);
                 }
             }
@@ -1115,7 +1111,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 if (presenter.hashClipboard!=null && presenter.hashClipboard.size()>=0){
                     onClipboardDialog();
                 }
-
             }
             @Override
             public void onAnimationRepeat(Animation animation) {

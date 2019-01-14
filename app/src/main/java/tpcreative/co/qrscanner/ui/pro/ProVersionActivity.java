@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.print.PrintHelper;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,29 +20,27 @@ import com.crashlytics.android.answers.ContentViewEvent;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
 
-public class ProVersionActivity extends BaseActivity implements View.OnClickListener{
+public class ProVersionActivity extends BaseActivitySlide implements View.OnClickListener{
 
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
     @BindView(R.id.btnUpgradeNow)
     Button btnUpgradeNow;
-    @BindView(R.id.tvTittle)
-    TextView tvTittle;
     private Animation mAnim = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pro_version);
-        imgArrowBack.setOnClickListener(this);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         btnUpgradeNow.setOnClickListener(this);
-        tvTittle.setText(getString(R.string.pro_version));
-        imgArrowBack.setColorFilter(getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
+        setTitle(getString(R.string.pro_version));
+        onDrawOverLay(this);
     }
-
 
     @Override
     public void onClick(View view) {

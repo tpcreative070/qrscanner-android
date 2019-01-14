@@ -100,11 +100,9 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     ImageView imgCreate;
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView barcodeScannerView;
-    private CaptureManager capture;
     private BeepManager beepManager;
     private CameraSettings cameraSettings = new CameraSettings();
     private int typeCamera = 0 ;
-    private Fragment fragment;
     private boolean isTurnOnFlash;
     private Animation mAnim = null;
     private ScannerPresenter presenter;
@@ -328,14 +326,13 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         SingletonScanner.getInstance().setListener(this);
         presenter = new ScannerPresenter();
         presenter.bindView(this);
-        fragment = this;
         barcodeScannerView.decodeContinuous(callback);
         zxing_status_view.setVisibility(View.INVISIBLE);
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
-        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         if (Utils.checkCameraBack(getContext())){
             cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
