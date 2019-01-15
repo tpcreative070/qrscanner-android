@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             R.drawable.baseline_save_alt_white_48,
             R.drawable.baseline_settings_white_48,
     };
-    
+
     public Toolbar getToolbar() {
         return toolbar;
     }
