@@ -19,6 +19,7 @@ import com.google.zxing.client.result.ParsedResultType;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
@@ -27,7 +28,7 @@ import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
-public class WifiFragment extends BaseActivitySlide implements View.OnClickListener{
+public class WifiFragment extends BaseActivitySlide implements View.OnClickListener ,SingletonGenerate.SingletonGenerateListener {
 
 
     private static final String TAG = WifiFragment.class.getSimpleName();
@@ -107,12 +108,6 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
         edtSSID.requestFocus();
     }
 
-    public void clearAndFocusUI(){
-        edtSSID.requestFocus();
-        edtSSID.setText("");
-        edtPassword.setText("");
-    }
-
 
     public void onSetData(){
         edtSSID.setText(save.ssId);
@@ -154,13 +149,22 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
+        SingletonGenerate.getInstance().setListener(null);
         Log.d(TAG,"onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        SingletonGenerate.getInstance().setListener(this);
         Log.d(TAG,"onResume");
+    }
+
+    @Override
+    public void onCompletedGenerate() {
+        SingletonSave.getInstance().reLoadData();
+        Utils.Log(TAG,"Finish...........");
+        finish();
     }
 
     @Override
@@ -187,9 +191,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
-            SingletonSave.getInstance().reLoadData();
-            Utils.Log(TAG,"Finish...........");
-            finish();
+
         }
 
     }

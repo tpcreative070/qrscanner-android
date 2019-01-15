@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -39,6 +40,7 @@ import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.PermissionUtils;
+import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
@@ -51,7 +53,7 @@ import tpcreative.co.qrscanner.model.Save;
 public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback,GoogleMap.OnMapClickListener,LocationListener{
+        ActivityCompat.OnRequestPermissionsResultCallback,GoogleMap.OnMapClickListener,LocationListener , SingletonGenerate.SingletonGenerateListener{
 
     private static final String TAG = LocationFragment.class.getSimpleName();
     @BindView(R.id.edtLatitude)
@@ -250,6 +252,7 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
             Utils.Log(TAG,"Permission is ready");
             mapFragment.getMapAsync(this);
         }
+        SingletonGenerate.getInstance().setListener(this);
     }
 
     @Override
@@ -270,7 +273,16 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
         locationManager.removeUpdates(this);
+        SingletonGenerate.getInstance().setListener(null);
     }
+
+    @Override
+    public void onCompletedGenerate() {
+        SingletonSave.getInstance().reLoadData();
+        Utils.Log(TAG,"Finish...........");
+        finish();
+    }
+
 
     @Override
     public void onMapReady(GoogleMap map) {

@@ -18,6 +18,7 @@ import com.google.zxing.client.result.ParsedResultType;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
@@ -25,7 +26,7 @@ import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.Save;
 
-public class MessageFragment extends BaseActivitySlide {
+public class MessageFragment extends BaseActivitySlide implements SingletonGenerate.SingletonGenerateListener{
 
     private static final String TAG = MessageFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
@@ -129,14 +130,24 @@ public class MessageFragment extends BaseActivitySlide {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        SingletonGenerate.getInstance().setListener(null);
         Log.d(TAG,"onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Utils.Log(TAG,"onResume");
+        SingletonGenerate.getInstance().setListener(this);
+        Log.d(TAG,"onResume");
     }
+
+    @Override
+    public void onCompletedGenerate() {
+        SingletonSave.getInstance().reLoadData();
+        Utils.Log(TAG,"Finish...........");
+        finish();
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

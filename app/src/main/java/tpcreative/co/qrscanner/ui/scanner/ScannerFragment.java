@@ -5,15 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +69,6 @@ import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
@@ -83,7 +77,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
-import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
+
 
 public class ScannerFragment extends BaseFragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
 
@@ -328,7 +322,6 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         presenter.bindView(this);
         barcodeScannerView.decodeContinuous(callback);
         zxing_status_view.setVisibility(View.INVISIBLE);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.brandon_regs);
         imgCreate.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         imgGallery.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         switch_camera.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
@@ -356,6 +349,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 barcodeScannerView.resume();
             }
         }
+        onBeepAndVibrate();
     }
 
     public void switchCamera(final int type){
@@ -872,8 +866,5 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             e.printStackTrace();
         }
     }
-
-
-
 
 }

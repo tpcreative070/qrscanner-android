@@ -44,6 +44,7 @@ import butterknife.BindView;
 import io.reactivex.disposables.Disposable;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -76,6 +77,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
     RelativeLayout rlAdsRoot;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
+    private boolean isComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +172,14 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
         super.onDestroy();
         if (adViewBanner != null) {
             adViewBanner.destroy();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isComplete){
+            SingletonGenerate.getInstance().onCompletedGenerate();
         }
     }
 
@@ -418,9 +428,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
     @Override
     public void onSaved(String path, EnumAction enumAction) {
         Utils.Log(TAG, "Saved successful");
-        Intent intent = getIntent();
-        setResult(RESULT_OK,intent);
-        Utils.Log(TAG,"RESULT_OK");
+        isComplete = true;
         switch (enumAction) {
             case SAVE: {
 

@@ -28,7 +28,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.QRCodeType;
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
-public class GenerateFragment extends BaseFragment implements GenerateCell.ItemSelectedListener,GenerateView,SingletonGenerate.SingletonGenerateListener {
+public class GenerateFragment extends BaseFragment implements GenerateCell.ItemSelectedListener,GenerateView {
 
     private static final String TAG = GenerateFragment.class.getSimpleName();
     @BindView(R.id.recyclerView)
@@ -58,7 +58,6 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
     @Override
     protected void work() {
         super.work();
-        SingletonGenerate.getInstance().setListener(this);
         presenter = new GeneratePresenter();
         presenter.bindView(this);
         presenter.setList();
@@ -101,7 +100,6 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
 
     @Override
     public void onClickItem(int position, boolean isChecked) {
-        setInvisible();
         switch (position){
             case 0:{
                 Navigator.onGenerateView(getActivity(),null,EmailFragment.class);
@@ -141,15 +139,6 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
         }
     }
 
-    @Override
-    public void setVisible() {
-
-    }
-
-    @Override
-    public void setInvisible() {
-
-    }
 
     @Override
     public void onClickShare(String value) {

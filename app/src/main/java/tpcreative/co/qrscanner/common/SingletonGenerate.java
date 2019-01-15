@@ -20,21 +20,15 @@ public class SingletonGenerate {
         this.listener = listener;
     }
 
-    public void setVisible(){
+    public void onCompletedGenerate(){
         if (listener!=null){
-            listener.setVisible();
+            listener.onCompletedGenerate();
         }
     }
 
-    public void setInvisible(){
-        if (listener!=null){
-            listener.setInvisible();
-        }
-    }
 
     public interface SingletonGenerateListener{
-        void setVisible();
-        void setInvisible();
+        void onCompletedGenerate();
     }
 
 }
