@@ -2,17 +2,14 @@ package tpcreative.co.qrscanner.ui.filecolor;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
@@ -23,42 +20,37 @@ import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonSettings;
-import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration;
 import tpcreative.co.qrscanner.model.EnumStatus;
 import tpcreative.co.qrscanner.model.Theme;
 
-public class ChangeFileColorActivity extends BaseActivity implements BaseView  ,ChangeFileColorAdapter.ItemSelectedListener,View.OnClickListener{
+public class ChangeFileColorActivity extends BaseActivitySlide implements BaseView  ,ChangeFileColorAdapter.ItemSelectedListener{
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.imgArrowBack)
-    ImageView imgArrowBack;
     @BindView(R.id.imgResult)
     ImageView imgResult;
     private Bitmap bitmap;
-    private Animation mAnim = null;
     private ChangeFileColorPresenter presenter;
     private ChangeFileColorAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chage_file_color);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initRecycleView(getLayoutInflater());
         presenter = new ChangeFileColorPresenter();
         presenter.bindView(this);
         presenter.getData();
-        imgArrowBack.setOnClickListener(this);
-        imgArrowBack.setColorFilter(getContext().getResources().getColor(R.color.colorBlueLight), PorterDuff.Mode.SRC_ATOP);
-
+        onDrawOverLay(this);
     }
-
 
     public void initRecycleView(LayoutInflater layoutInflater) {
         adapter = new ChangeFileColorAdapter(layoutInflater, getApplicationContext(), this);
@@ -76,31 +68,6 @@ public class ChangeFileColorActivity extends BaseActivity implements BaseView  ,
         presenter.getData();
         SingletonSettings.getInstance().onUpdated();
     }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.imgArrowBack : {
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG,"start");
-                    }
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        finish();
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-            }
-        }
-    }
-
 
     @Override
     protected void onResume() {
@@ -197,6 +164,5 @@ public class ChangeFileColorActivity extends BaseActivity implements BaseView  ,
             e.printStackTrace();
         }
     }
-
 
 }

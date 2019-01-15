@@ -6,6 +6,7 @@ package tpcreative.co.qrscanner.ui.create;
  */
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,8 @@ public class GenerateCell extends SimpleCell<QRCodeType,GenerateCell.ViewHolder>
         final QRCodeType data = getItem();
         viewHolder.tvName.setText(data.name);
         viewHolder.imgIcon.setImageDrawable(context.getResources().getDrawable(data.res));
+        viewHolder.imgDefault.setImageDrawable(context.getResources().getDrawable(R.drawable.baseline_add_box_white_48));
+        viewHolder.imgDefault.setColorFilter(context.getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         viewHolder.llRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +81,8 @@ public class GenerateCell extends SimpleCell<QRCodeType,GenerateCell.ViewHolder>
         TextView tvName;
         @BindView(R.id.imgIcon)
         ImageView imgIcon;
+        @BindView(R.id.imgDefault)
+        ImageView imgDefault;
         @BindView(R.id.llRoot)
         LinearLayout llRoot;
         ViewHolder(View itemView) {

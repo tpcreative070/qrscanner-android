@@ -53,7 +53,7 @@
             android:icon="@drawable/baseline_filter_none_white_48"
             android:title="@string/key_copy_to_clipboard"
             android:key="@string/key_copy_to_clipboard"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:summary="@string/key_copy_to_clipboard_detail">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 

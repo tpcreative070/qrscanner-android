@@ -50,24 +50,23 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
+import tpcreative.co.qrscanner.common.view.CustomViewPager;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
-
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private Fragment currentFragment;
     private MainViewPagerAdapter adapter;
     private Storage storage;
     private QRScannerReceiver receiver;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
-    ViewPager viewPager;
+    CustomViewPager viewPager;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.appBar)
@@ -111,6 +110,22 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         ServiceManager.getInstance().onStartService();
         Theme.getInstance().getList();
         initSpeedDial();
+
+        viewPager.setOnSwipeOutListener(new CustomViewPager.OnSwipeOutListener() {
+            @Override
+            public void onSwipeOutAtStart() {
+                Utils.Log(TAG,"Start swipe");
+            }
+            @Override
+            public void onSwipeOutAtEnd() {
+                Utils.Log(TAG,"End swipe");
+            }
+
+            @Override
+            public void onSwipeMove() {
+                Utils.Log(TAG,"Move swipe");
+            }
+        });
     }
 
     public void onShowFloatingButton(Fragment fragment){
@@ -137,7 +152,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         viewPager.setOffscreenPageLimit(5);
         adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-        currentFragment = adapter.getCurrentFragment();
     }
 
     private void setupTabIcons() {
@@ -154,9 +168,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         textView.setText(adapter.getPageTitle(position));
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView .setImageResource(tabIcons[position]);
+        imageView.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         return view;
     }
-
 
     private void initSpeedDial() {
         Utils.Log(TAG, "Init floating button");
@@ -363,7 +377,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
 
-
     public void askUpdateAppDialog(String title, List<String>list) {
         MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
         dialogBuilder.setTitle(title);
@@ -454,8 +467,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     Button negative = dialog.findViewById(android.R.id.button2);
                     if (positive!=null && negative!=null){
                         Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
-                        positive.setTypeface(typeface,Typeface.BOLD);
-                        negative.setTypeface(typeface,Typeface.BOLD);
                         positive.setTextSize(14);
                         negative.setTextSize(14);
                     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">QR Scanner</string>
-    <string name="admob_app_id">ca-app-pub-8291007483799285~7835389113</string>
-    <string name="banner_review">ca-app-pub-8291007483799285/8811706665</string>
-    <string name="banner_result">ca-app-pub-8515666124022892/3743650187</string>
+    <string name="admob_app_id">ca-app-pub-1720075758508937~1130706936</string>
+    <string name="banner_review">ca-app-pub-1720075758508937/7121400213</string>
+    <string name="banner_result">ca-app-pub-1720075758508937/8051338505</string>
     <string name="banner_result_scanner">ca-app-pub-8291007483799285/2199919050</string>
     <string name="banner_result_saved">ca-app-pub-8291007483799285/1354699102</string>
     <string name="banner_result_history">ca-app-pub-8291007483799285/9527744731</string>

@@ -137,10 +137,10 @@ public class Utils {
     private static Snackbar multilineSnackbar(Snackbar snackbar) {
         TextView textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         textView.setMaxLines(5);
-        textView.setTextSize(17);
+        textView.setTextSize(15);
 
         TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action);
-        snackbarActionTextView.setTextSize(16);
+        snackbarActionTextView.setTextSize(14);
         return snackbar;
     }
 

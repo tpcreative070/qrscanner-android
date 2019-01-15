@@ -34,12 +34,13 @@
             android:text="Hello" />
 
         <ImageView
+            android:id="@+id/imgDefault"
             android:tint="?attr/colorAccent"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:src="@drawable/baseline_add_box_white_48" />
+            android:src="@drawable/baseline_add_box_white_48"/>
 
     </RelativeLayout>
 </LinearLayout>

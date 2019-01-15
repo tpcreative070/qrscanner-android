@@ -415,7 +415,9 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             create.text = history.text;
             create.createType = ParsedResultType.TEXT;
         }
+
         Utils.Log(TAG, "Call intent");
+        create.fragmentType = EnumFragmentType.SAVER;
         Navigator.onResultView(getActivity(), create, ScannerResultFragment.class);
     }
 

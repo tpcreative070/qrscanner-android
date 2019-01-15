@@ -390,7 +390,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
             create.text = history.text;
             create.createType = ParsedResultType.TEXT;
         }
-
+        create.fragmentType = EnumFragmentType.HISTORY;
         Navigator.onResultView(getActivity(),create,ScannerResultFragment.class);
     }
 

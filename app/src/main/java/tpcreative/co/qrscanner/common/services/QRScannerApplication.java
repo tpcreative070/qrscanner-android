@@ -61,16 +61,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
-
-        PrefsController.putString(getString(R.string.key_admob_app_id), getString(R.string.admob_app_id));
-        PrefsController.putString(getString(R.string.key_banner_review),getString(R.string.banner_review));
-        PrefsController.putString(getString(R.string.key_banner_result),getString(R.string.banner_result));
-        PrefsController.putString(getString(R.string.key_banner_result_scanner),getString(R.string.banner_result_scanner));
-        PrefsController.putString(getString(R.string.key_banner_result_saved),getString(R.string.banner_result_saved));
-        PrefsController.putString(getString(R.string.key_banner_result_history),getString(R.string.banner_result_history));
-        PrefsController.putString(getString(R.string.key_interstitial_full_screen),getString(R.string.interstitial_full_screen));
-
-
         boolean first_Running = PrefsController.getBoolean(getString(R.string.key_not_first_running), false);
         if (!first_Running) {
             PrefsController.putBoolean(getString(R.string.key_not_first_running), true);
@@ -83,7 +73,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.dependenciesListener(this);
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
-
 
     }
 

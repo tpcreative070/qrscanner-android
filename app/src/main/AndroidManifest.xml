@@ -39,8 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.review.ReviewActivity"
-            android:screenOrientation="portrait" />
+            android:name=".ui.review.ReviewActivity"/>
 
         <receiver android:name=".common.services.QRScannerReceiver">
             <intent-filter>
@@ -72,60 +71,47 @@
         <service android:name=".common.services.QRScannerService" />
 
         <activity android:name=".ui.help.HelpActivity"
-            android:screenOrientation="portrait"/>
+            android:label="@string/help"/>
         <activity android:name=".ui.filecolor.ChangeFileColorActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.pro.ProVersionActivity"
-            android:screenOrientation="portrait"/>
+            android:label="@string/change_theme"/>
+        <activity android:name=".ui.pro.ProVersionActivity"/>
         <activity android:name=".ui.create.EmailFragment"
-            android:label="@string/email"
-            android:screenOrientation="portrait"></activity>
+            android:label="@string/email"></activity>
 
         <activity android:name=".ui.create.MessageFragment"
             android:label="@string/message"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.create.LocationFragment"
             android:label="@string/location"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.create.EventFragment"
             android:label="@string/event"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.create.ContactFragment"
             android:label="@string/contact"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.create.TelephoneFragment"
             android:label="@string/telephone"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.create.TextFragment"
             android:label="@string/text"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.create.WifiFragment"
             android:label="@string/wifi"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.create.UrlFragment"
             android:label="@string/url"
-            android:screenOrientation="portrait"
             ></activity>
 
         <activity android:name=".ui.scannerresult.ScannerResultFragment"
-            android:screenOrientation="portrait"
             ></activity>
-
-
     </application>
 
 </manifest>

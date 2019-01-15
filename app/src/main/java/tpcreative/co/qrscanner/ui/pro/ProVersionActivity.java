@@ -1,34 +1,22 @@
 package tpcreative.co.qrscanner.ui.pro;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.print.PrintHelper;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
-
 
 public class ProVersionActivity extends BaseActivitySlide implements View.OnClickListener{
 
     @BindView(R.id.btnUpgradeNow)
     Button btnUpgradeNow;
-    private Animation mAnim = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,32 +33,12 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.imgArrowBack : {
-                mAnim = AnimationUtils.loadAnimation(this, R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG,"start");
-                    }
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        finish();
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
             case R.id.btnUpgradeNow :{
                 onUpgradeNow();
                 break;
             }
         }
     }
-
 
     public void onUpgradeNow() {
         Answers.getInstance().logContentView(new ContentViewEvent()

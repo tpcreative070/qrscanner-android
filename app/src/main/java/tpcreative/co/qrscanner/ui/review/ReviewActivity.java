@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.review;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.ads.AdListener;
@@ -38,20 +36,16 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
 import java.io.File;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
 import butterknife.BindView;
 import io.reactivex.disposables.Disposable;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
-import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
@@ -83,7 +77,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
     RelativeLayout rlAdsRoot;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
-    public boolean isCreate ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,29 +106,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
             adViewBanner = new AdView(this);
             adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
 
-            final String preference = PrefsController.getString(getString(R.string.key_banner_review),null);
-            if (preference!=null){
-                adViewBanner.setAdUnitId(preference);
-            }
-
-//            final Author author = Author.getInstance().getAuthorInfo();
-//            if (author!=null){
-//                if (author.version!=null){
-//                    final Ads ads = author.version.ads;
-//                    if (ads!=null){
-//                        String banner_review = ads.banner_review;
-//                        if (banner_review!=null){
-//                            if (preference!=null){
-//                                if (!banner_review.equals(preference)){
-//                                    PrefsController.putString(getString(R.string.key_banner_review),banner_review);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-
-
+            adViewBanner.setAdUnitId(getString(R.string.banner_review));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         } else {
@@ -166,7 +137,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
             public void onAdFailedToLoad(int errorCode) {
                 Log.d(TAG, "Ad failed to load! error code: " + errorCode);
             }
-
             @Override
             public void onAdLeftApplication() {
                 Log.d(TAG, "Ad left application!");
