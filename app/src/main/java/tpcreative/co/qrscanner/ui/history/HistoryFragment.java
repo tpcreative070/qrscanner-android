@@ -543,8 +543,8 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             Log.d(TAG,"isVisible");
-            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);
             SingletonMain.getInstance().setListener(this);
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);
         }
         else{
             SingletonMain.getInstance().setListener(null);
