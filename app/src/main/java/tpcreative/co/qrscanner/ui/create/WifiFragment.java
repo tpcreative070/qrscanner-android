@@ -187,9 +187,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
-            if (data!=null){
-                SingletonSave.getInstance().reLoadData();
-            }
+            SingletonSave.getInstance().reLoadData();
             Utils.Log(TAG,"Finish...........");
             finish();
         }

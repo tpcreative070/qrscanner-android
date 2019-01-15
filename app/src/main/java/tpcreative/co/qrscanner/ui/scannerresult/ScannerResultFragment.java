@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.v4.content.FileProvider;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -50,11 +49,11 @@ import butterknife.OnClick;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
-import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -896,6 +895,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
 
         history.createDatetime = Utils.getCurrentDateTime();
         InstanceGenerator.getInstance(this).onInsert(history);
+        SingletonHistory.getInstance().reLoadData();
     }
 
     @Override
@@ -935,7 +935,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 }
             }
         }
-
     }
 
     @Override

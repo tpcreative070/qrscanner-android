@@ -213,7 +213,7 @@
     <string name="key_current_code_version"></string>
     <string name="scan_code_via_Camera">Scan BarCode And QRCode Via Camera.</string>
     <string name="scan_code_via_Gallery">Scan BarCode And QRCode From Gallery.</string>
-    <string name="choose_files">Where the files store(Check item -> choose share icon).</string>
+    <string name="choose_files">Where the files was stored(Check item -> choose share icon).</string>
     <string name="choose_qrscanner_app">Choose QR Scanner app(select app -> waiting for great result ^^).</string>
 
     <string name="connected_wifi_successful">Wifi Connected Was Successful</string>

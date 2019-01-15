@@ -226,6 +226,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     @Override
     protected void work() {
         super.work();
+        SingletonSave.getInstance().setListener(this);
         presenter = new SavePresenter();
         presenter.bindView(this);
         presenter.getListGroup();
@@ -524,9 +525,11 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
     @Override
     public void reLoadData() {
-        presenter.getListGroup();
-        addRecyclerHeaders();
-        bindData();
+        if (presenter!=null){
+            presenter.getListGroup();
+            recyclerView.removeAllCells();
+            bindData();
+        }
     }
 
     public void onAddPermissionSave() {
@@ -583,14 +586,9 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if (presenter != null && recyclerView != null) {
-                presenter.getListGroup();
-                recyclerView.removeAllCells();
-                bindData();
-            }
+            Log.d(TAG, "isVisible");
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SaverFragment.this);
             SingletonMain.getInstance().setListener(this);
-            Log.d(TAG, "isVisible");
         } else {
             SingletonMain.getInstance().setListener(null);
             Log.d(TAG, "isInVisible");

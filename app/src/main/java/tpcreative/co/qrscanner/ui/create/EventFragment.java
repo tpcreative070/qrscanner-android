@@ -415,9 +415,7 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG,"Finish...........");
-            if (data!=null){
-                SingletonSave.getInstance().reLoadData();
-            }
+            SingletonSave.getInstance().reLoadData();
             finish();
         }
     }

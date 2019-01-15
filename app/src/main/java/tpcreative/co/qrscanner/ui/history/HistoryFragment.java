@@ -479,10 +479,13 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         startActivity(Intent.createChooser(intent, "Share"));
     }
 
-
     @Override
     public void reLoadData() {
-
+        if (presenter !=null){
+            presenter.getListGroup();
+            recyclerView.removeAllCells();
+            bindData();
+        }
     }
 
     public void onAddPermissionSave() {
@@ -535,19 +538,12 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
                 }).onSameThread().check();
     }
 
-
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if (presenter !=null && recyclerView !=null){
-                presenter.getListGroup();
-                recyclerView.removeAllCells();
-                bindData();
-            }
-            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);
             Log.d(TAG,"isVisible");
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);
             SingletonMain.getInstance().setListener(this);
         }
         else{

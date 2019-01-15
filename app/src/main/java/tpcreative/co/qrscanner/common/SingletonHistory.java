@@ -25,7 +25,6 @@ public class SingletonHistory {
         }
     }
 
-
     public interface SingletonHistoryListener{
         void reLoadData();
     }
