@@ -50,6 +50,7 @@ import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonHistory;
+import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
@@ -929,8 +930,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         if (presenter.result!=null){
             switch (presenter.result.fragmentType){
                 case SCANNER:{
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK,intent);
+                    SingletonScanner.getInstance().setVisible();
+                    Utils.Log(TAG,"onDestroy.......");
                     break;
                 }
             }

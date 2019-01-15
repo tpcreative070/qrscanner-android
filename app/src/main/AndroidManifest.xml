@@ -39,7 +39,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.review.ReviewActivity"/>
+            android:name=".ui.review.ReviewActivity"
+            android:label="@string/review"/>
 
         <receiver android:name=".common.services.QRScannerReceiver">
             <intent-filter>

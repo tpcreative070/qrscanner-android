@@ -549,6 +549,9 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         else{
             SingletonMain.getInstance().setListener(null);
             Log.d(TAG,"isInVisible");
+            if (actionMode!=null){
+                actionMode.finish();
+            }
         }
     }
 

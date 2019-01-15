@@ -69,7 +69,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
     private String code;
     private Animation mAnim = null;
     private Save save = new Save();
-    private Disposable subscriptions;
     @BindView(R.id.rlAds)
     RelativeLayout rlAds;
     AdView adViewBanner;
@@ -150,7 +149,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
         adViewBanner.loadAd(adRequest);
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -172,9 +170,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
         super.onDestroy();
         if (adViewBanner != null) {
             adViewBanner.destroy();
-        }
-        if (subscriptions != null) {
-            subscriptions.dispose();
         }
     }
 
@@ -470,7 +465,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
         }
     }
 
-
     private void onPhotoPrint(String path) {
         try {
             PrintHelper photoPrinter = new PrintHelper(this);
@@ -512,6 +506,5 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
             e.printStackTrace();
         }
     }
-
 
 }

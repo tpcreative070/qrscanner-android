@@ -591,6 +591,9 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             SingletonMain.getInstance().setListener(this);
         } else {
             SingletonMain.getInstance().setListener(null);
+            if (actionMode!=null){
+                actionMode.finish();
+            }
             Log.d(TAG, "isInVisible");
         }
     }

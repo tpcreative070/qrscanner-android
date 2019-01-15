@@ -21,6 +21,7 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
 
+
         /*Preference theme*/
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <!--Action mode -->

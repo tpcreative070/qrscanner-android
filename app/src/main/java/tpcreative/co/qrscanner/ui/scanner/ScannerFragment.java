@@ -595,10 +595,12 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         }
         else if (resultCode == Activity.RESULT_OK && requestCode == Navigator.SCANNER){
             setVisible();
+            Utils.Log(TAG,"Resume camera");
         }
         else {
             Utils.Log(TAG,"You haven't picked Image");
             setVisible();
+            Utils.Log(TAG,"Resume camera!!!");
         }
     }
 
