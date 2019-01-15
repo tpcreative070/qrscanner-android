@@ -129,7 +129,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     public void onShowFloatingButton(Fragment fragment){
-
        if (fragment instanceof HistoryFragment){
            if (mSpeedDialView!=null){
                mSpeedDialView.show();
@@ -145,7 +144,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                mSpeedDialView.hide();
            }
        }
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
