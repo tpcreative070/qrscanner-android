@@ -71,10 +71,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     Toolbar toolbar;
     @BindView(R.id.appBar)
     AppBarLayout appBar;
-
     @BindView(R.id.speedDial)
     SpeedDialView mSpeedDialView;
-
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
