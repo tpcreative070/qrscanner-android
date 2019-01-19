@@ -2,9 +2,9 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.review.ReviewActivity">
 
 
@@ -12,31 +12,32 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_collapseMode="pin" />
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp">
-        </android.support.design.widget.CollapsingToolbarLayout>
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"></android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
 
     <RelativeLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -55,76 +56,85 @@
                 android:layout_below="@+id/rlButton"
                 android:orientation="vertical">
 
-                <RelativeLayout
-                    android:id="@+id/rlResult"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/imgResult"
-                        android:layout_width="@dimen/icon_size_200"
-                        android:layout_height="@dimen/icon_size_200"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="30dp" />
-                </RelativeLayout>
-
                 <LinearLayout
-                    android:id="@+id/llAction"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/rlResult"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center">
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg_location_group"
+                    android:orientation="vertical">
 
-                    <Button
-                        android:textColor="@color/white"
-                        android:id="@+id/btnSave"
-                        style="@style/brandonBoldTextView"
-                        android:layout_width="@dimen/width"
-                        android:layout_height="@dimen/height"
-                        android:layout_marginRight="@dimen/margin"
-                        android:background="@drawable/bg_button"
-                        android:gravity="center"
-                        android:text="@string/save"
-                        android:textAllCaps="false"
-                        android:textSize="@dimen/medium_x" />
+                    <RelativeLayout
+                        android:id="@+id/rlResult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <Button
-                        android:textColor="@color/white"
-                        android:id="@+id/btnShare"
-                        style="@style/brandonBoldTextView"
-                        android:layout_width="@dimen/width"
-                        android:layout_height="@dimen/height"
-                        android:layout_marginLeft="@dimen/margin"
-                        android:background="@drawable/bg_button"
-                        android:gravity="center"
-                        android:text="@string/share"
-                        android:textAllCaps="false"
-                        android:textSize="@dimen/medium_x" />
+                        <ImageView
+                            android:id="@+id/imgResult"
+                            android:layout_width="@dimen/icon_size_200"
+                            android:layout_height="@dimen/icon_size_200"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="30dp" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llAction"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rlResult"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/btnSave"
+                            style="@style/brandonBoldTextView"
+                            android:layout_width="@dimen/width"
+                            android:layout_height="@dimen/height"
+                            android:layout_marginRight="@dimen/margin"
+                            android:background="@drawable/bg_button"
+                            android:gravity="center"
+                            android:text="@string/save"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/medium_x" />
+
+                        <Button
+                            android:id="@+id/btnShare"
+                            style="@style/brandonBoldTextView"
+                            android:layout_width="@dimen/width"
+                            android:layout_height="@dimen/height"
+                            android:layout_marginLeft="@dimen/margin"
+                            android:background="@drawable/bg_button"
+                            android:gravity="center"
+                            android:text="@string/share"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/medium_x" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
 
                 <RelativeLayout
-                    android:background="@drawable/bg_generate_rounded"
-                    android:layout_gravity="center"
                     android:id="@+id/rlAdsRoot"
-                    android:layout_height="300dp"
                     android:layout_width="match_parent"
+                    android:layout_height="300dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_generate_rounded"
                     android:gravity="center">
 
                     <RelativeLayout
-                        android:layout_alignParentTop="true"
                         android:id="@+id/rlAds"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
                         android:layout_toLeftOf="@+id/rlRemove"
-                        android:gravity="center"/>
+                        android:gravity="center" />
                 </RelativeLayout>
             </LinearLayout>
         </ScrollView>

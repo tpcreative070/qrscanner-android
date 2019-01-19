@@ -35,6 +35,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 import com.snatik.storage.Storage;
+
+import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
@@ -123,6 +125,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 Utils.Log(TAG,"Move swipe");
             }
         });
+
+        if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
+            finish();
+        }
+
     }
 
     public void onShowFloatingButton(Fragment fragment){

@@ -2,42 +2,41 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_collapseMode="pin" />
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp">
-        </android.support.design.widget.CollapsingToolbarLayout>
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"></android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
 
-
-
     <RelativeLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -58,848 +57,857 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <!-- Email -->
                     <LinearLayout
-                        android:id="@+id/llEmail"
+                        android:layout_margin="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/to" />
-
-                        <TextView
-                            android:id="@+id/emailTo"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/subject" />
-
-                        <TextView
-                            android:id="@+id/emailSubject"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/message" />
-
-                        <TextView
-                            android:id="@+id/emailMessage"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                    </LinearLayout>
-
-
-                    <!-- SMS -->
-
-                    <LinearLayout
-                        android:id="@+id/llSMS"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/to" />
-
-                        <TextView
-                            android:id="@+id/smsTo"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/message" />
-
-                        <TextView
-                            android:id="@+id/smsMessage"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-                    </LinearLayout>
-
-
-                    <!-- Contact -->
-
-                    <LinearLayout
-                        android:id="@+id/llContact"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/fullName" />
-
-                        <TextView
-                            android:id="@+id/contactFullName"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/address" />
-
-                        <TextView
-                            android:id="@+id/contactAddress"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/phone" />
-
-                        <TextView
-                            android:id="@+id/contactPhone"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/email" />
-
-                        <TextView
-                            android:id="@+id/contactEmail"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                    </LinearLayout>
-
-
-                    <!-- Location -->
-
-                    <LinearLayout
-                        android:id="@+id/llLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/latitude" />
-
-                        <TextView
-                            android:id="@+id/locationLatitude"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/longitude" />
-
-                        <TextView
-                            android:id="@+id/locationLongitude"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/query" />
-
-                        <TextView
-                            android:id="@+id/locationQuery"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-                    </LinearLayout>
-
-
-                    <!-- Event -->
-
-                    <LinearLayout
-                        android:id="@+id/llEvent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/title" />
-
-                        <TextView
-                            android:id="@+id/eventTitle"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/location" />
-
-                        <TextView
-                            android:id="@+id/eventLocation"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/description" />
-
-                        <TextView
-                            android:id="@+id/eventDescription"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/beginTime" />
-
-                        <TextView
-                            android:id="@+id/eventBeginTime"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/endTime" />
-
-                        <TextView
-                            android:id="@+id/eventEndTime"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                    </LinearLayout>
-
-
-                    <!-- Wifi -->
-
-                    <LinearLayout
-                        android:id="@+id/llWifi"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/ssid" />
-
-                        <TextView
-                            android:id="@+id/wifiSSID"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/password" />
-
-                        <TextView
-                            android:id="@+id/wifiPassword"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/networkEncryption" />
-
-                        <TextView
-                            android:id="@+id/wifiNetworkEncryption"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/hidden" />
-
-                        <TextView
-                            android:id="@+id/wifiHidden"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-                    </LinearLayout>
-
-
-                    <!-- Phone number -->
-
-                    <LinearLayout
-                        android:id="@+id/llTelephone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/phoneNumber" />
-
-                        <TextView
-                            android:id="@+id/telephoneNumber"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                    </LinearLayout>
-
-
-                    <!-- Text -->
-
-                    <LinearLayout
-                        android:id="@+id/llText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_location_group"
                         android:orientation="vertical">
 
-                        <TextView
-                            style="@style/brandonBoldTextView"
+                        <!-- Email -->
+                        <LinearLayout
+                            android:id="@+id/llEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/text" />
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                        <TextView
-                            android:id="@+id/textMessage"
-                            style="@style/brandonRegularTextView"
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/to" />
+
+                            <TextView
+                                android:id="@+id/emailTo"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/subject" />
+
+                            <TextView
+                                android:id="@+id/emailSubject"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/message" />
+
+                            <TextView
+                                android:id="@+id/emailMessage"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+
+                        <!-- SMS -->
+
+                        <LinearLayout
+                            android:id="@+id/llSMS"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/to" />
 
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/smsTo"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/message" />
+
+                            <TextView
+                                android:id="@+id/smsMessage"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+                        </LinearLayout>
 
 
-                    <!-- Product -->
+                        <!-- Contact -->
 
-                    <LinearLayout
-                        android:id="@+id/llProduct"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/product_id" />
-
-                        <TextView
-                            android:id="@+id/textProduct"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                    </LinearLayout>
-
-                    <!-- ISBN -->
-
-                    <LinearLayout
-                        android:id="@+id/llISBN"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            style="@style/brandonBoldTextView"
+                        <LinearLayout
+                            android:id="@+id/llContact"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/isbs" />
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                        <TextView
-                            android:id="@+id/textISBN"
-                            style="@style/brandonRegularTextView"
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/fullName" />
+
+                            <TextView
+                                android:id="@+id/contactFullName"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/address" />
+
+                            <TextView
+                                android:id="@+id/contactAddress"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/phone" />
+
+                            <TextView
+                                android:id="@+id/contactPhone"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email" />
+
+                            <TextView
+                                android:id="@+id/contactEmail"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+
+                        <!-- Location -->
+
+                        <LinearLayout
+                            android:id="@+id/llLocation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/latitude" />
 
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/locationLatitude"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/longitude" />
+
+                            <TextView
+                                android:id="@+id/locationLongitude"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
 
 
-                    <!-- Url -->
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/query" />
 
-                    <LinearLayout
-                        android:id="@+id/llURL"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/locationQuery"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
 
-                        <TextView
-                            style="@style/brandonBoldTextView"
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+                        </LinearLayout>
+
+
+                        <!-- Event -->
+
+                        <LinearLayout
+                            android:id="@+id/llEvent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/url" />
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                        <TextView
-                            android:id="@+id/urlAddress"
-                            style="@style/brandonRegularTextView"
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/title" />
+
+                            <TextView
+                                android:id="@+id/eventTitle"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/location" />
+
+                            <TextView
+                                android:id="@+id/eventLocation"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/description" />
+
+                            <TextView
+                                android:id="@+id/eventDescription"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/beginTime" />
+
+                            <TextView
+                                android:id="@+id/eventBeginTime"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/endTime" />
+
+                            <TextView
+                                android:id="@+id/eventEndTime"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+
+                        <!-- Wifi -->
+
+                        <LinearLayout
+                            android:id="@+id/llWifi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/material_gray_600" />
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                        <View
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/ssid" />
+
+                            <TextView
+                                android:id="@+id/wifiSSID"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/password" />
+
+                            <TextView
+                                android:id="@+id/wifiPassword"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/networkEncryption" />
+
+                            <TextView
+                                android:id="@+id/wifiNetworkEncryption"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/hidden" />
+
+                            <TextView
+                                android:id="@+id/wifiHidden"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+                        </LinearLayout>
+
+
+                        <!-- Phone number -->
+
+                        <LinearLayout
+                            android:id="@+id/llTelephone"
                             android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/grey_lighter" />
-
-                    </LinearLayout>
-
-
-
-                    <LinearLayout
-                        android:id="@+id/rlFooter"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <RelativeLayout
-                            android:id="@+id/rlShare"
-                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1">
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/phoneNumber" />
+
+                            <TextView
+                                android:id="@+id/telephoneNumber"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+
+                        <!-- Text -->
+
+                        <LinearLayout
+                            android:id="@+id/llText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text" />
+
+                            <TextView
+                                android:id="@+id/textMessage"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+
+                        <!-- Product -->
+
+                        <LinearLayout
+                            android:id="@+id/llProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/product_id" />
+
+                            <TextView
+                                android:id="@+id/textProduct"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+                        <!-- ISBN -->
+
+                        <LinearLayout
+                            android:id="@+id/llISBN"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/isbs" />
+
+                            <TextView
+                                android:id="@+id/textISBN"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+
+                        <!-- Url -->
+
+                        <LinearLayout
+                            android:id="@+id/llURL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/url" />
+
+                            <TextView
+                                android:id="@+id/urlAddress"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/rlFooter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
                             <RelativeLayout
-                                android:layout_width="@dimen/width"
-                                android:layout_height="@dimen/height"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="@dimen/margin"
-                                android:background="@drawable/bg_button">
+                                android:id="@+id/rlShare"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1">
 
-                                <ImageView
-                                    android:tint="@color/white"
-                                    android:id="@+id/imgOpenApplication"
-                                    android:layout_width="60dp"
-                                    android:layout_height="60dp"
-                                    android:layout_centerInParent="true"
-                                    android:padding="6dp" />
+                                <RelativeLayout
+                                    android:layout_width="@dimen/width"
+                                    android:layout_height="@dimen/height"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginRight="@dimen/margin"
+                                    android:background="@drawable/bg_button">
+
+                                    <ImageView
+                                        android:id="@+id/imgOpenApplication"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_centerInParent="true"
+                                        android:padding="6dp"
+                                        android:tint="@color/white" />
+
+                                </RelativeLayout>
 
                             </RelativeLayout>
 
-                        </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1">
 
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1">
+                                <Button
+                                    android:id="@+id/btnClipboard"
+                                    style="@style/brandonBoldTextView"
+                                    android:layout_width="@dimen/width"
+                                    android:layout_height="@dimen/height"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginLeft="@dimen/margin"
+                                    android:background="@drawable/bg_button"
+                                    android:paddingLeft="10dp"
+                                    android:paddingRight="10dp"
+                                    android:text="@string/my_clipboad"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/medium" />
+                            </RelativeLayout>
+                        </LinearLayout>
 
-                            <Button
-                                android:textColor="@color/white"
-                                android:id="@+id/btnClipboard"
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="@dimen/width"
-                                android:layout_height="@dimen/height"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerInParent="true"
-                                android:layout_marginLeft="@dimen/margin"
-                                android:background="@drawable/bg_button"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:text="@string/my_clipboad"
-                                android:textAllCaps="false"
-                                android:textSize="@dimen/medium" />
-                        </RelativeLayout>
                     </LinearLayout>
 
 
                     <RelativeLayout
-                        android:background="@drawable/bg_generate_rounded"
-                        android:layout_gravity="center"
                         android:id="@+id/rlAdsRoot"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_generate_rounded"
                         android:gravity="center">
+
                         <RelativeLayout
-                            android:layout_alignParentTop="true"
                             android:id="@+id/rlAds"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
                             android:layout_toLeftOf="@+id/rlRemove"
-                            android:gravity="center"/>
+                            android:gravity="center" />
 
                     </RelativeLayout>
                 </LinearLayout>

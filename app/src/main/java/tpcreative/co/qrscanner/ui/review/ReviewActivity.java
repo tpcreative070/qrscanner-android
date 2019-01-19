@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
+
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.ads.AdListener;
@@ -431,12 +433,10 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
         isComplete = true;
         switch (enumAction) {
             case SAVE: {
-
                 /*Adding new columns*/
                 save.barcodeFormat = BarcodeFormat.QR_CODE.name();
                 save.favorite = false;
-
-                Utils.showGotItSnackbar(btnSave, "Saved code successful => Path: " + path);
+                Toast.makeText(this, "Saved code successful => Path: " + path, Toast.LENGTH_SHORT).show();
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE) {
                     InstanceGenerator.getInstance(getContext()).onInsert(save);
