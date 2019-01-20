@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -63,6 +63,7 @@
                     android:background="@drawable/bg_location_group"
                     android:orientation="vertical">
 
+
                     <RelativeLayout
                         android:id="@+id/rlResult"
                         android:layout_width="match_parent"
@@ -77,6 +78,7 @@
                             android:layout_marginTop="30dp" />
                     </RelativeLayout>
 
+
                     <LinearLayout
                         android:id="@+id/llAction"
                         android:layout_width="match_parent"
@@ -84,34 +86,12 @@
                         android:layout_below="@+id/rlResult"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="40dp"
-                        android:layout_marginBottom="20dp"
                         android:gravity="center">
 
-                        <Button
-                            android:id="@+id/btnSave"
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="@dimen/width"
-                            android:layout_height="@dimen/height"
-                            android:layout_marginRight="@dimen/margin"
-                            android:background="@drawable/bg_button"
-                            android:gravity="center"
-                            android:text="@string/save"
-                            android:textAllCaps="false"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/medium_x" />
-
-                        <Button
-                            android:id="@+id/btnShare"
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="@dimen/width"
-                            android:layout_height="@dimen/height"
-                            android:layout_marginLeft="@dimen/margin"
-                            android:background="@drawable/bg_button"
-                            android:gravity="center"
-                            android:text="@string/share"
-                            android:textAllCaps="false"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/medium_x" />
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
                     </LinearLayout>
 
@@ -137,6 +117,6 @@
                         android:gravity="center" />
                 </RelativeLayout>
             </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

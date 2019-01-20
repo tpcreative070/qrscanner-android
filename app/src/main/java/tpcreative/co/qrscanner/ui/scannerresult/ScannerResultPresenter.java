@@ -3,15 +3,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import com.google.gson.Gson;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
+import tpcreative.co.qrscanner.model.ItemNavigation;
 
 public class ScannerResultPresenter extends Presenter<ScannerResultView>{
 
@@ -19,10 +20,12 @@ public class ScannerResultPresenter extends Presenter<ScannerResultView>{
     protected HashMap<Object,String>hashClipboard = new HashMap<>();
     protected HashMap<Object,String>hashClipboardResult = new HashMap<>();
     protected StringBuilder stringBuilderClipboard = new StringBuilder();
+    protected List<ItemNavigation>mListItemNavigation;
     private static final String TAG = ScannerResultPresenter.class.getSimpleName();
 
     public ScannerResultPresenter(){
         result = new Create();
+        mListItemNavigation = new ArrayList<>();
     }
 
     public void getIntent(Activity activity){

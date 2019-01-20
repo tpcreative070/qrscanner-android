@@ -9,6 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.support.v4.print.PrintHelper;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -49,37 +52,42 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
+import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumImplement;
+import tpcreative.co.qrscanner.model.ItemNavigation;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultAdapter;
 
-public class ReviewActivity extends BaseActivitySlide implements ReviewView, View.OnClickListener, Utils.UtilsListener {
+public class ReviewActivity extends BaseActivitySlide implements ReviewView, Utils.UtilsListener,ScannerResultAdapter.ItemSelectedListener {
 
     protected static final String TAG = ReviewActivity.class.getSimpleName();
     @BindView(R.id.imgResult)
     ImageView imgResult;
-    @BindView(R.id.btnSave)
-    Button btnSave;
-    @BindView(R.id.btnShare)
-    Button btnShare;
     private ReviewPresenter presenter;
     private Create create;
     private Bitmap bitmap;
     private String code;
-    private Animation mAnim = null;
     private Save save = new Save();
     @BindView(R.id.rlAds)
     RelativeLayout rlAds;
     AdView adViewBanner;
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
-    @BindView(R.id.scrollView)
-    ScrollView scrollView;
     private boolean isComplete;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.scrollView)
+    NestedScrollView scrollView;
+
+    private ScannerResultAdapter adapter;
+    LinearLayoutManager llm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,14 +97,47 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         scrollView.smoothScrollTo(0,0);
-        btnSave.setOnClickListener(this);
-        btnShare.setOnClickListener(this);
         presenter = new ReviewPresenter();
+        setupRecyclerViewItem();
         presenter.bindView(this);
         presenter.getIntent(this);
         initAds();
         onDrawOverLay(this);
     }
+
+
+    public void setupRecyclerViewItem() {
+        llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        adapter = new ScannerResultAdapter(getLayoutInflater(), this, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
+    }
+
+
+    @Override
+    public void onClickItem(int position) {
+        final ItemNavigation itemNavigation = presenter.mListItemNavigation.get(position);
+        if (itemNavigation!=null){
+            switch (itemNavigation.enumAction){
+                case SHARE:{
+                    if (code != null) {
+                        Log.d(TAG, "Share");
+                        onGenerateCode(code, EnumAction.SHARE);
+                    }
+                    break;
+                }
+                case SAVE:{
+                    if (code != null) {
+                        onAddPermissionSave(EnumAction.SAVE);
+                    }
+                }
+            }
+        }
+    }
+
+
 
     public void initAds() {
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
@@ -305,7 +346,17 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
                 onGenerateReview(code);
                 break;
         }
+
+        presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
+        presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SAVE,R.drawable.baseline_save_alt_white_48,"Save"));
+        onReloadData();
     }
+
+    @Override
+    public void onReloadData() {
+        adapter.setDataSource(presenter.mListItemNavigation);
+    }
+
 
     public void onAddPermissionSave(final EnumAction enumAction) {
         Dexter.withActivity(this)
@@ -360,59 +411,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnSave: {
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG, "start");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (code != null) {
-                            onAddPermissionSave(EnumAction.SAVE);
-                        }
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-            case R.id.btnShare: {
-                mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
-                mAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        Log.d(TAG, "start");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (code != null) {
-                            Log.d(TAG, "Share");
-                            onGenerateCode(code, EnumAction.SHARE);
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                view.startAnimation(mAnim);
-                break;
-            }
-        }
-    }
-
     public void onGenerateCode(String code, EnumAction enumAction) {
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
@@ -436,7 +434,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
                 /*Adding new columns*/
                 save.barcodeFormat = BarcodeFormat.QR_CODE.name();
                 save.favorite = false;
-                Toast.makeText(this, "Saved code successful => Path: " + path, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Saved code successful => Path: " + path, Toast.LENGTH_LONG).show();
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE) {
                     InstanceGenerator.getInstance(getContext()).onInsert(save);
@@ -458,7 +456,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Vie
                         shareToSocial(uri);
                     }
                 } else {
-                    Utils.showGotItSnackbar(btnSave, R.string.no_items_found);
+                    Toast.makeText(ReviewActivity.this,getString(R.string.no_items_found),Toast.LENGTH_SHORT).show();
                 }
                 break;
             }

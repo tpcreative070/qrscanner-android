@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +25,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
@@ -53,17 +55,19 @@ import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
+import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.ItemNavigation;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 
-public class ScannerResultFragment extends BaseActivitySlide implements ScannerResultView,Utils.UtilsListener{
+public class ScannerResultFragment extends BaseActivitySlide implements ScannerResultView,Utils.UtilsListener,ScannerResultAdapter.ItemSelectedListener {
 
     private static final String TAG = ScannerResultFragment.class.getSimpleName();
     private ScannerResultPresenter presenter;
@@ -170,9 +174,16 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @BindView(R.id.textProduct)
     TextView textProduct;
 
-    /*Open application*/
-    @BindView(R.id.imgOpenApplication)
-    ImageView imgOpenApplication;
+
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.scrollView)
+    NestedScrollView scrollView;
+
+    private ScannerResultAdapter adapter;
+    LinearLayoutManager llm;
+
 
     private  String code ;
     private Bitmap bitmap;
@@ -183,9 +194,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     AdView adViewBanner;
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
-
-    @BindView(R.id.scrollView)
-    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +216,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         mList.add(llISBN);
         presenter = new ScannerResultPresenter();
         presenter.bindView(this);
+        setupRecyclerViewItem();
         presenter.getIntent(this);
         initAds();
         onDrawOverLay(this);
@@ -235,6 +244,15 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setupRecyclerViewItem() {
+        llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        adapter = new ScannerResultAdapter(getLayoutInflater(), this, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
     public void initAds() {
@@ -288,24 +306,26 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     }
 
 
-    @OnClick(R.id.rlShare)
-    public void openApplication(View view){
-        mAnim = AnimationUtils.loadAnimation(this, R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
+    @Override
+    public void onClickItem(int position) {
+        final ItemNavigation navigation = presenter.mListItemNavigation.get(position);
+        if (navigation!=null){
+            switch (navigation.enumAction){
+                case CLIPBOARD:{
+                    onClipboardDialog();
+                    break;
+                }
+                default:{
+                    onAddPermissionSave();
+                    break;
+                }
             }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onAddPermissionSave();
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+        }
+    }
 
-            }
-        });
-        view.startAnimation(mAnim);
+    @Override
+    public void onReloadData() {
+        adapter.setDataSource(presenter.mListItemNavigation);
     }
 
     public void onAddPermissionPhoneCall() {
@@ -358,6 +378,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
                             create = presenter.result;
+
                             try {
                                 switch (create.createType) {
                                     case ADDRESSBOOK:
@@ -534,7 +555,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void setView() {
         create = presenter.result;
-
         switch (create.createType){
             case ADDRESSBOOK:
 
@@ -556,10 +576,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.email = create.email;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_perm_contact_calendar_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_perm_contact_calendar_white_48,"AddressBook"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
                 onShowUI(llContact);
                 setTitle("AddressBook");
@@ -582,10 +602,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.message = create.message;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_email_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_email_white_48,"Email"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
 
                 onShowUI(llEmail);
@@ -599,10 +619,11 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.text = create.productId;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Product"));
+
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
                 onShowUI(llProduct);
                 setTitle("Product");
@@ -619,10 +640,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_language_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_language_white_48,"Url"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
                 onShowUI(llURL);
                 setTitle("Url");
@@ -652,12 +673,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.hidden = create.hidden;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_network_wifi_white_48));
-
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_network_wifi_white_48,"Wifi"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
 
                 onShowUI(llWifi);
@@ -683,10 +702,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_location_on_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_location_on_white_48,"Location"));
 
                 }else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
 
                 onShowUI(llLocation);
@@ -704,10 +723,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_phone_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_phone_white_48,"Telephone"));
 
                 }else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
 
                 onShowUI(llTelephone);
@@ -731,11 +750,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
-
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"SMS"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
 
                 onShowUI(llSMS);
@@ -769,10 +787,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.createType = create.createType.name();
 
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_event_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_event_white_48,"Calendar"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
                 onShowUI(llEvent);
                 setTitle("Calendar");
@@ -787,10 +805,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.text = create.ISBN;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Share"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"ISBN"));
                 }
                 onShowUI(llISBN);
                 setTitle("ISBN");
@@ -803,15 +821,18 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.text = create.text;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_textsms_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Text"));
                 }
                 else{
-                    imgOpenApplication.setImageDrawable(getResources().getDrawable(R.drawable.baseline_share_white_48));
+                    presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
                 onShowUI(llText);
                 setTitle("Text");
                 break;
         }
+
+        presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.CLIPBOARD,R.drawable.baseline_file_copy_white_48,"Clipboard"));
+        onReloadData();
 
         try {
             final boolean autoCopy = PrefsController.getBoolean(getString(R.string.key_copy_to_clipboard),false);
@@ -841,7 +862,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                     }
                 }
                 else{
-                    Utils.showGotItSnackbar(telephoneNumber,R.string.no_items_found);
+                    Toast.makeText(ScannerResultFragment.this,getString(R.string.no_items_found),Toast.LENGTH_SHORT).show();
                 }
             }
             default:{
@@ -976,7 +997,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (presenter.hashClipboardResult!=null &&presenter.hashClipboardResult.size()>0){
                     Utils.copyToClipboard(presenter.getResult(presenter.hashClipboardResult));
-                    Utils.showGotItSnackbar(emailMessage,R.string.copied_successful);
+                    Toast.makeText(ScannerResultFragment.this,getString(R.string.copied_successful),Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1005,28 +1026,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             }
         });
         dialog.show();
-    }
-
-    @OnClick(R.id.btnClipboard)
-    public void onClickedClipboard(View view){
-        mAnim = AnimationUtils.loadAnimation(this, R.anim.anomation_click_item);
-        mAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                if (presenter.hashClipboard!=null && presenter.hashClipboard.size()>=0){
-                    onClipboardDialog();
-                }
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        view.startAnimation(mAnim);
     }
 
     public void onOpenWebSites(String url){

@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/rlButton">
 
-            <ScrollView
+            <android.support.v4.widget.NestedScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -834,60 +834,15 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:orientation="horizontal"
-                            android:weightSum="2">
+                            android:orientation="horizontal">
 
-                            <RelativeLayout
-                                android:id="@+id/rlShare"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1">
 
-                                <RelativeLayout
-                                    android:layout_width="@dimen/width"
-                                    android:layout_height="@dimen/height"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_marginRight="@dimen/margin"
-                                    android:background="@drawable/bg_button">
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
 
-                                    <ImageView
-                                        android:id="@+id/imgOpenApplication"
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:layout_centerInParent="true"
-                                        android:padding="6dp"
-                                        android:tint="@color/white" />
-
-                                </RelativeLayout>
-
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1">
-
-                                <Button
-                                    android:id="@+id/btnClipboard"
-                                    style="@style/brandonBoldTextView"
-                                    android:layout_width="@dimen/width"
-                                    android:layout_height="@dimen/height"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_centerInParent="true"
-                                    android:layout_marginLeft="@dimen/margin"
-                                    android:background="@drawable/bg_button"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="10dp"
-                                    android:text="@string/my_clipboad"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/medium" />
-                            </RelativeLayout>
                         </LinearLayout>
-
                     </LinearLayout>
 
 
@@ -911,7 +866,7 @@
 
                     </RelativeLayout>
                 </LinearLayout>
-            </ScrollView>
+            </android.support.v4.widget.NestedScrollView>
         </RelativeLayout>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
