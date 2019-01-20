@@ -4,11 +4,10 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:background="?android:attr/selectableItemBackground"
         android:id="@+id/rlHome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-
 
         <RelativeLayout
             android:layout_margin="20dp"

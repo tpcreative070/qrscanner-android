@@ -86,6 +86,7 @@
                         android:layout_below="@+id/rlResult"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="40dp"
+                        android:layout_marginBottom="5dp"
                         android:gravity="center">
 
                         <android.support.v7.widget.RecyclerView

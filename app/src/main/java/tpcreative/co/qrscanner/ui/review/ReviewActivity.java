@@ -46,7 +46,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
-import io.reactivex.disposables.Disposable;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
