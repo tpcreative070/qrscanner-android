@@ -1007,7 +1007,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
 
             }
         });
-        MaterialDialog dialog = dialogBuilder.create();
+        MaterialDialog dialog = dialogBuilder.show();
         dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
@@ -1025,7 +1025,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 }
             }
         });
-        dialog.show();
     }
 
     public void onOpenWebSites(String url){
