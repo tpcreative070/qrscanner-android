@@ -187,7 +187,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
 
     private  String code ;
     private Bitmap bitmap;
-    private Animation mAnim = null;
+
 
     @BindView(R.id.rlAds)
     RelativeLayout rlAds;

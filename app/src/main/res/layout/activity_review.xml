@@ -75,7 +75,7 @@
                             android:layout_height="@dimen/icon_size_200"
                             android:layout_alignParentTop="true"
                             android:layout_centerInParent="true"
-                            android:layout_marginTop="30dp" />
+                            android:layout_marginTop="20dp" />
                     </RelativeLayout>
 
 
@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/rlResult"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginBottom="5dp"
                         android:gravity="center">
 
