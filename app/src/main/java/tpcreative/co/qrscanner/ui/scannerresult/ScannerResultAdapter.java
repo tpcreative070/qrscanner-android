@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.scannerresult;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class ScannerResultAdapter extends BaseAdapter<ItemNavigation, BaseHolder
             this.mPosition  = position;
             tvTitle.setText(data.value);
             imgAction.setImageDrawable(context.getResources().getDrawable(data.res));
+            imgAction.setColorFilter(context.getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         }
 
         @OnClick(R.id.rlHome)
