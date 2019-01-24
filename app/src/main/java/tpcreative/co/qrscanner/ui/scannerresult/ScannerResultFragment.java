@@ -19,10 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +39,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -313,6 +311,31 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             switch (navigation.enumAction){
                 case CLIPBOARD:{
                     onClipboardDialog();
+                    break;
+                }
+                case SEARCH:{
+                    final Create result = presenter.result;
+                    if (result==null){
+                        return;
+                    }
+                    switch (result.createType){
+                        case URI:{
+                            onSearch(result.url);
+                            break;
+                        }
+                        case PRODUCT:{
+                            onSearch(result.productId);
+                            break;
+                        }
+                        case ISBN:{
+                            onSearch(result.ISBN);
+                            break;
+                        }
+                        case TEXT:{
+                            onSearch(result.text);
+                            break;
+                        }
+                    }
                     break;
                 }
                 default:{
@@ -618,6 +641,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history = new History();
                 history.text = create.productId;
                 history.createType = create.createType.name();
+
+                presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Product"));
 
@@ -639,6 +664,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history.url = create.url;
                 history.createType = create.createType.name();
 
+                presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_language_white_48,"Url"));
                 }
@@ -804,6 +830,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history = new History();
                 history.text = create.ISBN;
                 history.createType = create.createType.name();
+
+                presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Share"));
                 }
@@ -820,6 +848,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history = new History();
                 history.text = create.text;
                 history.createType = create.createType.name();
+
+                presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Text"));
                 }
@@ -1043,6 +1073,33 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             catch (Exception ex){
                 Toast.makeText(this,"Can not open the link",Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+
+    public void onSearch(String query){
+        try {
+            String escapedQuery = URLEncoder.encode(query, "UTF-8");
+            Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
+            Intent i = new Intent(Intent.ACTION_VIEW,uri);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setPackage("com.android.chrome");
+            try {
+                startActivity(i);
+            } catch (ActivityNotFoundException e) {
+                // Chrome is probably not installed
+                // Try with the default browser
+                try {
+                    i.setPackage(null);
+                    startActivity(i);
+                }
+                catch (Exception ex){
+                    Toast.makeText(this,"Can not open the link",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
