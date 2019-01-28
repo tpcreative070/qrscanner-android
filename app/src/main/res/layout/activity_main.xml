@@ -51,5 +51,4 @@
         app:sdMainFabClosedSrc="@drawable/baseline_menu_white_24"
         app:sdMainFabOpenedSrc="@drawable/baseline_menu_white_24"
         app:sdOverlayLayout="@id/overlay"/>
-
 </android.support.design.widget.CoordinatorLayout>

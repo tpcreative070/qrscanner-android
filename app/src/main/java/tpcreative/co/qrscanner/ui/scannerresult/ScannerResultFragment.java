@@ -256,13 +256,13 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     public void initAds() {
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            adViewBanner.setAdSize(AdSize.BANNER);
             adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();
         } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
             adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            adViewBanner.setAdSize(AdSize.BANNER);
             adViewBanner.setAdUnitId(getString(R.string.banner_result));
             rlAds.addView(adViewBanner);
             addGoogleAdmods();

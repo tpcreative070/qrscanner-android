@@ -49,6 +49,7 @@
 
             <android.support.v4.widget.NestedScrollView
                 android:id="@+id/scrollView"
+                android:layout_above="@+id/rlAdsRoot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -843,29 +844,29 @@
 
                         </LinearLayout>
                     </LinearLayout>
-
-
-                    <RelativeLayout
-                        android:id="@+id/rlAdsRoot"
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:background="@drawable/bg_generate_rounded"
-                        android:gravity="center">
-
-                        <RelativeLayout
-                            android:id="@+id/rlAds"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_toLeftOf="@+id/rlRemove"
-                            android:gravity="center" />
-
-                    </RelativeLayout>
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
+
+            <RelativeLayout
+
+                android:id="@+id/rlAdsRoot"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_generate_rounded"
+                android:gravity="center">
+
+                <RelativeLayout
+                    android:id="@+id/rlAds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/rlRemove"
+                    android:gravity="center" />
+
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
