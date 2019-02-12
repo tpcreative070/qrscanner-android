@@ -24,7 +24,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -75,6 +81,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     AppBarLayout appBar;
     @BindView(R.id.speedDial)
     SpeedDialView mSpeedDialView;
+    @BindView(R.id.rlAds)
+    RelativeLayout rlAds;
+    AdView adViewBanner;
+    @BindView(R.id.rlAdsRoot)
+    RelativeLayout rlAdsRoot;
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
@@ -130,7 +141,60 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             finish();
         }
 
+        initAds();
+
     }
+
+
+    public void initAds() {
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
+            adViewBanner = new AdView(this);
+            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
+        } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
+            adViewBanner = new AdView(this);
+            adViewBanner.setAdSize(AdSize.BANNER);
+            adViewBanner.setAdUnitId(getString(R.string.banner_footer));
+            rlAds.addView(adViewBanner);
+            addGoogleAdmods();
+        } else {
+            Log.d(TAG, "Premium Version");
+        }
+    }
+
+    public void addGoogleAdmods() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adViewBanner.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                Utils.Log(TAG,"Loaded successful");
+            }
+
+            @Override
+            public void onAdClosed() {
+                Log.d(TAG, "Ad is closed!");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                Log.d(TAG, "Ad failed to load! error code: " + errorCode);
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                Log.d(TAG, "Ad left application!");
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+        });
+        adViewBanner.loadAd(adRequest);
+    }
+
 
     public void onShowFloatingButton(Fragment fragment){
        if (fragment instanceof HistoryFragment){
@@ -289,6 +353,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
     }
 
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        Log.d(TAG,"Network changed :"+ isConnected);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -297,16 +367,17 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 onInitReceiver();
             }
         }
-    }
-
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        Log.d(TAG,"Network changed :"+ isConnected);
+        if (adViewBanner != null) {
+            adViewBanner.resume();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if (adViewBanner != null) {
+            adViewBanner.pause();
+        }
     }
 
     @Override
@@ -320,7 +391,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
         PrefsController.putBoolean(getString(R.string.key_second_loads),true);
         ServiceManager.getInstance().onDismissServices();
+        if (adViewBanner != null) {
+            adViewBanner.destroy();
+        }
     }
+
 
     @Override
     public void onBackPressed() {
@@ -479,5 +554,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             e.printStackTrace();
         }
     }
+
 
 }

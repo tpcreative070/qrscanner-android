@@ -72,11 +72,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
     private Bitmap bitmap;
     private String code;
     private Save save = new Save();
-    @BindView(R.id.rlAds)
-    RelativeLayout rlAds;
-    AdView adViewBanner;
-    @BindView(R.id.rlAdsRoot)
-    RelativeLayout rlAdsRoot;
     private boolean isComplete;
 
     @BindView(R.id.recyclerView)
@@ -100,7 +95,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
         setupRecyclerViewItem();
         presenter.bindView(this);
         presenter.getIntent(this);
-        initAds();
         onDrawOverLay(this);
     }
 
@@ -136,85 +130,24 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
         }
     }
 
-
-
-    public void initAds() {
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-
-            adViewBanner.setAdUnitId(getString(R.string.banner_review));
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        } else {
-            Log.d(TAG, "Premium Version");
-            rlAdsRoot.setVisibility(View.GONE);
-        }
-    }
-
     @Override
     public void onCatch() {
         onBackPressed();
     }
 
-    public void addGoogleAdmods() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adViewBanner.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Utils.Log(TAG,"Loaded successful");
-            }
-
-            @Override
-            public void onAdClosed() {
-                Log.d(TAG, "Ad is closed!");
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                Log.d(TAG, "Ad failed to load! error code: " + errorCode);
-            }
-            @Override
-            public void onAdLeftApplication() {
-                Log.d(TAG, "Ad left application!");
-            }
-
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-            }
-        });
-        adViewBanner.loadAd(adRequest);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        if (adViewBanner != null) {
-            adViewBanner.resume();
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (adViewBanner != null) {
-            adViewBanner.pause();
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (adViewBanner != null) {
-            adViewBanner.destroy();
-        }
     }
 
     @Override

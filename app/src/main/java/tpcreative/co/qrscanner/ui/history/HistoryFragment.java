@@ -482,9 +482,11 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     @Override
     public void reLoadData() {
         if (presenter !=null){
-            presenter.getListGroup();
-            recyclerView.removeAllCells();
-            bindData();
+            if(recyclerView!=null){
+                presenter.getListGroup();
+                recyclerView.removeAllCells();
+                bindData();
+            }
         }
     }
 

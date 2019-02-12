@@ -187,12 +187,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     private Bitmap bitmap;
 
 
-    @BindView(R.id.rlAds)
-    RelativeLayout rlAds;
-    AdView adViewBanner;
-    @BindView(R.id.rlAdsRoot)
-    RelativeLayout rlAdsRoot;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,7 +210,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         presenter.bindView(this);
         setupRecyclerViewItem();
         presenter.getIntent(this);
-        initAds();
         onDrawOverLay(this);
     }
 
@@ -251,56 +244,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         adapter = new ScannerResultAdapter(getLayoutInflater(), this, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(false);
-    }
-
-    public void initAds() {
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_result));
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        } else {
-            rlAdsRoot.setVisibility(View.GONE);
-            Log.d(TAG, "Premium Version");
-        }
-    }
-
-    public void addGoogleAdmods() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adViewBanner.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Utils.Log(TAG,"Loaded successful");
-            }
-
-            @Override
-            public void onAdClosed() {
-                Log.d(TAG, "Ad is closed!");
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                Log.d(TAG, "Ad failed to load! error code: " + errorCode);
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                Log.d(TAG, "Ad left application!");
-            }
-
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-            }
-        });
-        adViewBanner.loadAd(adRequest);
     }
 
 
@@ -965,9 +908,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void onPause() {
         super.onPause();
-        if (adViewBanner != null) {
-            adViewBanner.pause();
-        }
         Utils.Log(TAG,"onPause");
     }
 
@@ -975,9 +915,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     public void onDestroy() {
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
-        if (adViewBanner != null) {
-            adViewBanner.destroy();
-        }
         if (presenter.result!=null){
             switch (presenter.result.fragmentType){
                 case SCANNER:{
@@ -993,9 +930,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     public void onResume() {
         super.onResume();
         Utils.Log(TAG,"onResume");
-        if (adViewBanner != null) {
-            adViewBanner.resume();
-        }
     }
 
     public void onClipboardDialog() {
