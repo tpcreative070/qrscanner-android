@@ -525,7 +525,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
     @Override
     public void reLoadData() {
-        if (presenter!=null){
+        if (presenter!=null && recyclerView!=null){
             presenter.getListGroup();
             recyclerView.removeAllCells();
             bindData();
