@@ -13,6 +13,7 @@ import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
+import tpcreative.co.qrscanner.ui.main.MainActivity;
 import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 
@@ -20,6 +21,8 @@ public class Navigator {
 
     public static final int CREATE = 1000;
     public static final int SCANNER = 1001;
+
+
 
 
     public static void onMoveToReview(Activity context, Create create){
@@ -59,6 +62,13 @@ public class Navigator {
         bundle.putSerializable(QRScannerApplication.getInstance().getString(R.string.key_data),save);
         intent.putExtras(bundle);
         context.startActivityForResult(intent,SCANNER);
+    }
+
+    public static void onMoveMainTab(Context context){
+        Intent intent = new Intent(context,MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 
 }

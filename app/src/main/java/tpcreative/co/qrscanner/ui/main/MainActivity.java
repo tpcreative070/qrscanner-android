@@ -89,8 +89,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
 
-    private InterstitialAd mInterstitialAd;
-
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
             R.drawable.baseline_add_box_white_48,
@@ -145,37 +143,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             finish();
         }
 
-
-        /*Lock here...*/
         //initAds();
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
-            mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    showInterstitial();
-                }
-            });
-        }
-        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
-            mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    showInterstitial();
-                }
-            });
-        }
-
     }
 
-    private void showInterstitial() {
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        }
-    }
 
 
     public void initAds() {

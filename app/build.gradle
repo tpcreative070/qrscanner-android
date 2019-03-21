@@ -100,8 +100,6 @@ dependencies {
     /*DateTime picker*/
     implementation project(':switchdatetime')
 
-
-
     /*Zxing*/
     implementation project(':zxing-android-embedded')
 
@@ -111,7 +109,7 @@ dependencies {
 
     /*Circle Design*/
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-    
+
     /*Google admod*/
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
