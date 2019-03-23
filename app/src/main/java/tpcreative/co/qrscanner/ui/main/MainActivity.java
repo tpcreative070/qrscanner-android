@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -26,13 +27,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -43,13 +42,12 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 import com.snatik.storage.Storage;
-
-import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
@@ -66,6 +64,7 @@ import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
+
 
 public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
 
@@ -88,6 +87,13 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     AdView adViewBanner;
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
+    @BindView(R.id.rlLoading)
+    RelativeLayout rlLoading;
+    @BindView(R.id.rlScanner)
+    RelativeLayout rlScanner;
+
+    private InterstitialAd mInterstitialAd;
+    private Handler handler = new Handler();
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
@@ -105,6 +111,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
+            finish();
+        }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().hide();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -138,15 +149,118 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 Utils.Log(TAG,"Move swipe");
             }
         });
-
-        if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
-            finish();
-        }
-
         //initAds();
+
+
+        /*Lock here...*/
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    showInterstitial();
+                    Utils.Log(TAG,"onAdLoaded");
+                }
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    rlScanner.setVisibility(View.VISIBLE);
+                    rlLoading.setVisibility(View.INVISIBLE);
+                    Utils.Log(TAG,"onAdClosed");
+                }
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                    rlScanner.setVisibility(View.VISIBLE);
+                    rlLoading.setVisibility(View.INVISIBLE);
+                    Utils.Log(TAG,"onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                    Utils.Log(TAG,"onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    Utils.Log(TAG,"onAdOpened");
+                }
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                    Utils.Log(TAG,"onAdClicked");
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                    Utils.Log(TAG,"onAdImpression");
+                }
+            });
+        }
+        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    showInterstitial();
+                    Utils.Log(TAG,"onAdLoaded");
+                }
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    rlScanner.setVisibility(View.VISIBLE);
+                    rlLoading.setVisibility(View.INVISIBLE);
+                    Utils.Log(TAG,"onAdClosed");
+                }
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                    rlScanner.setVisibility(View.VISIBLE);
+                    rlLoading.setVisibility(View.INVISIBLE);
+                    Utils.Log(TAG,"onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                    Utils.Log(TAG,"onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    Utils.Log(TAG,"onAdOpened");
+                }
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                    Utils.Log(TAG,"onAdClicked");
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                    Utils.Log(TAG,"onAdImpression");
+                }
+            });
+        }
+        else{
+           Utils.Log(TAG,"Nothing");
+        }
     }
 
-
+    private void showInterstitial() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+    }
 
     public void initAds() {
         if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {

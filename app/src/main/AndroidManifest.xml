@@ -26,7 +26,7 @@
             android:required="false" />
 
         <activity
-            android:name=".ui.splashscreen.SplashScreenActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -110,8 +110,6 @@
             android:name=".ui.create.UrlFragment"
             android:label="@string/url" />
         <activity android:name=".ui.scannerresult.ScannerResultFragment" />
-        <activity android:name=".ui.main.MainActivity"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

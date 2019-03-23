@@ -30,6 +30,37 @@
 
 
     <RelativeLayout
+        android:id="@+id/rlLoading"
+        android:background="@color/colorPrimary"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/icon_size_45"
+            android:layout_height="@dimen/icon_size_45" />
+
+        <TextView
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/icon_size_20"
+            android:text="@string/loading"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlScanner"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
