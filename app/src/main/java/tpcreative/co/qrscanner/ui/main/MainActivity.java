@@ -96,7 +96,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     private InterstitialAd mInterstitialAd;
     private Handler handler = new Handler();
-    private Runnable runnable;
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
@@ -166,9 +165,15 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    onInitInterstitialAds();
+                    if (Utils.isShowAds()){
+                        onInitInterstitialAds();
+                    }else{
+                        rlScanner.setVisibility(View.VISIBLE);
+                        appBar.setVisibility(View.VISIBLE);
+                        rlLoading.setVisibility(View.INVISIBLE);
+                    }
                 }
-            },1500);
+            },2000);
         }
     }
 
@@ -191,7 +196,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     rlScanner.setVisibility(View.VISIBLE);
                     appBar.setVisibility(View.VISIBLE);
                     rlLoading.setVisibility(View.INVISIBLE);
-                    handler.removeCallbacksAndMessages(null);
                     Utils.Log(TAG,"onAdClosed");
                 }
                 @Override
@@ -200,7 +204,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     rlScanner.setVisibility(View.VISIBLE);
                     appBar.setVisibility(View.VISIBLE);
                     rlLoading.setVisibility(View.INVISIBLE);
-                    handler.removeCallbacksAndMessages(null);
                     Utils.Log(TAG,"onAdFailedToLoad");
                 }
 
@@ -244,7 +247,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     rlScanner.setVisibility(View.VISIBLE);
                     appBar.setVisibility(View.VISIBLE);
                     rlLoading.setVisibility(View.INVISIBLE);
-                    handler.removeCallbacksAndMessages(null);
                     Utils.Log(TAG,"onAdClosed");
                 }
                 @Override
@@ -253,7 +255,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     rlScanner.setVisibility(View.VISIBLE);
                     appBar.setVisibility(View.VISIBLE);
                     rlLoading.setVisibility(View.INVISIBLE);
-                    handler.removeCallbacksAndMessages(null);
                     Utils.Log(TAG,"onAdFailedToLoad");
                 }
 
@@ -543,8 +544,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (adViewBanner != null) {
             adViewBanner.destroy();
         }
+        handler.removeCallbacksAndMessages(null);
     }
-
 
     @Override
     public void onBackPressed() {

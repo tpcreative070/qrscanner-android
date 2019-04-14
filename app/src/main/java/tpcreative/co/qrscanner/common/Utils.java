@@ -70,7 +70,7 @@ import tpcreative.co.qrscanner.model.ThemeUtil;
 public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
-
+    private static final long flagValue = 7200000;
     private UtilsListener listenner;
 
     public static boolean mCreateAndSaveFileOverride(String fileName, String path_folder_name, String responseJson, boolean append) {
@@ -527,6 +527,16 @@ public class Utils {
         catch (Exception e){
                 e.printStackTrace();
         }
+    }
+
+    public static boolean isShowAds(){
+        long currentValue = System.currentTimeMillis();
+        long previousValue = PrefsController.getLong(QRScannerApplication.getInstance().getString(R.string.key_waiting_for_show_ads),0);
+        if (currentValue>previousValue){
+            PrefsController.putLong(QRScannerApplication.getInstance().getString(R.string.key_waiting_for_show_ads),currentValue+flagValue);
+            return true;
+        }
+        return false;
     }
 
 }
