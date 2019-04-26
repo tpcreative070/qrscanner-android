@@ -68,7 +68,7 @@ import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerApplication.QRScannerAdListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewPagerAdapter adapter;
@@ -97,6 +97,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private InterstitialAd mInterstitialAd;
     private Handler handler = new Handler();
 
+
+
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
             R.drawable.baseline_add_box_white_48,
@@ -121,6 +123,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
+        QRScannerApplication.getInstance().setListener(this);
 
         SingletonResponse.getInstance().setListener(this);
         storage = new Storage(getApplicationContext());
@@ -132,7 +135,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             tab.setCustomView(getTabView(i));
         }
         setupTabIcons();
-        onAddPermissionCamera();
         ServiceManager.getInstance().onStartService();
         Theme.getInstance().getList();
         initSpeedDial();
@@ -153,30 +155,23 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         });
         //initAds();
-
         appBar.setVisibility(View.INVISIBLE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED){
-            rlScanner.setVisibility(View.VISIBLE);
-            appBar.setVisibility(View.VISIBLE);
-            rlLoading.setVisibility(View.INVISIBLE);
-        }
-        else{
-            handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (Utils.isShowAds()){
-                        onInitInterstitialAds();
-                    }else{
+                    if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+                            == PackageManager.PERMISSION_DENIED) {
                         rlScanner.setVisibility(View.VISIBLE);
                         appBar.setVisibility(View.VISIBLE);
                         rlLoading.setVisibility(View.INVISIBLE);
+                        onAddPermissionCamera();
+                    }
+                    else {
+                        QRScannerApplication.getInstance().showInterstitial();
                     }
                 }
-            },2000);
-        }
+            },3500);
     }
-
 
     public void onInitInterstitialAds(){
         /*Lock here...*/
@@ -187,7 +182,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             mInterstitialAd.setAdListener(new AdListener() {
                 public void onAdLoaded() {
                     super.onAdLoaded();
-                    showInterstitial();
                     Utils.Log(TAG,"onAdLoaded");
                 }
                 @Override
@@ -201,9 +195,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 @Override
                 public void onAdFailedToLoad(int i) {
                     super.onAdFailedToLoad(i);
-                    rlScanner.setVisibility(View.VISIBLE);
-                    appBar.setVisibility(View.VISIBLE);
-                    rlLoading.setVisibility(View.INVISIBLE);
                     Utils.Log(TAG,"onAdFailedToLoad");
                 }
 
@@ -238,7 +229,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             mInterstitialAd.setAdListener(new AdListener() {
                 public void onAdLoaded() {
                     super.onAdLoaded();
-                    showInterstitial();
                     Utils.Log(TAG,"onAdLoaded");
                 }
                 @Override
@@ -252,9 +242,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 @Override
                 public void onAdFailedToLoad(int i) {
                     super.onAdFailedToLoad(i);
-                    rlScanner.setVisibility(View.VISIBLE);
-                    appBar.setVisibility(View.VISIBLE);
-                    rlLoading.setVisibility(View.INVISIBLE);
                     Utils.Log(TAG,"onAdFailedToLoad");
                 }
 
@@ -291,8 +278,15 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     private void showInterstitial() {
-        if (mInterstitialAd.isLoaded()) {
+        if (mInterstitialAd !=null && mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
+            Utils.Log(TAG,"show ads");
+        }
+        else{
+            rlScanner.setVisibility(View.VISIBLE);
+            appBar.setVisibility(View.VISIBLE);
+            rlLoading.setVisibility(View.INVISIBLE);
+            Utils.Log(TAG,"could not show");
         }
     }
 
@@ -705,5 +699,49 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
+    //Feedback ads
 
+
+    public void onAdLoaded() {
+        Utils.Log(TAG,"onAdLoaded");
+    }
+    @Override
+    public void onAdClosed() {
+        rlScanner.setVisibility(View.VISIBLE);
+        appBar.setVisibility(View.VISIBLE);
+        rlLoading.setVisibility(View.INVISIBLE);
+        QRScannerApplication.getInstance().reloadAds();
+        Utils.Log(TAG,"onAdClosed");
+    }
+    @Override
+    public void onAdFailedToLoad(int i) {
+        Utils.Log(TAG,"onAdFailedToLoad");
+    }
+
+    @Override
+    public void onAdLeftApplication() {
+        Utils.Log(TAG,"onAdLeftApplication");
+    }
+
+    @Override
+    public void onAdOpened() {
+        Utils.Log(TAG,"onAdOpened");
+    }
+    @Override
+    public void onAdClicked() {
+        Utils.Log(TAG,"onAdClicked");
+    }
+
+    @Override
+    public void onAdImpression() {
+        Utils.Log(TAG,"onAdImpression");
+    }
+
+    @Override
+    public void onPremium() {
+        Utils.Log(TAG,"Nothing");
+        rlScanner.setVisibility(View.VISIBLE);
+        appBar.setVisibility(View.VISIBLE);
+        rlLoading.setVisibility(View.INVISIBLE);
+    }
 }

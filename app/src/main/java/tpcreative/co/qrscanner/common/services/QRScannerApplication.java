@@ -8,12 +8,16 @@ import android.provider.Settings;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.snatik.storage.Storage;
 import java.util.HashMap;
 import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
@@ -27,7 +31,6 @@ import tpcreative.co.qrscanner.ui.main.MainActivity;
  *
  */
 
-
 public class QRScannerApplication extends MultiDexApplication implements Dependencies.DependenciesListener, MultiDexApplication.ActivityLifecycleCallbacks {
 
     private static QRScannerApplication mInstance;
@@ -39,6 +42,8 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private boolean isLive;
     private MainActivity activity;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
+    private  InterstitialAd mInterstitialAd;
+    private QRScannerAdListener listener ;
 
     @Override
     public void onCreate() {
@@ -67,13 +72,189 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         }
         registerActivityLifecycleCallbacks(this);
 
-
         /*Init own service api*/
         dependencies = Dependencies.getsInstance(getApplicationContext(), getUrl());
         dependencies.dependenciesListener(this);
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
+        onInitInterstitialAds();
+    }
 
+    public void onInitInterstitialAds(){
+        /*Lock here...*/
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdLoaded();
+                    Utils.Log(TAG,"onAdLoaded");
+                }
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdClosed();
+                    Utils.Log(TAG,"onAdClosed");
+                }
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdFailedToLoad(i);
+                    Utils.Log(TAG,"onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdLeftApplication();
+                    Utils.Log(TAG,"onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdOpened();
+                    Utils.Log(TAG,"onAdOpened");
+                }
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdClicked();
+                    Utils.Log(TAG,"onAdClicked");
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdImpression();
+                    Utils.Log(TAG,"onAdImpression");
+                }
+            });
+        }
+        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdLoaded();
+                    Utils.Log(TAG,"onAdLoaded");
+                }
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdClosed();
+                    Utils.Log(TAG,"onAdClosed");
+                }
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdFailedToLoad(i);
+                    Utils.Log(TAG,"onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdLeftApplication();
+                    Utils.Log(TAG,"onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdOpened();
+                    Utils.Log(TAG,"onAdOpened");
+                }
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdClicked();
+                    Utils.Log(TAG,"onAdClicked");
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                    if (listener==null){
+                        return;
+                    }
+                    listener.onAdImpression();
+                    Utils.Log(TAG,"onAdImpression");
+                }
+            });
+        }
+        else{
+            if (listener==null){
+                return;
+            }
+            listener.onPremium();
+            Utils.Log(TAG,"Nothing");
+        }
+    }
+
+    public void showInterstitial() {
+        if (mInterstitialAd !=null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+            Utils.Log(TAG,"show ads");
+        }
+        else{
+            if (listener==null){
+                return;
+            }
+            listener.onAdClosed();
+            Utils.Log(TAG,"could not show");
+        }
+    }
+
+    public void reloadAds(){
+        if (mInterstitialAd==null){
+            return;
+        }
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(adRequest);
     }
 
     @Override
@@ -216,6 +397,22 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             }
         }
     }
+
+    public void setListener(QRScannerAdListener listener) {
+        this.listener = listener;
+    }
+
+    public interface QRScannerAdListener {
+        public void onAdClosed();
+        public void onAdFailedToLoad(int var1) ;
+        public void onAdLeftApplication() ;
+        public void onAdOpened() ;
+        public void onAdLoaded() ;
+        public void onAdClicked();
+        public void onAdImpression() ;
+        public void onPremium();
+    }
+
 
 }
 
