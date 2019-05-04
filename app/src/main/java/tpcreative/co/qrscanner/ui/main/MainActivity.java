@@ -68,7 +68,7 @@ import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerApplication.QRScannerAdListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewPagerAdapter adapter;
@@ -123,8 +123,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
-        QRScannerApplication.getInstance().setListener(this);
-
         SingletonResponse.getInstance().setListener(this);
         storage = new Storage(getApplicationContext());
         setupViewPager(viewPager);
@@ -155,6 +153,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         });
         //initAds();
+        onInitInterstitialAds();
         appBar.setVisibility(View.INVISIBLE);
         handler.postDelayed(new Runnable() {
                 @Override
@@ -167,10 +166,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                         onAddPermissionCamera();
                     }
                     else {
-                        QRScannerApplication.getInstance().showInterstitial();
+                      showInterstitial();
                     }
                 }
-            },3500);
+            },5000);
     }
 
     public void onInitInterstitialAds(){
@@ -187,10 +186,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 @Override
                 public void onAdClosed() {
                     super.onAdClosed();
+                    Utils.Log(TAG,"onAdClosed");
                     rlScanner.setVisibility(View.VISIBLE);
                     appBar.setVisibility(View.VISIBLE);
                     rlLoading.setVisibility(View.INVISIBLE);
-                    Utils.Log(TAG,"onAdClosed");
                 }
                 @Override
                 public void onAdFailedToLoad(int i) {
@@ -234,10 +233,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 @Override
                 public void onAdClosed() {
                     super.onAdClosed();
+                    Utils.Log(TAG,"onAdClosed");
                     rlScanner.setVisibility(View.VISIBLE);
                     appBar.setVisibility(View.VISIBLE);
                     rlLoading.setVisibility(View.INVISIBLE);
-                    Utils.Log(TAG,"onAdClosed");
                 }
                 @Override
                 public void onAdFailedToLoad(int i) {
@@ -268,12 +267,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     Utils.Log(TAG,"onAdImpression");
                 }
             });
-        }
-        else{
-            Utils.Log(TAG,"Nothing");
-            rlScanner.setVisibility(View.VISIBLE);
-            appBar.setVisibility(View.VISIBLE);
-            rlLoading.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -514,6 +507,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (adViewBanner != null) {
             adViewBanner.resume();
         }
+        Utils.Log(TAG,"onResume");
     }
 
     @Override
@@ -522,6 +516,13 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (adViewBanner != null) {
             adViewBanner.pause();
         }
+        Utils.Log(TAG,"onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
@@ -539,6 +540,14 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             adViewBanner.destroy();
         }
         handler.removeCallbacksAndMessages(null);
+    }
+
+    public void reloadAds(){
+        if (mInterstitialAd==null){
+            return;
+        }
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(adRequest);
     }
 
     @Override
@@ -697,51 +706,5 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    //Feedback ads
-
-
-    public void onAdLoaded() {
-        Utils.Log(TAG,"onAdLoaded");
-    }
-    @Override
-    public void onAdClosed() {
-        rlScanner.setVisibility(View.VISIBLE);
-        appBar.setVisibility(View.VISIBLE);
-        rlLoading.setVisibility(View.INVISIBLE);
-        QRScannerApplication.getInstance().reloadAds();
-        Utils.Log(TAG,"onAdClosed");
-    }
-    @Override
-    public void onAdFailedToLoad(int i) {
-        Utils.Log(TAG,"onAdFailedToLoad");
-    }
-
-    @Override
-    public void onAdLeftApplication() {
-        Utils.Log(TAG,"onAdLeftApplication");
-    }
-
-    @Override
-    public void onAdOpened() {
-        Utils.Log(TAG,"onAdOpened");
-    }
-    @Override
-    public void onAdClicked() {
-        Utils.Log(TAG,"onAdClicked");
-    }
-
-    @Override
-    public void onAdImpression() {
-        Utils.Log(TAG,"onAdImpression");
-    }
-
-    @Override
-    public void onPremium() {
-        Utils.Log(TAG,"Nothing");
-        rlScanner.setVisibility(View.VISIBLE);
-        appBar.setVisibility(View.VISIBLE);
-        rlLoading.setVisibility(View.INVISIBLE);
     }
 }

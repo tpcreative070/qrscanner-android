@@ -13,18 +13,10 @@ import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
 public class SplashScreenActivity extends BaseActivity {
-
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
-
-
     }
-
-
 }
