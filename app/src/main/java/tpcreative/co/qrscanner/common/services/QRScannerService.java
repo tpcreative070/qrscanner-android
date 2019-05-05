@@ -106,13 +106,14 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         }
         BaseView view = view();
         if (view == null) {
+            Utils.Log(TAG,"Author view is null");
             return;
         }
         if (NetworkUtil.pingIpAddress(view.getContext())) {
             return;
         }
         if (subscriptions == null) {
-            Utils.Log(TAG,"Subscriptions is null");
+            Utils.Log(TAG,"Author Subscriptions is null");
             return;
         }
 
@@ -137,19 +138,20 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 .doOnSubscribe(__ -> view.onStartLoading(EnumStatus.AUTHOR_SYNC))
                 .subscribe(onResponse -> {
                     view.onStopLoading(EnumStatus.AUTHOR_SYNC);
-                    Log.d(TAG, "Body author: " + new Gson().toJson(onResponse));
+                    Log.d(TAG, "Author body: " + new Gson().toJson(onResponse));
                 }, throwable -> {
                     if (throwable instanceof HttpException) {
                         ResponseBody bodys = ((HttpException) throwable).response().errorBody();
                         try {
-                            Log.d(TAG,"error" +bodys.string());
+                            Log.d(TAG,"Author error" +bodys.string());
                             String msg = new Gson().toJson(bodys.string());
                             Log.d(TAG, msg);
                         } catch (IOException e) {
+                            Log.d(TAG,"Author IOException" +e.getMessage());
                             e.printStackTrace();
                         }
                     } else {
-                        Log.d(TAG, "Can not call" + throwable.getMessage());
+                        Log.d(TAG, "Author Can not call" + throwable.getMessage());
                     }
                     view.onStopLoading(EnumStatus.AUTHOR_SYNC);
                 }));
