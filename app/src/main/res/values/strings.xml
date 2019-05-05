@@ -166,7 +166,7 @@
     <string name="barcode_guide">Barcode Scanner users the camera on your phone to read barcode and look up product information such as prices and reviews etc...</string>
     <string name="barcode_2d_guide">It also reads 2D barcode such as QR Codes ad Data Matrix. These can contain links to web numbers and email addresses, and more.</string>
 
-    <string name="url_developer">http://192.168.1.2:8082</string>
+    <string name="url_developer">http://192.168.1.3:8082</string>
     <string name="url_live">http://tpcreative.me:8082</string>
 
     <string name="key_device_id">device_id</string>

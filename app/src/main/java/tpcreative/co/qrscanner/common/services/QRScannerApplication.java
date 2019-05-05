@@ -48,7 +48,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         InstanceGenerator.getInstance(this);
-        isLive = true;
+        isLive = false;
 
         if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
             MobileAds.initialize(this, getString(R.string.admob_app_id));

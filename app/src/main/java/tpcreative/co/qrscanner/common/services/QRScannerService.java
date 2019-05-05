@@ -100,7 +100,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
 
 
     public void onSyncAuthor(){
-        Log.d(TAG,"info onSignUp");
+        Log.d(TAG,"onSyncAuthor");
         if (BuildConfig.DEBUG){
             return;
         }
@@ -112,6 +112,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             return;
         }
         if (subscriptions == null) {
+            Utils.Log(TAG,"Subscriptions is null");
             return;
         }
 
@@ -136,7 +137,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 .doOnSubscribe(__ -> view.onStartLoading(EnumStatus.AUTHOR_SYNC))
                 .subscribe(onResponse -> {
                     view.onStopLoading(EnumStatus.AUTHOR_SYNC);
-                    Log.d(TAG, "Body : " + new Gson().toJson(onResponse));
+                    Log.d(TAG, "Body author: " + new Gson().toJson(onResponse));
                 }, throwable -> {
                     if (throwable instanceof HttpException) {
                         ResponseBody bodys = ((HttpException) throwable).response().errorBody();
