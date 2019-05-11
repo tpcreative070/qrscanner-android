@@ -534,6 +534,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void onAdFailedToLoad(int var1) {
 
     }
+
     @Override
     public void onAdLeftApplication() {
 
