@@ -29,11 +29,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
+import android.widget.Toast;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -49,11 +46,9 @@ import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
-import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
@@ -68,8 +63,7 @@ import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
-
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerApplication.QRScannerAdListener{
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewPagerAdapter adapter;
     private Storage storage;
@@ -93,11 +87,15 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     RelativeLayout rlLoading;
     @BindView(R.id.rlScanner)
     RelativeLayout rlScanner;
-
-    private InterstitialAd mInterstitialAd;
+    @BindView(R.id.tvLoading)
+    TextView tvLoading;
+    private boolean isPressedBack = false;
+    private boolean doubleBackToExitPressedOnce = false;
+    private final int LOADING_APP = 5000;
+    private final int EXIT_APP = 3000;
+    private final int PRESSED_BACK = 2000;
+    private boolean isLoaded = false;
     private Handler handler = new Handler();
-
-
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
@@ -106,7 +104,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             R.drawable.baseline_save_alt_white_48,
             R.drawable.baseline_settings_white_48,
     };
-
     public Toolbar getToolbar() {
         return toolbar;
     }
@@ -115,11 +112,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        QRScannerApplication.getInstance().setListener(this);
         if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
             finish();
         }
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
@@ -153,185 +149,35 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         });
         //initAds();
-        onInitInterstitialAds();
         appBar.setVisibility(View.INVISIBLE);
         handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
                             == PackageManager.PERMISSION_DENIED) {
-                        rlScanner.setVisibility(View.VISIBLE);
-                        appBar.setVisibility(View.VISIBLE);
-                        rlLoading.setVisibility(View.INVISIBLE);
+                        onVisibleUI();
                         onAddPermissionCamera();
                     }
                     else {
-                      showInterstitial();
+                      QRScannerApplication.getInstance().showInterstitial();
                     }
+                    isLoaded = true;
                 }
-            },5000);
+            },LOADING_APP);
     }
 
-    public void onInitInterstitialAds(){
-        /*Lock here...*/
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
-            mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    Utils.Log(TAG,"onAdLoaded");
-                }
-                @Override
-                public void onAdClosed() {
-                    super.onAdClosed();
-                    Utils.Log(TAG,"onAdClosed");
-                    rlScanner.setVisibility(View.VISIBLE);
-                    appBar.setVisibility(View.VISIBLE);
-                    rlLoading.setVisibility(View.INVISIBLE);
-                }
-                @Override
-                public void onAdFailedToLoad(int i) {
-                    super.onAdFailedToLoad(i);
-                    Utils.Log(TAG,"onAdFailedToLoad");
-                }
-
-                @Override
-                public void onAdLeftApplication() {
-                    super.onAdLeftApplication();
-                    Utils.Log(TAG,"onAdLeftApplication");
-                }
-
-                @Override
-                public void onAdOpened() {
-                    super.onAdOpened();
-                    Utils.Log(TAG,"onAdOpened");
-                }
-                @Override
-                public void onAdClicked() {
-                    super.onAdClicked();
-                    Utils.Log(TAG,"onAdClicked");
-                }
-
-                @Override
-                public void onAdImpression() {
-                    super.onAdImpression();
-                    Utils.Log(TAG,"onAdImpression");
-                }
-            });
-        }
-        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
-            mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    Utils.Log(TAG,"onAdLoaded");
-                }
-                @Override
-                public void onAdClosed() {
-                    super.onAdClosed();
-                    Utils.Log(TAG,"onAdClosed");
-                    rlScanner.setVisibility(View.VISIBLE);
-                    appBar.setVisibility(View.VISIBLE);
-                    rlLoading.setVisibility(View.INVISIBLE);
-                }
-                @Override
-                public void onAdFailedToLoad(int i) {
-                    super.onAdFailedToLoad(i);
-                    Utils.Log(TAG,"onAdFailedToLoad");
-                }
-
-                @Override
-                public void onAdLeftApplication() {
-                    super.onAdLeftApplication();
-                    Utils.Log(TAG,"onAdLeftApplication");
-                }
-
-                @Override
-                public void onAdOpened() {
-                    super.onAdOpened();
-                    Utils.Log(TAG,"onAdOpened");
-                }
-                @Override
-                public void onAdClicked() {
-                    super.onAdClicked();
-                    Utils.Log(TAG,"onAdClicked");
-                }
-
-                @Override
-                public void onAdImpression() {
-                    super.onAdImpression();
-                    Utils.Log(TAG,"onAdImpression");
-                }
-            });
-        }
+    public void onVisibleUI(){
+        rlScanner.setVisibility(View.VISIBLE);
+        appBar.setVisibility(View.VISIBLE);
+        rlLoading.setVisibility(View.INVISIBLE);
     }
 
-    private void showInterstitial() {
-        if (mInterstitialAd !=null && mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-            Utils.Log(TAG,"show ads");
-        }
-        else{
-            rlScanner.setVisibility(View.VISIBLE);
-            appBar.setVisibility(View.VISIBLE);
-            rlLoading.setVisibility(View.INVISIBLE);
-            Utils.Log(TAG,"could not show");
-        }
+    public void onSeeYouSoon(){
+        rlScanner.setVisibility(View.INVISIBLE);
+        appBar.setVisibility(View.INVISIBLE);
+        rlLoading.setVisibility(View.VISIBLE);
+        tvLoading.setText(getString(R.string.SeeYouSoon));
     }
-
-    public void initAds() {
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_home_footer_test));
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        } else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
-            adViewBanner = new AdView(this);
-            adViewBanner.setAdSize(AdSize.BANNER);
-            adViewBanner.setAdUnitId(getString(R.string.banner_footer));
-            rlAds.addView(adViewBanner);
-            addGoogleAdmods();
-        } else {
-            Log.d(TAG, "Premium Version");
-        }
-    }
-
-    public void addGoogleAdmods() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adViewBanner.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Utils.Log(TAG,"Loaded successful");
-            }
-
-            @Override
-            public void onAdClosed() {
-                Log.d(TAG, "Ad is closed!");
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                Log.d(TAG, "Ad failed to load! error code: " + errorCode);
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                Log.d(TAG, "Ad left application!");
-            }
-
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-            }
-        });
-        adViewBanner.loadAd(adRequest);
-    }
-
 
     public void onShowFloatingButton(Fragment fragment){
        if (fragment instanceof HistoryFragment){
@@ -418,9 +264,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         mSpeedDialView.show();
     }
 
-
-
-
     public void onInitReceiver(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             receiver =new QRScannerReceiver();
@@ -490,7 +333,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
     }
 
-
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         Log.d(TAG,"Network changed :"+ isConnected);
@@ -542,20 +384,15 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         handler.removeCallbacksAndMessages(null);
     }
 
-    public void reloadAds(){
-        if (mInterstitialAd==null){
-            return;
-        }
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mInterstitialAd.loadAd(adRequest);
-    }
-
     @Override
     public void onBackPressed() {
         Utils.Log(TAG,"onBackPressed");
         final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
+        if (!isLoaded){
+            return;
+        }
         if (isPressed){
-            super.onBackPressed();
+           onLoadingEdsBack();
         }
         else{
             final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
@@ -569,9 +406,28 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 }
             }
             else{
-                super.onBackPressed();
+                onLoadingEdsBack();
             }
         }
+    }
+
+    public void onLoadingEdsBack(){
+        if (isPressedBack){
+            return;
+        }
+        if (doubleBackToExitPressedOnce) {
+            isPressedBack = true;
+            QRScannerApplication.getInstance().showInterstitial();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, PRESSED_BACK);
     }
 
     public void onRateApp() {
@@ -604,58 +460,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
         }
-    }
-
-
-    public void askUpdateAppDialog(String title, List<String>list) {
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.DarkDialogTheme);
-        dialogBuilder.setTitle(title);
-        dialogBuilder.setPadding(40,40,40,0);
-        dialogBuilder.setMargin(60,0,60,0);
-        dialogBuilder.setPositiveButton(R.string.upgrade_now, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_free_release))){
-                    onRateApp();
-                }
-                else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
-                    onRateAppPro();
-                }
-            }
-        });
-        CharSequence[] cs = list.toArray(new CharSequence[list.size()]);
-        dialogBuilder.setItems(cs, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        dialogBuilder.setNegativeButton(R.string.upgrade_later, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SingletonSettings.getInstance().onUpdateSharePreference(false);
-            }
-        });
-
-        MaterialDialog dialog = dialogBuilder.create();
-        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button positive = dialog.findViewById(android.R.id.button1);
-                Button negative = dialog.findViewById(android.R.id.button2);
-                TextView title = dialog.findViewById(android.R.id.title);
-                if (positive!=null &&  negative!=null && title!=null){
-                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
-                    title.setTypeface(typeface,Typeface.BOLD);
-                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.black));
-                    positive.setTypeface(typeface,Typeface.BOLD);
-                    positive.setTextSize(14);
-                    negative.setTypeface(typeface,Typeface.BOLD);
-                    negative.setTextSize(14);
-                }
-            }
-        });
-        dialog.show();
     }
 
     public void showEncourage(){
@@ -706,5 +510,68 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onAdClosed() {
+        Utils.Log(TAG,"onAdClosed");
+        if (isPressedBack){
+            onSeeYouSoon();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            },EXIT_APP);
+        }
+        else {
+            onVisibleUI();
+        }
+        QRScannerApplication.getInstance().reloadAds();
+    }
+
+    @Override
+    public void onAdFailedToLoad(int var1) {
+
+    }
+    @Override
+    public void onAdLeftApplication() {
+
+    }
+    @Override
+    public void onAdOpened() {
+
+    }
+    @Override
+    public void onAdLoaded() {
+
+    }
+    @Override
+    public void onAdClicked() {
+
+    }
+    @Override
+    public void onAdImpression() {
+
+    }
+    @Override
+    public void onPremium() {
+
+    }
+    @Override
+    public void onCouldNotShow() {
+        if (isPressedBack){
+            onSeeYouSoon();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            },EXIT_APP);
+        }
+        else {
+            onVisibleUI();
+        }
+        QRScannerApplication.getInstance().reloadAds();
     }
 }

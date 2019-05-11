@@ -22,8 +22,6 @@ import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
-import tpcreative.co.qrscanner.model.Ads;
-import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 
@@ -32,7 +30,6 @@ import tpcreative.co.qrscanner.ui.main.MainActivity;
  */
 
 public class QRScannerApplication extends MultiDexApplication implements Dependencies.DependenciesListener, MultiDexApplication.ActivityLifecycleCallbacks {
-
     private static QRScannerApplication mInstance;
     private String pathFolder;
     private Storage storage;
@@ -41,6 +38,8 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private static String url;
     private boolean isLive;
     private MainActivity activity;
+    private InterstitialAd mInterstitialAd;
+    private QRScannerAdListener listener ;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
 
     @Override
@@ -49,7 +48,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         Fabric.with(this, new Crashlytics());
         InstanceGenerator.getInstance(this);
         isLive = false;
-
         if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
             MobileAds.initialize(this, getString(R.string.admob_app_id));
         }
@@ -69,12 +67,184 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             PrefsController.putBoolean(getString(R.string.key_not_first_running), true);
         }
         registerActivityLifecycleCallbacks(this);
-
         /*Init own service api*/
         dependencies = Dependencies.getsInstance(getApplicationContext(), getUrl());
         dependencies.dependenciesListener(this);
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
+        onInitInterstitialAds();
+    }
+
+    public void onInitInterstitialAds(){
+        /*Lock here...*/
+        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    if(listener!=null){
+                        listener.onAdLoaded();
+                    }
+                    Utils.Log(TAG,"onAdLoaded");
+                }
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    if(listener!=null){
+                        listener.onAdClosed();
+                    }
+                    Utils.Log(TAG,"onAdClosed");
+                }
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                    if(listener!=null){
+                        listener.onAdFailedToLoad(i);
+                    }
+                    Utils.Log(TAG,"onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                    if(listener!=null){
+                        listener.onAdLeftApplication();
+                    }
+                    Utils.Log(TAG,"onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    if(listener!=null){
+                        listener.onAdOpened();
+                    }
+                    Utils.Log(TAG,"onAdOpened");
+                }
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                    if(listener!=null){
+                        listener.onAdClicked();
+                    }
+                    Utils.Log(TAG,"onAdClicked");
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                    if(listener!=null){
+                        listener.onAdImpression();
+                    }
+                    Utils.Log(TAG,"onAdImpression");
+                }
+            });
+        }
+        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    if(listener!=null){
+                        listener.onAdLoaded();
+                    }
+                    Utils.Log(TAG,"onAdLoaded");
+                }
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    if(listener!=null){
+                        listener.onAdClosed();
+                    }
+                    Utils.Log(TAG,"onAdClosed");
+                }
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                    if(listener!=null){
+                        listener.onAdFailedToLoad(i);
+                    }
+                    Utils.Log(TAG,"onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                    if(listener!=null){
+                        listener.onAdLeftApplication();
+                    }
+                    Utils.Log(TAG,"onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    if(listener!=null){
+                        listener.onAdOpened();
+                    }
+                    Utils.Log(TAG,"onAdOpened");
+                }
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                    if(listener!=null){
+                        listener.onAdClicked();
+                    }
+                    Utils.Log(TAG,"onAdClicked");
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                    if(listener!=null){
+                        listener.onAdImpression();
+                    }
+                    Utils.Log(TAG,"onAdImpression");
+                }
+            });
+        }
+    }
+
+    public void showInterstitial() {
+        if (mInterstitialAd !=null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+            Utils.Log(TAG,"show ads");
+        }
+        else{
+            if(listener!=null){
+                listener.onCouldNotShow();
+            }
+            Utils.Log(TAG,"could not show");
+        }
+    }
+
+    public void reloadAds(){
+        if (mInterstitialAd==null){
+            onInitInterstitialAds();
+            return;
+        }
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    public void setListener(QRScannerAdListener listener) {
+        this.listener = listener;
+    }
+
+    public interface QRScannerAdListener {
+        void onAdClosed();
+        void onAdFailedToLoad(int var1) ;
+        void onAdLeftApplication() ;
+        void onAdOpened() ;
+        void onAdLoaded() ;
+        void onAdClicked();
+        void onAdImpression() ;
+        void onCouldNotShow();
+        void onPremium();
     }
 
     @Override
@@ -195,27 +365,5 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         return versionRelease;
     }
 
-    public void onUpdatedAds() {
-        final Author author = Author.getInstance().getAuthorInfo();
-        if (author != null) {
-            if (author.version != null) {
-                final Ads ads = author.version.ads;
-                if (ads != null) {
-                    String app_id = ads.admob_app_id;
-                    if (app_id != null) {
-                        if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-                            final String preference = PrefsController.getString(getString(R.string.key_admob_app_id), null);
-                            if (preference!=null){
-                                if (!app_id.equals(preference)) {
-                                    MobileAds.initialize(this, app_id);
-                                    PrefsController.putString(getString(R.string.key_admob_app_id),app_id);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
