@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private boolean isPressedBack = false;
     private boolean doubleBackToExitPressedOnce = false;
     private final int LOADING_APP = 5000;
-    private final int EXIT_APP = 3000;
+    private final int EXIT_APP = 2000;
     private final int PRESSED_BACK = 2000;
     private boolean isLoaded = false;
     private Handler handler = new Handler();
@@ -402,7 +402,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     showEncourage();
                 }
                 else {
-                    super.onBackPressed();
+                    onLoadingEdsBack();
                 }
             }
             else{
