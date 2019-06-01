@@ -73,6 +73,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         onInitInterstitialAds();
+        Utils.Log(TAG,"Start ads");
     }
 
     public void onInitInterstitialAds(){

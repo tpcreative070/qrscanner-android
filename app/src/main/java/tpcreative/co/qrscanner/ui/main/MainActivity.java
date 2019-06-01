@@ -23,6 +23,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -96,6 +97,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private final int PRESSED_BACK = 2000;
     private boolean isLoaded = false;
     private Handler handler = new Handler();
+    private boolean isShowAds = false;
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
@@ -349,6 +351,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (adViewBanner != null) {
             adViewBanner.resume();
         }
+        onDestroyAds();
         Utils.Log(TAG,"onResume");
     }
 
@@ -532,16 +535,16 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void onAdFailedToLoad(int var1) {
-
+        Utils.Log(TAG,"onAdFailedToLoad");
     }
 
     @Override
     public void onAdLeftApplication() {
-
+        Utils.Log(TAG,"onAdLeftApplication");
     }
     @Override
     public void onAdOpened() {
-
+        Utils.Log(TAG,"onAdOpened");
     }
     @Override
     public void onAdLoaded() {
@@ -549,11 +552,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
     @Override
     public void onAdClicked() {
-
+        Utils.Log(TAG,"onAdClicked");
+        isShowAds = true;
     }
     @Override
     public void onAdImpression() {
-
+        Utils.Log(TAG,"onAdImpression");
     }
     @Override
     public void onPremium() {
@@ -574,5 +578,13 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             onVisibleUI();
         }
         QRScannerApplication.getInstance().reloadAds();
+    }
+
+    public void onDestroyAds(){
+        if (!isShowAds){
+            return;
+        }
+        Utils.Log(TAG,"onDestroyAds");
+        this.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
     }
 }
