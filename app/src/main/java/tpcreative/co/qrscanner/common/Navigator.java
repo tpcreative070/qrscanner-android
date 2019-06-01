@@ -1,12 +1,8 @@
 package tpcreative.co.qrscanner.common;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-
-import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
@@ -18,13 +14,8 @@ import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 
 public class Navigator {
-
     public static final int CREATE = 1000;
     public static final int SCANNER = 1001;
-
-
-
-
     public static void onMoveToReview(Activity context, Create create){
         Intent intent = new Intent(context, ReviewActivity.class);
         Bundle bundle = new Bundle();
@@ -70,5 +61,4 @@ public class Navigator {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
-
 }

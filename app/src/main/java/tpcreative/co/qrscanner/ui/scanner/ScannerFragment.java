@@ -9,7 +9,6 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +47,6 @@ import com.google.zxing.client.result.WifiParsedResult;
 import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
@@ -177,7 +175,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                         ssId = (wifiResult.getSsid()) == null ? "" : wifiResult.getSsid();
                         networkEncryption = (wifiResult.getNetworkEncryption())==null ? "" : wifiResult.getNetworkEncryption();
                         password = (wifiResult.getPassword()) == null ? "" : wifiResult.getPassword();
-                        Log.d(TAG,"method : " + wifiResult.getNetworkEncryption() + " :" + wifiResult.getPhase2Method() + " :" +wifiResult.getPassword());
+                        Utils.Log(TAG,"method : " + wifiResult.getNetworkEncryption() + " :" + wifiResult.getPhase2Method() + " :" +wifiResult.getPassword());
                         break;
 
                     case GEO:
@@ -220,7 +218,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                         startEventMilliseconds = calendarParsedResult.getStartTimestamp();
                         endEventMilliseconds = calendarParsedResult.getEndTimestamp();
 
-                        Log.d(TAG,startTime + " : " + endTime);
+                        Utils.Log(TAG,startTime + " : " + endTime);
 
                         break;
                     case ISBN:
@@ -302,7 +300,6 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         return fragment;
     }
 
-
     @Override
     protected int getLayoutId() {
         return 0;
@@ -376,12 +373,12 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                             onGetGallery();
                         }
                         else{
-                            Log.d(TAG,"Permission is denied");
+                            Utils.Log(TAG,"Permission is denied");
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed");
+                            Utils.Log(TAG, "request permission is failed");
                         }
                     }
                     @Override
@@ -393,7 +390,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 .withErrorListener(new PermissionRequestErrorListener() {
                     @Override
                     public void onError(DexterError error) {
-                        Log.d(TAG, "error ask permission");
+                        Utils.Log(TAG, "error ask permission");
                     }
                 }).onSameThread().check();
     }
@@ -411,7 +408,6 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     @Override
     public void setVisible() {
         if (barcodeScannerView!=null){
-            barcodeScannerView.setVisibility(View.VISIBLE);
             barcodeScannerView.resume();
         }
     }
@@ -420,18 +416,17 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     public void setInvisible() {
         if (barcodeScannerView!=null){
             barcodeScannerView.pauseAndWait();
-            barcodeScannerView.setVisibility(View.INVISIBLE);
         }
     }
 
     @OnClick(R.id.switch_camera)
     public void switchCamera(View view){
-        Log.d(TAG,"on clicked here : " + cameraSettings.getRequestedCameraId());
+        Utils.Log(TAG,"on clicked here : " + cameraSettings.getRequestedCameraId());
         mAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anomation_click_item);
         mAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
+                Utils.Log(TAG,"start");
             }
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -457,7 +452,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         mAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
+                Utils.Log(TAG,"start");
             }
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -489,7 +484,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         mAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
+                Utils.Log(TAG,"start");
             }
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -512,7 +507,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         mAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                Log.d(TAG,"start");
+                Utils.Log(TAG,"start");
             }
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -532,7 +527,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         if (barcodeScannerView!=null){
             barcodeScannerView.pauseAndWait();
         }
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
@@ -542,13 +537,14 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             SingletonResponse.getInstance().setScannerPosition();
             isRunning= true;
         }
-        Log.d(TAG,"onStart");
+        SingletonResponse.getInstance().onResumeAds();
+        Utils.Log(TAG,"onStart");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy");
+        Utils.Log(TAG,"onDestroy");
         if (typeCamera!=2){
             if (barcodeScannerView!=null){
                 barcodeScannerView.pause();
@@ -559,13 +555,13 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG,"onActivityResult : " + requestCode + " - " + resultCode);
+        Utils.Log(TAG,"onActivityResult : " + requestCode + " - " + resultCode);
         if (resultCode == Activity.RESULT_OK && requestCode == 9999) {
             try {
                 final Uri imageUri = data.getData();
@@ -704,7 +700,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 ssId = (wifiResult.getSsid()) == null ? "" : wifiResult.getSsid();
                 networkEncryption = (wifiResult.getNetworkEncryption())==null ? "" : wifiResult.getNetworkEncryption();
                 password = (wifiResult.getPassword()) == null ? "" : wifiResult.getPassword();
-                Log.d(TAG,"method : " + wifiResult.getNetworkEncryption() + " :" + wifiResult.getPhase2Method() + " :" +wifiResult.getPassword());
+                Utils.Log(TAG,"method : " + wifiResult.getNetworkEncryption() + " :" + wifiResult.getPhase2Method() + " :" +wifiResult.getPassword());
                 break;
 
             case GEO:
@@ -746,7 +742,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 endEvent = endTime;
                 startEventMilliseconds = calendarParsedResult.getStartTimestamp();
                 endEventMilliseconds = calendarParsedResult.getEndTimestamp();
-                Log.d(TAG,startTime + " : " + endTime);
+                Utils.Log(TAG,startTime + " : " + endTime);
                 break;
             case ISBN:
                 create.createType = ParsedResultType.ISBN;
@@ -799,11 +795,10 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(ScannerFragment.this);
-            Log.d(TAG, "isVisible");
+            Utils.Log(TAG, "isVisible");
         } else {
-            Log.d(TAG, "isInVisible");
+            Utils.Log(TAG, "isInVisible");
         }
-
         if (barcodeScannerView != null) {
             if (isVisibleToUser) {
                 if (typeCamera!=2){

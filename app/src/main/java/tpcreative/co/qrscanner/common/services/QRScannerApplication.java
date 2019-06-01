@@ -8,10 +8,12 @@ import android.provider.Settings;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.journeyapps.barcodescanner.Util;
 import com.snatik.storage.Storage;
 import java.util.HashMap;
 import io.fabric.sdk.android.Fabric;
@@ -24,7 +26,6 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
-
 /**
  *
  */
@@ -38,6 +39,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private static String url;
     private boolean isLive;
     private MainActivity activity;
+    private AdActivity adActivity;
     private InterstitialAd mInterstitialAd;
     private QRScannerAdListener listener ;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
@@ -106,7 +108,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                     }
                     Utils.Log(TAG,"onAdFailedToLoad");
                 }
-
                 @Override
                 public void onAdLeftApplication() {
                     super.onAdLeftApplication();
@@ -115,7 +116,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                     }
                     Utils.Log(TAG,"onAdLeftApplication");
                 }
-
                 @Override
                 public void onAdOpened() {
                     super.onAdOpened();
@@ -132,7 +132,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                     }
                     Utils.Log(TAG,"onAdClicked");
                 }
-
                 @Override
                 public void onAdImpression() {
                     super.onAdImpression();
@@ -171,7 +170,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                     }
                     Utils.Log(TAG,"onAdFailedToLoad");
                 }
-
                 @Override
                 public void onAdLeftApplication() {
                     super.onAdLeftApplication();
@@ -180,7 +178,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                     }
                     Utils.Log(TAG,"onAdLeftApplication");
                 }
-
                 @Override
                 public void onAdOpened() {
                     super.onAdOpened();
@@ -197,7 +194,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                     }
                     Utils.Log(TAG,"onAdClicked");
                 }
-
                 @Override
                 public void onAdImpression() {
                     super.onAdImpression();
@@ -213,6 +209,9 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public void showInterstitial() {
         if (mInterstitialAd !=null && mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
+            if (listener!=null){
+                listener.onShowAds();
+            }
             Utils.Log(TAG,"show ads");
         }
         else{
@@ -224,12 +223,15 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     }
 
     public void reloadAds(){
+        Utils.Log(TAG,"isLoaded " + mInterstitialAd.isLoaded());
+        Utils.Log(TAG,"isLoading " + mInterstitialAd.isLoading());
         if (mInterstitialAd==null){
             onInitInterstitialAds();
             return;
         }
         AdRequest adRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(adRequest);
+        Utils.Log(TAG,"reloadAds");
     }
 
     public void setListener(QRScannerAdListener listener) {
@@ -245,7 +247,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         void onAdClicked();
         void onAdImpression() ;
         void onCouldNotShow();
-        void onPremium();
+        void onShowAds();
     }
 
     @Override
@@ -259,6 +261,10 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         if (activity instanceof MainActivity){
             this.activity = (MainActivity) activity;
         }
+        if (activity instanceof AdActivity){
+            this.adActivity = (AdActivity) activity;
+            Utils.Log(TAG,"Start Activity ads");
+        }
     }
 
     @Override
@@ -266,17 +272,34 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         if (activity instanceof MainActivity){
             this.activity = (MainActivity) activity;
         }
+        if (activity instanceof AdActivity){
+            this.adActivity = (AdActivity) activity;
+            Utils.Log(TAG,"Start Activity ads");
+        }
     }
+
 
     @Override
     public void onActivityResumed(Activity activity) {
         if (activity instanceof MainActivity){
             this.activity = (MainActivity) activity;
         }
+        if (activity instanceof AdActivity){
+            this.adActivity = (AdActivity) activity;
+            Utils.Log(TAG,"Start Activity ads");
+        }
     }
 
     public MainActivity getActivity() {
         return activity;
+    }
+
+    public AdActivity getAdActivity() {
+        return adActivity;
+    }
+
+    public InterstitialAd getmInterstitialAd() {
+        return mInterstitialAd;
     }
 
     @Override
@@ -299,7 +322,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
 
     }
 
-
     public String getPathFolder() {
         return pathFolder;
     }
@@ -311,7 +333,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public void setConnectivityListener(QRScannerReceiver.ConnectivityReceiverListener listener) {
         QRScannerReceiver.connectivityReceiverListener = listener;
     }
-
 
     @Override
     public Class onObject() {
@@ -365,6 +386,5 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         String versionRelease = Build.VERSION.RELEASE;
         return versionRelease;
     }
-
 }
 

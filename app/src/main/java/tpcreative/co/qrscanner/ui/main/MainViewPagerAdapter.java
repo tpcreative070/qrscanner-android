@@ -93,9 +93,6 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 		super.setPrimaryItem(container, position, object);
 	}
 
-
-
-
 	/**
 	 * Get the current fragment
 	 */
@@ -103,7 +100,6 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getCurrentFragment() {
 		return currentFragment;
 	}
-
 
 	@Nullable
 	@Override

@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common;
-
 public class SingletonResponse {
 
     private static SingletonResponse instance ;
@@ -44,11 +43,17 @@ public class SingletonResponse {
         }
     }
 
+    public void onResumeAds(){
+        if (listener!=null){
+            listener.onResumeAds();
+        }
+    }
+
     public interface SingleTonResponseListener{
         void showScannerPosition();
         void showCreatePosition();
         void showAlertLatestVersion();
         void onNetworkConnectionChanged(boolean isConnected);
+        void onResumeAds();
     }
-
 }

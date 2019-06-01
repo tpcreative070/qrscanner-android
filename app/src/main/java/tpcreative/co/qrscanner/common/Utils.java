@@ -53,11 +53,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
@@ -537,6 +542,44 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static void onObserveData(long second,Listener ls){
+        Completable.timer(second, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+                    @Override
+                    public void onComplete() {
+                        Utils.Log(TAG,"Completed");
+                        ls.onStart();
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    public static void onObserveVisitView(long second,DelayShowUIListener ls){
+        Completable.timer(second, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+                    @Override
+                    public void onComplete() {
+                        Utils.Log(TAG,"Completed");
+                        ls.onSetVisitView();
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
 }

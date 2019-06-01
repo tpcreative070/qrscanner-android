@@ -610,6 +610,4 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         super.onResume();
         Log.d(TAG, "onResume");
     }
-
-
 }
