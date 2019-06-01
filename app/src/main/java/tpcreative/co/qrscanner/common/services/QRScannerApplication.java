@@ -13,7 +13,6 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.journeyapps.barcodescanner.Util;
 import com.snatik.storage.Storage;
 import java.util.HashMap;
 import io.fabric.sdk.android.Fabric;
@@ -286,7 +285,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         }
         if (activity instanceof AdActivity){
             this.adActivity = (AdActivity) activity;
-            Utils.Log(TAG,"Start Activity ads");
+            Utils.Log(TAG,"onActivityResumed ads");
         }
     }
 

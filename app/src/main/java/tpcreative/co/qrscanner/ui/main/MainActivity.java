@@ -513,7 +513,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void onAdClosed() {
         Utils.Log(TAG,"onAdClosed");
         onShowUI();
-        SingletonScanner.getInstance().setVisible();
+        if (!isPressedBack){
+            SingletonScanner.getInstance().setVisible();
+        }
         QRScannerApplication.getInstance().reloadAds();
     }
 
@@ -549,6 +551,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onShowAds() {
         Utils.Log(TAG,"onShowAds");
+        if (isPressedBack){
+            SingletonScanner.getInstance().setInvisible();
+        }
         Utils.onObserveVisitView(DELAY_TO_SHOW_UI, new DelayShowUIListener() {
             @Override
             public void onSetVisitView() {
