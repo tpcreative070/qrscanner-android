@@ -167,16 +167,20 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     public void onVisibleUI(){
-        rlScanner.setVisibility(View.VISIBLE);
-        appBar.setVisibility(View.VISIBLE);
-        rlLoading.setVisibility(View.INVISIBLE);
+        if (rlScanner!=null){
+            rlScanner.setVisibility(View.VISIBLE);
+            appBar.setVisibility(View.VISIBLE);
+            rlLoading.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void onSeeYouSoon(){
-        rlScanner.setVisibility(View.INVISIBLE);
-        appBar.setVisibility(View.INVISIBLE);
-        rlLoading.setVisibility(View.VISIBLE);
-        tvLoading.setText(getString(R.string.SeeYouSoon));
+        if (rlScanner!=null){
+            rlScanner.setVisibility(View.INVISIBLE);
+            appBar.setVisibility(View.INVISIBLE);
+            rlLoading.setVisibility(View.VISIBLE);
+            tvLoading.setText(getString(R.string.SeeYouSoon));
+        }
     }
 
     public void onShowFloatingButton(Fragment fragment){
@@ -529,6 +533,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onAdLeftApplication() {
         Utils.Log(TAG,"onAdLeftApplication");
+        isShowAds = true;
     }
     @Override
     public void onAdOpened() {
@@ -541,7 +546,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onAdClicked() {
         Utils.Log(TAG,"onAdClicked");
-        isShowAds = true;
     }
     @Override
     public void onAdImpression() {
