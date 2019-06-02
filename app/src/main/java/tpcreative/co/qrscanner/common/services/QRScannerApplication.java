@@ -277,7 +277,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         }
     }
 
-
     @Override
     public void onActivityResumed(Activity activity) {
         if (activity instanceof MainActivity){
@@ -285,7 +284,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         }
         if (activity instanceof AdActivity){
             this.adActivity = (AdActivity) activity;
-            Utils.Log(TAG,"onActivityResumed ads");
+            Utils.Log(TAG,"onActivityResumed AdActivity");
         }
     }
 

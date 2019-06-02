@@ -512,8 +512,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onAdClosed() {
         Utils.Log(TAG,"onAdClosed");
-        onShowUI();
         QRScannerApplication.getInstance().reloadAds();
+        onShowUI();
         if (isPressedBack){
             SingletonScanner.getInstance().setInvisible();
         }else{
@@ -554,11 +554,16 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Utils.onObserveVisitView(DELAY_TO_SHOW_UI, new DelayShowUIListener() {
             @Override
             public void onSetVisitView() {
-                Utils.Log(TAG,"Showing onShowUI");
                 if (isPressedBack){
-                    onSeeYouSoon();
+                    if (rlLoading.getVisibility() != View.VISIBLE){
+                        Utils.Log(TAG,"Showing See you soon");
+                        onSeeYouSoon();
+                    }
                 }else{
-                    onVisibleUI();
+                    if (rlScanner.getVisibility() != View.VISIBLE){
+                        onVisibleUI();
+                        Utils.Log(TAG,"Showing onShowUI");
+                    }
                 }
             }
         });
@@ -581,23 +586,28 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
         AdActivity adActivity = QRScannerApplication.getInstance().getAdActivity();
         if (adActivity!=null){
-            adActivity.onBackPressed();
+            adActivity.finish();
+            Utils.Log(TAG,"Showing onDismissAds");
         }
         isShowAds = false;
     }
 
     public void onShowUI(){
         if (isPressedBack){
-            Utils.Log(TAG,"Showing See you soon");
-            onSeeYouSoon();
+            if (rlLoading.getVisibility() != View.VISIBLE){
+                onSeeYouSoon();
+                Utils.Log(TAG,"Showing See you soon");
+            }
             Utils.onObserveData(EXIT_APP, new Listener() {
                 @Override
                 public void onStart() {finish();}
             });
         }
         else {
-            Utils.Log(TAG,"Showing onShowUI");
-            onVisibleUI();
+            if (rlScanner.getVisibility() != View.VISIBLE){
+                onVisibleUI();
+                Utils.Log(TAG,"Showing onShowUI");
+            }
         }
     }
 }
