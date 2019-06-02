@@ -1472,3 +1472,12 @@ zxing-android-embedded/build/intermediates/library_manifest/freedevelop/AndroidM
 zxing-android-embedded/build/intermediates/merged_manifests/freedevelop/output.json
 zxing-android-embedded/build/intermediates/runtime_library_classes/freedevelop/classes.jar
 zxing-android-embedded/build/intermediates/transforms/mergeJniLibs/freedevelop/__content__.json
+zxing-android-embedded/build/intermediates/aapt_friendly_merged_manifests/freerelease/aapt/AndroidManifest.xml
+zxing-android-embedded/build/intermediates/aapt_friendly_merged_manifests/freerelease/aapt/output.json
+zxing-android-embedded/build/intermediates/annotation_processor_list/freerelease/annotationProcessors.json
+zxing-android-embedded/build/intermediates/compile_library_classes/freerelease/classes.jar
+zxing-android-embedded/build/intermediates/compile_only_not_namespaced_r_class_jar/freerelease/generateFreereleaseRFile/R.jar
+zxing-android-embedded/build/intermediates/library_java_res/freerelease/res.jar
+zxing-android-embedded/build/intermediates/library_manifest/freerelease/AndroidManifest.xml
+zxing-android-embedded/build/intermediates/merged_manifests/freerelease/output.json
+zxing-android-embedded/build/intermediates/runtime_library_classes/freerelease/classes.jar
