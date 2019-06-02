@@ -92,6 +92,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     private boolean doubleBackToExitPressedOnce = false;
     private final int LOADING_APP = 5000;
     private final int EXIT_APP = 3000;
+    private final int START_SCANNER = 500;
     private final int PRESSED_BACK = 2000;
     private final int DELAY_TO_SHOW_UI = 2000;
     private boolean isLoaded = false;
@@ -518,11 +519,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         Utils.Log(TAG,"onAdClosed");
         QRScannerApplication.getInstance().reloadAds();
         onShowUI();
-        if (isPressedBack){
-            SingletonScanner.getInstance().setInvisible();
-        }else{
-            SingletonScanner.getInstance().setVisible();
-        }
     }
 
     @Override
@@ -574,13 +570,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
     @Override
     public void onCouldNotShow() {
-        onShowUI();
         QRScannerApplication.getInstance().reloadAds();
-        if (isPressedBack){
-            SingletonScanner.getInstance().setInvisible();
-        }else{
-            SingletonScanner.getInstance().setVisible();
-        }
+        onShowUI();
         Utils.Log(TAG,"onCouldNotShow");
     }
 
@@ -600,7 +591,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (isPressedBack){
             if (rlLoading.getVisibility() != View.VISIBLE){
                 onSeeYouSoon();
-                Utils.Log(TAG,"Showing See you soon");
+                Utils.Log(TAG,"Showing See you soon !");
             }
             Utils.onObserveData(EXIT_APP, new Listener() {
                 @Override
@@ -610,8 +601,15 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         else {
             if (rlScanner.getVisibility() != View.VISIBLE){
                 onVisibleUI();
-                Utils.Log(TAG,"Showing onShowUI");
+                Utils.Log(TAG,"Showing onShowUI !");
             }
+            Utils.onObserveData(START_SCANNER, new Listener() {
+                @Override
+                public void onStart() {
+                    SingletonScanner.getInstance().setVisible();
+                    Utils.Log(TAG,"Showing start camera");
+                }
+            });
         }
     }
 }
