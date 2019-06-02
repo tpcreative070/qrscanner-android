@@ -513,10 +513,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void onAdClosed() {
         Utils.Log(TAG,"onAdClosed");
         onShowUI();
-        if (!isPressedBack){
+        QRScannerApplication.getInstance().reloadAds();
+        if (isPressedBack){
+            SingletonScanner.getInstance().setInvisible();
+        }else{
             SingletonScanner.getInstance().setVisible();
         }
-        QRScannerApplication.getInstance().reloadAds();
     }
 
     @Override
@@ -540,9 +542,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void onAdClicked() {
         Utils.Log(TAG,"onAdClicked");
         isShowAds = true;
-        if (isPressedBack){
-            onSeeYouSoon();
-        }
     }
     @Override
     public void onAdImpression() {
@@ -551,24 +550,28 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onShowAds() {
         Utils.Log(TAG,"onShowAds");
-        if (isPressedBack){
-            SingletonScanner.getInstance().setInvisible();
-        }
+        SingletonScanner.getInstance().setInvisible();
         Utils.onObserveVisitView(DELAY_TO_SHOW_UI, new DelayShowUIListener() {
             @Override
             public void onSetVisitView() {
-                if(rlScanner.getVisibility() != View.VISIBLE){
-                    SingletonScanner.getInstance().setInvisible();
-                    onShowUI();
+                Utils.Log(TAG,"Showing onShowUI");
+                if (isPressedBack){
+                    onSeeYouSoon();
+                }else{
+                    onVisibleUI();
                 }
             }
         });
     }
     @Override
     public void onCouldNotShow() {
-        SingletonScanner.getInstance().setVisible();
         onShowUI();
         QRScannerApplication.getInstance().reloadAds();
+        if (isPressedBack){
+            SingletonScanner.getInstance().setInvisible();
+        }else{
+            SingletonScanner.getInstance().setVisible();
+        }
         Utils.Log(TAG,"onCouldNotShow");
     }
 
@@ -584,9 +587,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     public void onShowUI(){
-        Utils.Log(TAG,"See you soon onShowUI");
         if (isPressedBack){
-            Utils.Log(TAG,"See you soon");
+            Utils.Log(TAG,"Showing See you soon");
             onSeeYouSoon();
             Utils.onObserveData(EXIT_APP, new Listener() {
                 @Override
@@ -594,6 +596,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             });
         }
         else {
+            Utils.Log(TAG,"Showing onShowUI");
             onVisibleUI();
         }
     }
