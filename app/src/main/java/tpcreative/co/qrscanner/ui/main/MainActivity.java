@@ -90,8 +90,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     TextView tvLoading;
     private boolean isPressedBack = false;
     private boolean doubleBackToExitPressedOnce = false;
-    private final int LOADING_APP = 5000;
-    private final int EXIT_APP = 3000;
+    private final int LOADING_APP = 4000;
+    private final int EXIT_APP = 2000;
     private final int START_SCANNER = 500;
     private final int PRESSED_BACK = 2000;
     private final int DELAY_TO_SHOW_UI = 2000;
@@ -209,11 +209,16 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
-        tabLayout.getTabAt(3).setIcon(tabIcons[3]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
-        tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+        try {
+            tabLayout.getTabAt(0).setIcon(tabIcons[0]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+            tabLayout.getTabAt(1).setIcon(tabIcons[1]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+            tabLayout.getTabAt(2).setIcon(tabIcons[2]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+            tabLayout.getTabAt(3).setIcon(tabIcons[3]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+            tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+        }
+        catch (Exception e){
+           e.getMessage();
+        }
     }
 
     public View getTabView(int position) {
@@ -423,7 +428,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             return;
         }
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
         Utils.onObserveData(PRESSED_BACK, new Listener() {
             @Override
             public void onStart() {
