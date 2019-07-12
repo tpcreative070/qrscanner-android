@@ -132,10 +132,6 @@ dependencies {
     /*CSV*/
     implementation files('libs/opencsv-4.4.jar')
 
-    /*Swipe activity*/
-    implementation project(':slibrlibrary')
-    implementation 'com.52inc:52Kit-core:0.5.1'
-
     /*Floating button*/
     implementation project(':floatingbuttonlibrary')
 

@@ -95,7 +95,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
         setupRecyclerViewItem();
         presenter.bindView(this);
         presenter.getIntent(this);
-        onDrawOverLay(this);
     }
 
 

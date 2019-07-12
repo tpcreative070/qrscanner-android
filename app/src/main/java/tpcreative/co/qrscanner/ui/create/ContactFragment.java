@@ -54,7 +54,6 @@ public class ContactFragment extends BaseActivitySlide implements SingletonGener
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
 

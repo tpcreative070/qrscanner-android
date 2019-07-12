@@ -49,7 +49,6 @@ public class TelephoneFragment extends BaseActivitySlide implements SingletonGen
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
     @Override

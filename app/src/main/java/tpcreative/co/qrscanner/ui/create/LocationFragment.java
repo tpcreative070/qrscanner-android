@@ -101,7 +101,6 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             showGpsWarningDialog();
         }
-        onDrawOverLay(this);
     }
 
     public void showGpsWarningDialog() {

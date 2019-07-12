@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.ui.help.HelpActivity;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
+import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity;
 
 public class Navigator {
     public static final int CREATE = 1000;
@@ -59,6 +60,11 @@ public class Navigator {
         Intent intent = new Intent(context,MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void onMoveSeeYouSoon(Context context){
+        Intent intent = new Intent(context, SeeYouSoonActivity.class);
         context.startActivity(intent);
     }
 }

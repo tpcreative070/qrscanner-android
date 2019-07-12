@@ -78,10 +78,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     AppBarLayout appBar;
     @BindView(R.id.speedDial)
     SpeedDialView mSpeedDialView;
-    @BindView(R.id.rlAds)
-    RelativeLayout rlAds;
-    @BindView(R.id.rlAdsRoot)
-    RelativeLayout rlAdsRoot;
     @BindView(R.id.rlLoading)
     RelativeLayout rlLoading;
     @BindView(R.id.rlScanner)
@@ -90,7 +86,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     TextView tvLoading;
     private boolean isPressedBack = false;
     private boolean doubleBackToExitPressedOnce = false;
-    private final int LOADING_APP = 4000;
     private final int EXIT_APP = 2000;
     private final int START_SCANNER = 500;
     private final int PRESSED_BACK = 2000;
@@ -121,6 +116,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
         SingletonResponse.getInstance().setListener(this);
+        //initAds();
+        QRScannerApplication.getInstance().showInterstitial();
+        isLoaded = true;
         storage = new Storage(getApplicationContext());
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -149,22 +147,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 Utils.Log(TAG,"Move swipe");
             }
         });
-        //initAds();
-        appBar.setVisibility(View.INVISIBLE);
-        Utils.onObserveData(LOADING_APP, new Listener() {
-            @Override
-            public void onStart() {
-                if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_DENIED) {
-                    onVisibleUI();
-                    onAddPermissionCamera();
-                }
-                else {
-                    QRScannerApplication.getInstance().showInterstitial();
-                }
-                isLoaded = true;
-            }
-        });
+        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            onVisibleUI();
+            onAddPermissionCamera();
+        }
     }
 
     public void onVisibleUI(){
@@ -185,21 +172,21 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     public void onShowFloatingButton(Fragment fragment){
-       if (fragment instanceof HistoryFragment){
-           if (mSpeedDialView!=null){
-               mSpeedDialView.show();
-           }
-       }
-       else if (fragment instanceof SaverFragment){
-           if (mSpeedDialView!=null){
-               mSpeedDialView.show();
-           }
-       }
-       else{
-           if (mSpeedDialView!=null){
-               mSpeedDialView.hide();
-           }
-       }
+        if (fragment instanceof HistoryFragment){
+            if (mSpeedDialView!=null){
+                mSpeedDialView.show();
+            }
+        }
+        else if (fragment instanceof SaverFragment){
+            if (mSpeedDialView!=null){
+                mSpeedDialView.show();
+            }
+        }
+        else{
+            if (mSpeedDialView!=null){
+                mSpeedDialView.hide();
+            }
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -217,7 +204,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
         }
         catch (Exception e){
-           e.getMessage();
+            e.getMessage();
         }
     }
 
@@ -296,7 +283,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                                 PrefsController.putBoolean(getString(R.string.key_refresh),true);
                             }
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());
-                          // Do something here
+                            // Do something here
                         }
                         else{
                             Log.d(TAG,"Permission is denied");
@@ -399,7 +386,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             return;
         }
         if (isPressed){
-           onLoadingEdsBack();
+            onLoadingEdsBack();
         }
         else{
             final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
@@ -560,7 +547,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             @Override
             public void onSetVisitView() {
                 if (isPressedBack){
-                    if (rlLoading.getVisibility() != View.VISIBLE){
+                    if (rlLoading!=null && rlLoading.getVisibility() != View.VISIBLE){
                         Utils.Log(TAG,"Showing See you soon");
                         onSeeYouSoon();
                     }

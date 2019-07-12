@@ -27,7 +27,6 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         btnUpgradeNow.setOnClickListener(this);
         setTitle(getString(R.string.pro_version));
-        onDrawOverLay(this);
     }
 
     @Override

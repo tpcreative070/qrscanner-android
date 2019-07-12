@@ -60,7 +60,6 @@ public class EmailFragment extends BaseActivitySlide implements SingletonGenerat
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
     @Override

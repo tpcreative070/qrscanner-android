@@ -12,13 +12,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.ftinc.kit.util.SizeUtils;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
-import com.r0adkll.slidr.model.SlidrListener;
-import com.r0adkll.slidr.model.SlidrPosition;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
@@ -27,7 +20,6 @@ public class BaseActivitySlide extends AppCompatActivity {
     Unbinder unbinder;
     protected ActionBar actionBar ;
     int onStartCount = 0;
-    private SlidrConfig mConfig;
     public static final String TAG = BaseActivitySlide.class.getSimpleName();
 
     @Override
@@ -48,48 +40,11 @@ public class BaseActivitySlide extends AppCompatActivity {
         }
     }
 
-
-    protected void onDrawOverLay(Activity activity){
-        mConfig = new SlidrConfig.Builder()
-                .primaryColor(getResources().getColor(R.color.colorPrimary))
-                .secondaryColor(getResources().getColor(R.color.colorPrimaryDark))
-                .position(SlidrPosition.LEFT)
-                .velocityThreshold(2400)
-                .touchSize(SizeUtils.dpToPx(this, 32))
-                .listener(new SlidrListener(){
-                    @Override
-                    public void onSlideStateChanged(int state) {
-
-                    }
-
-                    @Override
-                    public void onSlideChange(float percent) {
-
-                    }
-
-                    @Override
-                    public void onSlideOpened() {
-
-                    }
-
-                    @Override
-                    public boolean onSlideClosed() {
-                        return false;
-                    }
-                })
-                .build();
-        Slidr.attach(activity, mConfig);
-    }
-
     @Override
     public Resources.Theme getTheme() {
         Resources.Theme theme = super.getTheme();
         theme.applyStyle(R.style.AppThemeSlide, true);
         return theme;
-    }
-
-    protected float getRandom(float range, float startsfrom) {
-        return (float) (Math.random() * range) + startsfrom;
     }
 
     @Override

@@ -49,7 +49,6 @@ public class UrlFragment extends BaseActivitySlide implements SingletonGenerate.
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
     @Override

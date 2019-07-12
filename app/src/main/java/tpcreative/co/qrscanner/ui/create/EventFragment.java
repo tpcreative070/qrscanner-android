@@ -87,7 +87,6 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
     @Override

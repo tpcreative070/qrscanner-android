@@ -30,7 +30,6 @@ public class HelpActivity extends BaseActivitySlide {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        onDrawOverLay(this);
 //        final Author author = Author.getInstance().getAuthorInfo();
 //        if (author!=null){
 //            if (author.version!=null){

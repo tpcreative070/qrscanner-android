@@ -49,7 +49,6 @@ public class ChangeFileColorActivity extends BaseActivitySlide implements BaseVi
         presenter = new ChangeFileColorPresenter();
         presenter.bindView(this);
         presenter.getData();
-        onDrawOverLay(this);
     }
 
     public void initRecycleView(LayoutInflater layoutInflater) {

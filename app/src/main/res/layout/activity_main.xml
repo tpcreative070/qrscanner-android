@@ -30,6 +30,7 @@
 
 
     <RelativeLayout
+        android:visibility="invisible"
         android:id="@+id/rlLoading"
         android:background="@color/colorPrimary"
         app:layout_constraintRight_toRightOf="parent"

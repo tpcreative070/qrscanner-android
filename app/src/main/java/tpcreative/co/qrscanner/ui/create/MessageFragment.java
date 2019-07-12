@@ -54,7 +54,6 @@ public class MessageFragment extends BaseActivitySlide implements SingletonGener
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
 

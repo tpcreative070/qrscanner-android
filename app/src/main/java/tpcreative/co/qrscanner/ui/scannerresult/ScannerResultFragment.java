@@ -210,7 +210,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         presenter.bindView(this);
         setupRecyclerViewItem();
         presenter.getIntent(this);
-        onDrawOverLay(this);
     }
 
     @Override
@@ -245,7 +244,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(false);
     }
-
 
     @Override
     public void onClickItem(int position) {

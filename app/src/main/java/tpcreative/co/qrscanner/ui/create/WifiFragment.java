@@ -65,7 +65,6 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
     @Override

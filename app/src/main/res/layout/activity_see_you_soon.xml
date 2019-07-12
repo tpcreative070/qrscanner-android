@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="tpcreative.co.qrscanner.ui.splashscreen.SplashScreenActivity">
+    tools:context=".ui.seeyousoon.SeeYouSoonActivity">
     <RelativeLayout
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +26,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/icon_size_20"
-            android:text="@string/loading"
+            android:text="@string/SeeYouSoon"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
