@@ -62,10 +62,9 @@ public class Navigator {
 
     public static void onMoveMainTab(AppCompatActivity context){
         Intent intent = new Intent(context,MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
         Bungee.fade(context);
+        context.finish();
     }
 
     public static void onMoveSeeYouSoon(AppCompatActivity context){
