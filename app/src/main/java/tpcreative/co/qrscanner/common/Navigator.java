@@ -3,8 +3,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.common.view.Bungee;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
@@ -13,6 +16,7 @@ import tpcreative.co.qrscanner.ui.main.MainActivity;
 import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity;
+import tpcreative.co.qrscanner.ui.splashscreen.SplashScreenActivity;
 
 public class Navigator {
     public static final int CREATE = 1000;
@@ -56,15 +60,18 @@ public class Navigator {
         context.startActivityForResult(intent,SCANNER);
     }
 
-    public static void onMoveMainTab(Context context){
+    public static void onMoveMainTab(AppCompatActivity context){
         Intent intent = new Intent(context,MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
+        Bungee.fade(context);
     }
 
-    public static void onMoveSeeYouSoon(Context context){
+    public static void onMoveSeeYouSoon(AppCompatActivity context){
         Intent intent = new Intent(context, SeeYouSoonActivity.class);
         context.startActivity(intent);
+        Bungee.fade(context);
+        context.finish();
     }
 }

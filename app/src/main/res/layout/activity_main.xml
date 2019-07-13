@@ -28,40 +28,9 @@
             app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
 
-
     <RelativeLayout
         android:visibility="invisible"
-        android:id="@+id/rlLoading"
-        android:background="@color/colorPrimary"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/icApp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_centerInParent="true"
-            android:layout_width="@dimen/icon_size_45"
-            android:layout_height="@dimen/icon_size_45" />
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/icApp"
-            android:id="@+id/tvLoading"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/icon_size_20"
-            android:text="@string/loading"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-
-    <RelativeLayout
         android:id="@+id/rlScanner"
-        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -80,7 +49,7 @@
 
         <com.leinardi.android.speeddial.SpeedDialView
             android:id="@+id/speedDial"
-            android:layout_above="@+id/rlAdsRoot"
+            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -91,22 +60,5 @@
             app:sdMainFabClosedSrc="@drawable/baseline_menu_white_24"
             app:sdMainFabOpenedSrc="@drawable/baseline_menu_white_24"
             app:sdOverlayLayout="@id/overlay" />
-
-        <RelativeLayout
-            android:id="@+id/rlAdsRoot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true"
-            android:gravity="center">
-
-            <RelativeLayout
-                android:id="@+id/rlAds"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center" />
-        </RelativeLayout>
-
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

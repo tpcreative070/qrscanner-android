@@ -28,7 +28,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.android.gms.ads.AdActivity;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -45,8 +44,6 @@ import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.DelayShowUIListener;
-import tpcreative.co.qrscanner.common.Listener;
 import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
@@ -78,18 +75,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     AppBarLayout appBar;
     @BindView(R.id.speedDial)
     SpeedDialView mSpeedDialView;
-    @BindView(R.id.rlLoading)
-    RelativeLayout rlLoading;
     @BindView(R.id.rlScanner)
     RelativeLayout rlScanner;
-    @BindView(R.id.tvLoading)
-    TextView tvLoading;
-    private boolean isPressedBack = false;
-    private boolean doubleBackToExitPressedOnce = false;
-    private final int EXIT_APP = 2000;
-    private final int START_SCANNER = 500;
-    private final int PRESSED_BACK = 2000;
-    private final int DELAY_TO_SHOW_UI = 2000;
     private boolean isLoaded = false;
     private boolean isShowAds = false;
 
@@ -106,9 +93,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        QRScannerApplication.getInstance().showInterstitial();
+        QRScannerApplication.getInstance().setListener(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        QRScannerApplication.getInstance().setListener(this);
         if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
             finish();
         }
@@ -116,8 +104,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
         SingletonResponse.getInstance().setListener(this);
-        //initAds();
-        QRScannerApplication.getInstance().showInterstitial();
         isLoaded = true;
         storage = new Storage(getApplicationContext());
         setupViewPager(viewPager);
@@ -158,16 +144,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (rlScanner!=null){
             rlScanner.setVisibility(View.VISIBLE);
             appBar.setVisibility(View.VISIBLE);
-            rlLoading.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    public void onSeeYouSoon(){
-        if (rlScanner!=null){
-            rlScanner.setVisibility(View.INVISIBLE);
-            appBar.setVisibility(View.INVISIBLE);
-            rlLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText(getString(R.string.SeeYouSoon));
         }
     }
 
@@ -320,13 +296,13 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void showAlertLatestVersion() {
-        //QRScannerApplication.getInstance().onUpdatedAds();
         Utils.Log(TAG,"Checking new version...");
     }
 
     @Override
     public void onResumeAds() {
         onDismissAds();
+        onShowUI();
         Utils.Log(TAG,"Closed ads");
     }
 
@@ -386,7 +362,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             return;
         }
         if (isPressed){
-            onLoadingEdsBack();
+           super.onBackPressed();
         }
         else{
             final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
@@ -396,33 +372,15 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     showEncourage();
                 }
                 else {
-                    onLoadingEdsBack();
+                   super.onBackPressed();
                 }
             }
             else{
-                onLoadingEdsBack();
+               super.onBackPressed();
             }
         }
     }
 
-    public void onLoadingEdsBack(){
-        if (isPressedBack){
-            return;
-        }
-        if (doubleBackToExitPressedOnce) {
-            isPressedBack = true;
-            QRScannerApplication.getInstance().showInterstitial();
-            return;
-        }
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
-        Utils.onObserveData(PRESSED_BACK, new Listener() {
-            @Override
-            public void onStart() {
-                doubleBackToExitPressedOnce=false;
-            }
-        });
-    }
 
     public void onRateApp() {
         Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release));
@@ -516,6 +474,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void onAdFailedToLoad(int var1) {
         Utils.Log(TAG,"onAdFailedToLoad");
+        onShowUI();
     }
 
     @Override
@@ -543,22 +502,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void onShowAds() {
         Utils.Log(TAG,"onShowAds");
         SingletonScanner.getInstance().setInvisible();
-        Utils.onObserveVisitView(DELAY_TO_SHOW_UI, new DelayShowUIListener() {
-            @Override
-            public void onSetVisitView() {
-                if (isPressedBack){
-                    if (rlLoading!=null && rlLoading.getVisibility() != View.VISIBLE){
-                        Utils.Log(TAG,"Showing See you soon");
-                        onSeeYouSoon();
-                    }
-                }else{
-                    if (rlScanner.getVisibility() != View.VISIBLE){
-                        onVisibleUI();
-                        Utils.Log(TAG,"Showing onShowUI");
-                    }
-                }
-            }
-        });
     }
     @Override
     public void onCouldNotShow() {
@@ -580,28 +523,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     public void onShowUI(){
-        if (isPressedBack){
-            if (rlLoading.getVisibility() != View.VISIBLE){
-                onSeeYouSoon();
-                Utils.Log(TAG,"Showing See you soon !");
-            }
-            Utils.onObserveData(EXIT_APP, new Listener() {
-                @Override
-                public void onStart() {finish();}
-            });
-        }
-        else {
-            if (rlScanner.getVisibility() != View.VISIBLE){
-                onVisibleUI();
-                Utils.Log(TAG,"Showing onShowUI !");
-            }
-            Utils.onObserveData(START_SCANNER, new Listener() {
-                @Override
-                public void onStart() {
-                    SingletonScanner.getInstance().setVisible();
-                    Utils.Log(TAG,"Showing start camera");
-                }
-            });
-        }
+        onVisibleUI();
+        SingletonScanner.getInstance().setVisible();
     }
 }

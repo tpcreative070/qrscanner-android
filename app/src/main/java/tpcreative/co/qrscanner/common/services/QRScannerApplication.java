@@ -222,9 +222,8 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     }
 
     public void reloadAds(){
-        Utils.Log(TAG,"isLoaded " + mInterstitialAd.isLoaded());
-        Utils.Log(TAG,"isLoading " + mInterstitialAd.isLoading());
         if (mInterstitialAd==null){
+            Utils.Log(TAG,"mInterstitialAd is null");
             onInitInterstitialAds();
             return;
         }

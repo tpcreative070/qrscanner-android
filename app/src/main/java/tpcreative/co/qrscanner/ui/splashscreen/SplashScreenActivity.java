@@ -31,6 +31,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.common.view.Bungee;
 
 public class SplashScreenActivity extends BaseActivity {
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
@@ -74,11 +75,13 @@ public class SplashScreenActivity extends BaseActivity {
                             // Do something here
                         }
                         else{
+                            finish();
                             Log.d(TAG,"Permission is denied");
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             /*Miss add permission in manifest*/
+                            finish();
                             Log.d(TAG, "request permission is failed");
                         }
                     }

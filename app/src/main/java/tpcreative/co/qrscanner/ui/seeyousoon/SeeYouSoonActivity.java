@@ -4,9 +4,11 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.DelayShowUIListener;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
+import tpcreative.co.qrscanner.common.view.Bungee;
 
 public class SeeYouSoonActivity extends BaseActivity {
     private final int DELAY_TO_SHOW_UI = 3000;
+    private static final String TAG = SeeYouSoonActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,7 +17,13 @@ public class SeeYouSoonActivity extends BaseActivity {
             @Override
             public void onSetVisitView() {
                 finish();
+                Utils.Log(TAG,"See you soon");
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
