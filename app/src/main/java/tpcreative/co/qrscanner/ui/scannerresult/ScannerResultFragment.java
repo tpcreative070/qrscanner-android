@@ -56,6 +56,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -178,6 +179,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     RecyclerView recyclerView;
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
+    @BindView(R.id.llAds)
+    LinearLayout llAds;
 
     private ScannerResultAdapter adapter;
     LinearLayoutManager llm;
@@ -210,6 +213,9 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         presenter.bindView(this);
         setupRecyclerViewItem();
         presenter.getIntent(this);
+        if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))){
+            llAds.addView(AdsLoader.getInstance().getAdView());
+        }
     }
 
     @Override
@@ -235,6 +241,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void setupRecyclerViewItem() {
         llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -912,6 +919,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void onDestroy() {
         super.onDestroy();
+        AdsLoader.getInstance().loadView();
         Utils.Log(TAG,"onDestroy");
         if (presenter.result!=null){
             switch (presenter.result.fragmentType){

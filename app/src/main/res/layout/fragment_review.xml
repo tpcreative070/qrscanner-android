@@ -29,7 +29,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"></android.support.design.widget.CollapsingToolbarLayout>
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"/>
     </android.support.design.widget.AppBarLayout>
 
 
@@ -827,8 +827,6 @@
                                 android:background="@color/grey_lighter" />
 
                         </LinearLayout>
-
-
                         <LinearLayout
                             android:id="@+id/rlFooter"
                             android:layout_width="match_parent"
@@ -841,9 +839,30 @@
                                 android:id="@+id/recyclerView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
-
                         </LinearLayout>
                     </LinearLayout>
+
+                    <View
+                        android:background="@color/colorDisableButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
+                    <RelativeLayout
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:id="@+id/llAds"
+                            android:layout_width="300dp"
+                            android:layout_height="250dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true">
+                        </LinearLayout>
+                    </RelativeLayout>
+
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
         </RelativeLayout>

@@ -383,5 +383,13 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         String versionRelease = Build.VERSION.RELEASE;
         return versionRelease;
     }
+
+    public void onDismissAds(){
+        AdActivity adActivity = QRScannerApplication.getInstance().getAdActivity();
+        if (adActivity!=null){
+            adActivity.finish();
+            Utils.Log(TAG,"Showing onDismissAds");
+        }
+    }
 }
 

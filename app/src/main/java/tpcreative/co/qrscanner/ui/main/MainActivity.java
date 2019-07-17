@@ -53,6 +53,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
+import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.common.view.CustomViewPager;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Theme;
@@ -60,7 +61,7 @@ import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerApplication.QRScannerAdListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewPagerAdapter adapter;
     private Storage storage;
@@ -78,7 +79,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @BindView(R.id.rlScanner)
     RelativeLayout rlScanner;
     private boolean isLoaded = false;
-    private boolean isShowAds = false;
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
@@ -93,10 +93,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        QRScannerApplication.getInstance().showInterstitial();
-        QRScannerApplication.getInstance().setListener(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AdsLoader.getInstance().loadView();
         if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
             finish();
         }
@@ -301,8 +300,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void onResumeAds() {
-        onDismissAds();
-        onShowUI();
         Utils.Log(TAG,"Closed ads");
     }
 
@@ -351,7 +348,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
         PrefsController.putBoolean(getString(R.string.key_second_loads),true);
         ServiceManager.getInstance().onDismissServices();
-        onDismissAds();
     }
 
     @Override
@@ -464,66 +460,4 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
-    @Override
-    public void onAdClosed() {
-        Utils.Log(TAG,"onAdClosed");
-        QRScannerApplication.getInstance().reloadAds();
-        onShowUI();
-    }
-
-    @Override
-    public void onAdFailedToLoad(int var1) {
-        Utils.Log(TAG,"onAdFailedToLoad");
-        onShowUI();
-    }
-
-    @Override
-    public void onAdLeftApplication() {
-        Utils.Log(TAG,"onAdLeftApplication");
-        isShowAds = true;
-    }
-    @Override
-    public void onAdOpened() {
-        Utils.Log(TAG,"onAdOpened");
-    }
-    @Override
-    public void onAdLoaded() {
-
-    }
-    @Override
-    public void onAdClicked() {
-        Utils.Log(TAG,"onAdClicked");
-    }
-    @Override
-    public void onAdImpression() {
-        Utils.Log(TAG,"onAdImpression");
-    }
-    @Override
-    public void onShowAds() {
-        Utils.Log(TAG,"onShowAds");
-        SingletonScanner.getInstance().setInvisible();
-    }
-    @Override
-    public void onCouldNotShow() {
-        QRScannerApplication.getInstance().reloadAds();
-        onShowUI();
-        Utils.Log(TAG,"onCouldNotShow");
-    }
-
-    public void onDismissAds(){
-        if (!isShowAds){
-            return;
-        }
-        AdActivity adActivity = QRScannerApplication.getInstance().getAdActivity();
-        if (adActivity!=null){
-            adActivity.finish();
-            Utils.Log(TAG,"Showing onDismissAds");
-        }
-        isShowAds = false;
-    }
-
-    public void onShowUI(){
-        onVisibleUI();
-        SingletonScanner.getInstance().setVisible();
-    }
 }

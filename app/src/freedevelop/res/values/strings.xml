@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">QR Developer</string>
-    <string name="admob_app_id">ca-app-pub-4216004431450294~9922644790</string>
-    <string name="banner_home_footer">ca-app-pub-4216004431450294/6027508101</string>
-    <string name="banner_review">ca-app-pub-4216004431450294/5791828099</string>
-    <string name="interstitial_full_screen">ca-app-pub-4216004431450294/3345504440</string>
+    <string name="app_name">QR Scanner</string>
+    <string name="admob_app_id">ca-app-pub-3405198318717193~1440948371</string>
+    <string name="banner_review">ca-app-pub-4139463645901234/7330778035</string>
+    <string name="banner_result">ca-app-pub-5090532923773118/5964366912</string>
+    <string name="banner_footer">ca-app-pub-3419088836759997/1567992459</string>
+    <string name="banner_result_scanner">ca-app-pub-8291007483799285/2199919050</string>
+    <string name="banner_result_saved">ca-app-pub-8291007483799285/1354699102</string>
+    <string name="banner_result_history">ca-app-pub-8291007483799285/9527744731</string>
+    <string name="interstitial_full_screen">ca-app-pub-3405198318717193/9127866701</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="interstitial_full_screen_test">ca-app-pub-3940256099942544/1033173712</string>
 </resources>
