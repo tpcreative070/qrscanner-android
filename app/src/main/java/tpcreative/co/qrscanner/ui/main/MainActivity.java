@@ -95,7 +95,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AdsLoader.getInstance().loadView();
         if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
             finish();
         }

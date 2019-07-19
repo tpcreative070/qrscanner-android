@@ -23,6 +23,7 @@ import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
+import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 /**
@@ -73,8 +74,8 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.dependenciesListener(this);
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
-        onInitInterstitialAds();
         Utils.Log(TAG,"Start ads");
+        AdsLoader.getInstance().iniAds();
     }
 
     public void onInitInterstitialAds(){
