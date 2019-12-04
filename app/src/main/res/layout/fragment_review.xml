@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/material_gray_100">
 
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -29,8 +29,8 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"></android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <RelativeLayout
@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/rlButton">
 
-            <android.support.v4.widget.NestedScrollView
+            <androidx.core.widget.NestedScrollView
                 android:id="@+id/scrollView"
                 android:layout_above="@+id/rlAdsRoot"
                 android:layout_width="match_parent"
@@ -827,8 +827,6 @@
                                 android:background="@color/grey_lighter" />
 
                         </LinearLayout>
-
-
                         <LinearLayout
                             android:id="@+id/rlFooter"
                             android:layout_width="match_parent"
@@ -837,15 +835,50 @@
                             android:layout_marginTop="20dp"
                             android:layout_marginBottom="5dp"
                             android:orientation="horizontal">
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recyclerView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
-
                         </LinearLayout>
                     </LinearLayout>
+
+                    <View
+                        android:background="@color/grey_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
+                    <RelativeLayout
+                        android:visibility="gone"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:id="@+id/llAds"
+                            android:layout_width="300dp"
+                            android:layout_height="250dp"
+                            android:layout_centerHorizontal="true">
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:background="@color/grey_light"
+                                android:text="Ad"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+
                 </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
         </RelativeLayout>
     </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

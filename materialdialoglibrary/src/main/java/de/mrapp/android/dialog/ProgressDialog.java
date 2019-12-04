@@ -16,12 +16,12 @@ package de.mrapp.android.dialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.StyleRes;
-import android.view.View;
-import android.view.Window;
-import de.mrapp.android.preference.R;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;import de.mrapp.android.preference.R;
 import java.util.Map;
 
 import de.mrapp.android.dialog.ScrollableArea.Area;

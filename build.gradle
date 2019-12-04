@@ -7,11 +7,44 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.google.gms:google-services:4.3.2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
+    subprojects {
+        project.configurations.all {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'androidx.core'
+                        && !details.requested.name.contains('androidx') ) {
+                    details.useVersion appSupportVersion
+                }
+
+                if (details.requested.group == 'androidx.recyclerview'
+                        && !details.requested.name.contains('androidx') ) {
+                    details.useVersion appRecyclerView
+                }
+
+                if (details.requested.group == 'com.google.android.material'
+                        && !details.requested.name.contains('com') ) {
+                    details.useVersion appGoogleMaterial
+                }
+
+                if (details.requested.group == 'androidx.annotation'
+                        && !details.requested.name.contains('androidx') ) {
+                    details.useVersion appSupportVersion
+                }
+
+                if (details.requested.group == 'io.reactivex.rxjava2'
+                        && !details.requested.name.contains('io') ) {
+                    details.useVersion appReactivexJava
+                }
+            }
+        }
+    }
+
 }
 
 allprojects {
@@ -30,14 +63,30 @@ task clean(type: Delete) {
 }
 
 subprojects {
-    ext.appVersionCode = 136
-    ext.appVersionName = "1.3.6"
+    ext.appVersionCode = 145
+    ext.appVersionName = "1.4.5"
     ext.appMinSdkVersion = 19
-    ext.appSupportVersion = "28.0.0"
-    ext.appCompileSdkVersion = 28
+    ext.appSupportVersion = "1.0.2"
+    ext.appReactivexAndroid = "2.1.1"
+    ext.appReactivexJava = "2.1.1"
+    ext.appRetrofit = "2.6.0"
     ext.appBuildToolsVersion = "28.0.3"
     ext.build_versions_java_version = 1.8
-    ext.appTargetSdkVersion = 28
-    ext.glide = "4.7.1"
+    ext.appGoogleMaterial = "1.0.0"
+    ext.apppreferenceV14 = "1.0.0"
+    ext.appCardView = "1.0.0"
+    ext.appExifinterface = "1.0.0"
+    ext.appRecyclerView = "1.0.0"
+    ext.appConstraintlayout = "1.1.2"
+    ext.appMultidex = "2.0.1"
+    ext.appPercent = "1.0.0"
+    ext.appCompileSdkVersion = 29
+    ext.appBuildToolsVersion = "28.0.3"
+    ext.appTargetSdkVersion = 29
+    ext.appConstraitLayout = "1.1.0"
+    ext.build_versions_java_version = 1.8
+    ext.appRoomVersion = "2.0.0-rc01"
+    ext.fresco = "1.10.0"
+    ext.glide = "4.8.0"
 }
 

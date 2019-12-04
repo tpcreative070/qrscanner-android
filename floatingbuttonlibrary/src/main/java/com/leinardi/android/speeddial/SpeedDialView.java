@@ -15,7 +15,6 @@
  */
 
 package com.leinardi.android.speeddial;
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -25,24 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.IntDef;
-import android.support.annotation.MenuRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.FloatingActionButton.OnVisibilityChangedListener;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -53,7 +34,25 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.IntDef;
+import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.annotation.Retention;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -62,7 +61,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
 import static com.leinardi.android.speeddial.SpeedDialActionItem.RESOURCE_NOT_SET;
 import static com.leinardi.android.speeddial.SpeedDialView.ExpansionMode.BOTTOM;
 import static com.leinardi.android.speeddial.SpeedDialView.ExpansionMode.LEFT;
@@ -179,7 +177,7 @@ public class SpeedDialView extends LinearLayout implements CoordinatorLayout.Att
         show(null);
     }
 
-    public void show(@Nullable final OnVisibilityChangedListener listener) {
+    public void show(@Nullable final FloatingActionButton.OnVisibilityChangedListener listener) {
         setVisibility(VISIBLE);
         showFabWithWorkaround(mMainFab, listener);
     }
@@ -187,8 +185,8 @@ public class SpeedDialView extends LinearLayout implements CoordinatorLayout.Att
     /*
      * WORKAROUND: Remove if Google will finally fix this: https://issuetracker.google.com/issues/111316656
      */
-    private void showFabWithWorkaround(FloatingActionButton fab, @Nullable final OnVisibilityChangedListener listener) {
-        fab.show(new OnVisibilityChangedListener() {
+    private void showFabWithWorkaround(FloatingActionButton fab, @Nullable final FloatingActionButton.OnVisibilityChangedListener listener) {
+        fab.show(new FloatingActionButton.OnVisibilityChangedListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onShown(FloatingActionButton fab) {
@@ -228,13 +226,13 @@ public class SpeedDialView extends LinearLayout implements CoordinatorLayout.Att
         hide(null);
     }
 
-    public void hide(@Nullable final OnVisibilityChangedListener listener) {
+    public void hide(@Nullable final FloatingActionButton.OnVisibilityChangedListener listener) {
         if (isOpen()) {
             close();
             // Workaround for mMainFab.hide() breaking the rotate anim
             ViewCompat.animate(mMainFab).rotation(0).setDuration(0).start();
         }
-        mMainFab.hide(new OnVisibilityChangedListener() {
+        mMainFab.hide(new FloatingActionButton.OnVisibilityChangedListener() {
             @Override
             public void onShown(FloatingActionButton fab) {
                 super.onShown(fab);
@@ -1002,7 +1000,7 @@ public class SpeedDialView extends LinearLayout implements CoordinatorLayout.Att
         @Nullable
         private Rect mTmpRect;
         @Nullable
-        private OnVisibilityChangedListener mInternalAutoHideListener;
+        private FloatingActionButton.OnVisibilityChangedListener mInternalAutoHideListener;
         private boolean mAutoHideEnabled;
 
         public SnackbarBehavior() {
@@ -1013,9 +1011,9 @@ public class SpeedDialView extends LinearLayout implements CoordinatorLayout.Att
         public SnackbarBehavior(Context context, AttributeSet attrs) {
             super(context, attrs);
             TypedArray a = context.obtainStyledAttributes(attrs,
-                    android.support.design.R.styleable.FloatingActionButton_Behavior_Layout);
+                    com.google.android.material.R.styleable.FloatingActionButton_Behavior_Layout);
             mAutoHideEnabled = a.getBoolean(
-                    android.support.design.R.styleable.FloatingActionButton_Behavior_Layout_behavior_autoHide,
+                    com.google.android.material.R.styleable.FloatingActionButton_Behavior_Layout_behavior_autoHide,
                     AUTO_HIDE_DEFAULT);
             a.recycle();
         }
@@ -1096,7 +1094,7 @@ public class SpeedDialView extends LinearLayout implements CoordinatorLayout.Att
         }
 
         @VisibleForTesting
-        void setInternalAutoHideListener(@Nullable OnVisibilityChangedListener listener) {
+        void setInternalAutoHideListener(@Nullable FloatingActionButton.OnVisibilityChangedListener listener) {
             mInternalAutoHideListener = listener;
         }
 

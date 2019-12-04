@@ -2,12 +2,11 @@ package tpcreative.co.qrscanner.ui.create;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-
+import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
@@ -47,7 +46,6 @@ public class TextFragment extends BaseActivitySlide implements SingletonGenerate
         else{
             Utils.Log(TAG,"Data is null");
         }
-        onDrawOverLay(this);
     }
 
     @Override

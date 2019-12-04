@@ -10,11 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -56,6 +56,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -178,6 +179,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     RecyclerView recyclerView;
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
+    @BindView(R.id.llAds)
+    LinearLayout llAds;
 
     private ScannerResultAdapter adapter;
     LinearLayoutManager llm;
@@ -210,7 +213,13 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         presenter.bindView(this);
         setupRecyclerViewItem();
         presenter.getIntent(this);
-        onDrawOverLay(this);
+        if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))){
+            try {
+                //llAds.addView(AdsLoader.getInstance().getAdView());
+            }catch (Exception e){
+                e.getMessage();
+            }
+        }
     }
 
     @Override
@@ -237,6 +246,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         return super.onOptionsItemSelected(item);
     }
 
+
     public void setupRecyclerViewItem() {
         llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
@@ -245,7 +255,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(false);
     }
-
 
     @Override
     public void onClickItem(int position) {
@@ -914,6 +923,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //AdsLoader.getInstance().loadView();
         Utils.Log(TAG,"onDestroy");
         if (presenter.result!=null){
             switch (presenter.result.fragmentType){

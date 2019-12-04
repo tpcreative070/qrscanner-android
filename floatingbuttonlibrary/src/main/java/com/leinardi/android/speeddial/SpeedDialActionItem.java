@@ -20,17 +20,16 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.content.res.AppCompatResources;
 import android.view.ContextThemeWrapper;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.content.res.AppCompatResources;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import static android.support.design.widget.FloatingActionButton.SIZE_AUTO;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SpeedDialActionItem implements Parcelable {
@@ -173,7 +172,7 @@ public class SpeedDialActionItem implements Parcelable {
         private int mLabelBackgroundColor = RESOURCE_NOT_SET;
         private boolean mLabelClickable = true;
         @FloatingActionButton.Size
-        private int mFabSize = SIZE_AUTO;
+        private int mFabSize = FloatingActionButton.SIZE_AUTO;
         @StyleRes
         private int mTheme = RESOURCE_NOT_SET;
 

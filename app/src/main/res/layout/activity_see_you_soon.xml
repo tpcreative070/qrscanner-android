@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".ui.seeyousoon.SeeYouSoonActivity">
+    <RelativeLayout
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/icApp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/icon_size_45"
+            android:layout_height="@dimen/icon_size_45" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/icApp"
+            android:id="@+id/tvLoading"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/icon_size_20"
+            android:text="@string/SeeYouSoon"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

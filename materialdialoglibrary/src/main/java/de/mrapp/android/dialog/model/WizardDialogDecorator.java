@@ -14,15 +14,17 @@
 package de.mrapp.android.dialog.model;
 
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.widget.Button;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import de.mrapp.android.dialog.WizardDialog.TabPosition;
 import de.mrapp.android.dialog.WizardDialog.WizardListener;
@@ -514,7 +516,7 @@ public interface WizardDialogDecorator {
      *         The listener, which should be added, as an instance of the type OnPageChangeListener.
      *         The listener may not be null
      */
-    void addOnPageChangeListener(@NonNull OnPageChangeListener listener);
+    void addOnPageChangeListener(@NonNull ViewPager.OnPageChangeListener listener);
 
     /**
      * Removes a listener, which should not be notified, when the page of the dialog's view pager
@@ -524,6 +526,6 @@ public interface WizardDialogDecorator {
      *         The listener, which should be removed, as an instance of the type
      *         OnPageChangeListener. The listener may not be null
      */
-    void removeOnPageChangeListener(@NonNull OnPageChangeListener listener);
+    void removeOnPageChangeListener(@NonNull ViewPager.OnPageChangeListener listener);
 
 }

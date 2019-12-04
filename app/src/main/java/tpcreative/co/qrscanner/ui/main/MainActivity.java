@@ -13,14 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +20,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.google.android.gms.ads.AdActivity;
+
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -45,8 +47,6 @@ import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.DelayShowUIListener;
-import tpcreative.co.qrscanner.common.Listener;
 import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
@@ -56,6 +56,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
+import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.common.view.CustomViewPager;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Theme;
@@ -63,7 +64,7 @@ import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener,QRScannerApplication.QRScannerAdListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewPagerAdapter adapter;
     private Storage storage;
@@ -78,25 +79,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     AppBarLayout appBar;
     @BindView(R.id.speedDial)
     SpeedDialView mSpeedDialView;
-    @BindView(R.id.rlAds)
-    RelativeLayout rlAds;
-    @BindView(R.id.rlAdsRoot)
-    RelativeLayout rlAdsRoot;
-    @BindView(R.id.rlLoading)
-    RelativeLayout rlLoading;
     @BindView(R.id.rlScanner)
     RelativeLayout rlScanner;
-    @BindView(R.id.tvLoading)
-    TextView tvLoading;
-    private boolean isPressedBack = false;
-    private boolean doubleBackToExitPressedOnce = false;
-    private final int LOADING_APP = 4000;
-    private final int EXIT_APP = 2000;
-    private final int START_SCANNER = 500;
-    private final int PRESSED_BACK = 2000;
-    private final int DELAY_TO_SHOW_UI = 2000;
     private boolean isLoaded = false;
-    private boolean isShowAds = false;
 
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
@@ -113,7 +98,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        QRScannerApplication.getInstance().setListener(this);
         if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
             finish();
         }
@@ -121,6 +105,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
         SingletonResponse.getInstance().setListener(this);
+        isLoaded = true;
         storage = new Storage(getApplicationContext());
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -149,57 +134,36 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 Utils.Log(TAG,"Move swipe");
             }
         });
-        //initAds();
-        appBar.setVisibility(View.INVISIBLE);
-        Utils.onObserveData(LOADING_APP, new Listener() {
-            @Override
-            public void onStart() {
-                if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_DENIED) {
-                    onVisibleUI();
-                    onAddPermissionCamera();
-                }
-                else {
-                    QRScannerApplication.getInstance().showInterstitial();
-                }
-                isLoaded = true;
-            }
-        });
+        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            onVisibleUI();
+            onAddPermissionCamera();
+        }
     }
 
     public void onVisibleUI(){
         if (rlScanner!=null){
             rlScanner.setVisibility(View.VISIBLE);
             appBar.setVisibility(View.VISIBLE);
-            rlLoading.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    public void onSeeYouSoon(){
-        if (rlScanner!=null){
-            rlScanner.setVisibility(View.INVISIBLE);
-            appBar.setVisibility(View.INVISIBLE);
-            rlLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText(getString(R.string.SeeYouSoon));
         }
     }
 
     public void onShowFloatingButton(Fragment fragment){
-       if (fragment instanceof HistoryFragment){
-           if (mSpeedDialView!=null){
-               mSpeedDialView.show();
-           }
-       }
-       else if (fragment instanceof SaverFragment){
-           if (mSpeedDialView!=null){
-               mSpeedDialView.show();
-           }
-       }
-       else{
-           if (mSpeedDialView!=null){
-               mSpeedDialView.hide();
-           }
-       }
+        if (fragment instanceof HistoryFragment){
+            if (mSpeedDialView!=null){
+                mSpeedDialView.show();
+            }
+        }
+        else if (fragment instanceof SaverFragment){
+            if (mSpeedDialView!=null){
+                mSpeedDialView.show();
+            }
+        }
+        else{
+            if (mSpeedDialView!=null){
+                mSpeedDialView.hide();
+            }
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -217,7 +181,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
         }
         catch (Exception e){
-           e.getMessage();
+            e.getMessage();
         }
     }
 
@@ -296,7 +260,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                                 PrefsController.putBoolean(getString(R.string.key_refresh),true);
                             }
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());
-                          // Do something here
+                            // Do something here
                         }
                         else{
                             Log.d(TAG,"Permission is denied");
@@ -333,13 +297,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void showAlertLatestVersion() {
-        //QRScannerApplication.getInstance().onUpdatedAds();
         Utils.Log(TAG,"Checking new version...");
     }
 
     @Override
     public void onResumeAds() {
-        onDismissAds();
         Utils.Log(TAG,"Closed ads");
     }
 
@@ -388,7 +350,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
         PrefsController.putBoolean(getString(R.string.key_second_loads),true);
         ServiceManager.getInstance().onDismissServices();
-        onDismissAds();
     }
 
     @Override
@@ -399,7 +360,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             return;
         }
         if (isPressed){
-           onLoadingEdsBack();
+           super.onBackPressed();
         }
         else{
             final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
@@ -409,33 +370,15 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     showEncourage();
                 }
                 else {
-                    onLoadingEdsBack();
+                   super.onBackPressed();
                 }
             }
             else{
-                onLoadingEdsBack();
+               super.onBackPressed();
             }
         }
     }
 
-    public void onLoadingEdsBack(){
-        if (isPressedBack){
-            return;
-        }
-        if (doubleBackToExitPressedOnce) {
-            isPressedBack = true;
-            QRScannerApplication.getInstance().showInterstitial();
-            return;
-        }
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
-        Utils.onObserveData(PRESSED_BACK, new Listener() {
-            @Override
-            public void onStart() {
-                doubleBackToExitPressedOnce=false;
-            }
-        });
-    }
 
     public void onRateApp() {
         Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release));
@@ -519,102 +462,4 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
-    @Override
-    public void onAdClosed() {
-        Utils.Log(TAG,"onAdClosed");
-        QRScannerApplication.getInstance().reloadAds();
-        onShowUI();
-    }
-
-    @Override
-    public void onAdFailedToLoad(int var1) {
-        Utils.Log(TAG,"onAdFailedToLoad");
-    }
-
-    @Override
-    public void onAdLeftApplication() {
-        Utils.Log(TAG,"onAdLeftApplication");
-        isShowAds = true;
-    }
-    @Override
-    public void onAdOpened() {
-        Utils.Log(TAG,"onAdOpened");
-    }
-    @Override
-    public void onAdLoaded() {
-
-    }
-    @Override
-    public void onAdClicked() {
-        Utils.Log(TAG,"onAdClicked");
-    }
-    @Override
-    public void onAdImpression() {
-        Utils.Log(TAG,"onAdImpression");
-    }
-    @Override
-    public void onShowAds() {
-        Utils.Log(TAG,"onShowAds");
-        SingletonScanner.getInstance().setInvisible();
-        Utils.onObserveVisitView(DELAY_TO_SHOW_UI, new DelayShowUIListener() {
-            @Override
-            public void onSetVisitView() {
-                if (isPressedBack){
-                    if (rlLoading.getVisibility() != View.VISIBLE){
-                        Utils.Log(TAG,"Showing See you soon");
-                        onSeeYouSoon();
-                    }
-                }else{
-                    if (rlScanner.getVisibility() != View.VISIBLE){
-                        onVisibleUI();
-                        Utils.Log(TAG,"Showing onShowUI");
-                    }
-                }
-            }
-        });
-    }
-    @Override
-    public void onCouldNotShow() {
-        QRScannerApplication.getInstance().reloadAds();
-        onShowUI();
-        Utils.Log(TAG,"onCouldNotShow");
-    }
-
-    public void onDismissAds(){
-        if (!isShowAds){
-            return;
-        }
-        AdActivity adActivity = QRScannerApplication.getInstance().getAdActivity();
-        if (adActivity!=null){
-            adActivity.finish();
-            Utils.Log(TAG,"Showing onDismissAds");
-        }
-        isShowAds = false;
-    }
-
-    public void onShowUI(){
-        if (isPressedBack){
-            if (rlLoading.getVisibility() != View.VISIBLE){
-                onSeeYouSoon();
-                Utils.Log(TAG,"Showing See you soon !");
-            }
-            Utils.onObserveData(EXIT_APP, new Listener() {
-                @Override
-                public void onStart() {finish();}
-            });
-        }
-        else {
-            if (rlScanner.getVisibility() != View.VISIBLE){
-                onVisibleUI();
-                Utils.Log(TAG,"Showing onShowUI !");
-            }
-            Utils.onObserveData(START_SCANNER, new Listener() {
-                @Override
-                public void onStart() {
-                    SingletonScanner.getInstance().setVisible();
-                    Utils.Log(TAG,"Showing start camera");
-                }
-            });
-        }
-    }
 }

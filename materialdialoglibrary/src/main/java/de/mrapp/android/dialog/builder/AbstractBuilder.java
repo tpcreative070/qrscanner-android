@@ -14,7 +14,9 @@
 package de.mrapp.android.dialog.builder;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+
+import androidx.annotation.NonNull;
 
 import static de.mrapp.android.util.Condition.ensureNotNull;
 

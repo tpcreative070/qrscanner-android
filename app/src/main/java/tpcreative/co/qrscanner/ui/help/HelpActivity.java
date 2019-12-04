@@ -1,10 +1,7 @@
 package tpcreative.co.qrscanner.ui.help;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -30,7 +27,6 @@ public class HelpActivity extends BaseActivitySlide {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        onDrawOverLay(this);
 //        final Author author = Author.getInstance().getAuthorInfo();
 //        if (author!=null){
 //            if (author.version!=null){

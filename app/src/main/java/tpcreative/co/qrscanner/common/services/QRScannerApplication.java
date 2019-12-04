@@ -5,8 +5,10 @@ import android.content.ContextWrapper;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
@@ -23,6 +25,7 @@ import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
+import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 /**
@@ -73,8 +76,8 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.dependenciesListener(this);
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
-        onInitInterstitialAds();
         Utils.Log(TAG,"Start ads");
+       // AdsLoader.getInstance().iniAds();
     }
 
     public void onInitInterstitialAds(){
@@ -222,9 +225,8 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     }
 
     public void reloadAds(){
-        Utils.Log(TAG,"isLoaded " + mInterstitialAd.isLoaded());
-        Utils.Log(TAG,"isLoading " + mInterstitialAd.isLoading());
         if (mInterstitialAd==null){
+            Utils.Log(TAG,"mInterstitialAd is null");
             onInitInterstitialAds();
             return;
         }
@@ -383,6 +385,14 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public String getVersionRelease() {
         String versionRelease = Build.VERSION.RELEASE;
         return versionRelease;
+    }
+
+    public void onDismissAds(){
+        AdActivity adActivity = QRScannerApplication.getInstance().getAdActivity();
+        if (adActivity!=null){
+            adActivity.finish();
+            Utils.Log(TAG,"Showing onDismissAds");
+        }
     }
 }
 

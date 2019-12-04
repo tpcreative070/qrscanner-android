@@ -1,9 +1,7 @@
 package com.r0adkll.slidr.model;
-
-
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
+import androidx.annotation.ColorInt;
+import androidx.annotation.FloatRange;
 
 
 /**
