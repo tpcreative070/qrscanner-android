@@ -1,18 +1,11 @@
 package tpcreative.co.qrscanner.common.preference;
-
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 import tpcreative.co.qrscanner.R;
-
 
 public class MyPreference extends Preference {
 

@@ -5,8 +5,10 @@ import android.content.ContextWrapper;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
@@ -75,7 +77,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         Utils.Log(TAG,"Start ads");
-        AdsLoader.getInstance().iniAds();
+       // AdsLoader.getInstance().iniAds();
     }
 
     public void onInitInterstitialAds(){

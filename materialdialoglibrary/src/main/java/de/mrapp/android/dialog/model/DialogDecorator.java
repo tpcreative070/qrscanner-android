@@ -14,7 +14,15 @@
 package de.mrapp.android.dialog.model;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.ArrayRes;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 
 /**
  * Defines the interface, all decorators, which allow to modify the view hierarchy of a dialog, must

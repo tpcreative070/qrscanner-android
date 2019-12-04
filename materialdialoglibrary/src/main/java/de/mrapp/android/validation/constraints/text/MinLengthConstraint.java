@@ -12,9 +12,7 @@
  * the License.
  */
 package de.mrapp.android.validation.constraints.text;
-
 import de.mrapp.android.validation.Constraint;
-
 import static de.mrapp.android.util.Condition.ensureAtLeast;
 
 /**

@@ -13,7 +13,11 @@
  */
 package de.mrapp.android.dialog;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.AttrRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 
 import de.mrapp.android.dialog.model.ValidateableDialog;
 

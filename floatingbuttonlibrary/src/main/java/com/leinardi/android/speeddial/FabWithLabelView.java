@@ -23,13 +23,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -39,11 +32,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.leinardi.android.speeddial.SpeedDialView.OnActionSelectedListener;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
-import static android.support.design.widget.FloatingActionButton.SIZE_AUTO;
-import static android.support.design.widget.FloatingActionButton.SIZE_MINI;
-import static android.support.design.widget.FloatingActionButton.SIZE_NORMAL;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.leinardi.android.speeddial.SpeedDialView.OnActionSelectedListener;
 import static com.leinardi.android.speeddial.SpeedDialActionItem.RESOURCE_NOT_SET;
 
 /**
@@ -181,8 +178,8 @@ public class FabWithLabelView extends LinearLayout {
                     getContext().getTheme());
         }
         setLabelBackgroundColor(labelBackgroundColor);
-        if (actionItem.getFabSize() == SIZE_AUTO) {
-            getFab().setSize(SIZE_MINI);
+        if (actionItem.getFabSize() == FloatingActionButton.SIZE_AUTO) {
+            getFab().setSize(FloatingActionButton.SIZE_MINI);
         } else {
             getFab().setSize(actionItem.getFabSize());
         }
@@ -253,7 +250,7 @@ public class FabWithLabelView extends LinearLayout {
         mLabelTextView = rootView.findViewById(R.id.label);
         mLabelCardView = rootView.findViewById(R.id.label_container);
 
-        setFabSize(SIZE_MINI);
+        setFabSize(FloatingActionButton.SIZE_MINI);
         setOrientation(LinearLayout.HORIZONTAL);
         setClipChildren(false);
         setClipToPadding(false);
@@ -293,14 +290,14 @@ public class FabWithLabelView extends LinearLayout {
         int normalFabSizePx = getContext().getResources().getDimensionPixelSize(R.dimen.sd_fab_normal_size);
         int miniFabSizePx = getContext().getResources().getDimensionPixelSize(R.dimen.sd_fab_mini_size);
         int fabSideMarginPx = getContext().getResources().getDimensionPixelSize(R.dimen.sd_fab_side_margin);
-        int fabSizePx = fabSize == SIZE_NORMAL ? normalFabSizePx : miniFabSizePx;
+        int fabSizePx = fabSize == FloatingActionButton.SIZE_NORMAL ? normalFabSizePx : miniFabSizePx;
         LayoutParams rootLayoutParams;
         LayoutParams fabLayoutParams = (LayoutParams) mFab.getLayoutParams();
         if (getOrientation() == HORIZONTAL) {
             rootLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, fabSizePx);
             rootLayoutParams.gravity = Gravity.END;
 
-            if (fabSize == SIZE_NORMAL) {
+            if (fabSize == FloatingActionButton.SIZE_NORMAL) {
                 int excessMargin = (normalFabSizePx - miniFabSizePx) / 2;
                 fabLayoutParams.setMargins(fabSideMarginPx - excessMargin, 0, fabSideMarginPx - excessMargin, 0);
             } else {

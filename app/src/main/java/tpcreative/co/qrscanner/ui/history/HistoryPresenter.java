@@ -1,15 +1,9 @@
 package tpcreative.co.qrscanner.ui.history;
-import android.util.Log;
-
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.model.History;

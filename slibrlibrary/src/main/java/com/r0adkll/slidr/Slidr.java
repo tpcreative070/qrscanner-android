@@ -1,16 +1,12 @@
 package com.r0adkll.slidr;
-
-
 import android.app.Activity;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
-
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import com.r0adkll.slidr.model.SlidrConfig;
 import com.r0adkll.slidr.model.SlidrInterface;
 import com.r0adkll.slidr.widget.SliderPanel;
-
 
 /**
  * This attacher class is used to attach the sliding mechanism to any {@link android.app.Activity}

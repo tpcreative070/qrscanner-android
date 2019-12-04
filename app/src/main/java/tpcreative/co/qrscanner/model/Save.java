@@ -1,8 +1,9 @@
 package tpcreative.co.qrscanner.model;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-import android.net.Uri;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.preference.PreferenceScreen;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.google.zxing.BarcodeFormat;
 
@@ -134,6 +135,7 @@ public class Save implements Serializable{
         this.barcodeFormat = BarcodeFormat.QR_CODE.name();
         this.favorite = false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
+
     }
 
     @Ignore

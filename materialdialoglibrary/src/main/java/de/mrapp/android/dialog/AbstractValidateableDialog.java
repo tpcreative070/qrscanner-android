@@ -15,12 +15,12 @@ package de.mrapp.android.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.StyleRes;
-import android.view.View;
-import android.view.Window;
-
+import androidx.annotation.AttrRes;
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;

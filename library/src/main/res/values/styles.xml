@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="brandonBoldTextView" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/brandon_bld</item>
-    </style>
-
-</resources>

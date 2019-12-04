@@ -6,10 +6,11 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 
 /**
  * Created by Maxim Dybarsky | maxim.dybarskyy@gmail.com

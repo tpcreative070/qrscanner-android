@@ -1,5 +1,5 @@
 package tpcreative.co.qrscanner.ui.save;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;

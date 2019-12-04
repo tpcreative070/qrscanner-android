@@ -1,5 +1,5 @@
 package tpcreative.co.qrscanner.ui.create;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
 import tpcreative.co.qrscanner.R;

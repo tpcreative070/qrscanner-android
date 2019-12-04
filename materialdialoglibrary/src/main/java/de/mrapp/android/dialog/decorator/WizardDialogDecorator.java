@@ -14,14 +14,12 @@
 package de.mrapp.android.dialog.decorator;
 
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +29,14 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +69,7 @@ import static de.mrapp.android.util.Condition.ensureNotNull;
  * @since 3.2.0
  */
 public class WizardDialogDecorator extends AbstractDialogFragmentDecorator<WizardDialog>
-        implements de.mrapp.android.dialog.model.WizardDialogDecorator, OnPageChangeListener {
+        implements de.mrapp.android.dialog.model.WizardDialogDecorator, androidx.viewpager.widget.ViewPager.OnPageChangeListener {
 
     /**
      * The name of the extra, which is used to store the position of the tabs, which indicate the
@@ -198,7 +204,7 @@ public class WizardDialogDecorator extends AbstractDialogFragmentDecorator<Wizar
      * The listeners, which should be notified, when the page of the dialog's view pager has been
      * changed.
      */
-    private final ListenerList<OnPageChangeListener> onPageChangeListeners;
+    private final ListenerList<androidx.viewpager.widget.ViewPager.OnPageChangeListener> onPageChangeListeners;
 
     /**
      * The adapter, which is used to manage the dialog's fragments.
@@ -1032,7 +1038,7 @@ public class WizardDialogDecorator extends AbstractDialogFragmentDecorator<Wizar
     }
 
     @Override
-    public final void addOnPageChangeListener(@NonNull final OnPageChangeListener listener) {
+    public final void addOnPageChangeListener(@NonNull final androidx.viewpager.widget.ViewPager.OnPageChangeListener listener) {
         ensureNotNull(listener, "The listener may not be null");
         onPageChangeListeners.add(listener);
 
@@ -1042,7 +1048,7 @@ public class WizardDialogDecorator extends AbstractDialogFragmentDecorator<Wizar
     }
 
     @Override
-    public final void removeOnPageChangeListener(@NonNull final OnPageChangeListener listener) {
+    public final void removeOnPageChangeListener(@NonNull final androidx.viewpager.widget.ViewPager.OnPageChangeListener listener) {
         ensureNotNull(listener, "The listener may not be null");
         onPageChangeListeners.remove(listener);
 
@@ -1153,7 +1159,7 @@ public class WizardDialogDecorator extends AbstractDialogFragmentDecorator<Wizar
                     viewPagerAdapter =
                             new ViewPagerAdapter(getContext(), fragmentManager, viewPagerItems);
 
-                    for (OnPageChangeListener listener : onPageChangeListeners) {
+                    for (androidx.viewpager.widget.ViewPager.OnPageChangeListener listener : onPageChangeListeners) {
                         viewPager.addOnPageChangeListener(listener);
                     }
 
