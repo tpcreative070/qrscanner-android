@@ -10,11 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -214,7 +214,11 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         setupRecyclerViewItem();
         presenter.getIntent(this);
         if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))){
-            llAds.addView(AdsLoader.getInstance().getAdView());
+            try {
+                //llAds.addView(AdsLoader.getInstance().getAdView());
+            }catch (Exception e){
+                e.getMessage();
+            }
         }
     }
 
@@ -919,7 +923,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AdsLoader.getInstance().loadView();
+        //AdsLoader.getInstance().loadView();
         Utils.Log(TAG,"onDestroy");
         if (presenter.result!=null){
             switch (presenter.result.fragmentType){

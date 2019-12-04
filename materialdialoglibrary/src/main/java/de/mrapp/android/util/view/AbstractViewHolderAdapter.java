@@ -12,11 +12,9 @@
  * the License.
  */
 package de.mrapp.android.util.view;
-
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.view.View;
-
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import static de.mrapp.android.util.Condition.ensureNotNull;
 
 /**

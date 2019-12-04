@@ -7,16 +7,14 @@ package tpcreative.co.qrscanner.ui.create;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import com.jaychang.srv.SimpleCell;
 import com.jaychang.srv.SimpleViewHolder;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;

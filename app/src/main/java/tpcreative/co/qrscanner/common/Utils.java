@@ -22,10 +22,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.StringRes;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -34,6 +30,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.snatik.storage.helpers.SizeUnit;
 
@@ -140,11 +140,11 @@ public class Utils {
     }
 
     private static Snackbar multilineSnackbar(Snackbar snackbar) {
-        TextView textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setMaxLines(5);
         textView.setTextSize(15);
 
-        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action);
+        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( com.google.android.material.R.id.snackbar_action);
         snackbarActionTextView.setTextSize(14);
         return snackbar;
     }

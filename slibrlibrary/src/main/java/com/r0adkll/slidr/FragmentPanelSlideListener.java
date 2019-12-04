@@ -1,13 +1,9 @@
 package com.r0adkll.slidr;
-
-
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
-
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import com.r0adkll.slidr.model.SlidrConfig;
 import com.r0adkll.slidr.widget.SliderPanel;
-
 
 class FragmentPanelSlideListener implements SliderPanel.OnPanelSlideListener {
 

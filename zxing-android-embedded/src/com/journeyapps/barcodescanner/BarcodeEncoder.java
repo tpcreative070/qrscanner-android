@@ -1,12 +1,7 @@
 package com.journeyapps.barcodescanner;
-
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.support.v4.content.res.ResourcesCompat;
-
+import androidx.core.content.res.ResourcesCompat;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;

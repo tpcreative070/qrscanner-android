@@ -4,10 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.StyleRes;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +11,11 @@ import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 import com.kunzisoft.switchdatetime.date.OnYearSelectedListener;
 import com.kunzisoft.switchdatetime.date.widget.ListPickerYearView;
@@ -132,7 +133,8 @@ public class SwitchDateTimeDialogFragment extends DialogFragment {
     }
 
     @Override
-    public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
+    public @NonNull
+    Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
         assert getActivity() != null;
