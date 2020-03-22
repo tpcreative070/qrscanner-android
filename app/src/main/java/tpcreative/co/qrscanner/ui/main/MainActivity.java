@@ -306,6 +306,14 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     }
 
     @Override
+    public void onScannerDone() {
+        Utils.Log(TAG,"onScannerDone");
+        if (viewPager!=null){
+            viewPager.setCurrentItem(0);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
@@ -315,6 +323,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     public void onNetworkConnectionChanged(boolean isConnected) {
         Log.d(TAG,"Network changed :"+ isConnected);
     }
+
 
     @Override
     protected void onResume() {

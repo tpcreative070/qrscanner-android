@@ -131,6 +131,8 @@ public class SettingsFragment extends BaseFragment {
 
         private MyPreference myPreferenceFileColor;
 
+        private MySwitchPreference myPreferenceMultipleScan;
+
         private MyPreference myPreferenceSuperSafe;
 
         private MyPreferenceCategory myPreferenceCategoryFamilyApps;
@@ -320,6 +322,11 @@ public class SettingsFragment extends BaseFragment {
             myPreferenceFileColor.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceFileColor.setOnPreferenceChangeListener(createChangeListener());
 
+            /*Multiple scan*/
+            myPreferenceMultipleScan = (MySwitchPreference) findPreference(getString(R.string.key_multiple_scan));
+            myPreferenceMultipleScan.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceMultipleScan.setOnPreferenceChangeListener(createChangeListener());
+
 
             myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {
                 @Override
@@ -334,8 +341,10 @@ public class SettingsFragment extends BaseFragment {
 
             if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
                 myPreferenceFileColor.setVisible(true);
+                myPreferenceMultipleScan.setVisible(true);
             } else {
                 myPreferenceFileColor.setVisible(false);
+                myPreferenceMultipleScan.setVisible(false);
             }
 
 

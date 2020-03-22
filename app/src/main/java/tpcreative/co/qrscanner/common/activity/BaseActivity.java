@@ -34,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
             onStartCount = 2;
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
     }
 

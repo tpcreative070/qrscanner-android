@@ -9,11 +9,13 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.crashlytics.android.answers.Answers;
@@ -48,6 +50,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.Util;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
@@ -66,6 +69,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
+import tpcreative.co.qrscanner.common.DelayShowUIListener;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.SingletonScanner;
@@ -92,6 +96,10 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     ImageView imgCreate;
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView barcodeScannerView;
+    @BindView(R.id.btnDone)
+    Button btnDone;
+    @BindView(R.id.tvCount)
+    TextView tvCount;
     private BeepManager beepManager;
     private CameraSettings cameraSettings = new CameraSettings();
     private int typeCamera = 0 ;
@@ -272,12 +280,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 if (result.getBarcodeFormat()!=null){
                     create.barcodeFormat = result.getBarcodeFormat().name();
                 }
-
-                beepManager.playBeepSoundAndVibrate();
-                if (barcodeScannerView!=null){
-                       barcodeScannerView.pauseAndWait();
-                }
-                Navigator.onResultView(getActivity(),create,ScannerResultFragment.class);
+                doNavigation(create);
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -287,6 +290,31 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                         .putContentId(System.currentTimeMillis() + "-"+QRScannerApplication.getInstance().getDeviceId()));
             }
         }
+
+        public void doNavigation(Create create){
+            if (Utils.isMultipleScan()){
+                btnDone.setVisibility(View.VISIBLE);
+                tvCount.setVisibility(View.VISIBLE);
+                presenter.updateValue(1);
+                presenter.doSaveItems(create);
+                if (barcodeScannerView!=null){
+                    barcodeScannerView.pauseAndWait();
+                    Utils.onObserveVisitView(1000, new DelayShowUIListener() {
+                        @Override
+                        public void onSetVisitView() {
+                            barcodeScannerView.resume();
+                        }
+                    });
+                }
+            }else{
+                Navigator.onResultView(getActivity(),create,ScannerResultFragment.class);
+                if (barcodeScannerView!=null){
+                    barcodeScannerView.pauseAndWait();
+                }
+            }
+            beepManager.playBeepSoundAndVibrate();
+        }
+
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
@@ -519,6 +547,12 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             }
         });
         view.startAnimation(mAnim);
+    }
+
+    @OnClick(R.id.btnDone)
+    public void onclickDone(){
+        Log.d(TAG,"Done");
+        SingletonResponse.getInstance().onScannerDone();
     }
 
     @Override
@@ -818,6 +852,10 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         super.onPause();
     }
 
+    @Override
+    public void updateValue(String value) {
+        tvCount.setText(value);
+    }
 
     /*Share File To QRScanner*/
     void onHandlerIntent(){
