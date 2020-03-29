@@ -109,7 +109,7 @@ public class Utils {
             public void run() {
                 multilineSnackbar(
                         Snackbar.make(
-                                view, text, BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                view, text, 1)
                                 .setAction(R.string.got_it, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -127,7 +127,7 @@ public class Utils {
             public void run() {
                 multilineSnackbar(
                         Snackbar.make(
-                                view, text, BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                view, text, 1)
                                 .setAction(R.string.got_it, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -209,7 +209,7 @@ public class Utils {
 
     public static boolean checkCameraBack(Context context) {
         if (context.getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA)) {
+                PackageManager.FEATURE_CAMERA_ANY)) {
             return true;
         }
         return false;
@@ -580,6 +580,10 @@ public class Utils {
 
                     }
                 });
+    }
+
+    public static boolean isMultipleScan(){
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_multiple_scan),false);
     }
 
 }

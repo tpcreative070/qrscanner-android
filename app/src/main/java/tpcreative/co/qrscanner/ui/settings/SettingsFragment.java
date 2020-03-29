@@ -131,6 +131,8 @@ public class SettingsFragment extends BaseFragment {
 
         private MyPreference myPreferenceFileColor;
 
+        private MySwitchPreference myPreferenceMultipleScan;
+
         private MyPreference myPreferenceSuperSafe;
 
         private MyPreferenceCategory myPreferenceCategoryFamilyApps;
@@ -265,7 +267,6 @@ public class SettingsFragment extends BaseFragment {
             super.onCreate(savedInstanceState);
 
             /*Version**/
-
             mVersionApp = (MyPreference) findPreference(getString(R.string.key_version));
             mVersionApp.setSummary(String.format("Version: %s", BuildConfig.VERSION_NAME));
 
@@ -281,19 +282,16 @@ public class SettingsFragment extends BaseFragment {
             }
 
             /*App Permissions*/
-
             myPreferencePermissions = (MyPreference) findPreference(getString(R.string.key_app_permissions));
             myPreferencePermissions.setOnPreferenceChangeListener(createChangeListener());
             myPreferencePermissions.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
             /*Share app*/
-
             myPreferenceShare = (MyPreference) findPreference(getString(R.string.key_share));
             myPreferenceShare.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceShare.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
             /*Rate*/
-
             myPreferenceRate = (MyPreference) findPreference(getString(R.string.key_rate));
             myPreferenceRate.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceRate.setOnPreferenceClickListener(createActionPreferenceClickListener());
@@ -303,13 +301,10 @@ public class SettingsFragment extends BaseFragment {
             myPreferenceSupport.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceSupport.setOnPreferenceChangeListener(createChangeListener());
 
-
-
             /*Help*/
             myPreferenceHelp = (MyPreference) findPreference(getString(R.string.key_help));
             myPreferenceHelp.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceHelp.setOnPreferenceChangeListener(createChangeListener());
-
 
             /*Vibrate*/
             mySwitchPreferenceVibrate = (MySwitchPreference) findPreference(getString(R.string.key_vibrate));
@@ -322,11 +317,15 @@ public class SettingsFragment extends BaseFragment {
             myPreferenceTheme.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceTheme.setVisible(false);
 
-
             /*File color*/
             myPreferenceFileColor = (MyPreference) findPreference(getString(R.string.key_color_code));
             myPreferenceFileColor.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceFileColor.setOnPreferenceChangeListener(createChangeListener());
+
+            /*Multiple scan*/
+            myPreferenceMultipleScan = (MySwitchPreference) findPreference(getString(R.string.key_multiple_scan));
+            myPreferenceMultipleScan.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            myPreferenceMultipleScan.setOnPreferenceChangeListener(createChangeListener());
 
 
             myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {
@@ -342,8 +341,10 @@ public class SettingsFragment extends BaseFragment {
 
             if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
                 myPreferenceFileColor.setVisible(true);
+                myPreferenceMultipleScan.setVisible(true);
             } else {
                 myPreferenceFileColor.setVisible(false);
+                myPreferenceMultipleScan.setVisible(false);
             }
 
 
@@ -414,7 +415,6 @@ public class SettingsFragment extends BaseFragment {
             addPreferencesFromResource(R.xml.pref_general);
         }
 
-
         public void onSuperSafe() {
             Uri uri = Uri.parse("market://details?id=" + getString(R.string.supersafe_live));
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -463,6 +463,4 @@ public class SettingsFragment extends BaseFragment {
             }
         }
     }
-
-
 }

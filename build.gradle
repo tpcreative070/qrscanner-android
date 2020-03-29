@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.6.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.google.gms:google-services:4.3.2'
         // NOTE: Do not place your application dependencies here; they belong
@@ -63,8 +63,8 @@ task clean(type: Delete) {
 }
 
 subprojects {
-    ext.appVersionCode = 145
-    ext.appVersionName = "1.4.5"
+    ext.appVersionCode = 147
+    ext.appVersionName = "1.4.7"
     ext.appMinSdkVersion = 19
     ext.appSupportVersion = "1.0.2"
     ext.appReactivexAndroid = "2.1.1"

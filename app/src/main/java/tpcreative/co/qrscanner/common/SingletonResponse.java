@@ -49,11 +49,18 @@ public class SingletonResponse {
         }
     }
 
+    public void onScannerDone(){
+        if (listener!=null){
+            listener.onScannerDone();
+        }
+    }
+
     public interface SingleTonResponseListener{
         void showScannerPosition();
         void showCreatePosition();
         void showAlertLatestVersion();
         void onNetworkConnectionChanged(boolean isConnected);
         void onResumeAds();
+        void onScannerDone();
     }
 }

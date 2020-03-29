@@ -107,7 +107,7 @@
     <string name="got_it">OK, GOT IT</string>
     <string name="copy">Copy</string>
     <string name="error_occurred_importing">Error occurred importing</string>
-    <string name="please_choose_correctly_format">Please choose pictures is QRCode or BarCode</string>
+    <string name="please_choose_correctly_format">Please choose "if" pictures is QRCode or BarCode</string>
     <string name="alert_end_event">Ending event data time must be greater than begin date time</string>
     <string name="alert_start_event">Starting event data time must be greater than current date time</string>
     <string name="can_not_support_this_format">Can not support this file format</string>
@@ -132,6 +132,8 @@
     <string name="summary">Premium version will be removed advertising</string>
     <string name="tpcreative">http://tpcreative.co</string>
     <string name="query_input">Input a query</string>
+    <string name="done">Done</string>
+    <string name="total">Total</string>
 
     <string name="admob_app_id">ca-app-pub-4761335417049737~8922362230</string>
     <string name="banner_review">ca-app-pub-4216004431450294/5791828099</string>
@@ -214,7 +216,7 @@
     <string name="key_current_code_version"></string>
     <string name="scan_code_via_Camera">Scan BarCode And QRCode Via Camera.</string>
     <string name="scan_code_via_Gallery">Scan BarCode And QRCode From Gallery.</string>
-    <string name="choose_files">Where the files was stored(Check item -> choose share icon).</string>
+    <string name="choose_files">Where the files are stored(Check item -> choose share icon).</string>
     <string name="choose_qrscanner_app">Choose QR Scanner app(select app -> waiting for great result ^^).</string>
 
     <string name="connected_wifi_successful">Wifi Connected Was Successful</string>
@@ -259,6 +261,8 @@
     <string name="key_auto_navigate_to_browser_detail">URI format: Auto navigate to Web Browser</string>
     <string name="database_name">db-qr-scanner</string>
     <string name="key_waiting_for_show_ads">waiting_for_show_ads</string>
+    <string name="key_multiple_scan">Multiple scan</string>
+    <string name="key_multiple_scan_detail">Scan multiple QR codes at one</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>
