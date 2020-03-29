@@ -553,6 +553,16 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     public void onclickDone(){
         Log.d(TAG,"Done");
         SingletonResponse.getInstance().onScannerDone();
+        if (barcodeScannerView!=null){
+            barcodeScannerView.pause();
+        }
+        presenter.doRefreshView();
+    }
+
+    @Override
+    public void doRefreshView() {
+        btnDone.setVisibility(View.INVISIBLE);
+        tvCount.setVisibility(View.INVISIBLE);
     }
 
     @Override
