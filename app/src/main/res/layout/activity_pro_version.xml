@@ -141,6 +141,35 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:tint="?attr/colorAccent"
+                        android:src="@drawable/baseline_more_white_48"
+                        android:layout_width="@dimen/icon_size_25"
+                        android:layout_height="@dimen/icon_size_25"/>
+
+                    <TextView
+                        android:textSize="@dimen/medium_16"
+                        style="@style/brandonRegularTextView"
+                        android:text="@string/key_multiple_scan_detail"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    baseline_more_white_48
+
                 </LinearLayout>
 
                 <LinearLayout
