@@ -182,6 +182,12 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         }
     }
 
+    public void doRefreshView(){
+        ScannerView view = view();
+        mCount = 0;
+        view.doRefreshView();
+    }
+
     private void onShowUI(Create create){
         /*Adding new columns*/
         history.barcodeFormat = create.barcodeFormat;
