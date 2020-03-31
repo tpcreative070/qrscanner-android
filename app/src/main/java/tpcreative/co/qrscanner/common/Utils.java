@@ -68,6 +68,7 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.TimeHelper;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.ThemeUtil;
@@ -461,7 +462,7 @@ public class Utils {
         String root = QRScannerApplication.getInstance().getPathFolder();
         File myDir = new File(root);
         myDir.mkdirs();
-        String fname = "Image_"+ type + code +".jpg";
+        String fname = "Image_"+ type + "_"+TimeHelper.getInstance().getString() +".jpg";
         fname = fname.replace("/","");
         fname = fname.replace(":","");
         File file = new File (myDir, fname);
