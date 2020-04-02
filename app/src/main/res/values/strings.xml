@@ -27,6 +27,7 @@
     <string name="history">History</string>
     <string name="save">Save</string>
     <string name="settings">Settings</string>
+    <string name="barcode">Barcode</string>
     <string name="email">Email</string>
     <string name="message">Message</string>
     <string name="location">Location</string>
@@ -113,6 +114,12 @@
     <string name="can_not_support_this_format">Can not support this file format</string>
     <string name="info">Information</string>
     <string name="tvPrimacyPolicy">https://sites.google.com/view/tpcreative/home</string>
+    <string name="warning_barcode_length_13">The given text is not valid for the format "EAN 13"</string>
+    <string name="warning_barcode_length_8">The given text is not valid for the format "EAN 8"</string>
+    <string name="random">Generate random digits</string>
+    <string name="hint_13">12 digits + 1 checksum digit</string>
+    <string name="hint_8">7 digits + 1 checksum digit</string>
+    <string name="generate_barcode">Generate Barcode</string>
     <string name="key_help">help</string>
     <string name="key_privacy_policy">privacy_policy</string>
     <string name="key_rate">rate</string>

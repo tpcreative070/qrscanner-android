@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -68,6 +69,7 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.TimeHelper;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.ThemeUtil;
@@ -461,7 +463,7 @@ public class Utils {
         String root = QRScannerApplication.getInstance().getPathFolder();
         File myDir = new File(root);
         myDir.mkdirs();
-        String fname = "Image_"+ type + code +".jpg";
+        String fname = "Image_"+ type + "_"+TimeHelper.getInstance().getString() +".jpg";
         fname = fname.replace("/","");
         fname = fname.replace(":","");
         File file = new File (myDir, fname);
@@ -586,4 +588,77 @@ public class Utils {
         return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_multiple_scan),false);
     }
 
+    public static boolean isProVersion(){
+        if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))) {
+            return  true;
+        }
+        return  false;
+    }
+
+    public static String generateEAN(String barcode) {
+        int first = 0;
+        int second = 0;
+
+        if(barcode.length() == 7 || barcode.length() == 12) {
+
+            for (int counter = 0; counter < barcode.length() - 1; counter++) {
+                first = (first + Integer.valueOf(barcode.substring(counter, counter + 1)));
+                counter++;
+                second = (second + Integer.valueOf(barcode.substring(counter, counter + 1)));
+            }
+            second = second * 3;
+            int total = second + first;
+            int roundedNum = Math.round((total + 9) / 10 * 10);
+
+            barcode = barcode + String.valueOf(roundedNum - total);
+        }
+        return barcode;
+    }
+
+    public static int generateRandomDigits(int n) {
+        int m = (int) Math.pow(10, n - 1);
+        return m + new Random().nextInt(9 * m);
+    }
+
+    public static int checkSum(String code){
+        int val=0;
+        for(int i=0; i<code.length()-1; i++){
+            val+=((int)Integer.parseInt(code.charAt(i)+""))*((i%2==0)?1:3);
+        }
+        int checksum_digit = (10 - (val % 10)) % 10;
+        return checksum_digit;
+    }
+
+    public static boolean checkGTIN (String gtin) {
+
+        int[] CheckDigitArray = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[] gtinMaths       = {3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3};
+        String[] BarcodeArray = gtin.split("(?!^)");
+        int gtinLength = gtin.length();
+        int modifier = (17 - (gtinLength - 1));
+        int gtinCheckDigit = Integer.parseInt(gtin.substring(gtinLength - 1));
+        int tmpCheckDigit = 0;
+        int tmpCheckSum = 0;
+        int tmpMath = 0;
+        int i=0;
+        int ii=0;
+
+        // Run through and put digits into multiplication table
+        for (i=0; i < (gtinLength - 1); i++) {
+            CheckDigitArray[modifier + i] = Integer.parseInt(BarcodeArray[i]);  // Add barcode digits to Multiplication Table
+        }
+
+        // Calculate "Sum" of barcode digits
+        for (ii=modifier; ii < 17; ii++) {
+            tmpCheckSum += (CheckDigitArray[ii] * gtinMaths[ii]);
+        }
+
+        // Difference from Rounded-Up-To-Nearest-10 - Fianl Check Digit Calculation
+        tmpCheckDigit = (int) ((Math.ceil((float) tmpCheckSum / (float) 10) * 10) - tmpCheckSum);
+
+        // Check if last digit is same as calculated check digit
+        if (gtinCheckDigit == tmpCheckDigit)
+            return true;
+        return false;
+    }
 }

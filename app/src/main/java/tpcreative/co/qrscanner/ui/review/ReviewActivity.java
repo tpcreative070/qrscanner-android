@@ -34,6 +34,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.client.result.ParsedResultType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -189,7 +190,12 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 break;
 
             case PRODUCT:
-
+                code = create.productId;
+                save = new Save();
+                save.text = create.productId;
+                save.createType = create.createType.name();
+                save.barcodeFormat = create.barcodeFormat;
+                onGenerateReview(code);
                 break;
             case URI:
                 code = create.url;
@@ -278,7 +284,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 onGenerateReview(code);
                 break;
         }
-
         presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
         presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SAVE,R.drawable.baseline_save_alt_white_48,"Save"));
         onReloadData();
@@ -288,7 +293,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
     public void onReloadData() {
         adapter.setDataSource(presenter.mListItemNavigation);
     }
-
 
     public void onAddPermissionSave(final EnumAction enumAction) {
         Dexter.withActivity(this)
@@ -350,7 +354,11 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
             Utils.Log(TAG, "Starting save items 0");
-            bitmap = barcodeEncoder.encodeBitmap(this, theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 400, 400, hints);
+            if (create.createType == ParsedResultType.PRODUCT){
+                bitmap = barcodeEncoder.encodeBitmap(this, theme.getPrimaryDarkColor(), code, BarcodeFormat.valueOf(create.barcodeFormat), 400, 400, hints);
+            }else{
+                bitmap = barcodeEncoder.encodeBitmap(this, theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 400, 400, hints);
+            }
             Utils.saveImage(bitmap, enumAction, create.createType.name(), code, ReviewActivity.this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -364,7 +372,9 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
         switch (enumAction) {
             case SAVE: {
                 /*Adding new columns*/
-                save.barcodeFormat = BarcodeFormat.QR_CODE.name();
+                if (save.createType != ParsedResultType.PRODUCT.name()){
+                    save.barcodeFormat = BarcodeFormat.QR_CODE.name();
+                }
                 save.favorite = false;
                 Toast.makeText(this, "Saved code successful => Path: " + path, Toast.LENGTH_LONG).show();
                 save.createDatetime = Utils.getCurrentDateTime();
@@ -438,7 +448,12 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 200, 200, hints);
+            Utils.Log(TAG,"barcode====================> "+ code +"--" +create.createType.name());
+            if (create.createType == ParsedResultType.PRODUCT){
+                bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.valueOf(create.barcodeFormat), 200, 200, hints);
+            }else{
+                bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 200, 200, hints);
+            }
             imgResult.setImageBitmap(bitmap);
         } catch (Exception e) {
             e.printStackTrace();

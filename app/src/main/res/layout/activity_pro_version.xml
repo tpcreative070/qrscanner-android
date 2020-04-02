@@ -167,9 +167,31 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+                </LinearLayout>
 
-                    baseline_more_white_48
+                <LinearLayout
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="23dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:tint="?attr/colorAccent"
+                        android:src="@drawable/ic_barcode"
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_25"/>
+
+                    <TextView
+                        android:textSize="@dimen/medium_16"
+                        style="@style/brandonRegularTextView"
+                        android:text="@string/generate_barcode"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -195,9 +217,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_marginBottom="5dp"
@@ -207,7 +227,6 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <Button
                         android:textColor="@color/white"
                         android:textSize="@dimen/medium_16"
@@ -219,7 +238,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/height"/>
                 </LinearLayout>
-
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

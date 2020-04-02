@@ -61,6 +61,7 @@ import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Save;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.ui.create.BarcodeFragment;
 import tpcreative.co.qrscanner.ui.create.ContactFragment;
 import tpcreative.co.qrscanner.ui.create.EmailFragment;
 import tpcreative.co.qrscanner.ui.create.EventFragment;
@@ -349,7 +350,13 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
         final Create create = new Create();
         final Save history = presenter.mList.get(position);
-        if (history.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
+        if (history.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
+            create.productId = history.text;
+            create.barcodeFormat = history.barcodeFormat;
+            Utils.Log(TAG,"Show..." + history.barcodeFormat);
+            create.createType = ParsedResultType.PRODUCT;
+        }
+        else if (history.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
             create.address = history.address;
             create.fullName = history.fullName;
             create.email = history.email;
@@ -437,7 +444,11 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             builder.append("\n");
             builder.append("END:VEVENT");
             code = builder.toString();
-        } else {
+        }
+        else if(share.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())){
+            code = share.text;
+        }
+        else {
             code = share.text;
         }
         onGenerateCode(code);
@@ -446,7 +457,10 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     @Override
     public void onClickEdit(int position) {
         edit = presenter.mList.get(position);
-        if (edit.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
+        if (edit.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
+            Navigator.onGenerateView(getActivity(), edit, BarcodeFragment.class);
+        }
+        else if (edit.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
             Navigator.onGenerateView(getActivity(), edit, ContactFragment.class);
         } else if (edit.createType.equalsIgnoreCase(ParsedResultType.EMAIL_ADDRESS.name())) {
             Navigator.onGenerateView(getActivity(), edit, EmailFragment.class);
@@ -483,7 +497,11 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 400, 400, hints);
+            if (share.createType == ParsedResultType.PRODUCT.name()){
+                bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.valueOf(share.barcodeFormat), 400, 400, hints);
+            }else{
+                bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 400, 400, hints);
+            }
             Utils.saveImage(bitmap, EnumAction.SHARE, share.createType, code, this);
 
         } catch (Exception e) {

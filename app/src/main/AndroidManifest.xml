@@ -118,6 +118,8 @@
         <activity
             android:name=".ui.create.UrlFragment"
             android:label="@string/url" />
+        <activity android:name=".ui.create.BarcodeFragment"
+            android:label="@string/barcode"/>
         <activity android:name=".ui.scannerresult.ScannerResultFragment" />
     </application>
 
