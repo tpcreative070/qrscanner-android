@@ -104,6 +104,7 @@ dependencies {
     */
     /*Circle Design*/
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'commons-validator:commons-validator:1.4.0'
 
     /*Google admod*/
     implementation 'com.google.android.gms:play-services-ads:18.3.0'

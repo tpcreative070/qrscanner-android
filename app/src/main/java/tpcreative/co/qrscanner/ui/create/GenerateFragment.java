@@ -98,39 +98,46 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
 
     @Override
     public void onClickItem(int position, boolean isChecked) {
+        if (!Utils.isProVersion()){
+            position = position + 1;
+        }
         switch (position){
             case 0:{
+                Navigator.onGenerateView(getActivity(),null,BarcodeFragment.class);
+                break;
+            }
+            case 1:{
                 Navigator.onGenerateView(getActivity(),null,EmailFragment.class);
                 break;
             }
-            case 1 :{
+            case 2 :{
                 Navigator.onGenerateView(getActivity(),null,MessageFragment.class);
                 break;
             }
-            case 2 :{
+            case 3 :{
                 Navigator.onGenerateView(getActivity(),null,LocationFragment.class);
                 break;
-            }case 3:{
+            }case 4:{
                 Navigator.onGenerateView(getActivity(),null,EventFragment.class);
                 break;
             }
-            case 4:{
+            case 5:{
                 Navigator.onGenerateView(getActivity(),null,ContactFragment.class);
                 break;
             }
-            case 5:{
+            case 6:{
                 Navigator.onGenerateView(getActivity(),null,TelephoneFragment.class);
                 break;
             }
-            case 6:{
+            case 7:{
                 Navigator.onGenerateView(getActivity(),null,TextFragment.class);
                 break;
             }
-            case 7:{
+            case 8:{
                 Navigator.onGenerateView(getActivity(),null,WifiFragment.class);
                 break;
             }
-            case 8:{
+            case 9:{
                 Navigator.onGenerateView(getActivity(),null,UrlFragment.class);
                 break;
             }
@@ -165,5 +172,10 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
     public void onResume() {
         super.onResume();
         Utils.Log(TAG,"onResume");
+    }
+
+    @Override
+    public void onInitView() {
+
     }
 }

@@ -30,6 +30,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.client.result.ParsedResultType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -532,18 +533,15 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         create = presenter.result;
         switch (create.createType){
             case ADDRESSBOOK:
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("fullName",create.fullName);
                 presenter.hashClipboard.put("address",create.address);
                 presenter.hashClipboard.put("phone",create.phone);
                 presenter.hashClipboard.put("email",create.email);
-
                 contactFullName.setText(create.fullName);
                 contactAddress.setText(create.address);
                 contactPhone.setText(create.phone);
                 contactEmail.setText(create.email);
-
                 history = new History();
                 history.fullName = create.fullName;
                 history.address = create.address;
@@ -560,17 +558,13 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 setTitle("AddressBook");
                 break;
             case EMAIL_ADDRESS:
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("email",create.email);
                 presenter.hashClipboard.put("subject",create.subject);
                 presenter.hashClipboard.put("message",create.message);
-
-
                 emailTo.setText(create.email);
                 emailSubject.setText(create.subject);
                 emailMessage.setText(create.message);
-
                 history = new History();
                 history.email = create.email;
                 history.subject = create.subject;
@@ -582,7 +576,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 else{
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
-
                 onShowUI(llEmail);
                 setTitle("Email");
                 break;
@@ -593,7 +586,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history = new History();
                 history.text = create.productId;
                 history.createType = create.createType.name();
-
+                history.barcodeFormat = create.barcodeFormat;
                 presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Product"));
@@ -606,16 +599,12 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 setTitle("Product");
                 break;
             case URI:
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("url",create.url);
-
-
                 urlAddress.setText(create.url);
                 history = new History();
                 history.url = create.url;
                 history.createType = create.createType.name();
-
                 presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_language_white_48,"Url"));
@@ -630,20 +619,16 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                     onOpenWebSites(create.url);
                 }
                 break;
-
             case WIFI:
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("ssId",create.ssId);
                 presenter.hashClipboard.put("password",create.password);
                 presenter.hashClipboard.put("networkEncryption",create.networkEncryption);
                 presenter.hashClipboard.put("hidden",create.hidden ? "Yes" : "No");
-
                 wifiSSID.setText(create.ssId);
                 wifiPassword.setText(create.password);
                 wifiNetworkEncryption.setText(create.networkEncryption);
                 wifiHidden.setText(create.hidden ? "Yes" : "No");
-
                 history = new History();
                 history.ssId = create.ssId;
                 history.password = create.password;
@@ -656,104 +641,78 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 else{
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
-
                 onShowUI(llWifi);
                 setTitle("Wifi");
                 break;
-
             case GEO:
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("lat",create.lat+"");
                 presenter.hashClipboard.put("lon",create.lon+"");
                 presenter.hashClipboard.put("query",create.query);
-
-
                 locationLatitude.setText("" + create.lat);
                 locationLongitude.setText("" + create.lon);
                 locationQuery.setText("" + create.query);
-
                 history = new History();
                 history.lat = create.lat;
                 history.lon = create.lon;
                 history.query = create.query;
                 history.createType = create.createType.name();
-
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_location_on_white_48,"Location"));
 
                 }else{
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
-
                 onShowUI(llLocation);
                 setTitle("Location");
                 break;
             case TEL:
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("phone",create.phone);
-
-
                 telephoneNumber.setText(create.phone);
                 history = new History();
                 history.phone = create.phone;
                 history.createType = create.createType.name();
-
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_phone_white_48,"Telephone"));
 
                 }else{
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
-
                 onShowUI(llTelephone);
                 setTitle("Telephone");
-
                 break;
             case SMS:
-
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("phone",create.phone);
                 presenter.hashClipboard.put("message",create.message);
-
-
                 smsTo.setText(create.phone);
                 smsMessage.setText(create.message);
-
                 history = new History();
                 history.phone = create.phone;
                 history.message = create.message;
                 history.createType = create.createType.name();
-
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"SMS"));
                 }
                 else{
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SHARE,R.drawable.baseline_share_white_48,"Share"));
                 }
-
                 onShowUI(llSMS);
                 setTitle("SMS");
                 break;
             case CALENDAR:
-
-
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("title",create.title);
                 presenter.hashClipboard.put("location",create.location);
                 presenter.hashClipboard.put("description",create.description);
                 presenter.hashClipboard.put("startEventMilliseconds",Utils.convertMillisecondsToDateTime(create.startEventMilliseconds));
                 presenter.hashClipboard.put("endEventMilliseconds",Utils.convertMillisecondsToDateTime(create.endEventMilliseconds));
-
                 eventTitle.setText(create.title);
                 eventLocation.setText(create.location);
                 eventDescription.setText(create.description);
                 eventBeginTime.setText(Utils.convertMillisecondsToDateTime(create.startEventMilliseconds));
                 eventEndTime.setText(Utils.convertMillisecondsToDateTime(create.endEventMilliseconds));
-
-
                 history = new History();
                 history.title = create.title;
                 history.location = create.location;
@@ -773,7 +732,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 onShowUI(llEvent);
                 setTitle("Calendar");
                 Utils.Log(TAG,"start milliseconds : " + create.startEventMilliseconds);
-
                 break;
             case ISBN:
                 /*Put item to HashClipboard*/
@@ -782,7 +740,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history = new History();
                 history.text = create.ISBN;
                 history.createType = create.createType.name();
-
                 presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Share"));
@@ -800,7 +757,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 history = new History();
                 history.text = create.text;
                 history.createType = create.createType.name();
-
                 presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER){
                     presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.Other,R.drawable.baseline_textsms_white_48,"Text"));
@@ -867,7 +823,12 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.MARGIN, 2);
             Theme theme = Theme.getInstance().getThemeInfo();
-            bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
+            if (history.createType == ParsedResultType.PRODUCT.name()){
+                bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryDarkColor(),code, BarcodeFormat.valueOf(history.barcodeFormat), 400, 400,hints);
+            }else{
+                bitmap = barcodeEncoder.encodeBitmap(this,theme.getPrimaryDarkColor(),code, BarcodeFormat.QR_CODE, 400, 400,hints);
+            }
+
             Utils.saveImage(bitmap,enumAction,create.createType.name(),code,this);
         } catch(Exception e) {
             Utils.Log(TAG,e.getMessage());

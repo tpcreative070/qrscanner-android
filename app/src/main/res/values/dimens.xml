@@ -10,6 +10,7 @@
     <dimen name="icon_size_50">50dp</dimen>
     <dimen name="icon_size_60">60dp</dimen>
     <dimen name="icon_size_25">25dp</dimen>
+    <dimen name="icon_size_22">22dp</dimen>
     <dimen name="icon_size_20">18dp</dimen>
     <dimen name="icon_size_200">200dp</dimen>
     <dimen name="icon_size_100">100dp</dimen>

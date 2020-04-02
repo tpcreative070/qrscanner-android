@@ -6,5 +6,6 @@ public enum  EnumAction {
     PRINT,
     CLIPBOARD,
     SEARCH,
+    BARCODE,
     Other
 }
