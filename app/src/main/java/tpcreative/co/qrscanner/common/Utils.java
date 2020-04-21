@@ -515,6 +515,31 @@ public class Utils {
         }
     }
 
+    public static boolean isDebug(){
+        if (BuildConfig.DEBUG){
+            return true;
+        }
+        return  false;
+    }
+
+    public static boolean isRelease(){
+        if (!BuildConfig.DEBUG){
+            if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isFreeRelease(){
+        if (!BuildConfig.DEBUG){
+            if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void copyToClipboard(String copyText) {
         android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
                 QRScannerApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);

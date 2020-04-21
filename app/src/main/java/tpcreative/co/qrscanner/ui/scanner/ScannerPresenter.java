@@ -215,4 +215,12 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         return "";
     }
 
+    public void doShowAds(){
+        ScannerView view = view();
+        if (Utils.isDebug() || Utils.isFreeRelease()){
+            view.doShowAds(true);
+        }else{
+            view.doShowAds(false);
+        }
+    }
 }

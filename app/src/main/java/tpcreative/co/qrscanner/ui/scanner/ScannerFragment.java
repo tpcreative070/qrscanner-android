@@ -17,9 +17,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -100,6 +102,8 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     Button btnDone;
     @BindView(R.id.tvCount)
     TextView tvCount;
+    @BindView(R.id.llAds)
+    LinearLayout llAds;
     private BeepManager beepManager;
     private CameraSettings cameraSettings = new CameraSettings();
     private int typeCamera = 0 ;
@@ -375,6 +379,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             }
         }
         onBeepAndVibrate();
+        presenter.doShowAds();
     }
 
     public void switchCamera(final int type){
@@ -910,4 +915,13 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         }
     }
 
+    @Override
+    public void doShowAds(boolean value) {
+        if (value){
+            final AdView ads = getAdsView();
+            if (ads!=null){
+                llAds.addView(ads);
+            }
+        }
+    }
 }
