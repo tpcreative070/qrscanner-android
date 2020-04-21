@@ -9,9 +9,16 @@ import android.view.WindowManager;
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.view.Bungee;
 
@@ -103,6 +110,56 @@ public class BaseActivity extends AppCompatActivity {
         } else if (onStartCount == 1) {
             onStartCount++;
         }
+    }
+
+    public AdView getAdsView(){
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        if (Utils.isFreeRelease()){
+            if(Utils.isDebug()){
+                adView.setAdUnitId(getString(R.string.banner_home_footer_test));
+            }else{
+                adView.setAdUnitId(getString(R.string.banner_footer));
+            }
+        }else{
+            adView.setAdUnitId(getString(R.string.banner_home_footer_test));
+        }
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
+        return adView;
     }
 
 }

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.ads.AdView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -64,7 +66,7 @@ import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener{
+public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener, MainView{
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewPagerAdapter adapter;
     private Storage storage;
@@ -82,7 +84,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @BindView(R.id.rlScanner)
     RelativeLayout rlScanner;
     private boolean isLoaded = false;
-
+    @BindView(R.id.llAds)
+    LinearLayout llAds;
+    private MainPresenter presenter;
     private int[] tabIcons = {
             R.drawable.baseline_history_white_48,
             R.drawable.baseline_add_box_white_48,
@@ -98,6 +102,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        presenter = new MainPresenter();
+        presenter.bindView(this);
         if (QRScannerApplication.getInstance().getDeviceId().equals("66801ac00252fe84")){
             finish();
         }
@@ -139,6 +145,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             onVisibleUI();
             onAddPermissionCamera();
         }
+        presenter.doShowAds();
     }
 
     public void onVisibleUI(){
@@ -468,6 +475,16 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
         catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void doShowAds(boolean value) {
+        if (value){
+            final AdView ads = getAdsView();
+            if (ads!=null){
+                llAds.addView(ads);
+            }
         }
     }
 
