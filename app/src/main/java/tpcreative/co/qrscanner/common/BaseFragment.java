@@ -87,7 +87,11 @@ public abstract class BaseFragment extends Fragment {
         AdView adView = new AdView(getContext());
         adView.setAdSize(AdSize.BANNER);
         if (Utils.isFreeRelease()){
-            adView.setAdUnitId(getString(R.string.banner_footer));
+            if(Utils.isDebug()){
+                adView.setAdUnitId(getString(R.string.banner_home_footer_test));
+            }else{
+                adView.setAdUnitId(getString(R.string.banner_footer));
+            }
         }else{
             adView.setAdUnitId(getString(R.string.banner_home_footer_test));
         }

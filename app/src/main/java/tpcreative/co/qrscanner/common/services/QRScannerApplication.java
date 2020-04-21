@@ -51,10 +51,11 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
         Fabric.with(this, new Crashlytics());
         InstanceGenerator.getInstance(this);
         isLive = false;
-        if (!Utils.isRelease()) {
+        if (!Utils.isProVersion()) {
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override
                 public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -62,7 +63,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             });
         }
         ServiceManager.getInstance().setContext(this);
-        mInstance = this;
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory() + "/Pictures/QRScanner";
         storage.createDirectory(pathFolder);

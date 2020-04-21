@@ -102,8 +102,6 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     Button btnDone;
     @BindView(R.id.tvCount)
     TextView tvCount;
-    @BindView(R.id.llAds)
-    LinearLayout llAds;
     private BeepManager beepManager;
     private CameraSettings cameraSettings = new CameraSettings();
     private int typeCamera = 0 ;
@@ -379,7 +377,6 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             }
         }
         onBeepAndVibrate();
-        presenter.doShowAds();
     }
 
     public void switchCamera(final int type){
@@ -912,16 +909,6 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         catch (Exception e){
             Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void doShowAds(boolean value) {
-        if (value){
-            final AdView ads = getAdsView();
-            if (ads!=null){
-                llAds.addView(ads);
-            }
         }
     }
 }

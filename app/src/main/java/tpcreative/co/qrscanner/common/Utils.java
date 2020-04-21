@@ -522,20 +522,16 @@ public class Utils {
         return  false;
     }
 
-    public static boolean isRelease(){
-        if (!BuildConfig.DEBUG){
-            if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release)){
-                return true;
-            }
+    public static boolean isProRelease(){
+        if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release)){
+            return true;
         }
         return false;
     }
 
     public static boolean isFreeRelease(){
-        if (!BuildConfig.DEBUG){
-            if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release)){
-                return true;
-            }
+        if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release)){
+            return true;
         }
         return false;
     }
