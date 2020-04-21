@@ -15,6 +15,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.snatik.storage.Storage;
 import java.util.HashMap;
 import io.fabric.sdk.android.Fabric;
@@ -53,7 +55,11 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         InstanceGenerator.getInstance(this);
         isLive = false;
         if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))) {
-            MobileAds.initialize(this, getString(R.string.admob_app_id));
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
         }
         ServiceManager.getInstance().setContext(this);
         mInstance = this;

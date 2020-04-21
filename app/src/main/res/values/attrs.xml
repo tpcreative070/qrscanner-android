@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="preference_title" format="reference"/>
+    <attr name="preference_summary" format="reference"/>
+    <attr name="preference_icon" format="reference"/>
+</resources>

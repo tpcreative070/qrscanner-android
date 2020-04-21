@@ -121,6 +121,8 @@
         <activity android:name=".ui.create.BarcodeFragment"
             android:label="@string/barcode"/>
         <activity android:name=".ui.scannerresult.ScannerResultFragment" />
+        <activity android:name=".ui.subscription.SubscriptionActivity"
+            android:label="@string/Premium"/>
     </application>
 
 </manifest>
