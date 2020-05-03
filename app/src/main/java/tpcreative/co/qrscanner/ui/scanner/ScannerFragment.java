@@ -114,6 +114,9 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
         public void barcodeResult(BarcodeResult result) {
             try {
             Utils.Log(TAG,"Call back :" + result.getText() + "  type :"  +result.getBarcodeFormat().name());
+            if (getActivity() ==null){
+                return;
+            }
             ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
                 final ParsedResult parsedResult = resultHandler.getResult();
                 final Create create = new Create();
@@ -677,6 +680,9 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     }
 
     public void onFilterResult(Result result){
+        if (getActivity() ==null){
+            return;
+        }
         ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result);
         final ParsedResult parsedResult = resultHandler.getResult();
         final Create create = new Create();

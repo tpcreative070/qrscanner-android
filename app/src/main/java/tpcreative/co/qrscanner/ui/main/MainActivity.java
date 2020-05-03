@@ -204,45 +204,48 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     private void initSpeedDial() {
         Utils.Log(TAG, "Init floating button");
-        Drawable drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_select_all_white_48);
-        mSpeedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id
-                .fab_track, drawable)
-                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, getTheme()))
-                .setLabel(getString(R.string.select))
-                .setLabelColor(Color.WHITE)
-                .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
-                        getTheme()))
-                .create());
+        try{
+            Drawable drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_select_all_white_48);
+            mSpeedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id
+                    .fab_track, drawable)
+                    .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, getTheme()))
+                    .setLabel(getString(R.string.select))
+                    .setLabelColor(Color.WHITE)
+                    .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
+                            getTheme()))
+                    .create());
 
-        drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_subtitles_white_48);
-        mSpeedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_csv, drawable)
-                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary,
-                        getTheme()))
-                .setLabel(R.string.csv)
-                .setLabelColor(getResources().getColor(R.color.white))
-                .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
-                        getTheme()))
-                .create());
+            drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_subtitles_white_48);
+            mSpeedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_csv, drawable)
+                    .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary,
+                            getTheme()))
+                    .setLabel(R.string.csv)
+                    .setLabelColor(getResources().getColor(R.color.white))
+                    .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
+                            getTheme()))
+                    .create());
 
 
-        //Set option fabs clicklisteners.
-        mSpeedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
-            @Override
-            public boolean onActionSelected(SpeedDialActionItem actionItem) {
-                final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
-                switch (actionItem.getId()) {
-                    case R.id.fab_track:
-                        SingletonMain.getInstance().isShowDeleteAction(true);
-                        return false; // false will close it without animation
-                    case R.id.fab_csv:
-                        SingletonMain.getInstance().isShowDeleteAction(false);
-                        return false; // closes without animation (same as mSpeedDialView.close(false); return false;)
+            //Set option fabs clicklisteners.
+            mSpeedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+                @Override
+                public boolean onActionSelected(SpeedDialActionItem actionItem) {
+                    final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                    switch (actionItem.getId()) {
+                        case R.id.fab_track:
+                            SingletonMain.getInstance().isShowDeleteAction(true);
+                            return false; // false will close it without animation
+                        case R.id.fab_csv:
+                            SingletonMain.getInstance().isShowDeleteAction(false);
+                            return false; // closes without animation (same as mSpeedDialView.close(false); return false;)
+                    }
+                    return true; // To keep the Speed Dial open
                 }
-                return true; // To keep the Speed Dial open
-            }
-        });
-
-        mSpeedDialView.show();
+            });
+            mSpeedDialView.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void onInitReceiver(){

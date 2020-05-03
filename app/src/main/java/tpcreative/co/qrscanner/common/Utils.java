@@ -496,13 +496,18 @@ public class Utils {
     }
 
     public static String convertStringArrayToString(String[] strArr, String delimiter) {
-        if (strArr==null){
-            return "";
+        try {
+            if (strArr==null){
+                return "";
+            }
+            StringBuilder sb = new StringBuilder();
+            for (String str : strArr)
+                sb.append(str).append(delimiter);
+            return sb.substring(0, sb.length() - 1);
+        }catch (Exception e){
+
         }
-        StringBuilder sb = new StringBuilder();
-        for (String str : strArr)
-            sb.append(str).append(delimiter);
-        return sb.substring(0, sb.length() - 1);
+        return "";
     }
 
     public interface UtilsListener {
