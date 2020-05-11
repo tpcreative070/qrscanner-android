@@ -491,6 +491,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     storage.createFile(storage.getExternalStorageDirectory()+"/.log_completed.txt",Utils.onLogAds("1111"));
                 }
             }
+        }else{
+            if (storage!=null){
+                storage.createFile(storage.getExternalStorageDirectory()+"/.log_completed.txt",Utils.onLogAds("2222"));
+            }
         }
     }
 
