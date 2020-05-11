@@ -14,6 +14,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.snatik.storage.Storage;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -27,6 +28,7 @@ public class BaseActivity extends AppCompatActivity {
     protected ActionBar actionBar ;
     int onStartCount = 0;
     public static final String TAG = BaseActivity.class.getSimpleName();
+    private Storage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class BaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
+        storage = new Storage(this);
     }
 
     @Override
@@ -130,17 +133,23 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
+                if (storage!=null){
+                    storage.createFile(storage.getExternalStorageDirectory()+"/.logs.txt",Utils.onLogAds("0000"));
+                }
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
+                if (storage!=null){
+                    storage.createFile(storage.getExternalStorageDirectory()+"/.logs.txt",Utils.onLogAds(""+errorCode));
+                }
             }
 
             @Override
             public void onAdOpened() {
                 // Code to be executed when an ad opens an overlay that
-                // covers the screen.
+                // covers the screen
             }
 
             @Override
