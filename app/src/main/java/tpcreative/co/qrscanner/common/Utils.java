@@ -528,14 +528,14 @@ public class Utils {
     }
 
     public static boolean isProRelease(){
-        if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release)){
+        if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))){
             return true;
         }
         return false;
     }
 
     public static boolean isFreeRelease(){
-        if (BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release)){
+        if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release))){
             return true;
         }
         return false;
@@ -691,6 +691,6 @@ public class Utils {
     public static String onLogAds(String eventCode){
         String idAds = QRScannerApplication.getInstance().getString(R.string.admob_app_id);
         String banner_id = QRScannerApplication.getInstance().getString(R.string.banner_footer);
-        return  "event-code:"+eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id;
+        return  "event-code:"+eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id + " ;app id: "+BuildConfig.APPLICATION_ID + " ;variant: "+ QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release);
     }
 }
