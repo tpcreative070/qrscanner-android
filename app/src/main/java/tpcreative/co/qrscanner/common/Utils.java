@@ -687,4 +687,10 @@ public class Utils {
             return true;
         return false;
     }
+
+    public static String onLogAds(String eventCode){
+        String idAds = QRScannerApplication.getInstance().getString(R.string.admob_app_id);
+        String banner_id = QRScannerApplication.getInstance().getString(R.string.banner_footer);
+        return  "event-code:"+eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id;
+    }
 }

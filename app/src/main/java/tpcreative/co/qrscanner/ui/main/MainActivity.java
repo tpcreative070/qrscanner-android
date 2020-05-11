@@ -487,6 +487,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             final AdView ads = getAdsView();
             if (ads!=null){
                 llAds.addView(ads);
+                if (storage!=null){
+                    storage.createFile(storage.getExternalStorageDirectory()+"/.log_completed.txt",Utils.onLogAds("1111"));
+                }
             }
         }
     }
