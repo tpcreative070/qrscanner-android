@@ -367,7 +367,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 unregisterReceiver(receiver);
             }
         }
-        PrefsController.putBoolean(getString(R.string.key_second_loads),true);
+        Utils.onSetCountRating(Utils.onGetCountRating() +1);
         ServiceManager.getInstance().onDismissServices();
     }
 
@@ -382,8 +382,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
            super.onBackPressed();
         }
         else{
-            final boolean  isSecondLoad = PrefsController.getBoolean(getString(R.string.key_second_loads),false);
-            if (isSecondLoad){
+            final int  mCountRating = Utils.onGetCountRating();
+            if (mCountRating == 5){
                 final boolean isPositive = PrefsController.getBoolean(getString(R.string.we_are_a_team_positive),false);
                 if (!isPositive){
                     showEncourage();
@@ -397,7 +397,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         }
     }
-
 
     public void onRateApp() {
         Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release));
