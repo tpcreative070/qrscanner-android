@@ -132,18 +132,13 @@ public class BaseActivity extends AppCompatActivity {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-                if (storage!=null){
-                    storage.createFile(storage.getExternalStorageDirectory()+"/.logs.txt",Utils.onLogAds("0000"));
-                }
+                Utils.onWriteLogs(BaseActivity.this,"logs.txt","0000");
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
-                if (storage!=null){
-                    storage.createFile(storage.getExternalStorageDirectory()+"/.logs.txt",Utils.onLogAds(""+errorCode));
-                }
+                Utils.onWriteLogs(BaseActivity.this,"logs.txt",""+errorCode);
             }
 
             @Override
