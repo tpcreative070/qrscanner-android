@@ -16,12 +16,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatImageView;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
-import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -89,13 +87,13 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     @BindView(R.id.zxing_status_view)
     TextView zxing_status_view;
     @BindView(R.id.switch_flashlight)
-    ImageView switch_flashlight;
+    AppCompatImageView switch_flashlight;
     @BindView(R.id.imgGallery)
-    ImageView imgGallery;
+    AppCompatImageView imgGallery;
     @BindView(R.id.switch_camera)
-    ImageView switch_camera;
+    AppCompatImageView switch_camera;
     @BindView(R.id.imgCreate)
-    ImageView imgCreate;
+    AppCompatImageView imgCreate;
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView barcodeScannerView;
     @BindView(R.id.btnDone)

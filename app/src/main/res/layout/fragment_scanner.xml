@@ -29,7 +29,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_alignParentLeft="true"
                     android:layout_centerInParent="true"
                     android:id="@+id/switch_camera"
@@ -41,7 +41,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/switch_flashlight"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
@@ -54,7 +54,7 @@
                     android:layout_height="50dp"
                     android:padding="2dp"/>
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_toLeftOf="@+id/imgGallery"
                     android:layout_centerInParent="true"
                     android:id="@+id/imgCreate"
@@ -66,7 +66,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgGallery"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
