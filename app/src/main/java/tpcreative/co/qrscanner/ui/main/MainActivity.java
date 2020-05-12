@@ -487,14 +487,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             final AdView ads = getAdsView();
             if (ads!=null){
                 llAds.addView(ads);
-                if (storage!=null){
-                    storage.createFile(storage.getExternalStorageDirectory()+"/.log_completed.txt",Utils.onLogAds("1111"));
-                }
+                Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
             }
         }else{
-            if (storage!=null){
-                storage.createFile(storage.getExternalStorageDirectory()+"/.log_completed.txt",Utils.onLogAds("2222"));
-            }
+            Utils.onWriteLogs(this,"logs_completed.txt",""+"2222");
         }
     }
 

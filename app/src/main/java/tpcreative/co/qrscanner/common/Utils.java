@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.common;
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -35,6 +36,13 @@ import androidx.annotation.StringRes;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
+import com.snatik.storage.Storage;
 import com.snatik.storage.helpers.SizeUnit;
 
 import java.io.ByteArrayOutputStream;
@@ -692,5 +700,17 @@ public class Utils {
         String idAds = QRScannerApplication.getInstance().getString(R.string.admob_app_id);
         String banner_id = QRScannerApplication.getInstance().getString(R.string.banner_footer);
         return  "event-code:"+eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id + " ;app id: "+BuildConfig.APPLICATION_ID + " ;variant: "+ QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release);
+    }
+
+    public static void onWriteLogs(Activity activity,String nameLogs,String errorCode){
+        if (activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Utils.Log(TAG,"Granted permission....");
+            final Storage storage = QRScannerApplication.getInstance().getStorage();
+            if (storage!=null){
+                storage.createFile(storage.getExternalStorageDirectory()+"/."+nameLogs,Utils.onLogAds(""+errorCode));
+            }
+        }else{
+            Utils.Log(TAG,"No permission");
+        }
     }
 }

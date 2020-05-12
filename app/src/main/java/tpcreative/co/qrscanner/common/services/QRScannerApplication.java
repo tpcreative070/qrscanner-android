@@ -400,5 +400,9 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             Utils.Log(TAG,"Showing onDismissAds");
         }
     }
+
+    public Storage getStorage() {
+        return storage;
+    }
 }
 
