@@ -52,6 +52,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private InterstitialAd mInterstitialAd;
     private QRScannerAdListener listener ;
     AdView adView;
+    private boolean isLoader = false;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
 
     @Override
@@ -421,6 +422,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
+                isLoader = true;
                 final Activity activity = getActivity();
                 if (activity!=null){
                     Utils.onWriteLogs(activity,"logs.txt","0000");
@@ -430,6 +432,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
+                isLoader = false;
                 final Activity activity = getActivity();
                 if (activity!=null){
                     Utils.onWriteLogs(activity,"logs.txt",""+errorCode);
@@ -470,6 +473,10 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             tempVg.removeView(adView);
         }
         layAd.addView(adView);
+    }
+
+    public boolean isLoader() {
+        return isLoader;
     }
 }
 
