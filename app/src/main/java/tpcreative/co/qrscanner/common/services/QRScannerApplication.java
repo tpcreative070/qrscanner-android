@@ -5,6 +5,8 @@ import android.content.ContextWrapper;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
@@ -13,6 +15,8 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -23,6 +27,7 @@ import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
@@ -46,6 +51,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private AdActivity adActivity;
     private InterstitialAd mInterstitialAd;
     private QRScannerAdListener listener ;
+    AdView adView;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
 
     @Override
@@ -83,7 +89,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         Utils.Log(TAG,"Start ads");
-       // AdsLoader.getInstance().iniAds();
+        getAdsView();
     }
 
     public void onInitInterstitialAds(){
@@ -393,16 +399,77 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         return versionRelease;
     }
 
-    public void onDismissAds(){
-        AdActivity adActivity = QRScannerApplication.getInstance().getAdActivity();
-        if (adActivity!=null){
-            adActivity.finish();
-            Utils.Log(TAG,"Showing onDismissAds");
-        }
-    }
-
     public Storage getStorage() {
         return storage;
+    }
+
+
+    private AdView getAdsView(){
+        adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        if (Utils.isFreeRelease()){
+            if(Utils.isDebug()){
+                adView.setAdUnitId(getString(R.string.banner_home_footer_test));
+            }else{
+                adView.setAdUnitId(getString(R.string.banner_footer));
+            }
+        }else{
+            adView.setAdUnitId(getString(R.string.banner_home_footer_test));
+        }
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                final Activity activity = getActivity();
+                if (activity!=null){
+                    Utils.onWriteLogs(activity,"logs.txt","0000");
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                final Activity activity = getActivity();
+                if (activity!=null){
+                    Utils.onWriteLogs(activity,"logs.txt",""+errorCode);
+                }
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
+        return adView;
+    }
+
+    public void loadAd(LinearLayout layAd) {
+        if (adView==null){
+            return;
+        }
+        if (adView.getParent() != null) {
+            ViewGroup tempVg = (ViewGroup) adView.getParent();
+            tempVg.removeView(adView);
+        }
+        layAd.addView(adView);
     }
 }
 

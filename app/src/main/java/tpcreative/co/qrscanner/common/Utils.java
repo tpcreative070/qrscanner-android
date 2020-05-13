@@ -713,4 +713,13 @@ public class Utils {
             Utils.Log(TAG,"No permission");
         }
     }
+
+    public static void onSetCountRating(int count){
+       PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.count_rating),count);
+    }
+
+    public static int onGetCountRating(){
+        final int  mCountRating = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.count_rating),0);
+        return mCountRating;
+    }
 }

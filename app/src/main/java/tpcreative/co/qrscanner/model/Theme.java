@@ -127,6 +127,7 @@ public class Theme implements Serializable {
                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list),new Gson().toJson(mList));
                PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),BuildConfig.VERSION_CODE);
                PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.we_are_a_team),false);
+               Utils.onSetCountRating(0);
                Utils.Log(TAG,"New install this version");
                return mList;
             }

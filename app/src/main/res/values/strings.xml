@@ -233,7 +233,6 @@
     <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
     <string name="tap_here_to_discover_how_to_scan_description">This tips will help you to use this app more efficient.</string>
 
-    <string name="key_second_loads">second loads</string>
     <string name="key_second_visit_settings">second visit settings</string>
     <string name="progressing">Progressing...</string>
     <string name="importing">Importing...</string>
@@ -248,6 +247,7 @@
     <string name="connected_wifi_failed">Wifi Connected Was Failed</string>
     <string name="connecting">Connecting</string>
     <string name="we_are_a_team">Would you like to support the app development with a rating on Google Play?</string>
+    <string name="count_rating">count_rating</string>
     <string name="we_are_a_team_positive">we_are_a_team_positive</string>
     <string name="report_issue">Report</string>
 
