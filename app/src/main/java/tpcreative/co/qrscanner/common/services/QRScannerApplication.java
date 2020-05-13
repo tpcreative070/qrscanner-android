@@ -90,7 +90,9 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         Utils.Log(TAG,"Start ads");
-        getAdsView();
+        if (!Utils.isProVersion()){
+            getAdsView();
+        }
     }
 
     public void onInitInterstitialAds(){
@@ -405,7 +407,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     }
 
 
-    private AdView getAdsView(){
+    public AdView getAdsView(){
         adView = new AdView(this);
         adView.setAdSize(AdSize.BANNER);
         if (Utils.isFreeRelease()){
@@ -423,6 +425,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             @Override
             public void onAdLoaded() {
                 isLoader = true;
+                Utils.Log(TAG,"Ads successful");
                 final Activity activity = getActivity();
                 if (activity!=null){
                     Utils.onWriteLogs(activity,"logs.txt","0000");
@@ -433,6 +436,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
                 isLoader = false;
+                Utils.Log(TAG,"Ads failed");
                 final Activity activity = getActivity();
                 if (activity!=null){
                     Utils.onWriteLogs(activity,"logs.txt",""+errorCode);
