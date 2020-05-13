@@ -146,6 +146,16 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             onAddPermissionCamera();
         }
         presenter.doShowAds();
+        final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
+        if (!isPressed){
+            final int  mCountRating = Utils.onGetCountRating();
+            if (mCountRating == 5){
+                final boolean isPositive = PrefsController.getBoolean(getString(R.string.we_are_a_team_positive),false);
+                if (!isPositive) {
+                    showEncourage();
+                }
+            }
+        }
     }
 
     public void onVisibleUI(){
@@ -337,6 +347,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     protected void onResume() {
+        presenter.doShowAds();
         super.onResume();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver==null){
@@ -373,29 +384,8 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         Utils.Log(TAG,"onBackPressed");
-        final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
-        if (!isLoaded){
-            return;
-        }
-        if (isPressed){
-           super.onBackPressed();
-        }
-        else{
-            final int  mCountRating = Utils.onGetCountRating();
-            if (mCountRating == 5){
-                final boolean isPositive = PrefsController.getBoolean(getString(R.string.we_are_a_team_positive),false);
-                if (!isPositive){
-                    showEncourage();
-                }
-                else {
-                   super.onBackPressed();
-                }
-            }
-            else{
-               super.onBackPressed();
-            }
-        }
     }
 
     public void onRateApp() {
@@ -483,14 +473,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void doShowAds(boolean value) {
         if (value){
-            final AdView ads = getAdsView();
-            if (ads!=null){
-                llAds.addView(ads);
-                Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
-            }
+            QRScannerApplication.getInstance().loadAd(llAds);
+            Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
         }else{
             Utils.onWriteLogs(this,"logs_completed.txt",""+"2222");
         }
     }
-
 }
