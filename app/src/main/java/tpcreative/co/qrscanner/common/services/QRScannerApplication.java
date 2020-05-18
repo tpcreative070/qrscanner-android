@@ -7,17 +7,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
-
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
