@@ -478,5 +478,4 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             llAds.setVisibility(View.GONE);
         }
     }
-    /*Hello*/
 }
