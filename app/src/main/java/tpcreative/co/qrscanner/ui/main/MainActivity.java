@@ -21,18 +21,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.gms.ads.AdView;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -58,7 +53,6 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
-import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.common.view.CustomViewPager;
 import tpcreative.co.qrscanner.model.History;
 import tpcreative.co.qrscanner.model.Theme;
@@ -83,8 +77,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     SpeedDialView mSpeedDialView;
     @BindView(R.id.rlScanner)
     RelativeLayout rlScanner;
-    private boolean isLoaded = false;
-    @BindView(R.id.llAds)
+    @BindView(R.id.llAdsSub)
     LinearLayout llAds;
     private MainPresenter presenter;
     private int[] tabIcons = {
@@ -111,7 +104,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
         SingletonResponse.getInstance().setListener(this);
-        isLoaded = true;
         storage = new Storage(getApplicationContext());
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -479,11 +471,11 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             QRScannerApplication.getInstance().loadAd(llAds);
             Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
             if (llAds!=null && !QRScannerApplication.getInstance().isLoader()){
-                llAds.setVisibility(View.INVISIBLE);
+                llAds.setVisibility(View.GONE);
             }
         }else{
             Utils.onWriteLogs(this,"logs_completed.txt",""+"2222");
-            llAds.setVisibility(View.INVISIBLE);
+            llAds.setVisibility(View.GONE);
         }
     }
 }

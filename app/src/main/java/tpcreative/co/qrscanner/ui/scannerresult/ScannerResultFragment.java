@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -24,10 +23,6 @@ import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.result.ParsedResultType;
@@ -46,7 +41,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
-import butterknife.OnClick;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
@@ -57,7 +51,6 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
-import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
@@ -180,8 +173,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     RecyclerView recyclerView;
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
-    @BindView(R.id.llAds)
-    LinearLayout llAds;
 
     private ScannerResultAdapter adapter;
     LinearLayoutManager llm;
@@ -214,13 +205,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         presenter.bindView(this);
         setupRecyclerViewItem();
         presenter.getIntent(this);
-        if (!BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.release))){
-            try {
-                //llAds.addView(AdsLoader.getInstance().getAdView());
-            }catch (Exception e){
-                e.getMessage();
-            }
-        }
     }
 
     @Override

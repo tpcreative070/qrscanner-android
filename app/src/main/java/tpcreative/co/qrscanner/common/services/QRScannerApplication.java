@@ -7,17 +7,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
-
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -27,12 +24,10 @@ import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
-import tpcreative.co.qrscanner.common.view.AdsLoader;
 import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 /**
@@ -49,8 +44,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private boolean isLive;
     private MainActivity activity;
     private AdActivity adActivity;
-    private InterstitialAd mInterstitialAd;
-    private QRScannerAdListener listener ;
     AdView adView;
     private boolean isLoader = false;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
@@ -93,177 +86,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         if (!Utils.isProVersion()){
             getAdsView();
         }
-    }
-
-    public void onInitInterstitialAds(){
-        /*Lock here...*/
-        if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freedevelop))) {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen_test));
-            mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    if(listener!=null){
-                        listener.onAdLoaded();
-                    }
-                    Utils.Log(TAG,"onAdLoaded");
-                }
-                @Override
-                public void onAdClosed() {
-                    super.onAdClosed();
-                    if(listener!=null){
-                        listener.onAdClosed();
-                    }
-                    Utils.Log(TAG,"onAdClosed");
-                }
-                @Override
-                public void onAdFailedToLoad(int i) {
-                    super.onAdFailedToLoad(i);
-                    if(listener!=null){
-                        listener.onAdFailedToLoad(i);
-                    }
-                    Utils.Log(TAG,"onAdFailedToLoad");
-                }
-                @Override
-                public void onAdLeftApplication() {
-                    super.onAdLeftApplication();
-                    if(listener!=null){
-                        listener.onAdLeftApplication();
-                    }
-                    Utils.Log(TAG,"onAdLeftApplication");
-                }
-                @Override
-                public void onAdOpened() {
-                    super.onAdOpened();
-                    if(listener!=null){
-                        listener.onAdOpened();
-                    }
-                    Utils.Log(TAG,"onAdOpened");
-                }
-                @Override
-                public void onAdClicked() {
-                    super.onAdClicked();
-                    if(listener!=null){
-                        listener.onAdClicked();
-                    }
-                    Utils.Log(TAG,"onAdClicked");
-                }
-                @Override
-                public void onAdImpression() {
-                    super.onAdImpression();
-                    if(listener!=null){
-                        listener.onAdImpression();
-                    }
-                    Utils.Log(TAG,"onAdImpression");
-                }
-            });
-        }
-        else if (BuildConfig.BUILD_TYPE.equals(getResources().getString(R.string.freerelease))) {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
-            mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            mInterstitialAd.setAdListener(new AdListener() {
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    if(listener!=null){
-                        listener.onAdLoaded();
-                    }
-                    Utils.Log(TAG,"onAdLoaded");
-                }
-                @Override
-                public void onAdClosed() {
-                    super.onAdClosed();
-                    if(listener!=null){
-                        listener.onAdClosed();
-                    }
-                    Utils.Log(TAG,"onAdClosed");
-                }
-                @Override
-                public void onAdFailedToLoad(int i) {
-                    super.onAdFailedToLoad(i);
-                    if(listener!=null){
-                        listener.onAdFailedToLoad(i);
-                    }
-                    Utils.Log(TAG,"onAdFailedToLoad");
-                }
-                @Override
-                public void onAdLeftApplication() {
-                    super.onAdLeftApplication();
-                    if(listener!=null){
-                        listener.onAdLeftApplication();
-                    }
-                    Utils.Log(TAG,"onAdLeftApplication");
-                }
-                @Override
-                public void onAdOpened() {
-                    super.onAdOpened();
-                    if(listener!=null){
-                        listener.onAdOpened();
-                    }
-                    Utils.Log(TAG,"onAdOpened");
-                }
-                @Override
-                public void onAdClicked() {
-                    super.onAdClicked();
-                    if(listener!=null){
-                        listener.onAdClicked();
-                    }
-                    Utils.Log(TAG,"onAdClicked");
-                }
-                @Override
-                public void onAdImpression() {
-                    super.onAdImpression();
-                    if(listener!=null){
-                        listener.onAdImpression();
-                    }
-                    Utils.Log(TAG,"onAdImpression");
-                }
-            });
-        }
-    }
-
-    public void showInterstitial() {
-        if (mInterstitialAd !=null && mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-            if (listener!=null){
-                listener.onShowAds();
-            }
-            Utils.Log(TAG,"show ads");
-        }
-        else{
-            if(listener!=null){
-                listener.onCouldNotShow();
-            }
-            Utils.Log(TAG,"could not show");
-        }
-    }
-
-    public void reloadAds(){
-        if (mInterstitialAd==null){
-            Utils.Log(TAG,"mInterstitialAd is null");
-            onInitInterstitialAds();
-            return;
-        }
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mInterstitialAd.loadAd(adRequest);
-        Utils.Log(TAG,"reloadAds");
-    }
-
-    public void setListener(QRScannerAdListener listener) {
-        this.listener = listener;
-    }
-
-    public interface QRScannerAdListener {
-        void onAdClosed();
-        void onAdFailedToLoad(int var1) ;
-        void onAdLeftApplication() ;
-        void onAdOpened() ;
-        void onAdLoaded() ;
-        void onAdClicked();
-        void onAdImpression() ;
-        void onCouldNotShow();
-        void onShowAds();
     }
 
     @Override
@@ -311,10 +133,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
 
     public AdActivity getAdActivity() {
         return adActivity;
-    }
-
-    public InterstitialAd getmInterstitialAd() {
-        return mInterstitialAd;
     }
 
     @Override

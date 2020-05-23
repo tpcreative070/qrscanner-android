@@ -61,14 +61,23 @@
             app:sdMainFabOpenedSrc="@drawable/baseline_menu_white_24"
             app:sdOverlayLayout="@id/overlay" />
         <LinearLayout
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:layout_centerVertical="true"
             android:background="@color/colorPrimary"
             android:orientation="vertical"
+            android:gravity="center_vertical"
             android:id="@+id/llAds"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:id="@+id/llAdsSub"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="55sp"/>
+
+        </LinearLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
