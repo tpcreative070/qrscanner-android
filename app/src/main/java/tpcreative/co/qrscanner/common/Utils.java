@@ -924,6 +924,14 @@ public class Utils {
                 }else{
                     mList.add(index);
                 }
+            }else {
+                final String mCode = Utils.getCodeContentByGenerate(index);
+                final SaveModel mSave = mMap.get(mCode);
+                if (mSave==null){
+                    mMap.put(mCode,index);
+                }else{
+                    mList.add(index);
+                }
             }
         }
         return mList;
@@ -937,6 +945,14 @@ public class Utils {
                 final HistoryModel mHistory = mMap.get(index.contentUnique);
                 if (mHistory==null){
                     mMap.put(index.contentUnique,index);
+                }else{
+                    mList.add(index);
+                }
+            }else{
+                final String mCode = Utils.getCodeContentByHistory(index);
+                final HistoryModel mHistory = mMap.get(mCode);
+                if (mHistory==null){
+                    mMap.put(mCode,index);
                 }else{
                     mList.add(index);
                 }

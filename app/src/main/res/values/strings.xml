@@ -261,6 +261,8 @@
     <string name="pro_version">Pro Version</string>
     <string name="loading">Loading...</string>
     <string name="SeeYouSoon">See you soon</string>
+    <string name="alert">Alert</string>
+    <string name="found_items_duplicates">Found %1$s items. Do you want to delete it?</string>
 
 
     <string name="selected">selected</string>

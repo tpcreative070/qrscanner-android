@@ -28,9 +28,13 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.SingletonHistory;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.preference.MyPreference;
 import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory;
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
@@ -86,6 +90,8 @@ public class SettingsFragment extends BaseFragment {
             Log.d(TAG, "isVisible");
         } else {
             Log.d(TAG, "isInVisible");
+            SingletonHistory.getInstance().reLoadData();
+            SingletonSave.getInstance().reLoadData();
         }
     }
 
@@ -190,6 +196,30 @@ public class SettingsFragment extends BaseFragment {
             dialog.show();
         }
 
+        public void askToDeleteDuplicatesItems(int count, ServiceManager.ServiceManagerClickedListener listener) {
+            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+            dialogBuilder.setTitle(R.string.alert);
+            dialogBuilder.setPadding(40,40,40,0);
+            dialogBuilder.setMargin(60,0,60,0);
+            dialogBuilder.setMessage(String.format(getString(R.string.found_items_duplicates),""+count));
+            dialogBuilder.setCancelable(false);
+            dialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    listener.onYes();
+                }
+            });
+            dialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mySwitchPreferenceSkipDuplicates.setChecked(false);
+                    listener.onNo();
+                }
+            });
+            MaterialDialog dialog = dialogBuilder.create();
+            dialog.show();
+        }
+
 
         /**
          * Creates and returns a listener, which allows to adapt the app's theme, when the value of the
@@ -209,9 +239,27 @@ public class SettingsFragment extends BaseFragment {
                             if (mResult){
                                 final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getListSave());
                                 Utils.Log(TAG,"need to be deleted at save "+mSaveList.size());
-
                                 final List<HistoryModel> mHistoryList = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getList());
                                 Utils.Log(TAG,"need to be deleted at history "+mHistoryList.size());
+                                final int mCount = mSaveList.size() + mHistoryList.size();
+                                if (mCount>0){
+                                    askToDeleteDuplicatesItems(mCount, new ServiceManager.ServiceManagerClickedListener() {
+                                        @Override
+                                        public void onYes() {
+                                            for (SaveModel index : mSaveList){
+                                                SQLiteHelper.onDelete(index);
+                                            }
+                                            for (HistoryModel index : mHistoryList){
+                                                SQLiteHelper.onDelete(index);
+                                            }
+
+                                        }
+                                        @Override
+                                        public void onNo() {
+
+                                        }
+                                    });
+                                }
                             }
                            Utils.Log(TAG,"CLicked "+ newValue);
                         }

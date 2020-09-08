@@ -343,4 +343,9 @@ public class ServiceManager implements BaseView {
         void onExportingSVCCompleted(String path);
     }
 
+    public interface ServiceManagerClickedListener {
+        void onYes();
+        void onNo();
+    }
+
 }

@@ -29,7 +29,15 @@ public class SQLiteHelper {
             if (cTalkManager==null){
                 return;
             }
-            InstanceGenerator.getInstance(getContext()).onInsert(new HistoryEntityModel(cTalkManager));
+            final HistoryEntityModel mData = new HistoryEntityModel(cTalkManager);
+            if (Utils.isSkipDuplicates()){
+                final HistoryModel mItem = getItemByHistory(mData.contentUnique);
+                if (mItem!=null){
+                    Utils.Log(TAG,"Already existed...!!!");
+                    return;
+                }
+            }
+            InstanceGenerator.getInstance(getContext()).onInsert(mData);
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -69,7 +77,8 @@ public class SQLiteHelper {
 
     public static final boolean onDelete(HistoryModel entity){
         try{
-            return getInstance().onDelete(new HistoryEntityModel(entity));
+            final HistoryEntityModel mData = new HistoryEntityModel(entity);
+            return getInstance().onDelete(mData);
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -82,7 +91,15 @@ public class SQLiteHelper {
             if (cTalkManager==null){
                 return;
             }
-            getInstance().onInsert(new SaveEntityModel(cTalkManager));
+            final SaveEntityModel mData = new SaveEntityModel(cTalkManager);
+            if (Utils.isSkipDuplicates()){
+                final SaveModel mItem = getItemBySave(mData.contentUnique);
+                if (mItem!=null){
+                    Utils.Log(TAG,"Already existed...!!!");
+                    return;
+                }
+            }
+            getInstance().onInsert(mData);
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -94,7 +111,8 @@ public class SQLiteHelper {
             if (cTalkManager==null){
                 return;
             }
-            getInstance().onUpdate(new SaveEntityModel(cTalkManager));
+            final SaveEntityModel mData = new SaveEntityModel(cTalkManager);
+            getInstance().onUpdate(mData);
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -118,7 +136,8 @@ public class SQLiteHelper {
 
     public static final boolean onDelete(SaveModel entity){
         try{
-            return getInstance().onDelete(new SaveEntityModel(entity));
+            final SaveEntityModel mData = new SaveEntityModel(entity);
+            return getInstance().onDelete(mData);
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
