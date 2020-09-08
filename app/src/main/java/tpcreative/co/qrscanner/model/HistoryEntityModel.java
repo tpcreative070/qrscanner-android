@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.model;
 
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.entities.HistoryEntity;
 
 public class HistoryEntityModel {
@@ -96,6 +97,6 @@ public class HistoryEntityModel {
         this.barcodeFormat = item.barcodeFormat;
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
-        this.contentUnique = item.contentUnique;
+        this.contentUnique = Utils.getCodeContentByHistory(item);
     }
 }

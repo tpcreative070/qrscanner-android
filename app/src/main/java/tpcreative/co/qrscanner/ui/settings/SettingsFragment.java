@@ -21,6 +21,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
@@ -34,7 +35,10 @@ import tpcreative.co.qrscanner.common.preference.MyPreference;
 import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory;
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Author;
+import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
@@ -133,6 +137,8 @@ public class SettingsFragment extends BaseFragment {
 
         private MySwitchPreference myPreferenceMultipleScan;
 
+        private MySwitchPreference mySwitchPreferenceSkipDuplicates;
+
         private MyPreference myPreferenceSuperSafe;
 
         private MyPreferenceCategory myPreferenceCategoryFamilyApps;
@@ -197,7 +203,18 @@ public class SettingsFragment extends BaseFragment {
             return new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(final Preference preference, final Object newValue) {
-                    if (preference instanceof MyPreference) {
+                    if (preference instanceof MySwitchPreference) {
+                        if (preference.getKey().equals(getString(R.string.key_skip_duplicates))){
+                            final boolean mResult = (boolean)newValue;
+                            if (mResult){
+                                final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getListSave());
+                                Utils.Log(TAG,"need to be deleted at save "+mSaveList.size());
+
+                                final List<HistoryModel> mHistoryList = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getList());
+                                Utils.Log(TAG,"need to be deleted at history "+mHistoryList.size());
+                            }
+                           Utils.Log(TAG,"CLicked "+ newValue);
+                        }
                     }
                     return true;
                 }
@@ -326,6 +343,11 @@ public class SettingsFragment extends BaseFragment {
             myPreferenceMultipleScan = (MySwitchPreference) findPreference(getString(R.string.key_multiple_scan));
             myPreferenceMultipleScan.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceMultipleScan.setOnPreferenceChangeListener(createChangeListener());
+
+            /*Skip duplicates*/
+            mySwitchPreferenceSkipDuplicates = (MySwitchPreference) findPreference(getString(R.string.key_skip_duplicates));
+            mySwitchPreferenceSkipDuplicates.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            mySwitchPreferenceSkipDuplicates.setOnPreferenceChangeListener(createChangeListener());
 
 
             myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {

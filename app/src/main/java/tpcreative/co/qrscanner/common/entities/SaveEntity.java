@@ -171,6 +171,7 @@ public class SaveEntity implements Serializable{
         this.barcodeFormat = item.barcodeFormat;
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
+        this.contentUnique = item.contentUnique;
     }
 
     @Ignore

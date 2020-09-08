@@ -62,6 +62,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -910,6 +911,38 @@ public class Utils {
             return false;
         }
         return  true;
+    }
+
+    public static List<SaveModel> filterDuplicationsSaveItems(List<SaveModel> list){
+        HashMap<String,SaveModel> mMap = new HashMap<>();
+        List<SaveModel> mList = new ArrayList<>();
+        for (SaveModel index : list){
+            if (Utils.isNotEmptyOrNull(index.contentUnique)){
+                final SaveModel mSave = mMap.get(index.contentUnique);
+                if (mSave==null){
+                    mMap.put(index.contentUnique,index);
+                }else{
+                    mList.add(index);
+                }
+            }
+        }
+        return mList;
+    }
+
+    public static List<HistoryModel> filterDuplicationsHistoryItems(List<HistoryModel> list){
+        HashMap<String,HistoryModel> mMap = new HashMap<>();
+        List<HistoryModel> mList = new ArrayList<>();
+        for (HistoryModel index : list){
+            if (Utils.isNotEmptyOrNull(index.contentUnique)){
+                final HistoryModel mHistory = mMap.get(index.contentUnique);
+                if (mHistory==null){
+                    mMap.put(index.contentUnique,index);
+                }else{
+                    mList.add(index);
+                }
+            }
+        }
+        return mList;
     }
 
 }

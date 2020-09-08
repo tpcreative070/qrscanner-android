@@ -166,6 +166,7 @@ public class HistoryEntity {
         this.barcodeFormat = item.barcodeFormat;
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
+        this.contentUnique = item.contentUnique;
     }
 
     @Ignore

@@ -48,7 +48,7 @@ public class SQLiteHelper {
         catch (Exception e){
             Utils.Log(TAG,e.getMessage());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public static final  List<HistoryModel> getListLatest(){
@@ -113,7 +113,7 @@ public class SQLiteHelper {
         catch (Exception e){
             Log.d(TAG,e.getMessage());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public static final boolean onDelete(SaveModel entity){
