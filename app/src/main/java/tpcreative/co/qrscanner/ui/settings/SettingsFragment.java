@@ -412,9 +412,11 @@ public class SettingsFragment extends BaseFragment {
             if (Utils.isProRelease()) {
                 myPreferenceFileColor.setVisible(true);
                 myPreferenceMultipleScan.setVisible(true);
+                mySwitchPreferenceSkipDuplicates.setVisible(true);
             } else {
                 myPreferenceFileColor.setVisible(false);
                 myPreferenceMultipleScan.setVisible(false);
+                mySwitchPreferenceSkipDuplicates.setVisible(false);
             }
 
             myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
