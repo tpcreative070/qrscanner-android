@@ -30,7 +30,8 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class EventFragment extends BaseActivitySlide implements View.OnClickListener , SingletonGenerate.SingletonGenerateListener{
 
@@ -61,7 +62,7 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
 
     private boolean isClick ;
     private boolean isBegin;
-    private Save save;
+    private SaveModel save;
 
 
     @Override
@@ -77,7 +78,7 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
         tvEndTime.setOnClickListener(this);
         initDateTimePicker();
         Bundle bundle = getIntent().getExtras();
-        final Save mData = (Save) bundle.get(getString(R.string.key_data));
+        final SaveModel mData = (SaveModel) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();

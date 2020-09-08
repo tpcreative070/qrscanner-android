@@ -7,7 +7,6 @@ import java.util.Date;
 import tpcreative.co.qrscanner.common.Utils;
 
 public class Create implements Serializable {
-
     public int id;
     public String email;
     public String subject ;

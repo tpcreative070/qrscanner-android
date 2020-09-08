@@ -20,7 +20,8 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class TextFragment extends BaseActivitySlide implements SingletonGenerate.SingletonGenerateListener {
 
@@ -28,7 +29,7 @@ public class TextFragment extends BaseActivitySlide implements SingletonGenerate
     AwesomeValidation mAwesomeValidation ;
     @BindView(R.id.edtText)
     EditText editText;
-    private Save save;
+    private SaveModel save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class TextFragment extends BaseActivitySlide implements SingletonGenerate
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
-        final Save mData = (Save) bundle.get(getString(R.string.key_data));
+        final SaveModel mData = (SaveModel) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -134,7 +135,6 @@ public class TextFragment extends BaseActivitySlide implements SingletonGenerate
         finish();
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -144,5 +144,4 @@ public class TextFragment extends BaseActivitySlide implements SingletonGenerate
             finish();
         }
     }
-
 }

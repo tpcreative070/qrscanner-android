@@ -1,4 +1,4 @@
-package tpcreative.co.qrscanner.model.room;
+package tpcreative.co.qrscanner.common.entities;
 import android.content.Context;
 import android.util.Log;
 import androidx.room.Database;
@@ -7,15 +7,15 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.model.History;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.HistoryEntityModel;
+import tpcreative.co.qrscanner.model.SaveEntityModel;
 
-@Database(entities = {History.class, Save.class}, version = 2, exportSchema = false)
+@Database(entities = {HistoryEntity.class, SaveEntity.class}, version = 3, exportSchema = false)
 public abstract class InstanceGenerator extends RoomDatabase {
 
     @Ignore
@@ -42,18 +42,19 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE 'save' ADD COLUMN  'contentUnique' TEXT");
+            database.execSQL("ALTER TABLE 'history' ADD COLUMN  'contentUnique' TEXT");
+        }
+    };
 
     public static InstanceGenerator getInstance(Context context) {
         if (instance == null) {
-//            instance = Room.databaseBuilder(context,
-//                     InstanceGenerator.class,
-//                     context.getString(R.string.database_name))
-//                     .allowMainThreadQueries()
-//                     .build();
-
             instance = Room.databaseBuilder(context,
                      InstanceGenerator.class,context.getString(R.string.database_name))
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
                     .allowMainThreadQueries()
                     .build();
         }
@@ -69,21 +70,41 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
     }
 
-    public synchronized void onInsert(History cTalkManager){
+    public void onInsert(HistoryEntityModel cTalkManager){
         try {
             if (cTalkManager==null){
                 return;
             }
-            instance.historyDao().insert(cTalkManager);
+            instance.historyDao().insert(new HistoryEntity(cTalkManager));
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
         }
     }
 
-    public final synchronized List<History> getList(){
+    public final List<HistoryEntityModel> getList(){
         try{
-            return instance.historyDao().loadAll();
+            final List<HistoryEntity> mValue =  instance.historyDao().loadAll();
+            List<HistoryEntityModel> mList = new ArrayList<>();
+            for ( HistoryEntity index : mValue){
+                mList.add(new HistoryEntityModel(index));
+            }
+            return mList;
+        }
+        catch (Exception e){
+            Utils.Log(TAG,e.getMessage());
+        }
+        return null;
+    }
+
+    public final List<HistoryEntityModel> getListLatest(){
+        try{
+            final List<HistoryEntity> mValue =  instance.historyDao().loadLatestItems();
+            List<HistoryEntityModel> mList = new ArrayList<>();
+            for ( HistoryEntity index : mValue){
+                mList.add(new HistoryEntityModel(index));
+            }
+            return mList;
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -91,19 +112,9 @@ public abstract class InstanceGenerator extends RoomDatabase {
         return null;
     }
 
-    public final synchronized List<History> getListLatest(){
+    public final boolean onDelete(HistoryEntityModel entity){
         try{
-            return instance.historyDao().loadLatestItems();
-        }
-        catch (Exception e){
-            Log.d(TAG,e.getMessage());
-        }
-        return null;
-    }
-
-    public final synchronized boolean onDelete(History entity){
-        try{
-            instance.historyDao().delete(entity);
+            instance.historyDao().delete(new HistoryEntity(entity));
             return true;
         }
         catch (Exception e){
@@ -113,33 +124,39 @@ public abstract class InstanceGenerator extends RoomDatabase {
     }
 
 
-    public synchronized void onInsert(Save cTalkManager){
+    public void onInsert(SaveEntityModel cTalkManager){
         try {
             if (cTalkManager==null){
                 return;
             }
-            instance.saveDao().insert(cTalkManager);
+            instance.saveDao().insert(new SaveEntity(cTalkManager));
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
         }
     }
 
-    public synchronized void onUpdate(Save cTalkManager){
+    public void onUpdate(SaveEntityModel cTalkManager){
         try {
             if (cTalkManager==null){
                 return;
             }
-            instance.saveDao().update(cTalkManager);
+            instance.saveDao().update(new SaveEntity(cTalkManager));
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
         }
     }
 
-    public final synchronized List<Save> getListSave(){
+    public final List<SaveEntityModel> getListSave(){
         try{
-            return instance.saveDao().loadAll();
+
+            final List<SaveEntity> mValue =  instance.saveDao().loadAll();
+            List<SaveEntityModel> mList = new ArrayList<>();
+            for ( SaveEntity index : mValue){
+                mList.add(new SaveEntityModel(index));
+            }
+            return mList;
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -147,9 +164,9 @@ public abstract class InstanceGenerator extends RoomDatabase {
         return null;
     }
 
-    public final synchronized boolean onDelete(Save entity){
+    public final boolean onDelete(SaveEntityModel entity){
         try{
-            instance.saveDao().delete(entity);
+            instance.saveDao().delete(new SaveEntity(entity));
             return true;
         }
         catch (Exception e){

@@ -7,19 +7,16 @@ import java.util.List;
 import java.util.Map;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
+import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.TypeCategories;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 public class SavePresenter extends Presenter<SaveView> {
-
     private final String TAG = SavePresenter.class.getSimpleName();
-
     protected List<TypeCategories> mListCategories;
-    protected List<Save> mList;
+    protected List<SaveModel> mList;
     protected List<Fragment> mFragment;
     private int i = 0;
-
 
     public SavePresenter(){
         mListCategories = new ArrayList<>();
@@ -27,38 +24,35 @@ public class SavePresenter extends Presenter<SaveView> {
         mFragment = new ArrayList<>();
     }
 
-    public Map<String,Save> getUniqueList(){
+    public Map<String, SaveModel> getUniqueList(){
         SaveView view = view();
-        final List<Save> saver = InstanceGenerator.getInstance(view.getContext()).getListSave();
+        final List<SaveModel> saver = SQLiteHelper.getListSave();
         if (saver==null){
             return new HashMap<>();
         }
-
         Utils.Log(TAG,new Gson().toJson(saver));
-
-        Map<String,Save> hashMap = new HashMap<>();
-        for (Save index : saver){
+        Map<String, SaveModel> hashMap = new HashMap<>();
+        for (SaveModel index : saver){
             hashMap.put(index.createType,index);
         }
-
         mListCategories.clear();
         i=0;
-        for (Map.Entry<String,Save>map : hashMap.entrySet()){
+        for (Map.Entry<String, SaveModel>map : hashMap.entrySet()){
             mListCategories.add(new TypeCategories(i,map.getKey()));
             i+=1;
         }
         return hashMap;
     }
 
-    public List<Save> getListGroup(){
+    public List<SaveModel> getListGroup(){
         getUniqueList();
         SaveView view = view();
-        final List<Save> list = InstanceGenerator.getInstance(view.getContext()).getListSave();
-        List<Save> mList = new ArrayList<>();
+        final List<SaveModel> list = SQLiteHelper.getListSave();
+        List<SaveModel> mList = new ArrayList<>();
         for (TypeCategories index : mListCategories){
-            for (Save save : list){
+            for (SaveModel save : list){
                 if (index.type.equals(save.createType)){
-                    final Save result = save;
+                    final SaveModel result = save;
                     result.typeCategories = index;
                     mList.add(result);
                 }
@@ -71,7 +65,7 @@ public class SavePresenter extends Presenter<SaveView> {
 
     public int getCheckedCount(){
         int count = 0;
-        for (Save index : mList){
+        for (SaveModel index : mList){
             if (index.isChecked()){
                 count+=1;
             }
@@ -81,11 +75,11 @@ public class SavePresenter extends Presenter<SaveView> {
 
     public void deleteItem(){
         SaveView view = view();
-        final List<Save> list = mList;
-        for (Save index : list){
+        final List<SaveModel> list = mList;
+        for (SaveModel index : list){
             if (index.isDeleted()){
                 if (index.isChecked()){
-                    InstanceGenerator.getInstance(view.getContext()).onDelete(index);
+                    SQLiteHelper.onDelete(index);
                 }
             }
         }

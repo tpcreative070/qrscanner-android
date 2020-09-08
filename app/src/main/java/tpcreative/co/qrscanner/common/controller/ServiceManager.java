@@ -20,11 +20,11 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerService;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.EnumStatus;
-import tpcreative.co.qrscanner.model.History;
-import tpcreative.co.qrscanner.model.Save;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class ServiceManager implements BaseView {
 
@@ -195,7 +195,7 @@ public class ServiceManager implements BaseView {
                 csvWrite = new CSVWriter(new FileWriter(path));
                 switch (enumFragmentType) {
                     case HISTORY: {
-                        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                        final List<HistoryModel> listHistory = SQLiteHelper.getList();
                         String arrStr1[] = {
                                 "FormatType",
                                 "Url",
@@ -223,7 +223,7 @@ public class ServiceManager implements BaseView {
                         };
 
                         csvWrite.writeNext(arrStr1);
-                        for (History index : listHistory) {
+                        for (HistoryModel index : listHistory) {
                             String value[] = {
                                     index.createType,
                                     index.url,
@@ -253,7 +253,7 @@ public class ServiceManager implements BaseView {
                         break;
                     }
                     case SAVER: {
-                        final List<Save> listSaver = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getListSave();
+                        final List<SaveModel> listSaver = SQLiteHelper.getListSave();
                         String arrStr1[] = {
                                 "FormatType",
                                 "Url",
@@ -280,7 +280,7 @@ public class ServiceManager implements BaseView {
                                 "CreatedDateTime"
                         };
                         csvWrite.writeNext(arrStr1);
-                        for (Save index : listSaver) {
+                        for (SaveModel index : listSaver) {
                             String value[] = {
                                     index.createType,
                                     index.url,

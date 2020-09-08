@@ -54,9 +54,9 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
 import tpcreative.co.qrscanner.common.view.CustomViewPager;
-import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
+import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
@@ -151,6 +151,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 }
             }
         }
+        Utils.onScanFile(this,".scan.log");
     }
 
     public void onVisibleUI(){
@@ -235,7 +236,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             mSpeedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
                 @Override
                 public boolean onActionSelected(SpeedDialActionItem actionItem) {
-                    final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                    final List<HistoryModel> listHistory = SQLiteHelper.getList();
                     switch (actionItem.getId()) {
                         case R.id.fab_track:
                             SingletonMain.getInstance().isShowDeleteAction(true);

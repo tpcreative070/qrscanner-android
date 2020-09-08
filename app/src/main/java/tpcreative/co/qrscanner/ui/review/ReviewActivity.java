@@ -10,22 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.zxing.BarcodeFormat;
@@ -51,13 +43,13 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.ItemNavigation;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultAdapter;
 
 public class ReviewActivity extends BaseActivitySlide implements ReviewView, Utils.UtilsListener,ScannerResultAdapter.ItemSelectedListener {
@@ -69,7 +61,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
     private Create create;
     private Bitmap bitmap;
     private String code;
-    private Save save = new Save();
+    private SaveModel save = new SaveModel();
     private boolean isComplete;
 
     @BindView(R.id.recyclerView)
@@ -94,7 +86,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
         presenter.bindView(this);
         presenter.getIntent(this);
     }
-
 
     public void setupRecyclerViewItem() {
         llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -166,7 +157,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
         switch (create.createType) {
             case ADDRESSBOOK:
                 code = "MECARD:N:" + create.fullName + ";TEL:" + create.phone + ";EMAIL:" + create.email + ";ADR:" + create.address + ";";
-                save = new Save();
+                save = new SaveModel();
                 save.fullName = create.fullName;
                 save.phone = create.phone;
                 save.email = create.email;
@@ -177,7 +168,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
             case EMAIL_ADDRESS:
                 code = "MATMSG:TO:" + create.email + ";SUB:" + create.subject + ";BODY:" + create.message + ";";
-                save = new Save();
+                save = new SaveModel();
                 save.email = create.email;
                 save.subject = create.subject;
                 save.message = create.message;
@@ -187,7 +178,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
             case PRODUCT:
                 code = create.productId;
-                save = new Save();
+                save = new SaveModel();
                 save.text = create.productId;
                 save.createType = create.createType.name();
                 save.barcodeFormat = create.barcodeFormat;
@@ -195,7 +186,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 break;
             case URI:
                 code = create.url;
-                save = new Save();
+                save = new SaveModel();
                 save.url = create.url;
                 save.createType = create.createType.name();
                 onGenerateReview(code);
@@ -203,7 +194,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
             case WIFI:
                 code = "WIFI:S:" + create.ssId + ";T:" + create.networkEncryption + ";P:" + create.password + ";H:" + create.hidden + ";";
-                save = new Save();
+                save = new SaveModel();
                 save.ssId = create.ssId;
                 save.password = create.password;
                 save.networkEncryption = create.networkEncryption;
@@ -214,7 +205,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
             case GEO:
                 code = "geo:" + create.lat + "," + create.lon + "?q=" + create.query + "";
-                save = new Save();
+                save = new SaveModel();
                 save.lat = create.lat;
                 save.lon = create.lon;
                 save.query = create.query;
@@ -224,7 +215,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
             case TEL:
                 code = "tel:" + create.phone + "";
-                save = new Save();
+                save = new SaveModel();
                 save.phone = create.phone;
                 save.createType = create.createType.name();
                 onGenerateReview(code);
@@ -232,7 +223,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
             case SMS:
                 code = "smsto:" + create.phone + ":" + create.message;
-                save = new Save();
+                save = new SaveModel();
                 save.phone = create.phone;
                 save.message = create.message;
                 save.createType = create.createType.name();
@@ -255,7 +246,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 builder.append("\n");
                 builder.append("END:VEVENT");
 
-                save = new Save();
+                save = new SaveModel();
                 save.title = create.title;
                 save.startEvent = create.startEvent;
                 save.endEvent = create.endEvent;
@@ -274,7 +265,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
             default:
                 code = create.text;
-                save = new Save();
+                save = new SaveModel();
                 save.text = create.text;
                 save.createType = create.createType.name();
                 onGenerateReview(code);
@@ -375,10 +366,10 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 Toast.makeText(this, "Saved code successful => Path: " + path, Toast.LENGTH_LONG).show();
                 save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE) {
-                    InstanceGenerator.getInstance(getContext()).onInsert(save);
+                    SQLiteHelper.onInsert(save);
                 } else if (create.enumImplement == EnumImplement.EDIT) {
                     save.id = create.id;
-                    InstanceGenerator.getInstance(getContext()).onUpdate(save);
+                    SQLiteHelper.onUpdate(save);
                 }
                 break;
             }

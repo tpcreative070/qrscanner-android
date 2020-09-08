@@ -21,7 +21,8 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class EmailFragment extends BaseActivitySlide implements SingletonGenerate.SingletonGenerateListener{
 
@@ -33,7 +34,7 @@ public class EmailFragment extends BaseActivitySlide implements SingletonGenerat
     @BindView(R.id.edtMessage)
     EditText edtMessage;
     private AwesomeValidation mAwesomeValidation ;
-    private Save save;
+    private SaveModel save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class EmailFragment extends BaseActivitySlide implements SingletonGenerat
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
-        final Save mData = (Save) bundle.get(getString(R.string.key_data));
+        final SaveModel mData = (SaveModel) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();

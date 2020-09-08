@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
-import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
+import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.TypeCategories;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 
 public class HistoryPresenter extends Presenter<HistoryView> {
 
     protected List<TypeCategories> mListCategories;
-    protected List<History> mList;
+    protected List<HistoryModel> mList;
     private int i = 0;
     private static final String TAG = HistoryPresenter.class.getSimpleName();
 
@@ -22,38 +22,35 @@ public class HistoryPresenter extends Presenter<HistoryView> {
         mList = new ArrayList<>();
     }
 
-    public Map<String,History> getUniqueList(){
+    public Map<String, HistoryModel> getUniqueList(){
         HistoryView view = view();
-        final List<History> histories = InstanceGenerator.getInstance(view.getContext()).getList();
+        final List<HistoryModel> histories = SQLiteHelper.getList();
         if (histories==null){
             return new HashMap<>();
         }
-
         Utils.Log(TAG,new Gson().toJson(histories));
-
-        Map<String,History> hashMap = new HashMap<>();
-        for (History index : histories){
+        Map<String, HistoryModel> hashMap = new HashMap<>();
+        for (HistoryModel index : histories){
             hashMap.put(index.createType,index);
         }
-
         mListCategories.clear();
         i=0;
-        for (Map.Entry<String,History>map : hashMap.entrySet()){
+        for (Map.Entry<String, HistoryModel>map : hashMap.entrySet()){
             mListCategories.add(new TypeCategories(i,map.getKey()));
             i+=1;
         }
         return hashMap;
     }
 
-    public List<History> getListGroup(){
+    public List<HistoryModel> getListGroup(){
         getUniqueList();
         HistoryView view = view();
-        final List<History> list = InstanceGenerator.getInstance(view.getContext()).getList();
-        List<History> mList = new ArrayList<>();
+        final List<HistoryModel> list = SQLiteHelper.getList();
+        List<HistoryModel> mList = new ArrayList<>();
         for (TypeCategories index : mListCategories){
-            for (History history : list){
+            for (HistoryModel history : list){
                 if (index.type.equals(history.createType)){
-                    final History result = history;
+                    final HistoryModel result = history;
                     result.typeCategories = index;
                     mList.add(result);
                 }
@@ -61,13 +58,12 @@ public class HistoryPresenter extends Presenter<HistoryView> {
         }
         this.mList.clear();
         this.mList.addAll(mList);
-
         return mList;
     }
 
     public int getCheckedCount(){
         int count = 0;
-        for (History index : mList){
+        for (HistoryModel index : mList){
             if (index.isChecked()){
                 count+=1;
             }
@@ -77,11 +73,11 @@ public class HistoryPresenter extends Presenter<HistoryView> {
 
     public void deleteItem(){
         HistoryView view = view();
-        final List<History> list = mList;
-        for (History index : list){
+        final List<HistoryModel> list = mList;
+        for (HistoryModel index : list){
             if (index.isDeleted()){
                 if (index.isChecked()){
-                    InstanceGenerator.getInstance(view.getContext()).onDelete(index);
+                    SQLiteHelper.onDelete(index);
                 }
             }
         }

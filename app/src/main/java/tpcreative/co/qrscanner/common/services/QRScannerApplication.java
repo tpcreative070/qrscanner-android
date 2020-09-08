@@ -28,7 +28,7 @@ import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.common.entities.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 /**
  *

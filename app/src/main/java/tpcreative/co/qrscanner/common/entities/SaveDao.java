@@ -1,24 +1,24 @@
-package tpcreative.co.qrscanner.model.room;
+package tpcreative.co.qrscanner.common.entities;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 import java.util.List;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
 
 
 @Dao
 public interface SaveDao {
     @Insert
-    void insert(Save... saves);
+    void insert(SaveEntity... saves);
 
     @Update
-    void update(Save... saves);
+    void update(SaveEntity... saves);
 
     @Delete
-    void delete(Save... saves);
+    void delete(SaveEntity... saves);
 
     @Query("Select * FROM save ORDER BY updatedDateTime DESC")
-    List<Save> loadAll();
+    List<SaveEntity> loadAll();
 }

@@ -5,26 +5,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.TextView;
-
 import androidx.annotation.Nullable;
-
 import com.jaychang.srv.SimpleRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import de.mrapp.android.dialog.animation.BackgroundAnimation;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.QRCodeType;
-import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class GenerateFragment extends BaseFragment implements GenerateCell.ItemSelectedListener,GenerateView {
 
@@ -40,7 +31,6 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
         fragment.setArguments(b);
         return fragment;
     }
-
 
     @Override
     protected int getLayoutId() {
@@ -143,7 +133,6 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
             }
         }
     }
-
 
     @Override
     public void onClickShare(String value) {

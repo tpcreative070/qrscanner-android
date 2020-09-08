@@ -50,7 +50,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.Util;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;

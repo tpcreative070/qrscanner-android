@@ -12,8 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import android.content.Context;
@@ -54,13 +52,13 @@ import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
-import tpcreative.co.qrscanner.model.History;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.create.BarcodeFragment;
 import tpcreative.co.qrscanner.ui.create.ContactFragment;
 import tpcreative.co.qrscanner.ui.create.EmailFragment;
@@ -71,7 +69,6 @@ import tpcreative.co.qrscanner.ui.create.TelephoneFragment;
 import tpcreative.co.qrscanner.ui.create.TextFragment;
 import tpcreative.co.qrscanner.ui.create.UrlFragment;
 import tpcreative.co.qrscanner.ui.create.WifiFragment;
-import tpcreative.co.qrscanner.ui.main.MainActivity;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
 public class SaverFragment extends BaseFragment implements SaveView, SaveCell.ItemSelectedListener, SingletonSave.SingletonSaveListener, Utils.UtilsListener, SingletonMain.SingleTonMainListener {
@@ -86,8 +83,8 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     private SavePresenter presenter;
     private Bitmap bitmap;
     private String code;
-    private Save share;
-    private Save edit;
+    private SaveModel share;
+    private SaveModel edit;
 
     private boolean isDeleted;
     private boolean isSelectedAll = false;
@@ -118,17 +115,17 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
             switch (item.getItemId()) {
                 case R.id.menu_item_select_all: {
-                    final List<Save> list = presenter.getListGroup();
+                    final List<SaveModel> list = presenter.getListGroup();
                     presenter.mList.clear();
                     if (isSelectedAll) {
-                        for (Save index : list) {
+                        for (SaveModel index : list) {
                             index.setDeleted(true);
                             index.setChecked(false);
                             presenter.mList.add(index);
                         }
                         isSelectedAll = false;
                     } else {
-                        for (Save index : list) {
+                        for (SaveModel index : list) {
                             index.setDeleted(true);
                             index.setChecked(true);
                             presenter.mList.add(index);
@@ -145,7 +142,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
                     return true;
                 }
                 case R.id.menu_item_delete: {
-                    final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                    final List<HistoryModel> listHistory = SQLiteHelper.getList();
                     if (listHistory == null) {
                         return false;
                     }
@@ -166,23 +163,21 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
         public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
             isSelectedAll = false;
-            final List<Save> list = presenter.getListGroup();
+            final List<SaveModel> list = presenter.getListGroup();
             presenter.mList.clear();
-            for (Save index : list) {
+            for (SaveModel index : list) {
                 index.setDeleted(false);
                 presenter.mList.add(index);
             }
             recyclerView.removeAllCells();
             bindData();
             isDeleted = false;
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Window window = QRScannerApplication.getInstance().getActivity().getWindow();
                 window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
             }
         }
     };
-
 
     public static SaverFragment newInstance(int index) {
         SaverFragment fragment = new SaverFragment();
@@ -216,10 +211,10 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     }
 
     private void addRecyclerHeaders() {
-        SectionHeaderProvider<Save> sh = new SimpleSectionHeaderProvider<Save>() {
+        SectionHeaderProvider<SaveModel> sh = new SimpleSectionHeaderProvider<SaveModel>() {
             @NonNull
             @Override
-            public View getSectionHeaderView(@NonNull Save history, int i) {
+            public View getSectionHeaderView(@NonNull SaveModel history, int i) {
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.save_item_header, null, false);
                 TextView textView = view.findViewById(R.id.tvHeader);
                 textView.setText(history.getCategoryName());
@@ -227,10 +222,9 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             }
 
             @Override
-            public boolean isSameSection(@NonNull Save history, @NonNull Save nextHistory) {
+            public boolean isSameSection(@NonNull SaveModel history, @NonNull SaveModel nextHistory) {
                 return history.getCategoryId() == nextHistory.getCategoryId();
             }
-
             // Optional, whether the header is sticky, default false
             @Override
             public boolean isSticky() {
@@ -241,9 +235,9 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     }
 
     private void bindData() {
-        List<Save> mListItems = presenter.mList;
+        List<SaveModel> mListItems = presenter.mList;
         List<SaveCell> cells = new ArrayList<>();
-        for (Save items : mListItems) {
+        for (SaveModel items : mListItems) {
             SaveCell cell = new SaveCell(items);
             cell.setListener(this);
             cells.add(cell);
@@ -272,7 +266,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
     @Override
     public void isShowDeleteAction(boolean isDelete) {
-        final List<Save> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getListSave();
+        final List<SaveModel> listHistory = SQLiteHelper.getListSave();
         if (isDelete) {
             if (actionMode == null) {
                 actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);
@@ -287,9 +281,9 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
                 return;
             }
 
-            final List<Save> list = presenter.getListGroup();
+            final List<SaveModel> list = presenter.getListGroup();
             presenter.mList.clear();
-            for (Save index : list) {
+            for (SaveModel index : list) {
                 index.setDeleted(true);
                 presenter.mList.add(index);
             }
@@ -324,14 +318,12 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
         if (actionMode == null) {
             actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);
         }
-
-        final List<Save> list = presenter.getListGroup();
+        final List<SaveModel> list = presenter.getListGroup();
         presenter.mList.clear();
-        for (Save index : list) {
+        for (SaveModel index : list) {
             index.setDeleted(true);
             presenter.mList.add(index);
         }
-
         presenter.mList.get(position).setChecked(true);
         if (actionMode != null) {
             actionMode.setTitle(presenter.getCheckedCount() + " " + getString(R.string.selected));
@@ -343,13 +335,11 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
     @Override
     public void onClickItem(int position) {
-
         if (actionMode != null) {
             return;
         }
-
         final Create create = new Create();
-        final Save history = presenter.mList.get(position);
+        final SaveModel history = presenter.mList.get(position);
         if (history.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
             create.productId = history.text;
             create.barcodeFormat = history.barcodeFormat;
@@ -403,7 +393,6 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             create.text = history.text;
             create.createType = ParsedResultType.TEXT;
         }
-
         Utils.Log(TAG, "Call intent");
         create.fragmentType = EnumFragmentType.SAVER;
         Navigator.onResultView(getActivity(), create, ScannerResultFragment.class);
@@ -650,5 +639,4 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
         super.onResume();
         Utils.Log(TAG, "onResume");
     }
-
 }
