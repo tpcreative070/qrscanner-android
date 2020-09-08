@@ -88,7 +88,7 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
 
     @Override
     public void onClickItem(int position, boolean isChecked) {
-        if (!Utils.isProVersion()){
+        if (!Utils.isProRelease()){
             position = position + 1;
         }
         switch (position){

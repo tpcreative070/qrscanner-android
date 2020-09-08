@@ -133,4 +133,7 @@ dependencies {
     /*Floating button*/
     implementation project(':floatingbuttonlibrary')
 
+    /*Drop down alert*/
+    implementation 'com.tapadoo.android:alerter:2.0.1'
+
 }

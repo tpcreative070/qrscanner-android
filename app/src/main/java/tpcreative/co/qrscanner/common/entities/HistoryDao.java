@@ -22,4 +22,8 @@ public interface HistoryDao {
 
     @Query("Select * FROM history ORDER BY id DESC LIMIT 10")
     List<HistoryEntity> loadLatestItems();
+
+    @Query("Select * FROM history WHERE contentUnique = :contentUnique")
+    HistoryEntity loadItem(String contentUnique);
+
 }

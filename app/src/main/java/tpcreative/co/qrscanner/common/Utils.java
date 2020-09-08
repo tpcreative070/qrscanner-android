@@ -47,6 +47,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.snatik.storage.Storage;
 import com.snatik.storage.helpers.SizeUnit;
+import com.tapadoo.alerter.Alerter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -169,7 +170,6 @@ public class Utils {
         TextView textView = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setMaxLines(5);
         textView.setTextSize(15);
-
         TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( com.google.android.material.R.id.snackbar_action);
         snackbarActionTextView.setTextSize(14);
         return snackbar;
@@ -573,7 +573,6 @@ public class Utils {
         clipboard.setPrimaryClip(clip);
     }
 
-
     public static void onUpdateVersionRateAlert(){
         try{
             final int current_code_version = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),0);
@@ -638,11 +637,8 @@ public class Utils {
         return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_multiple_scan),false);
     }
 
-    public static boolean isProVersion(){
-        if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))) {
-            return  true;
-        }
-        return  false;
+    public static boolean isSkipDuplicates(){
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_skip_duplicates),false);
     }
 
     public static String generateEAN(String barcode) {
@@ -897,6 +893,23 @@ public class Utils {
             }
         }
         return null;
+    }
+
+
+    public static void onDropDownAlert(Activity activity,String content){
+        Alerter.create(activity)
+       .setTitle("Alert")
+                .setText(content)
+                .setIcon(R.drawable.baseline_warning_white_24)
+                .setBackgroundColorRes(R.color.colorAccent) // or setBackgroundColorInt(Color.CYAN)
+                .show();
+    }
+
+    public static boolean isNotEmptyOrNull(String value) {
+        if (value==null || value.equals("") || value.equals("null")){
+            return false;
+        }
+        return  true;
     }
 
 }

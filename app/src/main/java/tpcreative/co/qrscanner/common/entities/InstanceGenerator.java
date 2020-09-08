@@ -164,6 +164,32 @@ public abstract class InstanceGenerator extends RoomDatabase {
         return null;
     }
 
+    public final HistoryEntityModel getItemByHistory(String contentUnique){
+        try{
+            final HistoryEntity mResult =  instance.historyDao().loadItem(contentUnique);
+            if (mResult!=null){
+                return new HistoryEntityModel(mResult);
+            }
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return null;
+    }
+
+    public final SaveEntityModel getItemBySave(String contentUnique){
+        try{
+            final SaveEntity mResult =  instance.saveDao().loadItem(contentUnique);
+            if (mResult!=null){
+                return new SaveEntityModel(mResult);
+            }
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return null;
+    }
+
     public final boolean onDelete(SaveEntityModel entity){
         try{
             instance.saveDao().delete(new SaveEntity(entity));

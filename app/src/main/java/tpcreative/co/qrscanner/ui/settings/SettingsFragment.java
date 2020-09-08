@@ -221,7 +221,7 @@ public class SettingsFragment extends BaseFragment {
                         if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
                             askPermission();
                         } else if (preference.getKey().equals(getString(R.string.key_share))) {
-                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
+                            if (Utils.isProRelease()) {
                                 shareToSocial(getString(R.string.scanner_app_pro));
                             } else {
                                 shareToSocial(getString(R.string.scanner_app));
@@ -275,7 +275,7 @@ public class SettingsFragment extends BaseFragment {
             mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
             mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
-            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
+            if (Utils.isProRelease()) {
                 mPreferencePremiumVersion.setVisible(false);
             } else {
                 mPreferencePremiumVersion.setVisible(true);
@@ -339,14 +339,13 @@ public class SettingsFragment extends BaseFragment {
                 }
             });
 
-            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
+            if (Utils.isProRelease()) {
                 myPreferenceFileColor.setVisible(true);
                 myPreferenceMultipleScan.setVisible(true);
             } else {
                 myPreferenceFileColor.setVisible(false);
                 myPreferenceMultipleScan.setVisible(false);
             }
-
 
             myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
             myPreferenceCategoryFamilyApps.setOnPreferenceClickListener(createActionPreferenceClickListener());

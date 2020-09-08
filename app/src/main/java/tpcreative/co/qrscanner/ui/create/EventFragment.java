@@ -141,13 +141,15 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
                     }
 
                     if (beginDateTimeMilliseconds>endDateTimeMilliseconds){
-                        Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
+                        //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
+                        Utils.onDropDownAlert(getParent(),"Ending event data time must be greater than begin date time");
                         return true;
                     }
 
                     long currentTime = System.currentTimeMillis();
                     if (beginDateTimeMilliseconds <= currentTime){
-                        Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
+                        //Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
+                        Utils.onDropDownAlert(getParent(),"Starting event data time must be greater than current date time");
                         return true;
                     }
 
@@ -307,7 +309,8 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
             public void onPositiveButtonClick(Date date) {
                 if (isBegin){
                     if (currentMilliseconds>date.getTime()){
-                        Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
+                        //Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
+                        Utils.onDropDownAlert(getParent(),"Starting event data time must be greater than current date time");
                     }
                     else {
                         beginDateTimeMilliseconds = date.getTime();
@@ -316,10 +319,12 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
                 }
                 else{
                     if (currentMilliseconds>date.getTime()){
-                        Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than current date time");
+                        //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than current date time");
+                        Utils.onDropDownAlert(getParent(),"Ending event data time must be greater than current date time");
                     }
                     else if(beginDateTimeMilliseconds >= date.getTime()){
-                        Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
+                        //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
+                        Utils.onDropDownAlert(getParent(),"Ending event data time must be greater than begin date time");
                     }
                     else {
                         endDateTimeMilliseconds = date.getTime();

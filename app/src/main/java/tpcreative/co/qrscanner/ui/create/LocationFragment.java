@@ -171,7 +171,8 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
                     Create create = new Create();
                     try {
                         if (lastLon ==0 || lastLon==0){
-                            Utils.showGotItSnackbar(edtLatitude,"Please enable GPS in order to get accurate lat and lon");
+                            //Utils.showGotItSnackbar(edtLatitude,"Please enable GPS in order to get accurate lat and lon");
+                            Utils.onDropDownAlert(getParent(),"Please enable GPS in order to get accurate lat and lon");
                         }
                         else {
                             create.lat = lastLat;

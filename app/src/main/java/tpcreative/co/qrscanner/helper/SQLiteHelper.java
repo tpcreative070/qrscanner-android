@@ -4,7 +4,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.entities.HistoryEntity;
 import tpcreative.co.qrscanner.common.entities.InstanceGenerator;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.HistoryEntityModel;
 import tpcreative.co.qrscanner.model.HistoryModel;
@@ -124,5 +126,29 @@ public class SQLiteHelper {
         return false;
     }
 
+    public static final HistoryModel getItemByHistory(String contentUnique){
+        try{
+            final HistoryEntityModel mResult =  getInstance().getItemByHistory(contentUnique);
+            if (mResult!=null){
+                return new HistoryModel(mResult);
+            }
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return null;
+    }
 
+    public static final SaveModel getItemBySave(String contentUnique){
+        try{
+            final SaveEntityModel mResult =  getInstance().getItemBySave(contentUnique);
+            if (mResult!=null){
+                return new SaveModel(mResult);
+            }
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return null;
+    }
 }

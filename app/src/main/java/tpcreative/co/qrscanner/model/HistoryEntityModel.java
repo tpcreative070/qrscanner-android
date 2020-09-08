@@ -32,6 +32,9 @@ public class HistoryEntityModel {
     public boolean favorite;
     public String updatedDateTime;
 
+    /*content_type_barcode*/
+    public String contentUnique;
+
     public HistoryEntityModel(HistoryEntity item){
         this.id = item.id;
         this.email = item.email;
@@ -61,6 +64,7 @@ public class HistoryEntityModel {
         this.barcodeFormat = item.barcodeFormat;
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
+        this.contentUnique = item.contentUnique;
     }
 
     public HistoryEntityModel(HistoryModel item){
@@ -92,5 +96,6 @@ public class HistoryEntityModel {
         this.barcodeFormat = item.barcodeFormat;
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
+        this.contentUnique = item.contentUnique;
     }
 }

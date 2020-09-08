@@ -50,6 +50,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.Util;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
@@ -661,7 +662,8 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             catch (NotFoundException | IOException |ChecksumException e){
                 e.printStackTrace();
                 barcodeScannerView.resume();
-                Utils.showGotItSnackbar(getView(),R.string.please_choose_correctly_format);
+                //Utils.showGotItSnackbar(getView(),R.string.please_choose_correctly_format);
+                Utils.onDropDownAlert(getActivity(),getString(R.string.please_choose_correctly_format));
             }
         }
         catch (FormatException e){
@@ -884,7 +886,8 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             }
         }
         catch (Exception e){
-            Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
+            //Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
+            Utils.onDropDownAlert(getActivity(),getString(R.string.error_occurred_importing));
             e.printStackTrace();
         }
     }
@@ -906,11 +909,13 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 },1000);
             }
             else{
-                Utils.showGotItSnackbar(getView(),R.string.can_not_support_this_format);
+                //Utils.showGotItSnackbar(getView(),R.string.can_not_support_this_format);
+                Utils.onDropDownAlert(getActivity(),getString(R.string.can_not_support_this_format));
             }
         }
         catch (Exception e){
-            Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
+            //Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
+            Utils.onDropDownAlert(getActivity(),getString(R.string.error_occurred_importing));
             e.printStackTrace();
         }
     }

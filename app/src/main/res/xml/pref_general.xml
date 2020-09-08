@@ -59,6 +59,15 @@
 
         <tpcreative.co.qrscanner.common.preference.MySwitchPreference
             android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_content_copy_white_24"
+            android:title="@string/key_skip_duplicates"
+            android:key="@string/key_skip_duplicates"
+            android:defaultValue="false"
+            android:summary="@string/key_skip_duplicates_detail">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_filter_none_white_48"
             android:title="@string/key_copy_to_clipboard"
             android:key="@string/key_copy_to_clipboard"

@@ -280,6 +280,8 @@
     <string name="key_waiting_for_show_ads">waiting_for_show_ads</string>
     <string name="key_multiple_scan">Multiple scan</string>
     <string name="key_multiple_scan_detail">Scan multiple QR codes at one</string>
+    <string name="key_skip_duplicates">Skip duplicates</string>
+    <string name="key_skip_duplicates_detail">Skip and remove duplicates QRCode or Barcode</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>

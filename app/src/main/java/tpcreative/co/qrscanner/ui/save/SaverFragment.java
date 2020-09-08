@@ -31,6 +31,7 @@ import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.journeyapps.barcodescanner.Util;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -506,7 +507,8 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             Uri uri = Uri.fromFile(file);
             shareToSocial(uri);
         } else {
-            Utils.showGotItSnackbar(getView(), R.string.no_items_found);
+            //Utils.showGotItSnackbar(getView(), R.string.no_items_found);
+            Utils.onDropDownAlert(getActivity(),getString(R.string.no_items_found));
         }
     }
 
