@@ -226,6 +226,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
 
 
     public AdView getAdsView(){
+        Utils.Log(TAG,"show ads...");
         adView = new AdView(this);
         adView.setAdSize(AdSize.BANNER);
         if (Utils.isFreeRelease()){
@@ -288,6 +289,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
 
     public void loadAd(LinearLayout layAd) {
         if (adView==null){
+            Utils.Log(TAG,"ads null");
             return;
         }
         if (adView.getParent() != null) {
