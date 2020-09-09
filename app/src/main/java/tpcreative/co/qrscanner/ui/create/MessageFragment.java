@@ -21,7 +21,8 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class MessageFragment extends BaseActivitySlide implements SingletonGenerate.SingletonGenerateListener{
 
@@ -31,7 +32,7 @@ public class MessageFragment extends BaseActivitySlide implements SingletonGener
     EditText edtTo;
     @BindView(R.id.edtMessage)
     EditText edtMessage;
-    private Save save;
+    private SaveModel save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +42,8 @@ public class MessageFragment extends BaseActivitySlide implements SingletonGener
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Bundle bundle = getIntent().getExtras();
-        final Save mData = (Save) bundle.get("data");
+        final SaveModel mData = (SaveModel) bundle.get("data");
         if (mData!=null){
             save = mData;
             onSetData();
@@ -52,7 +52,6 @@ public class MessageFragment extends BaseActivitySlide implements SingletonGener
             Utils.Log(TAG,"Data is null");
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,7 +143,6 @@ public class MessageFragment extends BaseActivitySlide implements SingletonGener
         finish();
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -154,6 +152,4 @@ public class MessageFragment extends BaseActivitySlide implements SingletonGener
             finish();
         }
     }
-
-
 }

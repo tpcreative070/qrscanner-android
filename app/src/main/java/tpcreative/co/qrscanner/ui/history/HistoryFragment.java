@@ -20,7 +20,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-
 import com.google.zxing.client.result.ParsedResultType;
 import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
@@ -45,10 +44,10 @@ import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonMain;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
-import tpcreative.co.qrscanner.model.History;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
 public class HistoryFragment extends BaseFragment implements HistoryView, HistoryCell.ItemSelectedListener, SingletonHistory.SingletonHistoryListener,SingletonMain.SingleTonMainListener {
@@ -93,17 +92,17 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
 
             switch (item.getItemId()){
                 case R.id.menu_item_select_all:{
-                    final List<History> list = presenter.getListGroup();
+                    final List<HistoryModel> list = presenter.getListGroup();
                     presenter.mList.clear();
                     if (isSelectedAll) {
-                        for (History index : list) {
+                        for (HistoryModel index : list) {
                             index.setDeleted(true);
                             index.setChecked(false);
                             presenter.mList.add(index);
                         }
                         isSelectedAll = false;
                     } else {
-                        for (History index : list) {
+                        for (HistoryModel index : list) {
                             index.setDeleted(true);
                             index.setChecked(true);
                             presenter.mList.add(index);
@@ -120,7 +119,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
                     return true;
                 }
                 case R.id.menu_item_delete:{
-                    final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+                    final List<HistoryModel> listHistory = SQLiteHelper.getList();
                     if (listHistory==null){
                         return false;
                     }
@@ -141,9 +140,9 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
             isSelectedAll = false;
-            final List<History> list = presenter.getListGroup();
+            final List<HistoryModel> list = presenter.getListGroup();
             presenter.mList.clear();
-            for (History index : list) {
+            for (HistoryModel index : list) {
                 index.setDeleted(false);
                 presenter.mList.add(index);
             }
@@ -196,10 +195,10 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     }
 
     private void addRecyclerHeaders() {
-        SectionHeaderProvider<History> sh = new SimpleSectionHeaderProvider<History>() {
+        SectionHeaderProvider<HistoryModel> sh = new SimpleSectionHeaderProvider<HistoryModel>() {
             @NonNull
             @Override
-            public View getSectionHeaderView(@NonNull History history, int i) {
+            public View getSectionHeaderView(@NonNull HistoryModel history, int i) {
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.history_item_header, null, false);
                 TextView textView = view.findViewById(R.id.tvHeader);
                 textView.setText(history.getCategoryName());
@@ -207,7 +206,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
             }
 
             @Override
-            public boolean isSameSection(@NonNull History history, @NonNull History nextHistory) {
+            public boolean isSameSection(@NonNull HistoryModel history, @NonNull HistoryModel nextHistory) {
                 return history.getCategoryId() == nextHistory.getCategoryId();
             }
 
@@ -221,15 +220,14 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     }
 
     private void bindData() {
-        List<History> mListItems = presenter.mList;
+        List<HistoryModel> mListItems = presenter.mList;
         List<HistoryCell> cells = new ArrayList<>();
         //LOOP THROUGH GALAXIES INSTANTIATING THEIR CELLS AND ADDING TO CELLS COLLECTION
-        for (History items : mListItems) {
+        for (HistoryModel items : mListItems) {
             HistoryCell cell = new HistoryCell(items);
             cell.setListener(this);
             cells.add(cell);
         }
-
         if (mListItems!=null){
             if (mListItems.size()>0){
                 tvNotFoundItems.setVisibility(View.INVISIBLE);
@@ -261,7 +259,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
 
     @Override
     public void isShowDeleteAction(boolean isDelete) {
-        final List<History> listHistory = InstanceGenerator.getInstance(QRScannerApplication.getInstance()).getList();
+        final List<HistoryModel> listHistory = SQLiteHelper.getList();
         if (isDelete) {
             if (actionMode == null) {
                 actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);
@@ -276,9 +274,9 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
                 return;
             }
 
-            final List<History> list = presenter.getListGroup();
+            final List<HistoryModel> list = presenter.getListGroup();
             presenter.mList.clear();
-            for (History index : list) {
+            for (HistoryModel index : list) {
                 index.setDeleted(true);
                 presenter.mList.add(index);
             }
@@ -302,14 +300,12 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         if (actionMode == null) {
             actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);
         }
-
-        final List<History> list = presenter.getListGroup();
+        final List<HistoryModel> list = presenter.getListGroup();
         presenter.mList.clear();
-        for (History index : list) {
+        for (HistoryModel index : list) {
             index.setDeleted(true);
             presenter.mList.add(index);
         }
-
         presenter.mList.get(position).setChecked(true);
         if (actionMode!=null){
             actionMode.setTitle(presenter.getCheckedCount() + " " + getString(R.string.selected));
@@ -321,13 +317,11 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
 
     @Override
     public void onClickItem(int position) {
-
         if (actionMode!=null){
             return;
         }
-
         final Create create = new Create();
-        final History history = presenter.mList.get(position);
+        final HistoryModel history = presenter.mList.get(position);
         if (history.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
             create.address = history.address;
             create.fullName = history.fullName;
@@ -387,7 +381,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
 
     @Override
     public void onClickShare(int position) {
-        final History history = presenter.mList.get(position);
+        final HistoryModel history = presenter.mList.get(position);
         StringBuilder sb = new StringBuilder();
         if (history.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
             sb.append("Address :"+history.address);
@@ -408,7 +402,6 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
             sb.append("Url :"+history.url);
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.WIFI.name())) {
-
             sb.append("SSId :"+history.ssId);
             sb.append("\n");
             sb.append("Password :"+ history.password);
@@ -416,9 +409,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
             sb.append("Network encryption :"+ history.networkEncryption);
             sb.append("\n");
             sb.append("Hidden :"+ history.hidden);
-
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.GEO.name())) {
-
             sb.append("Latitude :"+history.lat);
             sb.append("\n");
             sb.append("Longitude :"+ history.lon);
@@ -428,12 +419,10 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.TEL.name())) {
             sb.append("Phone :"+history.phone);
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.SMS.name())) {
-
             sb.append("Phone :"+history.phone);
             sb.append("\n");
             sb.append("Message :"+ history.message);
         } else if (history.createType.equalsIgnoreCase(ParsedResultType.CALENDAR.name())) {
-
             sb.append("Title :"+history.title);
             sb.append("\n");
             sb.append("Description :"+ history.description);

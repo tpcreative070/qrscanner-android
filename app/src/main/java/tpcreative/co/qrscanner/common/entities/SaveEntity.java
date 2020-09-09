@@ -1,4 +1,4 @@
-package tpcreative.co.qrscanner.model;
+package tpcreative.co.qrscanner.common.entities;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.preference.PreferenceScreen;
 import androidx.room.Entity;
@@ -12,9 +12,11 @@ import java.util.Date;
 import java.util.UUID;
 
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.model.SaveEntityModel;
+import tpcreative.co.qrscanner.model.TypeCategories;
 
 @Entity(tableName = "save")
-public class Save implements Serializable{
+public class SaveEntity implements Serializable{
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String email;
@@ -45,6 +47,9 @@ public class Save implements Serializable{
     public boolean favorite;
     public String updatedDateTime;
 
+    /*content_type_barcode*/
+    public String contentUnique;
+
     @Ignore
     public TypeCategories typeCategories;
     @Ignore
@@ -52,7 +57,7 @@ public class Save implements Serializable{
     @Ignore
     private boolean isDeleted;
 
-    public Save(
+    public SaveEntity(
                 String email,
                 String subject ,
                 String message,
@@ -107,7 +112,7 @@ public class Save implements Serializable{
         this.updatedDateTime = updatedDateTime;
     }
 
-    public Save(){
+    public SaveEntity(){
         this.email = "";
         this.subject = "";
         this.message = "" ;
@@ -135,7 +140,38 @@ public class Save implements Serializable{
         this.barcodeFormat = BarcodeFormat.QR_CODE.name();
         this.favorite = false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
+    }
 
+    public SaveEntity(SaveEntityModel item){
+        this.id = item.id;
+        this.email = item.email;
+        this.subject  = item.subject;
+        this.message = item.message;
+        this.phone = item.phone;
+        this.lat = item.lat;
+        this.lon = item.lon;
+        this.query = item.query;
+        this.title = item.title;
+        this.location = item.location;
+        this.description = item.description;
+        this.startEvent = item.startEvent;
+        this.endEvent = item.endEvent;
+        this.startEventMilliseconds = item.startEventMilliseconds;
+        this.endEventMilliseconds = item.endEventMilliseconds;
+        this.fullName = item.fullName;
+        this.address = item.address;
+        this.text = item.text;
+        this.ssId = item.ssId;
+        this.hidden = item.hidden;
+        this.password = item.password;
+        this.url = item.url;
+        this.createType = item.createType;
+        this.networkEncryption = item.networkEncryption;
+        this.createDatetime = item.createDatetime;
+        this.barcodeFormat = item.barcodeFormat;
+        this.favorite = item.favorite;
+        this.updatedDateTime = item.updatedDateTime;
+        this.contentUnique = item.contentUnique;
     }
 
     @Ignore

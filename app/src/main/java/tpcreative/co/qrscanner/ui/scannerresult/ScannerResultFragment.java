@@ -51,13 +51,14 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
-import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.ItemNavigation;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.common.entities.InstanceGenerator;
 
 
 public class ScannerResultFragment extends BaseActivitySlide implements ScannerResultView,Utils.UtilsListener,ScannerResultAdapter.ItemSelectedListener {
@@ -66,7 +67,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     private ScannerResultPresenter presenter;
     private Create create;
     List<LinearLayout> mList = new ArrayList<>();
-    private History history = new History();
+    private HistoryModel history = new HistoryModel();
 
     /*Email*/
     @BindView(R.id.llEmail)
@@ -526,7 +527,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 contactAddress.setText(create.address);
                 contactPhone.setText(create.phone);
                 contactEmail.setText(create.email);
-                history = new History();
+                history = new HistoryModel();
                 history.fullName = create.fullName;
                 history.address = create.address;
                 history.phone = create.phone;
@@ -549,7 +550,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 emailTo.setText(create.email);
                 emailSubject.setText(create.subject);
                 emailMessage.setText(create.message);
-                history = new History();
+                history = new HistoryModel();
                 history.email = create.email;
                 history.subject = create.subject;
                 history.message = create.message;
@@ -567,7 +568,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("productId",create.productId);
                 textProduct.setText(create.productId);
-                history = new History();
+                history = new HistoryModel();
                 history.text = create.productId;
                 history.createType = create.createType.name();
                 history.barcodeFormat = create.barcodeFormat;
@@ -586,7 +587,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("url",create.url);
                 urlAddress.setText(create.url);
-                history = new History();
+                history = new HistoryModel();
                 history.url = create.url;
                 history.createType = create.createType.name();
                 presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
@@ -613,7 +614,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 wifiPassword.setText(create.password);
                 wifiNetworkEncryption.setText(create.networkEncryption);
                 wifiHidden.setText(create.hidden ? "Yes" : "No");
-                history = new History();
+                history = new HistoryModel();
                 history.ssId = create.ssId;
                 history.password = create.password;
                 history.networkEncryption = create.networkEncryption;
@@ -636,7 +637,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 locationLatitude.setText("" + create.lat);
                 locationLongitude.setText("" + create.lon);
                 locationQuery.setText("" + create.query);
-                history = new History();
+                history = new HistoryModel();
                 history.lat = create.lat;
                 history.lon = create.lon;
                 history.query = create.query;
@@ -654,7 +655,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("phone",create.phone);
                 telephoneNumber.setText(create.phone);
-                history = new History();
+                history = new HistoryModel();
                 history.phone = create.phone;
                 history.createType = create.createType.name();
                 if (create.fragmentType == EnumFragmentType.HISTORY || create.fragmentType == EnumFragmentType.SCANNER) {
@@ -672,7 +673,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 presenter.hashClipboard.put("message",create.message);
                 smsTo.setText(create.phone);
                 smsMessage.setText(create.message);
-                history = new History();
+                history = new HistoryModel();
                 history.phone = create.phone;
                 history.message = create.message;
                 history.createType = create.createType.name();
@@ -697,7 +698,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 eventDescription.setText(create.description);
                 eventBeginTime.setText(Utils.convertMillisecondsToDateTime(create.startEventMilliseconds));
                 eventEndTime.setText(Utils.convertMillisecondsToDateTime(create.endEventMilliseconds));
-                history = new History();
+                history = new HistoryModel();
                 history.title = create.title;
                 history.location = create.location;
                 history.description = create.description;
@@ -721,7 +722,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("ISBN",create.ISBN);
                 textISBN.setText(create.ISBN);
-                history = new History();
+                history = new HistoryModel();
                 history.text = create.ISBN;
                 history.createType = create.createType.name();
                 presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
@@ -738,7 +739,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 /*Put item to HashClipboard*/
                 presenter.hashClipboard.put("text",create.text);
                 textMessage.setText(create.text);
-                history = new History();
+                history = new HistoryModel();
                 history.text = create.text;
                 history.createType = create.createType.name();
                 presenter.mListItemNavigation.add(new ItemNavigation(create.createType,create.fragmentType,EnumAction.SEARCH,R.drawable.baseline_search_white_48,"Search"));
@@ -843,8 +844,9 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         history.favorite = create.favorite;
 
         history.createDatetime = Utils.getCurrentDateTime();
-        InstanceGenerator.getInstance(this).onInsert(history);
+        SQLiteHelper.onInsert(history);
         SingletonHistory.getInstance().reLoadData();
+        Utils.Log(TAG,"Parse result " + Utils.getCodeContentByHistory(history));
     }
 
     @Override
@@ -969,7 +971,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     public void onSearch(String query){
         try {
             String escapedQuery = URLEncoder.encode(query, "UTF-8");
-            Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
+            Uri uri = Uri.parse("https://www.google.com/search?q=" + escapedQuery);
             Intent i = new Intent(Intent.ACTION_VIEW,uri);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.setPackage("com.android.chrome");

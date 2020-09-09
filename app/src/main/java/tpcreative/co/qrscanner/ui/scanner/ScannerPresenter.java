@@ -1,26 +1,18 @@
 package tpcreative.co.qrscanner.ui.scanner;
-import android.view.View;
-import android.widget.LinearLayout;
-
 import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.model.EnumAction;
-import tpcreative.co.qrscanner.model.EnumFragmentType;
-import tpcreative.co.qrscanner.model.History;
-import tpcreative.co.qrscanner.model.ItemNavigation;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultView;
+import tpcreative.co.qrscanner.model.HistoryModel;
 
 
 public class ScannerPresenter extends Presenter<ScannerView>{
@@ -33,7 +25,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         mFragment = new ArrayList<>();
     }
     protected int mCount = 0;
-    protected History history = new History();
+    protected HistoryModel history = new HistoryModel();
 
     public void updateValue(int mCount){
         ScannerView view = view();
@@ -46,14 +38,13 @@ public class ScannerPresenter extends Presenter<ScannerView>{
        final Create create = mCreate;
         switch (create.createType){
             case ADDRESSBOOK:
-
                 /*Put item to HashClipboard*/
                 hashClipboard.put("fullName",create.fullName);
                 hashClipboard.put("address",create.address);
                 hashClipboard.put("phone",create.phone);
                 hashClipboard.put("email",create.email);
 
-                history = new History();
+                history = new HistoryModel();
                 history.fullName = create.fullName;
                 history.address = create.address;
                 history.phone = create.phone;
@@ -67,7 +58,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
                 hashClipboard.put("subject",create.subject);
                 hashClipboard.put("message",create.message);
 
-                history = new History();
+                history = new HistoryModel();
                 history.email = create.email;
                 history.subject = create.subject;
                 history.message = create.message;
@@ -77,7 +68,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
             case PRODUCT:
                 /*Put item to HashClipboard*/
                 hashClipboard.put("productId",create.productId);
-                history = new History();
+                history = new HistoryModel();
                 history.text = create.productId;
                 history.createType = create.createType.name();
                 onShowUI(create);
@@ -85,7 +76,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
             case URI:
                 /*Put item to HashClipboard*/
                 hashClipboard.put("url",create.url);
-                history = new History();
+                history = new HistoryModel();
                 history.url = create.url;
                 history.createType = create.createType.name();
                 onShowUI(create);
@@ -97,7 +88,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
                 hashClipboard.put("password",create.password);
                 hashClipboard.put("networkEncryption",create.networkEncryption);
                 hashClipboard.put("hidden",create.hidden ? "Yes" : "No");
-                history = new History();
+                history = new HistoryModel();
                 history.ssId = create.ssId;
                 history.password = create.password;
                 history.networkEncryption = create.networkEncryption;
@@ -111,7 +102,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
                 hashClipboard.put("lat",create.lat+"");
                 hashClipboard.put("lon",create.lon+"");
                 hashClipboard.put("query",create.query);
-                history = new History();
+                history = new HistoryModel();
                 history.lat = create.lat;
                 history.lon = create.lon;
                 history.query = create.query;
@@ -121,7 +112,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
             case TEL:
                 /*Put item to HashClipboard*/
                 hashClipboard.put("phone",create.phone);
-                history = new History();
+                history = new HistoryModel();
                 history.phone = create.phone;
                 history.createType = create.createType.name();
                 onShowUI(create);
@@ -130,7 +121,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
                 /*Put item to HashClipboard*/
                 hashClipboard.put("phone",create.phone);
                 hashClipboard.put("message",create.message);
-                history = new History();
+                history = new HistoryModel();
                 history.phone = create.phone;
                 history.message = create.message;
                 history.createType = create.createType.name();
@@ -143,7 +134,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
                 hashClipboard.put("description",create.description);
                 hashClipboard.put("startEventMilliseconds", Utils.convertMillisecondsToDateTime(create.startEventMilliseconds));
                 hashClipboard.put("endEventMilliseconds",Utils.convertMillisecondsToDateTime(create.endEventMilliseconds));
-                history = new History();
+                history = new HistoryModel();
                 history.title = create.title;
                 history.location = create.location;
                 history.description = create.description;
@@ -157,7 +148,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
             case ISBN:
                 /*Put item to HashClipboard*/
                 hashClipboard.put("ISBN",create.ISBN);
-                history = new History();
+                history = new HistoryModel();
                 history.text = create.ISBN;
                 history.createType = create.createType.name();
                 onShowUI(create);
@@ -165,7 +156,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
             default:
                 /*Put item to HashClipboard*/
                 hashClipboard.put("text",create.text);
-                history = new History();
+                history = new HistoryModel();
                 history.text = create.text;
                 history.createType = create.createType.name();
                 onShowUI(create);
@@ -193,7 +184,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         history.barcodeFormat = create.barcodeFormat;
         history.favorite = create.favorite;
         history.createDatetime = Utils.getCurrentDateTime();
-        InstanceGenerator.getInstance(QRScannerApplication.getInstance()).onInsert(history);
+        SQLiteHelper.onInsert(history);
         SingletonHistory.getInstance().reLoadData();
     }
 

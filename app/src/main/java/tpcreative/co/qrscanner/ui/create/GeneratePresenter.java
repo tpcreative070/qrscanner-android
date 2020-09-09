@@ -32,7 +32,7 @@ public class GeneratePresenter extends Presenter<GenerateView>{
     public void setList(){
         GenerateView view = view();
         mList.clear();
-        if (Utils.isProVersion()){
+        if (Utils.isProRelease()){
             mList.add(new QRCodeType("0",view.getContext().getString(R.string.barcode), R.drawable.ic_barcode));
         }
         mList.add(new QRCodeType("1",view.getContext().getString(R.string.email), R.drawable.baseline_email_white_48));

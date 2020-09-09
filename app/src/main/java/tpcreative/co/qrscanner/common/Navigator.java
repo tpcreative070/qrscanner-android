@@ -8,14 +8,14 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.view.Bungee;
 import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity;
-import tpcreative.co.qrscanner.ui.splashscreen.SplashScreenActivity;
 
 public class Navigator {
     public static final int CREATE = 1000;
@@ -43,7 +43,7 @@ public class Navigator {
         context.startActivity(intent);
     }
 
-    public static  <T> void onGenerateView(Activity context, Save save,Class<T> clazz ){
+    public static  <T> void onGenerateView(Activity context, SaveModel save, Class<T> clazz ){
         Intent intent = new Intent(context,clazz);
         Bundle bundle = new Bundle();
         bundle.putSerializable(QRScannerApplication.getInstance().getString(R.string.key_data),save);

@@ -5,14 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -48,7 +46,8 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
@@ -73,7 +72,7 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private LocationManager locationManager;
     private boolean isRunning;
-    private Save save;
+    private SaveModel save;
 
 
 
@@ -88,7 +87,7 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);;
         Bundle bundle = getIntent().getExtras();
-        final Save mData = (Save) bundle.get(getString(R.string.key_data));
+        final SaveModel mData = (SaveModel) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -96,7 +95,6 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
         else{
             Utils.Log(TAG,"Data is null");
         }
-
         locationManager  = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             showGpsWarningDialog();
@@ -173,7 +171,8 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
                     Create create = new Create();
                     try {
                         if (lastLon ==0 || lastLon==0){
-                            Utils.showGotItSnackbar(edtLatitude,"Please enable GPS in order to get accurate lat and lon");
+                            //Utils.showGotItSnackbar(edtLatitude,"Please enable GPS in order to get accurate lat and lon");
+                            Utils.onDropDownAlert(getParent(),"Please enable GPS in order to get accurate lat and lon");
                         }
                         else {
                             create.lat = lastLat;

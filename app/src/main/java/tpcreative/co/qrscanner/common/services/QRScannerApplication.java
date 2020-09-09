@@ -28,7 +28,7 @@ import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
-import tpcreative.co.qrscanner.model.room.InstanceGenerator;
+import tpcreative.co.qrscanner.common.entities.InstanceGenerator;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 /**
  *
@@ -55,7 +55,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         Fabric.with(this, new Crashlytics());
         InstanceGenerator.getInstance(this);
         isLive = false;
-        if (!Utils.isProVersion()) {
+        if (!Utils.isProRelease()) {
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override
                 public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -83,7 +83,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         Utils.Log(TAG,"Start ads");
-        if (!Utils.isProVersion()){
+        if (!Utils.isProRelease()){
             getAdsView();
         }
     }

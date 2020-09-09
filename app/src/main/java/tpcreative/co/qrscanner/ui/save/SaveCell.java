@@ -17,22 +17,21 @@ import androidx.annotation.NonNull;
 import com.google.zxing.client.result.ParsedResultType;
 import com.jaychang.srv.SimpleCell;
 import com.jaychang.srv.SimpleViewHolder;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.model.History;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
-public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
+public class SaveCell extends SimpleCell<SaveModel,SaveCell.ViewHolder> {
 
 
     private ItemSelectedListener listener;
 
     private static final String TAG = SaveCell.class.getSimpleName();
 
-    public SaveCell(@NonNull Save item) {
+    public SaveCell(@NonNull SaveModel item) {
         super(item);
     }
 
@@ -59,9 +58,7 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
      */
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder viewHolder,final int i, @NonNull Context context, Object o) {
-
-          final Save data = getItem();
-
+        final SaveModel data = getItem();
         if (data.isDeleted()){
             viewHolder.ckDelete.setVisibility(View.VISIBLE);
             viewHolder.llCheckedBox.setVisibility(View.VISIBLE);
@@ -72,10 +69,8 @@ public class SaveCell extends SimpleCell<Save,SaveCell.ViewHolder> {
             viewHolder.llCheckedBox.setVisibility(View.INVISIBLE);
             viewHolder.imgEdit.setVisibility(View.VISIBLE);
         }
-
         Log.d(TAG,"position :" + i +" checked :" + data.isChecked());
         viewHolder.ckDelete.setChecked(data.isChecked());
-
         viewHolder.llCheckedBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

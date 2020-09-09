@@ -30,7 +30,8 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.FormatTypeModel;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class BarcodeFragment extends BaseActivitySlide implements SingletonGenerate.SingletonGenerateListener,GenerateView {
 
@@ -40,7 +41,7 @@ public class BarcodeFragment extends BaseActivitySlide implements SingletonGener
     EditText editText;
     @BindView(R.id.spinner)
     Spinner spinner;
-    private Save save;
+    private SaveModel save;
     private GeneratePresenter presenter;
     private ArrayAdapter<FormatTypeModel> dataAdapter;
 
@@ -55,7 +56,7 @@ public class BarcodeFragment extends BaseActivitySlide implements SingletonGener
         presenter.bindView(this);
         presenter.doInitView();
         Bundle bundle = getIntent().getExtras();
-        final Save mData = (Save) bundle.get(getString(R.string.key_data));
+        final SaveModel mData = (SaveModel) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();

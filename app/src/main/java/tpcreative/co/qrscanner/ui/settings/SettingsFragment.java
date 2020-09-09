@@ -21,20 +21,28 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.SingletonHistory;
+import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.preference.MyPreference;
 import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory;
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Author;
+import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
@@ -82,6 +90,8 @@ public class SettingsFragment extends BaseFragment {
             Log.d(TAG, "isVisible");
         } else {
             Log.d(TAG, "isInVisible");
+            SingletonHistory.getInstance().reLoadData();
+            SingletonSave.getInstance().reLoadData();
         }
     }
 
@@ -132,6 +142,8 @@ public class SettingsFragment extends BaseFragment {
         private MyPreference myPreferenceFileColor;
 
         private MySwitchPreference myPreferenceMultipleScan;
+
+        private MySwitchPreference mySwitchPreferenceSkipDuplicates;
 
         private MyPreference myPreferenceSuperSafe;
 
@@ -184,6 +196,30 @@ public class SettingsFragment extends BaseFragment {
             dialog.show();
         }
 
+        public void askToDeleteDuplicatesItems(int count, ServiceManager.ServiceManagerClickedListener listener) {
+            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+            dialogBuilder.setTitle(R.string.alert);
+            dialogBuilder.setPadding(40,40,40,0);
+            dialogBuilder.setMargin(60,0,60,0);
+            dialogBuilder.setMessage(String.format(getString(R.string.found_items_duplicates),""+count));
+            dialogBuilder.setCancelable(false);
+            dialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    listener.onYes();
+                }
+            });
+            dialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mySwitchPreferenceSkipDuplicates.setChecked(false);
+                    listener.onNo();
+                }
+            });
+            MaterialDialog dialog = dialogBuilder.create();
+            dialog.show();
+        }
+
 
         /**
          * Creates and returns a listener, which allows to adapt the app's theme, when the value of the
@@ -197,7 +233,36 @@ public class SettingsFragment extends BaseFragment {
             return new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(final Preference preference, final Object newValue) {
-                    if (preference instanceof MyPreference) {
+                    if (preference instanceof MySwitchPreference) {
+                        if (preference.getKey().equals(getString(R.string.key_skip_duplicates))){
+                            final boolean mResult = (boolean)newValue;
+                            if (mResult){
+                                final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getListSave());
+                                Utils.Log(TAG,"need to be deleted at save "+mSaveList.size());
+                                final List<HistoryModel> mHistoryList = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getList());
+                                Utils.Log(TAG,"need to be deleted at history "+mHistoryList.size());
+                                final int mCount = mSaveList.size() + mHistoryList.size();
+                                if (mCount>0){
+                                    askToDeleteDuplicatesItems(mCount, new ServiceManager.ServiceManagerClickedListener() {
+                                        @Override
+                                        public void onYes() {
+                                            for (SaveModel index : mSaveList){
+                                                SQLiteHelper.onDelete(index);
+                                            }
+                                            for (HistoryModel index : mHistoryList){
+                                                SQLiteHelper.onDelete(index);
+                                            }
+
+                                        }
+                                        @Override
+                                        public void onNo() {
+
+                                        }
+                                    });
+                                }
+                            }
+                           Utils.Log(TAG,"CLicked "+ newValue);
+                        }
                     }
                     return true;
                 }
@@ -221,7 +286,7 @@ public class SettingsFragment extends BaseFragment {
                         if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
                             askPermission();
                         } else if (preference.getKey().equals(getString(R.string.key_share))) {
-                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
+                            if (Utils.isProRelease()) {
                                 shareToSocial(getString(R.string.scanner_app_pro));
                             } else {
                                 shareToSocial(getString(R.string.scanner_app));
@@ -275,7 +340,7 @@ public class SettingsFragment extends BaseFragment {
             mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
             mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
-            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
+            if (Utils.isProRelease()) {
                 mPreferencePremiumVersion.setVisible(false);
             } else {
                 mPreferencePremiumVersion.setVisible(true);
@@ -327,6 +392,11 @@ public class SettingsFragment extends BaseFragment {
             myPreferenceMultipleScan.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceMultipleScan.setOnPreferenceChangeListener(createChangeListener());
 
+            /*Skip duplicates*/
+            mySwitchPreferenceSkipDuplicates = (MySwitchPreference) findPreference(getString(R.string.key_skip_duplicates));
+            mySwitchPreferenceSkipDuplicates.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            mySwitchPreferenceSkipDuplicates.setOnPreferenceChangeListener(createChangeListener());
+
 
             myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {
                 @Override
@@ -339,14 +409,15 @@ public class SettingsFragment extends BaseFragment {
                 }
             });
 
-            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
+            if (Utils.isProRelease()) {
                 myPreferenceFileColor.setVisible(true);
                 myPreferenceMultipleScan.setVisible(true);
+                mySwitchPreferenceSkipDuplicates.setVisible(true);
             } else {
                 myPreferenceFileColor.setVisible(false);
                 myPreferenceMultipleScan.setVisible(false);
+                mySwitchPreferenceSkipDuplicates.setVisible(false);
             }
-
 
             myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
             myPreferenceCategoryFamilyApps.setOnPreferenceClickListener(createActionPreferenceClickListener());

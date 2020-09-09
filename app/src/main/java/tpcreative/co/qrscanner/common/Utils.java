@@ -18,6 +18,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Handler;
@@ -32,10 +33,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.core.content.PermissionChecker;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.zxing.client.result.ParsedResultType;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -44,6 +47,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.snatik.storage.Storage;
 import com.snatik.storage.helpers.SizeUnit;
+import com.tapadoo.alerter.Alerter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,10 +62,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
@@ -78,7 +84,10 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.TimeHelper;
+import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
+import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.ThemeUtil;
 
@@ -110,6 +119,15 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static String getUUId(){
+        try {
+            return UUID.randomUUID().toString();
+        }
+        catch (Exception e){
+            return ""+System.currentTimeMillis();
         }
     }
 
@@ -153,7 +171,6 @@ public class Utils {
         TextView textView = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setMaxLines(5);
         textView.setTextSize(15);
-
         TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( com.google.android.material.R.id.snackbar_action);
         snackbarActionTextView.setTextSize(14);
         return snackbar;
@@ -557,7 +574,6 @@ public class Utils {
         clipboard.setPrimaryClip(clip);
     }
 
-
     public static void onUpdateVersionRateAlert(){
         try{
             final int current_code_version = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),0);
@@ -622,11 +638,8 @@ public class Utils {
         return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_multiple_scan),false);
     }
 
-    public static boolean isProVersion(){
-        if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))) {
-            return  true;
-        }
-        return  false;
+    public static boolean isSkipDuplicates(){
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_skip_duplicates),false);
     }
 
     public static String generateEAN(String barcode) {
@@ -664,7 +677,6 @@ public class Utils {
     }
 
     public static boolean checkGTIN (String gtin) {
-
         int[] CheckDigitArray = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] gtinMaths       = {3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3};
         String[] BarcodeArray = gtin.split("(?!^)");
@@ -722,4 +734,231 @@ public class Utils {
         final int  mCountRating = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.count_rating),0);
         return mCountRating;
     }
+
+    public static void onScanFile(Context activity, String nameLogs){
+        if (PermissionChecker.checkSelfPermission(activity,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PermissionChecker.PERMISSION_GRANTED) {
+            Utils.Log(TAG,"Granted permission....");
+            final Storage storage = QRScannerApplication.getInstance().getStorage();
+            if (storage!=null){
+                File file = new File(storage.getExternalStorageDirectory()+"/"+nameLogs);
+                MediaScannerConnection.scanFile(activity, new String[]{file.getAbsolutePath()}, null, null);
+                MediaScannerConnection.scanFile(activity, new String[]{storage.getExternalStorageDirectory()}, null, null);
+                storage.createFile(storage.getExternalStorageDirectory()+"/"+nameLogs,"");
+            }
+        }else{
+            Utils.Log(TAG,"No permission");
+        }
+    }
+
+    public static String getCodeContentByHistory(final HistoryModel item){
+        /*Product id must be plus barcode format type*/
+        if (item!=null){
+            final ParsedResultType mResult = ParsedResultType.valueOf(item.createType);
+            if (mResult==null){
+                return null;
+            }
+            switch (mResult){
+                case ADDRESSBOOK:
+                    String code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";";
+                    String mData = mResult.name() +"-" +code;
+                    return mData;
+                case EMAIL_ADDRESS:
+                    code = "MATMSG:TO:" + item.email + ";SUB:" + item.subject + ";BODY:" + item.message + ";";
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case PRODUCT:
+                    code = item.text;
+                    String barCodeType = item.barcodeFormat;
+                    mData =  mResult.name() +"-"+barCodeType+"-"+code;
+                    return mData;
+                case URI:
+                    code = item.url;
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case WIFI:
+                    code = "WIFI:S:" + item.ssId + ";T:" + item.networkEncryption + ";P:" + item.password + ";H:" + item.hidden + ";";
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case GEO:
+                    code = "geo:" + item.lat + "," + item.lon + "?q=" + item.query + "";
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case TEL:
+                    code = "tel:" + item.phone + "";
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case SMS:
+                    code = "smsto:" + item.phone + ":" + item.message;
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case CALENDAR:
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("BEGIN:VEVENT");
+                    builder.append("\n");
+                    builder.append("SUMMARY:" + item.title);
+                    builder.append("\n");
+                    builder.append("DTSTART:" + item.startEvent);
+                    builder.append("\n");
+                    builder.append("DTEND:" + item.endEvent);
+                    builder.append("\n");
+                    builder.append("LOCATION:" + item.location);
+                    builder.append("\n");
+                    builder.append("DESCRIPTION:" + item.description);
+                    builder.append("\n");
+                    builder.append("END:VEVENT");
+                    code = builder.toString();
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case ISBN:
+                    code = item.text;
+                    barCodeType = item.barcodeFormat;
+                    mData =  mResult.name() +"-"+barCodeType+"-"+code;
+                    return mData;
+                default:
+                    code = item.text;
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+            }
+        }
+        return null;
+    }
+
+    public static String getCodeContentByGenerate(final SaveModel item) {
+        /*Product id must be plus barcode format type*/
+        if (item != null) {
+            final ParsedResultType mResult = ParsedResultType.valueOf(item.createType);
+            if (mResult==null){
+                return null;
+            }
+            switch (mResult) {
+                case ADDRESSBOOK:
+                    String code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";";
+                    String mData = mResult.name() + "-" + code;
+                    return mData;
+                case EMAIL_ADDRESS:
+                    code = "MATMSG:TO:" + item.email + ";SUB:" + item.subject + ";BODY:" + item.message + ";";
+                    mData = mResult.name() + "-" + code;
+                    return mData;
+                case PRODUCT:
+                    code = item.text;
+                    String barCodeType = item.barcodeFormat;
+                    mData =  mResult.name() +"-"+barCodeType+"-"+code;
+                    return mData;
+                case URI:
+                    code = item.url;
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case WIFI:
+                    code = "WIFI:S:" + item.ssId + ";T:" + item.networkEncryption + ";P:" + item.password + ";H:" + item.hidden + ";";
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case GEO:
+                    code = "geo:" + item.lat + "," + item.lon + "?q=" + item.query + "";
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case TEL:
+                    code = "tel:" + item.phone + "";
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case SMS:
+                    code = "smsto:" + item.phone + ":" + item.message;
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case CALENDAR:
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("BEGIN:VEVENT");
+                    builder.append("\n");
+                    builder.append("SUMMARY:" + item.title);
+                    builder.append("\n");
+                    builder.append("DTSTART:" + item.startEvent);
+                    builder.append("\n");
+                    builder.append("DTEND:" + item.endEvent);
+                    builder.append("\n");
+                    builder.append("LOCATION:" + item.location);
+                    builder.append("\n");
+                    builder.append("DESCRIPTION:" + item.description);
+                    builder.append("\n");
+                    builder.append("END:VEVENT");
+                    code = builder.toString();
+                    mData = mResult.name() +"-" +code;
+                    return mData;
+                case ISBN:
+                    code = item.text;
+                    barCodeType = item.barcodeFormat;
+                    mData =  mResult.name() +"-"+barCodeType+"-"+code;
+                    return mData;
+                default:
+                    code = item.text;
+                    mData = mResult.name() + "-" + code;
+                    return mData;
+            }
+        }
+        return null;
+    }
+
+
+    public static void onDropDownAlert(Activity activity,String content){
+        Alerter.create(activity)
+       .setTitle("Alert")
+                .setText(content)
+                .setIcon(R.drawable.baseline_warning_white_24)
+                .setBackgroundColorRes(R.color.colorAccent) // or setBackgroundColorInt(Color.CYAN)
+                .show();
+    }
+
+    public static boolean isNotEmptyOrNull(String value) {
+        if (value==null || value.equals("") || value.equals("null")){
+            return false;
+        }
+        return  true;
+    }
+
+    public static List<SaveModel> filterDuplicationsSaveItems(List<SaveModel> list){
+        HashMap<String,SaveModel> mMap = new HashMap<>();
+        List<SaveModel> mList = new ArrayList<>();
+        for (SaveModel index : list){
+            if (Utils.isNotEmptyOrNull(index.contentUnique)){
+                final SaveModel mSave = mMap.get(index.contentUnique);
+                if (mSave==null){
+                    mMap.put(index.contentUnique,index);
+                }else{
+                    mList.add(index);
+                }
+            }else {
+                final String mCode = Utils.getCodeContentByGenerate(index);
+                final SaveModel mSave = mMap.get(mCode);
+                if (mSave==null){
+                    mMap.put(mCode,index);
+                }else{
+                    mList.add(index);
+                }
+            }
+        }
+        return mList;
+    }
+
+    public static List<HistoryModel> filterDuplicationsHistoryItems(List<HistoryModel> list){
+        HashMap<String,HistoryModel> mMap = new HashMap<>();
+        List<HistoryModel> mList = new ArrayList<>();
+        for (HistoryModel index : list){
+            if (Utils.isNotEmptyOrNull(index.contentUnique)){
+                final HistoryModel mHistory = mMap.get(index.contentUnique);
+                if (mHistory==null){
+                    mMap.put(index.contentUnique,index);
+                }else{
+                    mList.add(index);
+                }
+            }else{
+                final String mCode = Utils.getCodeContentByHistory(index);
+                final HistoryModel mHistory = mMap.get(mCode);
+                if (mHistory==null){
+                    mMap.put(mCode,index);
+                }else{
+                    mList.add(index);
+                }
+            }
+        }
+        return mList;
+    }
+
 }

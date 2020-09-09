@@ -19,12 +19,12 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonSave;
-import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.model.Save;
+import tpcreative.co.qrscanner.common.entities.SaveEntity;
+import tpcreative.co.qrscanner.model.SaveModel;
 
 public class WifiFragment extends BaseActivitySlide implements View.OnClickListener ,SingletonGenerate.SingletonGenerateListener {
 
@@ -44,8 +44,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     @BindView(R.id.radio2)
     RadioButton radio2;
     String typeEncrypt = "WPA";
-    private Save save;
-
+    private SaveModel save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
-        final Save mData = (Save) bundle.get(getString(R.string.key_data));
+        final SaveModel mData = (SaveModel) bundle.get(getString(R.string.key_data));
         if (mData!=null){
             save = mData;
             onSetData();
@@ -95,7 +94,6 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-
     private void addValidationForEditText() {
         mAwesomeValidation.addValidation(this,R.id.edtSSID, RegexTemplate.NOT_EMPTY,R.string.err_ssId);
         mAwesomeValidation.addValidation(this,R.id.edtPassword, RegexTemplate.NOT_EMPTY,R.string.err_password);
@@ -104,7 +102,6 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     public void FocusUI(){
         edtSSID.requestFocus();
     }
-
 
     public void onSetData(){
         edtSSID.setText(save.ssId);
@@ -188,9 +185,6 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
-
         }
-
     }
-
 }

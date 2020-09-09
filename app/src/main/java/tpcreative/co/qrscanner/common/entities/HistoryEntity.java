@@ -1,4 +1,4 @@
-package tpcreative.co.qrscanner.model;
+package tpcreative.co.qrscanner.common.entities;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -8,9 +8,11 @@ import java.util.Date;
 import java.util.UUID;
 
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.model.HistoryEntityModel;
+import tpcreative.co.qrscanner.model.TypeCategories;
 
 @Entity(tableName = "history")
-public class History{
+public class HistoryEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String email;
@@ -41,6 +43,9 @@ public class History{
     public boolean favorite;
     public String updatedDateTime;
 
+    /*content_type_barcode*/
+    public String contentUnique;
+
     @Ignore
     public TypeCategories typeCategories;
     @Ignore
@@ -48,7 +53,7 @@ public class History{
     @Ignore
     private boolean isDeleted;
 
-    public History(
+    public HistoryEntity(
                    String email,
                    String subject ,
                    String message,
@@ -102,7 +107,7 @@ public class History{
         this.updatedDateTime = updatedDateTime ;
     }
 
-    public History(){
+    public HistoryEntity(){
         this.email = "";
         this.subject = "";
         this.message = "" ;
@@ -130,6 +135,38 @@ public class History{
         this.barcodeFormat = BarcodeFormat.QR_CODE.name();
         this.favorite = false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
+    }
+
+    public HistoryEntity(HistoryEntityModel item){
+        this.id = item.id;
+        this.email = item.email;
+        this.subject = item.subject;
+        this.message = item.message;
+        this.phone = item.phone;
+        this.lat = item.lat;
+        this.lon = item.lon;
+        this.query = item.query;
+        this.title = item.title;
+        this.location = item.location;
+        this.description = item.description;
+        this.startEvent = item.startEvent;
+        this.endEvent = item.endEvent;
+        this.startEventMilliseconds = item.startEventMilliseconds;
+        this.endEventMilliseconds = item.endEventMilliseconds;
+        this.fullName = item.fullName;
+        this.address = item.address;
+        this.text = item.text;
+        this.ssId = item.ssId;
+        this.hidden = item.hidden;
+        this.password = item.password;
+        this.url = item.url;
+        this.createType = item.createType;
+        this.networkEncryption = item.networkEncryption;
+        this.createDatetime = item.createDatetime;
+        this.barcodeFormat = item.barcodeFormat;
+        this.favorite = item.favorite;
+        this.updatedDateTime = item.updatedDateTime;
+        this.contentUnique = item.contentUnique;
     }
 
     @Ignore

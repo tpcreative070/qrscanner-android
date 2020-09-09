@@ -20,16 +20,17 @@ import com.jaychang.srv.SimpleViewHolder;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.model.History;
+import tpcreative.co.qrscanner.common.entities.HistoryEntity;
+import tpcreative.co.qrscanner.model.HistoryModel;
 
-public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
+public class HistoryCell extends SimpleCell<HistoryModel,HistoryCell.ViewHolder> {
 
 
     private ItemSelectedListener listener;
 
     private static final String TAG = HistoryCell.class.getSimpleName();
 
-    public HistoryCell(@NonNull History item) {
+    public HistoryCell(@NonNull HistoryModel item) {
         super(item);
     }
 
@@ -56,9 +57,7 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
      */
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder viewHolder,final int i, @NonNull Context context, Object o) {
-
-          final History data = getItem();
-
+        final HistoryModel data = getItem();
         if (data.isDeleted()){
             viewHolder.ckDelete.setVisibility(View.VISIBLE);
             viewHolder.llCheckedBox.setVisibility(View.VISIBLE);
@@ -68,12 +67,9 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
             viewHolder.ckDelete.setVisibility(View.INVISIBLE);
             viewHolder.llCheckedBox.setVisibility(View.INVISIBLE);
             viewHolder.imgShare.setVisibility(View.VISIBLE);
-
         }
-
         Log.d(TAG,"position :" + i +" checked :" + data.isChecked());
         viewHolder.ckDelete.setChecked(data.isChecked());
-
         viewHolder.llCheckedBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +79,6 @@ public class HistoryCell extends SimpleCell<History,HistoryCell.ViewHolder> {
                 }
             }
         });
-
         viewHolder.lItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
