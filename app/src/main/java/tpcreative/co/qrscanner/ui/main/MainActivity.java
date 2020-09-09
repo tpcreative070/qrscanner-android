@@ -137,7 +137,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             onVisibleUI();
             onAddPermissionCamera();
         }
-        presenter.doShowAds();
         if (!QRScannerApplication.getInstance().isLoader() && !Utils.isProRelease()){
             QRScannerApplication.getInstance().getAdsView();
         }
@@ -152,6 +151,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             }
         }
         Utils.onScanFile(this,".scan.log");
+        presenter.doShowAds();
     }
 
     public void onVisibleUI(){
@@ -443,7 +443,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
-                    finish();
                 }
             });
 
@@ -469,6 +468,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     public void doShowAds(boolean value) {
         if (value){
+            Utils.Log(TAG,"ads...???");
             QRScannerApplication.getInstance().loadAd(llAds);
             Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
             if (llAds!=null && !QRScannerApplication.getInstance().isLoader()){
