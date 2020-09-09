@@ -34,7 +34,7 @@ public class SQLiteHelper {
                 final HistoryModel mItem = getItemByHistory(mData.contentUnique);
                 if (mItem!=null){
                     Utils.Log(TAG,"Already existed...!!!");
-                    return;
+                    onDelete(mItem);
                 }
             }
             InstanceGenerator.getInstance(getContext()).onInsert(mData);
@@ -96,7 +96,7 @@ public class SQLiteHelper {
                 final SaveModel mItem = getItemBySave(mData.contentUnique);
                 if (mItem!=null){
                     Utils.Log(TAG,"Already existed...!!!");
-                    return;
+                    onDelete(mItem);
                 }
             }
             getInstance().onInsert(mData);

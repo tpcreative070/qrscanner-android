@@ -971,7 +971,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     public void onSearch(String query){
         try {
             String escapedQuery = URLEncoder.encode(query, "UTF-8");
-            Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
+            Uri uri = Uri.parse("https://www.google.com/search?q=" + escapedQuery);
             Intent i = new Intent(Intent.ACTION_VIEW,uri);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.setPackage("com.android.chrome");
