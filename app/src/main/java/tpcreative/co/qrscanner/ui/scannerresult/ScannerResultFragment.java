@@ -58,7 +58,6 @@ import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.ItemNavigation;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.common.entities.InstanceGenerator;
 
 
 public class ScannerResultFragment extends BaseActivitySlide implements ScannerResultView,Utils.UtilsListener,ScannerResultAdapter.ItemSelectedListener {
@@ -870,7 +869,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //AdsLoader.getInstance().loadView();
         Utils.Log(TAG,"onDestroy");
         if (presenter.result!=null){
             switch (presenter.result.fragmentType){
