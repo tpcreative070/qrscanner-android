@@ -26,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -50,6 +51,7 @@ import tpcreative.co.qrscanner.common.SingletonScanner;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
+import tpcreative.co.qrscanner.common.controller.PremiumManager;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
@@ -137,7 +139,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             onVisibleUI();
             onAddPermissionCamera();
         }
-        if (!QRScannerApplication.getInstance().isLoader() && !Utils.isProRelease()){
+        if (!QRScannerApplication.getInstance().isLoader() && !Utils.isPremium()){
             QRScannerApplication.getInstance().getAdsView();
         }
         final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
@@ -152,6 +154,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
         Utils.onScanFile(this,".scan.log");
         presenter.doShowAds();
+        PremiumManager.getInstance().onStartInAppPurchase();
     }
 
     public void onVisibleUI(){
@@ -376,6 +379,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
         Utils.onSetCountRating(Utils.onGetCountRating() +1);
         ServiceManager.getInstance().onDismissServices();
+        PremiumManager.getInstance().onStop();
     }
 
     @Override
@@ -400,22 +404,6 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         }
     }
 
-    public void onRateAppPro() {
-        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release));
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        try {
-            startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
-        }
-    }
-
     public void showEncourage(){
         try {
             MaterialDialog.Builder builder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
@@ -428,12 +416,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
             builder.setPositiveButton(getString(R.string.rate_app_5_stars), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_free_release))){
-                        onRateApp();
-                    }
-                    else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
-                        onRateAppPro();
-                    }
+                    onRateApp();
                     PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
                     PrefsController.putBoolean(getString(R.string.we_are_a_team_positive),true);
                 }

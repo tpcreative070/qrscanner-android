@@ -87,6 +87,7 @@ import tpcreative.co.qrscanner.helper.TimeHelper;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.PremiumModel;
 import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.ThemeUtil;
@@ -552,13 +553,6 @@ public class Utils {
         return  false;
     }
 
-    public static boolean isProRelease(){
-        if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))){
-            return true;
-        }
-        return false;
-    }
-
     public static boolean isFreeRelease(){
         if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release))){
             return true;
@@ -723,6 +717,38 @@ public class Utils {
             }
         }else{
             Utils.Log(TAG,"No permission");
+        }
+    }
+
+    public static boolean isPremium(){
+        try{
+            String value = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),null);
+            if (value!=null){
+                final PremiumModel mPremium = new Gson().fromJson(value,PremiumModel.class);
+                if (mPremium!=null){
+                    return mPremium.isPremium;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void setPremium(boolean isPremium){
+        String value = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),null);
+        final PremiumModel mPremiumLocal = new PremiumModel(isPremium);
+        if (value!=null){
+            final PremiumModel mPremium = new Gson().fromJson(value,PremiumModel.class);
+            if (mPremium!=null){
+                mPremium.isPremium = isPremium;
+                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),new Gson().toJson(mPremium));
+            }else{
+                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),new Gson().toJson(mPremiumLocal));
+            }
+        }else{
+            PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),new Gson().toJson(mPremiumLocal));
         }
     }
 

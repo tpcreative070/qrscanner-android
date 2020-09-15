@@ -19,7 +19,13 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.snatik.storage.Storage;
+
+import org.solovyev.android.checkout.Billing;
+
 import java.util.HashMap;
+
+import javax.annotation.Nonnull;
+
 import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
@@ -55,13 +61,11 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         Fabric.with(this, new Crashlytics());
         InstanceGenerator.getInstance(this);
         isLive = false;
-        if (!Utils.isProRelease()) {
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                }
-            });
-        }
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
         ServiceManager.getInstance().setContext(this);
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory() + "/Pictures/QRScanner";
@@ -83,10 +87,26 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         Utils.Log(TAG,"Start ads");
-        if (!Utils.isProRelease()){
+        if (!Utils.isPremium()){
             getAdsView();
         }
     }
+
+    /*In app purchase*/
+    private final Billing mBilling = new Billing(this, new Billing.DefaultConfiguration() {
+        /*In app purchase*/
+        String key_purchase = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk+6HXAFTNx3LbODafbpgsLqkdyMqMEvIYt55lqTjLIh0PkoAX7oSAD0fY7BXW0Czuys13hNNdyzmDjQe76xmUWTNfXM1vp0JQtStl7tRqNaFuaRje59HKRLpRTW1MGmgKw/19/18EalWTjbGOW7C2qZ5eGIOvGfQvvlraAso9lCTeEwze3bmGTc7B8MOfDqZHETdavSVgVjGJx/K10pzAauZFGvZ+ryZtU0u+9ZSyGx1CgHysmtfcZFKqZLbtOxUQHpBMeJf2M1LReqbR1kvJiAeLYqdOMWzmmNcsEoG6g/e+F9ZgjZjoQzqhWsrTE2IQZAaiwU4EezdqqruNXx6uwIDAQAB";
+        @Override
+        public String getPublicKey() {
+            return key_purchase;
+        }
+    });
+
+    @Nonnull
+    public Billing getBilling() {
+        return mBilling;
+    }
+
 
     @Override
     protected void attachBaseContext(Context base) {

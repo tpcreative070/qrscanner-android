@@ -11,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
@@ -28,7 +26,6 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
 import tpcreative.co.qrscanner.common.SingletonHistory;
 import tpcreative.co.qrscanner.common.SingletonSave;
 import tpcreative.co.qrscanner.common.SingletonSettings;
@@ -44,7 +41,6 @@ import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
-import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -235,6 +231,11 @@ public class SettingsFragment extends BaseFragment {
                 public boolean onPreferenceChange(final Preference preference, final Object newValue) {
                     if (preference instanceof MySwitchPreference) {
                         if (preference.getKey().equals(getString(R.string.key_skip_duplicates))){
+                            if (!Utils.isPremium()){
+                                mySwitchPreferenceSkipDuplicates.setChecked(false);
+                                Navigator.onMoveProVersion(getContext());
+                                return false;
+                            }
                             final boolean mResult = (boolean)newValue;
                             if (mResult){
                                 final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getListSave());
@@ -263,6 +264,13 @@ public class SettingsFragment extends BaseFragment {
                             }
                            Utils.Log(TAG,"CLicked "+ newValue);
                         }
+                        else if (preference.getKey().equals(getString(R.string.key_multiple_scan))){
+                            if (!Utils.isPremium()){
+                                myPreferenceMultipleScan.setChecked(false);
+                                Navigator.onMoveProVersion(getContext());
+                                return  false;
+                            }
+                        }
                     }
                     return true;
                 }
@@ -286,11 +294,7 @@ public class SettingsFragment extends BaseFragment {
                         if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
                             askPermission();
                         } else if (preference.getKey().equals(getString(R.string.key_share))) {
-                            if (Utils.isProRelease()) {
-                                shareToSocial(getString(R.string.scanner_app_pro));
-                            } else {
-                                shareToSocial(getString(R.string.scanner_app));
-                            }
+                            shareToSocial(getString(R.string.scanner_app));
                         } else if (preference.getKey().equals(getString(R.string.key_support))) {
                             try {
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
@@ -305,15 +309,14 @@ public class SettingsFragment extends BaseFragment {
                             Navigator.onMoveToHelp(getContext());
                         }
                         else if (preference.getKey().equals(getString(R.string.key_color_code))){
-                            Navigator.onMoveToChangeFileColor(getActivity());
+                            if (!Utils.isPremium()){
+                                Navigator.onMoveProVersion(getContext());
+                            }else{
+                                Navigator.onMoveToChangeFileColor(getActivity());
+                            }
                         }
                         else if (preference.getKey().equals(getString(R.string.key_rate))){
-                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_free_release))){
-                                onRateApp();
-                            }
-                            else if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
-                                onRateProApp();
-                            }
+                            onRateApp();
                         }
                         else if (preference.getKey().equals(getString(R.string.key_supersafe))){
                             onSuperSafe();
@@ -339,12 +342,7 @@ public class SettingsFragment extends BaseFragment {
             mPreferencePremiumVersion = (MyPreference) findPreference(getString(R.string.key_premium_version));
             mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
             mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
-
-            if (Utils.isProRelease()) {
-                mPreferencePremiumVersion.setVisible(false);
-            } else {
-                mPreferencePremiumVersion.setVisible(true);
-            }
+            mPreferencePremiumVersion.setVisible(false);
 
             /*App Permissions*/
             myPreferencePermissions = (MyPreference) findPreference(getString(R.string.key_app_permissions));
@@ -408,16 +406,6 @@ public class SettingsFragment extends BaseFragment {
                     }
                 }
             });
-
-            if (Utils.isProRelease()) {
-                myPreferenceFileColor.setVisible(true);
-                myPreferenceMultipleScan.setVisible(true);
-                mySwitchPreferenceSkipDuplicates.setVisible(true);
-            } else {
-                myPreferenceFileColor.setVisible(false);
-                myPreferenceMultipleScan.setVisible(false);
-                mySwitchPreferenceSkipDuplicates.setVisible(false);
-            }
 
             myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
             myPreferenceCategoryFamilyApps.setOnPreferenceClickListener(createActionPreferenceClickListener());
@@ -515,22 +503,6 @@ public class SettingsFragment extends BaseFragment {
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_free_release))));
-            }
-        }
-
-        public void onRateProApp() {
-            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release));
-            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-            // To count with Play market backstack, After pressing back button,
-            // to taken back to our application, we need to add following flags to intent.
-            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            try {
-                startActivity(goToMarket);
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
             }
         }
     }

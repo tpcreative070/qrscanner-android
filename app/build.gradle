@@ -127,6 +127,9 @@ dependencies {
         exclude group: 'stax', module: 'stax'
     }
 
+    /*Checkout*/
+    implementation 'org.solovyev.android:checkout:1.2.2'
+
     /*CSV*/
     implementation files('libs/opencsv-4.4.jar')
 
