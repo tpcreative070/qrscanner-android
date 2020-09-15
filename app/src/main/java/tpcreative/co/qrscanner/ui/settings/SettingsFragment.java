@@ -216,7 +216,6 @@ public class SettingsFragment extends BaseFragment {
             dialog.show();
         }
 
-
         /**
          * Creates and returns a listener, which allows to adapt the app's theme, when the value of the
          * corresponding preference has been changed.
@@ -320,9 +319,6 @@ public class SettingsFragment extends BaseFragment {
                         }
                         else if (preference.getKey().equals(getString(R.string.key_supersafe))){
                             onSuperSafe();
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_premium_version))){
-                            Navigator.onMoveProVersion(getContext());
                         }
                     }
                     return true;

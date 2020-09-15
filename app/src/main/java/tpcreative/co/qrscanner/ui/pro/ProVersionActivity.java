@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -138,6 +139,7 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
 //                        presenter.onAddCheckout(purchase);
 //                    }
                     Utils.setPremium(true);
+                    finish();
                 }
                 catch (Exception e){
                     Toast.makeText(getApplicationContext(),"Error "+e.getMessage(),Toast.LENGTH_SHORT).show();
@@ -176,7 +178,6 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
     private void reloadInventory() {
         List<String> mList = new ArrayList<>();
         mList.add(getString(R.string.one_years));
-        //mList.add(getString(R.string.life_time));
         final Inventory.Request request = Inventory.Request.create();
         // load purchase info
         request.loadAllPurchases();
