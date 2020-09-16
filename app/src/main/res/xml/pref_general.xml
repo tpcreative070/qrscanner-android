@@ -2,7 +2,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto">
 
-    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_scan"
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_basic_features"
         android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MySwitchPreference
             android:layout="@layout/custom_preferences_item"
@@ -18,6 +18,24 @@
             android:key="@string/key_beep">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_filter_none_white_48"
+            android:title="@string/key_copy_to_clipboard"
+            android:key="@string/key_copy_to_clipboard"
+            android:defaultValue="false"
+            android:summary="@string/key_copy_to_clipboard_detail">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            android:defaultValue="false"
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_language_white_48"
+            android:title="@string/key_auto_navigate_to_browser"
+            android:summary="@string/key_auto_navigate_to_browser_detail"
+            android:key="@string/key_auto_navigate_to_browser">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_family_apps" android:key="@string/key_family_apps"
@@ -65,25 +83,6 @@
             android:defaultValue="false"
             android:summary="@string/key_skip_duplicates_detail">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
-
-        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_filter_none_white_48"
-            android:title="@string/key_copy_to_clipboard"
-            android:key="@string/key_copy_to_clipboard"
-            android:defaultValue="false"
-            android:summary="@string/key_copy_to_clipboard_detail">
-        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
-
-        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            android:defaultValue="false"
-            android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_language_white_48"
-            android:title="@string/key_auto_navigate_to_browser"
-            android:summary="@string/key_auto_navigate_to_browser_detail"
-            android:key="@string/key_auto_navigate_to_browser">
-        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
-
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
 

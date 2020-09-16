@@ -203,6 +203,7 @@
     <string name="device_type">Android</string>
     <string name="key_locale">locale</string>
     <string name="key_scan">Scan</string>
+    <string name="key_basic_features">Basic Features</string>
     <string name="key_advance_features">Advance Features</string>
     <string name="key_vibrate">Vibrate</string>
     <string name="key_beep">Beep</string>
