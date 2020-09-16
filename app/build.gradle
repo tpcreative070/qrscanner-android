@@ -39,6 +39,7 @@ android {
         }
 
         freerelease {
+            //initWith(buildTypes.debug)
             applicationIdSuffix ".free.release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }

@@ -44,17 +44,18 @@ public class PremiumManager {
                             final Purchase purchaseExpire = mProduct.getPurchaseInState(index, Purchase.State.EXPIRED);
                             if (purchaseExpire != null) {
                                Utils.setPremium(false);
-                                Utils.writeLogs(Utils.logPath(),"line 47",true);
+                                Utils.writeLogs("line 47");
                             }else{
                                 final Purchase purchase = mProduct.getPurchaseInState(index, Purchase.State.PURCHASED);
                                 if (purchase == null) {
-                                    Utils.writeLogs(Utils.logPath(),"line 51",true);
+                                    Utils.writeLogs("line 51");
                                    Utils.setPremium(false);
                                 } else {
-                                    Utils.writeLogs(Utils.logPath(),"line 54",true);
-                                   Utils.setPremium(true);
+                                    Utils.writeLogs("line 54");
+                                    Utils.setPremium(true);
                                 }
                             }
+                            Utils.Log(TAG,"Status: " + Utils.isPremium());
                         }
                     }
                 }

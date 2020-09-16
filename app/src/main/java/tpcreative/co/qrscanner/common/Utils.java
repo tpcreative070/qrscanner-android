@@ -33,6 +33,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -49,6 +50,7 @@ import com.snatik.storage.Storage;
 import com.snatik.storage.helpers.SizeUnit;
 import com.tapadoo.alerter.Alerter;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -98,22 +100,37 @@ public class Utils {
     private static final long flagValue = 7200000;
     private UtilsListener listenner;
 
-    public static boolean writeLogs( String path_folder_name, String responseJson, boolean append) {
-        try {
-            File root = new File(path_folder_name);
-            if (!root.exists()) {
-                root.createNewFile();
+    public static void writeLogs(String responseJson) {
+        if (!BuildConfig.DEBUG){
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(),android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ) {
+            appendLog(responseJson);
+            Utils.Log(TAG,"write logs...");
+        }
+    }
+
+    private static void appendLog(String text) {
+        File logFile = new File(logPath());
+        if (!logFile.exists()) {
+            try {
+                logFile.createNewFile();
             }
-            FileWriter file = new FileWriter(root, append);
-            file.write("\r\n");
-            file.write(responseJson);
-            file.write("\r\n");
-            file.flush();
-            file.close();
-            return true;
-        } catch (IOException e) {
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(text+"\n");
+            buf.newLine();
+            buf.close();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
-            return false;
         }
     }
 
@@ -985,7 +1002,7 @@ public class Utils {
 
     public static String logPath(){
         final Storage storage = QRScannerApplication.getInstance().getStorage();
-        return storage.getExternalStorageDirectory()+"/."+"logsData.txt";
+        return storage.getExternalStorageDirectory()+"/logsData.txt";
     }
 
 }

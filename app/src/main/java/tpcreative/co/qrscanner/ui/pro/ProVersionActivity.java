@@ -46,6 +46,7 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
     private InventoryCallback mInventoryCallback;
     private Inventory.Product mProduct;
     private Sku mYears;
+    private static String TAG = ProVersionActivity.class.getSimpleName();
 
 
     @Override
@@ -139,7 +140,8 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
 //                        presenter.onAddCheckout(purchase);
 //                    }
                     final Purchase purchase = (Purchase) result;
-                    Utils.writeLogs(Utils.logPath(),new Gson().toJson(purchase),true);
+                    Utils.Log(TAG,new Gson().toJson(purchase));
+                    Utils.writeLogs(new Gson().toJson(purchase));
                     Utils.setPremium(true);
                     finish();
                 }
@@ -150,6 +152,7 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
             }
             @Override
             public void onError(int response, @Nonnull Exception e) {
+                Utils.Log(TAG,"Error checkout " +e.getMessage());
                 reloadInventory();
             }
         };
