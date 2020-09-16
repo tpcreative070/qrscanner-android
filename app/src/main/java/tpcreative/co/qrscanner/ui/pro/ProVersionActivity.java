@@ -138,6 +138,8 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
 //                        final Purchase purchase = (Purchase) result;
 //                        presenter.onAddCheckout(purchase);
 //                    }
+                    final Purchase purchase = (Purchase) result;
+                    Utils.writeLogs(Utils.logPath(),new Gson().toJson(purchase),true);
                     Utils.setPremium(true);
                     finish();
                 }

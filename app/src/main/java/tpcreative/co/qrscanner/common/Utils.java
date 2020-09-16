@@ -98,22 +98,16 @@ public class Utils {
     private static final long flagValue = 7200000;
     private UtilsListener listenner;
 
-    public static boolean mCreateAndSaveFileOverride(String fileName, String path_folder_name, String responseJson, boolean append) {
-        final String newLine = System.getProperty("line.separator");
+    public static boolean writeLogs( String path_folder_name, String responseJson, boolean append) {
         try {
-            File root = new File(path_folder_name + "/" + fileName);
+            File root = new File(path_folder_name);
             if (!root.exists()) {
-                File parentFolder = new File(path_folder_name);
-                if (!parentFolder.exists()) {
-                    parentFolder.mkdirs();
-                }
                 root.createNewFile();
             }
             FileWriter file = new FileWriter(root, append);
             file.write("\r\n");
             file.write(responseJson);
             file.write("\r\n");
-
             file.flush();
             file.close();
             return true;
@@ -721,6 +715,7 @@ public class Utils {
     }
 
     public static boolean isPremium(){
+        Utils.Log(TAG,"isPremium");
         try{
             String value = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),null);
             if (value!=null){
@@ -750,6 +745,7 @@ public class Utils {
         }else{
             PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),new Gson().toJson(mPremiumLocal));
         }
+        Utils.Log(TAG,"setPremium");
     }
 
     public static void onSetCountRating(int count){
@@ -985,6 +981,11 @@ public class Utils {
             }
         }
         return mList;
+    }
+
+    public static String logPath(){
+        final Storage storage = QRScannerApplication.getInstance().getStorage();
+        return storage.getExternalStorageDirectory()+"/."+"logsData.txt";
     }
 
 }

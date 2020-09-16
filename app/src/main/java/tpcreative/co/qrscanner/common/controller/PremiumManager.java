@@ -1,4 +1,6 @@
 package tpcreative.co.qrscanner.common.controller;
+import com.google.gson.Gson;
+
 import org.solovyev.android.checkout.Billing;
 import org.solovyev.android.checkout.Checkout;
 import org.solovyev.android.checkout.Inventory;
@@ -42,11 +44,14 @@ public class PremiumManager {
                             final Purchase purchaseExpire = mProduct.getPurchaseInState(index, Purchase.State.EXPIRED);
                             if (purchaseExpire != null) {
                                Utils.setPremium(false);
+                                Utils.writeLogs(Utils.logPath(),"line 47",true);
                             }else{
                                 final Purchase purchase = mProduct.getPurchaseInState(index, Purchase.State.PURCHASED);
                                 if (purchase == null) {
+                                    Utils.writeLogs(Utils.logPath(),"line 51",true);
                                    Utils.setPremium(false);
                                 } else {
+                                    Utils.writeLogs(Utils.logPath(),"line 54",true);
                                    Utils.setPremium(true);
                                 }
                             }
