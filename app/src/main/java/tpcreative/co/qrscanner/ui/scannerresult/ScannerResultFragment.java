@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -176,6 +177,9 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
 
     @BindView(R.id.llAds)
     LinearLayout llAds;
+
+    @BindView(R.id.rlAdsRoot)
+    RelativeLayout rlAdsRoot;
 
     private ScannerResultAdapter adapter;
     LinearLayoutManager llm;
@@ -1007,11 +1011,11 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             QRScannerApplication.getInstance().loadLargeAd(llAds);
             Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
             if (llAds!=null && !QRScannerApplication.getInstance().isLoaderLarge()){
-                llAds.setVisibility(View.GONE);
+                rlAdsRoot.setVisibility(View.GONE);
             }
         }else{
             Utils.onWriteLogs(this,"logs_completed.txt",""+"2222");
-            llAds.setVisibility(View.GONE);
+            rlAdsRoot.setVisibility(View.GONE);
         }
     }
 }

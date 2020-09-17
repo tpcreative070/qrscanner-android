@@ -847,6 +847,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
                     <RelativeLayout
+                        android:id="@+id/rlAdsRoot"
                         android:layout_marginBottom="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
