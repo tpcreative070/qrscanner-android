@@ -174,6 +174,9 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
 
+    @BindView(R.id.llAds)
+    LinearLayout llAds;
+
     private ScannerResultAdapter adapter;
     LinearLayoutManager llm;
 
@@ -205,6 +208,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         presenter.bindView(this);
         setupRecyclerViewItem();
         presenter.getIntent(this);
+        if (!QRScannerApplication.getInstance().isLoaderLarge() && !Utils.isPremium()){
+            QRScannerApplication.getInstance().getAdsLargeView();
+        }
+        presenter.doShowAds();
     }
 
     @Override
@@ -992,4 +999,19 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         }
     }
 
+    /*show ads*/
+    @Override
+    public void doShowAds(boolean isShow) {
+        if (isShow){
+            Utils.Log(TAG,"ads...???");
+            QRScannerApplication.getInstance().loadLargeAd(llAds);
+            Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
+            if (llAds!=null && !QRScannerApplication.getInstance().isLoaderLarge()){
+                llAds.setVisibility(View.GONE);
+            }
+        }else{
+            Utils.onWriteLogs(this,"logs_completed.txt",""+"2222");
+            llAds.setVisibility(View.GONE);
+        }
+    }
 }

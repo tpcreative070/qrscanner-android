@@ -9,10 +9,12 @@ import java.util.List;
 import java.util.Map;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.ItemNavigation;
+import tpcreative.co.qrscanner.ui.main.MainView;
 
 public class ScannerResultPresenter extends Presenter<ScannerResultView>{
 
@@ -22,6 +24,15 @@ public class ScannerResultPresenter extends Presenter<ScannerResultView>{
     protected StringBuilder stringBuilderClipboard = new StringBuilder();
     protected List<ItemNavigation>mListItemNavigation;
     private static final String TAG = ScannerResultPresenter.class.getSimpleName();
+
+    public void doShowAds(){
+        ScannerResultView view = view();
+        if (Utils.isDebug() || !Utils.isPremium()){
+            view.doShowAds(true);
+        }else{
+            view.doShowAds(false);
+        }
+    }
 
     public ScannerResultPresenter(){
         result = new Create();

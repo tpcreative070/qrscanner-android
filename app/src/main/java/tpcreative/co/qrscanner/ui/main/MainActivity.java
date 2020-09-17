@@ -142,6 +142,9 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (!QRScannerApplication.getInstance().isLoader() && !Utils.isPremium()){
             QRScannerApplication.getInstance().getAdsView();
         }
+        if (!QRScannerApplication.getInstance().isLoaderLarge() && !Utils.isPremium()){
+            QRScannerApplication.getInstance().getAdsLargeView();
+        }
         final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
         if (!isPressed){
             final int  mCountRating = Utils.onGetCountRating();

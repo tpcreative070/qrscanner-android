@@ -3,5 +3,6 @@
     <string name="app_name">QR Scanner</string>
     <string name="admob_app_id">ca-app-pub-4373922267501959~3392590848</string>
     <string name="banner_footer">ca-app-pub-4373922267501959/9307152106</string>
+    <string name="banner_review">ca-app-pub-1640362259804989/2668382058</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

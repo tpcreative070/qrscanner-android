@@ -19,13 +19,9 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.snatik.storage.Storage;
-
 import org.solovyev.android.checkout.Billing;
-
 import java.util.HashMap;
-
 import javax.annotation.Nonnull;
-
 import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
@@ -50,8 +46,10 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private boolean isLive;
     private MainActivity activity;
     private AdActivity adActivity;
-    AdView adView;
+    private AdView adView;
+    private AdView adLargeView;
     private boolean isLoader = false;
+    private boolean isLoaderLarge = false;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
 
     @Override
@@ -89,6 +87,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         Utils.Log(TAG,"Start ads");
         if (!Utils.isPremium()){
             getAdsView();
+            getAdsLargeView();
         }
     }
 
@@ -307,6 +306,68 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         return adView;
     }
 
+    public AdView getAdsLargeView(){
+        Utils.Log(TAG,"show ads...");
+        adLargeView = new AdView(this);
+        adLargeView.setAdSize(AdSize.MEDIUM_RECTANGLE);
+        if (Utils.isFreeRelease()){
+            if(Utils.isDebug()){
+                adLargeView.setAdUnitId(getString(R.string.banner_home_footer_test));
+            }else{
+                adLargeView.setAdUnitId(getString(R.string.banner_review));
+            }
+        }else{
+            adLargeView.setAdUnitId(getString(R.string.banner_home_footer_test));
+        }
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adLargeView.loadAd(adRequest);
+        adLargeView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                isLoaderLarge = true;
+                Utils.Log(TAG,"Ads successful");
+                final Activity activity = getActivity();
+                if (activity!=null){
+                    Utils.onWriteLogs(activity,"logs.txt","0000");
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                isLoaderLarge = false;
+                Utils.Log(TAG,"Ads failed");
+                final Activity activity = getActivity();
+                if (activity!=null){
+                    Utils.onWriteLogs(activity,"logs.txt",""+errorCode);
+                }
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
+        return adLargeView;
+    }
+
     public void loadAd(LinearLayout layAd) {
         if (adView==null){
             Utils.Log(TAG,"ads null");
@@ -319,8 +380,24 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         layAd.addView(adView);
     }
 
+    public void loadLargeAd(LinearLayout layAd) {
+        if (adLargeView==null){
+            Utils.Log(TAG,"ads null");
+            return;
+        }
+        if (adLargeView.getParent() != null) {
+            ViewGroup tempVg = (ViewGroup) adLargeView.getParent();
+            tempVg.removeView(adLargeView);
+        }
+        layAd.addView(adLargeView);
+    }
+
     public boolean isLoader() {
         return isLoader;
+    }
+
+    public boolean isLoaderLarge() {
+        return isLoaderLarge;
     }
 }
 
