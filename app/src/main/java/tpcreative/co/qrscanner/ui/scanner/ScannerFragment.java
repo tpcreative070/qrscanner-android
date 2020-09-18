@@ -842,16 +842,16 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(ScannerFragment.this);
             Utils.Log(TAG, "isVisible");
         } else {
             Utils.Log(TAG, "isInVisible");
         }
         if (barcodeScannerView != null) {
-            if (isVisibleToUser) {
+            if (menuVisible) {
                 if (typeCamera!=2){
                     onBeepAndVibrate();
                     barcodeScannerView.resume();
@@ -862,6 +862,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
                 }
             }
         }
+        Utils.Log(TAG,"Fragment visit..." + menuVisible);
     }
 
     @Override
