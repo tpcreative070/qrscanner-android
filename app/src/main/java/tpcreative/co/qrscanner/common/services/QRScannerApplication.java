@@ -45,7 +45,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private static String url;
     private boolean isLive;
     private MainActivity activity;
-    private AdActivity adActivity;
     private AdView adView;
     private AdView adLargeView;
     private boolean isLoader = false;
@@ -118,20 +117,12 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         if (activity instanceof MainActivity){
             this.activity = (MainActivity) activity;
         }
-        if (activity instanceof AdActivity){
-            this.adActivity = (AdActivity) activity;
-            Utils.Log(TAG,"Start Activity ads");
-        }
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
         if (activity instanceof MainActivity){
             this.activity = (MainActivity) activity;
-        }
-        if (activity instanceof AdActivity){
-            this.adActivity = (AdActivity) activity;
-            Utils.Log(TAG,"Start Activity ads");
         }
     }
 
@@ -140,18 +131,10 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         if (activity instanceof MainActivity){
             this.activity = (MainActivity) activity;
         }
-        if (activity instanceof AdActivity){
-            this.adActivity = (AdActivity) activity;
-            Utils.Log(TAG,"onActivityResumed AdActivity");
-        }
     }
 
     public MainActivity getActivity() {
         return activity;
-    }
-
-    public AdActivity getAdActivity() {
-        return adActivity;
     }
 
     @Override
