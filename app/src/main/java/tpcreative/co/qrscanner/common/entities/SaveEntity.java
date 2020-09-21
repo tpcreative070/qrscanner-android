@@ -1,19 +1,11 @@
 package tpcreative.co.qrscanner.common.entities;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.preference.PreferenceScreen;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
 import com.google.zxing.BarcodeFormat;
-
 import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
-
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.model.SaveEntityModel;
-import tpcreative.co.qrscanner.model.TypeCategories;
 
 @Entity(tableName = "save")
 public class SaveEntity implements Serializable{
@@ -49,13 +41,6 @@ public class SaveEntity implements Serializable{
 
     /*content_type_barcode*/
     public String contentUnique;
-
-    @Ignore
-    public TypeCategories typeCategories;
-    @Ignore
-    private boolean isChecked;
-    @Ignore
-    private boolean isDeleted;
 
     public SaveEntity(
                 String email,
@@ -136,7 +121,6 @@ public class SaveEntity implements Serializable{
         this.url = "";
         this.createType = "";
         this.networkEncryption = "";
-        this.typeCategories = new TypeCategories();
         this.barcodeFormat = BarcodeFormat.QR_CODE.name();
         this.favorite = false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
@@ -173,57 +157,5 @@ public class SaveEntity implements Serializable{
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
     }
-
-    @Ignore
-    public boolean isChecked() {
-        return isChecked;
-    }
-
-    @Ignore
-    public void setChecked(boolean checked) {
-        isChecked = checked;
-    }
-
-    @Ignore
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    @Ignore
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-
-    @Ignore
-    public int getId() {
-        return id;
-    }
-
-    @Ignore
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Ignore
-    public String getUUId(){
-        try {
-            return UUID.randomUUID().toString();
-        }
-        catch (Exception e){
-            return ""+System.currentTimeMillis();
-        }
-    }
-
-    @Ignore
-    public int getCategoryId() {
-        return typeCategories.getId();
-    }
-
-    @Ignore
-    public String getCategoryName() {
-        return typeCategories.getType();
-    }
-
 }
 
