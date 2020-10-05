@@ -1,257 +1,57 @@
 {
   "project_info": {
-    "project_number": "313458999697",
-    "firebase_url": "https://tpcreative-f96c7.firebaseio.com",
-    "project_id": "tpcreative-f96c7",
-    "storage_bucket": "tpcreative-f96c7.appspot.com"
+    "project_number": "369444282152",
+    "firebase_url": "https://qrscanner-1531453997054.firebaseio.com",
+    "project_id": "qrscanner-1531453997054",
+    "storage_bucket": "qrscanner-1531453997054.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:313458999697:android:b73984c7c887d77d",
-        "android_client_info": {
-          "package_name": "co.tpcreative.supersafe"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCc8lQo97S1ntQo3JNE_7KAm5NSi4Niw3M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "313458999697-79miv3d4cbgdc76djucd9cpjihu7k0ss.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "co.tpcreative.supersafe.develop"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:313458999697:android:b11bfca682a7ecc4",
-        "android_client_info": {
-          "package_name": "co.tpcreative.supersafe.develop"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCc8lQo97S1ntQo3JNE_7KAm5NSi4Niw3M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "313458999697-79miv3d4cbgdc76djucd9cpjihu7k0ss.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "co.tpcreative.supersafe.develop"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:313458999697:android:eec6c64b685e86ce",
-        "android_client_info": {
-          "package_name": "tpcreative.co.gpsspeedkm"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCc8lQo97S1ntQo3JNE_7KAm5NSi4Niw3M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "313458999697-79miv3d4cbgdc76djucd9cpjihu7k0ss.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "co.tpcreative.supersafe.develop"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:313458999697:android:e370beac5eaac32a",
-        "android_client_info": {
-          "package_name": "tpcreative.co.gpsspeedkm.develop"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCc8lQo97S1ntQo3JNE_7KAm5NSi4Niw3M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "313458999697-79miv3d4cbgdc76djucd9cpjihu7k0ss.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "co.tpcreative.supersafe.develop"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:313458999697:android:6638b73a8636d7a3",
-        "android_client_info": {
-          "package_name": "tpcreative.co.qrscanner"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCc8lQo97S1ntQo3JNE_7KAm5NSi4Niw3M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "313458999697-79miv3d4cbgdc76djucd9cpjihu7k0ss.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "co.tpcreative.supersafe.develop"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:313458999697:android:d828e890c9fd6f6e",
-        "android_client_info": {
-          "package_name": "tpcreative.co.qrscanner.free.develop"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCc8lQo97S1ntQo3JNE_7KAm5NSi4Niw3M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "313458999697-79miv3d4cbgdc76djucd9cpjihu7k0ss.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "co.tpcreative.supersafe.develop"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:313458999697:android:21e683aee2233374",
+        "mobilesdk_app_id": "1:369444282152:android:e9b8f501335ccd0da87a1d",
         "android_client_info": {
           "package_name": "tpcreative.co.qrscanner.free.release"
         }
       },
       "oauth_client": [
         {
-          "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
+          "client_id": "369444282152-u9vk5kgqg9251gq9o08roof83762j0r8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tpcreative.co.qrscanner.free.release",
+            "certificate_hash": "18df20cb3e96f8c527b6df0bc18d268efa38fff9"
+          }
+        },
+        {
+          "client_id": "369444282152-am7vujmoml5cr07uptc8q727jlh2pq6a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tpcreative.co.qrscanner.free.release",
+            "certificate_hash": "07f0c8f4f0601e17ed799664ac8b1904679c40a2"
+          }
+        },
+        {
+          "client_id": "369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc8lQo97S1ntQo3JNE_7KAm5NSi4Niw3M"
+          "current_key": "AIzaSyDGdrfAVeZEceHLWJH7v_2-9rVwHLgg8cw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "313458999697-rvhrs6a1q3fdoli9mclg23b8fu21dir0.apps.googleusercontent.com",
+              "client_id": "369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "313458999697-79miv3d4cbgdc76djucd9cpjihu7k0ss.apps.googleusercontent.com",
+              "client_id": "369444282152-nmqq6gqom7ikjbta7ut160948gfnf71o.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "co.tpcreative.supersafe.develop"
+                "bundle_id": "co.tpcreative.qrscanner.app.develop"
               }
             }
           ]
