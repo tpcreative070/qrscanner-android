@@ -454,12 +454,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         if (value){
             Utils.Log(TAG,"ads...???");
             QRScannerApplication.getInstance().loadAd(llAds);
-            Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
-            if (llAds!=null && !QRScannerApplication.getInstance().isLoader()){
-                llAds.setVisibility(View.GONE);
-            }
         }else{
-            Utils.onWriteLogs(this,"logs_completed.txt",""+"2222");
             llAds.setVisibility(View.GONE);
         }
     }

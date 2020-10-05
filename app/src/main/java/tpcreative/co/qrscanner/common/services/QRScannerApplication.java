@@ -9,20 +9,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
-import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.snatik.storage.Storage;
 import org.solovyev.android.checkout.Billing;
 import java.util.HashMap;
 import javax.annotation.Nonnull;
-import io.fabric.sdk.android.Fabric;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
@@ -55,7 +54,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        Fabric.with(this, new Crashlytics());
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
         InstanceGenerator.getInstance(this);
         isLive = false;
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -254,14 +253,10 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             }
 
             @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
+            public void onAdFailedToLoad(LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
                 isLoader = false;
                 Utils.Log(TAG,"Ads failed");
-                final Activity activity = getActivity();
-                if (activity!=null){
-                    Utils.onWriteLogs(activity,"logs.txt",""+errorCode);
-                }
             }
 
             @Override
@@ -316,14 +311,10 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             }
 
             @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
+            public void onAdFailedToLoad(LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
                 isLoaderLarge = false;
                 Utils.Log(TAG,"Ads failed");
-                final Activity activity = getActivity();
-                if (activity!=null){
-                    Utils.onWriteLogs(activity,"logs.txt",""+errorCode);
-                }
             }
 
             @Override

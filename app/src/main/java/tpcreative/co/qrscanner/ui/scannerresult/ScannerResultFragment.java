@@ -1009,12 +1009,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         if (isShow){
             Utils.Log(TAG,"ads...???");
             QRScannerApplication.getInstance().loadLargeAd(llAds);
-            Utils.onWriteLogs(this,"logs_completed.txt",""+"1111");
-            if (llAds!=null && !QRScannerApplication.getInstance().isLoaderLarge()){
-                rlAdsRoot.setVisibility(View.GONE);
-            }
         }else{
-            Utils.onWriteLogs(this,"logs_completed.txt",""+"2222");
             rlAdsRoot.setVisibility(View.GONE);
         }
     }

@@ -74,10 +74,8 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 android:id="@+id/llAdsSub"
-                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="55sp"/>
-
         </LinearLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

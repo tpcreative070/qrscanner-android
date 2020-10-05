@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.common.controller;
 import com.google.gson.Gson;
-
 import org.solovyev.android.checkout.Billing;
 import org.solovyev.android.checkout.Checkout;
 import org.solovyev.android.checkout.Inventory;
@@ -30,7 +29,7 @@ public class PremiumManager {
     private class InventoryCallback implements Inventory.Callback {
         @Override
         public void onLoaded(Inventory.Products products) {
-            final Inventory.Product product = products.get(ProductTypes.SUBSCRIPTION);
+            final Inventory.Product product = products.get(ProductTypes.IN_APP);
             if (!product.supported) {
                 // billing is not supported, user can't purchase anything
                 return;
@@ -40,22 +39,24 @@ public class PremiumManager {
                 if (mProduct.getSkus().size() > 0) {
                     for (int i = 0; i < mProduct.getSkus().size(); i++) {
                         Sku index = mProduct.getSkus().get(i);
-                       if (index.id.code.equals(QRScannerApplication.getInstance().getString(R.string.one_years))) {
-                            final Purchase purchaseExpire = mProduct.getPurchaseInState(index, Purchase.State.EXPIRED);
-                            if (purchaseExpire != null) {
+                       if (index.id.code.equals(QRScannerApplication.getInstance().getString(R.string.lifetime))) {
+                           if (mProduct.getPurchaseInState(index,Purchase.State.CANCELLED)!=null){
+                               Utils.Log(TAG,"Status: canceled");
                                Utils.setPremium(false);
-                                Utils.writeLogs("line 47");
-                            }else{
-                                final Purchase purchase = mProduct.getPurchaseInState(index, Purchase.State.PURCHASED);
-                                if (purchase == null) {
-                                    Utils.writeLogs("line 51");
+                           }else if (mProduct.getPurchaseInState(index,Purchase.State.REFUNDED)!=null){
+                               Utils.Log(TAG,"Status: refunded");
+                               Utils.setPremium(false);
+                           }else{
+                               final Purchase purchase = mProduct.getPurchaseInState(index, Purchase.State.PURCHASED);
+                               if (purchase == null) {
                                    Utils.setPremium(false);
-                                } else {
-                                    Utils.writeLogs("line 54");
-                                    Utils.setPremium(true);
-                                }
-                            }
-                            Utils.Log(TAG,"Status: " + Utils.isPremium());
+                               } else {
+                                   Utils.Log(TAG,"Status: purchased");
+                                   Utils.setPremium(true);
+                               }
+                           }
+                           Utils.Log(TAG, new Gson().toJson(product));
+                           Utils.Log(TAG,"Status: " + Utils.isPremium());
                         }
                     }
                 }
@@ -73,10 +74,10 @@ public class PremiumManager {
 
     private void reloadInventory() {
         List<String> mList = new ArrayList<>();
-        mList.add(getString(R.string.one_years));
+        mList.add(getString(R.string.lifetime));
         final Inventory.Request request = Inventory.Request.create();
         request.loadAllPurchases();
-        request.loadSkus(ProductTypes.SUBSCRIPTION, mList);
+        request.loadSkus(ProductTypes.IN_APP, mList);
         mCheckout.loadInventory(request, mInventoryCallback);
     }
 

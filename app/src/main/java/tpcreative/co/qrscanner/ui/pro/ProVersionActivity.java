@@ -1,18 +1,12 @@
 package tpcreative.co.qrscanner.ui.pro;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.widget.Toolbar;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.gson.Gson;
-
 import org.solovyev.android.checkout.ActivityCheckout;
 import org.solovyev.android.checkout.Billing;
 import org.solovyev.android.checkout.BillingRequests;
@@ -22,15 +16,11 @@ import org.solovyev.android.checkout.ProductTypes;
 import org.solovyev.android.checkout.Purchase;
 import org.solovyev.android.checkout.RequestListener;
 import org.solovyev.android.checkout.Sku;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nonnull;
-
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonSettings;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -45,7 +35,7 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
     private ActivityCheckout mCheckout;
     private InventoryCallback mInventoryCallback;
     private Inventory.Product mProduct;
-    private Sku mYears;
+    private Sku mLifetime;
     private static String TAG = ProVersionActivity.class.getSimpleName();
 
 
@@ -73,14 +63,14 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
 
     public void onUpgradeNow() {
         if (mProduct.getSkus()!=null && mProduct.getSkus().size()>0){
-            if (mYears!=null){
-                final Purchase purchase = mProduct.getPurchaseInState(mYears, Purchase.State.PURCHASED);
+            if (mLifetime!=null){
+                final Purchase purchase = mProduct.getPurchaseInState(mLifetime, Purchase.State.PURCHASED);
                 if (purchase != null) {
                     Toast.makeText(getApplicationContext(),"Already charged",Toast.LENGTH_SHORT).show();
                     consume(purchase);
                 } else {
-                    Utils.Log(TAG,"value...?"+ new Gson().toJson(mYears));
-                    purchase(mYears);
+                    Utils.Log(TAG,"value...?"+ new Gson().toJson(mLifetime));
+                    purchase(mLifetime);
                 }
             }
         }
@@ -104,7 +94,7 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
     private class InventoryCallback implements Inventory.Callback {
         @Override
         public void onLoaded(Inventory.Products products) {
-            final Inventory.Product product = products.get(ProductTypes.SUBSCRIPTION);
+            final Inventory.Product product = products.get(ProductTypes.IN_APP);
             if (!product.supported) {
                 // billing is not supported, user can't purchase anything
                 return;
@@ -114,9 +104,9 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
                 if (mProduct.getSkus().size()>0){
                     for (int i=0;i<mProduct.getSkus().size();i++){
                         Sku index = mProduct.getSkus().get(i);
-                        if (index.id.code.equals(getString(R.string.one_years))){
+                        if (index.id.code.equals(getString(R.string.lifetime))){
                             tvPrice.setText(index.price);
-                            mYears = index;
+                            mLifetime = index;
                         }
                     }
                 }
@@ -182,13 +172,12 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
 
     private void reloadInventory() {
         List<String> mList = new ArrayList<>();
-        mList.add(getString(R.string.one_years));
+        mList.add(getString(R.string.lifetime));
         final Inventory.Request request = Inventory.Request.create();
         // load purchase info
         request.loadAllPurchases();
         // load SKU details
-        request.loadSkus(ProductTypes.SUBSCRIPTION,mList);
+        request.loadSkus(ProductTypes.IN_APP,mList);
         mCheckout.loadInventory(request, mInventoryCallback);
     }
-
 }

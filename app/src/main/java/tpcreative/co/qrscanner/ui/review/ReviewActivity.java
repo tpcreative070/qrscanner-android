@@ -18,8 +18,6 @@ import androidx.core.widget.NestedScrollView;
 import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.result.ParsedResultType;
@@ -407,10 +405,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             photoPrinter.printBitmap(Utils.getCurrentDate(),bitmap);
         }catch (Exception e){
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName("Printer "+ReviewActivity.class.getSimpleName())
-                    .putContentType("Error "+e.getMessage())
-                    .putContentId(System.currentTimeMillis() + "-" + QRScannerApplication.getInstance().getDeviceId()));
         }
     }
 

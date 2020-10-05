@@ -245,6 +245,7 @@
     <string name="count_rating">count_rating</string>
     <string name="we_are_a_team_positive">we_are_a_team_positive</string>
     <string name="report_issue">Report</string>
+    <string name="guideline_pro_version">This pro version is one time purchase for lifetime. Can be used across multiple devices</string>
 
     <string name="dislike_it">Dislike it</string>
     <string name="no_thanks">No, thanks</string>
@@ -252,6 +253,7 @@
     <string name="qrscanner_free_develop">tpcreative.co.qrscanner.free.develop</string>
     <string name="qrscanner_free_release">tpcreative.co.qrscanner.free.release</string>
     <string name="one_years">tpcreative.co.qrscanner.free.release.one.year</string>
+    <string name="lifetime">tpcreative.co.qrscanner.free.release.lifetime</string>
     <string name="qrscanner_pro_release">tpcreative.co.qrscanner</string>
     <string name="supersafe_live">co.tpcreative.supersafe</string>
     <string name="my_clipboad">Clipboard</string>

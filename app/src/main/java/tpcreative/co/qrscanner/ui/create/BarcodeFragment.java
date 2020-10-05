@@ -146,10 +146,22 @@ public class BarcodeFragment extends BaseActivitySlide implements SingletonGener
         editText.requestFocus();
     }
 
-
     public void onSetData(){
         editText.setText(save.text);
+        if (save.createType.equals(ParsedResultType.PRODUCT.name())){
+            if (save.barcodeFormat.equals(BarcodeFormat.EAN_13.name())){
+                presenter.mType = BarcodeFormat.EAN_13;
+                presenter.mLength = 13;
+                spinner.setSelection(0);
+            }
+            else if (save.barcodeFormat.equals(BarcodeFormat.EAN_8.name())){
+                presenter.mType = BarcodeFormat.EAN_8;
+                presenter.mLength = 8;
+                spinner.setSelection(1);
+            }
+        }
     }
+
 
     @Override
     public void onStart() {

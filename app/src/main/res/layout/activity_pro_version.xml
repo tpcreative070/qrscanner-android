@@ -256,7 +256,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <Button
@@ -269,6 +269,12 @@
                         android:src="@drawable/baseline_mood_white_48"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/height"/>
+
+                    <TextView
+                        android:text="@string/guideline_pro_version"
+                        android:layout_marginTop="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

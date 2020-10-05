@@ -18,8 +18,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -287,10 +285,6 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
             }
             catch (Exception e){
                 e.printStackTrace();
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("ScannerFragment Error")
-                        .putContentType("Content "+e.getMessage())
-                        .putContentId(System.currentTimeMillis() + "-"+QRScannerApplication.getInstance().getDeviceId()));
             }
         }
 
