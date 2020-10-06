@@ -1,18 +1,20 @@
 package tpcreative.co.qrscanner.common.services;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.snatik.storage.Storage;
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,16 +33,18 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
-import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.presenter.PresenterService;
+import tpcreative.co.qrscanner.common.services.download.DownloadService;
 import tpcreative.co.qrscanner.common.services.upload.ProgressRequestBody;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.DriveAbout;
 import tpcreative.co.qrscanner.model.EnumStatus;
+import tpcreative.co.qrscanner.model.HistoryModel;
 
 public class QRScannerService extends PresenterService<BaseView> implements QRScannerReceiver.ConnectivityReceiverListener {
 
@@ -49,15 +53,16 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
     protected Storage storage;
     private Intent mIntent;
     private QRScannerReceiver androidReceiver;
-
+    private DownloadService downloadService;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate");
+        Utils.Log(TAG, "onCreate");
         storage = new Storage(this);
         onInitReceiver();
         QRScannerApplication.getInstance().setConnectivityListener(this);
+        downloadService = new DownloadService();
     }
 
     public Storage getStorage() {
@@ -76,10 +81,28 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
+        Utils.Log(TAG, "onDestroy");
         if (androidReceiver != null) {
             unregisterReceiver(androidReceiver);
         }
+        /*Delete files and folders of temporary*/
+        deleteTempFiles(getCacheDir());
+    }
+
+    private boolean deleteTempFiles(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (f.isDirectory()) {
+                        deleteTempFiles(f);
+                    } else {
+                        f.delete();
+                    }
+                }
+            }
+        }
+        return file.delete();
     }
 
     @Override
@@ -99,24 +122,24 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // If we get killed, after returning from here, restart
-        Log.d(TAG, "onStartCommand");
+        Utils.Log(TAG, "onStartCommand");
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         Bundle extras = intent.getExtras();
-        Log.d(TAG, "onBind");
+        Utils.Log(TAG, "onBind");
         // Get messager from the Activity
         if (extras != null) {
-            Log.d("service", "onBind with extra");
+            Utils.Log("service", "onBind with extra");
         }
         return mBinder;
     }
 
 
     public void onSyncAuthor(){
-        Log.d(TAG,"onSyncAuthor");
+        Utils.Log(TAG,"onSyncAuthor");
         if (BuildConfig.DEBUG){
             return;
         }
@@ -154,27 +177,27 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 .doOnSubscribe(__ -> view.onStartLoading(EnumStatus.AUTHOR_SYNC))
                 .subscribe(onResponse -> {
                     view.onStopLoading(EnumStatus.AUTHOR_SYNC);
-                    Log.d(TAG, "Author body: " + new Gson().toJson(onResponse));
+                    Utils.Log(TAG, "Author body: " + new Gson().toJson(onResponse));
                 }, throwable -> {
                     if (throwable instanceof HttpException) {
                         ResponseBody bodys = ((HttpException) throwable).response().errorBody();
                         try {
-                            Log.d(TAG,"Author error" +bodys.string());
+                            Utils.Log(TAG,"Author error" +bodys.string());
                             String msg = new Gson().toJson(bodys.string());
-                            Log.d(TAG, msg);
+                            Utils.Log(TAG, msg);
                         } catch (IOException e) {
-                            Log.d(TAG,"Author IOException" +e.getMessage());
+                            Utils.Log(TAG,"Author IOException" +e.getMessage());
                             e.printStackTrace();
                         }
                     } else {
-                        Log.d(TAG, "Author Can not call" + throwable.getMessage());
+                        Utils.Log(TAG, "Author Can not call" + throwable.getMessage());
                     }
                     view.onStopLoading(EnumStatus.AUTHOR_SYNC);
                 }));
     }
 
     public void onCheckVersion(){
-        Log.d(TAG,"onCheckVersion");
+        Utils.Log(TAG,"onCheckVersion");
         BaseView view = view();
         if (view == null) {
             return;
@@ -201,19 +224,19 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                         }
                     }
                     view.onStopLoading(EnumStatus.CHECK_VERSION);
-                    Log.d(TAG, "Body : " + new Gson().toJson(onResponse));
+                    Utils.Log(TAG, "Body : " + new Gson().toJson(onResponse));
                 }, throwable -> {
                     if (throwable instanceof HttpException) {
                         ResponseBody bodys = ((HttpException) throwable).response().errorBody();
                         try {
-                            Log.d(TAG,"error" +bodys.string());
+                            Utils.Log(TAG,"error" +bodys.string());
                             String msg = new Gson().toJson(bodys.string());
-                            Log.d(TAG, msg);
+                            Utils.Log(TAG, msg);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     } else {
-                        Log.d(TAG, "Can not call" + throwable.getMessage());
+                        Utils.Log(TAG, "Can not call" + throwable.getMessage());
                     }
                     view.onStopLoading(EnumStatus.CHECK_VERSION);
                 }));
@@ -345,6 +368,107 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         });
     }
 
+    public void onDownloadFile(String id) {
+        Utils.Log(TAG, "onDownloadFile !!!!");
+        final DownloadFileRequest request = new DownloadFileRequest();
+        File output = null;
+        try {
+            File outputDir = getExternalCacheDir(); // context being the Activity pointer
+            output = File.createTempFile("history",".json",outputDir);
+            request.path_folder_output = outputDir.getAbsolutePath();
+            request.file_name = output.getName();
+            request.id = id;
+            request.Authorization = Utils.getAccessToken();
+        }
+        catch (Exception e){
+            e.getMessage();
+            return;
+        }
+        downloadService.onProgressingDownload(new DownloadService.DownLoadServiceListener() {
+            @Override
+            public void onDownLoadCompleted(File file_name, DownloadFileRequest request) {
+                Utils.Log(TAG, "onDownLoadCompleted " + file_name.getAbsolutePath());
+                final String mValue = loadFromTempFile(file_name);
+                if (mValue!=null){
+                    final List<HistoryModel> mList = new Gson().fromJson(mValue,new TypeToken<List<HistoryModel>>(){}.getType());
+                    if (mList!=null){
+                        Utils.Log(TAG,"List value "+ new Gson().toJson(mList));
+                        Utils.Log(TAG,"Count "+ mList.size());
+                    }
+                }
+            }
+            @Override
+            public void onDownLoadError(String error) {
+                Utils.Log(TAG, "onDownLoadError " + error);
+            }
+            @Override
+            public void onProgressingDownloading(int percent) {
+                Utils.Log(TAG, "Progressing downloaded " + percent + "%");
+            }
+            @Override
+            public void onAttachmentElapsedTime(long elapsed) {
+            }
+            @Override
+            public void onAttachmentAllTimeForDownloading(long all) {
+            }
+            @Override
+            public void onAttachmentRemainingTime(long all) {
+            }
+            @Override
+            public void onAttachmentSpeedPerSecond(double all) {
+            }
+            @Override
+            public void onAttachmentTotalDownload(long totalByte, long totalByteDownloaded) {
+            }
+            @Override
+            public void onSavedCompleted() {
+                Utils.Log(TAG, "onSavedCompleted ");
+            }
+            @Override
+            public void onErrorSave(String name) {
+                Utils.Log(TAG, "onErrorSave");
+            }
+            @Override
+            public void onCodeResponse(int code, DownloadFileRequest request) {
+                if (code == 404) {
+                    Utils.Log(TAG,"Request delete id");
+                }
+            }
+            @Override
+            public Map<String, String> onHeader() {
+                return new HashMap<>();
+            }
+        });
+        downloadService.downloadFileFromGoogleDrive(request);
+    }
+
+    public String loadFromTempFile(File file){
+        String jString = null;
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream(file);
+            FileChannel fc = stream.getChannel();
+            MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+            /* Instead of using default, pass in a decoder. */
+            jString = Charset.defaultCharset().decode(bb).toString();
+            return jString;
+        }
+        catch (FileNotFoundException e){
+
+        }
+        catch (IOException e){
+
+        }
+        finally {
+            try {
+                stream.close();
+            }catch (IOException e){
+
+            }
+        }
+        return null;
+    }
+
     public void getFileListInApp() {
         Utils.Log(TAG, "getFileListInApp");
         if (!Utils.isConnectedToGoogleDrive()){
@@ -390,6 +514,45 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                     }
                 }));
     }
+
+
+    /*Get List Categories*/
+    public void onDeleteCloudItems(final String id) {
+        Utils.Log(TAG, "onDeleteCloudItems");
+        subscriptions.add(QRScannerApplication.serverDriveApi.onDeleteCloudItem(Utils.getAccessToken(), id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onResponse -> {
+                    Utils.Log(TAG,"Deleted cloud response code " + onResponse.code());
+                    if (onResponse.code() == 204) {
+                        Utils.Log(TAG,"Deleted id successfully");
+                    } else if (onResponse.code() == 404) {
+                        Utils.Log(TAG,"This id is not exiting");
+                    } else {
+                        Utils.Log(TAG,"Not found for this case");
+                    }
+                }, throwable -> {
+                    if (throwable instanceof HttpException) {
+                        ResponseBody bodys = ((HttpException) throwable).response().errorBody();
+                        try {
+                            final String value = bodys.string();
+                            final DriveAbout driveAbout = new Gson().fromJson(value, DriveAbout.class);
+                            if (driveAbout != null) {
+                                if (driveAbout.error != null) {
+                                    Utils.Log(TAG,"Request refresh access token");
+                                }
+                            } else {
+                                Utils.Log(TAG,"Request refresh access token");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Utils.Log(TAG, "Can not call " + throwable.getMessage());
+                    }
+                }));
+    }
+
     /**
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
@@ -404,8 +567,6 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             mIntent = intent;
         }
     }
-
-
 
     public interface GoogleDriveListener {
         void onError(String message,EnumStatus enumStatus);

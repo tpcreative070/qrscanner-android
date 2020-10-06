@@ -5,6 +5,7 @@ import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
+import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -64,5 +65,7 @@ public interface RootAPI{
     @GET(GET_LIST_FILE_IN_APP_FOLDER)
     Observable<DriveAbout> onGetListFileInAppFolder(@Header("Authorization") String token,@Query("spaces")String value);
 
-
+    @Headers({"Accept: application/json"})
+    @DELETE(DELETE_CLOUD_ITEM)
+    Observable<Response<DriveAbout>> onDeleteCloudItem(@Header("Authorization") String token, @Path("id") String id);
 }
