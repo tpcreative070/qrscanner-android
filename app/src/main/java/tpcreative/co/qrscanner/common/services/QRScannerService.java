@@ -10,22 +10,34 @@ import android.os.IBinder;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.snatik.storage.Storage;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.HttpException;
+import retrofit2.Response;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.presenter.PresenterService;
+import tpcreative.co.qrscanner.common.services.upload.ProgressRequestBody;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.DriveAbout;
 import tpcreative.co.qrscanner.model.EnumStatus;
@@ -238,6 +250,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                             mAuthor.isConnectedToGoogleDrive = true;
                             Utils.setAuthor(mAuthor);
                             view.onSuccessful("Successful",EnumStatus.GET_DRIVE_ABOUT_SUCCESSFULLY);
+                            Utils.Log(TAG,new Gson().toJson(onResponse));
                         }
                     }
                 }, throwable -> {
@@ -287,8 +300,96 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 }));
     }
 
+    public void onUploadFileInAppFolder() {
+        Utils.Log(TAG, "onUploadFileInAppFolder");
+        MediaType contentType = MediaType.parse("application/json; charset=UTF-8");
+        HashMap<String, Object> content = new HashMap<>();
+        File file = null;
+        try {
+           file =  Utils.writeToJson(new Gson().toJson(SQLiteHelper.getList()),File.createTempFile("history",".json"));
+        }catch (Exception e){
+            Utils.Log(TAG,"Could not generate temporary file");
+            return;
+        }
+        List<String> list = new ArrayList<>();
+        list.add(getString(R.string.key_appDataFolder));
+        content.put(getString(R.string.key_name),"history.json");
+        content.put(getString(R.string.key_parents), list);
+        MultipartBody.Part metaPart = MultipartBody.Part.create(RequestBody.create(contentType, new Gson().toJson(content)));
+        ProgressRequestBody fileBody = new ProgressRequestBody(file, new ProgressRequestBody.UploadCallbacks() {
+            @Override
+            public void onProgressUpdate(int percentage) {
+                Utils.Log(TAG, "Progressing uploaded " + percentage + "%");
+            }
+            @Override
+            public void onError() {
+                Utils.Log(TAG, "onError");
+            }
+            @Override
+            public void onFinish() {
+                Utils.Log(TAG, "onFinish");
+            }
+        });
+        fileBody.setContentType("application/json");
+        MultipartBody.Part dataPart = MultipartBody.Part.create(fileBody);
+        Call<DriveResponse> request = QRScannerApplication.serverDriveApi.uploadFileMultipleInAppFolder(Utils.getAccessToken(), metaPart, dataPart, "application/json");
+        request.enqueue(new Callback<DriveResponse>() {
+            @Override
+            public void onResponse(Call<DriveResponse> call, Response<DriveResponse> response) {
+                Utils.Log(TAG, "response successful :" + new Gson().toJson(response.body()));;
+            }
+            @Override
+            public void onFailure(Call<DriveResponse> call, Throwable t) {
+                Utils.Log(TAG, "response failed :" + t.getMessage());
+            }
+        });
+    }
 
-
+    public void getFileListInApp() {
+        Utils.Log(TAG, "getFileListInApp");
+        if (!Utils.isConnectedToGoogleDrive()){
+            Utils.Log(TAG,"Request to update access token of Google drive");
+            return;
+        }
+        subscriptions.add(QRScannerApplication.serverDriveApi.onGetListFileInAppFolder(Utils.getAccessToken(),QRScannerApplication.getInstance().getString(R.string.key_appDataFolder))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(__ -> Utils.Log(TAG,""))
+                .subscribe(onResponse -> {
+                    Utils.Log(TAG, "Response data from items " + new Gson().toJson(onResponse));
+                    if (onResponse.error != null) {
+                        Utils.Log(TAG, "onError:" + new Gson().toJson(onResponse));
+                    } else {
+                        final int count = onResponse.files.size();
+                        Utils.Log(TAG,"Total count request :" + count);
+                        Utils.Log(TAG,new Gson().toJson(onResponse));
+                    }
+                }, throwable -> {
+                    if (throwable instanceof HttpException) {
+                        ResponseBody bodys = ((HttpException) throwable).response().errorBody();
+                        int code  = ((HttpException) throwable).response().code();
+                        try {
+                            final String value = bodys.string();
+                            final DriveAbout driveAbout = new Gson().fromJson(value, DriveAbout.class);
+                            if (driveAbout != null) {
+                                if (driveAbout.error != null) {
+                                    final Author mAuthor = Author.getInstance().getAuthorInfo();
+                                    if (mAuthor!=null){
+                                        mAuthor.isConnectedToGoogleDrive = false;
+                                        Utils.setAuthor(mAuthor);
+                                    }
+                                }
+                            } else {
+                                Utils.Log(TAG,"Fetching data has issue");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Utils.Log(TAG, "Can not call " + throwable.getMessage());
+                    }
+                }));
+    }
     /**
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.

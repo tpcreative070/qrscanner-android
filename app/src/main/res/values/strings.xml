@@ -276,8 +276,13 @@
     <string name="found_items_duplicates">Found %1$s items. Do you want to delete it?</string>
     <string name="key_is_premium">key_is_premium</string>
     <string name="grant_permissions_to_google_drive">The app need some specific permissions to backup data to your Google drive, Do not worry about sensitive data in your Google drive. QRScanner app only generate own space to backup data. It does not affect to your data existing.</string>
+    <string name="current_email">Signed in with email is: %1$s Please keep it to continue signing in to another devices</string>
     <string name="enable_sync_data">Enable sync data</string>
+    <string name="switch_account">Switch account</string>
     <string name="selected">selected</string>
+    <string name="key_parents">parents</string>
+    <string name="key_appDataFolder">appDataFolder</string>
+    <string name="key_name">name</string>
     <string name="copy_items">Copy items</string>
     <string name="choose_which_items_you_want_to_copy">Select which items you want to copy.</string>
     <string name="key_author">Author</string>

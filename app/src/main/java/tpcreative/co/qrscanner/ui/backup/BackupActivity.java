@@ -3,7 +3,12 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
+import butterknife.BindView;
 import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
@@ -15,6 +20,12 @@ import tpcreative.co.qrscanner.common.services.QRScannerService;
 public class BackupActivity extends BaseGoogleApi {
 
     private static final String TAG = BackupActivity.class.getSimpleName();
+    @BindView(R.id.tvEmail)
+    AppCompatTextView tvEmail;
+    @BindView(R.id.btnEnable)
+    AppCompatButton btnEnable;
+    @BindView(R.id.tvUsedSpace)
+    AppCompatTextView tvUsedSpace;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +33,14 @@ public class BackupActivity extends BaseGoogleApi {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final String  email = Utils.getDriveEmail();
+        if (email!=null){
+            String mValue = String.format(getString(R.string.current_email),email);
+            String newText = mValue.replace(email, "<font color=#e19704><b>"+email+"</b></font>");
+            tvEmail.setText(HtmlCompat.fromHtml(newText,HtmlCompat.FROM_HTML_MODE_LEGACY));
+            tvEmail.setVisibility(View.VISIBLE);
+            btnEnable.setText(getText(R.string.switch_account));
+        }
     }
 
     @OnClick(R.id.btnEnable)
@@ -60,12 +79,19 @@ public class BackupActivity extends BaseGoogleApi {
 
     @Override
     protected void onDriveClientReady() {
-
+        final String  email = Utils.getDriveEmail();
+        if (email!=null){
+            String mValue = String.format(getString(R.string.current_email),email);
+            String newText = mValue.replace(email, "<font color=#e19704><b>"+email+"</b></font>");
+            tvEmail.setText(HtmlCompat.fromHtml(newText,HtmlCompat.FROM_HTML_MODE_LEGACY));
+            tvEmail.setVisibility(View.VISIBLE);
+            btnEnable.setText(getText(R.string.switch_account));
+        }
     }
 
     @Override
     protected void onDriveSuccessful() {
-
+        ServiceManager.getInstance().getMyService().getFileListInApp();
     }
 
     @Override

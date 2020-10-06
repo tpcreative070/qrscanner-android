@@ -134,6 +134,7 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                         if (mAuthor!=null){
                             mAuthor.isConnectedToGoogleDrive = true;
                             mAuthor.access_token = String.format(getString(R.string.access_token),value);
+                            mAuthor.email = credential.getSelectedAccount().name;
                             Utils.setAuthor(mAuthor);
                         }
                     }

@@ -12,6 +12,7 @@ public class Author implements Serializable{
     public Version version;
     public String access_token;
     public boolean isConnectedToGoogleDrive;
+    public String email;
 
     private static final String TAG = Author.class.getSimpleName();
 
@@ -28,7 +29,6 @@ public class Author implements Serializable{
             if (value!=null){
                 final Author author = new Gson().fromJson(value,Author.class);
                 if (author!=null){
-                    Utils.Log(TAG,new Gson().toJson(author));
                     return author;
                 }
             }

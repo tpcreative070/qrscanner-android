@@ -45,11 +45,32 @@
             android:layout_height="200dp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:textSize="@dimen/medium_16"
             android:id="@+id/tvAlert"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:text="@string/grant_permissions_to_google_drive"
             android:layout_below="@+id/imgLogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:visibility="gone"
+            android:id="@+id/tvEmail"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_below="@+id/tvAlert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:visibility="gone"
+            android:id="@+id/tvUsedSpace"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_below="@+id/tvEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -61,7 +82,7 @@
             android:textColor="@color/white"
             android:text="@string/enable_sync_data"
             android:layout_marginTop="30dp"
-            android:layout_below="@+id/tvAlert"
+            android:layout_below="@+id/tvUsedSpace"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

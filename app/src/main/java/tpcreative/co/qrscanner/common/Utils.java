@@ -1027,4 +1027,28 @@ public class Utils {
         }
        return false;
     }
+
+    public static String getDriveEmail(){
+        final Author mAuthor = Author.getInstance().getAuthorInfo();
+        if (mAuthor!=null){
+            return mAuthor.email;
+        }
+        return null;
+    }
+
+    public static File writeToJson(String data, File file){
+        try {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(file, false));
+            buf.append(data);
+            buf.newLine();
+            buf.close();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return file;
+    }
+
 }
