@@ -1,4 +1,6 @@
 package tpcreative.co.qrscanner.common.services;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -10,6 +12,7 @@ import com.google.gson.Gson;
 import com.snatik.storage.Storage;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -24,6 +27,7 @@ import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.presenter.PresenterService;
 import tpcreative.co.qrscanner.model.Author;
+import tpcreative.co.qrscanner.model.DriveAbout;
 import tpcreative.co.qrscanner.model.EnumStatus;
 
 public class QRScannerService extends PresenterService<BaseView> implements QRScannerReceiver.ConnectivityReceiverListener {
@@ -180,7 +184,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                             view.onSuccessful("Successful",EnumStatus.CHECK_VERSION);
                             final Author author = Author.getInstance().getAuthorInfo();
                             author.version = onResponse.version;
-                            PrefsController.putString(getString(R.string.key_author),new Gson().toJson(author) );
+                            Utils.setAuthor(author);
                             SingletonResponse.getInstance().onAlertLatestVersion();
                         }
                     }
@@ -203,6 +207,87 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 }));
     }
 
+    public void getDriveAbout(GoogleDriveListener view) {
+        Utils.Log(TAG, "getDriveAbout");
+        if (!Utils.isConnectedToGoogleDrive()) {
+            view.onError("User is null",EnumStatus.NONE);
+            return;
+        }
+        String access_token = Utils.getAccessToken();
+        if (access_token == null) {
+            view.onError("Access token is null",EnumStatus.REQUEST_ACCESS_TOKEN);
+            return;
+        }
+
+        Utils.Log(TAG, "access_token : " + access_token);
+        subscriptions.add(QRScannerApplication.serverDriveApi.onGetDriveAbout(access_token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(__ -> Utils.Log(TAG,""))
+                .subscribe(onResponse -> {
+                    if (onResponse.error != null) {
+                        final Author mAuthor = Author.getInstance().getAuthorInfo();
+                        if (mAuthor != null) {
+                            mAuthor.isConnectedToGoogleDrive = false;
+                            Utils.setAuthor(mAuthor);
+                        }
+                        view.onError(new Gson().toJson(onResponse.error), EnumStatus.REQUEST_ACCESS_TOKEN);
+                    } else {
+                        final Author mAuthor = Author.getInstance().getAuthorInfo();
+                        if (mAuthor != null) {
+                            mAuthor.isConnectedToGoogleDrive = true;
+                            Utils.setAuthor(mAuthor);
+                            view.onSuccessful("Successful",EnumStatus.GET_DRIVE_ABOUT_SUCCESSFULLY);
+                        }
+                    }
+                }, throwable -> {
+                    if (view == null) {
+                        Utils.Log(TAG, "View is null");
+                        return;
+                    }
+                    if (throwable instanceof HttpException) {
+                        ResponseBody bodys = ((HttpException) throwable).response().errorBody();
+                        try {
+                            if (view==null){
+                                return;
+                            }
+                            final String value = bodys.string();
+                            final DriveAbout driveAbout = new Gson().fromJson(value, DriveAbout.class);
+                            if (driveAbout != null) {
+                                if (driveAbout.error != null) {
+                                    final Author mAuthor = Author.getInstance().getAuthorInfo();
+                                    if (mAuthor != null) {
+                                        mAuthor.isConnectedToGoogleDrive = false;
+                                        Utils.setAuthor(mAuthor);
+                                    }
+                                    view.onError(new Gson().toJson(driveAbout.error), EnumStatus.REQUEST_ACCESS_TOKEN);
+                                }
+                            } else {
+                                final Author mAuthor = Author.getInstance().getAuthorInfo();
+                                if (mAuthor != null) {
+                                    mAuthor.isConnectedToGoogleDrive = false;
+                                    Utils.setAuthor(mAuthor);
+                                }
+                                view.onError("Error null ", EnumStatus.REQUEST_ACCESS_TOKEN);
+                            }
+                        } catch (IOException e) {
+                            final Author mAuthor = Author.getInstance().getAuthorInfo();
+                            if (mAuthor != null) {
+                                mAuthor.isConnectedToGoogleDrive = false;
+                                Utils.setAuthor(mAuthor);
+                            }
+                        }
+                    } else {
+                        final Author mAuthor = Author.getInstance().getAuthorInfo();
+                        if (mAuthor != null) {
+                            mAuthor.isConnectedToGoogleDrive = false;
+                            Utils.setAuthor(mAuthor);
+                        }
+                    }
+                }));
+    }
+
+
 
     /**
      * Class used for the client Binder.  Because we know this service always
@@ -220,4 +305,15 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
     }
 
 
+
+    public interface GoogleDriveListener {
+        void onError(String message,EnumStatus enumStatus);
+        void onSuccessful(String message,EnumStatus enumStatus);
+    }
+
+    public interface ServiceManagerSyncDataListener {
+        void onCompleted();
+        void onError();
+        void onCancel();
+    }
 }

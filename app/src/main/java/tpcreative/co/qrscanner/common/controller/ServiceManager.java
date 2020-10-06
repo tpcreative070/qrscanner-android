@@ -1,5 +1,8 @@
 package tpcreative.co.qrscanner.common.controller;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +10,8 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.zxing.client.result.ParsedResultType;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
@@ -15,6 +20,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
@@ -48,6 +55,19 @@ public class ServiceManager implements BaseView {
             myService = null;
         }
     };
+
+    public void onPickUpNewEmail(Activity context) {
+        try {
+            String value = String.format(QRScannerApplication.getInstance().getString(R.string.choose_an_new_account));
+            Account account1 = new Account("abc@gmail.com", GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+            Intent intent = AccountManager.newChooseAccountIntent(account1, null,
+                    new String[] { GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE }, value, null, null, null);
+            intent.putExtra("overrideTheme", 1);
+            context.startActivityForResult(intent, Navigator.REQUEST_CODE_EMAIL);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static ServiceManager getInstance() {
         if (instance == null) {

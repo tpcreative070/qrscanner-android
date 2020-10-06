@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEnable"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:background="@drawable/bg_button"

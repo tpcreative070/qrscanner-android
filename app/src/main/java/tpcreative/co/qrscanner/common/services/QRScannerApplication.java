@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.common.services;
+import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -17,10 +18,22 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
+import com.google.api.services.drive.DriveScopes;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.snatik.storage.EncryptConfiguration;
 import com.snatik.storage.Storage;
+import com.snatik.storage.security.SecurityUtil;
+
 import org.solovyev.android.checkout.Billing;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
@@ -48,6 +61,11 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private AdView adLargeView;
     private boolean isLoader = false;
     private boolean isLoaderLarge = false;
+    private String authorization = null;
+    private GoogleSignInOptions.Builder options;
+    private Set<Scope> requiredScopes;
+    private List<String> requiredScopesString;
+    public static RootAPI serverDriveApi;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
 
     @Override
@@ -82,11 +100,22 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.dependenciesListener(this);
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
+        serverDriveApi = new RetrofitHelper().getCityService(RootAPI.ROOT_GOOGLE_DRIVE);
         Utils.Log(TAG,"Start ads");
         if (!Utils.isPremium()){
             getAdsView();
             getAdsLargeView();
         }
+        options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
+                .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA));
+        requiredScopes = new HashSet<>(2);
+        requiredScopes.add(new Scope(DriveScopes.DRIVE_FILE));
+        requiredScopes.add(new Scope(DriveScopes.DRIVE_APPDATA));
+        requiredScopesString = new ArrayList<>();
+        requiredScopesString.add(DriveScopes.DRIVE_APPDATA);
+        requiredScopesString.add(DriveScopes.DRIVE_FILE);
     }
 
     /*In app purchase*/
@@ -104,6 +133,19 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         return mBilling;
     }
 
+    public GoogleSignInOptions getGoogleSignInOptions(final Account account) {
+        if (options != null) {
+            if (account != null) {
+                options.setAccountName(account.name);
+            }
+            return options.build();
+        }
+        return options.build();
+    }
+
+    public List<String> getRequiredScopesString() {
+        return requiredScopesString;
+    }
 
     @Override
     protected void attachBaseContext(Context base) {

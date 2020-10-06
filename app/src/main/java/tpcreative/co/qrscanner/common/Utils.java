@@ -86,6 +86,7 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.TimeHelper;
+import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.HistoryModel;
@@ -1005,4 +1006,25 @@ public class Utils {
         return storage.getExternalStorageDirectory()+"/logsData.txt";
     }
 
+    public static void setAuthor(Author author){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_author),new Gson().toJson(author) );
+    }
+
+    public static String getAccessToken(){
+        final Author mAuthor = Author.getInstance().getAuthorInfo();
+        if (mAuthor!=null){
+            if (mAuthor.access_token!=null){
+                return mAuthor.access_token;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isConnectedToGoogleDrive(){
+        final Author mAuthor = Author.getInstance().getAuthorInfo();
+        if (mAuthor!=null){
+            return mAuthor.isConnectedToGoogleDrive;
+        }
+       return false;
+    }
 }

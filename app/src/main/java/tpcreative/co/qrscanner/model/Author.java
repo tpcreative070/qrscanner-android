@@ -10,7 +10,8 @@ public class Author implements Serializable{
 
     private static Author instance;
     public Version version;
-
+    public String access_token;
+    public boolean isConnectedToGoogleDrive;
 
     private static final String TAG = Author.class.getSimpleName();
 

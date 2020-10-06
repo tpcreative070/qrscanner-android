@@ -189,7 +189,11 @@
 
     <string name="url_developer">http://192.168.1.3:8082</string>
     <string name="url_live">http://tpcreative.me:8082</string>
-
+    <string name="server_client_id">369444282152-kjlg1buv2vuf0h18vqk6d4nd7ijrtdm3.apps.googleusercontent.com</string>
+    <string name="key_request_sign_out_google_drive">request_sign_out_google_drive</string>
+    <string name="access_token">Bearer %1$s</string>
+    <string name="choose_an_account">Please select %1$s to link to Google Drive</string>
+    <string name="choose_an_new_account">Please select or add your Google account to sign in with SuperSafe</string>
     <string name="key_device_id">device_id</string>
     <string name="key_device_type">device_type</string>
     <string name="key_manufacturer">manufacturer</string>

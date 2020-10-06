@@ -21,6 +21,8 @@ import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity;
 public class Navigator {
     public static final int CREATE = 1000;
     public static final int SCANNER = 1001;
+    public static final int REQUEST_CODE_EMAIL = 1007;
+    public static final int REQUEST_CODE_EMAIL_ANOTHER_ACCOUNT = 1008;
     public static void onMoveToReview(Activity context, Create create){
         Intent intent = new Intent(context, ReviewActivity.class);
         Bundle bundle = new Bundle();
