@@ -133,6 +133,8 @@ public class SettingsFragment extends BaseFragment {
 
         private MySwitchPreference mySwitchPreferenceVibrate;
 
+        private MySwitchPreference mySwitchPreferenceBackupData;
+
         private MyPreference myPreferenceTheme;
 
         private MyPreference myPreferenceFileColor;
@@ -270,6 +272,9 @@ public class SettingsFragment extends BaseFragment {
                                 return  false;
                             }
                         }
+                        else if (preference.getKey().equals(getString(R.string.key_backup_data))){
+                            Navigator.onBackupData(getContext());
+                        }
                     }
                     return true;
                 }
@@ -374,7 +379,12 @@ public class SettingsFragment extends BaseFragment {
             myPreferenceTheme = (MyPreference) findPreference(getString(R.string.key_theme));
             myPreferenceTheme.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceTheme.setOnPreferenceChangeListener(createChangeListener());
-            myPreferenceTheme.setVisible(false);
+            myPreferenceTheme.setListener(new MyPreference.MyPreferenceListener() {
+                @Override
+                public void onUpdatePreference() {
+                    myPreferenceTheme.getTvChoose().setVisibility(View.VISIBLE);
+                }
+            });
 
             /*File color*/
             myPreferenceFileColor = (MyPreference) findPreference(getString(R.string.key_color_code));
@@ -390,6 +400,11 @@ public class SettingsFragment extends BaseFragment {
             mySwitchPreferenceSkipDuplicates = (MySwitchPreference) findPreference(getString(R.string.key_skip_duplicates));
             mySwitchPreferenceSkipDuplicates.setOnPreferenceClickListener(createActionPreferenceClickListener());
             mySwitchPreferenceSkipDuplicates.setOnPreferenceChangeListener(createChangeListener());
+
+            /*Backup data*/
+            mySwitchPreferenceBackupData = (MySwitchPreference) findPreference(getString(R.string.key_backup_data));
+            mySwitchPreferenceBackupData.setOnPreferenceClickListener(createActionPreferenceClickListener());
+            mySwitchPreferenceBackupData.setOnPreferenceChangeListener(createChangeListener());
 
 
             myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {

@@ -210,6 +210,7 @@
     <string name="key_vibrate">Vibrate</string>
     <string name="key_beep">Beep</string>
     <string name="key_theme">Theme</string>
+    <string name="key_theme_detail">Choose dark or light theme</string>
     <string name="key_color_code">Change code color</string>
     <string name="change_theme">Change theme</string>
     <string name="key_color_code_detail">Make QR codes in multi colors</string>
@@ -270,8 +271,8 @@
     <string name="alert">Alert</string>
     <string name="found_items_duplicates">Found %1$s items. Do you want to delete it?</string>
     <string name="key_is_premium">key_is_premium</string>
-
-
+    <string name="grant_permissions_to_google_drive">The app need some specific permissions to backup data to your Google drive, Do not worry about sensitive data in your Google drive. QRScanner app only generate own space to backup data. It does not affect to your data existing.</string>
+    <string name="enable_sync_data">Enable sync data</string>
     <string name="selected">selected</string>
     <string name="copy_items">Copy items</string>
     <string name="choose_which_items_you_want_to_copy">Select which items you want to copy.</string>
@@ -291,6 +292,8 @@
     <string name="key_multiple_scan_detail">Scan multiple QR codes at one</string>
     <string name="key_skip_duplicates">Skip duplicates</string>
     <string name="key_skip_duplicates_detail">Skip and remove duplicates QRCode or Barcode</string>
+    <string name="key_backup_data">Backup data to Cloud</string>
+    <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>

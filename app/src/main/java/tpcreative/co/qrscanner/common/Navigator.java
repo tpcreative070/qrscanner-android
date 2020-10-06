@@ -10,6 +10,7 @@ import tpcreative.co.qrscanner.common.view.Bungee;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.common.entities.SaveEntity;
 import tpcreative.co.qrscanner.model.SaveModel;
+import tpcreative.co.qrscanner.ui.backup.BackupActivity;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
@@ -71,5 +72,10 @@ public class Navigator {
         context.startActivity(intent);
         Bungee.fade(context);
         context.finish();
+    }
+
+    public static void onBackupData(Context context){
+        Intent intent = new Intent(context, BackupActivity.class);
+        context.startActivity(intent);
     }
 }

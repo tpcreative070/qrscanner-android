@@ -3,6 +3,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import tpcreative.co.qrscanner.R;
@@ -12,6 +14,7 @@ public class MyPreference extends Preference {
     private Context context;
     private ImageView imageViewCover;
     private ImageView imgSuperSafe;
+    private TextView tvChoose;
     private MyPreferenceListener listener;
 
     public void setListener(MyPreferenceListener listener) {
@@ -38,12 +41,13 @@ public class MyPreference extends Preference {
         super.onBindViewHolder(view);
         imageViewCover = (ImageView) view.findViewById(R.id.imgCover);
         imgSuperSafe = (ImageView) view.findViewById(R.id.imgSuperSafe);
+        tvChoose = (TextView) view.findViewById(R.id.tvChoose);
         imageViewCover.setVisibility(View.INVISIBLE);
         imgSuperSafe.setVisibility(View.INVISIBLE);
+        tvChoose.setVisibility(View.INVISIBLE);
         if (listener != null) {
             listener.onUpdatePreference();
         }
-
     }
 
     public ImageView getImageView() {
@@ -58,5 +62,7 @@ public class MyPreference extends Preference {
         void onUpdatePreference();
     }
 
-
+    public TextView getTvChoose() {
+        return tvChoose;
+    }
 }

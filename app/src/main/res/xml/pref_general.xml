@@ -55,7 +55,8 @@
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_opacity_white_48"
             android:title="@string/key_theme"
-            android:key="@string/key_theme">
+            android:key="@string/key_theme"
+            android:summary="@string/key_theme_detail">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
@@ -83,6 +84,15 @@
             android:defaultValue="false"
             android:summary="@string/key_skip_duplicates_detail">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_backup_white_24"
+            android:title="@string/key_backup_data"
+            android:key="@string/key_backup_data"
+            android:defaultValue="false"
+            android:summary="@string/key_backup_data_detail">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
 
@@ -109,7 +119,7 @@
             android:key="@string/key_privacy_policy">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="@string/tvPrimacyPolicy"></intent>
+                android:data="@string/tvPrimacyPolicy"/>
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
