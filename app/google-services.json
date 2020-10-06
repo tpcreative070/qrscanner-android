@@ -8,6 +8,61 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:369444282152:android:d3bd610166aba633a87a1d",
+        "android_client_info": {
+          "package_name": "tpcreative.co.qrscanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "369444282152-812lusmkuaqd5i7bof10uml3mo0n6hpq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tpcreative.co.qrscanner",
+            "certificate_hash": "18df20cb3e96f8c527b6df0bc18d268efa38fff9"
+          }
+        },
+        {
+          "client_id": "369444282152-lclatpu61buoieani0itb6nldifibqor.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tpcreative.co.qrscanner",
+            "certificate_hash": "07f0c8f4f0601e17ed799664ac8b1904679c40a2"
+          }
+        },
+        {
+          "client_id": "369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_iW5q2diz5b7Ih_GE1rTroxyCX2iWwNY"
+        },
+        {
+          "current_key": "AIzaSyDGdrfAVeZEceHLWJH7v_2-9rVwHLgg8cw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "369444282152-nmqq6gqom7ikjbta7ut160948gfnf71o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.tpcreative.qrscanner.app.develop"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:369444282152:android:e9b8f501335ccd0da87a1d",
         "android_client_info": {
           "package_name": "tpcreative.co.qrscanner.free.release"
@@ -36,6 +91,9 @@
         }
       ],
       "api_key": [
+        {
+          "current_key": "AIzaSyC_iW5q2diz5b7Ih_GE1rTroxyCX2iWwNY"
+        },
         {
           "current_key": "AIzaSyDGdrfAVeZEceHLWJH7v_2-9rVwHLgg8cw"
         }
