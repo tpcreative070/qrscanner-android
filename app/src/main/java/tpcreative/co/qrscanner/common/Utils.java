@@ -733,6 +733,9 @@ public class Utils {
     }
 
     public static boolean isPremium(){
+        if (isProVersion()){
+            return true;
+        }
         Utils.Log(TAG,"isPremium");
         try{
             String value = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium),null);
@@ -745,6 +748,13 @@ public class Utils {
         }
         catch (Exception e){
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean isProVersion(){
+        if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))){
+            return true;
         }
         return false;
     }
