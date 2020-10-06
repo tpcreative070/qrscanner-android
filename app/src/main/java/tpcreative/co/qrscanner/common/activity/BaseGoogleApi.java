@@ -3,9 +3,7 @@ import android.accounts.Account;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -134,6 +132,7 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                         Utils.Log(TAG,"access token  start "+ value);
                         final Author mAuthor = Author.getInstance().getAuthorInfo();
                         if (mAuthor!=null){
+                            mAuthor.isConnectedToGoogleDrive = true;
                             mAuthor.access_token = String.format(getString(R.string.access_token),value);
                             Utils.setAuthor(mAuthor);
                         }
@@ -172,10 +171,6 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                                         revokeAccess();
                                         break;
                                     }
-                                }
-                                if (isSignIn()) {
-                                    Utils.Log(TAG,"Call onDriveClientReady");
-                                    onDriveClientReady();
                                 }
                             }
                             @Override

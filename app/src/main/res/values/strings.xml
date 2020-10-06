@@ -189,7 +189,7 @@
 
     <string name="url_developer">http://192.168.1.3:8082</string>
     <string name="url_live">http://tpcreative.me:8082</string>
-    <string name="server_client_id">369444282152-kjlg1buv2vuf0h18vqk6d4nd7ijrtdm3.apps.googleusercontent.com</string>
+    <string name="server_client_id">369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com</string>
     <string name="key_request_sign_out_google_drive">request_sign_out_google_drive</string>
     <string name="access_token">Bearer %1$s</string>
     <string name="choose_an_account">Please select %1$s to link to Google Drive</string>

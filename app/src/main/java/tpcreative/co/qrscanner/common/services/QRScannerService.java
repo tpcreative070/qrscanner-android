@@ -210,7 +210,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
     public void getDriveAbout(GoogleDriveListener view) {
         Utils.Log(TAG, "getDriveAbout");
         if (!Utils.isConnectedToGoogleDrive()) {
-            view.onError("User is null",EnumStatus.NONE);
+            view.onError("User is null",EnumStatus.REQUEST_ACCESS_TOKEN);
             return;
         }
         String access_token = Utils.getAccessToken();

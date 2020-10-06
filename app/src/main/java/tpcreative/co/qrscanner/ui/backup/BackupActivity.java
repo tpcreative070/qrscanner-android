@@ -7,12 +7,14 @@ import androidx.appcompat.widget.Toolbar;
 import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseGoogleApi;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerService;
 
 public class BackupActivity extends BaseGoogleApi {
 
+    private static final String TAG = BackupActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class BackupActivity extends BaseGoogleApi {
             case Navigator.REQUEST_CODE_EMAIL :
                 if (resultCode == Activity.RESULT_OK) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    Utils.Log(TAG,"account name " + accountName );
                     signOut(new QRScannerService.ServiceManagerSyncDataListener() {
                         @Override
                         public void onCompleted() {
