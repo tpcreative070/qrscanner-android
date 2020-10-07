@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.zxing.client.result.ParsedResultType;
 import com.opencsv.CSVWriter;
@@ -109,15 +107,15 @@ public class ServiceManager implements BaseView {
         return myService;
     }
 
-    protected void showMessage(String message) {
-        Toast.makeText(QRScannerApplication.getInstance(), message, Toast.LENGTH_LONG).show();
-    }
-
     private String getString(int res) {
         String value = QRScannerApplication.getInstance().getString(res);
         return value;
     }
 
+    /*Sync data*/
+    public void onGetDataList(){
+
+    }
 
     /*User info*/
     public void onAuthorSync() {

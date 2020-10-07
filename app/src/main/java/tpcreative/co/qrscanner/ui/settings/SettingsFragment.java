@@ -17,6 +17,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.client.result.VINParsedResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.EnumMap;
 import java.util.List;
@@ -298,7 +299,11 @@ public class SettingsFragment extends BaseFragment {
                         if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
                             askPermission();
                         } else if (preference.getKey().equals(getString(R.string.key_share))) {
-                            shareToSocial(getString(R.string.scanner_app));
+                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
+                                shareToSocial(getString(R.string.scanner_app_pro));
+                            }else{
+                                shareToSocial(getString(R.string.scanner_app));
+                            }
                         } else if (preference.getKey().equals(getString(R.string.key_support))) {
                             try {
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
@@ -320,7 +325,11 @@ public class SettingsFragment extends BaseFragment {
                             }
                         }
                         else if (preference.getKey().equals(getString(R.string.key_rate))){
-                            onRateApp();
+                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
+                                onRateProApp();
+                            }else{
+                                onRateApp();
+                            }
                         }
                         else if (preference.getKey().equals(getString(R.string.key_supersafe))){
                             onSuperSafe();
@@ -334,10 +343,11 @@ public class SettingsFragment extends BaseFragment {
         @Override
         public final void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             /*Version**/
             mVersionApp = (MyPreference) findPreference(getString(R.string.key_version));
             mVersionApp.setSummary(String.format("Version: %s", BuildConfig.VERSION_NAME));
+            mVersionApp.setOnPreferenceChangeListener(createChangeListener());
+            mVersionApp.setOnPreferenceClickListener(createActionPreferenceClickListener());
 
             /*Premium*/
             mPreferencePremiumVersion = (MyPreference) findPreference(getString(R.string.key_premium_version));
@@ -375,6 +385,8 @@ public class SettingsFragment extends BaseFragment {
             mySwitchPreferenceVibrate.setOnPreferenceClickListener(createActionPreferenceClickListener());
             mySwitchPreferenceVibrate.setOnPreferenceChangeListener(createChangeListener());
 
+            /*This area is premium*/
+
             /*Theme*/
             myPreferenceTheme = (MyPreference) findPreference(getString(R.string.key_theme));
             myPreferenceTheme.setOnPreferenceClickListener(createActionPreferenceClickListener());
@@ -383,6 +395,7 @@ public class SettingsFragment extends BaseFragment {
                 @Override
                 public void onUpdatePreference() {
                     myPreferenceTheme.getTvChoose().setVisibility(View.VISIBLE);
+                    myPreferenceTheme.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
 
@@ -390,31 +403,44 @@ public class SettingsFragment extends BaseFragment {
             myPreferenceFileColor = (MyPreference) findPreference(getString(R.string.key_color_code));
             myPreferenceFileColor.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceFileColor.setOnPreferenceChangeListener(createChangeListener());
+            myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {
+                @Override
+                public void onUpdatePreference() {
+                    myPreferenceFileColor.getImgPremium().setVisibility(View.VISIBLE);
+                    onGenerateReview("123");
+                }
+            });
 
             /*Multiple scan*/
             myPreferenceMultipleScan = (MySwitchPreference) findPreference(getString(R.string.key_multiple_scan));
             myPreferenceMultipleScan.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceMultipleScan.setOnPreferenceChangeListener(createChangeListener());
+            myPreferenceMultipleScan.setListener(new MySwitchPreference.MySwitchPreferenceListener() {
+                @Override
+                public void onUpdatePreference() {
+                    myPreferenceMultipleScan.getImgPremium().setVisibility(View.VISIBLE);
+                }
+            });
 
             /*Skip duplicates*/
             mySwitchPreferenceSkipDuplicates = (MySwitchPreference) findPreference(getString(R.string.key_skip_duplicates));
             mySwitchPreferenceSkipDuplicates.setOnPreferenceClickListener(createActionPreferenceClickListener());
             mySwitchPreferenceSkipDuplicates.setOnPreferenceChangeListener(createChangeListener());
+            mySwitchPreferenceSkipDuplicates.setListener(new MySwitchPreference.MySwitchPreferenceListener() {
+                @Override
+                public void onUpdatePreference() {
+                    mySwitchPreferenceSkipDuplicates.getImgPremium().setVisibility(View.VISIBLE);
+                }
+            });
 
             /*Backup data*/
             mySwitchPreferenceBackupData = (MySwitchPreference) findPreference(getString(R.string.key_backup_data));
             mySwitchPreferenceBackupData.setOnPreferenceClickListener(createActionPreferenceClickListener());
             mySwitchPreferenceBackupData.setOnPreferenceChangeListener(createChangeListener());
-
-
-            myPreferenceFileColor.setListener(new MyPreference.MyPreferenceListener() {
+            mySwitchPreferenceBackupData.setListener(new MySwitchPreference.MySwitchPreferenceListener() {
                 @Override
                 public void onUpdatePreference() {
-                    if (myPreferenceFileColor.getImageView() != null) {
-                       onGenerateReview("123");
-                    } else {
-                        Utils.Log(TAG, "Log album cover is null.........");
-                    }
+                    mySwitchPreferenceBackupData.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
 
@@ -456,7 +482,6 @@ public class SettingsFragment extends BaseFragment {
                 myPreferenceCategoryFamilyApps.setVisible(false);
                 myPreferenceSuperSafe.setVisible(false);
             }
-
         }
 
         public void onGenerateReview(String code){
@@ -514,6 +539,22 @@ public class SettingsFragment extends BaseFragment {
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_free_release))));
+            }
+        }
+
+        public void onRateProApp() {
+            Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release));
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
             }
         }
     }
