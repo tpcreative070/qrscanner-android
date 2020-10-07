@@ -522,9 +522,9 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
             Log.d(TAG,"isVisible");
             SingletonMain.getInstance().setListener(this);
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);

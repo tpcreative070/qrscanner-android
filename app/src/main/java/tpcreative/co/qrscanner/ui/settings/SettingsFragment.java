@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
-import com.google.zxing.client.result.VINParsedResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.EnumMap;
 import java.util.List;
@@ -80,13 +78,13 @@ public class SettingsFragment extends BaseFragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SettingsFragment.this);
-            Log.d(TAG, "isVisible");
+            Utils.Log(TAG, "isVisible");
         } else {
-            Log.d(TAG, "isInVisible");
+            Utils.Log(TAG, "isInVisible");
             SingletonHistory.getInstance().reLoadData();
             SingletonSave.getInstance().reLoadData();
         }
@@ -95,25 +93,25 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop");
+        Utils.Log(TAG, "onStop");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart");
+        Utils.Log(TAG, "onStart");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
+        Utils.Log(TAG, "onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
+        Utils.Log(TAG, "onResume");
     }
 
     public static class SettingsFragmentPreference extends PreferenceFragmentCompat implements SingletonSettings.SingletonSettingsListener{
@@ -314,7 +312,7 @@ public class SettingsFragment extends BaseFragment {
                                 //TODO smth
                             }
                         } else if (preference.getKey().equals(getString(R.string.key_help))) {
-                            Log.d(TAG, "action here");
+                            Utils.Log(TAG, "action here");
                             Navigator.onMoveToHelp(getContext());
                         }
                         else if (preference.getKey().equals(getString(R.string.key_color_code))){

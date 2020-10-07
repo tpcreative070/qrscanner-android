@@ -13,7 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -55,6 +54,7 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
 import tpcreative.co.qrscanner.common.view.CustomViewPager;
+import tpcreative.co.qrscanner.common.view.MyDrawableCompat;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.Theme;
@@ -192,11 +192,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
 
     private void setupTabIcons() {
         try {
-            tabLayout.getTabAt(0).setIcon(tabIcons[0]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-            tabLayout.getTabAt(1).setIcon(tabIcons[1]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
-            tabLayout.getTabAt(2).setIcon(tabIcons[2]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
-            tabLayout.getTabAt(3).setIcon(tabIcons[3]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
-            tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);;
+            MyDrawableCompat.setColorFilter(tabLayout.getTabAt(1).setIcon(tabIcons[1]).getIcon(),ContextCompat.getColor(this,R.color.white));
+            MyDrawableCompat.setColorFilter(tabLayout.getTabAt(2).setIcon(tabIcons[2]).getIcon(),ContextCompat.getColor(this,R.color.white));
+            MyDrawableCompat.setColorFilter(tabLayout.getTabAt(3).setIcon(tabIcons[3]).getIcon(),ContextCompat.getColor(this,R.color.white));
+            MyDrawableCompat.setColorFilter(tabLayout.getTabAt(4).setIcon(tabIcons[4]).getIcon(),ContextCompat.getColor(this,R.color.white));
         }
         catch (Exception e){
             e.getMessage();
@@ -209,7 +208,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         textView.setText(adapter.getPageTitle(position));
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView .setImageResource(tabIcons[position]);
-        imageView.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        imageView.setColorFilter(ContextCompat.getColor(this,R.color.white), PorterDuff.Mode.SRC_ATOP);
         return view;
     }
 
@@ -231,7 +230,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary,
                             getTheme()))
                     .setLabel(R.string.csv)
-                    .setLabelColor(getResources().getColor(R.color.white))
+                    .setLabelColor(ContextCompat.getColor(this,R.color.white))
                     .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
                             getTheme()))
                     .create());
@@ -274,7 +273,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
-                            Log.d(TAG, "Permission is ready");
+                            Utils.Log(TAG, "Permission is ready");
                             boolean isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh),false);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
                                 SingletonScanner.getInstance().setVisible();
@@ -284,12 +283,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                             // Do something here
                         }
                         else{
-                            Log.d(TAG,"Permission is denied");
+                            Utils.Log(TAG,"Permission is denied");
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed");
+                            Utils.Log(TAG, "request permission is failed");
                         }
                     }
                     @Override
@@ -301,7 +300,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                 .withErrorListener(new PermissionRequestErrorListener() {
                     @Override
                     public void onError(DexterError error) {
-                        Log.d(TAG, "error ask permission");
+                        Utils.Log(TAG, "error ask permission");
                     }
                 }).onSameThread().check();
     }
@@ -337,12 +336,12 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG,"main activity : " + requestCode +" - " + resultCode);
+        Utils.Log(TAG,"main activity : " + requestCode +" - " + resultCode);
     }
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        Log.d(TAG,"Network changed :"+ isConnected);
+        Utils.Log(TAG,"Network changed :"+ isConnected);
     }
 
 

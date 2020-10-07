@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.ui.create;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,13 +51,13 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(GenerateFragment.this);
-            Log.d(TAG, "isVisible");
+            Utils.Log(TAG, "isVisible");
         } else {
-            Log.d(TAG, "isInVisible");
+            Utils.Log(TAG, "isInVisible");
         }
     }
 
