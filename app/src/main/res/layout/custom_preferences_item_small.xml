@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:tint="?attr/colorAccent"
+                android:layout_centerInParent="true"
+                android:src="@color/grey_light"
+                android:id="@android:id/icon"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textSize="@dimen/medium_16"
+                android:id="@android:id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textSize="@dimen/small"
+                android:id="@android:id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@android:id/title"
+                android:layout_alignStart="@android:id/title"
+                android:textColor="?android:attr/textColorSecondary"
+                android:maxLines="3"/>
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:tint="?attr/colorAccent"
+            android:id="@+id/imgPremium"
+            app:srcCompat="@drawable/ic_crown_5"
+            android:layout_width="@dimen/icon_size_25"
+            android:layout_height="@dimen/icon_size_25"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgCover"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/image_size_custom_60"
+                android:layout_height="@dimen/image_size_custom_60"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgSuperSafe"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/image_size_custom_60"
+                android:layout_height="@dimen/image_size_custom_60"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_centerInParent="true"
+                android:visibility="invisible"
+                android:id="@android:id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </androidx.appcompat.widget.SwitchCompat>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvChoose"
+                android:visibility="invisible"
+                android:text="@string/key_theme"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

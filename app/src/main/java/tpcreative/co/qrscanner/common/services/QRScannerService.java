@@ -245,12 +245,12 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
     public void getDriveAbout(GoogleDriveListener view) {
         Utils.Log(TAG, "getDriveAbout");
         if (!Utils.isConnectedToGoogleDrive()) {
-            view.onError("User is null",EnumStatus.REQUEST_ACCESS_TOKEN);
+            view.onError("User is null",EnumStatus.DRIVE_CONNECTED_DISABLE);
             return;
         }
         String access_token = Utils.getAccessToken();
         if (access_token == null) {
-            view.onError("Access token is null",EnumStatus.REQUEST_ACCESS_TOKEN);
+            view.onError("Access token is null",EnumStatus.DRIVE_CONNECTED_DISABLE);
             return;
         }
 
@@ -266,7 +266,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                             mAuthor.isConnectedToGoogleDrive = false;
                             Utils.setAuthor(mAuthor);
                         }
-                        view.onError(new Gson().toJson(onResponse.error), EnumStatus.REQUEST_ACCESS_TOKEN);
+                        view.onError(new Gson().toJson(onResponse.error), EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN);
                     } else {
                         final Author mAuthor = Author.getInstance().getAuthorInfo();
                         if (mAuthor != null) {
@@ -296,7 +296,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                                         mAuthor.isConnectedToGoogleDrive = false;
                                         Utils.setAuthor(mAuthor);
                                     }
-                                    view.onError(new Gson().toJson(driveAbout.error), EnumStatus.REQUEST_ACCESS_TOKEN);
+                                    view.onError(new Gson().toJson(driveAbout.error), EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN);
                                 }
                             } else {
                                 final Author mAuthor = Author.getInstance().getAuthorInfo();
@@ -304,7 +304,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                                     mAuthor.isConnectedToGoogleDrive = false;
                                     Utils.setAuthor(mAuthor);
                                 }
-                                view.onError("Error null ", EnumStatus.REQUEST_ACCESS_TOKEN);
+                                view.onError("Error null ", EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN);
                             }
                         } catch (IOException e) {
                             final Author mAuthor = Author.getInstance().getAuthorInfo();
@@ -469,10 +469,11 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         return null;
     }
 
-    public void getFileListInApp() {
+    public void getFileListInApp(BaseListener<DriveResponse> listener) {
         Utils.Log(TAG, "getFileListInApp");
         if (!Utils.isConnectedToGoogleDrive()){
             Utils.Log(TAG,"Request to update access token of Google drive");
+            listener.onError("Request to update access token of Google drive",EnumStatus.DRIVE_CONNECTED_DISABLE);
             return;
         }
         subscriptions.add(QRScannerApplication.serverDriveApi.onGetListFileInAppFolder(Utils.getAccessToken(),QRScannerApplication.getInstance().getString(R.string.key_appDataFolder))
@@ -487,6 +488,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                         final int count = onResponse.files.size();
                         Utils.Log(TAG,"Total count request :" + count);
                         Utils.Log(TAG,new Gson().toJson(onResponse));
+                        listener.onShowListObjects(onResponse.files);
                     }
                 }, throwable -> {
                     if (throwable instanceof HttpException) {
@@ -502,6 +504,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                                         mAuthor.isConnectedToGoogleDrive = false;
                                         Utils.setAuthor(mAuthor);
                                     }
+                                    listener.onError("Request refresh access token",EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN);
                                 }
                             } else {
                                 Utils.Log(TAG,"Fetching data has issue");
@@ -578,4 +581,12 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         void onError();
         void onCancel();
     }
+
+    public interface BaseListener <T> {
+        void onShowListObjects(List<T>list);
+        void onShowObjects(T object);
+        void onError(String message, EnumStatus status);
+        void onSuccessful(String message,EnumStatus status);
+    }
+
 }

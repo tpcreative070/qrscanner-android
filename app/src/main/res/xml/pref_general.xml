@@ -5,14 +5,14 @@
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_basic_features"
         android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_vibration_white_48"
             android:title="@string/key_vibrate"
             android:key="@string/key_vibrate">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 
         <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_surround_sound_white_48"
             android:title="@string/key_beep"
             android:key="@string/key_beep">
@@ -99,7 +99,7 @@
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/info"
         android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_stars_white_48"
             android:title="@string/premium_version"
             android:summary="@string/summary"
@@ -107,13 +107,13 @@
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_playlist_add_check_white_48"
             android:title="@string/app_permission"
             android:key="@string/key_app_permissions"/>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_beenhere_white_48"
             android:title="@string/privacy_policy"
             android:key="@string/key_privacy_policy">
@@ -123,7 +123,7 @@
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:title="@string/give_rate"
             android:icon="@drawable/baseline_star_rate_white_48"
             android:key="@string/key_rate">
@@ -131,26 +131,26 @@
 
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_share_white_48"
             android:title="@string/share"
             android:key="@string/key_share"/>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_help_white_48"
             android:title="@string/help"
             android:key="@string/key_help"/>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_live_help_white_48"
             android:title="@string/support"
             android:summary="@string/support_detail"
             android:key="@string/key_support"/>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item"
+            android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_label_white_48"
             android:key="@string/key_version"
             android:summary=""

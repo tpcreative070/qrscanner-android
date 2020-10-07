@@ -9,6 +9,7 @@ public enum EnumStatus {
         AUTHOR_SYNC,
         CHECK_VERSION,
         SCAN_DONE,
-        REQUEST_ACCESS_TOKEN,
+        REQUEST_REFRESH_ACCESS_TOKEN,
+        DRIVE_CONNECTED_DISABLE,
         GET_DRIVE_ABOUT_SUCCESSFULLY
 }

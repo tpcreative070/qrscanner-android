@@ -199,6 +199,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 save.hidden = create.hidden;
                 save.createType = create.createType.name();
                 onGenerateReview(code);
+                Utils.Log(TAG,"wifi "+ create.networkEncryption);
                 break;
 
             case GEO:

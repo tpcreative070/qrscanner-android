@@ -8,8 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.util.Log;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
@@ -22,6 +22,8 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.activity.BaseGoogleApi;
+import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerService;
@@ -40,16 +42,17 @@ public class ServiceManager implements BaseView {
     private Disposable subscriptions;
     ServiceConnection myConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            Log.d(TAG, "connected");
+            Utils.Log(TAG, "connected");
             myService = ((QRScannerService.LocalBinder) binder).getService();
             myService.bindView(ServiceManager.this);
             myService.onSyncAuthor();
             myService.onCheckVersion();
+            ServiceManager.getInstance().onPreparingSyncData();
         }
 
         //binder comes from server to communicate with method's of
         public void onServiceDisconnected(ComponentName className) {
-            Log.d(TAG, "disconnected");
+            Utils.Log(TAG, "disconnected");
             myService = null;
         }
     };
@@ -87,7 +90,7 @@ public class ServiceManager implements BaseView {
         intent = new Intent(mContext, QRScannerService.class);
         intent.putExtra(TAG, "Message");
         mContext.bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
-        Log.d(TAG, "onStartService");
+        Utils.Log(TAG, "onStartService");
     }
 
     public void onStartService() {
@@ -113,7 +116,83 @@ public class ServiceManager implements BaseView {
     }
 
     /*Sync data*/
-    public void onGetDataList(){
+    public void onPreparingSyncData(){
+        if (!Utils.isPremium()){
+            Utils.Log(TAG,"Please upgrade to premium version");
+            return;
+        }
+        if (myService==null){
+            Utils.Log(TAG,"Request service");
+            onStartService();
+            return;
+        }
+        if (Utils.getAccessToken()==null){
+            Utils.Log(TAG,"Need to sign in with Google drive first");
+            return;
+        }
+        if (!Utils.isConnectedToGoogleDrive()){
+            Utils.Log(TAG,"Need to connect to Google drive");
+            Navigator.onRefreshAccessToken(QRScannerApplication.getInstance());
+            return;
+        }
+        Utils.Log(TAG,"Starting sync data");
+        onGetItemList();
+    }
+
+    public void onGetItemList(){
+        myService.getFileListInApp(new QRScannerService.BaseListener<DriveResponse>() {
+            @Override
+            public void onShowListObjects(List<DriveResponse> list) {
+                Utils.Log(TAG,"response data " + new Gson().toJson(list));
+                Navigator.onRefreshAccessToken(QRScannerApplication.getInstance());
+            }
+            @Override
+            public void onShowObjects(DriveResponse object) {
+
+            }
+            @Override
+            public void onError(String message, EnumStatus status) {
+                Utils.Log(TAG,"response error " + message);
+                switch (status){
+                    case REQUEST_REFRESH_ACCESS_TOKEN:
+                        Navigator.onRefreshAccessToken(QRScannerApplication.getInstance());
+                        break;
+                    default:
+                        break;
+                }
+            }
+            @Override
+            public void onSuccessful(String message, EnumStatus status) {
+
+            }
+        });
+    }
+
+    /*onPreparingDownload*/
+    public void onPreparingDownloadItemData(){
+
+    }
+
+    public void onDownloadItemData(){
+
+    }
+
+    /*onPreparingDownload*/
+    public void onPreparingDeleteItemData(){
+
+    }
+
+    public void onDeleteItemData(){
+
+    }
+
+
+    /*onPreparingDownload*/
+    public void onPreparingUploadItemData(){
+
+    }
+
+    public void onUploadItemData(){
 
     }
 
@@ -149,12 +228,12 @@ public class ServiceManager implements BaseView {
 
     @Override
     public void onError(String message, EnumStatus status) {
-        Log.d(TAG, "onError response :" + message + " - " + status.name());
+        Utils.Log(TAG, "onError response :" + message + " - " + status.name());
     }
 
     @Override
     public void onSuccessful(String message) {
-        Log.d(TAG, "onSuccessful Response  :" + message);
+        Utils.Log(TAG, "onSuccessful Response  :" + message);
     }
 
     @Override
@@ -365,5 +444,4 @@ public class ServiceManager implements BaseView {
         void onYes();
         void onNo();
     }
-
 }

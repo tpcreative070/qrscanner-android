@@ -2,7 +2,6 @@ package tpcreative.co.qrscanner.ui.create;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,11 +22,9 @@ import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.common.entities.SaveEntity;
 import tpcreative.co.qrscanner.model.SaveModel;
 
 public class WifiFragment extends BaseActivitySlide implements View.OnClickListener ,SingletonGenerate.SingletonGenerateListener {
-
 
     private static final String TAG = WifiFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
@@ -62,6 +59,9 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
         else{
             Utils.Log(TAG,"Data is null");
         }
+        radio0.setOnClickListener(this);
+        radio1.setOnClickListener(this);
+        radio2.setOnClickListener(this);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
         switch (item.getItemId()){
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
-                    Log.d(TAG,"Passed");
+                    Utils.Log(TAG,"Passed");
                     Create create = new Create();
                     create.ssId = edtSSID.getText().toString().trim();
                     create.password = edtPassword.getText().toString();
@@ -86,7 +86,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
                     Navigator.onMoveToReview(this,create);
                 }
                 else{
-                    Log.d(TAG,"error");
+                    Utils.Log(TAG,"error");
                 }
                 return true;
             }
@@ -119,7 +119,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart");
+        Utils.Log(TAG,"onStart");
         mAwesomeValidation =  new AwesomeValidation(ValidationStyle.BASIC);
         addValidationForEditText();
         if (save!=null){
@@ -131,27 +131,27 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Utils.Log(TAG,"onStop");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG,"onPause");
+        Utils.Log(TAG,"onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         SingletonGenerate.getInstance().setListener(null);
-        Log.d(TAG,"onDestroy");
+        Utils.Log(TAG,"onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         SingletonGenerate.getInstance().setListener(this);
-        Log.d(TAG,"onResume");
+        Utils.Log(TAG,"onResume");
     }
 
     @Override
@@ -166,14 +166,17 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
         switch (view.getId()){
             case R.id.radio0 : {
                 typeEncrypt = "WPA";
+                Utils.Log(TAG,"Selected here: radio 0");
                 break;
             }
             case R.id.radio1 : {
                 typeEncrypt = "WEP";
+                Utils.Log(TAG,"Selected here: radio 1");
                 break;
             }
             case R.id.radio2 :{
                 typeEncrypt = "None";
+                Utils.Log(TAG,"Selected here: radio 2");
             }
             default:{
                 break;
