@@ -92,9 +92,9 @@ public class BackupActivity extends BaseGoogleApi {
     @Override
     protected void onDriveSuccessful() {
         //ServiceManager.getInstance().getMyService().getFileListInApp();
-        //ServiceManager.getInstance().getMyService().onDownloadFile("1GMELjrmNXx1RdSOpKBtV38FR6Q_Kka4OJvxM2kFQVc7vGjhC5g");
-        //ServiceManager.getInstance().getMyService().onDeleteCloudItems("1c4kyHgK4RO8Kfzt8T2J2KKT_lRRLTei9zXLK5XkXJoZirHOxcQ");
-        //ServiceManager.getInstance().getMyService().onUploadFileInAppFolder();
+        ServiceManager.getInstance().onPreparingDownloadItemData("1vlpBGLEaAwFGHyblIGkBPIC9EminB35x_3nbvFJOTKmERf7B_A");
+        //ServiceManager.getInstance().onPreparingDeleteItemData("1dAnl2u-15m7gk_9fIyxSsjo72Sh4nN-g8PRHRscF9PKyfWOyFA");
+        ServiceManager.getInstance().onPreparingUploadItemData();
     }
 
     @Override

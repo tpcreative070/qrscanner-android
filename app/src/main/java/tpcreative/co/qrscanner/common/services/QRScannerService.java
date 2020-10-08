@@ -45,6 +45,7 @@ import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.DriveAbout;
 import tpcreative.co.qrscanner.model.EnumStatus;
 import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.SyncDataModel;
 
 public class QRScannerService extends PresenterService<BaseView> implements QRScannerReceiver.ConnectivityReceiverListener {
 
@@ -323,20 +324,20 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 }));
     }
 
-    public void onUploadFileInAppFolder() {
+    public void onUploadFileInAppFolder(BaseListener listener) {
         Utils.Log(TAG, "onUploadFileInAppFolder");
         MediaType contentType = MediaType.parse("application/json; charset=UTF-8");
         HashMap<String, Object> content = new HashMap<>();
         File file = null;
         try {
-           file =  Utils.writeToJson(new Gson().toJson(SQLiteHelper.getList()),File.createTempFile("history",".json"));
+           file =  Utils.writeToJson(new SyncDataModel().toJson(),File.createTempFile("backup",".json"));
         }catch (Exception e){
             Utils.Log(TAG,"Could not generate temporary file");
             return;
         }
         List<String> list = new ArrayList<>();
         list.add(getString(R.string.key_appDataFolder));
-        content.put(getString(R.string.key_name),"history.json");
+        content.put(getString(R.string.key_name),"backup.json");
         content.put(getString(R.string.key_parents), list);
         MultipartBody.Part metaPart = MultipartBody.Part.create(RequestBody.create(contentType, new Gson().toJson(content)));
         ProgressRequestBody fileBody = new ProgressRequestBody(file, new ProgressRequestBody.UploadCallbacks() {
@@ -360,21 +361,23 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             @Override
             public void onResponse(Call<DriveResponse> call, Response<DriveResponse> response) {
                 Utils.Log(TAG, "response successful :" + new Gson().toJson(response.body()));;
+                listener.onSuccessful("Response data uploaded :" +new Gson().toJson(response.body()),EnumStatus.UPLOADED_SUCCESSFULLYY);
             }
             @Override
             public void onFailure(Call<DriveResponse> call, Throwable t) {
                 Utils.Log(TAG, "response failed :" + t.getMessage());
+                listener.onError(t.getMessage(),EnumStatus.UPLOADING_FAILED);;
             }
         });
     }
 
-    public void onDownloadFile(String id) {
+    public void onDownloadFile(String id, BaseListener<SyncDataModel> listener) {
         Utils.Log(TAG, "onDownloadFile !!!!");
         final DownloadFileRequest request = new DownloadFileRequest();
         File output = null;
         try {
             File outputDir = getExternalCacheDir(); // context being the Activity pointer
-            output = File.createTempFile("history",".json",outputDir);
+            output = File.createTempFile("backup",".json",outputDir);
             request.path_folder_output = outputDir.getAbsolutePath();
             request.file_name = output.getName();
             request.id = id;
@@ -390,16 +393,18 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 Utils.Log(TAG, "onDownLoadCompleted " + file_name.getAbsolutePath());
                 final String mValue = loadFromTempFile(file_name);
                 if (mValue!=null){
-                    final List<HistoryModel> mList = new Gson().fromJson(mValue,new TypeToken<List<HistoryModel>>(){}.getType());
-                    if (mList!=null){
-                        Utils.Log(TAG,"List value "+ new Gson().toJson(mList));
-                        Utils.Log(TAG,"Count "+ mList.size());
+                    final SyncDataModel mDataValue = new Gson().fromJson(mValue,new TypeToken<SyncDataModel>(){}.getType());
+                    if (mDataValue!=null){
+                        Utils.Log(TAG,"List value "+ new Gson().toJson(mDataValue));
+                        listener.onShowObjects(mDataValue);
+                        listener.onSuccessful("Downloaded successfully",EnumStatus.DOWNLOADED_SUCCESSFULLY);
                     }
                 }
             }
             @Override
             public void onDownLoadError(String error) {
                 Utils.Log(TAG, "onDownLoadError " + error);
+                listener.onError(error,EnumStatus.DOWNLOADING_FAILED);
             }
             @Override
             public void onProgressingDownloading(int percent) {
@@ -432,6 +437,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             public void onCodeResponse(int code, DownloadFileRequest request) {
                 if (code == 404) {
                     Utils.Log(TAG,"Request delete id");
+                    listener.onError("Downloading not found id",EnumStatus.DOWNLOADING_NOT_FOUND_ID);
                 }
             }
             @Override
@@ -520,7 +526,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
 
 
     /*Get List Categories*/
-    public void onDeleteCloudItems(final String id) {
+    public void onDeleteCloudItems(final String id,BaseListener listener) {
         Utils.Log(TAG, "onDeleteCloudItems");
         subscriptions.add(QRScannerApplication.serverDriveApi.onDeleteCloudItem(Utils.getAccessToken(), id)
                 .subscribeOn(Schedulers.io())
@@ -529,8 +535,10 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                     Utils.Log(TAG,"Deleted cloud response code " + onResponse.code());
                     if (onResponse.code() == 204) {
                         Utils.Log(TAG,"Deleted id successfully");
+                        listener.onSuccessful("Deleted successfully",EnumStatus.DELETED_SUCCESSFULLY);
                     } else if (onResponse.code() == 404) {
                         Utils.Log(TAG,"This id is not exiting");
+                        listener.onError("Not found id",EnumStatus.DELETING_NOT_FOUND_ID);
                     } else {
                         Utils.Log(TAG,"Not found for this case");
                     }
@@ -543,9 +551,11 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                             if (driveAbout != null) {
                                 if (driveAbout.error != null) {
                                     Utils.Log(TAG,"Request refresh access token");
+                                    listener.onError("Request refresh access token",EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN);
                                 }
                             } else {
                                 Utils.Log(TAG,"Request refresh access token");
+                                listener.onError("Request refresh access token",EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

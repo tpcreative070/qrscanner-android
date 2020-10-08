@@ -22,7 +22,6 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.SingletonResponse;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.common.activity.BaseGoogleApi;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -32,6 +31,7 @@ import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.EnumStatus;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SaveModel;
+import tpcreative.co.qrscanner.model.SyncDataModel;
 
 public class ServiceManager implements BaseView {
 
@@ -40,6 +40,8 @@ public class ServiceManager implements BaseView {
     private QRScannerService myService;
     private Context mContext;
     private Disposable subscriptions;
+    private boolean isDownloadData,isUploadData,isDeleteData;
+
     ServiceConnection myConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
             Utils.Log(TAG, "connected");
@@ -144,7 +146,6 @@ public class ServiceManager implements BaseView {
             @Override
             public void onShowListObjects(List<DriveResponse> list) {
                 Utils.Log(TAG,"response data " + new Gson().toJson(list));
-                Navigator.onRefreshAccessToken(QRScannerApplication.getInstance());
             }
             @Override
             public void onShowObjects(DriveResponse object) {
@@ -169,32 +170,92 @@ public class ServiceManager implements BaseView {
     }
 
     /*onPreparingDownload*/
-    public void onPreparingDownloadItemData(){
+    public void onPreparingDownloadItemData(String id){
+        myService.onDownloadFile(id, new QRScannerService.BaseListener<SyncDataModel>() {
+            @Override
+            public void onShowListObjects(List<SyncDataModel> list) {
+                Utils.Log(TAG,new Gson().toJson(list));
+            }
 
+            @Override
+            public void onShowObjects(SyncDataModel object) {
+                Utils.Log(TAG,new Gson().toJson(object));
+            }
+
+            @Override
+            public void onError(String message, EnumStatus status) {
+                Utils.Log(TAG,message);
+            }
+
+            @Override
+            public void onSuccessful(String message, EnumStatus status) {
+                Utils.Log(TAG,message);
+            }
+        });
     }
 
-    public void onDownloadItemData(){
-
-    }
+//    public void onDownloadItemData(){
+//
+//    }
 
     /*onPreparingDownload*/
-    public void onPreparingDeleteItemData(){
+    public void onPreparingDeleteItemData(String id){
+        myService.onDeleteCloudItems(id, new QRScannerService.BaseListener() {
+            @Override
+            public void onShowListObjects(List list) {
 
+            }
+
+            @Override
+            public void onShowObjects(Object object) {
+
+            }
+
+            @Override
+            public void onError(String message, EnumStatus status) {
+                Utils.Log(TAG,message);
+            }
+
+            @Override
+            public void onSuccessful(String message, EnumStatus status) {
+                Utils.Log(TAG,message);
+            }
+        });
     }
 
-    public void onDeleteItemData(){
-
-    }
+//    public void onDeleteItemData(){
+//
+//    }
 
 
     /*onPreparingDownload*/
     public void onPreparingUploadItemData(){
+        myService.onUploadFileInAppFolder(new QRScannerService.BaseListener() {
+            @Override
+            public void onShowListObjects(List list) {
 
+            }
+
+            @Override
+            public void onShowObjects(Object object) {
+
+            }
+
+            @Override
+            public void onError(String message, EnumStatus status) {
+                Utils.Log(TAG,message);
+            }
+
+            @Override
+            public void onSuccessful(String message, EnumStatus status) {
+                Utils.Log(TAG,message);
+            }
+        });
     }
 
-    public void onUploadItemData(){
-
-    }
+//    public void onUploadItemData(){
+//
+//    }
 
     /*User info*/
     public void onAuthorSync() {
