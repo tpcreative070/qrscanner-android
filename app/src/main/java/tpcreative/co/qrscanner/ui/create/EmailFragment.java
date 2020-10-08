@@ -65,13 +65,11 @@ public class EmailFragment extends BaseActivitySlide implements GenerateSingleto
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.email = edtEmail.getText().toString().trim();
                     create.subject = edtObject.getText().toString();
                     create.message = edtMessage.getText().toString();
                     create.createType = ParsedResultType.EMAIL_ADDRESS;
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(EmailFragment.this,create);
                 }
                 else{

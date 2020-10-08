@@ -39,6 +39,9 @@ public class SaveModel implements Serializable {
     /*content_type_barcode*/
     public String contentUnique;
     public String contentUniqueForUpdatedTime;
+    /*sync data*/
+    public boolean isSynced;
+    public String uuId;
 
     /*Custom fields*/
     public TypeCategories typeCategories;
@@ -72,9 +75,13 @@ public class SaveModel implements Serializable {
         this.typeCategories = new TypeCategories();
         this.barcodeFormat = BarcodeFormat.QR_CODE.name();
         this.favorite = false;
-        this.updatedDateTime = Utils.getCurrentDateTimeSort();
+        final String time = Utils.getCurrentDateTimeSort();
+        this.createDatetime = time;
+        this.updatedDateTime = time;
         this.contentUnique = "";
-        this.contentUnique = "";
+        this.contentUniqueForUpdatedTime = "";
+        this.isSynced = false;
+        this.uuId = Utils.getUUId();
     }
 
     public SaveModel(SaveEntityModel item){
@@ -108,6 +115,8 @@ public class SaveModel implements Serializable {
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
         this.contentUniqueForUpdatedTime = item.contentUniqueForUpdatedTime;
+        this.isSynced = item.isSynced;
+        this.uuId = item.uuId;
     }
 
     public boolean isChecked() {
@@ -132,15 +141,6 @@ public class SaveModel implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getUUId(){
-        try {
-            return UUID.randomUUID().toString();
-        }
-        catch (Exception e){
-            return ""+System.currentTimeMillis();
-        }
     }
 
     public int getCategoryId() {

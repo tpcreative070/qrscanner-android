@@ -60,11 +60,9 @@ public class UrlFragment extends BaseActivitySlide implements GenerateSingleton.
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Log.d(TAG,"Passed");
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.url = edtUrl.getText().toString().trim();
                     create.createType = ParsedResultType.URI;
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(this,create);
                 }
                 else{

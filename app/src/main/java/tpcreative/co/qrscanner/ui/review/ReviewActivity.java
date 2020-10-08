@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -101,7 +100,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
             switch (itemNavigation.enumAction){
                 case SHARE:{
                     if (code != null) {
-                        Log.d(TAG, "Share");
+                        Utils.Log(TAG, "Share");
                         onGenerateCode(code, EnumAction.SHARE);
                     }
                     break;
@@ -290,12 +289,12 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                         if (report.areAllPermissionsGranted()) {
                             onGenerateCode(code,enumAction);
                         } else {
-                            Log.d(TAG, "Permission is denied");
+                            Utils.Log(TAG, "Permission is denied");
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed");
+                            Utils.Log(TAG, "request permission is failed");
                         }
                     }
 
@@ -308,7 +307,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 .withErrorListener(new PermissionRequestErrorListener() {
                     @Override
                     public void onError(DexterError error) {
-                        Log.d(TAG, "error ask permission");
+                        Utils.Log(TAG, "error ask permission");
                     }
                 }).onSameThread().check();
     }
@@ -362,11 +361,18 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                 }
                 save.favorite = false;
                 Toast.makeText(this, "Saved code successful => Path: " + path, Toast.LENGTH_LONG).show();
-                save.createDatetime = Utils.getCurrentDateTime();
                 if (create.enumImplement == EnumImplement.CREATE) {
+                    final String time = Utils.getCurrentDateTimeSort();
+                    save.createDatetime = time;
+                    save.updatedDateTime = time;
                     SQLiteHelper.onInsert(save);
                 } else if (create.enumImplement == EnumImplement.EDIT) {
+                    final String time = Utils.getCurrentDateTimeSort();
+                    save.updatedDateTime = time;
+                    save.createDatetime = create.createdDateTime;
                     save.id = create.id;
+                    save.isSynced = create.isSynced;
+                    save.uuId = create.uuId;
                     SQLiteHelper.onUpdate(save);
                 }
                 break;
@@ -374,7 +380,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
             case SHARE: {
                 File file = new File(path);
                 if (file.isFile()) {
-                    Log.d(TAG, "path : " + path);
+                    Utils.Log(TAG, "path : " + path);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
                         shareToSocial(uri);
@@ -415,7 +421,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
     }
 
     public void shareToSocial(final Uri value) {
-        Log.d(TAG, "path call");
+        Utils.Log(TAG, "path call");
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");

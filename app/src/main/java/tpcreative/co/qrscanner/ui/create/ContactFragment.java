@@ -67,14 +67,12 @@ public class ContactFragment extends BaseActivitySlide implements GenerateSingle
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.fullName = edtFullName.getText().toString().trim();
                     create.address = edtAddress.getText().toString();
                     create.phone = edtPhone.getText().toString();
                     create.email = edtEmail.getText().toString();
                     create.createType = ParsedResultType.ADDRESSBOOK;
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(this,create);
                 }
                 else{

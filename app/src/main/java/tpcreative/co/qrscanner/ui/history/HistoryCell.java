@@ -21,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.entities.HistoryEntity;
+import tpcreative.co.qrscanner.helper.TimeHelper;
 import tpcreative.co.qrscanner.model.HistoryModel;
 
 public class HistoryCell extends SimpleCell<HistoryModel,HistoryCell.ViewHolder> {
@@ -105,9 +106,7 @@ public class HistoryCell extends SimpleCell<HistoryModel,HistoryCell.ViewHolder>
                 return false;
             }
         });
-
-        viewHolder.tvTime.setText(data.createDatetime);
-
+        viewHolder.tvTime.setText(TimeHelper.getInstance().getCurrentDateDisplay(data.updatedDateTime));
         if (data.createType.equals(ParsedResultType.EMAIL_ADDRESS.name())){
             viewHolder.tvContent.setText(data.email);
         }

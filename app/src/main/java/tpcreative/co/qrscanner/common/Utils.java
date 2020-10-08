@@ -1013,6 +1013,10 @@ public class Utils {
         return mList;
     }
 
+//    public static List<HistoryModel> foundSyncedFilesHistoryDelete(List<HistoryModel> mSyncedList){
+//
+//    }
+
     public static String logPath(){
         final Storage storage = QRScannerApplication.getInstance().getStorage();
         return storage.getExternalStorageDirectory()+"/logsData.txt";

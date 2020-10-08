@@ -61,11 +61,9 @@ public class TelephoneFragment extends BaseActivitySlide implements GenerateSing
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.phone = edtPhone.getText().toString().trim();
                     create.createType = ParsedResultType.TEL;
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(this,create);
                 }
                 else{

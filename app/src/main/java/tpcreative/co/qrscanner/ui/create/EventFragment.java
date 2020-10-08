@@ -152,7 +152,7 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
                         return true;
                     }
 
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.title = edtTitle.getText().toString();
                     create.location = edtLocation.getText().toString();
                     create.description = edtDescription.getText().toString();
@@ -161,8 +161,6 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
                     create.startEventMilliseconds = beginDateTimeMilliseconds;
                     create.endEventMilliseconds = endDateTimeMilliseconds;
                     create.createType = ParsedResultType.CALENDAR;
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(this, create);
                 } else {
                     Utils.Log(TAG, "error");

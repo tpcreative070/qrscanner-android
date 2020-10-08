@@ -37,6 +37,10 @@ public class SaveEntityModel {
     /*content_type_barcode*/
     public String contentUnique;
     public String contentUniqueForUpdatedTime;
+    /*sync data*/
+    public boolean isSynced;
+    public String uuId;
+
 
     public SaveEntityModel(SaveEntity item){
         this.id = item.id;
@@ -69,6 +73,8 @@ public class SaveEntityModel {
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
         this.contentUniqueForUpdatedTime = item.contentUnique +""+this.updatedDateTime;
+        this.isSynced = item.isSynced;
+        this.uuId = item.uuId;
     }
 
     public SaveEntityModel(SaveModel item){
@@ -102,5 +108,7 @@ public class SaveEntityModel {
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = Utils.getCodeContentByGenerate(item);
         this.contentUniqueForUpdatedTime = this.contentUnique +""+this.updatedDateTime;
+        this.isSynced = item.isSynced;
+        this.uuId = item.uuId;
     }
 }

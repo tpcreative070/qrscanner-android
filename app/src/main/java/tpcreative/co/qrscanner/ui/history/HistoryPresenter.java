@@ -27,6 +27,7 @@ public class HistoryPresenter extends Presenter<HistoryView> {
     public Map<String, HistoryModel> getUniqueList(){
         HistoryView view = view();
         final List<HistoryModel> histories = SQLiteHelper.getList();
+        Utils.Log(TAG,"History list "+ new Gson().toJson(histories));
         if (histories==null){
             return new HashMap<>();
         }

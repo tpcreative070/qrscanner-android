@@ -37,6 +37,10 @@ public class HistoryModel implements Serializable {
     /*content_type_barcode*/
     public String contentUnique;
     public String contentUniqueForUpdatedTime;
+    /*sync data*/
+    public boolean isSynced;
+    public String uuId;
+
 
     /*Custom fields*/
     public TypeCategories typeCategories;
@@ -72,7 +76,9 @@ public class HistoryModel implements Serializable {
         this.favorite = false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
         this.contentUnique = "";
-        this.contentUnique = "";
+        this.contentUniqueForUpdatedTime = "";
+        this.isSynced = false;
+        this.uuId = Utils.getUUId();
     }
 
     public HistoryModel(HistoryEntityModel item){
@@ -106,6 +112,8 @@ public class HistoryModel implements Serializable {
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
         this.contentUniqueForUpdatedTime = item.contentUniqueForUpdatedTime;
+        this.isSynced = item.isSynced;
+        this.uuId = item.uuId;
     }
 
     public boolean isChecked() {
@@ -130,15 +138,6 @@ public class HistoryModel implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getUUId(){
-        try {
-            return UUID.randomUUID().toString();
-        }
-        catch (Exception e){
-            return ""+System.currentTimeMillis();
-        }
     }
 
     public int getCategoryId() {

@@ -77,12 +77,10 @@ public class BarcodeFragment extends BaseActivitySlide implements GenerateSingle
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.productId = editText.getText().toString().trim();
                     create.createType = ParsedResultType.PRODUCT;
                     create.barcodeFormat = presenter.mType.name();
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(this,create);
                 }
                 else{

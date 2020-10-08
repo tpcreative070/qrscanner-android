@@ -1,9 +1,6 @@
 package tpcreative.co.qrscanner.model;
 import com.google.zxing.client.result.ParsedResultType;
-
 import java.io.Serializable;
-import java.util.Date;
-
 import tpcreative.co.qrscanner.common.Utils;
 
 public class Create implements Serializable {
@@ -34,10 +31,14 @@ public class Create implements Serializable {
     public String barcodeFormat;
     public boolean favorite;
     public String updatedDateTime ;
+    public String createdDateTime;
     public ParsedResultType createType;
     public String networkEncryption;
     public EnumFragmentType fragmentType;
     public EnumImplement enumImplement;
+    /*Sync data*/
+    public boolean isSynced;
+    public String uuId;
 
     public Create(){
         email = "";
@@ -68,10 +69,9 @@ public class Create implements Serializable {
         this.barcodeFormat = "";
         this.favorite =false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
-
     }
 
-    public Create(String title){
+    public Create(SaveModel save){
         email = "";
         subject = "";
         message = "";
@@ -81,7 +81,7 @@ public class Create implements Serializable {
         startEventMilliseconds = 0;
         endEventMilliseconds = 0;
         query = "";
-        this.title = title;
+        title = "";
         location = "";
         description = "";
         startEvent = "";
@@ -100,5 +100,11 @@ public class Create implements Serializable {
         this.barcodeFormat = "";
         this.favorite =false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
+        this.createdDateTime = (save != null) ? save.createDatetime : Utils.getCurrentDateTimeSort();
+        this.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
+        this.id = (save != null) ? save.id : 0 ;
+        this.isSynced = (save != null) && save.isSynced;
+        this.uuId = (save != null) ? save.uuId : Utils.getUUId() ;
+        this.uuId = (save != null) ? save.uuId : Utils.getUUId() ;
     }
 }

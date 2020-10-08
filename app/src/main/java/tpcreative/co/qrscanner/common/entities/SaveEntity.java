@@ -41,6 +41,9 @@ public class SaveEntity implements Serializable{
 
     /*content_type_barcode*/
     public String contentUnique;
+    /*sync data*/
+    public boolean isSynced;
+    public String uuId;
 
     public SaveEntity(
                 String email,
@@ -156,6 +159,8 @@ public class SaveEntity implements Serializable{
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
+        this.isSynced = item.isSynced;
+        this.uuId = item.uuId;
     }
 }
 

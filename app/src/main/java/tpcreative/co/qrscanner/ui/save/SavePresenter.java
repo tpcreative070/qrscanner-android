@@ -25,11 +25,8 @@ public class SavePresenter extends Presenter<SaveView> {
     }
 
     public Map<String, SaveModel> getUniqueList(){
-        SaveView view = view();
         final List<SaveModel> saver = SQLiteHelper.getListSave();
-        if (saver==null){
-            return new HashMap<>();
-        }
+        Utils.Log(TAG,"Save list "+ new Gson().toJson(saver));
         Utils.Log(TAG,new Gson().toJson(saver));
         Map<String, SaveModel> hashMap = new HashMap<>();
         for (SaveModel index : saver){

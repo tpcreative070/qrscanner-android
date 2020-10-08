@@ -36,6 +36,10 @@ public class HistoryEntityModel {
     /*content_type_barcode*/
     public String contentUnique;
     public String contentUniqueForUpdatedTime;
+    /*sync data*/
+    public boolean isSynced;
+    public String uuId;
+
 
     public HistoryEntityModel(HistoryEntity item){
         this.id = item.id;
@@ -68,6 +72,8 @@ public class HistoryEntityModel {
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
         this.contentUniqueForUpdatedTime = item.contentUnique +""+this.updatedDateTime;
+        this.isSynced = item.isSynced;
+        this.uuId = item.uuId;
     }
 
     public HistoryEntityModel(HistoryModel item){
@@ -101,5 +107,7 @@ public class HistoryEntityModel {
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = Utils.getCodeContentByHistory(item);
         this.contentUniqueForUpdatedTime = this.contentUnique +""+this.updatedDateTime;
+        this.isSynced =  item.isSynced;
+        this.uuId = item.uuId;
     }
 }

@@ -76,13 +76,11 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
                     Utils.Log(TAG,"Passed");
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.ssId = edtSSID.getText().toString().trim();
                     create.password = edtPassword.getText().toString();
                     create.networkEncryption = typeEncrypt;
                     create.createType = ParsedResultType.WIFI;
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(this,create);
                 }
                 else{

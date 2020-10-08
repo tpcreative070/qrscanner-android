@@ -167,7 +167,7 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
         switch (item.getItemId()){
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
-                    Create create = new Create();
+                    Create create = new Create(save);
                     try {
                         if (lastLon ==0 || lastLon==0){
                             //Utils.showGotItSnackbar(edtLatitude,"Please enable GPS in order to get accurate lat and lon");
@@ -178,8 +178,6 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
                             create.lon = lastLon;
                             create.query = edtQuery.getText().toString();
                             create.createType = ParsedResultType.GEO;
-                            create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                            create.id = (save != null) ? save.id : 0 ;
                             Navigator.onMoveToReview(this,create);
                         }
 

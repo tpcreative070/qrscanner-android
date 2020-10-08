@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.UUID;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.HistoryEntityModel;
+import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SaveEntityModel;
 
-@Database(entities = {HistoryEntity.class, SaveEntity.class}, version = 3, exportSchema = false)
+@Database(entities = {HistoryEntity.class, SaveEntity.class}, version = 4, exportSchema = false)
 public abstract class InstanceGenerator extends RoomDatabase {
 
     @Ignore
@@ -50,24 +52,26 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE 'save' ADD COLUMN  'isSynced' INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE 'save' ADD COLUMN  'uuId' TEXT");
+
+            database.execSQL("ALTER TABLE 'history' ADD COLUMN  'isSynced' INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE 'history' ADD COLUMN  'uuId' TEXT");
+        }
+    };
+
     public static InstanceGenerator getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context,
                      InstanceGenerator.class,context.getString(R.string.database_name))
-                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4)
                     .allowMainThreadQueries()
                     .build();
         }
         return instance;
-    }
-
-    public String getUUId(){
-        try {
-            return UUID.randomUUID().toString();
-        }
-        catch (Exception e){
-            return ""+System.currentTimeMillis();
-        }
     }
 
     public void onInsert(HistoryEntityModel cTalkManager){
@@ -87,7 +91,15 @@ public abstract class InstanceGenerator extends RoomDatabase {
             final List<HistoryEntity> mValue =  instance.historyDao().loadAll();
             List<HistoryEntityModel> mList = new ArrayList<>();
             for ( HistoryEntity index : mValue){
-                mList.add(new HistoryEntityModel(index));
+                final HistoryEntityModel item = new HistoryEntityModel(index);
+                if (item.uuId==null){
+                    item.uuId = Utils.getUUId();
+                    SQLiteHelper.getInstance().onUpdate(item);
+                    Utils.Log(TAG,"Request update........");
+                }else {
+                    Utils.Log(TAG,"UUID........"+item.uuId);
+                }
+                mList.add(item);
             }
             return mList;
         }
@@ -148,13 +160,29 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
     }
 
+    public void onUpdate(HistoryEntityModel cTalkManager){
+        try {
+            if (cTalkManager==null){
+                return;
+            }
+            instance.historyDao().update(new HistoryEntity(cTalkManager));
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+    }
+
     public final List<SaveEntityModel> getListSave(){
         try{
-
             final List<SaveEntity> mValue =  instance.saveDao().loadAll();
             List<SaveEntityModel> mList = new ArrayList<>();
             for ( SaveEntity index : mValue){
-                mList.add(new SaveEntityModel(index));
+                final SaveEntityModel item = new SaveEntityModel(index);
+                if (item.uuId==null){
+                    item.uuId = Utils.getUUId();
+                    SQLiteHelper.getInstance().onUpdate(item);
+                }
+                mList.add(item);
             }
             return mList;
         }

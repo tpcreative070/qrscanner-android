@@ -183,7 +183,9 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         /*Adding new columns*/
         history.barcodeFormat = create.barcodeFormat;
         history.favorite = create.favorite;
-        history.createDatetime = Utils.getCurrentDateTime();
+        final String time = Utils.getCurrentDateTimeSort();
+        history.createDatetime = time;
+        history.updatedDateTime = time;
         SQLiteHelper.onInsert(history);
         HistorySingleton.getInstance().reLoadData();
     }

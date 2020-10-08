@@ -38,6 +38,9 @@ public class HistoryEntity {
 
     /*content_type_barcode*/
     public String contentUnique;
+    /*sync data*/
+    public boolean isSynced;
+    public String uuId;
 
     public HistoryEntity(
                    String email,
@@ -152,6 +155,8 @@ public class HistoryEntity {
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
+        this.isSynced = item.isSynced;
+        this.uuId = item.uuId;
     }
 }
 

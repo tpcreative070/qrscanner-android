@@ -63,12 +63,10 @@ public class MessageFragment extends BaseActivitySlide implements GenerateSingle
         switch (item.getItemId()){
             case R.id.menu_item_select:{
                 if (mAwesomeValidation.validate()){
-                    Create create = new Create();
+                    Create create = new Create(save);
                     create.phone = edtTo.getText().toString();
                     create.message = edtMessage.getText().toString();
                     create.createType = ParsedResultType.SMS;
-                    create.enumImplement = (save != null) ? EnumImplement.EDIT : EnumImplement.CREATE ;
-                    create.id = (save != null) ? save.id : 0 ;
                     Navigator.onMoveToReview(this,create);
                     Utils.Log(TAG,"Passed");
                 }
