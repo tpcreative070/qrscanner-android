@@ -174,6 +174,7 @@
     <string name="key_banner_result_history">banner_result_history</string>
     <string name="key_interstitial_full_screen">interstitial_full_screen</string>
     <string name="advertising">Advertising</string>
+    <string name="key_created_datetime_sync">created_date_time_sync</string>
 
 
     <string name="freedevelop">freedevelop</string>

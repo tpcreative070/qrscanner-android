@@ -1,12 +1,7 @@
 package tpcreative.co.qrscanner.model;
-
-import androidx.room.Ignore;
-
 import com.google.zxing.BarcodeFormat;
-
 import java.io.Serializable;
 import java.util.UUID;
-
 import tpcreative.co.qrscanner.common.Utils;
 
 public class HistoryModel implements Serializable {
