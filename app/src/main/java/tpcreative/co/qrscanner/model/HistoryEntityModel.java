@@ -35,6 +35,7 @@ public class HistoryEntityModel {
 
     /*content_type_barcode*/
     public String contentUnique;
+    public String contentUniqueForUpdatedTime;
 
     public HistoryEntityModel(HistoryEntity item){
         this.id = item.id;
@@ -66,6 +67,7 @@ public class HistoryEntityModel {
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
+        this.contentUniqueForUpdatedTime = item.contentUnique +""+this.updatedDateTime;
     }
 
     public HistoryEntityModel(HistoryModel item){
@@ -98,5 +100,6 @@ public class HistoryEntityModel {
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = Utils.getCodeContentByHistory(item);
+        this.contentUniqueForUpdatedTime = this.contentUnique +""+this.updatedDateTime;
     }
 }

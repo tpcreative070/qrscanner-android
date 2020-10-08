@@ -33,8 +33,8 @@ public class SQLiteHelper {
             if (Utils.isSkipDuplicates()){
                 final HistoryModel mItem = getItemByHistory(mData.contentUnique);
                 if (mItem!=null){
-                    Utils.Log(TAG,"Already existed...!!!");
-                    onDelete(mItem);
+                    Utils.Log(TAG,"Already existed on history item...!!!");
+                    return;
                 }
             }
             InstanceGenerator.getInstance(getContext()).onInsert(mData);
@@ -95,8 +95,8 @@ public class SQLiteHelper {
             if (Utils.isSkipDuplicates()){
                 final SaveModel mItem = getItemBySave(mData.contentUnique);
                 if (mItem!=null){
-                    Utils.Log(TAG,"Already existed...!!!");
-                    onDelete(mItem);
+                    Utils.Log(TAG,"Already existed on save item...!!!");
+                    return;
                 }
             }
             getInstance().onInsert(mData);
@@ -175,5 +175,4 @@ public class SQLiteHelper {
         getInstance().historyDao().deleteAllItems();
         getInstance().saveDao().deleteAllItems();
     }
-
 }

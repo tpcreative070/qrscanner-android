@@ -38,6 +38,7 @@ public class SaveModel implements Serializable {
 
     /*content_type_barcode*/
     public String contentUnique;
+    public String contentUniqueForUpdatedTime;
 
     /*Custom fields*/
     public TypeCategories typeCategories;
@@ -73,6 +74,7 @@ public class SaveModel implements Serializable {
         this.favorite = false;
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
         this.contentUnique = "";
+        this.contentUnique = "";
     }
 
     public SaveModel(SaveEntityModel item){
@@ -105,6 +107,7 @@ public class SaveModel implements Serializable {
         this.favorite = item.favorite;
         this.updatedDateTime = item.updatedDateTime;
         this.contentUnique = item.contentUnique;
+        this.contentUniqueForUpdatedTime = item.contentUniqueForUpdatedTime;
     }
 
     public boolean isChecked() {

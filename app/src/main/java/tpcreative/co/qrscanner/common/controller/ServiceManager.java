@@ -158,7 +158,8 @@ public class ServiceManager implements BaseView {
                 Utils.Log(TAG,"Response data " + new Gson().toJson(list));
                 mDriveIdList.clear();
                 mDriveIdList.addAll(list);
-                ServiceManager.getInstance().onPreparingUploadItemData();
+                //ServiceManager.getInstance().onPreparingUploadItemData();
+                ServiceManager.getInstance().onPreparingDownloadItemData("1RAxCa1WiBcebvTt5Sruet2jSxwgObYiLiirm5_bhavp4Ak4gyQ");
             }
             @Override
             public void onShowObjects(DriveResponse object) {
