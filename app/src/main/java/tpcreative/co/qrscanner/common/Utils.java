@@ -67,6 +67,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -83,6 +84,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.TimeHelper;
@@ -1059,6 +1061,43 @@ public class Utils {
             e.printStackTrace();
         }
         return file;
+    }
+
+    /*Get the first of category data*/
+    public static String getIndexOfHashMap(Map<String, String> mMapDelete){
+        if (mMapDelete!=null){
+            if (mMapDelete.size()>0){
+                final String id = mMapDelete.get(mMapDelete.keySet().toArray()[0]);
+                Utils.Log(TAG,"Id need to be deleting " + id);
+                return  id;
+            }
+        }
+        return null;
+    }
+
+    /*Delete hash map after delete Google drive or Server system*/
+    public static boolean deletedIndexOfHashMap(String id, Map<String,String>map){
+        try {
+            if (map!=null){
+                if (map.size()>0){
+                    map.remove(id);
+                    return  true;
+                }
+            }
+        }
+        catch (Exception e){
+            Utils.Log(TAG,"Could not delete hash map==============================>");
+        }
+        return  false;
+    }
+
+    /*Merge list to hash map for upload, download and delete*/
+    public static Map<String,String> mergeListToHashMap(List<DriveResponse>mList){
+        Map<String,String> map = new HashMap<>();
+        for (DriveResponse index : mList){
+            map.put(index.id,index.id);
+        }
+        return map;
     }
 
 }

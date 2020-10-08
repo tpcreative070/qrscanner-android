@@ -53,6 +53,8 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
     private Intent mIntent;
     private QRScannerReceiver androidReceiver;
     private DownloadService downloadService;
+    File uploadTempFile = null;
+    File downloadTempFile = null;
 
     @Override
     public void onCreate() {
@@ -85,23 +87,12 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             unregisterReceiver(androidReceiver);
         }
         /*Delete files and folders of temporary*/
-        deleteTempFiles(getCacheDir());
-    }
-
-    private boolean deleteTempFiles(File file) {
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            if (files != null) {
-                for (File f : files) {
-                    if (f.isDirectory()) {
-                        deleteTempFiles(f);
-                    } else {
-                        f.delete();
-                    }
-                }
-            }
+        if (uploadTempFile!=null){
+            uploadTempFile.deleteOnExit();
         }
-        return file.delete();
+        if (downloadTempFile!=null){
+            downloadTempFile.deleteOnExit();
+        }
     }
 
     @Override
@@ -326,13 +317,9 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         Utils.Log(TAG, "onUploadFileInAppFolder");
         MediaType contentType = MediaType.parse("application/json; charset=UTF-8");
         HashMap<String, Object> content = new HashMap<>();
-        File file = null;
         try {
-           file =  Utils.writeToJson(new SyncDataModel().toJson(),File.createTempFile("backup",".json"));
-        }catch (Exception e){
-            Utils.Log(TAG,"Could not generate temporary file");
-            return;
-        }
+        uploadTempFile = File.createTempFile("backup",".json");
+        final File  file =  Utils.writeToJson(new SyncDataModel().toJson(),uploadTempFile);
         List<String> list = new ArrayList<>();
         list.add(getString(R.string.key_appDataFolder));
         content.put(getString(R.string.key_name),"backup.json");
@@ -360,31 +347,37 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             public void onResponse(Call<DriveResponse> call, Response<DriveResponse> response) {
                 Utils.Log(TAG, "response successful :" + new Gson().toJson(response.body()));;
                 listener.onSuccessful("Response data uploaded :" +new Gson().toJson(response.body()),EnumStatus.UPLOADED_SUCCESSFULLYY);
+                if (uploadTempFile.delete()){
+                    Utils.Log(TAG,"Already deleted temp file " + uploadTempFile.getAbsolutePath());
+                    Utils.Log(TAG,"File " + file.getAbsolutePath());
+                }
             }
             @Override
             public void onFailure(Call<DriveResponse> call, Throwable t) {
                 Utils.Log(TAG, "response failed :" + t.getMessage());
-                listener.onError(t.getMessage(),EnumStatus.UPLOADING_FAILED);;
+                listener.onError(t.getMessage(),EnumStatus.UPLOADING_FAILED);
+                if (uploadTempFile.delete()){
+                    Utils.Log(TAG,"Already deleted temp file " + uploadTempFile.getAbsolutePath());
+                }
             }
         });
+        }catch (IOException e){
+            e.printStackTrace();
+            Utils.Log(TAG,"Could not generate temporary file");
+        }
     }
 
     public void onDownloadFile(String id, BaseListener<SyncDataModel> listener) {
         Utils.Log(TAG, "onDownloadFile !!!!");
         final DownloadFileRequest request = new DownloadFileRequest();
-        File output = null;
+
         try {
-            File outputDir = getExternalCacheDir(); // context being the Activity pointer
-            output = File.createTempFile("backup",".json",outputDir);
+            File outputDir = getCacheDir(); // context being the Activity pointer
+            downloadTempFile  = File.createTempFile("backup",".json",outputDir);
             request.path_folder_output = outputDir.getAbsolutePath();
-            request.file_name = output.getName();
+            request.file_name = downloadTempFile.getName();
             request.id = id;
             request.Authorization = Utils.getAccessToken();
-        }
-        catch (Exception e){
-            e.getMessage();
-            return;
-        }
         downloadService.onProgressingDownload(new DownloadService.DownLoadServiceListener() {
             @Override
             public void onDownLoadCompleted(File file_name, DownloadFileRequest request) {
@@ -396,6 +389,9 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                         Utils.Log(TAG,"List value "+ new Gson().toJson(mDataValue));
                         listener.onShowObjects(mDataValue);
                         listener.onSuccessful("Downloaded successfully",EnumStatus.DOWNLOADED_SUCCESSFULLY);
+                        if (downloadTempFile.delete()){
+                            Utils.Log(TAG,"Already deleted temp file");
+                        }
                     }
                 }
             }
@@ -403,6 +399,9 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             public void onDownLoadError(String error) {
                 Utils.Log(TAG, "onDownLoadError " + error);
                 listener.onError(error,EnumStatus.DOWNLOADING_FAILED);
+                if (downloadTempFile.delete()){
+                    Utils.Log(TAG,"Already deleted temp file");
+                }
             }
             @Override
             public void onProgressingDownloading(int percent) {
@@ -436,6 +435,9 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 if (code == 404) {
                     Utils.Log(TAG,"Request delete id");
                     listener.onError("Downloading not found id",EnumStatus.DOWNLOADING_NOT_FOUND_ID);
+                    if (downloadTempFile.delete()){
+                        Utils.Log(TAG,"Already deleted temp file");
+                    }
                 }
             }
             @Override
@@ -444,6 +446,10 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             }
         });
         downloadService.downloadFileFromGoogleDrive(request);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public String loadFromTempFile(File file){
@@ -532,7 +538,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 .subscribe(onResponse -> {
                     Utils.Log(TAG,"Deleted cloud response code " + onResponse.code());
                     if (onResponse.code() == 204) {
-                        Utils.Log(TAG,"Deleted id successfully");
+                        Utils.Log(TAG,"Deleted id successfully: " + id);
                         listener.onSuccessful("Deleted successfully",EnumStatus.DELETED_SUCCESSFULLY);
                     } else if (onResponse.code() == 404) {
                         Utils.Log(TAG,"This id is not exiting");

@@ -13,7 +13,10 @@ import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -42,6 +45,8 @@ public class ServiceManager implements BaseView {
     private Context mContext;
     private Disposable subscriptions;
     private boolean isDownloadData,isUploadData,isDeleteData;
+    private Map<String,String>mMapDelete = new HashMap<>();
+    private List<DriveResponse> mDriveIdList = new ArrayList<>();
 
     ServiceConnection myConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
@@ -138,6 +143,10 @@ public class ServiceManager implements BaseView {
             RefreshTokenSingleton.getInstance().onStart(ServiceManager.class);
             return;
         }
+        if (isDeleteData){
+            Utils.Log(TAG,"onPreparingDeleteData is deleting id. Please wait");
+            return;
+        }
         Utils.Log(TAG,"Starting sync data");
         onGetItemList();
     }
@@ -146,8 +155,11 @@ public class ServiceManager implements BaseView {
         myService.getFileListInApp(new QRScannerService.BaseListener<DriveResponse>() {
             @Override
             public void onShowListObjects(List<DriveResponse> list) {
-                Utils.Log(TAG,"response data " + new Gson().toJson(list));
-                RefreshTokenSingleton.getInstance().onStart(ServiceManager.class);
+                Utils.Log(TAG,"Response data " + new Gson().toJson(list));
+                mDriveIdList.clear();
+                mDriveIdList.addAll(list);
+                //ServiceManager.getInstance().onPreparingUploadItemData();
+                ServiceManager.getInstance().onPreparingDownloadItemData("1m2OFKO_lep5YdKgxg2edEIyal_FLaLQjRjCVK91Nic7ilnZ1hw");
             }
             @Override
             public void onShowObjects(DriveResponse object) {
@@ -201,13 +213,27 @@ public class ServiceManager implements BaseView {
 //    }
 
     /*onPreparingDownload*/
-    public void onPreparingDeleteItemData(String id){
+    public void onPreparingDeleteItemData(){
+        if (mDriveIdList.size()>0){
+            mMapDelete.clear();
+            mMapDelete = Utils.mergeListToHashMap(mDriveIdList);
+            final String id = Utils.getIndexOfHashMap(mMapDelete);
+            if (id!=null){
+                Utils.Log(TAG,"onPreparingDeleteItemData total: "+ mMapDelete.size());
+                onDeleteItemData(id);
+            }
+        }else{
+            Utils.Log(TAG,"Not found data to delete");
+        }
+    }
+
+    private void onDeleteItemData(String id){
+        isDeleteData = true;
         myService.onDeleteCloudItems(id, new QRScannerService.BaseListener() {
             @Override
             public void onShowListObjects(List list) {
 
             }
-
             @Override
             public void onShowObjects(Object object) {
 
@@ -221,13 +247,22 @@ public class ServiceManager implements BaseView {
             @Override
             public void onSuccessful(String message, EnumStatus status) {
                 Utils.Log(TAG,message);
+                isDeleteData = false;
+                if (status==EnumStatus.DELETED_SUCCESSFULLY){
+                    if (Utils.deletedIndexOfHashMap(id,mMapDelete)){
+                        final String id = Utils.getIndexOfHashMap(mMapDelete);
+                        if (id!=null){
+                            onDeleteItemData(id);
+                            isDeleteData = true;
+                        }else{
+                            Utils.Log(TAG,"Deleted item completely");
+                        }
+                    }
+                }
             }
         });
-    }
 
-//    public void onDeleteItemData(){
-//
-//    }
+    }
 
     /*onPreparingDownload*/
     public void onPreparingUploadItemData(){
