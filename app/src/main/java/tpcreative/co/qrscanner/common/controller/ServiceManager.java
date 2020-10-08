@@ -158,8 +158,7 @@ public class ServiceManager implements BaseView {
                 Utils.Log(TAG,"Response data " + new Gson().toJson(list));
                 mDriveIdList.clear();
                 mDriveIdList.addAll(list);
-                //ServiceManager.getInstance().onPreparingUploadItemData();
-                ServiceManager.getInstance().onPreparingDownloadItemData("1m2OFKO_lep5YdKgxg2edEIyal_FLaLQjRjCVK91Nic7ilnZ1hw");
+                ServiceManager.getInstance().onPreparingUploadItemData();
             }
             @Override
             public void onShowObjects(DriveResponse object) {
@@ -238,15 +237,27 @@ public class ServiceManager implements BaseView {
             public void onShowObjects(Object object) {
 
             }
-
             @Override
             public void onError(String message, EnumStatus status) {
-                Utils.Log(TAG,message);
+                Utils.Log(TAG,message + ": "+id);
+                if (status==EnumStatus.DELETING_NOT_FOUND_ID){
+                    isDeleteData = false;
+                    if (Utils.deletedIndexOfHashMap(id,mMapDelete)){
+                        final String id = Utils.getIndexOfHashMap(mMapDelete);
+                        if (id!=null){
+                            onDeleteItemData(id);
+                            isDeleteData = true;
+                        }else{
+                            Utils.Log(TAG,"Deleted item completely");
+                        }
+                    }
+                }else{
+                    isDeleteData = false;
+                }
             }
-
             @Override
             public void onSuccessful(String message, EnumStatus status) {
-                Utils.Log(TAG,message);
+                Utils.Log(TAG,message + ": "+id);
                 isDeleteData = false;
                 if (status==EnumStatus.DELETED_SUCCESSFULLY){
                     if (Utils.deletedIndexOfHashMap(id,mMapDelete)){
@@ -261,7 +272,6 @@ public class ServiceManager implements BaseView {
                 }
             }
         });
-
     }
 
     /*onPreparingDownload*/

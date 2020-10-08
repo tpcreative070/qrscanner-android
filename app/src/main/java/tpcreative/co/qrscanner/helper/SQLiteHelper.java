@@ -170,4 +170,10 @@ public class SQLiteHelper {
         }
         return null;
     }
+
+    public static final void CleanUpData(){
+        getInstance().historyDao().deleteAllItems();
+        getInstance().saveDao().deleteAllItems();
+    }
+
 }

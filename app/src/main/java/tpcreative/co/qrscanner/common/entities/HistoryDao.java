@@ -17,6 +17,9 @@ public interface HistoryDao {
     @Delete
     void delete(HistoryEntity... history);
 
+    @Query("DELETE FROM history")
+    public void deleteAllItems();
+
     @Query("Select * FROM history ORDER BY updatedDateTime DESC")
     List<HistoryEntity> loadAll();
 

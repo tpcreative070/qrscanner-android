@@ -19,6 +19,9 @@ public interface SaveDao {
     @Delete
     void delete(SaveEntity... saves);
 
+    @Query("DELETE FROM save")
+    public void deleteAllItems();
+
     @Query("Select * FROM save ORDER BY updatedDateTime DESC")
     List<SaveEntity> loadAll();
 
