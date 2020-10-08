@@ -1,12 +1,8 @@
-package tpcreative.co.qrscanner.ui.refreshtoken;
+package tpcreative.co.qrscanner.common;
 import android.accounts.Account;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -16,10 +12,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.DriveScopes;
-import com.google.gson.Gson;
 import java.io.IOException;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -27,34 +21,37 @@ import tpcreative.co.qrscanner.common.services.QRScannerService;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.EnumStatus;
 
-public class RefreshTokenActivity extends AppCompatActivity {
-    private static final String TAG = RefreshTokenActivity.class.getSimpleName();
-    protected static final int REQUEST_CODE_SIGN_IN = 0;
+public class RefreshTokenSingleton {
+    private static String TAG = RefreshTokenSingleton.class.getSimpleName();
     private GoogleSignInAccount mSignInAccount;
     private GoogleSignInClient mGoogleSignInClient;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mGoogleSignInClient = GoogleSignIn.getClient(this, QRScannerApplication.getInstance().getGoogleSignInOptions(null));
+    private static RefreshTokenSingleton instance ;
+    
+    public static RefreshTokenSingleton getInstance(){
+        if (instance==null){
+            synchronized (RefreshTokenSingleton.class){
+                if (instance==null){
+                    instance = new RefreshTokenSingleton();
+                }
+            }
+        }
+        return instance;
     }
-
-    protected void signIn(final String email) {
-        Utils.Log(TAG,"Sign in");
-        Account account = new Account(email, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        mGoogleSignInClient = GoogleSignIn.getClient(this, QRScannerApplication.getInstance().getGoogleSignInOptions(account));
-        startActivityForResult(mGoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+    
+    private RefreshTokenSingleton(){
+        mGoogleSignInClient = GoogleSignIn.getClient(QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getGoogleSignInOptions(null));
     }
-
+    
     private GoogleSignInClient getGoogleSignInClient(Account account){
-        mGoogleSignInClient = GoogleSignIn.getClient(this, QRScannerApplication.getInstance().getGoogleSignInOptions(account));
+        mGoogleSignInClient = GoogleSignIn.getClient(QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getGoogleSignInOptions(account));
         return mGoogleSignInClient;
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+    
+    public <T>void onStart(Class<T>tClass) {
+        if (tClass!=null){
+            TAG = tClass.getSimpleName();
+        }
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(QRScannerApplication.getInstance());
         if (account != null && GoogleSignIn.hasPermissions(account,new Scope(DriveScopes.DRIVE_FILE),new Scope(DriveScopes.DRIVE_APPDATA))) {
             getGoogleSignInClient(account.getAccount());
             initializeDriveClient(account);
@@ -64,34 +61,6 @@ public class RefreshTokenActivity extends AppCompatActivity {
             if (mAuthor!=null){
                 mAuthor.isConnectedToGoogleDrive = false;
                 Utils.setAuthor(mAuthor);
-            }
-        }
-    }
-
-    /**
-     * Handles resolution callbacks.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_CODE_SIGN_IN: {
-                if (resultCode != RESULT_OK) {
-                    // Sign-in may fail or be cancelled by the user. For this sample, sign-in is
-                    // required and is fatal. For apps where sign-in is optional, handle
-                    // appropriately
-                    Utils.Log(TAG, "Sign-in failed.");
-                    return;
-                }
-                Task<GoogleSignInAccount> getAccountTask =
-                        GoogleSignIn.getSignedInAccountFromIntent(data);
-                if (getAccountTask.isSuccessful()) {
-                    Utils.Log(TAG, "sign in successful");
-                    initializeDriveClient(getAccountTask.getResult());
-                } else {
-                    Utils.Log(TAG, "Sign-in failed..");
-                }
-                break;
             }
         }
     }
@@ -108,16 +77,15 @@ public class RefreshTokenActivity extends AppCompatActivity {
                 }
                 GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
                         QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString());
-                Utils.Log(TAG,"Account :"+ new Gson().toJson(accounts));
                 credential.setSelectedAccount(accounts[0]);
                 try {
                     String value = credential.getToken();
                     if (value!=null){
-                        Utils.Log(TAG,"access token  start "+ value);
                         final Author mAuthor = Author.getInstance().getAuthorInfo();
                         if (mAuthor!=null){
                             mAuthor.isConnectedToGoogleDrive = true;
-                            mAuthor.access_token = String.format(getString(R.string.access_token),value);
+                            mAuthor.access_token = String.format(QRScannerApplication.getInstance().getString(R.string.access_token),value);
+                            Utils.Log(TAG,"Refresh access token value: "+ mAuthor.access_token);
                             mAuthor.email = credential.getSelectedAccount().name;
                             Utils.setAuthor(mAuthor);
                         }
@@ -143,7 +111,7 @@ public class RefreshTokenActivity extends AppCompatActivity {
                     if (mUser != null) {
                         //Log.d(TAG, "Call getDriveAbout " + new Gson().toJson(mUser));
                         if (ServiceManager.getInstance().getMyService()==null){
-                            Utils.Log(TAG,"SuperSafeService is null");
+                            Utils.Log(TAG,"QRScannerService is null");
                             return;
                         }
                         ServiceManager.getInstance().getMyService().getDriveAbout(new QRScannerService.GoogleDriveListener() {
@@ -160,8 +128,6 @@ public class RefreshTokenActivity extends AppCompatActivity {
                             @Override
                             public void onSuccessful(String message, EnumStatus status) {
                                 Utils.Log(TAG,"onSuccessful " +message + " - " +status.name());
-                                final Author mAuthor = Author.getInstance().getAuthorInfo();
-                                finish();
                             }
                         });
                     }
@@ -181,9 +147,8 @@ public class RefreshTokenActivity extends AppCompatActivity {
 
     private void initializeDriveClient(GoogleSignInAccount signInAccount) {
         mSignInAccount = signInAccount;
-        Utils.Log(TAG,"Google client ready");
-        Utils.Log(TAG,"Account :"+ mSignInAccount.getAccount());
-        new RefreshTokenActivity.GetAccessToken().execute(mSignInAccount.getAccount());
+        Utils.Log(TAG,"Request refresh access token");
+        new RefreshTokenSingleton.GetAccessToken().execute(mSignInAccount.getAccount());
     }
 
     protected void revokeAccess() {
@@ -194,11 +159,11 @@ public class RefreshTokenActivity extends AppCompatActivity {
             return;
         }
         Utils.Log(TAG,"onRevokeAccess");
-        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
+        mGoogleSignInClient.revokeAccess().addOnCompleteListener(
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        PrefsController.putBoolean(getString(R.string.key_request_sign_out_google_drive),false);
+                        PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_request_sign_out_google_drive),false);
                     }
                 });
     }

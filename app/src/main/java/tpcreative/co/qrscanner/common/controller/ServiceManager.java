@@ -20,7 +20,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonResponse;
+import tpcreative.co.qrscanner.common.RefreshTokenSingleton;
+import tpcreative.co.qrscanner.common.ResponseSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
@@ -134,7 +135,7 @@ public class ServiceManager implements BaseView {
         }
         if (!Utils.isConnectedToGoogleDrive()){
             Utils.Log(TAG,"Need to connect to Google drive");
-            Navigator.onRefreshAccessToken(QRScannerApplication.getInstance());
+            RefreshTokenSingleton.getInstance().onStart(ServiceManager.class);
             return;
         }
         Utils.Log(TAG,"Starting sync data");
@@ -146,6 +147,7 @@ public class ServiceManager implements BaseView {
             @Override
             public void onShowListObjects(List<DriveResponse> list) {
                 Utils.Log(TAG,"response data " + new Gson().toJson(list));
+                RefreshTokenSingleton.getInstance().onStart(ServiceManager.class);
             }
             @Override
             public void onShowObjects(DriveResponse object) {
@@ -156,7 +158,7 @@ public class ServiceManager implements BaseView {
                 Utils.Log(TAG,"response error " + message);
                 switch (status){
                     case REQUEST_REFRESH_ACCESS_TOKEN:
-                        Navigator.onRefreshAccessToken(QRScannerApplication.getInstance());
+                        RefreshTokenSingleton.getInstance().onStart(ServiceManager.class);
                         break;
                     default:
                         break;
@@ -226,7 +228,6 @@ public class ServiceManager implements BaseView {
 //    public void onDeleteItemData(){
 //
 //    }
-
 
     /*onPreparingDownload*/
     public void onPreparingUploadItemData(){
@@ -339,7 +340,7 @@ public class ServiceManager implements BaseView {
             case CONNECTED: {
                 onAuthorSync();
                 onCheckVersion();
-                SingletonResponse.getInstance().onNetworkConnectionChanged(true);
+                ResponseSingleton.getInstance().onNetworkConnectionChanged(true);
                 break;
             }
         }

@@ -31,7 +31,6 @@ import com.jaychang.srv.SimpleRecyclerView;
 import com.jaychang.srv.decoration.SectionHeaderProvider;
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-import com.journeyapps.barcodescanner.Util;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -48,8 +47,8 @@ import java.util.Map;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonMain;
-import tpcreative.co.qrscanner.common.SingletonSave;
+import tpcreative.co.qrscanner.common.MainSingleton;
+import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -72,7 +71,7 @@ import tpcreative.co.qrscanner.ui.create.UrlFragment;
 import tpcreative.co.qrscanner.ui.create.WifiFragment;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
-public class SaverFragment extends BaseFragment implements SaveView, SaveCell.ItemSelectedListener, SingletonSave.SingletonSaveListener, Utils.UtilsListener, SingletonMain.SingleTonMainListener {
+public class SaverFragment extends BaseFragment implements SaveView, SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener, MainSingleton.SingleTonMainListener {
 
     private static final String TAG = SaverFragment.class.getSimpleName();
     @BindView(R.id.rlRoot)
@@ -203,7 +202,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     @Override
     protected void work() {
         super.work();
-        SingletonSave.getInstance().setListener(this);
+        SaveSingleton.getInstance().setListener(this);
         presenter = new SavePresenter();
         presenter.bindView(this);
         presenter.getListGroup();
@@ -576,10 +575,10 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
         super.setMenuVisibility(menuVisible);
         if (menuVisible) {
             Log.d(TAG, "isVisible");
-            SingletonMain.getInstance().setListener(this);
+            MainSingleton.getInstance().setListener(this);
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SaverFragment.this);
         } else {
-            SingletonMain.getInstance().setListener(null);
+            MainSingleton.getInstance().setListener(null);
             if (actionMode!=null){
                 actionMode.finish();
             }

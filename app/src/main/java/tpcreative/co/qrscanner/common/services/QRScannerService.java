@@ -31,7 +31,7 @@ import retrofit2.HttpException;
 import retrofit2.Response;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonResponse;
+import tpcreative.co.qrscanner.common.ResponseSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
@@ -40,11 +40,9 @@ import tpcreative.co.qrscanner.common.presenter.BaseView;
 import tpcreative.co.qrscanner.common.presenter.PresenterService;
 import tpcreative.co.qrscanner.common.services.download.DownloadService;
 import tpcreative.co.qrscanner.common.services.upload.ProgressRequestBody;
-import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.DriveAbout;
 import tpcreative.co.qrscanner.model.EnumStatus;
-import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SyncDataModel;
 
 public class QRScannerService extends PresenterService<BaseView> implements QRScannerReceiver.ConnectivityReceiverListener {
@@ -221,7 +219,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                             final Author author = Author.getInstance().getAuthorInfo();
                             author.version = onResponse.version;
                             Utils.setAuthor(author);
-                            SingletonResponse.getInstance().onAlertLatestVersion();
+                            ResponseSingleton.getInstance().onAlertLatestVersion();
                         }
                     }
                     view.onStopLoading(EnumStatus.CHECK_VERSION);

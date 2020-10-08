@@ -24,16 +24,15 @@ import java.util.TimeZone;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
-import tpcreative.co.qrscanner.common.SingletonSave;
+import tpcreative.co.qrscanner.common.GenerateSingleton;
+import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.common.entities.SaveEntity;
 import tpcreative.co.qrscanner.model.SaveModel;
 
-public class EventFragment extends BaseActivitySlide implements View.OnClickListener , SingletonGenerate.SingletonGenerateListener{
+public class EventFragment extends BaseActivitySlide implements View.OnClickListener , GenerateSingleton.SingletonGenerateListener{
 
     private static final String TAG = EventFragment.class.getSimpleName();
     @BindView(R.id.llBeginTime)
@@ -405,20 +404,20 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SingletonGenerate.getInstance().setListener(null);
+        GenerateSingleton.getInstance().setListener(null);
         Log.d(TAG,"onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        SingletonGenerate.getInstance().setListener(this);
+        GenerateSingleton.getInstance().setListener(this);
         Log.d(TAG,"onResume");
     }
 
     @Override
     public void onCompletedGenerate() {
-        SingletonSave.getInstance().reLoadData();
+        SaveSingleton.getInstance().reLoadData();
         Utils.Log(TAG,"Finish...........");
         finish();
     }
@@ -429,7 +428,7 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG,"Finish...........");
-            SingletonSave.getInstance().reLoadData();
+            SaveSingleton.getInstance().reLoadData();
             finish();
         }
     }

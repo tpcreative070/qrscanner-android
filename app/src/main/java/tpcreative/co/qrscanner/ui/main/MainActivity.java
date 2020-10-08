@@ -43,9 +43,9 @@ import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonMain;
-import tpcreative.co.qrscanner.common.SingletonResponse;
-import tpcreative.co.qrscanner.common.SingletonScanner;
+import tpcreative.co.qrscanner.common.MainSingleton;
+import tpcreative.co.qrscanner.common.ResponseSingleton;
+import tpcreative.co.qrscanner.common.ScannerSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
@@ -61,7 +61,7 @@ import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
 
-public class MainActivity extends BaseActivity implements SingletonResponse.SingleTonResponseListener, MainView{
+public class MainActivity extends BaseActivity implements ResponseSingleton.SingleTonResponseListener, MainView{
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewPagerAdapter adapter;
     private Storage storage;
@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().hide();
-        SingletonResponse.getInstance().setListener(this);
+        ResponseSingleton.getInstance().setListener(this);
         storage = new Storage(getApplicationContext());
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -243,10 +243,10 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                     final List<HistoryModel> listHistory = SQLiteHelper.getList();
                     switch (actionItem.getId()) {
                         case R.id.fab_track:
-                            SingletonMain.getInstance().isShowDeleteAction(true);
+                            MainSingleton.getInstance().isShowDeleteAction(true);
                             return false; // false will close it without animation
                         case R.id.fab_csv:
-                            SingletonMain.getInstance().isShowDeleteAction(false);
+                            MainSingleton.getInstance().isShowDeleteAction(false);
                             return false; // closes without animation (same as mSpeedDialView.close(false); return false;)
                     }
                     return true; // To keep the Speed Dial open
@@ -276,7 +276,7 @@ public class MainActivity extends BaseActivity implements SingletonResponse.Sing
                             Utils.Log(TAG, "Permission is ready");
                             boolean isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh),false);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
-                                SingletonScanner.getInstance().setVisible();
+                                ScannerSingleton.getInstance().setVisible();
                                 PrefsController.putBoolean(getString(R.string.key_refresh),true);
                             }
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());

@@ -25,9 +25,9 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonHistory;
-import tpcreative.co.qrscanner.common.SingletonSave;
-import tpcreative.co.qrscanner.common.SingletonSettings;
+import tpcreative.co.qrscanner.common.HistorySingleton;
+import tpcreative.co.qrscanner.common.SaveSingleton;
+import tpcreative.co.qrscanner.common.SettingsSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
@@ -85,8 +85,8 @@ public class SettingsFragment extends BaseFragment {
             Utils.Log(TAG, "isVisible");
         } else {
             Utils.Log(TAG, "isInVisible");
-            SingletonHistory.getInstance().reLoadData();
-            SingletonSave.getInstance().reLoadData();
+            HistorySingleton.getInstance().reLoadData();
+            SaveSingleton.getInstance().reLoadData();
         }
     }
 
@@ -114,7 +114,7 @@ public class SettingsFragment extends BaseFragment {
         Utils.Log(TAG, "onResume");
     }
 
-    public static class SettingsFragmentPreference extends PreferenceFragmentCompat implements SingletonSettings.SingletonSettingsListener{
+    public static class SettingsFragmentPreference extends PreferenceFragmentCompat implements SettingsSingleton.SingletonSettingsListener{
 
         private MyPreference mVersionApp;
 
@@ -153,7 +153,7 @@ public class SettingsFragment extends BaseFragment {
         @Override
         public void onResume() {
             super.onResume();
-            SingletonSettings.getInstance().setListener(this);
+            SettingsSingleton.getInstance().setListener(this);
         }
 
         @Override

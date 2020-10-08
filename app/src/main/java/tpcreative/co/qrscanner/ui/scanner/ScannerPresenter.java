@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonHistory;
+import tpcreative.co.qrscanner.common.HistorySingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.presenter.Presenter;
@@ -185,7 +185,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         history.favorite = create.favorite;
         history.createDatetime = Utils.getCurrentDateTime();
         SQLiteHelper.onInsert(history);
-        SingletonHistory.getInstance().reLoadData();
+        HistorySingleton.getInstance().reLoadData();
     }
 
     private String getResult(HashMap<Object,String> value){

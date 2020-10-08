@@ -8,14 +8,12 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.view.Bungee;
 import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.common.entities.SaveEntity;
 import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.ui.backup.BackupActivity;
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity;
 import tpcreative.co.qrscanner.ui.help.HelpActivity;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 import tpcreative.co.qrscanner.ui.pro.ProVersionActivity;
-import tpcreative.co.qrscanner.ui.refreshtoken.RefreshTokenActivity;
 import tpcreative.co.qrscanner.ui.review.ReviewActivity;
 import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity;
 
@@ -79,12 +77,6 @@ public class Navigator {
 
     public static void onBackupData(Context context){
         Intent intent = new Intent(context, BackupActivity.class);
-        context.startActivity(intent);
-    }
-
-    public static void onRefreshAccessToken(Context context){
-        Intent intent = new Intent(context, RefreshTokenActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 }

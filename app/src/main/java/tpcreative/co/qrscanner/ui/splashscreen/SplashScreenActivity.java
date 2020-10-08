@@ -17,13 +17,11 @@ import java.util.List;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Listener;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonScanner;
+import tpcreative.co.qrscanner.common.ScannerSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
-import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
-import tpcreative.co.qrscanner.common.view.Bungee;
 
 public class SplashScreenActivity extends BaseActivity {
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
@@ -59,7 +57,7 @@ public class SplashScreenActivity extends BaseActivity {
                             Log.d(TAG, "Permission is ready");
                             boolean isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh),false);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
-                                SingletonScanner.getInstance().setVisible();
+                                ScannerSingleton.getInstance().setVisible();
                                 PrefsController.putBoolean(getString(R.string.key_refresh),true);
                             }
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());

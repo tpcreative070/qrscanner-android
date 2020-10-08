@@ -24,8 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.refreshtoken.RefreshTokenActivity"
-            android:theme="@style/TransparentCompat"/>
         <activity
             android:name=".ui.backup.BackupActivity"
             android:label="@string/key_backup_data" />

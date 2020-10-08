@@ -22,18 +22,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
 import com.google.api.services.drive.DriveScopes;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.snatik.storage.EncryptConfiguration;
 import com.snatik.storage.Storage;
-import com.snatik.storage.security.SecurityUtil;
-
 import org.solovyev.android.checkout.Billing;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.annotation.Nonnull;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;

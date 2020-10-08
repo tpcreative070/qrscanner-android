@@ -1,14 +1,14 @@
 package tpcreative.co.qrscanner.common;
 
-public class SingletonHistory {
-    private static SingletonHistory instance ;
+public class HistorySingleton {
+    private static HistorySingleton instance ;
     private SingletonHistoryListener listener;
 
-    public static SingletonHistory getInstance(){
+    public static HistorySingleton getInstance(){
         if (instance==null){
-            synchronized (SingletonHistory.class){
+            synchronized (HistorySingleton.class){
                 if (instance==null){
-                    instance = new SingletonHistory();
+                    instance = new HistorySingleton();
                 }
             }
         }

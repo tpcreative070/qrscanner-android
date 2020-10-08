@@ -40,9 +40,8 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonHistory;
-import tpcreative.co.qrscanner.common.SingletonMain;
-import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.HistorySingleton;
+import tpcreative.co.qrscanner.common.MainSingleton;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
@@ -51,7 +50,7 @@ import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
-public class HistoryFragment extends BaseFragment implements HistoryView, HistoryCell.ItemSelectedListener, SingletonHistory.SingletonHistoryListener,SingletonMain.SingleTonMainListener {
+public class HistoryFragment extends BaseFragment implements HistoryView, HistoryCell.ItemSelectedListener, HistorySingleton.SingletonHistoryListener, MainSingleton.SingleTonMainListener {
 
     private static final String TAG = HistoryFragment.class.getSimpleName();
     @BindView(R.id.rlRoot)
@@ -180,7 +179,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     @Override
     protected void work() {
         super.work();
-        SingletonHistory.getInstance().setListener(this);
+        HistorySingleton.getInstance().setListener(this);
         presenter = new HistoryPresenter();
         presenter.bindView(this);
         presenter.getListGroup();
@@ -526,11 +525,11 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         super.setMenuVisibility(menuVisible);
         if (menuVisible) {
             Log.d(TAG,"isVisible");
-            SingletonMain.getInstance().setListener(this);
+            MainSingleton.getInstance().setListener(this);
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);
         }
         else{
-            SingletonMain.getInstance().setListener(null);
+            MainSingleton.getInstance().setListener(null);
             Log.d(TAG,"isInVisible");
             if (actionMode!=null){
                 actionMode.finish();

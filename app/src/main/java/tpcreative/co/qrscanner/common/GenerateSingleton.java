@@ -1,15 +1,15 @@
 package tpcreative.co.qrscanner.common;
 
-public class SingletonGenerate {
+public class GenerateSingleton {
 
-    private static SingletonGenerate instance ;
+    private static GenerateSingleton instance ;
     private SingletonGenerateListener listener;
 
-    public static SingletonGenerate getInstance(){
+    public static GenerateSingleton getInstance(){
         if (instance==null){
-            synchronized (SingletonGenerate.class){
+            synchronized (GenerateSingleton.class){
                 if (instance==null){
-                    instance = new SingletonGenerate();
+                    instance = new GenerateSingleton();
                 }
             }
         }

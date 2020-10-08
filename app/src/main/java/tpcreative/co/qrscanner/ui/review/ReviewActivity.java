@@ -36,11 +36,10 @@ import java.util.Map;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
+import tpcreative.co.qrscanner.common.GenerateSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
-import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
@@ -140,7 +139,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
     protected void onStop() {
         super.onStop();
         if (isComplete){
-            SingletonGenerate.getInstance().onCompletedGenerate();
+            GenerateSingleton.getInstance().onCompletedGenerate();
         }
     }
 

@@ -38,21 +38,20 @@ import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.PermissionUtils;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
-import tpcreative.co.qrscanner.common.SingletonSave;
+import tpcreative.co.qrscanner.common.GenerateSingleton;
+import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
-import tpcreative.co.qrscanner.common.entities.SaveEntity;
 import tpcreative.co.qrscanner.model.SaveModel;
 
 public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback,GoogleMap.OnMapClickListener,LocationListener , SingletonGenerate.SingletonGenerateListener{
+        ActivityCompat.OnRequestPermissionsResultCallback,GoogleMap.OnMapClickListener,LocationListener , GenerateSingleton.SingletonGenerateListener{
 
     private static final String TAG = LocationFragment.class.getSimpleName();
     @BindView(R.id.edtLatitude)
@@ -250,7 +249,7 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
             Utils.Log(TAG,"Permission is ready");
             mapFragment.getMapAsync(this);
         }
-        SingletonGenerate.getInstance().setListener(this);
+        GenerateSingleton.getInstance().setListener(this);
     }
 
     @Override
@@ -271,12 +270,12 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
         super.onDestroy();
         Utils.Log(TAG,"onDestroy");
         locationManager.removeUpdates(this);
-        SingletonGenerate.getInstance().setListener(null);
+        GenerateSingleton.getInstance().setListener(null);
     }
 
     @Override
     public void onCompletedGenerate() {
-        SingletonSave.getInstance().reLoadData();
+        SaveSingleton.getInstance().reLoadData();
         Utils.Log(TAG,"Finish...........");
         finish();
     }
@@ -420,7 +419,7 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG,"Finish...........");
-            SingletonSave.getInstance().reLoadData();
+            SaveSingleton.getInstance().reLoadData();
             finish();
         }
     }

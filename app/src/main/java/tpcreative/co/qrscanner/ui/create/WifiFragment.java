@@ -16,15 +16,15 @@ import com.google.zxing.client.result.ParsedResultType;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonGenerate;
-import tpcreative.co.qrscanner.common.SingletonSave;
+import tpcreative.co.qrscanner.common.GenerateSingleton;
+import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.SaveModel;
 
-public class WifiFragment extends BaseActivitySlide implements View.OnClickListener ,SingletonGenerate.SingletonGenerateListener {
+public class WifiFragment extends BaseActivitySlide implements View.OnClickListener , GenerateSingleton.SingletonGenerateListener {
 
     private static final String TAG = WifiFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
@@ -143,20 +143,20 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SingletonGenerate.getInstance().setListener(null);
+        GenerateSingleton.getInstance().setListener(null);
         Utils.Log(TAG,"onDestroy");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        SingletonGenerate.getInstance().setListener(this);
+        GenerateSingleton.getInstance().setListener(this);
         Utils.Log(TAG,"onResume");
     }
 
     @Override
     public void onCompletedGenerate() {
-        SingletonSave.getInstance().reLoadData();
+        SaveSingleton.getInstance().reLoadData();
         Utils.Log(TAG,"Finish...........");
         finish();
     }

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonSettings;
+import tpcreative.co.qrscanner.common.SettingsSingleton;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
@@ -64,7 +64,7 @@ public class ChangeFileColorActivity extends BaseActivitySlide implements BaseVi
         presenter.mTheme = presenter.mList.get(position);
         PrefsController.putString(getString(R.string.key_theme_object),new Gson().toJson(presenter.mTheme));
         presenter.getData();
-        SingletonSettings.getInstance().onUpdated();
+        SettingsSingleton.getInstance().onUpdated();
     }
 
     @Override

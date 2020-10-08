@@ -45,8 +45,8 @@ import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonHistory;
-import tpcreative.co.qrscanner.common.SingletonScanner;
+import tpcreative.co.qrscanner.common.HistorySingleton;
+import tpcreative.co.qrscanner.common.ScannerSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration;
@@ -856,7 +856,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
 
         history.createDatetime = Utils.getCurrentDateTime();
         SQLiteHelper.onInsert(history);
-        SingletonHistory.getInstance().reLoadData();
+        HistorySingleton.getInstance().reLoadData();
         Utils.Log(TAG,"Parse result " + Utils.getCodeContentByHistory(history));
     }
 
@@ -885,7 +885,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         if (presenter.result!=null){
             switch (presenter.result.fragmentType){
                 case SCANNER:{
-                    SingletonScanner.getInstance().setVisible();
+                    ScannerSingleton.getInstance().setVisible();
                     Utils.Log(TAG,"onDestroy.......");
                     break;
                 }

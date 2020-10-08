@@ -2,7 +2,7 @@ package tpcreative.co.qrscanner.ui.help;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.SingletonScanner;
+import tpcreative.co.qrscanner.common.ScannerSingleton;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 
 public class HelpActivity extends BaseActivitySlide {
@@ -19,7 +19,7 @@ public class HelpActivity extends BaseActivitySlide {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SingletonScanner.getInstance().setVisible();
+        ScannerSingleton.getInstance().setVisible();
     }
 
     @Override

@@ -1,22 +1,22 @@
 package tpcreative.co.qrscanner.common;
 
-public class SingletonSettings {
+public class SettingsSingleton {
 
-    private static SingletonSettings instance ;
-    private SingletonSettings.SingletonSettingsListener listener;
+    private static SettingsSingleton instance ;
+    private SettingsSingleton.SingletonSettingsListener listener;
 
-    public static SingletonSettings getInstance(){
+    public static SettingsSingleton getInstance(){
         if (instance==null){
-            synchronized (SingletonSettings.class){
+            synchronized (SettingsSingleton.class){
                 if (instance==null){
-                    instance = new SingletonSettings();
+                    instance = new SettingsSingleton();
                 }
             }
         }
         return instance;
     }
 
-    public void setListener(SingletonSettings.SingletonSettingsListener listener){
+    public void setListener(SettingsSingleton.SingletonSettingsListener listener){
         this.listener = listener;
     }
 

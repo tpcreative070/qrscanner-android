@@ -48,7 +48,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.Util;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.result.ResultHandler;
 import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
@@ -69,8 +68,8 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.DelayShowUIListener;
 import tpcreative.co.qrscanner.common.Navigator;
-import tpcreative.co.qrscanner.common.SingletonResponse;
-import tpcreative.co.qrscanner.common.SingletonScanner;
+import tpcreative.co.qrscanner.common.ResponseSingleton;
+import tpcreative.co.qrscanner.common.ScannerSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
@@ -79,7 +78,7 @@ import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
 
 
-public class ScannerFragment extends BaseFragment implements SingletonScanner.SingletonScannerListener ,ScannerView{
+public class ScannerFragment extends BaseFragment implements ScannerSingleton.SingletonScannerListener ,ScannerView{
 
     private static final String TAG = ScannerFragment.class.getSimpleName();
     @BindView(R.id.zxing_status_view)
@@ -339,7 +338,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     @Override
     protected void work() {
         super.work();
-        SingletonScanner.getInstance().setListener(this);
+        ScannerSingleton.getInstance().setListener(this);
         presenter = new ScannerPresenter();
         presenter.bindView(this);
         barcodeScannerView.decodeContinuous(callback);
@@ -549,7 +548,7 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     @OnClick(R.id.btnDone)
     public void onclickDone(){
         Log.d(TAG,"Done");
-        SingletonResponse.getInstance().onScannerDone();
+        ResponseSingleton.getInstance().onScannerDone();
         if (barcodeScannerView!=null){
             barcodeScannerView.pause();
         }
@@ -575,10 +574,10 @@ public class ScannerFragment extends BaseFragment implements SingletonScanner.Si
     public void onStart() {
         super.onStart();
         if (!isRunning){
-            SingletonResponse.getInstance().setScannerPosition();
+            ResponseSingleton.getInstance().setScannerPosition();
             isRunning= true;
         }
-        SingletonResponse.getInstance().onResumeAds();
+        ResponseSingleton.getInstance().onResumeAds();
         Utils.Log(TAG,"onStart");
     }
 

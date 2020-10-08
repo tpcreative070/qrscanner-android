@@ -1,14 +1,14 @@
 package tpcreative.co.qrscanner.common;
-public class SingletonResponse {
+public class ResponseSingleton {
 
-    private static SingletonResponse instance ;
+    private static ResponseSingleton instance ;
     private SingleTonResponseListener listener;
 
-    public static SingletonResponse getInstance(){
+    public static ResponseSingleton getInstance(){
         if (instance==null){
-            synchronized (SingletonResponse.class){
+            synchronized (ResponseSingleton.class){
                 if (instance==null){
-                    instance = new SingletonResponse();
+                    instance = new ResponseSingleton();
                 }
             }
         }
