@@ -319,7 +319,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         HashMap<String, Object> content = new HashMap<>();
         try {
         uploadTempFile = File.createTempFile("backup",".json");
-        final File  file =  Utils.writeToJson(new SyncDataModel().toJson(),uploadTempFile);
+        final File  file =  Utils.writeToJson(new SyncDataModel(true).toJson(),uploadTempFile);
         List<String> list = new ArrayList<>();
         list.add(getString(R.string.key_appDataFolder));
         content.put(getString(R.string.key_name),"backup.json");
@@ -387,8 +387,8 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                     final SyncDataModel mDataValue = new Gson().fromJson(mValue,new TypeToken<SyncDataModel>(){}.getType());
                     if (mDataValue!=null){
                         Utils.Log(TAG,"List value "+ new Gson().toJson(mDataValue));
-                        listener.onShowObjects(mDataValue);
                         listener.onSuccessful("Downloaded successfully",EnumStatus.DOWNLOADED_SUCCESSFULLY);
+                        listener.onShowObjects(mDataValue);
                         if (downloadTempFile.delete()){
                             Utils.Log(TAG,"Already deleted temp file");
                         }

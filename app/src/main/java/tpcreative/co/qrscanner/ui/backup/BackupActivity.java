@@ -87,15 +87,7 @@ public class BackupActivity extends BaseGoogleApi {
             tvEmail.setVisibility(View.VISIBLE);
             btnEnable.setText(getText(R.string.switch_account));
         }
-    }
-
-    @Override
-    protected void onDriveSuccessful() {
-        //ServiceManager.getInstance().getMyService().getFileListInApp();
-        //ServiceManager.getInstance().onPreparingDownloadItemData("1vlpBGLEaAwFGHyblIGkBPIC9EminB35x_3nbvFJOTKmERf7B_A");
-        //ServiceManager.getInstance().onPreparingDeleteItemData("1dAnl2u-15m7gk_9fIyxSsjo72Sh4nN-g8PRHRscF9PKyfWOyFA");
-        //ServiceManager.getInstance().onPreparingUploadItemData();
-        ServiceManager.getInstance().onPreparingDeleteItemData();
+        ServiceManager.getInstance().onPreparingSyncData(false);
     }
 
     @Override

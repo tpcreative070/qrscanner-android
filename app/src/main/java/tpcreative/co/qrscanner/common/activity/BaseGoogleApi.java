@@ -18,6 +18,12 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
@@ -33,6 +39,7 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
     protected static final int REQUEST_CODE_SIGN_IN = 0;
     private GoogleSignInAccount mSignInAccount;
     private GoogleSignInClient mGoogleSignInClient;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,6 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
             getGoogleSignInClient(account.getAccount());
             initializeDriveClient(account);
             mSignInAccount = account;
-            onDriveSuccessful();
         } else {
             final Author mAuthor = Author.getInstance().getAuthorInfo();
             if (mAuthor!=null){
@@ -92,7 +98,6 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                 if (getAccountTask.isSuccessful()) {
                     Utils.Log(TAG, "sign in successful");
                     initializeDriveClient(getAccountTask.getResult());
-                    onDriveSuccessful();
                 } else {
                     onDriveError();
                     Utils.Log(TAG, "Sign-in failed..");
@@ -105,11 +110,99 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
     protected void getAccessToken(){
         if (mSignInAccount!=null){
             Utils.Log(TAG,"Request token");
-            new GetAccessToken().execute(mSignInAccount.getAccount());
+            //new GetAccessToken().execute(mSignInAccount.getAccount());
+            onRefreshAccessToken(mSignInAccount.getAccount());
         }
         else{
             Utils.Log(TAG,"mSignInAccount is null");
         }
+    }
+
+    public void onRefreshAccessToken(Account accounts){
+        compositeDisposable.add(Observable.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                try {
+                    if (accounts==null){
+                        return null;
+                    }
+                    GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
+                            QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString());
+                    credential.setSelectedAccount(accounts);
+                    try {
+                        String value = credential.getToken();
+                        if (value!=null){
+                            final Author mAuthor = Author.getInstance().getAuthorInfo();
+                            if (mAuthor!=null){
+                                mAuthor.isConnectedToGoogleDrive = true;
+                                mAuthor.access_token = String.format(QRScannerApplication.getInstance().getString(R.string.access_token),value);
+                                Utils.Log(TAG,"Refresh access token value: "+ mAuthor.access_token);
+                                mAuthor.email = credential.getSelectedAccount().name;
+                                Utils.setAuthor(mAuthor);
+                            }
+                        }
+                        return value;
+                    }
+                    catch (GoogleAuthException e){
+                        Utils.Log(TAG,"Error occurred on GoogleAuthException");
+                    }
+                } catch (UserRecoverableAuthIOException recoverableException) {
+                    Utils.Log(TAG,"Error occurred on UserRecoverableAuthIOException");
+                } catch (IOException e) {
+                    Utils.Log(TAG,"Error occurred on IOException");
+                }
+                return null;
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(response ->{
+                    try {
+                        if (response != null) {
+                            final Author mUser = Author.getInstance().getAuthorInfo();
+                            if (mUser != null) {
+                                //Log.d(TAG, "Call getDriveAbout " + new Gson().toJson(mUser));
+                                if (ServiceManager.getInstance().getMyService()==null){
+                                    Utils.Log(TAG,"SuperSafeService is null");
+                                    startServiceNow();
+                                    compositeDisposable.dispose();
+                                    return;
+                                }
+                                ServiceManager.getInstance().getMyService().getDriveAbout(new QRScannerService.GoogleDriveListener() {
+                                    @Override
+                                    public void onError(String message, EnumStatus status) {
+                                        Utils.Log(TAG,"onError " +message + " - " +status.name());
+                                        switch (status){
+                                            case REQUEST_REFRESH_ACCESS_TOKEN:{
+                                                revokeAccess();
+                                                break;
+                                            }
+                                        }
+                                        compositeDisposable.dispose();
+                                    }
+                                    @Override
+                                    public void onSuccessful(String message, EnumStatus status) {
+                                        Utils.Log(TAG,"onSuccessful " +message + " - " +status.name());
+                                        final Author mAuthor = Author.getInstance().getAuthorInfo();
+                                        if (isSignIn()) {
+                                            Utils.Log(TAG,"Call onDriveClientReady");
+                                            onDriveClientReady();
+                                        }
+                                        compositeDisposable.dispose();
+                                    }
+                                });
+                            }else{
+                                compositeDisposable.dispose();
+                            }
+                        }else{
+                            compositeDisposable.dispose();
+                        }
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                        Utils.Log(TAG,"Call onDriveClientReady");
+                        onDriveClientReady();
+                        compositeDisposable.dispose();
+                    }
+                }));
     }
 
     private class GetAccessToken extends AsyncTask<Account, Void, String> {
@@ -205,15 +298,14 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
         mSignInAccount = signInAccount;
         Utils.Log(TAG,"Google client ready");
         Utils.Log(TAG,"Account :"+ mSignInAccount.getAccount());
-        new GetAccessToken().execute(mSignInAccount.getAccount());
+        //new GetAccessToken().execute(mSignInAccount.getAccount());
+        onRefreshAccessToken(mSignInAccount.getAccount());
     }
     /**
      * Called after the user has signed in and the Drive client has been initialized.
      */
 
     protected abstract void onDriveClientReady();
-
-    protected abstract void onDriveSuccessful();
 
     protected abstract void onDriveError();
 

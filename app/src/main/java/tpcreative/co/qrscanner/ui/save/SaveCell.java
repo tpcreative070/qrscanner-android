@@ -113,7 +113,7 @@ public class SaveCell extends SimpleCell<SaveModel,SaveCell.ViewHolder> {
                 return false;
             }
         });
-        viewHolder.tvTime.setText(TimeHelper.getInstance().getCurrentDateDisplay(data.updatedDateTime));
+        viewHolder.tvTime.setText(Utils.getCurrentDateDisplay(data.updatedDateTime));
         if (data.createType.equals(ParsedResultType.EMAIL_ADDRESS.name())){
             viewHolder.tvContent.setText(data.email);
         }

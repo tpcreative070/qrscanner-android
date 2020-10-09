@@ -241,6 +241,7 @@
     <string name="importing">Importing...</string>
     <string name="no_items_found">No Items Found</string>
     <string name="key_current_code_version"></string>
+    <string name="key_last_time_synced">key_last_time_synced</string>
     <string name="scan_code_via_Camera">Scan BarCode And QRCode Via Camera.</string>
     <string name="scan_code_via_Gallery">Scan BarCode And QRCode From Gallery.</string>
     <string name="choose_files">Where the files are stored(Check item -> choose share icon).</string>

@@ -35,6 +35,7 @@ public class SQLiteHelper {
                     return;
                 }
             }
+            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
             InstanceGenerator.getInstance(getContext()).onInsert(mData);
         }
         catch (Exception e){
@@ -76,6 +77,7 @@ public class SQLiteHelper {
         try{
             final HistoryEntityModel mData = new HistoryEntityModel(entity);
             Utils.setHistoryDeletedMap(mData);
+            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
             return getInstance().onDelete(mData);
         }
         catch (Exception e){
@@ -107,6 +109,7 @@ public class SQLiteHelper {
                     return;
                 }
             }
+            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
             getInstance().onInsert(mData);
         }
         catch (Exception e){
@@ -120,6 +123,7 @@ public class SQLiteHelper {
                 return;
             }
             final SaveEntityModel mData = new SaveEntityModel(cTalkManager);
+            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
             getInstance().onUpdate(mData);
         }
         catch (Exception e){
@@ -133,6 +137,7 @@ public class SQLiteHelper {
                 return;
             }
             final HistoryEntityModel mData = new HistoryEntityModel(cTalkManager);
+            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
             getInstance().onUpdate(mData);
         }
         catch (Exception e){
@@ -174,6 +179,7 @@ public class SQLiteHelper {
         try{
             final SaveEntityModel mData = new SaveEntityModel(entity);
             Utils.setSaveDeletedMap(mData);
+            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
             return getInstance().onDelete(mData);
         }
         catch (Exception e){

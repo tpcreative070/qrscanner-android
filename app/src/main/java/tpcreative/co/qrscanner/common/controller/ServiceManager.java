@@ -22,9 +22,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.HistorySingleton;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.RefreshTokenSingleton;
 import tpcreative.co.qrscanner.common.ResponseSingleton;
+import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.presenter.BaseView;
@@ -44,9 +46,9 @@ public class ServiceManager implements BaseView {
     private QRScannerService myService;
     private Context mContext;
     private Disposable subscriptions;
-    private boolean isDownloadData,isUploadData,isDeleteData;
     private Map<String,String>mMapDelete = new HashMap<>();
     private List<DriveResponse> mDriveIdList = new ArrayList<>();
+    private boolean isDismiss ;
 
     ServiceConnection myConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
@@ -55,9 +57,8 @@ public class ServiceManager implements BaseView {
             myService.bindView(ServiceManager.this);
             myService.onSyncAuthor();
             myService.onCheckVersion();
-            ServiceManager.getInstance().onPreparingSyncData();
+            ServiceManager.getInstance().onPreparingSyncData(false);
         }
-
         //binder comes from server to communicate with method's of
         public void onServiceDisconnected(ComponentName className) {
             Utils.Log(TAG, "disconnected");
@@ -124,9 +125,12 @@ public class ServiceManager implements BaseView {
     }
 
     /*Sync data*/
-    public void onPreparingSyncData(){
+    public void onPreparingSyncData(boolean isDismissApp){
         if (!Utils.isPremium()){
             Utils.Log(TAG,"Please upgrade to premium version");
+            if (isDismissApp){
+                onDismissServices();
+            }
             return;
         }
         if (myService==null){
@@ -136,18 +140,21 @@ public class ServiceManager implements BaseView {
         }
         if (Utils.getAccessToken()==null){
             Utils.Log(TAG,"Need to sign in with Google drive first");
+            if (isDismissApp){
+                onDismissServices();
+            }
             return;
         }
         if (!Utils.isConnectedToGoogleDrive()){
             Utils.Log(TAG,"Need to connect to Google drive");
             RefreshTokenSingleton.getInstance().onStart(ServiceManager.class);
-            return;
-        }
-        if (isDeleteData){
-            Utils.Log(TAG,"onPreparingDeleteData is deleting id. Please wait");
+            if (isDismissApp){
+                onDismissServices();
+            }
             return;
         }
         Utils.Log(TAG,"Starting sync data");
+        this.isDismiss = isDismissApp;
         onGetItemList();
     }
 
@@ -158,8 +165,12 @@ public class ServiceManager implements BaseView {
                 Utils.Log(TAG,"Response data " + new Gson().toJson(list));
                 mDriveIdList.clear();
                 mDriveIdList.addAll(list);
-                //ServiceManager.getInstance().onPreparingUploadItemData();
-                ServiceManager.getInstance().onPreparingDownloadItemData("1qTZ5FauRFa98Y_W4b33BnKlDSTiEQy_Vi9sSLi2y1hVzStDnhQ");
+                if (mDriveIdList.size()>0){
+                    final DriveResponse mData = mDriveIdList.get(0);
+                    ServiceManager.getInstance().onPreparingDownloadItemData(mData.id);
+                }else{
+                    onPreparingUploadItemData();
+                }
             }
             @Override
             public void onShowObjects(DriveResponse object) {
@@ -194,7 +205,7 @@ public class ServiceManager implements BaseView {
             @Override
             public void onShowObjects(SyncDataModel object) {
                 Utils.Log(TAG,new Gson().toJson(object));
-                onCheckingDataToInsert(object);
+                onCheckingDataToSyncToLocalDB(object);
             }
 
             @Override
@@ -209,12 +220,8 @@ public class ServiceManager implements BaseView {
         });
     }
 
-//    public void onDownloadItemData(){
-//
-//    }
-
     /*Checking data to insert to local db*/
-    public void onCheckingDataToInsert(SyncDataModel mObject){
+    public void onCheckingDataToSyncToLocalDB(SyncDataModel mObject){
         final List<SaveModel> mSaveList = mObject.saveList;
         final List<HistoryModel> mHistoryList = mObject.historyList;
 
@@ -239,6 +246,42 @@ public class ServiceManager implements BaseView {
 
         Utils.Log(TAG,"Some items of save need to be deleting "+mSaveDeleteResultList.size());
         Utils.Log(TAG,"Some items of history need to be deleting "+mHistoryDeleteResultList.size());
+
+        /*Inserting to local db*/
+        for (SaveModel index : mSaveAddResultList){
+            SQLiteHelper.onInsert(index);
+        }
+        for (HistoryModel index : mHistoryAddResultList){
+            SQLiteHelper.onInsert(index);
+        }
+
+        /*Updating to local db*/
+        for (SaveModel index : mSaveUpdateResultList){
+            SQLiteHelper.onUpdate(index);
+        }
+        for (HistoryModel index : mHistoryUpdateResultList){
+            SQLiteHelper.onUpdate(index);
+        }
+
+        /*Deleting to local db*/
+        for (SaveModel index : mSaveDeleteResultList){
+            SQLiteHelper.onDelete(index);
+        }
+        for (HistoryModel index : mHistoryDeleteResultList){
+            SQLiteHelper.onDelete(index);
+        }
+        /*Final step sync upload file*/
+        if (Utils.isEqualTimeSynced(mObject.updatedDateTime)){
+            Utils.Log(TAG,"The session of previous already synced");
+            if (isDismiss){
+                onDismissServices();
+            }
+        }else {
+            Utils.Log(TAG,"Preparing delete old file...");
+            Utils.Log(TAG,"Last time from cloud..." +mObject.updatedDateTime);
+            Utils.Log(TAG,"Last time from local..." +Utils.getLastTimeSynced());
+            onPreparingDeleteItemData();
+        }
     }
 
     /*Updated history and save after upload file*/
@@ -253,6 +296,13 @@ public class ServiceManager implements BaseView {
             index.isSynced = true;
             SQLiteHelper.onUpdate(index);
         }
+        /*Final step*/
+        if (isDismiss){
+            onDismissServices();
+        }else{
+            SaveSingleton.getInstance().reLoadData();
+            HistorySingleton.getInstance().reLoadData();
+        }
     }
 
     /*onPreparingDownload*/
@@ -266,12 +316,14 @@ public class ServiceManager implements BaseView {
                 onDeleteItemData(id);
             }
         }else{
+            if (isDismiss){
+                onDismissServices();
+            }
             Utils.Log(TAG,"Not found data to delete");
         }
     }
 
     private void onDeleteItemData(String id){
-        isDeleteData = true;
         myService.onDeleteCloudItems(id, new QRScannerService.BaseListener() {
             @Override
             public void onShowListObjects(List list) {
@@ -285,32 +337,28 @@ public class ServiceManager implements BaseView {
             public void onError(String message, EnumStatus status) {
                 Utils.Log(TAG,message + ": "+id);
                 if (status==EnumStatus.DELETING_NOT_FOUND_ID){
-                    isDeleteData = false;
                     if (Utils.deletedIndexOfHashMap(id,mMapDelete)){
                         final String id = Utils.getIndexOfHashMap(mMapDelete);
                         if (id!=null){
                             onDeleteItemData(id);
-                            isDeleteData = true;
                         }else{
                             Utils.Log(TAG,"Deleted item completely");
+                            onPreparingUploadItemData();
                         }
                     }
-                }else{
-                    isDeleteData = false;
                 }
             }
             @Override
             public void onSuccessful(String message, EnumStatus status) {
                 Utils.Log(TAG,message + ": "+id);
-                isDeleteData = false;
                 if (status==EnumStatus.DELETED_SUCCESSFULLY){
                     if (Utils.deletedIndexOfHashMap(id,mMapDelete)){
                         final String id = Utils.getIndexOfHashMap(mMapDelete);
                         if (id!=null){
                             onDeleteItemData(id);
-                            isDeleteData = true;
                         }else{
                             Utils.Log(TAG,"Deleted item completely");
+                            onPreparingUploadItemData();
                         }
                     }
                 }
@@ -334,8 +382,10 @@ public class ServiceManager implements BaseView {
             @Override
             public void onError(String message, EnumStatus status) {
                 Utils.Log(TAG,message);
+                if (isDismiss){
+                    onDismissServices();
+                }
             }
-
             @Override
             public void onSuccessful(String message, EnumStatus status) {
                 Utils.Log(TAG,message);
@@ -345,13 +395,6 @@ public class ServiceManager implements BaseView {
             }
         });
     }
-
-//    public void onUploadItemData(){
-//
-//    }
-
-    /*Backup*/
-
 
     /*User info*/
     public void onAuthorSync() {
@@ -376,10 +419,11 @@ public class ServiceManager implements BaseView {
         if (myService != null) {
             myService.unbindView();
         }
-
         if (subscriptions != null) {
             subscriptions.dispose();
         }
+        isDismiss = false;
+        Utils.setDefaultSaveHistoryDeletedKey();
         Utils.Log(TAG, "Dismiss Service manager");
     }
 

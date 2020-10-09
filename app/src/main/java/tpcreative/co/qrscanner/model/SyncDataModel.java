@@ -11,7 +11,7 @@ public class SyncDataModel implements Serializable {
     public List<HistoryModel> historyList;
     public String updatedDateTime;
 
-    public SyncDataModel(){
+    public SyncDataModel(boolean resultUpload){
         this.saveList = new ArrayList<>();
         for (SaveModel index : SQLiteHelper.getSaveList()){
             this.saveList.add(new SaveModel(index,true));
@@ -21,6 +21,7 @@ public class SyncDataModel implements Serializable {
             this.historyList.add(new HistoryModel(index,true));
         }
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
+        Utils.setLastTimeSynced(this.updatedDateTime);
     }
     public String toJson(){
         return new Gson().toJson(this);

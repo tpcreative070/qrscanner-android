@@ -13,6 +13,13 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.DriveScopes;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
@@ -26,6 +33,7 @@ public class RefreshTokenSingleton {
     private GoogleSignInAccount mSignInAccount;
     private GoogleSignInClient mGoogleSignInClient;
     private static RefreshTokenSingleton instance ;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
     
     public static RefreshTokenSingleton getInstance(){
         if (instance==null){
@@ -63,6 +71,86 @@ public class RefreshTokenSingleton {
                 Utils.setAuthor(mAuthor);
             }
         }
+    }
+
+    public void onRefreshAccessToken(Account accounts){
+        compositeDisposable.add(Observable.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                try {
+                    if (accounts==null){
+                        return null;
+                    }
+                    GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
+                            QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString());
+                    credential.setSelectedAccount(accounts);
+                    try {
+                        String value = credential.getToken();
+                        if (value!=null){
+                            final Author mAuthor = Author.getInstance().getAuthorInfo();
+                            if (mAuthor!=null){
+                                mAuthor.isConnectedToGoogleDrive = true;
+                                mAuthor.access_token = String.format(QRScannerApplication.getInstance().getString(R.string.access_token),value);
+                                Utils.Log(TAG,"Refresh access token value: "+ mAuthor.access_token);
+                                mAuthor.email = credential.getSelectedAccount().name;
+                                Utils.setAuthor(mAuthor);
+                            }
+                        }
+                        return value;
+                    }
+                    catch (GoogleAuthException e){
+                        Utils.Log(TAG,"Error occurred on GoogleAuthException");
+                    }
+                } catch (UserRecoverableAuthIOException recoverableException) {
+                    Utils.Log(TAG,"Error occurred on UserRecoverableAuthIOException");
+                } catch (IOException e) {
+                    Utils.Log(TAG,"Error occurred on IOException");
+                }
+                return null;
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(response ->{
+            try {
+                if (response != null) {
+                    final Author mUser = Author.getInstance().getAuthorInfo();
+                    if (mUser != null) {
+                        //Log.d(TAG, "Call getDriveAbout " + new Gson().toJson(mUser));
+                        if (ServiceManager.getInstance().getMyService()==null){
+                            Utils.Log(TAG,"QRScannerService is null");
+                            compositeDisposable.dispose();
+                            return;
+                        }
+                        ServiceManager.getInstance().getMyService().getDriveAbout(new QRScannerService.GoogleDriveListener() {
+                            @Override
+                            public void onError(String message, EnumStatus status) {
+                                Utils.Log(TAG,"onError " +message + " - " +status.name());
+                                switch (status){
+                                    case REQUEST_REFRESH_ACCESS_TOKEN:{
+                                        revokeAccess();
+                                        break;
+                                    }
+                                }
+                                compositeDisposable.dispose();
+                            }
+                            @Override
+                            public void onSuccessful(String message, EnumStatus status) {
+                                Utils.Log(TAG,"onSuccessful " +message + " - " +status.name());
+                                compositeDisposable.dispose();
+                            }
+                        });
+                    }else{
+                        compositeDisposable.dispose();
+                    }
+                }else{
+                    compositeDisposable.dispose();
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                Utils.Log(TAG,"Call onDriveClientReady");
+                compositeDisposable.dispose();
+            }
+        }));
     }
 
     private class GetAccessToken extends AsyncTask<Account, Void, String> {
@@ -148,7 +236,8 @@ public class RefreshTokenSingleton {
     private void initializeDriveClient(GoogleSignInAccount signInAccount) {
         mSignInAccount = signInAccount;
         Utils.Log(TAG,"Request refresh access token");
-        new RefreshTokenSingleton.GetAccessToken().execute(mSignInAccount.getAccount());
+        onRefreshAccessToken(mSignInAccount.getAccount());
+        //new RefreshTokenSingleton.GetAccessToken().execute(mSignInAccount.getAccount());
     }
 
     protected void revokeAccess() {

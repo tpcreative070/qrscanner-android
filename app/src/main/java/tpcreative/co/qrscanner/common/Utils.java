@@ -102,10 +102,9 @@ import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.ThemeUtil;
 
 public class Utils {
-
     private static final String TAG = Utils.class.getSimpleName();
-    private static final long flagValue = 7200000;
-    private UtilsListener listenner;
+    final static String mStandardSortedDateTime = "ddMMYYYYHHmmss";
+    final static String FORMAT_DISPLAY = "EE dd MMM, yyyy HH:mm:ss a";
 
     public static void writeLogs(String responseJson) {
         if (!BuildConfig.DEBUG){
@@ -149,52 +148,6 @@ public class Utils {
             return ""+System.currentTimeMillis();
         }
     }
-
-    public static void showGotItSnackbar(final View view, final @StringRes int text) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                multilineSnackbar(
-                        Snackbar.make(
-                                view, text, 1)
-                                .setAction(R.string.got_it, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                ).show();
-            }
-        }, 200);
-    }
-
-    public static void showGotItSnackbar(final View view, final String text) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                multilineSnackbar(
-                        Snackbar.make(
-                                view, text, 1)
-                                .setAction(R.string.got_it, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                ).show();
-            }
-        }, 200);
-    }
-
-    private static Snackbar multilineSnackbar(Snackbar snackbar) {
-        TextView textView = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
-        textView.setMaxLines(5);
-        textView.setTextSize(15);
-        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( com.google.android.material.R.id.snackbar_action);
-        snackbarActionTextView.setTextSize(14);
-        return snackbar;
-    }
-
 
     public static String convertMillisecondsToHMmSs(long millisecond) {
         Date date = new Date(millisecond);
@@ -270,125 +223,30 @@ public class Utils {
         return false;
     }
 
-    private static int screenWidth = 0;
-    private static int screenHeight = 0;
-
-    public static void hideSoftKeyboard(Activity context) {
-        View view = context.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    public static int getScreenHeight(Context c) {
-        if (screenHeight == 0) {
-            WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenHeight = size.y;
-        }
-
-        return screenHeight;
-    }
-
-    public static int getScreenWidth(Context c) {
-        if (screenWidth == 0) {
-            WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-        }
-
-        return screenWidth;
-    }
-
-    public static int dpToPx(int dp) {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
-    }
-
-    public static void hideSoftKeyboardFragment(Activity context) {
-        if (context != null) {
-            context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        }
-    }
-
-    public static void showSoftKeyboardFragment(Context context) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-    }
-
-    public static void showSoftKeyboard(final Context context,final View view) {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-            }
-        }, 300);
-
-    }
-
-    public static void hideSoftKeyboard(final Context context,final View view) {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-        }, 300);
-
-    }
-
-    public static double convertDollarsToCents(double dollars){
-        return dollars * 100;
-    }
-
-
-    public static double convertCentsToDollars(double cents){
-        return cents / 100;
-    }
-
-    @SuppressLint("HardwareIds")
-    public static String getDeviceSerial(Context context) {
-        return Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-    }
-
-    public static String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.startsWith(manufacturer)) {
-            return capitalize(model);
-        } else {
-            return capitalize(manufacturer) + " " + model;
-        }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public static String formatDateISO(Date date){
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); // Quoted "Z" to indicate UTC, no timezone offset
-        df.setTimeZone(tz);
-        return df.format(date);
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public static Date convertStringToDate(String value){
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    public static long getMilliseconds(String value){
         try {
-            date = format.parse(value);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date date = dateFormat.parse(value);
+            return date.getTime();
+        }catch (ParseException e){
             e.printStackTrace();
         }
-        return date;
+        return 0;
     }
+
+    public static String getCurrentDateDisplay(String value) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date date = dateFormat.parse(value);
+            dateFormat = new SimpleDateFormat(FORMAT_DISPLAY,Locale.getDefault());
+            String result = dateFormat.format(date);
+            return result;
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        return value;
+    }
+
 
     public static String capitalize(String str) {
         return capitalize(str, (char[]) null);
@@ -434,80 +292,19 @@ public class Utils {
         }
     }
 
-    public static String getEmijoByUnicode(int unicode){
-        return new String(Character.toChars(unicode));
+
+    public static String geTimeFileName(){
+        long millisecond = System.currentTimeMillis();
+        SimpleDateFormat formatter = new SimpleDateFormat(mStandardSortedDateTime);
+        String dateString = formatter.format(new Date(millisecond));
+        return dateString;
     }
-
-    public static byte[] readFully(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        for (int count; (count = in.read(buffer)) != -1; ) {
-            out.write(buffer, 0, count);
-        }
-        return out.toByteArray();
-    }
-
-    public static double getDecimalFormat(double aDouble){
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
-        otherSymbols.setDecimalSeparator('.');
-        otherSymbols.setGroupingSeparator(',');
-        DecimalFormat format = new DecimalFormat("#.##", otherSymbols);
-        return Double.valueOf(format.format(Math.round(aDouble*1e5)/1e5));
-    }
-
-    public static Drawable getDrawable(String normal, String selected,final int[] colors) {
-        StateListDrawable states = new StateListDrawable() {
-            @Override
-            protected boolean onStateChange(int[] states) {
-                if (colors != null) {
-                    boolean isSelected = false;
-                    for (int state : states) {
-                        if (state == android.R.attr.state_selected) {
-                            isSelected = true;
-                        }
-                    }
-                    if (isSelected)
-                        setColorFilter(colors[0], PorterDuff.Mode.SRC_ATOP);
-                    else {
-                        clearColorFilter();
-                        setColorFilter(colors[1], PorterDuff.Mode.SRC_ATOP);
-                    }
-                }
-                return super.onStateChange(states);
-            }
-        };
-        Drawable selectedDrawable = Drawable.createFromPath(selected);
-        Drawable normalDrawable = Drawable.createFromPath(normal);
-
-        states.addState(new int[]{android.R.attr.state_selected}, selectedDrawable);
-        states.addState(new int[]{}, normalDrawable);
-        return states;
-    }
-
-    public static int getScreenWidth() {
-        return Resources.getSystem().getDisplayMetrics().widthPixels;
-    }
-
-    public static int getScreenHeight() {
-        return Resources.getSystem().getDisplayMetrics().heightPixels;
-    }
-
-
-    public static int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
 
     public static void saveImage(final Bitmap finalBitmap,final EnumAction enumAction,final String type,final String code,UtilsListener listenner) {
         String root = QRScannerApplication.getInstance().getPathFolder();
         File myDir = new File(root);
         myDir.mkdirs();
-        String fname = "Image_"+ type + "_"+TimeHelper.getInstance().getString() +".jpg";
+        String fname = "Image_"+ type + "_"+geTimeFileName() +".jpg";
         fname = fname.replace("/","");
         fname = fname.replace(":","");
         File file = new File (myDir, fname);
@@ -521,22 +318,6 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static Bitmap changeBitmapColor(Bitmap sourceBitmap, int color) {
-        try{
-            Bitmap resultBitmap = sourceBitmap.copy(sourceBitmap.getConfig(),true);
-            Paint paint = new Paint();
-            ColorFilter filter = new LightingColorFilter(color, 1);
-            paint.setColorFilter(filter);
-            Canvas canvas = new Canvas(resultBitmap);
-            canvas.drawBitmap(resultBitmap, 0, 0, paint);
-            return resultBitmap;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public static String convertStringArrayToString(String[] strArr, String delimiter) {
@@ -584,28 +365,6 @@ public class Utils {
         android.content.ClipData clip = android.content.ClipData
                 .newPlainText(QRScannerApplication.getInstance().getString(R.string.my_clipboad), copyText);
         clipboard.setPrimaryClip(clip);
-    }
-
-    public static void onUpdateVersionRateAlert(){
-        try{
-            final int current_code_version = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),0);
-            if (current_code_version != BuildConfig.VERSION_CODE){
-                PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.we_are_a_team),false);
-            }
-        }
-        catch (Exception e){
-                e.printStackTrace();
-        }
-    }
-
-    public static boolean isShowAds(){
-        long currentValue = System.currentTimeMillis();
-        long previousValue = PrefsController.getLong(QRScannerApplication.getInstance().getString(R.string.key_waiting_for_show_ads),0);
-        if (currentValue>previousValue){
-            PrefsController.putLong(QRScannerApplication.getInstance().getString(R.string.key_waiting_for_show_ads),currentValue+flagValue);
-            return true;
-        }
-        return false;
     }
 
     public static void onObserveData(long second,Listener ls){
@@ -1058,7 +817,7 @@ public class Utils {
         for (SaveModel index : mSyncedList){
             /*Checking item exiting before*/
             final SaveModel mItem = mSyncedMap.get(index.uuId);
-            if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime)){
+            if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime) && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)){
                 mList.add(index);
             }
         }
@@ -1072,7 +831,7 @@ public class Utils {
         for (HistoryModel index : mSyncedList){
             /*Checking item exiting before*/
             final HistoryModel mItem = mSyncedMap.get(index.uuId);
-            if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime)){
+            if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime) && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)){
                 index.id = mItem.id;
                 mList.add(index);
             }
@@ -1147,24 +906,6 @@ public class Utils {
     public static void setDefaultSaveHistoryDeletedKey(){
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_save_deleted_list),new Gson().toJson(new HashMap<String,String>()));
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_history_deleted_list), new Gson().toJson(new HashMap<String,String>()));
-    }
-
-    public static Map<String,HistoryModel> getHistorySyncedMap(){
-        final List<HistoryModel> mList = SQLiteHelper.getHistoryList(true);
-        Map<String,HistoryModel> mMap = new HashMap<>();
-        for (HistoryModel index: mList){
-            mMap.put(index.uuId,index);
-        }
-        return mMap;
-    }
-
-    public static Map<String,SaveModel> getSaveSyncedMap(){
-        final List<SaveModel> mList = SQLiteHelper.getSaveList(true);
-        Map<String,SaveModel> mMap = new HashMap<>();
-        for (SaveModel index: mList){
-            mMap.put(index.uuId,index);
-        }
-        return mMap;
     }
 
     public static Map<String,SaveModel> convertSaveListToMap(List<SaveModel> list){
@@ -1271,4 +1012,18 @@ public class Utils {
         return map;
     }
 
+    public static void setLastTimeSynced(String value){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_last_time_synced),value);
+    }
+
+    public static String getLastTimeSynced(){
+        return PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_last_time_synced),"");
+    }
+
+    public static boolean isEqualTimeSynced(String value){
+        if (value.equals(getLastTimeSynced())){
+            return true;
+        }
+        return false;
+    }
 }

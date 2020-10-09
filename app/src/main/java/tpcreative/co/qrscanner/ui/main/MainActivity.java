@@ -379,7 +379,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
             }
         }
         Utils.onSetCountRating(Utils.onGetCountRating() +1);
-        ServiceManager.getInstance().onDismissServices();
+        ServiceManager.getInstance().onPreparingSyncData(true);
         PremiumManager.getInstance().onStop();
     }
 
