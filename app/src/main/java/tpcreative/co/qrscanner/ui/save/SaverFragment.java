@@ -56,7 +56,6 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
-import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.create.BarcodeFragment;
@@ -111,8 +110,6 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int i = item.getItemId();
-
             switch (item.getItemId()) {
                 case R.id.menu_item_select_all: {
                     final List<SaveModel> list = presenter.getListGroup();
@@ -132,24 +129,21 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
                         }
                         isSelectedAll = true;
                     }
-
                     if (actionMode != null) {
                         actionMode.setTitle(presenter.getCheckedCount() + " " + getString(R.string.selected));
                     }
-
                     recyclerView.removeAllCells();
                     bindData();
                     return true;
                 }
                 case R.id.menu_item_delete: {
-                    final List<HistoryModel> listHistory = SQLiteHelper.getHistoryList();
-                    if (listHistory == null) {
+                    Utils.Log(TAG,"Delete call here");
+                    final List<SaveModel> listSave = SQLiteHelper.getSaveList();
+                    if (listSave.size() == 0) {
+                        Utils.Log(TAG,"Delete call here ???");
                         return false;
                     }
-                    if (listHistory.size() == 0) {
-                        return false;
-                    }
-                    Log.d(TAG, "start");
+                    Utils.Log(TAG, "start");
                     if (presenter.getCheckedCount() > 0) {
                         dialogDelete();
                     }
@@ -214,16 +208,16 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
         SectionHeaderProvider<SaveModel> sh = new SimpleSectionHeaderProvider<SaveModel>() {
             @NonNull
             @Override
-            public View getSectionHeaderView(@NonNull SaveModel history, int i) {
+            public View getSectionHeaderView(@NonNull SaveModel save, int i) {
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.save_item_header, null, false);
                 TextView textView = view.findViewById(R.id.tvHeader);
-                textView.setText(history.getCategoryName());
+                textView.setText(save.getCategoryName());
                 return view;
             }
 
             @Override
-            public boolean isSameSection(@NonNull SaveModel history, @NonNull SaveModel nextHistory) {
-                return history.getCategoryId() == nextHistory.getCategoryId();
+            public boolean isSameSection(@NonNull SaveModel save, @NonNull SaveModel nextSave) {
+                return save.getCategoryId() == nextSave.getCategoryId();
             }
             // Optional, whether the header is sticky, default false
             @Override
@@ -266,21 +260,14 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
     @Override
     public void isShowDeleteAction(boolean isDelete) {
-        final List<SaveModel> listHistory = SQLiteHelper.getSaveList();
+        final List<SaveModel> listSave = SQLiteHelper.getSaveList();
         if (isDelete) {
             if (actionMode == null) {
                 actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);
             }
-            if (listHistory == null) {
-
-                return;
-
-            }
-            if (listHistory.size() == 0) {
-
+            if (listSave.size() == 0) {
                 return;
             }
-
             final List<SaveModel> list = presenter.getListGroup();
             presenter.mList.clear();
             for (SaveModel index : list) {
@@ -291,10 +278,10 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             bindData();
             isDeleted = true;
         } else {
-            if (listHistory == null) {
+            if (listSave == null) {
                 return;
             }
-            if (listHistory.size() == 0) {
+            if (listSave.size() == 0) {
                 return;
             }
             onAddPermissionSave();
@@ -339,58 +326,58 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
             return;
         }
         final Create create = new Create();
-        final SaveModel history = presenter.mList.get(position);
-        if (history.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
-            create.productId = history.text;
-            create.barcodeFormat = history.barcodeFormat;
-            Utils.Log(TAG,"Show..." + history.barcodeFormat);
+        final SaveModel save = presenter.mList.get(position);
+        if (save.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
+            create.productId = save.text;
+            create.barcodeFormat = save.barcodeFormat;
+            Utils.Log(TAG,"Show..." + save.barcodeFormat);
             create.createType = ParsedResultType.PRODUCT;
         }
-        else if (history.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
-            create.address = history.address;
-            create.fullName = history.fullName;
-            create.email = history.email;
-            create.phone = history.phone;
+        else if (save.createType.equalsIgnoreCase(ParsedResultType.ADDRESSBOOK.name())) {
+            create.address = save.address;
+            create.fullName = save.fullName;
+            create.email = save.email;
+            create.phone = save.phone;
             create.createType = ParsedResultType.ADDRESSBOOK;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.EMAIL_ADDRESS.name())) {
-            create.email = history.email;
-            create.subject = history.subject;
-            create.message = history.message;
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.EMAIL_ADDRESS.name())) {
+            create.email = save.email;
+            create.subject = save.subject;
+            create.message = save.message;
             create.createType = ParsedResultType.EMAIL_ADDRESS;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.PRODUCT.name())) {
             create.createType = ParsedResultType.PRODUCT;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
-            create.url = history.url;
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.URI.name())) {
+            create.url = save.url;
             create.createType = ParsedResultType.URI;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.WIFI.name())) {
-            create.hidden = history.hidden;
-            create.ssId = history.ssId;
-            create.networkEncryption = history.networkEncryption;
-            create.password = history.password;
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.WIFI.name())) {
+            create.hidden = save.hidden;
+            create.ssId = save.ssId;
+            create.networkEncryption = save.networkEncryption;
+            create.password = save.password;
             create.createType = ParsedResultType.WIFI;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.GEO.name())) {
-            create.lat = history.lat;
-            create.lon = history.lon;
-            create.query = history.query;
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.GEO.name())) {
+            create.lat = save.lat;
+            create.lon = save.lon;
+            create.query = save.query;
             create.createType = ParsedResultType.GEO;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.TEL.name())) {
-            create.phone = history.phone;
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.TEL.name())) {
+            create.phone = save.phone;
             create.createType = ParsedResultType.TEL;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.SMS.name())) {
-            create.phone = history.phone;
-            create.message = history.message;
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.SMS.name())) {
+            create.phone = save.phone;
+            create.message = save.message;
             create.createType = ParsedResultType.SMS;
-        } else if (history.createType.equalsIgnoreCase(ParsedResultType.CALENDAR.name())) {
-            create.title = history.title;
-            create.description = history.description;
-            create.location = history.location;
-            create.startEvent = history.startEvent;
-            create.endEvent = history.endEvent;
-            create.startEventMilliseconds = history.startEventMilliseconds;
-            create.endEventMilliseconds = history.endEventMilliseconds;
+        } else if (save.createType.equalsIgnoreCase(ParsedResultType.CALENDAR.name())) {
+            create.title = save.title;
+            create.description = save.description;
+            create.location = save.location;
+            create.startEvent = save.startEvent;
+            create.endEvent = save.endEvent;
+            create.startEventMilliseconds = save.startEventMilliseconds;
+            create.endEventMilliseconds = save.endEventMilliseconds;
             create.createType = ParsedResultType.CALENDAR;
         } else {
-            create.text = history.text;
+            create.text = save.text;
             create.createType = ParsedResultType.TEXT;
         }
         Utils.Log(TAG, "Call intent");

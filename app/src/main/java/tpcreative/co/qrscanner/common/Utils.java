@@ -787,6 +787,7 @@ public class Utils {
             /*Checking item exiting before*/
             final HistoryModel mItem = mSyncedMap.get(index.uuId);
             if (mValue==null && mItem == null){
+                index.id = 0;
                 mList.add(index);
             }
         }
@@ -804,6 +805,7 @@ public class Utils {
             /*Checking item exiting before*/
             final SaveModel mItem = mSyncedMap.get(index.uuId);
             if (mValue==null && mItem == null){
+                index.id = 0;
                 mList.add(index);
             }
         }
@@ -818,6 +820,7 @@ public class Utils {
             /*Checking item exiting before*/
             final SaveModel mItem = mSyncedMap.get(index.uuId);
             if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime) && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)){
+                index.id = mItem.id;
                 mList.add(index);
             }
         }
