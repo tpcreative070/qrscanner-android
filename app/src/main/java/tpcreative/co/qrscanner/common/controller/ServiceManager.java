@@ -304,6 +304,9 @@ public class ServiceManager implements BaseView {
 //
 //    }
 
+
+    /*Backup*/
+
     /*User info*/
     public void onAuthorSync() {
         if (myService != null) {

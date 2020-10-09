@@ -20,6 +20,9 @@ public interface HistoryDao {
     @Query("DELETE FROM history")
     public void deleteAllItems();
 
+    @Query("DELETE FROM history where uuId =:uuId")
+    public void deleteSpecific(String uuId);
+
     @Query("Select * FROM history ORDER BY updatedDateTime DESC")
     List<HistoryEntity> loadAll();
 

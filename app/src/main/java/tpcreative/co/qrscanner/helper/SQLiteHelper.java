@@ -75,7 +75,18 @@ public class SQLiteHelper {
     public static final boolean onDelete(HistoryModel entity){
         try{
             final HistoryEntityModel mData = new HistoryEntityModel(entity);
+            Utils.setHistoryDeletedMap(mData);
             return getInstance().onDelete(mData);
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return false;
+    }
+
+    public static final boolean onDeleteHistorySpecific(String uuId){
+        try{
+            return getInstance().onDeleteHistorySpecific(uuId);
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -149,7 +160,18 @@ public class SQLiteHelper {
     public static final boolean onDelete(SaveModel entity){
         try{
             final SaveEntityModel mData = new SaveEntityModel(entity);
+            Utils.setSaveDeletedMap(mData);
             return getInstance().onDelete(mData);
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return false;
+    }
+
+    public static final boolean onDeleteSaveSpecific(String uuId){
+        try{
+            return getInstance().onDeleteSaveSpecific(uuId);
         }
         catch (Exception e){
             Log.d(TAG,e.getMessage());

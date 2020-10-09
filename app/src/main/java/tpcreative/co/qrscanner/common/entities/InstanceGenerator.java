@@ -137,6 +137,18 @@ public abstract class InstanceGenerator extends RoomDatabase {
         return false;
     }
 
+    public final boolean onDeleteHistorySpecific(String uuId){
+        try{
+            instance.historyDao().deleteSpecific(uuId);
+            return true;
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return false;
+    }
+
+
 
     public void onInsert(SaveEntityModel cTalkManager){
         try {
@@ -243,6 +255,17 @@ public abstract class InstanceGenerator extends RoomDatabase {
     public final boolean onDelete(SaveEntityModel entity){
         try{
             instance.saveDao().delete(new SaveEntity(entity));
+            return true;
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return false;
+    }
+
+    public final boolean onDeleteSaveSpecific(String uuId){
+        try{
+            instance.saveDao().deleteSpecific(uuId);
             return true;
         }
         catch (Exception e){

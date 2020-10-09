@@ -39,6 +39,7 @@ import androidx.core.content.PermissionChecker;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.client.result.ParsedResultType;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -92,8 +93,10 @@ import tpcreative.co.qrscanner.helper.TimeHelper;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumAction;
+import tpcreative.co.qrscanner.model.HistoryEntityModel;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.PremiumModel;
+import tpcreative.co.qrscanner.model.SaveEntityModel;
 import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.model.ThemeUtil;
@@ -1014,9 +1017,167 @@ public class Utils {
         return mList;
     }
 
-//    public static List<HistoryModel> foundSyncedFilesHistoryDelete(List<HistoryModel> mSyncedList){
-//        final List<HistoryModel> mList = SQLiteHelper.getHistoryList(true);
-//    }
+    public static List<HistoryModel> checkHistoryItemToInsertToLocal(List<HistoryModel> mSyncedList){
+        /*Checking local items deleted*/
+        final Map<String,String> mHistoryMap = getHistoryDeletedMap();
+        final Map<String,HistoryModel> mSyncedMap = convertHistoryListToMap(SQLiteHelper.getHistoryList(true));
+        List<HistoryModel> mList = new ArrayList<>();
+        for (HistoryModel index : mSyncedList){
+            /*Checking item was deleted before*/
+            final String mValue = mHistoryMap.get(index.uuId);
+            /*Checking item exiting before*/
+            final HistoryModel mItem = mSyncedMap.get(index.uuId);
+            if (mValue==null && mItem == null){
+                mList.add(index);
+            }
+        }
+        return mList;
+    }
+
+    public static List<SaveModel> checkSaveItemToInsertToLocal(List<SaveModel> mSyncedList){
+        /*Checking local items deleted*/
+        final Map<String,String> mHistoryMap = getSaveDeletedMap();
+        final Map<String,SaveModel> mSyncedMap = convertSaveListToMap(SQLiteHelper.getSaveList(true));
+        List<SaveModel> mList = new ArrayList<>();
+        for (SaveModel index : mSyncedList){
+            /*Checking item was deleted before*/
+            final String mValue = mHistoryMap.get(index.uuId);
+            /*Checking item exiting before*/
+            final SaveModel mItem = mSyncedMap.get(index.uuId);
+            if (mValue==null && mItem == null){
+                mList.add(index);
+            }
+        }
+        return mList;
+    }
+
+    public static List<SaveModel> checkSaveItemToUpdateToLocal(List<SaveModel> mSyncedList){
+        /*Checking local items deleted*/
+        final Map<String,SaveModel> mSyncedMap = convertSaveListToMap(SQLiteHelper.getSaveList(true));
+        List<SaveModel> mList = new ArrayList<>();
+        for (SaveModel index : mSyncedList){
+            /*Checking item exiting before*/
+            final SaveModel mItem = mSyncedMap.get(index.uuId);
+            if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime)){
+                mList.add(index);
+            }
+        }
+        return mList;
+    }
+
+    public static List<HistoryModel> checkHistoryItemToUpdateToLocal(List<HistoryModel> mSyncedList){
+        /*Checking local items deleted*/
+        final Map<String,HistoryModel> mSyncedMap = convertHistoryListToMap(SQLiteHelper.getHistoryList(true));
+        List<HistoryModel> mList = new ArrayList<>();
+        for (HistoryModel index : mSyncedList){
+            /*Checking item exiting before*/
+            final HistoryModel mItem = mSyncedMap.get(index.uuId);
+            if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime)){
+                mList.add(index);
+            }
+        }
+        return mList;
+    }
+
+    public static void autoHistoryDeleteSyncedLocal(List<HistoryModel> mSyncedList){
+        final List<HistoryModel> mList = SQLiteHelper.getHistoryList(true);
+        final Map<String,HistoryModel> mMap = convertHistoryListToMap(mSyncedList);
+        for (HistoryModel index : mList){
+            final HistoryModel mValue = mMap.get(index.uuId);
+            if (mValue==null){
+                SQLiteHelper.onDelete(index);
+            }
+        }
+    }
+
+    public static void autoSaveDeleteSyncedLocal(List<SaveModel> mSyncedList){
+        final List<SaveModel> mList = SQLiteHelper.getSaveList(true);
+        final Map<String,SaveModel> mMap = convertSaveListToMap(mSyncedList);
+        for (SaveModel index : mList){
+            final SaveModel mValue = mMap.get(index.uuId);
+            if (mValue==null){
+                SQLiteHelper.onDelete(index);
+            }
+        }
+    }
+
+    public static Map<String,String> getSaveDeletedMap(){
+        String mValue = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_save_deleted_list),null);
+        if (mValue!=null){
+            final Map<String,String> mData = new Gson().fromJson(mValue,new TypeToken<Map<String,String>>(){}.getType());
+            if (mData!=null){
+                return mData;
+            }
+        }
+        return new HashMap<>();
+    }
+
+    public static Map<String,String> getHistoryDeletedMap(){
+        String mValue = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_history_deleted_list),null);
+        if (mValue!=null){
+            final Map<String,String> mData = new Gson().fromJson(mValue,new TypeToken<Map<String,String>>(){}.getType());
+            if (mData!=null){
+                return mData;
+            }
+        }
+        return new HashMap<>();
+    }
+
+    public static void setSaveDeletedMap(SaveEntityModel item){
+        if (Utils.isPremium() && item.isSynced){
+            Map<String,String> mMap = getSaveDeletedMap();
+            mMap.put(item.uuId,item.uuId);
+            PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_save_deleted_list),new Gson().toJson(mMap));
+        }
+    }
+
+    public static void setHistoryDeletedMap(HistoryEntityModel item){
+        if (Utils.isPremium() && item.isSynced) {
+            Map<String,String> mMap = getHistoryDeletedMap();
+            mMap.put(item.uuId,item.uuId);
+            PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_history_deleted_list), new Gson().toJson(mMap));
+        }
+    }
+
+    public static void setDefaultSaveHistoryDeletedKey(){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_save_deleted_list),new Gson().toJson(new HashMap<String,String>()));
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_history_deleted_list), new Gson().toJson(new HashMap<String,String>()));
+    }
+
+    public static Map<String,HistoryModel> getHistorySyncedMap(){
+        final List<HistoryModel> mList = SQLiteHelper.getHistoryList(true);
+        Map<String,HistoryModel> mMap = new HashMap<>();
+        for (HistoryModel index: mList){
+            mMap.put(index.uuId,index);
+        }
+        return mMap;
+    }
+
+    public static Map<String,SaveModel> getSaveSyncedMap(){
+        final List<SaveModel> mList = SQLiteHelper.getSaveList(true);
+        Map<String,SaveModel> mMap = new HashMap<>();
+        for (SaveModel index: mList){
+            mMap.put(index.uuId,index);
+        }
+        return mMap;
+    }
+
+    public static Map<String,SaveModel> convertSaveListToMap(List<SaveModel> list){
+        Map<String,SaveModel> mMap = new HashMap<>();
+        for (SaveModel index: list){
+            mMap.put(index.uuId,index);
+        }
+        return mMap;
+    }
+
+    public static Map<String,HistoryModel> convertHistoryListToMap(List<HistoryModel> list){
+        Map<String,HistoryModel> mMap = new HashMap<>();
+        for (HistoryModel index: list){
+            mMap.put(index.uuId,index);
+        }
+        return mMap;
+    }
+
 
     public static String logPath(){
         final Storage storage = QRScannerApplication.getInstance().getStorage();

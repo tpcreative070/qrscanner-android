@@ -226,6 +226,8 @@
     <string name="key_is_first_gallery">is first gallery</string>
     <string name="key_is_first_help">is first_help</string>
     <string name="key_data">data</string>
+    <string name="key_save_deleted_list">key_save_deleted_list</string>
+    <string name="key_history_deleted_list">key_history_deleted_list</string>
     <string name="select">Select</string>
     <string name="print">Print</string>
     <string name="report">Report</string>

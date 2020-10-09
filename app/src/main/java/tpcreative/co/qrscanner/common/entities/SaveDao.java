@@ -22,6 +22,9 @@ public interface SaveDao {
     @Query("DELETE FROM save")
     public void deleteAllItems();
 
+    @Query("DELETE FROM save where uuId =:uuId")
+    public void deleteSpecific(String uuId);
+
     @Query("Select * FROM save ORDER BY updatedDateTime DESC")
     List<SaveEntity> loadAll();
 
