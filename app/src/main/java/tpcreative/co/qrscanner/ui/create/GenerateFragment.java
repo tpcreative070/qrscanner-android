@@ -56,6 +56,13 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
         if (menuVisible) {
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(GenerateFragment.this);
             Utils.Log(TAG, "isVisible");
+            if (Utils.isPremium()){
+                if (!presenter.isPremium){
+                    presenter.setList();
+                    presenter.isPremium = Utils.isPremium();
+                    Utils.Log(TAG,"Call update ui");
+                }
+            }
         } else {
             Utils.Log(TAG, "isInVisible");
         }
@@ -82,6 +89,7 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
             cell.setListener(this);
             cells.add(cell);
         }
+        recyclerView.removeAllCells();
         recyclerView.addCells(cells);
     }
 

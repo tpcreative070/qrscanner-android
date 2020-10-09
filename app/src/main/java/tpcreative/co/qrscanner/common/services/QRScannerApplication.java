@@ -70,11 +70,13 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
         InstanceGenerator.getInstance(this);
         isLive = false;
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
+        if (!Utils.isPremium()){
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+        }
         ServiceManager.getInstance().setContext(this);
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory() + "/Pictures/QRScanner";

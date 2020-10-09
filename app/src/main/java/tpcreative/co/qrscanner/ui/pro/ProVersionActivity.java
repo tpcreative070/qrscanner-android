@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import butterknife.BindView;
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.GenerateSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
@@ -136,6 +137,7 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
                     Utils.Log(TAG,new Gson().toJson(purchase));
                     if (Utils.isRealCheckedOut(purchase.orderId)){
                         Utils.setPremium(true);
+                        GenerateSingleton.getInstance().onCompletedGenerate();
                         finish();
                     }else{
                         Utils.setPremium(false);

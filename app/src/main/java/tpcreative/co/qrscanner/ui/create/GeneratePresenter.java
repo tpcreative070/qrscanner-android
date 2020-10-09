@@ -21,6 +21,7 @@ public class GeneratePresenter extends Presenter<GenerateView>{
     protected List<FormatTypeModel> mBarcodeFormat;
     protected BarcodeFormat mType = BarcodeFormat.EAN_13;
     protected int mLength = 13;
+    protected boolean isPremium;
 
     public GeneratePresenter(){
         mList = new ArrayList<>();

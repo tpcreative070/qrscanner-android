@@ -460,7 +460,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     }
 
     @Override
-    public void reLoadData() {
+    public void reloadData() {
         if (presenter !=null){
             if(recyclerView!=null){
                 presenter.getListGroup();

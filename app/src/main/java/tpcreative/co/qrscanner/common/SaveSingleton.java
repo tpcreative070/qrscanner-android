@@ -21,12 +21,12 @@ public class SaveSingleton {
 
     public void reLoadData(){
         if (listener!=null){
-            listener.reLoadData();
+            listener.reloadData();
         }
     }
 
     public interface SingletonSaveListener{
-        void reLoadData();
+        void reloadData();
     }
 
 

@@ -21,12 +21,12 @@ public class HistorySingleton {
 
     public void reLoadData(){
         if (listener!=null){
-            listener.reLoadData();
+            listener.reloadData();
         }
     }
 
     public interface SingletonHistoryListener{
-        void reLoadData();
+        void reloadData();
     }
 
 }

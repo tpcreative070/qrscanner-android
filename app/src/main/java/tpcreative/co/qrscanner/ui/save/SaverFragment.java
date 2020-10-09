@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
 import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
@@ -499,7 +498,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     }
 
     @Override
-    public void reLoadData() {
+    public void reloadData() {
         if (presenter!=null && recyclerView!=null){
             presenter.getListGroup();
             recyclerView.removeAllCells();

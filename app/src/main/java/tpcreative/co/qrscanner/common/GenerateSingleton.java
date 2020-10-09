@@ -1,7 +1,5 @@
 package tpcreative.co.qrscanner.common;
-
 public class GenerateSingleton {
-
     private static GenerateSingleton instance ;
     private SingletonGenerateListener listener;
 
@@ -15,7 +13,6 @@ public class GenerateSingleton {
         }
         return instance;
     }
-
     public void setListener(SingletonGenerateListener listener){
         this.listener = listener;
     }
@@ -25,10 +22,7 @@ public class GenerateSingleton {
             listener.onCompletedGenerate();
         }
     }
-
-
     public interface SingletonGenerateListener{
         void onCompletedGenerate();
     }
-
 }
