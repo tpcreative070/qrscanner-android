@@ -68,7 +68,6 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
     private ScannerResultAdapter adapter;
     LinearLayoutManager llm;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
