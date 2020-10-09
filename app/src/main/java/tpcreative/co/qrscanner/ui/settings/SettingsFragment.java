@@ -345,6 +345,9 @@ public class SettingsFragment extends BaseFragment {
                         else if (preference.getKey().equals(getString(R.string.key_supersafe))){
                             onSuperSafe();
                         }
+                        else if (preference.getKey().equals(getString(R.string.key_premium_version))){
+                            Navigator.onMoveProVersion(getContext());
+                        }
                     }
                     return true;
                 }
@@ -364,8 +367,9 @@ public class SettingsFragment extends BaseFragment {
             mPreferencePremiumVersion = (MyPreference) findPreference(getString(R.string.key_premium_version));
             mPreferencePremiumVersion.setOnPreferenceChangeListener(createChangeListener());
             mPreferencePremiumVersion.setOnPreferenceClickListener(createActionPreferenceClickListener());
-            mPreferencePremiumVersion.setVisible(false);
-
+            if (Utils.isPremium()){
+                mPreferencePremiumVersion.setVisible(false);
+            }
             /*App Permissions*/
             myPreferencePermissions = (MyPreference) findPreference(getString(R.string.key_app_permissions));
             myPreferencePermissions.setOnPreferenceChangeListener(createChangeListener());

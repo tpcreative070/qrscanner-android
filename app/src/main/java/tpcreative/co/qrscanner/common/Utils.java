@@ -1004,4 +1004,11 @@ public class Utils {
         }
         return false;
     }
+
+    public static boolean isRealCheckedOut(String orderId){
+        if (orderId.contains("GPA")){
+            return true;
+        }
+        return false;
+    }
 }

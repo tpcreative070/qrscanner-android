@@ -216,6 +216,7 @@
     <string name="key_beep">Beep</string>
     <string name="key_theme">Theme</string>
     <string name="key_theme_detail">Choose dark or light theme</string>
+    <string name="theme_title">Change theme dark or light mode</string>
     <string name="key_color_code">Change code color</string>
     <string name="change_theme">Change theme</string>
     <string name="key_color_code_detail">Make QR codes in multi colors</string>
@@ -235,6 +236,7 @@
     <string name="tap_here_to_scan_code_from_gallery_description">QRScanner will scan directly Barcode and QRcode from your Gallery.</string>
     <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
     <string name="tap_here_to_discover_how_to_scan_description">This tips will help you to use this app more efficient.</string>
+    <string name="warning_fake_checkout">Sorry for inconvenience. It seems FAKE order. Please contact to us via care@tpcreative.co</string>
 
     <string name="key_second_visit_settings">second visit settings</string>
     <string name="progressing">Progressing...</string>

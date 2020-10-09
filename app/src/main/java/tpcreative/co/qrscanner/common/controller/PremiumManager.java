@@ -52,7 +52,11 @@ public class PremiumManager {
                                    Utils.setPremium(false);
                                } else {
                                    Utils.Log(TAG,"Status: purchased");
-                                   Utils.setPremium(true);
+                                   if (Utils.isRealCheckedOut(purchase.orderId)){
+                                       Utils.setPremium(true);
+                                   }else{
+                                       Utils.setPremium(false);
+                                   }
                                }
                            }
                            Utils.Log(TAG, new Gson().toJson(product));

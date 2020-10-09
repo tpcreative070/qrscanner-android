@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.pro;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,9 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import butterknife.BindView;
+import de.mrapp.android.dialog.MaterialDialog;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
+import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
 public class ProVersionActivity extends BaseActivitySlide implements View.OnClickListener{
@@ -131,9 +134,13 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
 //                    }
                     final Purchase purchase = (Purchase) result;
                     Utils.Log(TAG,new Gson().toJson(purchase));
-                    Utils.writeLogs(new Gson().toJson(purchase));
-                    Utils.setPremium(true);
-                    finish();
+                    if (Utils.isRealCheckedOut(purchase.orderId)){
+                        Utils.setPremium(true);
+                        finish();
+                    }else{
+                        Utils.setPremium(false);
+                        askWarningFakeCheckout();
+                    }
                 }
                 catch (Exception e){
                     Toast.makeText(getApplicationContext(),"Error "+e.getMessage(),Toast.LENGTH_SHORT).show();
@@ -146,6 +153,23 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
                 reloadInventory();
             }
         };
+    }
+
+    public void askWarningFakeCheckout() {
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+        dialogBuilder.setTitle(R.string.alert);
+        dialogBuilder.setPadding(40,40,40,0);
+        dialogBuilder.setMargin(60,0,60,0);
+        dialogBuilder.setMessage(getString(R.string.warning_fake_checkout));
+        dialogBuilder.setPositiveButton(R.string.got_it, null);
+        MaterialDialog dialog = dialogBuilder.create();
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+               finish();
+            }
+        });
+        dialog.show();
     }
 
     private void consume(final Purchase purchase) {
