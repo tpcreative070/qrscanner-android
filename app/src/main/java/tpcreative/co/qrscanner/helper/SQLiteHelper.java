@@ -127,6 +127,19 @@ public class SQLiteHelper {
         }
     }
 
+    public static void onUpdate(HistoryModel cTalkManager){
+        try {
+            if (cTalkManager==null){
+                return;
+            }
+            final HistoryEntityModel mData = new HistoryEntityModel(cTalkManager);
+            getInstance().onUpdate(mData);
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+    }
+
     public static final List<SaveModel> getSaveList(){
         try{
             final List<SaveEntityModel> mValue = getInstance().getSaveList();

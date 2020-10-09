@@ -159,7 +159,7 @@ public class ServiceManager implements BaseView {
                 mDriveIdList.clear();
                 mDriveIdList.addAll(list);
                 //ServiceManager.getInstance().onPreparingUploadItemData();
-                ServiceManager.getInstance().onPreparingDownloadItemData("1jVj5xiAxp69mRldYAka26IH6zIRpFipFT6LZVZqaKPtnmN085Q");
+                ServiceManager.getInstance().onPreparingDownloadItemData("1qTZ5FauRFa98Y_W4b33BnKlDSTiEQy_Vi9sSLi2y1hVzStDnhQ");
             }
             @Override
             public void onShowObjects(DriveResponse object) {
@@ -194,6 +194,7 @@ public class ServiceManager implements BaseView {
             @Override
             public void onShowObjects(SyncDataModel object) {
                 Utils.Log(TAG,new Gson().toJson(object));
+                onCheckingDataToInsert(object);
             }
 
             @Override
@@ -211,6 +212,48 @@ public class ServiceManager implements BaseView {
 //    public void onDownloadItemData(){
 //
 //    }
+
+    /*Checking data to insert to local db*/
+    public void onCheckingDataToInsert(SyncDataModel mObject){
+        final List<SaveModel> mSaveList = mObject.saveList;
+        final List<HistoryModel> mHistoryList = mObject.historyList;
+
+        /*Checking data to insert to local db*/
+        final List<SaveModel> mSaveAddResultList = Utils.checkSaveItemToInsertToLocal(mSaveList);
+        final List<HistoryModel> mHistoryAddResultList = Utils.checkHistoryItemToInsertToLocal(mHistoryList);
+
+        /*Checking data to update to local db*/
+        final List<SaveModel> mSaveUpdateResultList = Utils.checkSaveItemToUpdateToLocal(mSaveList);
+        final List<HistoryModel> mHistoryUpdateResultList = Utils.checkHistoryItemToUpdateToLocal(mHistoryList);
+
+        /*Checking data to delete to local db*/
+        final List<SaveModel> mSaveDeleteResultList = Utils.checkSaveDeleteSyncedLocal(mSaveList);
+        final List<HistoryModel> mHistoryDeleteResultList = Utils.checkHistoryDeleteSyncedLocal(mHistoryList);
+
+
+        Utils.Log(TAG,"Some items of save need to be inserting "+mSaveAddResultList.size());
+        Utils.Log(TAG,"Some items of history need to be inserting "+mHistoryAddResultList.size());
+
+        Utils.Log(TAG,"Some items of save need to be updating "+mSaveUpdateResultList.size());
+        Utils.Log(TAG,"Some items of history need to be updating "+mHistoryUpdateResultList.size());
+
+        Utils.Log(TAG,"Some items of save need to be deleting "+mSaveDeleteResultList.size());
+        Utils.Log(TAG,"Some items of history need to be deleting "+mHistoryDeleteResultList.size());
+    }
+
+    /*Updated history and save after upload file*/
+    public void onUpdatedHistoryAndSaveToSyncedItem(){
+        final List<SaveModel> mSaveList = SQLiteHelper.getSaveList(false);
+        final List<HistoryModel> mHistoryList = SQLiteHelper.getHistoryList(false);
+        for (SaveModel index : mSaveList){
+            index.isSynced = true;
+            SQLiteHelper.onUpdate(index);
+        }
+        for (HistoryModel index : mHistoryList){
+            index.isSynced = true;
+            SQLiteHelper.onUpdate(index);
+        }
+    }
 
     /*onPreparingDownload*/
     public void onPreparingDeleteItemData(){
@@ -296,6 +339,9 @@ public class ServiceManager implements BaseView {
             @Override
             public void onSuccessful(String message, EnumStatus status) {
                 Utils.Log(TAG,message);
+                if (status==EnumStatus.UPLOADED_SUCCESSFULLYY){
+                    onUpdatedHistoryAndSaveToSyncedItem();
+                }
             }
         });
     }
@@ -304,8 +350,8 @@ public class ServiceManager implements BaseView {
 //
 //    }
 
-
     /*Backup*/
+
 
     /*User info*/
     public void onAuthorSync() {

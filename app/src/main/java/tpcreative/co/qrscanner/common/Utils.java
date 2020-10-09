@@ -1073,32 +1073,37 @@ public class Utils {
             /*Checking item exiting before*/
             final HistoryModel mItem = mSyncedMap.get(index.uuId);
             if (mItem != null && !index.contentUniqueForUpdatedTime.equals(mItem.contentUniqueForUpdatedTime)){
+                index.id = mItem.id;
                 mList.add(index);
             }
         }
         return mList;
     }
 
-    public static void autoHistoryDeleteSyncedLocal(List<HistoryModel> mSyncedList){
-        final List<HistoryModel> mList = SQLiteHelper.getHistoryList(true);
+    public static List<HistoryModel> checkHistoryDeleteSyncedLocal(List<HistoryModel> mSyncedList){
+        final List<HistoryModel> mListResult = new ArrayList<>();
+        final List<HistoryModel> mListLocal = SQLiteHelper.getHistoryList(true);
         final Map<String,HistoryModel> mMap = convertHistoryListToMap(mSyncedList);
-        for (HistoryModel index : mList){
+        for (HistoryModel index : mListLocal){
             final HistoryModel mValue = mMap.get(index.uuId);
             if (mValue==null){
-                SQLiteHelper.onDelete(index);
+                mListResult.add(index);
             }
         }
+        return mListResult;
     }
 
-    public static void autoSaveDeleteSyncedLocal(List<SaveModel> mSyncedList){
-        final List<SaveModel> mList = SQLiteHelper.getSaveList(true);
+    public static List<SaveModel> checkSaveDeleteSyncedLocal(List<SaveModel> mSyncedList){
+        final List<SaveModel> mListResult = new ArrayList<>();
+        final List<SaveModel> mListLocal = SQLiteHelper.getSaveList(true);
         final Map<String,SaveModel> mMap = convertSaveListToMap(mSyncedList);
-        for (SaveModel index : mList){
+        for (SaveModel index : mListLocal){
             final SaveModel mValue = mMap.get(index.uuId);
             if (mValue==null){
-                SQLiteHelper.onDelete(index);
+                mListResult.add(index);
             }
         }
+        return mListResult;
     }
 
     public static Map<String,String> getSaveDeletedMap(){
