@@ -119,7 +119,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
                     return true;
                 }
                 case R.id.menu_item_delete:{
-                    final List<HistoryModel> listHistory = SQLiteHelper.getList();
+                    final List<HistoryModel> listHistory = SQLiteHelper.getHistoryList();
                     if (listHistory==null){
                         return false;
                     }
@@ -259,7 +259,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
 
     @Override
     public void isShowDeleteAction(boolean isDelete) {
-        final List<HistoryModel> listHistory = SQLiteHelper.getList();
+        final List<HistoryModel> listHistory = SQLiteHelper.getHistoryList();
         if (isDelete) {
             if (actionMode == null) {
                 actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);

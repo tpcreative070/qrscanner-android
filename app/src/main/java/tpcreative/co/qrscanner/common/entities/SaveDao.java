@@ -25,6 +25,9 @@ public interface SaveDao {
     @Query("Select * FROM save ORDER BY updatedDateTime DESC")
     List<SaveEntity> loadAll();
 
+    @Query("Select * FROM save where isSynced =:isSynced ORDER BY updatedDateTime DESC")
+    List<SaveEntity> loadAll(boolean isSynced);
+
     @Query("Select * FROM save WHERE contentUnique = :contentUnique")
     SaveEntity loadItem(String contentUnique);
 }

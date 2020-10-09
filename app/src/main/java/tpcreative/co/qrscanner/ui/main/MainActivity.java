@@ -240,7 +240,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
             mSpeedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
                 @Override
                 public boolean onActionSelected(SpeedDialActionItem actionItem) {
-                    final List<HistoryModel> listHistory = SQLiteHelper.getList();
+                    final List<HistoryModel> listHistory = SQLiteHelper.getHistoryList();
                     switch (actionItem.getId()) {
                         case R.id.fab_track:
                             MainSingleton.getInstance().isShowDeleteAction(true);
@@ -473,7 +473,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
     @Override
     public void doShowAds(boolean value) {
         if (value){
-            Utils.Log(TAG,"ads...???");
             QRScannerApplication.getInstance().loadAd(llAds);
         }else{
             llAds.setVisibility(View.GONE);

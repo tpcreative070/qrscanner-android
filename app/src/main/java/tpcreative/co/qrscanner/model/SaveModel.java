@@ -119,6 +119,41 @@ public class SaveModel implements Serializable {
         this.uuId = item.uuId;
     }
 
+    public SaveModel(SaveModel item, boolean isSynced){
+        this.id = item.id;
+        this.email = item.email;
+        this.subject = item.subject;
+        this.message = item.message;
+        this.phone = item.phone;
+        this.lat = item.lat;
+        this.lon = item.lon;
+        this.query = item.query;
+        this.title = item.title;
+        this.location = item.location;
+        this.description = item.description;
+        this.startEvent= item.startEvent;
+        this.endEvent = item.endEvent;
+        this.startEventMilliseconds = item.startEventMilliseconds;
+        this.endEventMilliseconds = item.endEventMilliseconds;
+        this.fullName = item.fullName;
+        this.address = item.address;
+        this.text = item.text;
+        this.ssId = item.ssId;
+        this.hidden = item.hidden;
+        this.password = item.password;
+        this.url= item.url;
+        this.createType = item.createType;
+        this.networkEncryption = item.networkEncryption;
+        this.createDatetime = item.createDatetime;
+        this.barcodeFormat = item.barcodeFormat;
+        this.favorite = item.favorite;
+        this.updatedDateTime = item.updatedDateTime;
+        this.contentUnique = item.contentUnique;
+        this.contentUniqueForUpdatedTime = item.contentUniqueForUpdatedTime;
+        this.isSynced = isSynced;
+        this.uuId = item.uuId;
+    }
+
     public boolean isChecked() {
         return isChecked;
     }

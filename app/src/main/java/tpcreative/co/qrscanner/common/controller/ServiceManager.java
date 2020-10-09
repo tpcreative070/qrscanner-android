@@ -159,7 +159,7 @@ public class ServiceManager implements BaseView {
                 mDriveIdList.clear();
                 mDriveIdList.addAll(list);
                 //ServiceManager.getInstance().onPreparingUploadItemData();
-                ServiceManager.getInstance().onPreparingDownloadItemData("1RAxCa1WiBcebvTt5Sruet2jSxwgObYiLiirm5_bhavp4Ak4gyQ");
+                ServiceManager.getInstance().onPreparingDownloadItemData("1jVj5xiAxp69mRldYAka26IH6zIRpFipFT6LZVZqaKPtnmN085Q");
             }
             @Override
             public void onShowObjects(DriveResponse object) {
@@ -400,7 +400,7 @@ public class ServiceManager implements BaseView {
                 csvWrite = new CSVWriter(new FileWriter(path));
                 switch (enumFragmentType) {
                     case HISTORY: {
-                        final List<HistoryModel> listHistory = SQLiteHelper.getList();
+                        final List<HistoryModel> listHistory = SQLiteHelper.getHistoryList();
                         String arrStr1[] = {
                                 "FormatType",
                                 "Url",
@@ -458,7 +458,7 @@ public class ServiceManager implements BaseView {
                         break;
                     }
                     case SAVER: {
-                        final List<SaveModel> listSaver = SQLiteHelper.getListSave();
+                        final List<SaveModel> listSaver = SQLiteHelper.getSaveList();
                         String arrStr1[] = {
                                 "FormatType",
                                 "Url",

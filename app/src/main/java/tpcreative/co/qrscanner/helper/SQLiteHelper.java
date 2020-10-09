@@ -4,9 +4,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.common.entities.HistoryEntity;
 import tpcreative.co.qrscanner.common.entities.InstanceGenerator;
-import tpcreative.co.qrscanner.common.entities.SaveEntity;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.HistoryEntityModel;
 import tpcreative.co.qrscanner.model.HistoryModel;
@@ -44,9 +42,9 @@ public class SQLiteHelper {
         }
     }
 
-    public static final List<HistoryModel> getList(){
+    public static final List<HistoryModel> getHistoryList(){
         try{
-            final List<HistoryEntityModel> mValue =  getInstance().getList();
+            final List<HistoryEntityModel> mValue =  getInstance().getHistoryList();
             List<HistoryModel> mList = new ArrayList<>();
             for ( HistoryEntityModel index : mValue){
                 mList.add(new HistoryModel(index));
@@ -59,9 +57,9 @@ public class SQLiteHelper {
         return new ArrayList<>();
     }
 
-    public static final  List<HistoryModel> getListLatest(){
+    public static final List<HistoryModel> getHistoryList(boolean isSync){
         try{
-            final List<HistoryEntityModel> mValue =  getInstance().getListLatest();
+            final List<HistoryEntityModel> mValue =  getInstance().getHistoryList(isSync);
             List<HistoryModel> mList = new ArrayList<>();
             for ( HistoryEntityModel index : mValue){
                 mList.add(new HistoryModel(index));
@@ -69,11 +67,10 @@ public class SQLiteHelper {
             return mList;
         }
         catch (Exception e){
-            Log.d(TAG,e.getMessage());
+            Utils.Log(TAG,e.getMessage());
         }
-        return null;
+        return new ArrayList<>();
     }
-
 
     public static final boolean onDelete(HistoryModel entity){
         try{
@@ -119,9 +116,24 @@ public class SQLiteHelper {
         }
     }
 
-    public static final List<SaveModel> getListSave(){
+    public static final List<SaveModel> getSaveList(){
         try{
-            final List<SaveEntityModel> mValue = getInstance().getListSave();
+            final List<SaveEntityModel> mValue = getInstance().getSaveList();
+            List<SaveModel> mList = new ArrayList<>();
+            for ( SaveEntityModel index : mValue){
+                mList.add(new SaveModel(index));
+            }
+            return mList;
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+
+    public static final List<SaveModel> getSaveList(boolean isSync){
+        try{
+            final List<SaveEntityModel> mValue = getInstance().getSaveList(isSync);
             List<SaveModel> mList = new ArrayList<>();
             for ( SaveEntityModel index : mValue){
                 mList.add(new SaveModel(index));

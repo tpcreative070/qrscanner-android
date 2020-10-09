@@ -238,9 +238,9 @@ public class SettingsFragment extends BaseFragment {
                             }
                             final boolean mResult = (boolean)newValue;
                             if (mResult){
-                                final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getListSave());
+                                final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getSaveList());
                                 Utils.Log(TAG,"need to be deleted at save "+mSaveList.size());
-                                final List<HistoryModel> mHistoryList = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getList());
+                                final List<HistoryModel> mHistoryList = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getHistoryList());
                                 Utils.Log(TAG,"need to be deleted at history "+mHistoryList.size());
                                 final int mCount = mSaveList.size() + mHistoryList.size();
                                 if (mCount>0){

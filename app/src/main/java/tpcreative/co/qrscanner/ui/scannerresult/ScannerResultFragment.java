@@ -1009,7 +1009,6 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void doShowAds(boolean isShow) {
         if (isShow){
-            Utils.Log(TAG,"ads...???");
             QRScannerApplication.getInstance().loadLargeAd(llAds);
         }else{
             rlAdsRoot.setVisibility(View.GONE);

@@ -87,6 +87,7 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.helper.TimeHelper;
 import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.Create;
@@ -1014,7 +1015,7 @@ public class Utils {
     }
 
 //    public static List<HistoryModel> foundSyncedFilesHistoryDelete(List<HistoryModel> mSyncedList){
-//
+//        final List<HistoryModel> mList = SQLiteHelper.getHistoryList(true);
 //    }
 
     public static String logPath(){

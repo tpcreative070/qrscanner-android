@@ -71,9 +71,9 @@ subprojects {
     ext.appReactivexAndroid = "2.1.1"
     ext.appReactivexJava = "2.1.1"
     ext.appRetrofit = "2.6.0"
-    ext.appCompileSdkVersion = 29
-    ext.appTargetSdkVersion = 29
-    ext.appBuildToolsVersion = "29.0.2"
+    ext.appCompileSdkVersion = 30
+    ext.appTargetSdkVersion = 30
+    ext.appBuildToolsVersion = "30.0.2"
     ext.build_versions_java_version = 1.8
     ext.appGoogleMaterial = "1.0.0"
     ext.apppreferenceV14 = "1.0.0"
@@ -83,7 +83,6 @@ subprojects {
     ext.appConstraintlayout = "1.1.2"
     ext.appMultidex = "2.0.1"
     ext.appPercent = "1.0.0"
-    ext.appConstraitLayout = "1.1.0"
     ext.appRoomVersion = "2.0.0-rc01"
     ext.fresco = "1.10.0"
     ext.glide = "4.8.0"

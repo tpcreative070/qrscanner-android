@@ -44,7 +44,7 @@ public class SaveEntity implements Serializable{
     /*sync data*/
     public boolean isSynced;
     public String uuId;
-
+   
     public SaveEntity(
                 String email,
                 String subject ,

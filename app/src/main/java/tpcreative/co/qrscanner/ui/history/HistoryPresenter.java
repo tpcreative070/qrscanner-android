@@ -26,7 +26,7 @@ public class HistoryPresenter extends Presenter<HistoryView> {
 
     public Map<String, HistoryModel> getUniqueList(){
         HistoryView view = view();
-        final List<HistoryModel> histories = SQLiteHelper.getList();
+        final List<HistoryModel> histories = SQLiteHelper.getHistoryList();
         Utils.Log(TAG,"History list "+ new Gson().toJson(histories));
         if (histories==null){
             return new HashMap<>();
@@ -48,7 +48,7 @@ public class HistoryPresenter extends Presenter<HistoryView> {
     public List<HistoryModel> getListGroup(){
         getUniqueList();
         HistoryView view = view();
-        final List<HistoryModel> list = SQLiteHelper.getList();
+        final List<HistoryModel> list = SQLiteHelper.getHistoryList();
         List<HistoryModel> mList = new ArrayList<>();
         for (TypeCategories index : mListCategories){
             for (HistoryModel history : list){

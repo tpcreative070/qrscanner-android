@@ -142,7 +142,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
                     return true;
                 }
                 case R.id.menu_item_delete: {
-                    final List<HistoryModel> listHistory = SQLiteHelper.getList();
+                    final List<HistoryModel> listHistory = SQLiteHelper.getHistoryList();
                     if (listHistory == null) {
                         return false;
                     }
@@ -266,7 +266,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
 
     @Override
     public void isShowDeleteAction(boolean isDelete) {
-        final List<SaveModel> listHistory = SQLiteHelper.getListSave();
+        final List<SaveModel> listHistory = SQLiteHelper.getSaveList();
         if (isDelete) {
             if (actionMode == null) {
                 actionMode = QRScannerApplication.getInstance().getActivity().getToolbar().startActionMode(callback);

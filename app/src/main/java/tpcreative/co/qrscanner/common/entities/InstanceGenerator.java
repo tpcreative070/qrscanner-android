@@ -86,7 +86,7 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
     }
 
-    public final List<HistoryEntityModel> getList(){
+    public final List<HistoryEntityModel> getHistoryList(){
         try{
             final List<HistoryEntity> mValue =  instance.historyDao().loadAll();
             List<HistoryEntityModel> mList = new ArrayList<>();
@@ -95,9 +95,6 @@ public abstract class InstanceGenerator extends RoomDatabase {
                 if (item.uuId==null){
                     item.uuId = Utils.getUUId();
                     SQLiteHelper.getInstance().onUpdate(item);
-                    Utils.Log(TAG,"Request update........");
-                }else {
-                    Utils.Log(TAG,"UUID........"+item.uuId);
                 }
                 mList.add(item);
             }
@@ -109,17 +106,22 @@ public abstract class InstanceGenerator extends RoomDatabase {
         return null;
     }
 
-    public final List<HistoryEntityModel> getListLatest(){
+    public final List<HistoryEntityModel> getHistoryList(boolean isSync){
         try{
-            final List<HistoryEntity> mValue =  instance.historyDao().loadLatestItems();
+            final List<HistoryEntity> mValue =  instance.historyDao().loadAll(isSync);
             List<HistoryEntityModel> mList = new ArrayList<>();
             for ( HistoryEntity index : mValue){
-                mList.add(new HistoryEntityModel(index));
+                final HistoryEntityModel item = new HistoryEntityModel(index);
+                if (item.uuId==null){
+                    item.uuId = Utils.getUUId();
+                    SQLiteHelper.getInstance().onUpdate(item);
+                }
+                mList.add(item);
             }
             return mList;
         }
         catch (Exception e){
-            Log.d(TAG,e.getMessage());
+            Utils.Log(TAG,e.getMessage());
         }
         return null;
     }
@@ -172,9 +174,29 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
     }
 
-    public final List<SaveEntityModel> getListSave(){
+    public final List<SaveEntityModel> getSaveList(){
         try{
             final List<SaveEntity> mValue =  instance.saveDao().loadAll();
+            List<SaveEntityModel> mList = new ArrayList<>();
+            for ( SaveEntity index : mValue){
+                final SaveEntityModel item = new SaveEntityModel(index);
+                if (item.uuId==null){
+                    item.uuId = Utils.getUUId();
+                    SQLiteHelper.getInstance().onUpdate(item);
+                }
+                mList.add(item);
+            }
+            return mList;
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        return null;
+    }
+
+    public final List<SaveEntityModel> getSaveList(boolean isSynced){
+        try{
+            final List<SaveEntity> mValue =  instance.saveDao().loadAll(isSynced);
             List<SaveEntityModel> mList = new ArrayList<>();
             for ( SaveEntity index : mValue){
                 final SaveEntityModel item = new SaveEntityModel(index);
@@ -228,7 +250,6 @@ public abstract class InstanceGenerator extends RoomDatabase {
         }
         return false;
     }
-
 }
 
 
