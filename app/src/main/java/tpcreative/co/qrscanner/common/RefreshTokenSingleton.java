@@ -33,7 +33,7 @@ public class RefreshTokenSingleton {
     private GoogleSignInAccount mSignInAccount;
     private GoogleSignInClient mGoogleSignInClient;
     private static RefreshTokenSingleton instance ;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    CompositeDisposable compositeDisposable = null;
     
     public static RefreshTokenSingleton getInstance(){
         if (instance==null){
@@ -74,6 +74,7 @@ public class RefreshTokenSingleton {
     }
 
     public void onRefreshAccessToken(Account accounts){
+        compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(Observable.fromCallable(new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -94,6 +95,7 @@ public class RefreshTokenSingleton {
                                 Utils.Log(TAG,"Refresh access token value: "+ mAuthor.access_token);
                                 mAuthor.email = credential.getSelectedAccount().name;
                                 Utils.setAuthor(mAuthor);
+                                ServiceManager.getInstance().onPreparingSyncData(false);
                             }
                         }
                         return value;
@@ -151,81 +153,6 @@ public class RefreshTokenSingleton {
                 compositeDisposable.dispose();
             }
         }));
-    }
-
-    private class GetAccessToken extends AsyncTask<Account, Void, String> {
-        @Override
-        protected String doInBackground(Account... accounts) {
-            try {
-                if (accounts==null){
-                    return null;
-                }
-                if (accounts[0]==null){
-                    return null;
-                }
-                GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
-                        QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString());
-                credential.setSelectedAccount(accounts[0]);
-                try {
-                    String value = credential.getToken();
-                    if (value!=null){
-                        final Author mAuthor = Author.getInstance().getAuthorInfo();
-                        if (mAuthor!=null){
-                            mAuthor.isConnectedToGoogleDrive = true;
-                            mAuthor.access_token = String.format(QRScannerApplication.getInstance().getString(R.string.access_token),value);
-                            Utils.Log(TAG,"Refresh access token value: "+ mAuthor.access_token);
-                            mAuthor.email = credential.getSelectedAccount().name;
-                            Utils.setAuthor(mAuthor);
-                        }
-                    }
-                    return value;
-                }
-                catch (GoogleAuthException e){
-                    Utils.Log(TAG,"Error occurred on GoogleAuthException");
-                }
-            } catch (UserRecoverableAuthIOException recoverableException) {
-                Utils.Log(TAG,"Error occurred on UserRecoverableAuthIOException");
-            } catch (IOException e) {
-                Utils.Log(TAG,"Error occurred on IOException");
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String accessToken) {
-            super.onPostExecute(accessToken);
-            try {
-                if (accessToken != null) {
-                    final Author mUser = Author.getInstance().getAuthorInfo();
-                    if (mUser != null) {
-                        //Log.d(TAG, "Call getDriveAbout " + new Gson().toJson(mUser));
-                        if (ServiceManager.getInstance().getMyService()==null){
-                            Utils.Log(TAG,"QRScannerService is null");
-                            return;
-                        }
-                        ServiceManager.getInstance().getMyService().getDriveAbout(new QRScannerService.GoogleDriveListener() {
-                            @Override
-                            public void onError(String message, EnumStatus status) {
-                                Utils.Log(TAG,"onError " +message + " - " +status.name());
-                                switch (status){
-                                    case REQUEST_REFRESH_ACCESS_TOKEN:{
-                                        revokeAccess();
-                                        break;
-                                    }
-                                }
-                            }
-                            @Override
-                            public void onSuccessful(String message, EnumStatus status) {
-                                Utils.Log(TAG,"onSuccessful " +message + " - " +status.name());
-                            }
-                        });
-                    }
-                }
-            }
-            catch (Exception e){
-                e.printStackTrace();
-                Utils.Log(TAG,"Call onDriveClientReady");
-            }
-        }
     }
 
     /**

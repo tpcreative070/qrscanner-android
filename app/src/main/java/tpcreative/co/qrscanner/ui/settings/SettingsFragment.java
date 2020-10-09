@@ -272,7 +272,20 @@ public class SettingsFragment extends BaseFragment {
                             }
                         }
                         else if (preference.getKey().equals(getString(R.string.key_backup_data))){
-                            Navigator.onBackupData(getContext());
+                            if (!Utils.isPremium()){
+                                mySwitchPreferenceBackupData.setChecked(false);
+                                return false;
+                            }
+                            if (Utils.isPremium()){
+                                final boolean mResult = (boolean)newValue;
+                                if (mResult) {
+                                    if (!Utils.isConnectedToGoogleDrive()) {
+                                        Navigator.onBackupData(getContext());
+                                    }
+                                }
+                            }else{
+                                Navigator.onMoveProVersion(getContext());
+                            }
                         }
                     }
                     return true;

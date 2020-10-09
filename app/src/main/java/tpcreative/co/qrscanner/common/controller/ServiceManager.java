@@ -68,8 +68,12 @@ public class ServiceManager implements BaseView {
 
     public void onPickUpNewEmail(Activity context) {
         try {
+            String email = Utils.getDriveEmail();
+            if (email==null){
+                email = "a@gmail.com";
+            }
             String value = String.format(QRScannerApplication.getInstance().getString(R.string.choose_an_new_account));
-            Account account1 = new Account("abc@gmail.com", GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+            Account account1 = new Account(email, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
             Intent intent = AccountManager.newChooseAccountIntent(account1, null,
                     new String[] { GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE }, value, null, null, null);
             intent.putExtra("overrideTheme", 1);
@@ -132,6 +136,15 @@ public class ServiceManager implements BaseView {
                 onDismissServices();
             }
             return;
+        }
+        if (Utils.isPremium()){
+           if (!Utils.isTurnedOnBackup()){
+               if (isDismissApp){
+                   onDismissServices();
+               }
+               Utils.Log(TAG,"Backup status is turn off. Please turn on it don't lose data");
+               return;
+           }
         }
         if (myService==null){
             Utils.Log(TAG,"Request service");

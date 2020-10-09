@@ -247,33 +247,6 @@ public class Utils {
         return value;
     }
 
-
-    public static String capitalize(String str) {
-        return capitalize(str, (char[]) null);
-    }
-
-    public static String capitalize(String str, char... delimiters) {
-        int delimLen = delimiters == null ? -1 : delimiters.length;
-        if (!TextUtils.isEmpty(str) && delimLen != 0) {
-            char[] buffer = str.toCharArray();
-            boolean capitalizeNext = true;
-
-            for (int i = 0; i < buffer.length; ++i) {
-                char ch = buffer[i];
-                if (isDelimiter(ch, delimiters)) {
-                    capitalizeNext = true;
-                } else if (capitalizeNext) {
-                    buffer[i] = Character.toTitleCase(ch);
-                    capitalizeNext = false;
-                }
-            }
-
-            return new String(buffer);
-        } else {
-            return str;
-        }
-    }
-
     private static boolean isDelimiter(char ch, char[] delimiters) {
         if (delimiters == null) {
             return Character.isWhitespace(ch);
@@ -291,7 +264,6 @@ public class Utils {
             return false;
         }
     }
-
 
     public static String geTimeFileName(){
         long millisecond = System.currentTimeMillis();
@@ -927,7 +899,6 @@ public class Utils {
         return mMap;
     }
 
-
     public static String logPath(){
         final Storage storage = QRScannerApplication.getInstance().getStorage();
         return storage.getExternalStorageDirectory()+"/logsData.txt";
@@ -953,6 +924,10 @@ public class Utils {
             return mAuthor.isConnectedToGoogleDrive;
         }
        return false;
+    }
+
+    public static boolean isTurnedOnBackup(){
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_backup_data),false);
     }
 
     public static String getDriveEmail(){
