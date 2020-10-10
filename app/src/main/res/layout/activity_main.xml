@@ -7,9 +7,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="58dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -53,13 +52,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_margin="2dp"
             app:sdExpansionMode="top"
             app:sdMainFabAnimationRotateAngle="180"
             app:sdMainFabClosedSrc="@drawable/baseline_menu_white_24"
             app:sdMainFabOpenedSrc="@drawable/baseline_menu_white_24"
-            app:sdOverlayLayout="@id/overlay" />
+            app:sdOverlayLayout="@id/overlay"/>
         <LinearLayout
             android:layout_centerVertical="true"
             android:background="@color/colorPrimary"

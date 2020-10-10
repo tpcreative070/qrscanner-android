@@ -2,9 +2,12 @@ package tpcreative.co.qrscanner.common.preference;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceViewHolder;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
 
 public class MyPreferenceCategory extends PreferenceCategory {
@@ -25,7 +28,7 @@ public class MyPreferenceCategory extends PreferenceCategory {
     public void onBindViewHolder(PreferenceViewHolder view) {
         super.onBindViewHolder(view);
         TextView titleView = (TextView) view.findViewById(android.R.id.title);
-        titleView.setTextColor(getContext().getResources().getColor(R.color.colorPrimary));
+        titleView.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.colorPrimary));
         titleView.setAllCaps(true);
         titleView.setTextSize(17);
     }

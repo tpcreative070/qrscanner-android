@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".ui.review.ReviewActivity">
 
 
@@ -30,7 +29,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"></com.google.android.material.appbar.CollapsingToolbarLayout>
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"/>
     </com.google.android.material.appbar.AppBarLayout>
 
 

@@ -90,7 +90,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     /*Material Dialog*/
-    implementation project(':materialdialoglibrary')
+    //implementation project(':materialdialoglibrary')
+    implementation 'com.github.michael-rapp:android-material-dialog:5.2.3'
 
     /*Note : Go the both*/
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
@@ -145,7 +146,8 @@ dependencies {
     implementation files('libs/opencsv-4.4.jar')
 
     /*Floating button*/
-    implementation project(':floatingbuttonlibrary')
+    //implementation project(':floatingbuttonlibrary')
+    implementation "com.leinardi.android:speed-dial:3.1.1"
 
     /*Drop down alert*/
     implementation 'com.tapadoo.android:alerter:2.0.1'

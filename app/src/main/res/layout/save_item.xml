@@ -22,6 +22,7 @@
             android:layout_weight="0.7"
             android:layout_height="wrap_content">
             <TextView
+                android:textColor="@color/material_gray_800"
                 style="@style/brandonRegularTextView"
                 android:id="@+id/tvDate"
                 android:text="2:40:35 PM - 8:24:16 PM"

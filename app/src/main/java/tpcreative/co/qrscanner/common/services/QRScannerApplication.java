@@ -38,6 +38,8 @@ import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.network.Dependencies;
 import tpcreative.co.qrscanner.common.entities.InstanceGenerator;
+import tpcreative.co.qrscanner.helper.ThemeHelper;
+import tpcreative.co.qrscanner.model.EnumThemeMode;
 import tpcreative.co.qrscanner.ui.main.MainActivity;
 /**
  *
@@ -113,6 +115,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         requiredScopesString = new ArrayList<>();
         requiredScopesString.add(DriveScopes.DRIVE_APPDATA);
         requiredScopesString.add(DriveScopes.DRIVE_FILE);
+        ThemeHelper.applyTheme(EnumThemeMode.byPosition(Utils.getPositionTheme()));
     }
 
     /*In app purchase*/

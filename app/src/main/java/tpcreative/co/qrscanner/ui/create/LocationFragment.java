@@ -102,7 +102,7 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
 
     public void showGpsWarningDialog() {
         PrefsController.putBoolean(getString(R.string.key_already_load_app),true);
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,Utils.getCurrentTheme());
         dialogBuilder.setTitle(getString(R.string.gps_disabled));
         dialogBuilder.setMessage("Please turn on your location or GPS to get exactly position");
         dialogBuilder.setPadding(40,40,40,0);

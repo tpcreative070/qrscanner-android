@@ -4,19 +4,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.snatik.storage.Storage;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.common.services.QRScannerApplication;
-import tpcreative.co.qrscanner.common.view.Bungee;
 
 public class BaseActivity extends AppCompatActivity {
     Unbinder unbinder;
@@ -67,25 +61,6 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setDisplayHomeAsUpEnabled(boolean check){
         actionBar.setDisplayHomeAsUpEnabled(check);
-    }
-
-    protected void setNoTitle(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-
-    protected void setFullScreen(){
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-
-    protected void setAdjustScreen(){
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        /*android:windowSoftInputMode="adjustPan|adjustResize"*/
-    }
-
-    protected String getResourceString(int code) {
-        return getResources().getString(code);
     }
 
     @Override

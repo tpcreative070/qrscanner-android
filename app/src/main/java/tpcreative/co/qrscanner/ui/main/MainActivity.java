@@ -424,7 +424,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
 
     public void showEncourage(){
         try {
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,Utils.getCurrentTheme());
             builder.setHeaderBackground(R.drawable.back);
             builder.setPadding(40,40,40,0);
             builder.setMargin(60,0,60,0);

@@ -335,5 +335,9 @@
     <string name="CSV_Url">Url</string>
     <string name="CSV_CreatedDateTime">CreatedDateTime</string>
 
-
+    <string-array name="themeEntryArray">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string name="key_position_theme">key_position_theme</string>
 </resources>

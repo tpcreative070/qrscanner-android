@@ -28,10 +28,10 @@ buildscript {
                     details.useVersion appRecyclerView
                 }
 
-                if (details.requested.group == 'com.google.android.material'
-                        && !details.requested.name.contains('com') ) {
-                    details.useVersion appGoogleMaterial
-                }
+//                if (details.requested.group == 'com.google.android.material'
+//                        && !details.requested.name.contains('com') ) {
+//                    details.useVersion appGoogleMaterial
+//                }
 
                 if (details.requested.group == 'androidx.annotation'
                         && !details.requested.name.contains('androidx') ) {
@@ -75,7 +75,7 @@ subprojects {
     ext.appTargetSdkVersion = 30
     ext.appBuildToolsVersion = "30.0.2"
     ext.build_versions_java_version = 1.8
-    ext.appGoogleMaterial = "1.0.0"
+    ext.appGoogleMaterial = "1.1.0-beta01"
     ext.apppreferenceV14 = "1.0.0"
     ext.appCardView = "1.0.0"
     ext.appExifinterface = "1.0.0"

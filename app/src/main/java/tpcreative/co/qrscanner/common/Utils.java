@@ -317,6 +317,13 @@ public class Utils {
         }
     }
 
+    public static <T>void Log(Class<T> mClass,final String message){
+        if (BuildConfig.DEBUG){
+            Log.d(mClass.getSimpleName(),message);
+        }
+    }
+
+
     public static boolean isDebug(){
         if (BuildConfig.DEBUG){
             return true;
@@ -1010,5 +1017,20 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static int getPositionTheme(){
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_position_theme),0);
+    }
+
+    public static void setPositionTheme(int positionTheme){
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_position_theme),positionTheme);
+    }
+
+    public static int getCurrentTheme(){
+        if (Utils.getPositionTheme()==0){
+            return R.style.LightDialogTheme;
+        }
+        return R.style.DarkDialogTheme;
     }
 }

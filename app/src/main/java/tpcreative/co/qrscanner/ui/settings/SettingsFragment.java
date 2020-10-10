@@ -11,12 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +39,9 @@ import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory;
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
+import tpcreative.co.qrscanner.helper.ThemeHelper;
 import tpcreative.co.qrscanner.model.Author;
+import tpcreative.co.qrscanner.model.EnumThemeMode;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SaveModel;
 import tpcreative.co.qrscanner.model.Theme;
@@ -70,7 +75,8 @@ public class SettingsFragment extends BaseFragment {
         super.work();
         Fragment fragment = getChildFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         if (fragment == null) {
-            fragment = Fragment.instantiate(getContext(), SettingsFragmentPreference.class.getName());
+            final  FragmentFactory mFactory = getFragmentManager().getFragmentFactory();
+            fragment = mFactory.instantiate(ClassLoader.getSystemClassLoader(),SettingsFragmentPreference.class.getName());
         }
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
@@ -115,7 +121,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     public static class SettingsFragmentPreference extends PreferenceFragmentCompat implements SettingsSingleton.SingletonSettingsListener{
-
+        int mPosition = Utils.getPositionTheme();
         private MyPreference mVersionApp;
 
         private MyPreference mPreferencePremiumVersion;
@@ -194,7 +200,7 @@ public class SettingsFragment extends BaseFragment {
         }
 
         public void askToDeleteDuplicatesItems(int count, ServiceManager.ServiceManagerClickedListener listener) {
-            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),Utils.getCurrentTheme());
             dialogBuilder.setTitle(R.string.alert);
             dialogBuilder.setPadding(40,40,40,0);
             dialogBuilder.setMargin(60,0,60,0);
@@ -211,6 +217,28 @@ public class SettingsFragment extends BaseFragment {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     mySwitchPreferenceSkipDuplicates.setChecked(false);
                     listener.onNo();
+                }
+            });
+            MaterialDialog dialog = dialogBuilder.create();
+            dialog.show();
+        }
+
+        public void askChooseTheme(ServiceManager.ServiceManagerClickedItemsListener listener) {
+            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),Utils.getCurrentTheme());
+            dialogBuilder.setTitle(R.string.change_theme);
+            dialogBuilder.setPadding(40,40,40,0);
+            dialogBuilder.setMargin(60,0,60,0);
+            dialogBuilder.setSingleChoiceItems(R.array.themeEntryArray, Utils.getPositionTheme(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface,int i) {
+                    mPosition = i;
+                }
+            });
+            dialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Utils.setPositionTheme(EnumThemeMode.byPosition(mPosition).ordinal());
+                    listener.onYes();
                 }
             });
             MaterialDialog dialog = dialogBuilder.create();
@@ -346,6 +374,15 @@ public class SettingsFragment extends BaseFragment {
                         }
                         else if (preference.getKey().equals(getString(R.string.key_premium_version))){
                             Navigator.onMoveProVersion(getContext());
+                        }
+                        else if (preference.getKey().equals(getString(R.string.key_theme))){
+                            askChooseTheme(new ServiceManager.ServiceManagerClickedItemsListener() {
+                                @Override
+                                public void onYes() {
+                                    ThemeHelper.applyTheme(EnumThemeMode.byPosition(Utils.getPositionTheme()));
+                                    Utils.Log(TAG,"Clicked say yes");
+                                }
+                            });
                         }
                     }
                     return true;

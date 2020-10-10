@@ -658,4 +658,8 @@ public class ServiceManager implements BaseView {
         void onYes();
         void onNo();
     }
+
+    public interface ServiceManagerClickedItemsListener {
+        void onYes();
+    }
 }
