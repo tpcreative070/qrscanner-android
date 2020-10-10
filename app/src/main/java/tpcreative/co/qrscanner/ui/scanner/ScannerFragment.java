@@ -18,6 +18,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
+
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -343,10 +345,10 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
         presenter.bindView(this);
         barcodeScannerView.decodeContinuous(callback);
         zxing_status_view.setVisibility(View.INVISIBLE);
-        imgCreate.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        imgGallery.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        switch_camera.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.white), PorterDuff.Mode.SRC_ATOP);
+        imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.white), PorterDuff.Mode.SRC_ATOP);
+        switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.white), PorterDuff.Mode.SRC_ATOP);
+        switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         if (Utils.checkCameraBack(getContext())){
             cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
@@ -483,15 +485,14 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                 if (isTurnOnFlash){
                     barcodeScannerView.setTorchOff();
                     isTurnOnFlash = false;
-                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_off_white_48));
-                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-
+                    switch_flashlight.setImageDrawable(ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.baseline_flash_off_white_48));
+                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
                 }
                 else{
                     barcodeScannerView.setTorchOn();
                     isTurnOnFlash = true;
-                    switch_flashlight.setImageDrawable(getContext().getResources().getDrawable(R.drawable.baseline_flash_on_white_48));
-                    switch_flashlight.setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+                    switch_flashlight.setImageDrawable(ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.baseline_flash_on_white_48));
+                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
                 }
             }
             @Override

@@ -23,4 +23,6 @@
     <color name="white_theme">@color/material_gray_900</color>
     <color name="material_gray_theme">@color/material_gray_900</color>
     <color name="material_gray_800">@color/material_gray_600</color>
+    <color name="colorPrimary">#055C5C</color>
+    <color name="colorPrimaryDark">#042E2E</color>
 </resources>

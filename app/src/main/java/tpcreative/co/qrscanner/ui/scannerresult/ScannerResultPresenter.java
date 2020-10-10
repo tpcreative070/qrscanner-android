@@ -27,7 +27,7 @@ public class ScannerResultPresenter extends Presenter<ScannerResultView>{
 
     public void doShowAds(){
         ScannerResultView view = view();
-        if (Utils.isDebug() || !Utils.isPremium()){
+        if (!Utils.isPremium()){
             view.doShowAds(true);
         }else{
             view.doShowAds(false);
