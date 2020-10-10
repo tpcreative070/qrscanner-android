@@ -562,7 +562,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
         if (menuVisible) {
             Log.d(TAG, "isVisible");
             MainSingleton.getInstance().setListener(this);
-            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SaverFragment.this);
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SaverFragment.this,true);
         } else {
             MainSingleton.getInstance().setListener(null);
             if (actionMode!=null){

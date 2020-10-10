@@ -15,6 +15,7 @@ import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.QRCodeType;
+import tpcreative.co.qrscanner.ui.scanner.ScannerFragment;
 
 public class GenerateFragment extends BaseFragment implements GenerateCell.ItemSelectedListener,GenerateView {
 
@@ -54,7 +55,7 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(GenerateFragment.this);
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(GenerateFragment.this,true);
             Utils.Log(TAG, "isVisible");
             if (Utils.isPremium()){
                 if (!presenter.isPremium){
@@ -64,6 +65,7 @@ public class GenerateFragment extends BaseFragment implements GenerateCell.ItemS
                 }
             }
         } else {
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(GenerateFragment.this,false);
             Utils.Log(TAG, "isInVisible");
         }
     }

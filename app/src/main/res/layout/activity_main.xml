@@ -1,80 +1,73 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/coordinator"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/llAds"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        android:layout_height="match_parent">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_collapseMode="pin"
-            app:layout_scrollFlags="enterAlways|snap"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            style="@style/MyCustomTabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlScanner"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="enterAlways|snap"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                style="@style/MyCustomTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:tabGravity="fill"
+                app:tabMode="fixed" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <tpcreative.co.qrscanner.common.view.CustomViewPager
-            android:layout_above="@+id/llAds"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
         <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-            android:layout_above="@+id/llAds"
+            android:background="#610F6FE6"
             android:id="@+id/overlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:clickable_overlay="true" />
-
+            app:clickable_overlay="true"/>
         <com.leinardi.android.speeddial.SpeedDialView
             android:layout_above="@+id/llAds"
+            android:layout_gravity="bottom|end"
             android:id="@+id/speedDial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="2dp"
             app:sdExpansionMode="top"
             app:sdMainFabAnimationRotateAngle="180"
             app:sdMainFabClosedSrc="@drawable/baseline_menu_white_24"
             app:sdMainFabOpenedSrc="@drawable/baseline_menu_white_24"
-            app:sdOverlayLayout="@id/overlay"/>
+            app:sdOverlayLayout="@id/overlay"
+            app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:id="@+id/llAds"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_centerVertical="true"
-            android:background="@color/colorPrimary"
             android:orientation="vertical"
             android:gravity="center_vertical"
-            android:id="@+id/llAds"
-            android:layout_alignParentBottom="true"
+            android:id="@+id/llAdsSub"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:id="@+id/llAdsSub"
-                android:layout_width="match_parent"
-                android:layout_height="55sp"/>
-        </LinearLayout>
-    </RelativeLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_height="55sp"/>
+    </LinearLayout>
+</RelativeLayout>

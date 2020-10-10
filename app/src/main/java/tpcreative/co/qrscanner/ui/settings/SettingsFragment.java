@@ -87,9 +87,10 @@ public class SettingsFragment extends BaseFragment {
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SettingsFragment.this);
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SettingsFragment.this,true);
             Utils.Log(TAG, "isVisible");
         } else {
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SettingsFragment.this,false);
             Utils.Log(TAG, "isInVisible");
             HistorySingleton.getInstance().reLoadData();
             SaveSingleton.getInstance().reLoadData();
@@ -376,13 +377,17 @@ public class SettingsFragment extends BaseFragment {
                             Navigator.onMoveProVersion(getContext());
                         }
                         else if (preference.getKey().equals(getString(R.string.key_theme))){
-                            askChooseTheme(new ServiceManager.ServiceManagerClickedItemsListener() {
-                                @Override
-                                public void onYes() {
-                                    ThemeHelper.applyTheme(EnumThemeMode.byPosition(Utils.getPositionTheme()));
-                                    Utils.Log(TAG,"Clicked say yes");
-                                }
-                            });
+                            if (!Utils.isPremium()){
+                                Navigator.onMoveProVersion(getContext());
+                            }else {
+                                askChooseTheme(new ServiceManager.ServiceManagerClickedItemsListener() {
+                                    @Override
+                                    public void onYes() {
+                                        ThemeHelper.applyTheme(EnumThemeMode.byPosition(Utils.getPositionTheme()));
+                                        Utils.Log(TAG, "Clicked say yes");
+                                    }
+                                });
+                            }
                         }
                     }
                     return true;

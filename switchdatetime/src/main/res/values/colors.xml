@@ -5,6 +5,7 @@
     <color name="colorAccent">#f44336</color>
     <color name="white">#FFF</color>
     <color name="colorDark">#000000</color>
+    <color name="colorDarkTheme">#000000</color>
     <color name="material_gray_800">#424242</color>
     <color name="textColorSecondaryInverse">#E65100</color>
     <color name="colorBlueLight">#84FFFF</color>

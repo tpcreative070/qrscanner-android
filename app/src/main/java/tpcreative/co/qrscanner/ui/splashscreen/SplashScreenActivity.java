@@ -25,7 +25,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 public class SplashScreenActivity extends BaseActivity {
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
     private Storage storage;
-    private final int LOADING_APP = 2000;
+    private final int LOADING_APP = 1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

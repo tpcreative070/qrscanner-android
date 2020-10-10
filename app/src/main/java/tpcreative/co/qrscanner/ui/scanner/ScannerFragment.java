@@ -78,6 +78,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
+import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
 
 
 public class ScannerFragment extends BaseFragment implements ScannerSingleton.SingletonScannerListener ,ScannerView{
@@ -839,9 +840,10 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(ScannerFragment.this);
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(ScannerFragment.this,true);
             Utils.Log(TAG, "isVisible");
         } else {
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(ScannerFragment.this,false);
             Utils.Log(TAG, "isInVisible");
         }
         if (barcodeScannerView != null) {

@@ -527,7 +527,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
         if (menuVisible) {
             Log.d(TAG,"isVisible");
             MainSingleton.getInstance().setListener(this);
-            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this);
+            QRScannerApplication.getInstance().getActivity().onShowFloatingButton(HistoryFragment.this,true);
         }
         else{
             MainSingleton.getInstance().setListener(null);

@@ -18,10 +18,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -60,6 +60,7 @@ import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
+import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
 
 public class MainActivity extends BaseActivity implements ResponseSingleton.SingleTonResponseListener, MainView{
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -76,8 +77,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
     AppBarLayout appBar;
     @BindView(R.id.speedDial)
     SpeedDialView mSpeedDialView;
-    @BindView(R.id.rlScanner)
-    RelativeLayout rlScanner;
     @BindView(R.id.llAdsSub)
     LinearLayout llAds;
     private MainPresenter presenter;
@@ -135,7 +134,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
         });
         if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
-            onVisibleUI();
             onAddPermissionCamera();
         }
         if (!QRScannerApplication.getInstance().isLoader() && !Utils.isPremium()){
@@ -159,14 +157,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
         PremiumManager.getInstance().onStartInAppPurchase();
     }
 
-    public void onVisibleUI(){
-        if (rlScanner!=null){
-            rlScanner.setVisibility(View.VISIBLE);
-            appBar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void onShowFloatingButton(Fragment fragment){
+    public void onShowFloatingButton(Fragment fragment,boolean isShow){
         if (fragment instanceof HistoryFragment){
             if (mSpeedDialView!=null){
                 mSpeedDialView.show();
@@ -178,6 +169,15 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
             }
         }
         else{
+            if (isShow){
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)mSpeedDialView.getLayoutParams();
+                params.setBehavior(new SpeedDialView.NoBehavior());
+                mSpeedDialView.requestLayout();
+            }else {
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)mSpeedDialView.getLayoutParams();
+                params.setBehavior(new SpeedDialView.ScrollingViewSnackbarBehavior());
+                mSpeedDialView.requestLayout();
+            }
             if (mSpeedDialView!=null){
                 mSpeedDialView.hide();
             }

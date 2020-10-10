@@ -10,7 +10,7 @@ public class ThemeUtil {
 
     public static ArrayList<Theme> getThemeList(){
         ArrayList<Theme> themeArrayList = new ArrayList<>();
-        themeArrayList.add(new Theme(0, R.color.black, R.color.colorDark, R.color.colorButton));
+        themeArrayList.add(new Theme(0, R.color.blackTheme, R.color.colorDarkTheme, R.color.colorButton));
         themeArrayList.add(new Theme(1, R.color.inbox_primary, R.color.inbox_primary_dark, R.color.colorAccent));
         themeArrayList.add(new Theme(2, R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorButton));
         themeArrayList.add(new Theme(3,R.color.primaryColorPink, R.color.primaryDarkColorPink, R.color.secondaryColorPink));
