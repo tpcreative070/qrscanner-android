@@ -26,7 +26,6 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.GenerateSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
-import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
 public class ProVersionActivity extends BaseActivitySlide implements View.OnClickListener{
@@ -66,7 +65,10 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
     }
 
     public void onUpgradeNow() {
-        if (mProduct.getSkus()!=null && mProduct.getSkus().size()>0){
+        if (mProduct==null){
+            return;
+        }
+        if (mProduct.getSkus().size()>0){
             if (mLifetime!=null){
                 final Purchase purchase = mProduct.getPurchaseInState(mLifetime, Purchase.State.PURCHASED);
                 if (purchase != null) {
@@ -104,14 +106,12 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
                 return;
             }
             mProduct = product;
-            if (mProduct!=null){
-                if (mProduct.getSkus().size()>0){
-                    for (int i=0;i<mProduct.getSkus().size();i++){
-                        Sku index = mProduct.getSkus().get(i);
-                        if (index.id.code.equals(getString(R.string.lifetime))){
-                            tvPrice.setText(index.price);
-                            mLifetime = index;
-                        }
+            if (mProduct.getSkus().size()>0){
+                for (int i=0;i<mProduct.getSkus().size();i++){
+                    Sku index = mProduct.getSkus().get(i);
+                    if (index.id.code.equals(getString(R.string.lifetime))){
+                        tvPrice.setText(index.price);
+                        mLifetime = index;
                     }
                 }
             }

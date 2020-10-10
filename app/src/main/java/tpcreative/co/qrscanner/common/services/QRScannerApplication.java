@@ -290,7 +290,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                     Utils.onWriteLogs(activity,"logs.txt","0000");
                 }
             }
-
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);

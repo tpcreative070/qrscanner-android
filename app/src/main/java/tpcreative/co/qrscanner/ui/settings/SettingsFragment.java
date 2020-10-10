@@ -274,6 +274,7 @@ public class SettingsFragment extends BaseFragment {
                         else if (preference.getKey().equals(getString(R.string.key_backup_data))){
                             if (!Utils.isPremium()){
                                 mySwitchPreferenceBackupData.setChecked(false);
+                                Navigator.onMoveProVersion(getContext());
                                 return false;
                             }
                             if (Utils.isPremium()){
@@ -283,8 +284,6 @@ public class SettingsFragment extends BaseFragment {
                                         Navigator.onBackupData(getContext());
                                     }
                                 }
-                            }else{
-                                Navigator.onMoveProVersion(getContext());
                             }
                         }
                     }
