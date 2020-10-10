@@ -36,7 +36,7 @@ public class DecoderThread {
         public boolean handleMessage(Message message) {
             if (message.what == R.id.zxing_decode) {
                 decode((SourceData) message.obj);
-            } else if(message.what == R.id.zxing_preview_failed) {
+            } else if (message.what == R.id.zxing_preview_failed) {
                 // Error already logged. Try again.
                 requestNextPreview();
             }
@@ -142,7 +142,7 @@ public class DecoderThread {
         sourceData.setCropRect(cropRect);
         LuminanceSource source = createSource(sourceData);
 
-        if(source != null) {
+        if (source != null) {
             rawResult = decoder.decode(source);
         }
 
@@ -164,8 +164,8 @@ public class DecoderThread {
             }
         }
         if (resultHandler != null) {
-            List<ResultPoint> resultPoints = decoder.getPossibleResultPoints();
-            Message message = Message.obtain(resultHandler, R.id.zxing_possible_result_points, resultPoints);
+            List<ResultPoint> resultPoints = BarcodeResult.transformResultPoints(decoder.getPossibleResultPoints(), sourceData);
+                    Message message = Message.obtain(resultHandler, R.id.zxing_possible_result_points, resultPoints);
             message.sendToTarget();
         }
         requestNextPreview();

@@ -25,7 +25,6 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.Log;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 /**

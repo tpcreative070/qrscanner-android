@@ -89,6 +89,13 @@ public final class Intents {
         public static final String CAMERA_ID = "SCAN_CAMERA_ID";
 
         /**
+         * Optional parameter to switch the torch on at camera startup.
+         * Enables the torch on camera startup
+         * If provided, should be a boolean.
+         */
+        public static final String TORCH_ENABLED = "TORCH_ENABLED";
+
+        /**
          * @see com.google.zxing.DecodeHintType#CHARACTER_SET
          */
         public static final String CHARACTER_SET = "CHARACTER_SET";
@@ -107,6 +114,21 @@ public final class Intents {
          * Set the time to finish the scan screen.
          */
         public static final String TIMEOUT = "TIMEOUT";
+
+        /**
+         * Set the time to finish the scan screen.
+         */
+        public static final String MISSING_CAMERA_PERMISSION = "MISSING_CAMERA_PERMISSION";
+
+        /**
+         * Set the time to finish the scan screen.
+         */
+        public static final String SHOW_MISSING_CAMERA_PERMISSION_DIALOG = "SHOW_MISSING_CAMERA_PERMISSION_DIALOG";
+
+        /**
+         * Set the time to finish the scan screen.
+         */
+        public static final String MISSING_CAMERA_PERMISSION_DIALOG_MESSAGE = "MISSING_CAMERA_PERMISSION_DIALOG_MESSAGE";
 
         /**
          * Whether or not the orientation should be locked when the activity is first started.

@@ -90,7 +90,7 @@ public class DecoratedBarcodeView extends FrameLayout {
 
         inflate(getContext(), scannerLayout, this);
 
-        barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
+        barcodeView = findViewById(R.id.zxing_barcode_surface);
 
         if (barcodeView == null) {
             throw new IllegalArgumentException(
@@ -102,7 +102,7 @@ public class DecoratedBarcodeView extends FrameLayout {
         barcodeView.initializeAttributes(attrs);
 
 
-        viewFinder = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
+        viewFinder = findViewById(R.id.zxing_viewfinder_view);
 
         if (viewFinder == null) {
             throw new IllegalArgumentException(
@@ -113,11 +113,11 @@ public class DecoratedBarcodeView extends FrameLayout {
         viewFinder.setCameraPreview(barcodeView);
 
         // statusView is optional
-        statusView = (TextView) findViewById(R.id.zxing_status_view);
+        statusView = findViewById(R.id.zxing_status_view);
     }
 
     /**
-     * Initialize with no custom attributes setted.
+     * Initialize with no custom attributes set.
      */
     private void initialize() {
         initialize(null);
@@ -142,6 +142,12 @@ public class DecoratedBarcodeView extends FrameLayout {
             }
         }
 
+        if (intent.hasExtra(Intents.Scan.TORCH_ENABLED)) {
+            if (intent.getBooleanExtra(Intents.Scan.TORCH_ENABLED, false)) {
+                this.setTorchOn();
+            }
+        }
+
         String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
         if (customPromptMessage != null) {
             setStatusText(customPromptMessage);
@@ -159,9 +165,25 @@ public class DecoratedBarcodeView extends FrameLayout {
         barcodeView.setDecoderFactory(new DefaultDecoderFactory(decodeFormats, decodeHints, characterSet, scanType));
     }
 
+    public void setCameraSettings(CameraSettings cameraSettings) {
+        barcodeView.setCameraSettings(cameraSettings);
+    }
+
+    public void setDecoderFactory(DecoderFactory decoderFactory) {
+        barcodeView.setDecoderFactory(decoderFactory);
+    }
+
+    public DecoderFactory getDecoderFactory() {
+        return barcodeView.getDecoderFactory();
+    }
+
+    public CameraSettings getCameraSettings() {
+        return barcodeView.getCameraSettings();
+    }
+
     public void setStatusText(String text) {
         // statusView is optional when using a custom layout
-        if(statusView != null) {
+        if (statusView != null) {
             statusView.setText(text);
         }
     }
@@ -188,7 +210,7 @@ public class DecoratedBarcodeView extends FrameLayout {
     }
 
     public BarcodeView getBarcodeView() {
-        return (BarcodeView) findViewById(R.id.zxing_barcode_surface);
+        return findViewById(R.id.zxing_barcode_surface);
     }
 
     public ViewfinderView getViewFinder() {

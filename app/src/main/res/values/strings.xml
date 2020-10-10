@@ -237,7 +237,7 @@
     <string name="tap_here_to_discover_how_to_scan">Tap here to discover. How to scan.</string>
     <string name="tap_here_to_discover_how_to_scan_description">This tips will help you to use this app more efficient.</string>
     <string name="warning_fake_checkout">Sorry for inconvenience. It seems FAKE order. Please contact to us via care@tpcreative.co</string>
-
+    <string name="cancel">Cancel</string>
     <string name="key_second_visit_settings">second visit settings</string>
     <string name="progressing">Progressing...</string>
     <string name="importing">Importing...</string>

@@ -52,7 +52,7 @@ public final class CameraConfigurationUtils {
     }
 
     public static void setFocus(Camera.Parameters parameters,
-								CameraSettings.FocusMode focusModeSetting,
+                                CameraSettings.FocusMode focusModeSetting,
                                 boolean safeMode) {
         List<String> supportedFocusModes = parameters.getSupportedFocusModes();
         String focusMode = null;

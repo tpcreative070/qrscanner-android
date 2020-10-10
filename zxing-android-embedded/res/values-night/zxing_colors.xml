@@ -26,6 +26,6 @@
   <color name="zxing_custom_result_view">#b0000000</color>
   <color name="zxing_custom_viewfinder_laser">#1976D2</color>
   <color name="zxing_custom_viewfinder_mask">#60000000</color>
-  <color name="zxing_colorAccent">#e19704</color>
+  <color name="zxing_colorAccent">#986809</color>
   <color name="zxing_colorBlueLight">#055C5C</color>
 </resources>

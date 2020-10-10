@@ -41,6 +41,7 @@ import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ProductParsedResult;
+import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.client.result.SMSParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.TextParsedResult;
@@ -51,8 +52,6 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
-import com.journeyapps.barcodescanner.result.ResultHandler;
-import com.journeyapps.barcodescanner.result.ResultHandlerFactory;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -115,8 +114,8 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
             if (getActivity() ==null){
                 return;
             }
-            ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
-                final ParsedResult parsedResult = resultHandler.getResult();
+           // ResultHan resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
+                final ParsedResult parsedResult = ResultParser.parseResult(result.getResult());
                 final Create create = new Create();
                 String address = "" ;
                 String fullName = "";
@@ -148,7 +147,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                 switch (parsedResult.getType()) {
                     case ADDRESSBOOK:
                         create.createType = ParsedResultType.ADDRESSBOOK;
-                        AddressBookParsedResult addressResult = (AddressBookParsedResult) resultHandler.getResult();
+                        AddressBookParsedResult addressResult = (AddressBookParsedResult)parsedResult;
                         if (addressResult!=null){
                              address = Utils.convertStringArrayToString(addressResult.getAddresses(), ",");
                              fullName = Utils.convertStringArrayToString(addressResult.getNames(), ",");
@@ -158,7 +157,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                         break;
                     case EMAIL_ADDRESS:
                         create.createType = ParsedResultType.EMAIL_ADDRESS;
-                        EmailAddressParsedResult emailAddress = (EmailAddressParsedResult) resultHandler.getResult();
+                        EmailAddressParsedResult emailAddress = (EmailAddressParsedResult) parsedResult;
                         if (emailAddress!=null){
                             email = Utils.convertStringArrayToString(emailAddress.getTos(), ",");
                             subject = (emailAddress.getSubject())==null ? "" : emailAddress.getSubject() ;
@@ -167,13 +166,13 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                         break;
                     case PRODUCT:
                         create.createType = ParsedResultType.PRODUCT;
-                        ProductParsedResult productResult = (ProductParsedResult) resultHandler.getResult();
+                        ProductParsedResult productResult = (ProductParsedResult)parsedResult;
                         productId = (productResult.getProductID()) == null ? "" : productResult.getProductID();
                         Utils.Log(TAG,"Product "+new Gson().toJson(productResult));
                         break;
                     case URI:
                         create.createType = ParsedResultType.URI;
-                        URIParsedResult urlResult = (URIParsedResult) resultHandler.getResult();
+                        URIParsedResult urlResult = (URIParsedResult)parsedResult;
                         if (urlResult!=null){
                             url = (urlResult.getURI())==null ? "" : urlResult.getURI() ;
                         }
@@ -181,7 +180,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
 
                     case WIFI:
                         create.createType = ParsedResultType.WIFI;
-                        WifiParsedResult wifiResult = (WifiParsedResult)resultHandler.getResult();
+                        WifiParsedResult wifiResult = (WifiParsedResult)parsedResult;
                         hidden = wifiResult.isHidden();
                         ssId = (wifiResult.getSsid()) == null ? "" : wifiResult.getSsid();
                         networkEncryption = (wifiResult.getNetworkEncryption())==null ? "" : wifiResult.getNetworkEncryption();
@@ -192,7 +191,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                     case GEO:
                         create.createType = ParsedResultType.GEO;
                         try{
-                            GeoParsedResult geoParsedResult = (GeoParsedResult)resultHandler.getResult();
+                            GeoParsedResult geoParsedResult = (GeoParsedResult)parsedResult;
                             lat = geoParsedResult.getLatitude();
                             lon = geoParsedResult.getLongitude();
                             query = geoParsedResult.getQuery();
@@ -205,18 +204,18 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                         break;
                     case TEL:
                         create.createType = ParsedResultType.TEL;
-                        TelParsedResult telParsedResult = (TelParsedResult) resultHandler.getResult();
+                        TelParsedResult telParsedResult = (TelParsedResult) parsedResult;
                         phone = telParsedResult.getNumber();
                         break;
                     case SMS:
                         create.createType = ParsedResultType.SMS;
-                        SMSParsedResult smsParsedResult = (SMSParsedResult) resultHandler.getResult();
+                        SMSParsedResult smsParsedResult = (SMSParsedResult) parsedResult;
                         phone = Utils.convertStringArrayToString(smsParsedResult.getNumbers(), ",");
                         message = (smsParsedResult.getBody()) == null ? "" : smsParsedResult.getBody();
                         break;
                     case CALENDAR:
                         create.createType = ParsedResultType.CALENDAR;
-                        CalendarParsedResult calendarParsedResult = (CalendarParsedResult) resultHandler.getResult();
+                        CalendarParsedResult calendarParsedResult = (CalendarParsedResult) parsedResult;
 
                         String startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getStartTimestamp());
                         String endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getEndTimestamp());
@@ -234,7 +233,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                         break;
                     case ISBN:
                         create.createType = ParsedResultType.ISBN;
-                        ISBNParsedResult isbParsedResult = (ISBNParsedResult) resultHandler.getResult();
+                        ISBNParsedResult isbParsedResult = (ISBNParsedResult) parsedResult;
                         ISBN = (isbParsedResult.getISBN()) == null ? "" : isbParsedResult.getISBN();
                         Utils.Log(TAG,"Result filter "+ new Gson().toJson(isbParsedResult));
                         break;
@@ -242,7 +241,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                         try {
                             Utils.Log(TAG,"Default value");
                             create.createType = ParsedResultType.TEXT;
-                            TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
+                            TextParsedResult textParsedResult = (TextParsedResult)parsedResult;
                             text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
                         }catch (Exception e){
                             e.printStackTrace();
@@ -677,8 +676,8 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
         if (getActivity() ==null){
             return;
         }
-        ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result);
-        final ParsedResult parsedResult = resultHandler.getResult();
+        //ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result);
+        final ParsedResult parsedResult = ResultParser.parseResult(result);
         final Create create = new Create();
         String address = "" ;
         String fullName = "";
@@ -709,7 +708,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
         switch (parsedResult.getType()) {
             case ADDRESSBOOK:
                 create.createType = ParsedResultType.ADDRESSBOOK;
-                AddressBookParsedResult addressResult = (AddressBookParsedResult) resultHandler.getResult();
+                AddressBookParsedResult addressResult = (AddressBookParsedResult) parsedResult;
                 if (addressResult!=null){
                     address = Utils.convertStringArrayToString(addressResult.getAddresses(), ",");
                     fullName = Utils.convertStringArrayToString(addressResult.getNames(), ",");
@@ -719,7 +718,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                 break;
             case EMAIL_ADDRESS:
                 create.createType = ParsedResultType.EMAIL_ADDRESS;
-                EmailAddressParsedResult emailAddress = (EmailAddressParsedResult) resultHandler.getResult();
+                EmailAddressParsedResult emailAddress = (EmailAddressParsedResult) parsedResult;
                 if (emailAddress!=null){
                     email = Utils.convertStringArrayToString(emailAddress.getTos(), ",");
                     subject = (emailAddress.getSubject())==null ? "" : emailAddress.getSubject() ;
@@ -728,12 +727,12 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                 break;
             case PRODUCT:
                 create.createType = ParsedResultType.PRODUCT;
-                ProductParsedResult productResult = (ProductParsedResult) resultHandler.getResult();
+                ProductParsedResult productResult = (ProductParsedResult) parsedResult;
                 productId = (productResult.getProductID()) == null ? "" : productResult.getProductID();
                 break;
             case URI:
                 create.createType = ParsedResultType.URI;
-                URIParsedResult urlResult = (URIParsedResult) resultHandler.getResult();
+                URIParsedResult urlResult = (URIParsedResult) parsedResult;
                 if (urlResult!=null){
                     url = (urlResult.getURI())==null ? "" : urlResult.getURI() ;
                 }
@@ -741,7 +740,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
 
             case WIFI:
                 create.createType = ParsedResultType.WIFI;
-                WifiParsedResult wifiResult = (WifiParsedResult)resultHandler.getResult();
+                WifiParsedResult wifiResult = (WifiParsedResult)parsedResult;
                 hidden = wifiResult.isHidden();
                 ssId = (wifiResult.getSsid()) == null ? "" : wifiResult.getSsid();
                 networkEncryption = (wifiResult.getNetworkEncryption())==null ? "" : wifiResult.getNetworkEncryption();
@@ -752,7 +751,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
             case GEO:
                 create.createType = ParsedResultType.GEO;
                 try{
-                    GeoParsedResult geoParsedResult = (GeoParsedResult)resultHandler.getResult();
+                    GeoParsedResult geoParsedResult = (GeoParsedResult)parsedResult;
                     lat = geoParsedResult.getLatitude();
                     lon = geoParsedResult.getLongitude();
                     query = geoParsedResult.getQuery();
@@ -765,18 +764,18 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                 break;
             case TEL:
                 create.createType = ParsedResultType.TEL;
-                TelParsedResult telParsedResult = (TelParsedResult) resultHandler.getResult();
+                TelParsedResult telParsedResult = (TelParsedResult) parsedResult;
                 phone = telParsedResult.getNumber();
                 break;
             case SMS:
                 create.createType = ParsedResultType.SMS;
-                SMSParsedResult smsParsedResult = (SMSParsedResult) resultHandler.getResult();
+                SMSParsedResult smsParsedResult = (SMSParsedResult) parsedResult;
                 phone = Utils.convertStringArrayToString(smsParsedResult.getNumbers(), ",");
                 message = (smsParsedResult.getBody()) == null ? "" : smsParsedResult.getBody();
                 break;
             case CALENDAR:
                 create.createType = ParsedResultType.CALENDAR;
-                CalendarParsedResult calendarParsedResult = (CalendarParsedResult) resultHandler.getResult();
+                CalendarParsedResult calendarParsedResult = (CalendarParsedResult) parsedResult;
 
                 String startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getStartTimestamp());
                 String endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.getEndTimestamp());
@@ -792,13 +791,13 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                 break;
             case ISBN:
                 create.createType = ParsedResultType.ISBN;
-                ISBNParsedResult isbParsedResult = (ISBNParsedResult) resultHandler.getResult();
+                ISBNParsedResult isbParsedResult = (ISBNParsedResult) parsedResult;
                 ISBN = (isbParsedResult.getISBN()) == null ? "" : isbParsedResult.getISBN();
                 Utils.Log(TAG,"Result filter "+ new Gson().toJson(isbParsedResult));
                 break;
             default:
                 create.createType = ParsedResultType.TEXT;
-                TextParsedResult textParsedResult = (TextParsedResult) resultHandler.getResult();
+                TextParsedResult textParsedResult = (TextParsedResult) parsedResult;
                 text = (textParsedResult.getText()) == null ? "" : textParsedResult.getText();
                 break;
         }

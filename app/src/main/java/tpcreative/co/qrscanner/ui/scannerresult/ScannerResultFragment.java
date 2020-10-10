@@ -937,7 +937,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 }
             }
         });
-        dialogBuilder.setNegativeButton(R.string.zxing_button_cancel, new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
