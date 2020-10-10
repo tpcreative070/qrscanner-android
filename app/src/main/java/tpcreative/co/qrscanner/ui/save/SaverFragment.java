@@ -507,7 +507,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     }
 
     public void onAddPermissionSave() {
-        Dexter.withActivity(getActivity())
+        Dexter.withContext(getActivity())
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)

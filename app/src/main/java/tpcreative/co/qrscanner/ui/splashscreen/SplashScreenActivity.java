@@ -31,22 +31,17 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         storage = new Storage(this);
-        Utils.onObserveData(LOADING_APP, new Listener() {
-            @Override
-            public void onStart() {
-                if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_DENIED) {
-                    onAddPermissionCamera();
-                }
-                else {
-                    Navigator.onMoveMainTab(SplashScreenActivity.this);
-                }
-            }
-        });
+        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            onAddPermissionCamera();
+        }
+        else {
+            Navigator.onMoveMainTab(SplashScreenActivity.this);
+        }
     }
 
     public void onAddPermissionCamera() {
-        Dexter.withActivity(this)
+        Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.CAMERA)
                 .withListener(new MultiplePermissionsListener() {

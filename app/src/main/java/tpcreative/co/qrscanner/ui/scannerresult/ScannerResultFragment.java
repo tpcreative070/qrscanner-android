@@ -303,7 +303,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     }
 
     public void onAddPermissionPhoneCall() {
-        Dexter.withActivity(this)
+        Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.CALL_PHONE)
                 .withListener(new MultiplePermissionsListener() {
@@ -343,7 +343,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     }
 
     public void onAddPermissionSave() {
-        Dexter.withActivity(this)
+        Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)

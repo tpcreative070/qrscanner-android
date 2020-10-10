@@ -182,6 +182,13 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                 mSpeedDialView.hide();
             }
         }
+        if (Utils.isPremium()){
+            if (!presenter.isPremium){
+                presenter.doShowAds();
+                presenter.isPremium = Utils.isPremium();
+                Utils.Log(TAG,"Call update ui");
+            }
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -269,7 +276,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
     }
 
     public void onAddPermissionCamera() {
-        Dexter.withActivity(this)
+        Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.CAMERA)
                 .withListener(new MultiplePermissionsListener() {

@@ -385,7 +385,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
     }
 
     public void onAddPermissionGallery() {
-        Dexter.withActivity(getActivity())
+        Dexter.withContext(getActivity())
                 .withPermissions(
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE)
