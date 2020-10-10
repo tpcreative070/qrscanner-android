@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
@@ -59,17 +62,14 @@ public class ScannerResultAdapter extends BaseAdapter<ItemNavigation, BaseHolder
             super.bind(data, position);
             this.mPosition  = position;
             tvTitle.setText(data.value);
-            imgAction.setImageDrawable(context.getResources().getDrawable(data.res));
-            imgAction.setColorFilter(context.getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+            imgAction.setImageDrawable(ContextCompat.getDrawable(context,data.res));
+            imgAction.setColorFilter(ContextCompat.getColor(context,R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         }
-
         @OnClick(R.id.rlHome)
         public void onClicked(View view) {
             if (itemSelectedListener != null) {
                 itemSelectedListener.onClickItem(mPosition);
             }
         }
-
     }
-
 }

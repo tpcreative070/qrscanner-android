@@ -46,50 +46,6 @@
         <item name="tint">@color/white</item>
     </style>
 
-<!--    &lt;!&ndash; Toolbar &ndash;&gt;-->
-<!--    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar">-->
-<!--        <item name="materialThemeOverlay">@style/MyThemeOverlay_Toolbar</item>-->
-<!--    </style>-->
-
-<!--    <style name="MyThemeOverlay_Toolbar" parent="">-->
-<!--        <item name="android:textColorPrimary">@color/white</item>-->
-<!--        <item name="colorOnPrimary">@color/white</item>-->
-<!--    </style>-->
-
-
-<!--    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar.Primary">-->
-<!--        <item name="titleTextColor">@color/white</item>-->
-<!--        <item name="colorControlNormal">@color/white</item>-->
-<!--        <item name="iconTint">@color/white</item>-->
-<!--    </style>-->
-
-<!--    <style name="MyThemeOverlay_Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">-->
-<!--        &lt;!&ndash; color used by the toolbar title &ndash;&gt;-->
-<!--        <item name="android:textColorPrimary">@color/blue</item>-->
-<!--        &lt;!&ndash; color used by navigation icon and overflow icon &ndash;&gt;-->
-<!--        <item name="titleTextColor">@color/white</item>-->
-<!--        <item name="colorControlNormal">@color/white</item>-->
-<!--        <item name="iconTint">@color/white</item>-->
-<!--        <item name="drawableTint">@color/white</item>-->
-<!--    </style>-->
-
-    <style name="AppThemeSlide" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colorDark</item>
-        <item name="android:textColorSecondary">@color/material_gray_600</item>
-        <item name="android:popupMenuStyle">@style/PopupMenuDark</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        /*Preference theme*/
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <!--Action mode -->
-        <item name="actionModeStyle">@style/CustomActionModeStyle</item>
-        <item name="windowActionModeOverlay">true</item>
-    </style>
-
-
     <style name="CustomActionModeStyle" parent="Base.Widget.AppCompat.ActionMode">
         <item name="background">@color/colorAccent</item>
         <item name="actionMenuTextColor">@color/multiple_image_select_toolbarPrimaryText</item>

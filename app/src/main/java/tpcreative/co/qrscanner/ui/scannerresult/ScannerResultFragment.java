@@ -20,10 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.result.ParsedResultType;
@@ -911,9 +914,10 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         for (Map.Entry<Object,String> hash : presenter.hashClipboard.entrySet()){
             list.add(hash.getValue());
         }
-
         CharSequence[] cs = list.toArray(new CharSequence[list.size()]);
-        dialogBuilder.setMultiChoiceItems(cs, new boolean[]{false, false, false}, new DialogInterface.OnMultiChoiceClickListener() {
+        Utils.Log(TAG,"Result " + new Gson().toJson(list)) ;
+        Utils.Log(TAG,"show size of list " + cs.length);
+        dialogBuilder.setMultiChoiceItems(cs,null, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
                 if (b){
@@ -949,8 +953,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 TextView title = dialog.findViewById(android.R.id.title);
                 TextView content = dialog.findViewById(android.R.id.message);
                 if (positive!=null && negative!=null && title!=null && content!=null){
-                    title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.black));
-                    content.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.material_gray_700));
+                title.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.black));
+                    content.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.material_gray_700));
                     positive.setTextSize(14);
                     negative.setTextSize(14);
                     content.setTextSize(18);
