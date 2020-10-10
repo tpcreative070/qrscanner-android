@@ -62,7 +62,7 @@ public class ChangeFileColorActivity extends BaseActivitySlide implements BaseVi
     @Override
     public void onClickItem(int position) {
         presenter.mTheme = presenter.mList.get(position);
-        PrefsController.putString(getString(R.string.key_theme_object),new Gson().toJson(presenter.mTheme));
+        PrefsController.putInt(getString(R.string.key_theme_object),position);
         presenter.getData();
         SettingsSingleton.getInstance().onUpdated();
     }

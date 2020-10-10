@@ -85,9 +85,10 @@ public class Theme implements Serializable {
 
     public Theme getThemeInfo(){
         try{
-            String value = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_theme_object),null);
-            if (value!=null){
-                final Theme mTheme = new Gson().fromJson(value,Theme.class);
+            int value = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_theme_object),0);
+            final List<Theme> mThem = ThemeUtil.getThemeList();
+            if (mThem.size()>value){
+                final Theme mTheme = mThem.get(value);
                 if (mTheme!=null){
                     return mTheme;
                 }
