@@ -19,14 +19,11 @@
             android:id="@+id/imgTheme"
             android:layout_width="75dp"
             android:layout_height="75dp"/>
-
         <ImageView
             android:id="@+id/imgChecked"
             android:src="@drawable/baseline_check_white_48"
             android:layout_centerInParent="true"
             android:layout_width="@dimen/icon_size_30"
             android:layout_height="@dimen/icon_size_30" />
-
-
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

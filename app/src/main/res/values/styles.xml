@@ -24,8 +24,54 @@
         <!--Action mode -->
         <item name="actionModeStyle">@style/CustomActionModeStyle</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="actionOverflowButtonStyle">@style/ToolbarStyle.Overflow</item>
+        <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
     </style>
 
+
+    <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
+        <!-- Makes the toolbar text whatever color you want for both light/dark-->
+        <item name="titleTextColor">@color/white</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="ToolbarStyle.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <!-- For toolbar menu -->
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <!-- For the hamburger menu, back button, etc -->
+        <item name="tint">@color/white</item>
+    </style>
+
+<!--    &lt;!&ndash; Toolbar &ndash;&gt;-->
+<!--    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar">-->
+<!--        <item name="materialThemeOverlay">@style/MyThemeOverlay_Toolbar</item>-->
+<!--    </style>-->
+
+<!--    <style name="MyThemeOverlay_Toolbar" parent="">-->
+<!--        <item name="android:textColorPrimary">@color/white</item>-->
+<!--        <item name="colorOnPrimary">@color/white</item>-->
+<!--    </style>-->
+
+
+<!--    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar.Primary">-->
+<!--        <item name="titleTextColor">@color/white</item>-->
+<!--        <item name="colorControlNormal">@color/white</item>-->
+<!--        <item name="iconTint">@color/white</item>-->
+<!--    </style>-->
+
+<!--    <style name="MyThemeOverlay_Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">-->
+<!--        &lt;!&ndash; color used by the toolbar title &ndash;&gt;-->
+<!--        <item name="android:textColorPrimary">@color/blue</item>-->
+<!--        &lt;!&ndash; color used by navigation icon and overflow icon &ndash;&gt;-->
+<!--        <item name="titleTextColor">@color/white</item>-->
+<!--        <item name="colorControlNormal">@color/white</item>-->
+<!--        <item name="iconTint">@color/white</item>-->
+<!--        <item name="drawableTint">@color/white</item>-->
+<!--    </style>-->
 
     <style name="AppThemeSlide" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>

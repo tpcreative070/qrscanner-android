@@ -537,7 +537,11 @@ public class Utils {
                 File file = new File(storage.getExternalStorageDirectory()+"/"+nameLogs);
                 MediaScannerConnection.scanFile(activity, new String[]{file.getAbsolutePath()}, null, null);
                 MediaScannerConnection.scanFile(activity, new String[]{storage.getExternalStorageDirectory()}, null, null);
-                storage.createFile(storage.getExternalStorageDirectory()+"/"+nameLogs,"");
+                try {
+                    storage.createFile(storage.getExternalStorageDirectory()+"/"+nameLogs,"");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }else{
             Utils.Log(TAG,"No permission");

@@ -4,13 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <FrameLayout
         android:id="@+id/flContainer_save_review"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
     <RelativeLayout
         android:layout_marginBottom="18dp"
         android:id="@+id/rlRoot"
@@ -20,7 +17,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <com.jaychang.srv.SimpleRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -35,7 +31,6 @@
             app:srv_layoutMode="linearVertical"
             app:srv_showDivider="false"
             app:srv_showLastDivider="false" />
-
         <TextView
             android:visibility="invisible"
             android:id="@+id/tvNotFoundItems"
@@ -46,7 +41,5 @@
             android:text="@string/no_items_found"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </RelativeLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

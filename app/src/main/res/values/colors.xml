@@ -21,8 +21,8 @@
     <color name="blue_light">#03A9F4</color>
     <color name="blue">#1E88E5</color>
     <color name="blue_dark">#01579B</color>
-    <color name="white">#FFF</color>
-    <color name="white_theme">#FFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_theme">#FFFFFF</color>
     <color name="colorDark">#000000</color>
     <color name="colorBlue">#1DE9B6</color>
     <color name="colorBlueDark">#76FF03</color>

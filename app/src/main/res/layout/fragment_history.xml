@@ -4,13 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <FrameLayout
         android:id="@+id/flContainer_history_review"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
     <RelativeLayout
         android:layout_marginBottom="18dp"
         android:id="@+id/rlRoot"
