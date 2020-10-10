@@ -25,4 +25,5 @@
     <color name="material_gray_800">@color/material_gray_600</color>
     <color name="colorPrimary">#055C5C</color>
     <color name="colorPrimaryDark">#042E2E</color>
+    <color name="colorAccent">#986809</color>
 </resources>
