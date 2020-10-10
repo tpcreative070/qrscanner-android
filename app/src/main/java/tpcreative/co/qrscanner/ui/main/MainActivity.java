@@ -221,6 +221,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                     .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, getTheme()))
                     .setLabel(getString(R.string.select))
                     .setLabelColor(Color.WHITE)
+                    .setFabImageTintColor(ContextCompat.getColor(this,R.color.white))
                     .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
                             getTheme()))
                     .create());
@@ -230,6 +231,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                     .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary,
                             getTheme()))
                     .setLabel(R.string.csv)
+                    .setFabImageTintColor(ContextCompat.getColor(this,R.color.white))
                     .setLabelColor(ContextCompat.getColor(this,R.color.white))
                     .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
                             getTheme()))
@@ -252,6 +254,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                     return true; // To keep the Speed Dial open
                 }
             });
+            mSpeedDialView.getMainFab().setColorFilter(ContextCompat.getColor(this, R.color.white),PorterDuff.Mode.SRC_IN);
             mSpeedDialView.show();
         }catch (Exception e){
             e.printStackTrace();

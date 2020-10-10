@@ -158,7 +158,7 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
     }
 
     public void askWarningFakeCheckout() {
-        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,R.style.LightDialogTheme);
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(this,Utils.getCurrentTheme());
         dialogBuilder.setTitle(R.string.alert);
         dialogBuilder.setPadding(40,40,40,0);
         dialogBuilder.setMargin(60,0,60,0);

@@ -1033,4 +1033,12 @@ public class Utils {
         }
         return R.style.DarkDialogTheme;
     }
+
+    public static String getCurrentThemeName(){
+        String[] myResArray = QRScannerApplication.getInstance().getResources().getStringArray(R.array.themeEntryArray);
+        if (Utils.getPositionTheme()==0){
+            return myResArray[0];
+        }
+        return myResArray[1];
+    }
 }

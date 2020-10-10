@@ -42,6 +42,7 @@ import tpcreative.co.qrscanner.common.BaseFragment;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.HistorySingleton;
 import tpcreative.co.qrscanner.common.MainSingleton;
+import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
@@ -538,7 +539,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     }
 
     public void dialogDelete() {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext());
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext(), Utils.getCurrentTheme());
         builder.setTitle(getString(R.string.delete));
         builder.setMessage(String.format(getString(R.string.dialog_delete),presenter.getCheckedCount()+""));
         builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {

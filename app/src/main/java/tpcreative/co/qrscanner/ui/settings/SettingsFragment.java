@@ -178,7 +178,7 @@ public class SettingsFragment extends BaseFragment {
 
         public void askPermission() {
             PrefsController.putBoolean(getString(R.string.key_already_load_app), true);
-            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),R.style.LightDialogTheme);
+            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),Utils.getCurrentTheme());
             dialogBuilder.setTitle(R.string.app_permission);
             dialogBuilder.setPadding(40,40,40,0);
             dialogBuilder.setMargin(60,0,60,0);
@@ -447,6 +447,7 @@ public class SettingsFragment extends BaseFragment {
                 public void onUpdatePreference() {
                     myPreferenceTheme.getTvChoose().setVisibility(View.VISIBLE);
                     myPreferenceTheme.getImgPremium().setVisibility(View.VISIBLE);
+                    myPreferenceTheme.getTvChoose().setText(Utils.getCurrentThemeName());
                 }
             });
 

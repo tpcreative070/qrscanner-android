@@ -573,7 +573,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     }
 
     public void dialogDelete() {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext());
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext(),Utils.getCurrentTheme());
         builder.setTitle(getString(R.string.delete));
         builder.setMessage(String.format(getString(R.string.dialog_delete), presenter.getCheckedCount() + ""));
         builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
