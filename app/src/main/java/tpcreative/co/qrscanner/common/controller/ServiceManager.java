@@ -12,6 +12,7 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import com.opencsv.CSVWriter;
+import org.solovyev.android.checkout.Purchase;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,9 +56,10 @@ public class ServiceManager implements BaseView {
             Utils.Log(TAG, "connected");
             myService = ((QRScannerService.LocalBinder) binder).getService();
             myService.bindView(ServiceManager.this);
-            myService.onSyncAuthor();
-            myService.onCheckVersion();
             ServiceManager.getInstance().onPreparingSyncData(false);
+            if (Utils.isProVersion() && !Utils.isAlreadyCheckout()){
+                ServiceManager.getInstance().onCheckout(null);
+            }
         }
         //binder comes from server to communicate with method's of
         public void onServiceDisconnected(ComponentName className) {
@@ -440,6 +442,32 @@ public class ServiceManager implements BaseView {
         Utils.Log(TAG, "Dismiss Service manager");
     }
 
+    public void onCheckout(Purchase purchase){
+        if (myService!=null){
+            Utils.Log(TAG,"Call checkcout here");
+            myService.onAddCheckout(purchase, new QRScannerService.BaseListener() {
+                @Override
+                public void onShowListObjects(List list) {
+
+                }
+                @Override
+                public void onShowObjects(Object object) {
+
+                }
+
+                @Override
+                public void onError(String message, EnumStatus status) {
+                    Utils.Log(TAG,message);
+                }
+
+                @Override
+                public void onSuccessful(String message, EnumStatus status) {
+                    Utils.Log(TAG,message);
+                }
+            });
+        }
+    }
+
     @Override
     public void onError(String message, EnumStatus status) {
         Utils.Log(TAG, "onError response :" + message + " - " + status.name());
@@ -490,8 +518,6 @@ public class ServiceManager implements BaseView {
     public void onSuccessful(String message, EnumStatus status) {
         switch (status) {
             case CONNECTED: {
-                onAuthorSync();
-                onCheckVersion();
                 ResponseSingleton.getInstance().onNetworkConnectionChanged(true);
                 break;
             }

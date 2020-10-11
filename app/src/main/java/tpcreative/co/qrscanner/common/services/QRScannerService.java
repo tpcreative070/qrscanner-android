@@ -8,6 +8,9 @@ import android.os.IBinder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.snatik.storage.Storage;
+
+import org.solovyev.android.checkout.Purchase;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,6 +36,7 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.ResponseSingleton;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.api.request.CheckoutRequest;
 import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
 import tpcreative.co.qrscanner.common.network.NetworkUtil;
@@ -41,6 +45,7 @@ import tpcreative.co.qrscanner.common.presenter.PresenterService;
 import tpcreative.co.qrscanner.common.services.download.DownloadService;
 import tpcreative.co.qrscanner.common.services.upload.ProgressRequestBody;
 import tpcreative.co.qrscanner.model.Author;
+import tpcreative.co.qrscanner.model.CheckoutModel;
 import tpcreative.co.qrscanner.model.DriveAbout;
 import tpcreative.co.qrscanner.model.EnumStatus;
 import tpcreative.co.qrscanner.model.SyncDataModel;
@@ -127,6 +132,49 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         return mBinder;
     }
 
+    public void onAddCheckout(final Purchase purchase, BaseListener<CheckoutModel> listener){
+        if (subscriptions == null) {
+            return;
+        }
+        CheckoutRequest mCheckout;
+        if (purchase==null){
+            mCheckout = new CheckoutRequest();
+        }else {
+            mCheckout = new CheckoutRequest(purchase.autoRenewing,purchase.orderId,purchase.sku,purchase.state.name(),purchase.token);
+        }
+        Utils.Log(TAG,"Preparing checkout");
+        subscriptions.add(QRScannerApplication.serverAPI.onCheckout(mCheckout)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(__ -> Utils.Log(TAG,""))
+                .subscribe(onResponse -> {
+                    if (onResponse.error){
+                        listener.onError("Error",EnumStatus.NONE);
+                    }
+                    else{
+                        listener.onSuccessful("Checkout successfully " +new Gson().toJson(onResponse.data),EnumStatus.NONE);
+                        Utils.Log(TAG,new Gson().toJson(onResponse.data));
+                        Utils.setCheckoutValue(true);
+                    }
+                }, throwable -> {
+                    if (throwable instanceof HttpException) {
+                        ResponseBody bodys = ((HttpException) throwable).response().errorBody();
+                        int code  = ((HttpException) throwable).response().code();
+                        try {
+                            if (code==401){
+                                Utils.Log(TAG,"code "+code);
+                            }
+                            Utils.Log(TAG, "error" + bodys.string());
+                            String msg = new Gson().toJson(bodys.string());
+                            Utils.Log(TAG, msg);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Utils.Log(TAG, "Can not call " + throwable.getMessage());
+                    }
+                }));
+    }
 
     public void onSyncAuthor(){
         Utils.Log(TAG,"onSyncAuthor");

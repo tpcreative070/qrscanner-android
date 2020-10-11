@@ -189,7 +189,7 @@
     <string name="barcode_2d_guide">It also reads 2D barcode such as QR Codes ad Data Matrix. These can contain links to web numbers and email addresses, and more.</string>
 
     <string name="url_developer">http://192.168.1.3:8082</string>
-    <string name="url_live">http://tpcreative.me:8082</string>
+    <string name="url_live">http://tpcreative.me:8081</string>
     <string name="server_client_id">369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com</string>
     <string name="key_request_sign_out_google_drive">request_sign_out_google_drive</string>
     <string name="access_token">Bearer %1$s</string>
@@ -309,6 +309,7 @@
     <string name="key_skip_duplicates_detail">Skip and remove duplicates QRCode or Barcode</string>
     <string name="key_backup_data">Backup data to Cloud</string>
     <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
+    <string name="key_already_checkout">key_already_checkout</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>

@@ -5,6 +5,7 @@ import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -17,13 +18,15 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
+import tpcreative.co.qrscanner.common.api.request.CheckoutRequest;
 import tpcreative.co.qrscanner.common.api.response.BaseResponse;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
+import tpcreative.co.qrscanner.common.api.response.RootResponse;
 import tpcreative.co.qrscanner.model.DriveAbout;
 
 public interface RootAPI{
     String ROOT_GOOGLE_DRIVE = "https://www.googleapis.com/";
-    String CHECKOUT = "/api/checkout/syncDevices";
+    String CHECKOUT = "/api/qrscanner/checkout/transaction";
     String AUTHOR = "/api/author/syncDevices";
     String CHECK_VERSION = "/api/author/version";
     String GET_DRIVE_ABOUT = "/drive/v3/about?fields=user,storageQuota,kind";
@@ -32,10 +35,8 @@ public interface RootAPI{
     String GET_LIST_FILE_IN_APP_FOLDER = "/drive/v3/files";
     String GET_FILES_INFO = "/drive/v3/files/{id}";
     String DELETE_CLOUD_ITEM = "/drive/v3/files/{id}";
-    @FormUrlEncoded
     @POST(CHECKOUT)
-    Observable<BaseResponse> onCheckout(@FieldMap Map<String, String> request);
-
+    Observable<RootResponse> onCheckout(@Body CheckoutRequest request);
 
     @FormUrlEncoded
     @POST(AUTHOR)

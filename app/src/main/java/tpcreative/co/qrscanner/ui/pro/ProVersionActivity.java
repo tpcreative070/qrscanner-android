@@ -26,6 +26,7 @@ import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.GenerateSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
+import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 
 public class ProVersionActivity extends BaseActivitySlide implements View.OnClickListener{
@@ -128,13 +129,9 @@ public class ProVersionActivity extends BaseActivitySlide implements View.OnClic
             @Override
             public void onSuccess(@Nonnull T result) {
                 try {
-//                    Utils.onWriteLog(new Gson().toJson("Checkout "+result),EnumStatus.CHECKOUT);
-//                    if (presenter!=null){
-//                        final Purchase purchase = (Purchase) result;
-//                        presenter.onAddCheckout(purchase);
-//                    }
                     final Purchase purchase = (Purchase) result;
                     Utils.Log(TAG,new Gson().toJson(purchase));
+                    ServiceManager.getInstance().onCheckout(purchase);
                     if (Utils.isRealCheckedOut(purchase.orderId)){
                         Utils.setPremium(true);
                         GenerateSingleton.getInstance().onCompletedGenerate();

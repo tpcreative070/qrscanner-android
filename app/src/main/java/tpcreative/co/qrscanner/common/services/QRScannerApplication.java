@@ -77,7 +77,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
-        isLive = false;
+        isLive = true;
         if (!Utils.isPremium()){
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override
@@ -261,6 +261,10 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public String getVersionRelease() {
         String versionRelease = Build.VERSION.RELEASE;
         return versionRelease;
+    }
+
+    public String getPackageId(){
+        return BuildConfig.APPLICATION_ID;
     }
 
     public Storage getStorage() {
