@@ -39,10 +39,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-
         <androidx.core.widget.NestedScrollView
-            android:layout_above="@+id/rlAdsRoot"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

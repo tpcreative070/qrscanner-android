@@ -39,8 +39,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/rlButton">
+            android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scrollView"

@@ -39,7 +39,6 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:layout_below="@+id/rlButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
