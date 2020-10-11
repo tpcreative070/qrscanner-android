@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
+
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.SkuDetails;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -22,8 +26,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
 import com.google.api.services.drive.DriveScopes;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
 import com.snatik.storage.Storage;
-import org.solovyev.android.checkout.Billing;
+//import org.solovyev.android.checkout.Billing;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,7 +50,7 @@ import tpcreative.co.qrscanner.ui.main.MainActivity;
  *
  */
 
-public class QRScannerApplication extends MultiDexApplication implements Dependencies.DependenciesListener, MultiDexApplication.ActivityLifecycleCallbacks {
+public class QRScannerApplication extends MultiDexApplication implements Dependencies.DependenciesListener, MultiDexApplication.ActivityLifecycleCallbacks{
     private static QRScannerApplication mInstance;
     private String pathFolder;
     private Storage storage;
@@ -64,7 +69,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private List<String> requiredScopesString;
     public static RootAPI serverDriveApi;
     private static final String TAG = QRScannerApplication.class.getSimpleName();
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -116,21 +120,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         requiredScopesString.add(DriveScopes.DRIVE_APPDATA);
         requiredScopesString.add(DriveScopes.DRIVE_FILE);
         ThemeHelper.applyTheme(EnumThemeMode.byPosition(Utils.getPositionTheme()));
-    }
-
-    /*In app purchase*/
-    private final Billing mBilling = new Billing(this, new Billing.DefaultConfiguration() {
-        /*In app purchase*/
-        String key_purchase = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxToUe5+7Xy+Q7YYZfuMofqZmNe0021vMBJ32VQVPa8+Hd0z9YWPWTVvplslRX4rKU2TQ1l93yMzPVIHVxLIwPuo9OC9I8sO7LpOi91pyPk9fT0IjVaWDTSv1h/qLUE6m3OS5/LVPYQNbHCp3yqujSmj6bIj7AvbjhF36XjxZaESfJI3KhtXy/RD+ZaM255TgY6g1vwN3ObsrXZ3e98VrT8ehJrry8u8RTpiZ6NWTgcsk/riMPYZiwebf6fUHQgidAtwdBfZx94hYgldt5kPN3hB2LcG4KVj9jI2QY9Y4WsOPQ643I9fP8e9VbYW8/uAOTZnvUeUW9qb9qIw3NHyV6wIDAQAB";
-        @Override
-        public String getPublicKey() {
-            return key_purchase;
-        }
-    });
-
-    @Nonnull
-    public Billing getBilling() {
-        return mBilling;
     }
 
     public GoogleSignInOptions getGoogleSignInOptions(final Account account) {

@@ -105,6 +105,7 @@ public class Utils {
     private static final String TAG = Utils.class.getSimpleName();
     final static String mStandardSortedDateTime = "ddMMYYYYHHmmss";
     final static String FORMAT_DISPLAY = "EE dd MMM, yyyy HH:mm:ss a";
+    final public static String GOOGLE_CONSOLE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxToUe5+7Xy+Q7YYZfuMofqZmNe0021vMBJ32VQVPa8+Hd0z9YWPWTVvplslRX4rKU2TQ1l93yMzPVIHVxLIwPuo9OC9I8sO7LpOi91pyPk9fT0IjVaWDTSv1h/qLUE6m3OS5/LVPYQNbHCp3yqujSmj6bIj7AvbjhF36XjxZaESfJI3KhtXy/RD+ZaM255TgY6g1vwN3ObsrXZ3e98VrT8ehJrry8u8RTpiZ6NWTgcsk/riMPYZiwebf6fUHQgidAtwdBfZx94hYgldt5kPN3hB2LcG4KVj9jI2QY9Y4WsOPQ643I9fP8e9VbYW8/uAOTZnvUeUW9qb9qIw3NHyV6wIDAQAB";
 
     public static void writeLogs(String responseJson) {
         if (!BuildConfig.DEBUG){

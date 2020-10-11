@@ -138,9 +138,7 @@ dependencies {
     }
 
     /*Checkout*/
-
-    implementation 'org.solovyev.android:checkout:1.2.2'
-    //implementation 'com.anjlab.android.iab.v3:library:1.0.44'
+    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
 
     /*CSV*/
     implementation files('libs/opencsv-4.4.jar')

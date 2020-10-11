@@ -8,11 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import com.anjlab.android.iab.v3.PurchaseData;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.gson.Gson;
 import com.google.zxing.client.result.ParsedResultType;
 import com.opencsv.CSVWriter;
-import org.solovyev.android.checkout.Purchase;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -442,10 +442,10 @@ public class ServiceManager implements BaseView {
         Utils.Log(TAG, "Dismiss Service manager");
     }
 
-    public void onCheckout(Purchase purchase){
+    public void onCheckout(PurchaseData purchaseData){
         if (myService!=null){
             Utils.Log(TAG,"Call checkcout here");
-            myService.onAddCheckout(purchase, new QRScannerService.BaseListener() {
+            myService.onAddCheckout(purchaseData, new QRScannerService.BaseListener() {
                 @Override
                 public void onShowListObjects(List list) {
 
