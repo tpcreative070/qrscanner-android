@@ -36,10 +36,10 @@ public class CheckoutRequest implements Serializable {
     }
     public CheckoutRequest(){
         this.autoRenewing = false;
-        this.sku = "null";
-        this.orderId = "null";
-        this.state = "null";
-        this.token = "null";
+        this.sku = "Pro version";
+        this.orderId = "Pro version";
+        this.state = "Pro version";
+        this.token = "Pro version";
         this.device_id = QRScannerApplication.getInstance().getDeviceId();
         this.device_type = QRScannerApplication.getInstance().getString(R.string.device_type);
         this.manufacturer =  QRScannerApplication.getInstance().getManufacturer();
