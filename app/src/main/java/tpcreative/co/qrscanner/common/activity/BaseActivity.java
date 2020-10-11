@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.snatik.storage.Storage;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import tpcreative.co.qrscanner.R;
 
 public class BaseActivity extends AppCompatActivity {
     Unbinder unbinder;
@@ -24,13 +23,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         onStartCount = 1;
-        if (savedInstanceState == null){
-           // this.overridePendingTransition(R.anim.anim_slide_in_left,
-           //         R.anim.anim_slide_out_left);
-        } else // already created so reverse animation
-        {
-            onStartCount = 2;
-        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
@@ -77,12 +69,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (onStartCount > 1) {
-            this.overridePendingTransition(R.anim.anim_slide_in_right,
-                    R.anim.anim_slide_out_right);
-        } else if (onStartCount == 1) {
-            onStartCount++;
-        }
     }
 
 }

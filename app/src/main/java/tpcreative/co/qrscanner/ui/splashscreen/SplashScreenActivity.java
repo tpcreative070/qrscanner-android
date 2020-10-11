@@ -31,13 +31,18 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         storage = new Storage(this);
-        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED) {
-            onAddPermissionCamera();
-        }
-        else {
-            Navigator.onMoveMainTab(SplashScreenActivity.this);
-        }
+        Utils.onObserveData(LOADING_APP, new Listener() {
+            @Override
+            public void onStart() {
+                if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED) {
+                    onAddPermissionCamera();
+                }
+                else {
+                    Navigator.onMoveMainTab(SplashScreenActivity.this);
+                }
+            }
+        });
     }
 
     public void onAddPermissionCamera() {

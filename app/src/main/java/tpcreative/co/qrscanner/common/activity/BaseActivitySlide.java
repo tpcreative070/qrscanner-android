@@ -25,14 +25,6 @@ public class BaseActivitySlide extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         onStartCount = 1;
-        if (savedInstanceState == null) // 1st time
-        {
-            this.overridePendingTransition(R.anim.anim_slide_in_left,
-                    R.anim.anim_slide_out_left);
-        } else // already created so reverse animation
-        {
-            onStartCount = 2;
-        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -78,11 +70,5 @@ public class BaseActivitySlide extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (onStartCount > 1) {
-            this.overridePendingTransition(R.anim.anim_slide_in_right,
-                    R.anim.anim_slide_out_right);
-        } else if (onStartCount == 1) {
-            onStartCount++;
-        }
     }
 }

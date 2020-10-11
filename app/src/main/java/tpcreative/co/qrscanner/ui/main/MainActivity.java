@@ -60,7 +60,6 @@ import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.Theme;
 import tpcreative.co.qrscanner.ui.history.HistoryFragment;
 import tpcreative.co.qrscanner.ui.save.SaverFragment;
-import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
 
 public class MainActivity extends BaseActivity implements ResponseSingleton.SingleTonResponseListener, MainView{
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -284,21 +283,19 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
                             Utils.Log(TAG, "Permission is ready");
-                            boolean isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh),false);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
-                                ScannerSingleton.getInstance().setVisible();
-                                PrefsController.putBoolean(getString(R.string.key_refresh),true);
-                            }
+                            ScannerSingleton.getInstance().setVisible();
                             storage.createDirectory(QRScannerApplication.getInstance().getPathFolder());
                             // Do something here
                         }
                         else{
                             Utils.Log(TAG,"Permission is denied");
+                            finish();
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             /*Miss add permission in manifest*/
                             Utils.Log(TAG, "request permission is failed");
+                            finish();
                         }
                     }
                     @Override
