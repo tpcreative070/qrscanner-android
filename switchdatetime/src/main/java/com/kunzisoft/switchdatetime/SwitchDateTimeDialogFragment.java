@@ -353,6 +353,15 @@ public class SwitchDateTimeDialogFragment extends DialogFragment {
         return db.create();
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setBackground(null);
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).setBackground(null);
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEUTRAL).setBackground(null);
+    }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);

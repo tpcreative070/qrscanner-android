@@ -71,6 +71,12 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         mInstance = this;
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
         InstanceGenerator.getInstance(this);
+        new PrefsController.Builder()
+                .setContext(getApplicationContext())
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
         isLive = false;
         if (!Utils.isPremium()){
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -83,12 +89,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         storage = new Storage(getApplicationContext());
         pathFolder = storage.getExternalStorageDirectory() + "/Pictures/QRScanner";
         storage.createDirectory(pathFolder);
-        new PrefsController.Builder()
-                .setContext(getApplicationContext())
-                .setMode(ContextWrapper.MODE_PRIVATE)
-                .setPrefsName(getPackageName())
-                .setUseDefaultSharedPreference(true)
-                .build();
         boolean first_Running = PrefsController.getBoolean(getString(R.string.key_not_first_running), false);
         if (!first_Running) {
             PrefsController.putBoolean(getString(R.string.key_not_first_running), true);

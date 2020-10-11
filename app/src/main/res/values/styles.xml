@@ -28,8 +28,6 @@
         <item name="actionOverflowButtonStyle">@style/ToolbarStyle.Overflow</item>
         <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
     </style>
-
-
     <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
         <!-- Makes the toolbar text whatever color you want for both light/dark-->
         <item name="titleTextColor">@color/white</item>
