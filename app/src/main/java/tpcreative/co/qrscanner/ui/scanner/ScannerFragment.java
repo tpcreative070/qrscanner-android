@@ -486,7 +486,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
                     barcodeScannerView.setTorchOff();
                     isTurnOnFlash = false;
                     switch_flashlight.setImageDrawable(ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.baseline_flash_off_white_48));
-                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.white), PorterDuff.Mode.SRC_ATOP);
                 }
                 else{
                     barcodeScannerView.setTorchOn();
