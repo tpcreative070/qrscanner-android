@@ -183,6 +183,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
 
     @BindView(R.id.rlAdsRoot)
     RelativeLayout rlAdsRoot;
+    @BindView(R.id.viewSeparateLine)
+    View viewSeparateLine;
 
     private ScannerResultAdapter adapter;
     LinearLayoutManager llm;
@@ -1017,6 +1019,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
             QRScannerApplication.getInstance().loadLargeAd(llAds);
         }else{
             rlAdsRoot.setVisibility(View.GONE);
+            viewSeparateLine.setVisibility(View.GONE);
         }
     }
 }

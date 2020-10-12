@@ -836,6 +836,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/viewSeparateLine"
                         android:background="@color/grey_light"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
