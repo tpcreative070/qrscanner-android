@@ -16,12 +16,33 @@ public class HistoryPresenter extends Presenter<HistoryView> {
 
     protected List<TypeCategories> mListCategories;
     protected List<HistoryModel> mList;
+    protected HistoryModel mLatestValue;
     private int i = 0;
     private static final String TAG = HistoryPresenter.class.getSimpleName();
 
     public HistoryPresenter(){
         mListCategories = new ArrayList<>();
         mList = new ArrayList<>();
+        mLatestValue = new HistoryModel();
+    }
+
+    public List<HistoryModel>getLatestList(List<HistoryModel> mData){
+        List<HistoryModel> mList = new ArrayList<>();
+        if (mData.size()>0){
+            mLatestValue = mData.get(0);
+            for (HistoryModel index : mData){
+                if (index.createType.equals(mLatestValue.createType)){
+                    index.typeCategories = new TypeCategories(0,mLatestValue.createType);
+                    mList.add(index);
+                }
+            }
+        }
+        Collections.sort(mList, new Comparator<HistoryModel>() {
+            public int compare(HistoryModel o1, HistoryModel o2) {
+                return (Utils.getMilliseconds(o1.updatedDateTime)<Utils.getMilliseconds(o2.updatedDateTime)) ? 0 : 1;
+            }
+        });
+        return mList;
     }
 
     public Map<String, HistoryModel> getUniqueList(){
@@ -37,7 +58,7 @@ public class HistoryPresenter extends Presenter<HistoryView> {
             hashMap.put(index.createType,index);
         }
         mListCategories.clear();
-        i=0;
+        i=1;
         for (Map.Entry<String, HistoryModel>map : hashMap.entrySet()){
             mListCategories.add(new TypeCategories(i,map.getKey()));
             i+=1;
@@ -50,18 +71,24 @@ public class HistoryPresenter extends Presenter<HistoryView> {
         HistoryView view = view();
         final List<HistoryModel> list = SQLiteHelper.getHistoryList();
         List<HistoryModel> mList = new ArrayList<>();
+        final List<HistoryModel> mLatestType = getLatestList(list);
+        Utils.Log(TAG,"Latest list "+ new Gson().toJson(mLatestType));
+        Utils.Log(TAG,"Latest object " + new Gson().toJson(mLatestValue));
         for (TypeCategories index : mListCategories){
             for (HistoryModel history : list){
-                if (index.type.equals(history.createType)){
+                if (index.type.equals(history.createType) && !index.type.equals(mLatestValue.createType)){
                     final HistoryModel result = history;
                     result.typeCategories = index;
                     mList.add(result);
                 }
             }
         }
+
+        /*Added latest list to ArrayList*/
+        mLatestType.addAll(mList);
         this.mList.clear();
-        this.mList.addAll(mList);
-        return mList;
+        this.mList.addAll(mLatestType);
+        return mLatestType;
     }
 
     public int getCheckedCount(){

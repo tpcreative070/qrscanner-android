@@ -15,6 +15,7 @@ import android.widget.ViewAnimator;
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.kunzisoft.switchdatetime.date.OnYearSelectedListener;
@@ -360,6 +361,9 @@ public class SwitchDateTimeDialogFragment extends DialogFragment {
         ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setBackground(null);
         ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).setBackground(null);
         ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEUTRAL).setBackground(null);
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.white));
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.white));
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(ContextCompat.getColor(getContext(),R.color.white));
     }
 
     @Override

@@ -16,9 +16,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
-
 import androidx.core.content.ContextCompat;
-
 import com.google.gson.Gson;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;

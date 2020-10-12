@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class TypeCategories implements Serializable{
     public int id;
+    public String type;
 
     public int getId() {
         return id;
@@ -21,16 +22,15 @@ public class TypeCategories implements Serializable{
         this.type = type;
     }
 
-    public String type;
 
     public TypeCategories(){
         this.id = 0;
         this.type = "";
     }
 
-    public TypeCategories(int id, String date){
+    public TypeCategories(int id, String type){
         this.id = id;
-        this.type = date;
+        this.type = type;
     }
 
 }
