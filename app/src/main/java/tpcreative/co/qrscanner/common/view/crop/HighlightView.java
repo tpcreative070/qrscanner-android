@@ -13,7 +13,10 @@ import android.graphics.Region;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
+import androidx.core.content.ContextCompat;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+
 class HighlightView {
 
     public static final int GROW_NONE        = (1 << 0);
@@ -23,7 +26,7 @@ class HighlightView {
     public static final int GROW_BOTTOM_EDGE = (1 << 4);
     public static final int MOVE             = (1 << 5);
 
-    private static final int DEFAULT_HIGHLIGHT_COLOR = 0xFF33B5E5;
+    private static final int DEFAULT_HIGHLIGHT_COLOR = ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.colorPrimary);
     private static final float HANDLE_RADIUS_DP = 12f;
     private static final float OUTLINE_DP = 2f;
 
@@ -44,7 +47,7 @@ class HighlightView {
     private boolean showCircle;
     private int highlightColor;
 
-    private ModifyMode modifyMode = ModifyMode.None;
+    private ModifyMode modifyMode = ModifyMode.Grow;
     private HandleMode handleMode = HandleMode.Changing;
     private boolean maintainAspectRatio;
     private float initialAspectRatio;
@@ -87,12 +90,12 @@ class HighlightView {
         outlinePaint.setAntiAlias(true);
         outlineWidth = dpToPx(OUTLINE_DP);
 
-        handlePaint.setColor(highlightColor);
+        handlePaint.setColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.colorAccent));
         handlePaint.setStyle(Paint.Style.FILL);
         handlePaint.setAntiAlias(true);
         handleRadius = dpToPx(HANDLE_RADIUS_DP);
 
-        modifyMode = ModifyMode.None;
+        modifyMode = ModifyMode.Grow;
     }
 
     private float dpToPx(float dp) {

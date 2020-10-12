@@ -102,9 +102,7 @@ public class CropImageView extends ImageViewTouchBase {
                     lastY = event.getY();
                     // Prevent multiple touches from interfering with crop area re-sizing
                     validPointerId = event.getPointerId(event.getActionIndex());
-                    motionHighlightView.setMode((edge == HighlightView.MOVE)
-                            ? HighlightView.ModifyMode.Move
-                            : HighlightView.ModifyMode.Grow);
+                    motionHighlightView.setMode(HighlightView.ModifyMode.Grow);
                     break;
                 }
             }
@@ -112,7 +110,7 @@ public class CropImageView extends ImageViewTouchBase {
         case MotionEvent.ACTION_UP:
             if (motionHighlightView != null) {
                 centerBasedOnHighlightView(motionHighlightView);
-                motionHighlightView.setMode(HighlightView.ModifyMode.None);
+                motionHighlightView.setMode(HighlightView.ModifyMode.Grow);
             }
             motionHighlightView = null;
             center();
