@@ -2,14 +2,10 @@ package tpcreative.co.qrscanner.ui.scanner;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,20 +15,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
-
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Reader;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
@@ -50,7 +36,6 @@ import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.TextParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;
-import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -62,11 +47,7 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -83,8 +64,6 @@ import tpcreative.co.qrscanner.common.view.crop.Crop;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
-import tpcreative.co.qrscanner.ui.settings.SettingsFragment;
-
 
 public class ScannerFragment extends BaseFragment implements ScannerSingleton.SingletonScannerListener ,ScannerView{
 
@@ -644,37 +623,6 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
         }
         else if (resultCode == Activity.RESULT_CANCELED){
             setVisible();
-        }
-    }
-
-    public void onRenderCode(final Bitmap bitmap,final InputStream inputStream){
-        try{
-            if(bitmap==null){
-                return;
-            }
-            if (inputStream==null){
-                return;
-            }
-            int[] intArray = new int[bitmap.getWidth()*bitmap.getHeight()];
-            bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-            LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
-            BinaryBitmap mBitmap = new BinaryBitmap(new HybridBinarizer(source));
-            Reader reader = new MultiFormatReader();
-            try {
-                Result result = reader.decode(mBitmap);
-                onFilterResult(result);
-                inputStream.close();
-            }
-            catch (NotFoundException | IOException |ChecksumException e){
-                e.printStackTrace();
-                barcodeScannerView.resume();
-                //Utils.showGotItSnackbar(getView(),R.string.please_choose_correctly_format);
-                Utils.onDropDownAlert(getActivity(),getString(R.string.please_choose_correctly_format));
-            }
-        }
-        catch (FormatException e){
-           e.printStackTrace();
-            barcodeScannerView.resume();
         }
     }
 
