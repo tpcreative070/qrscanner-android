@@ -98,10 +98,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         serverDriveApi = new RetrofitHelper().getCityService(RootAPI.ROOT_GOOGLE_DRIVE);
-        if (!Utils.isPremium()){
-            getAdsView();
-            getAdsLargeView();
-        }
         options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
@@ -254,9 +250,9 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     }
 
 
-    public AdView getAdsView(){
+    public AdView getAdsView(Context context){
         Utils.Log(TAG,"show ads...");
-        adView = new AdView(this);
+        adView = new AdView(context);
         adView.setAdSize(AdSize.BANNER);
         if (Utils.isFreeRelease()){
             if(Utils.isDebug()){
@@ -308,9 +304,9 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         return adView;
     }
 
-    public AdView getAdsLargeView(){
+    public AdView getAdsLargeView(Context context){
         Utils.Log(TAG,"show ads...");
-        adLargeView = new AdView(this);
+        adLargeView = new AdView(context);
         adLargeView.setAdSize(AdSize.MEDIUM_RECTANGLE);
         if (Utils.isFreeRelease()){
             if(Utils.isDebug()){

@@ -216,7 +216,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         setupRecyclerViewItem();
         presenter.getIntent(this);
         if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium()){
-            QRScannerApplication.getInstance().getAdsLargeView();
+            QRScannerApplication.getInstance().getAdsLargeView(this);
         }
         presenter.doShowAds();
     }
@@ -900,6 +900,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @Override
     public void onResume() {
         super.onResume();
+        presenter.doShowAds();
         Utils.Log(TAG,"onResume");
     }
 
