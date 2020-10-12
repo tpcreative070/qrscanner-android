@@ -178,7 +178,6 @@ public class SettingsFragment extends BaseFragment {
          */
 
         public void askPermission() {
-            PrefsController.putBoolean(getString(R.string.key_already_load_app), true);
             MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(getContext(),Utils.getCurrentTheme());
             dialogBuilder.setTitle(R.string.app_permission);
             dialogBuilder.setPadding(40,40,40,0);
@@ -192,7 +191,6 @@ public class SettingsFragment extends BaseFragment {
                     Button positive = dialog.findViewById(android.R.id.button1);
                     TextView title = dialog.findViewById(android.R.id.title);
                     if (positive!=null && title!=null){
-                        title.setTextColor(QRScannerApplication.getInstance().getResources().getColor(R.color.black));
                         positive.setTextSize(14);
                     }
                 }

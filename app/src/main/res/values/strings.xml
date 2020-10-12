@@ -105,7 +105,6 @@
     <string name="key_app_permissions">app_permissions</string>
     <string name="app_info">About this app</string>
     <string name="key_not_first_running">first_running</string>
-    <string name="key_already_load_app">already_load_app</string>
     <string name="got_it">OK, GOT IT</string>
     <string name="copy">Copy</string>
     <string name="error_occurred_importing">Error occurred importing</string>

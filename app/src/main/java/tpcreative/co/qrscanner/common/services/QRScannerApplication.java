@@ -76,6 +76,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                 .build();
         isLive = true;
         if (!Utils.isPremium()){
+            Utils.Log(TAG,"Start ads");
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override
                 public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -97,7 +98,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         dependencies.init();
         serverAPI = (RootAPI) Dependencies.serverAPI;
         serverDriveApi = new RetrofitHelper().getCityService(RootAPI.ROOT_GOOGLE_DRIVE);
-        Utils.Log(TAG,"Start ads");
         if (!Utils.isPremium()){
             getAdsView();
             getAdsLargeView();
