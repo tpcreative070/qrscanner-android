@@ -135,10 +135,10 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                 == PackageManager.PERMISSION_DENIED) {
             onAddPermissionCamera();
         }
-        if (!QRScannerApplication.getInstance().isLoader() && !Utils.isPremium()){
+        if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium()){
             QRScannerApplication.getInstance().getAdsView();
         }
-        if (!QRScannerApplication.getInstance().isLoaderLarge() && !Utils.isPremium()){
+        if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium()){
             QRScannerApplication.getInstance().getAdsLargeView();
         }
         final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);

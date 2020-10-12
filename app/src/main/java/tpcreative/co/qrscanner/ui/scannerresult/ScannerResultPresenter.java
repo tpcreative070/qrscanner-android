@@ -14,7 +14,6 @@ import tpcreative.co.qrscanner.common.presenter.Presenter;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.ItemNavigation;
-import tpcreative.co.qrscanner.ui.main.MainView;
 
 public class ScannerResultPresenter extends Presenter<ScannerResultView>{
 

@@ -54,8 +54,8 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     private MainActivity activity;
     private AdView adView;
     private AdView adLargeView;
-    private boolean isLoader = false;
-    private boolean isLoaderLarge = false;
+    private boolean isRequestAds = true;
+    private boolean isRequestLargeAds = true;
     private String authorization = null;
     private GoogleSignInOptions.Builder options;
     private Set<Scope> requiredScopes;
@@ -272,17 +272,13 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                isLoader = true;
+                isRequestAds = false;
                 Utils.Log(TAG,"Ads successful");
-                final Activity activity = getActivity();
-                if (activity!=null){
-                    Utils.onWriteLogs(activity,"logs.txt","0000");
-                }
             }
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
-                isLoader = false;
+                isRequestAds = true;
                 Utils.Log(TAG,"Ads failed");
             }
 
@@ -300,6 +296,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             @Override
             public void onAdLeftApplication() {
                 // Code to be executed when the user has left the app.
+                Utils.Log(TAG,"Ads left app");
             }
 
             @Override
@@ -329,18 +326,14 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         adLargeView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                isLoaderLarge = true;
+                isRequestLargeAds = false;
                 Utils.Log(TAG,"Ads successful");
-                final Activity activity = getActivity();
-                if (activity!=null){
-                    Utils.onWriteLogs(activity,"logs.txt","0000");
-                }
             }
 
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
-                isLoaderLarge = false;
+                isRequestLargeAds = true;
                 Utils.Log(TAG,"Ads failed");
             }
 
@@ -393,12 +386,12 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
         layAd.addView(adLargeView);
     }
 
-    public boolean isLoader() {
-        return isLoader;
+    public boolean isRequestAds() {
+        return isRequestAds;
     }
 
-    public boolean isLoaderLarge() {
-        return isLoaderLarge;
+    public boolean isRequestLargeAds() {
+        return isRequestLargeAds;
     }
 }
 
