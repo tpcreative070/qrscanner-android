@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.entities;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.zxing.BarcodeFormat;
