@@ -9,6 +9,7 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 
@@ -59,6 +62,8 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,6 +79,7 @@ import tpcreative.co.qrscanner.common.ScannerSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
+import tpcreative.co.qrscanner.common.view.crop.Crop;
 import tpcreative.co.qrscanner.model.Create;
 import tpcreative.co.qrscanner.model.EnumFragmentType;
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment;
@@ -536,7 +542,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
             }
             @Override
             public void onAnimationEnd(Animation animation) {
-               onAddPermissionGallery();
+                onAddPermissionGallery();
             }
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -603,35 +609,41 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.Log(TAG,"onActivityResult : " + requestCode + " - " + resultCode);
-        if (resultCode == Activity.RESULT_OK && requestCode == 9999) {
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.RGB_565;
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream,null,options);
-                Handler handler =  new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        onRenderCode(selectedImage,imageStream);
-                    }
-                },1000);
-            } catch (FileNotFoundException  e) {
-                e.printStackTrace();
-                Utils.Log(TAG,"Something went wrong");
-                setVisible();
-            }
-
-        }
-        else if (resultCode == Activity.RESULT_OK && requestCode == Navigator.SCANNER){
+        if (resultCode == Activity.RESULT_OK && requestCode == Navigator.SCANNER){
             setVisible();
             Utils.Log(TAG,"Resume camera");
+        }
+        else if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
+            beginCrop(data.getData());
+        }
+        else if (requestCode == Crop.REQUEST_CROP) {
+            handleCrop(resultCode, data);
         }
         else {
             Utils.Log(TAG,"You haven't picked Image");
             setVisible();
             Utils.Log(TAG,"Resume camera!!!");
+        }
+    }
+
+    private void beginCrop(Uri source) {
+        Uri destination = Uri.fromFile(new File(getActivity().getCacheDir(), "cropped"));
+        Crop.of(source, destination).asSquare().start(getContext(),this);
+    }
+
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == Activity.RESULT_OK) {
+            final String mData = Crop.getOutputString(result);
+            final Result mResult = new Gson().fromJson(mData,Result.class);
+            if (mResult!=null){
+                onFilterResult(mResult);
+            }
+            Utils.Log(TAG,"Result of cropped " +new Gson().toJson(mResult));
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Toast.makeText(getActivity(), Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        else if (resultCode == Activity.RESULT_CANCELED){
+            setVisible();
         }
     }
 
@@ -667,9 +679,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
     }
 
     public void onGetGallery(){
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, 9999);
+        Crop.pickImage(getContext(),this);
     }
 
     public void onFilterResult(Result result){
@@ -892,17 +902,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
         try {
             Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
             if (imageUri != null) {
-                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.RGB_565;
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream,null,options);
-                Handler handler =  new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        onRenderCode(selectedImage,imageStream);
-                    }
-                },1000);
+                beginCrop(imageUri);
             }
             else{
                 //Utils.showGotItSnackbar(getView(),R.string.can_not_support_this_format);

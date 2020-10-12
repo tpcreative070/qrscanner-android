@@ -9,14 +9,17 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.opengl.GLES10;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
+import android.widget.FrameLayout;
+
+import androidx.core.content.ContextCompat;
+
+import com.google.gson.Gson;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -29,8 +32,8 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.concurrent.CountDownLatch;
+import butterknife.BindView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
 
@@ -44,25 +47,24 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
     private final Handler handler  = new Handler(Looper.getMainLooper());;
     private int aspectX;
     private int aspectY;
-
     // Output image
     private int maxX;
     private int maxY;
     private int exifRotation;
-    private boolean saveAsPng;
     private Uri sourceUri;
-    private Uri saveUri;
     private boolean isSaving;
     private int sampleSize;
     private RotateBitmap rotateBitmap;
     private CropImageView imageView;
     private HighlightView cropView;
     private boolean isProgressing ;
+    @BindView(R.id.btn_done)
+    FrameLayout layoutDone;
 
     @Override
     public void onCreate(Bundle icicle) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(icicle);
-        setupWindowFlags();
         setupViews();
         loadInput();
         if (rotateBitmap == null) {
@@ -70,14 +72,8 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
             return;
         }
         startCrop();
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void setupWindowFlags() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
+        layoutDone.setEnabled(false);
+        layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorAccent));
     }
 
     private void setupViews() {
@@ -100,7 +96,7 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
 
         findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onSaveClicked();
+               finish();
             }
         });
     }
@@ -113,8 +109,6 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
             aspectY = extras.getInt(Crop.Extra.ASPECT_Y);
             maxX = extras.getInt(Crop.Extra.MAX_X);
             maxY = extras.getInt(Crop.Extra.MAX_Y);
-            saveAsPng = extras.getBoolean(Crop.Extra.AS_PNG, false);
-            saveUri = extras.getParcelable(MediaStore.EXTRA_OUTPUT);
         }
         sourceUri = intent.getData();
         if (sourceUri != null) {
@@ -177,6 +171,7 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
         if (isFinishing()) {
             return;
         }
+        imageView.setListenerState(this);
         imageView.setImageRotateBitmapResetBase(rotateBitmap, true);
         CropUtil.startBackgroundJob(this, null, getResources().getString(R.string.crop__wait),
                 new Runnable() {
@@ -242,62 +237,10 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
         }
     }
 
-    private void onSaveClicked() {
-        if (cropView == null || isSaving) {
-            return;
-        }
-        isSaving = true;
-        Bitmap croppedImage;
-        Rect r = cropView.getScaledCropRect(sampleSize);
-        int width = r.width();
-        int height = r.height();
-        int outWidth = width;
-        int outHeight = height;
-        if (maxX > 0 && maxY > 0 && (width > maxX || height > maxY)) {
-            float ratio = (float) width / (float) height;
-            if ((float) maxX / (float) maxY > ratio) {
-                outHeight = maxY;
-                outWidth = (int) ((float) maxY * ratio + .5f);
-            } else {
-                outWidth = maxX;
-                outHeight = (int) ((float) maxX / ratio + .5f);
-            }
-        }
-
-        try {
-            croppedImage = decodeRegionCrop(r, outWidth, outHeight);
-        } catch (IllegalArgumentException e) {
-            setResultException(e);
-            finish();
-            return;
-        }
-
-        if (croppedImage != null) {
-            imageView.setImageRotateBitmapResetBase(new RotateBitmap(croppedImage, exifRotation), true);
-            imageView.center();
-            imageView.highlightViews.clear();
-        }
-        saveImage(croppedImage);
-    }
-
-    private void saveImage(Bitmap croppedImage) {
-        if (croppedImage != null) {
-            final Bitmap b = croppedImage;
-            CropUtil.startBackgroundJob(this, null, getResources().getString(R.string.crop__saving),
-                    new Runnable() {
-                        public void run() {
-                            saveOutput(b);
-                        }
-                    }, handler
-            );
-        } else {
-            finish();
-        }
-    }
 
     private Bitmap decodeRegionCrop(Rect rect, int outWidth, int outHeight) {
         // Release memory now
-        clearImageView();
+//        clearImageView();
         InputStream is = null;
         Bitmap croppedImage = null;
         try {
@@ -349,38 +292,6 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
         System.gc();
     }
 
-    private void saveOutput(Bitmap croppedImage) {
-        if (saveUri != null) {
-            OutputStream outputStream = null;
-            try {
-                outputStream = getContentResolver().openOutputStream(saveUri);
-                if (outputStream != null) {
-                    croppedImage.compress(saveAsPng ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG,
-                            90,     // note: quality is ignored when using PNG
-                            outputStream);
-                }
-            } catch (IOException e) {
-                setResultException(e);
-                Log.e("Cannot open file: " + saveUri, e);
-            } finally {
-                CropUtil.closeSilently(outputStream);
-            }
-            CropUtil.copyExifRotation(
-                    CropUtil.getFromMediaUri(this, getContentResolver(), sourceUri),
-                    CropUtil.getFromMediaUri(this, getContentResolver(), saveUri)
-            );
-            setResultUri(saveUri);
-        }
-        final Bitmap b = croppedImage;
-        handler.post(new Runnable() {
-            public void run() {
-                imageView.clear();
-                b.recycle();
-            }
-        });
-        finish();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -402,6 +313,10 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
         setResult(RESULT_OK, new Intent().putExtra(MediaStore.EXTRA_OUTPUT, uri));
     }
 
+    private void setResultEncode(Result encode) {
+        setResult(RESULT_OK, new Intent().putExtra(Crop.REQUEST_DATA,new Gson().toJson(encode)));
+    }
+
     private void setResultException(Throwable throwable) {
         setResult(Crop.RESULT_ERROR, new Intent().putExtra(Crop.Extra.ERROR, throwable));
     }
@@ -413,15 +328,48 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
 
     @Override
     public void onRequestCropImage() {
-
+        Utils.Log(TAG,"onRequestCropImage");
+        handleCropping();
     }
 
-    public void onRenderCode(final Bitmap bitmap,final InputStream inputStream){
+    public void handleCropping(){
+        if (cropView == null || isSaving) {
+            return;
+        }
+        isSaving = true;
+        isProgressing = true;
+        Bitmap croppedImage;
+        Rect r = cropView.getScaledCropRect(sampleSize);
+        int width = r.width();
+        int height = r.height();
+        int outWidth = width;
+        int outHeight = height;
+        if (maxX > 0 && maxY > 0 && (width > maxX || height > maxY)) {
+            float ratio = (float) width / (float) height;
+            if ((float) maxX / (float) maxY > ratio) {
+                outHeight = maxY;
+                outWidth = (int) ((float) maxY * ratio + .5f);
+            } else {
+                outWidth = maxX;
+                outHeight = (int) ((float) maxX / ratio + .5f);
+            }
+        }
+        try {
+            croppedImage = decodeRegionCrop(r, outWidth, outHeight);
+        } catch (IllegalArgumentException e) {
+            setResultException(e);
+            finish();
+            return;
+        }
+        onRenderCode(croppedImage);
+    }
+
+    public void onRenderCode(final Bitmap bitmap){
+        Utils.Log(TAG,"onRenderCode");
         try{
             if(bitmap==null){
-                return;
-            }
-            if (inputStream==null){
+                isSaving = false;
+                isProgressing = false;
                 return;
             }
             int[] intArray = new int[bitmap.getWidth()*bitmap.getHeight()];
@@ -432,16 +380,35 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
             try {
                 Result result = reader.decode(mBitmap);
                 Utils.Log(TAG,"This is type of qrcode");
-                inputStream.close();
+                isSaving = false;
+                isProgressing = false;
+                layoutDone.setEnabled(true);
+                layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
+                setResultEncode(result);
             }
-            catch (NotFoundException | IOException | ChecksumException e){
+            catch (NotFoundException  | ChecksumException e){
                 e.printStackTrace();
                 Utils.Log(TAG,"Do not recognize qrcode type");
+                isSaving = false;
+                isProgressing = false;
+                layoutDone.setEnabled(false);
+                layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorAccent));
             }
         }
         catch (FormatException e){
             e.printStackTrace();
+            isSaving = false;
+            isProgressing = false;
             Utils.Log(TAG,"Do not recognize qrcode type");
+            layoutDone.setEnabled(false);
+            layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorAccent));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
+        super.onBackPressed();
     }
 }

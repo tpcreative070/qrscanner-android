@@ -340,4 +340,14 @@
         <item>Dark</item>
     </string-array>
     <string name="key_position_theme">key_position_theme</string>
+
+    /*Crop image*/
+    <string name="crop__saving">Saving picture…</string>
+    <string name="crop__wait">Please wait…</string>
+    <string name="crop__pick_error">No image sources available</string>
+
+    <string name="crop__done">DONE</string>
+    <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
+    <string name="drag_the_orange_markers_to_detect_barcode">Drag the orange markers to detect barcode or qr-code</string>
+
 </resources>

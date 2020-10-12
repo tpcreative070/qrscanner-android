@@ -16,6 +16,7 @@ public class Crop {
     public static final int REQUEST_CROP = 6709;
     public static final int REQUEST_PICK = 9162;
     public static final int RESULT_ERROR = 404;
+    public static final String REQUEST_DATA = "DATA";
 
     interface Extra {
         String ASPECT_X = "aspect_x";
@@ -154,6 +155,11 @@ public class Crop {
     public static Uri getOutput(Intent result) {
         return result.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
     }
+
+    public static String getOutputString(Intent result) {
+        return result.getStringExtra(Crop.REQUEST_DATA);
+    }
+
 
     /**
      * Retrieve error that caused crop to fail

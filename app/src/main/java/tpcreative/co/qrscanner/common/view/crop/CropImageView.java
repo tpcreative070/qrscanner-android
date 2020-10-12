@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import java.util.ArrayList;
-
 import tpcreative.co.qrscanner.common.Utils;
 
 public class CropImageView extends ImageViewTouchBase {
@@ -27,6 +26,10 @@ public class CropImageView extends ImageViewTouchBase {
     }
     public CropImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+    }
+
+    public void setListenerState(ListenerState listenerState) {
+        this.listenerState = listenerState;
     }
 
     @Override
@@ -80,14 +83,8 @@ public class CropImageView extends ImageViewTouchBase {
             hv.matrix.postTranslate(deltaX, deltaY);
             hv.invalidate();
         }
-        if (listenerState!=null){
-            if (!listenerState.isProgressingCropImage()){
-                listenerState.onRequestCropImage();
-            }
-        }
         Utils.Log(TAG,"postTranslate");
     }
-
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         CropImageActivity cropImageActivity = (CropImageActivity) context;
@@ -119,6 +116,11 @@ public class CropImageView extends ImageViewTouchBase {
             }
             motionHighlightView = null;
             center();
+            if (listenerState!=null){
+                if (!listenerState.isProgressingCropImage()){
+                    listenerState.onRequestCropImage();
+                }
+            }
             break;
         case MotionEvent.ACTION_MOVE:
             if (motionHighlightView != null && event.getPointerId(event.getActionIndex()) == validPointerId) {

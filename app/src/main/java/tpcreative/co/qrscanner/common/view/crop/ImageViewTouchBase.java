@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -133,7 +134,6 @@ abstract class ImageViewTouchBase extends AppCompatImageView {
         }
         return super.onKeyUp(keyCode, event);
     }
-
     @Override
     public void setImageBitmap(Bitmap bitmap) {
         setImageBitmap(bitmap, 0);

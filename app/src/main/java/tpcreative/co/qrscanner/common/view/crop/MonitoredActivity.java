@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tpcreative.co.qrscanner.common.view.crop;
-
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
+
+import tpcreative.co.qrscanner.common.activity.BaseActivity;
 
 /*
  * Modified from original in AOSP.
  */
-abstract class MonitoredActivity extends AppCompatActivity {
+abstract class MonitoredActivity extends BaseActivity {
 
     private final ArrayList<LifeCycleListener> listeners = new ArrayList<LifeCycleListener>();
 
