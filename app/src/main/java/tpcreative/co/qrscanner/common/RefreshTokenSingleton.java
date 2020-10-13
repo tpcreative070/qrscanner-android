@@ -95,6 +95,8 @@ public class RefreshTokenSingleton {
                                 Utils.Log(TAG,"Refresh access token value: "+ mAuthor.access_token);
                                 mAuthor.email = credential.getSelectedAccount().name;
                                 Utils.setAuthor(mAuthor);
+                                Utils.Log(ServiceManager.class,"onRefreshAccessToken");
+                                Utils.Log(ServiceManager.class,"isSyncingData 99 " +ServiceManager.getInstance().isSyncingData());
                                 ServiceManager.getInstance().onPreparingSyncData(false);
                             }
                         }

@@ -62,17 +62,20 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null && GoogleSignIn.hasPermissions(account,new Scope(DriveScopes.DRIVE_FILE),new Scope(DriveScopes.DRIVE_APPDATA))) {
-            getGoogleSignInClient(account.getAccount());
-            initializeDriveClient(account);
-            mSignInAccount = account;
-        } else {
-            final Author mAuthor = Author.getInstance().getAuthorInfo();
-            if (mAuthor!=null){
-                mAuthor.isConnectedToGoogleDrive = false;
-                Utils.setAuthor(mAuthor);
-                onDriveError();
+        Utils.Log(ServiceManager.class,"onStart " +Utils.isRequestSyncData());
+        if (Utils.isRequestSyncData() || ServiceManager.getInstance().isSyncingData()){
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+            if (account != null && GoogleSignIn.hasPermissions(account,new Scope(DriveScopes.DRIVE_FILE),new Scope(DriveScopes.DRIVE_APPDATA))) {
+                getGoogleSignInClient(account.getAccount());
+                initializeDriveClient(account);
+                mSignInAccount = account;
+            } else {
+                final Author mAuthor = Author.getInstance().getAuthorInfo();
+                if (mAuthor!=null){
+                    mAuthor.isConnectedToGoogleDrive = false;
+                    Utils.setAuthor(mAuthor);
+                    onDriveError();
+                }
             }
         }
     }
@@ -130,6 +133,11 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                                 mAuthor.access_token = String.format(QRScannerApplication.getInstance().getString(R.string.access_token),value);
                                 Utils.Log(TAG,"Refresh access token value: "+ mAuthor.access_token);
                                 mAuthor.email = credential.getSelectedAccount().name;
+                                Utils.Log(ServiceManager.class,"isSyncingData 136 " +ServiceManager.getInstance().isSyncingData());
+                                Utils.Log(ServiceManager.class,"onRefreshAccessToken!!!");
+                                if (Utils.getDriveEmail()!=null && !mAuthor.email.equals(Utils.getDriveEmail())){
+                                    onSwitchedUser();
+                                }
                                 Utils.setAuthor(mAuthor);
                             }
                         }
@@ -145,7 +153,7 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                 }
                 return null;
             }
-        }).subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(response ->{
                     try {
                         if (response != null) {
@@ -196,6 +204,20 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                 }));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (compositeDisposable != null) {
+            if (!compositeDisposable.isDisposed()) {
+                compositeDisposable.dispose();
+            }
+            if (compositeDisposable.isDisposed()) {
+                compositeDisposable.clear();
+            }
+            compositeDisposable = null;
+        }
+    }
+
     /**
      * Continues the sign-in process, initializing the Drive clients with the current
      * user's account.
@@ -205,12 +227,13 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
         mSignInAccount = signInAccount;
         Utils.Log(TAG,"Google client ready");
         Utils.Log(TAG,"Account :"+ mSignInAccount.getAccount());
-        //new GetAccessToken().execute(mSignInAccount.getAccount());
         onRefreshAccessToken(mSignInAccount.getAccount());
     }
     /**
      * Called after the user has signed in and the Drive client has been initialized.
      */
+
+    protected abstract void onSwitchedUser();
 
     protected abstract void onDriveClientReady();
 
@@ -225,28 +248,6 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
     protected abstract boolean isSignIn();
 
     protected abstract void startServiceNow();
-
-    protected abstract void onStopListenerAWhile();
-
-    protected void signOut() {
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                final  Author mAuthor = Author.getInstance().getAuthorInfo();
-                if (mAuthor!=null){
-                    mAuthor.isConnectedToGoogleDrive = false;
-                    Utils.setAuthor(mAuthor);
-                }
-                onDriveSignOut();
-            }
-
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        });
-    }
 
     protected void signOut(QRScannerService.ServiceManagerSyncDataListener ls) {
         Utils.Log(TAG,"Call signOut");

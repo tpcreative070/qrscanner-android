@@ -185,6 +185,7 @@ public class ServiceManager implements BaseView {
 
     private void onGetItemList(){
         isSyncingData = true;
+        Utils.Log(TAG,"isSyncingData 188 " +isSyncingData);
         myService.getFileListInApp(new QRScannerService.BaseListener<DriveResponse>() {
             @Override
             public void onShowListObjects(List<DriveResponse> list) {
@@ -204,6 +205,7 @@ public class ServiceManager implements BaseView {
             @Override
             public void onError(String message, EnumStatus status) {
                 isSyncingData = false;
+                Utils.Log(TAG,"isSyncingData 207 " + isSyncingData);
                 Utils.Log(TAG,"response error " + message);
                 switch (status){
                     case REQUEST_REFRESH_ACCESS_TOKEN:
@@ -238,6 +240,7 @@ public class ServiceManager implements BaseView {
             public void onError(String message, EnumStatus status) {
                 Utils.Log(TAG,message);
                 isSyncingData = false;
+                Utils.Log(TAG,"isSyncingData 401 " + isSyncingData);
             }
 
             @Override
@@ -304,6 +307,7 @@ public class ServiceManager implements BaseView {
                 onDismissServices();
             }
             isSyncingData = false;
+            Utils.Log(TAG,"isSyncingData 308 " + isSyncingData);
         }else {
             Utils.Log(TAG,"Preparing delete old file...");
             Utils.Log(TAG,"Last time from cloud..." +mObject.updatedDateTime);
@@ -332,11 +336,13 @@ public class ServiceManager implements BaseView {
         if (isDismiss){
             onDismissServices();
             isSyncingData = false;
+            Utils.Log(TAG,"isSyncingData 337 " + isSyncingData);
         }else{
             SaveSingleton.getInstance().reloadData();
             HistorySingleton.getInstance().reloadData();
             BackupSingleton.getInstance().reloadData();
             isSyncingData = false;
+            Utils.Log(TAG,"isSyncingData 343 " + isSyncingData);
             Utils.Log(TAG,"Syncing data completed");
         }
     }
@@ -356,6 +362,7 @@ public class ServiceManager implements BaseView {
                 onDismissServices();
             }
             isSyncingData = false;
+            Utils.Log(TAG,"isSyncingData 363 " + isSyncingData);
             Utils.Log(TAG,"Not found data to delete");
         }
     }
@@ -423,6 +430,7 @@ public class ServiceManager implements BaseView {
                     onDismissServices();
                 }
                 isSyncingData = false;
+                Utils.Log(TAG,"isSyncingData 431 " + isSyncingData);
             }
             @Override
             public void onSuccessful(String message, EnumStatus status) {
@@ -542,6 +550,8 @@ public class ServiceManager implements BaseView {
         switch (status) {
             case CONNECTED: {
                 isSyncingData = false;
+                Utils.Log(TAG,"isSyncingData 551 " + isSyncingData);
+                Utils.Log(TAG,"Wifi connected changed");
                 onPreparingSyncData(false);
                 ResponseSingleton.getInstance().onNetworkConnectionChanged(true);
                 break;

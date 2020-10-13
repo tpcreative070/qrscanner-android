@@ -71,7 +71,13 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
 
     @OnClick(R.id.btnEnable)
     public void onClickedEnable(){
-        ServiceManager.getInstance().onPickUpNewEmail(this);
+        Utils.Log(ServiceManager.class,"isSyncingData 74 " +ServiceManager.getInstance().isSyncingData());
+        if (!ServiceManager.getInstance().isSyncingData()){
+            ServiceManager.getInstance().onPickUpNewEmail(this);
+        }else{
+            Utils.Log(ServiceManager.class,"isSyncingData 78 is running");
+            requestSyncData();
+        }
     }
 
     @Override
@@ -88,8 +94,7 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
                             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
                             Utils.setRequestSync(true);
                             requestSyncData();
-                            Utils.cleanDataAlreadySynced();
-                            Utils.setDefaultSaveHistoryDeletedKey();
+                            Utils.Log(TAG,"isSyncingData 92 " +ServiceManager.getInstance().isSyncingData());
                             signOut(new QRScannerService.ServiceManagerSyncDataListener() {
                                 @Override
                                 public void onCompleted() {
@@ -107,6 +112,7 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
                             return;
                         }
                     }
+                    Utils.Log(TAG,"isSyncingData 109 " +ServiceManager.getInstance().isSyncingData());
                     Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
                     Utils.setRequestSync(true);
                     signOut(new QRScannerService.ServiceManagerSyncDataListener() {
@@ -141,6 +147,8 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
             tvEmail.setVisibility(View.VISIBLE);
             btnEnable.setText(getText(R.string.switch_account));
         }
+        Utils.Log(ServiceManager.class,"onDriveClientReady");
+        Utils.Log(ServiceManager.class,"isSyncingData 143" +ServiceManager.getInstance().isSyncingData());
         ServiceManager.getInstance().onPreparingSyncData(false);
     }
 
@@ -160,6 +168,13 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     }
 
     @Override
+    protected void onSwitchedUser() {
+        Utils.Log(ServiceManager.class,"onSwitchedUser and delete synced data "+ ServiceManager.getInstance().isSyncingData());
+        Utils.cleanDataAlreadySynced();
+        Utils.setDefaultSaveHistoryDeletedKey();
+    }
+
+    @Override
     protected boolean isSignIn() {
         return true;
     }
@@ -176,12 +191,13 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     }
 
     @Override
-    protected void onStopListenerAWhile() {
-
+    protected void onSignedInSuccessful() {
+        requestSyncData();
     }
 
     @Override
-    protected void onSignedInSuccessful() {
+    protected void onStart() {
+        super.onStart();
         requestSyncData();
     }
 
