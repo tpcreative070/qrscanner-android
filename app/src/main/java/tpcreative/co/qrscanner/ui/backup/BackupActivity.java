@@ -69,6 +69,7 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
         switch (requestCode){
             case Navigator.REQUEST_CODE_EMAIL :
                 if (resultCode == Activity.RESULT_OK) {
+                    tvUsedSpace.setText(getText(R.string.loading_data));
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     Utils.Log(TAG,"account name " + accountName );
                     if (Utils.getDriveEmail()!=null){
@@ -123,11 +124,6 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
             tvEmail.setText(HtmlCompat.fromHtml(newText,HtmlCompat.FROM_HTML_MODE_LEGACY));
             tvEmail.setVisibility(View.VISIBLE);
             btnEnable.setText(getText(R.string.switch_account));
-            final List<SaveModel> mSaveSyncedList = SQLiteHelper.getSaveList(true);
-            final List<HistoryModel> mHistorySyncedList = SQLiteHelper.getHistoryList(true);
-            tvUsedSpace.setVisibility(View.VISIBLE);
-            String mTextSynced = String.format(getString(R.string.synced_data),mSaveSyncedList.size()+"",mHistorySyncedList.size()+"");
-            tvUsedSpace.setText(HtmlCompat.fromHtml(mTextSynced,HtmlCompat.FROM_HTML_MODE_LEGACY));
         }
         ServiceManager.getInstance().onPreparingSyncData(false);
     }

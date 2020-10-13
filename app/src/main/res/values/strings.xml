@@ -283,6 +283,7 @@
     <string name="grant_permissions_to_google_drive">The app need some specific permissions to backup data to your Google drive, Do not worry about sensitive data in your Google drive. QRScanner app only generate own space to backup data. It does not affect to your data existing.</string>
     <string name="current_email">Signed in with email is: %1$s Please keep it to continue signing in to another devices</string>
     <string name="synced_data"><![CDATA[<b>Save synced: <font color=#e19704>%1$s</font></b><br\>]]> <![CDATA[<b>History synced: <font color=#e19704>%2$s</font></b>]]></string>
+    <string name="loading_data">Loading data...</string>
     <string name="enable_sync_data">Enable sync data</string>
     <string name="switch_account">Switch account</string>
     <string name="selected">selected</string>

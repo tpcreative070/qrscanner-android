@@ -430,14 +430,43 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                 Utils.Log(TAG, "onDownLoadCompleted " + file_name.getAbsolutePath());
                 final String mValue = loadFromTempFile(file_name);
                 if (mValue!=null){
-                    final SyncDataModel mDataValue = new Gson().fromJson(mValue,new TypeToken<SyncDataModel>(){}.getType());
-                    if (mDataValue!=null){
-                        Utils.Log(TAG,"List value "+ new Gson().toJson(mDataValue));
-                        listener.onSuccessful("Downloaded successfully",EnumStatus.DOWNLOADED_SUCCESSFULLY);
-                        listener.onShowObjects(mDataValue);
+                    try {
+                        final SyncDataModel mDataValue = new Gson().fromJson(mValue,new TypeToken<SyncDataModel>(){}.getType());
+                        if (mDataValue!=null){
+                            Utils.Log(TAG,"List value "+ new Gson().toJson(mDataValue));
+                            listener.onSuccessful("Downloaded successfully",EnumStatus.DOWNLOADED_SUCCESSFULLY);
+                            listener.onShowObjects(mDataValue);
+                            if (downloadTempFile.delete()){
+                                Utils.Log(TAG,"Already deleted temp file");
+                            }
+                        }
+                    }catch (Exception e){
+                        /*Delete file could not parse to object*/
+                        onDeleteCloudItems(id, new BaseListener() {
+                            @Override
+                            public void onShowListObjects(List list) {
+
+                            }
+
+                            @Override
+                            public void onShowObjects(Object object) {
+
+                            }
+
+                            @Override
+                            public void onError(String message, EnumStatus status) {
+
+                            }
+
+                            @Override
+                            public void onSuccessful(String message, EnumStatus status) {
+
+                            }
+                        });
                         if (downloadTempFile.delete()){
                             Utils.Log(TAG,"Already deleted temp file");
                         }
+                        e.printStackTrace();
                     }
                 }
             }
