@@ -97,6 +97,7 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                         GoogleSignIn.getSignedInAccountFromIntent(data);
                 if (getAccountTask.isSuccessful()) {
                     Utils.Log(TAG, "sign in successful");
+                    onSignedInSuccessful();
                     initializeDriveClient(getAccountTask.getResult());
                 } else {
                     onDriveError();
@@ -218,6 +219,8 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
     protected abstract void onDriveSignOut();
 
     protected abstract void onDriveRevokeAccess();
+
+    protected abstract void onSignedInSuccessful();
 
     protected abstract boolean isSignIn();
 

@@ -63,6 +63,7 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     public void requestSyncData(){
         if (Utils.isRequestSyncData() || ServiceManager.getInstance().isSyncingData()){
             tvUsedSpace.setText(getText(R.string.syncing_data));
+            tvUsedSpace.setVisibility(View.VISIBLE);
             btnEnable.setTextColor(ContextCompat.getColor(this,R.color.material_gray_400));
             btnEnable.setEnabled(false);
         }
@@ -106,6 +107,8 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
                             return;
                         }
                     }
+                    Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+                    Utils.setRequestSync(true);
                     signOut(new QRScannerService.ServiceManagerSyncDataListener() {
                         @Override
                         public void onCompleted() {
@@ -175,6 +178,11 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     @Override
     protected void onStopListenerAWhile() {
 
+    }
+
+    @Override
+    protected void onSignedInSuccessful() {
+        requestSyncData();
     }
 
     @Override
