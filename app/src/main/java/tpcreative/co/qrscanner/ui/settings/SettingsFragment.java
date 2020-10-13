@@ -166,6 +166,13 @@ public class SettingsFragment extends BaseFragment {
         }
 
         @Override
+        public void onSyncDataRequest() {
+            if (!Utils.isConnectedToGoogleDrive()){
+                mySwitchPreferenceBackupData.setChecked(false);
+            }
+        }
+
+        @Override
         public void onUpdatedSharePreferences(boolean value) {
 
         }
