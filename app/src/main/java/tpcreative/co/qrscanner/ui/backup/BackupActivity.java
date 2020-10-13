@@ -149,6 +149,12 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BackupSingleton.getInstance().setListener(null);
+    }
+
+    @Override
     protected void startServiceNow() {
         ServiceManager.getInstance().onStartService();
     }

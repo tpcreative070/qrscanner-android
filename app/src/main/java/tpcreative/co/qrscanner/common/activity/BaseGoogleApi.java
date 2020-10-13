@@ -278,11 +278,4 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                     }
                 });
     }
-
-    protected void onCheckRequestSignOut(){
-        boolean isRequest = PrefsController.getBoolean(getString(R.string.key_request_sign_out_google_drive),false);
-        if (isRequest){
-            revokeAccess();
-        }
-    }
 }
