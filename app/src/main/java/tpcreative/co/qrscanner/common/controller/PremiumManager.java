@@ -54,6 +54,9 @@ public class PremiumManager implements BillingProcessor.IBillingHandler {
                 final PurchaseData mPurchaseData = details.purchaseInfo.purchaseData;
                 if (mPurchaseData!=null){
                     if (Utils.isRealCheckedOut(mPurchaseData.orderId)){
+                        if (!Utils.isAlreadyCheckout()){
+                            ServiceManager.getInstance().onCheckout(mPurchaseData);
+                        }
                         Utils.setPremium(true);
                     }else{
                         Utils.setPremium(false);
