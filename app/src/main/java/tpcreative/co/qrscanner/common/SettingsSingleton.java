@@ -26,6 +26,12 @@ public class SettingsSingleton {
         }
     }
 
+    public void onSyncDataRequest(){
+        if (listener!=null){
+            listener.onSyncDataRequest();
+        }
+    }
+
     public void onUpdateSharePreference(boolean value){
         if (listener!=null){
             listener.onUpdatedSharePreferences(value);
@@ -35,5 +41,6 @@ public class SettingsSingleton {
     public interface SingletonSettingsListener{
         void onUpdated();
         void onUpdatedSharePreferences(boolean value);
+        void onSyncDataRequest();
     }
 }

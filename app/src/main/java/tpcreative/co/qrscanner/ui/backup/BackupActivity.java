@@ -17,6 +17,7 @@ import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.BackupSingleton;
 import tpcreative.co.qrscanner.common.Navigator;
+import tpcreative.co.qrscanner.common.SettingsSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseGoogleApi;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
@@ -183,6 +184,7 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     protected void onDestroy() {
         super.onDestroy();
         BackupSingleton.getInstance().setListener(null);
+        SettingsSingleton.getInstance().onSyncDataRequest();
     }
 
     @Override
