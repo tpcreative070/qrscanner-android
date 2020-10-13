@@ -1021,6 +1021,13 @@ public class Utils {
         return PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_last_time_synced),"");
     }
 
+    public static boolean isRequestSyncData(){
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_sync),false);
+    }
+
+    public static void setRequestSync(boolean value){
+         PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_sync),value);
+    }
     public static boolean isEqualTimeSynced(String value){
         if (value.equals(getLastTimeSynced())){
             return true;

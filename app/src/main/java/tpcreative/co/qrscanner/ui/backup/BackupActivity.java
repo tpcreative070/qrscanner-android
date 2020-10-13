@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import java.util.List;
@@ -54,7 +55,16 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
                 tvUsedSpace.setVisibility(View.VISIBLE);
                 String mTextSynced = String.format(getString(R.string.synced_data),mSaveSyncedList.size()+"",mHistorySyncedList.size()+"");
                 tvUsedSpace.setText(HtmlCompat.fromHtml(mTextSynced,HtmlCompat.FROM_HTML_MODE_LEGACY));
+                requestSyncData();
             }
+        }
+    }
+
+    public void requestSyncData(){
+        if (Utils.isRequestSyncData()){
+            tvUsedSpace.setText(getText(R.string.loading_data));
+            btnEnable.setTextColor(ContextCompat.getColor(this,R.color.material_gray_400));
+            btnEnable.setEnabled(false);
         }
     }
 
@@ -69,11 +79,14 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
         switch (requestCode){
             case Navigator.REQUEST_CODE_EMAIL :
                 if (resultCode == Activity.RESULT_OK) {
-                    tvUsedSpace.setText(getText(R.string.loading_data));
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     Utils.Log(TAG,"account name " + accountName );
                     if (Utils.getDriveEmail()!=null){
                         if (!Utils.getDriveEmail().equals(accountName)){
+                            /*Updated lifecycle for sync data*/
+                            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+                            Utils.setRequestSync(true);
+                            requestSyncData();
                             Utils.cleanDataAlreadySynced();
                             Utils.setDefaultSaveHistoryDeletedKey();
                             signOut(new QRScannerService.ServiceManagerSyncDataListener() {
@@ -172,5 +185,7 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
         tvUsedSpace.setVisibility(View.VISIBLE);
         String mTextSynced = String.format(getString(R.string.synced_data),mSaveSyncedList.size()+"",mHistorySyncedList.size()+"");
         tvUsedSpace.setText(HtmlCompat.fromHtml(mTextSynced,HtmlCompat.FROM_HTML_MODE_LEGACY));
+        btnEnable.setEnabled(true);
+        btnEnable.setTextColor(ContextCompat.getColor(this,R.color.white));
     }
 }

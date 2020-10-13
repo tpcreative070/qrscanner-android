@@ -22,6 +22,7 @@ public class SyncDataModel implements Serializable {
         }
         this.updatedDateTime = Utils.getCurrentDateTimeSort();
         Utils.setLastTimeSynced(this.updatedDateTime);
+        Utils.setRequestSync(false);
     }
     public String toJson(){
         return new Gson().toJson(this);

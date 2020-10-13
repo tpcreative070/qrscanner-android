@@ -372,7 +372,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                     save.id = create.id;
                     save.isSynced = create.isSynced;
                     save.uuId = create.uuId;
-                    SQLiteHelper.onUpdate(save);
+                    SQLiteHelper.onUpdate(save,true);
                 }
                 break;
             }

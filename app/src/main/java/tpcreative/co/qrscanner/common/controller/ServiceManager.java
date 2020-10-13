@@ -273,10 +273,10 @@ public class ServiceManager implements BaseView {
 
         /*Updating to local db*/
         for (SaveModel index : mSaveUpdateResultList){
-            SQLiteHelper.onUpdate(index);
+            SQLiteHelper.onUpdate(index,true);
         }
         for (HistoryModel index : mHistoryUpdateResultList){
-            SQLiteHelper.onUpdate(index);
+            SQLiteHelper.onUpdate(index,true);
         }
 
         /*Deleting to local db*/
@@ -305,12 +305,16 @@ public class ServiceManager implements BaseView {
         final List<SaveModel> mSaveList = SQLiteHelper.getSaveList(false);
         final List<HistoryModel> mHistoryList = SQLiteHelper.getHistoryList(false);
         for (SaveModel index : mSaveList){
-            index.isSynced = true;
-            SQLiteHelper.onUpdate(index);
+            if (!index.isSynced){
+                index.isSynced = true;
+                SQLiteHelper.onUpdate(index,false);
+            }
         }
         for (HistoryModel index : mHistoryList){
-            index.isSynced = true;
-            SQLiteHelper.onUpdate(index);
+            if (!index.isSynced){
+                index.isSynced = true;
+                SQLiteHelper.onUpdate(index,false);
+            }
         }
         /*Final step*/
         if (isDismiss){

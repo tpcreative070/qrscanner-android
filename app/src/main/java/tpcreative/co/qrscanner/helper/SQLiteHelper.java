@@ -36,6 +36,7 @@ public class SQLiteHelper {
                 }
             }
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+            Utils.setRequestSync(true);
             InstanceGenerator.getInstance(getContext()).onInsert(mData);
         }
         catch (Exception e){
@@ -78,6 +79,7 @@ public class SQLiteHelper {
             final HistoryEntityModel mData = new HistoryEntityModel(entity);
             Utils.setHistoryDeletedMap(mData);
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+            Utils.setRequestSync(true);
             return getInstance().onDelete(mData);
         }
         catch (Exception e){
@@ -110,6 +112,7 @@ public class SQLiteHelper {
                 }
             }
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+            Utils.setRequestSync(true);
             getInstance().onInsert(mData);
         }
         catch (Exception e){
@@ -117,13 +120,16 @@ public class SQLiteHelper {
         }
     }
 
-    public static void onUpdate(SaveModel cTalkManager){
+    public static void onUpdate(SaveModel cTalkManager,boolean isRequestChangingLifecycle){
         try {
             if (cTalkManager==null){
                 return;
             }
             final SaveEntityModel mData = new SaveEntityModel(cTalkManager);
-            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+            if (isRequestChangingLifecycle){
+                Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+                Utils.setRequestSync(true);
+            }
             getInstance().onUpdate(mData);
         }
         catch (Exception e){
@@ -131,13 +137,16 @@ public class SQLiteHelper {
         }
     }
 
-    public static void onUpdate(HistoryModel cTalkManager){
+    public static void onUpdate(HistoryModel cTalkManager, boolean isRequestChangingLifecycle){
         try {
             if (cTalkManager==null){
                 return;
             }
             final HistoryEntityModel mData = new HistoryEntityModel(cTalkManager);
-            Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+            if (isRequestChangingLifecycle){
+                Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+                Utils.setRequestSync(true);
+            }
             getInstance().onUpdate(mData);
         }
         catch (Exception e){
@@ -180,6 +189,7 @@ public class SQLiteHelper {
             final SaveEntityModel mData = new SaveEntityModel(entity);
             Utils.setSaveDeletedMap(mData);
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort());
+            Utils.setRequestSync(true);
             return getInstance().onDelete(mData);
         }
         catch (Exception e){
