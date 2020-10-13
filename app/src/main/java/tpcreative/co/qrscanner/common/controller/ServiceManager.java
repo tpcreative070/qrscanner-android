@@ -183,7 +183,7 @@ public class ServiceManager implements BaseView {
         onGetItemList();
     }
 
-    public void onGetItemList(){
+    private void onGetItemList(){
         isSyncingData = true;
         myService.getFileListInApp(new QRScannerService.BaseListener<DriveResponse>() {
             @Override
@@ -221,7 +221,7 @@ public class ServiceManager implements BaseView {
     }
 
     /*onPreparingDownload*/
-    public void onPreparingDownloadItemData(String id){
+    private void onPreparingDownloadItemData(String id){
         myService.onDownloadFile(id, new QRScannerService.BaseListener<SyncDataModel>() {
             @Override
             public void onShowListObjects(List<SyncDataModel> list) {
@@ -248,7 +248,7 @@ public class ServiceManager implements BaseView {
     }
 
     /*Checking data to insert to local db*/
-    public void onCheckingDataToSyncToLocalDB(SyncDataModel mObject){
+    private void onCheckingDataToSyncToLocalDB(SyncDataModel mObject){
         final List<SaveModel> mSaveList = mObject.saveList;
         final List<HistoryModel> mHistoryList = mObject.historyList;
 
@@ -313,7 +313,7 @@ public class ServiceManager implements BaseView {
     }
 
     /*Updated history and save after upload file*/
-    public void onUpdatedHistoryAndSaveToSyncedItem(){
+    private void onUpdatedHistoryAndSaveToSyncedItem(){
         final List<SaveModel> mSaveList = SQLiteHelper.getSaveList(false);
         final List<HistoryModel> mHistoryList = SQLiteHelper.getHistoryList(false);
         for (SaveModel index : mSaveList){
@@ -342,7 +342,7 @@ public class ServiceManager implements BaseView {
     }
 
     /*onPreparingDownload*/
-    public void onPreparingDeleteItemData(){
+    private void onPreparingDeleteItemData(){
         if (mDriveIdList.size()>0){
             mMapDelete.clear();
             mMapDelete = Utils.mergeListToHashMap(mDriveIdList);
@@ -404,7 +404,7 @@ public class ServiceManager implements BaseView {
     }
 
     /*onPreparingDownload*/
-    public void onPreparingUploadItemData(){
+    private void onPreparingUploadItemData(){
         myService.onUploadFileInAppFolder(new QRScannerService.BaseListener() {
             @Override
             public void onShowListObjects(List list) {
