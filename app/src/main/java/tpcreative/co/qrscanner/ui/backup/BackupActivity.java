@@ -61,7 +61,7 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     }
 
     public void requestSyncData(){
-        if (Utils.isRequestSyncData()){
+        if (Utils.isRequestSyncData() || ServiceManager.getInstance().isSyncingData()){
             tvUsedSpace.setText(getText(R.string.syncing_data));
             btnEnable.setTextColor(ContextCompat.getColor(this,R.color.material_gray_400));
             btnEnable.setEnabled(false);

@@ -51,6 +51,7 @@ public class ServiceManager implements BaseView {
     private Map<String,String>mMapDelete = new HashMap<>();
     private List<DriveResponse> mDriveIdList = new ArrayList<>();
     private boolean isDismiss ;
+    private boolean isSyncingData;
 
     ServiceConnection myConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
@@ -68,6 +69,10 @@ public class ServiceManager implements BaseView {
             myService = null;
         }
     };
+
+    public boolean isSyncingData() {
+        return isSyncingData;
+    }
 
     public void onPickUpNewEmail(Activity context) {
         try {
@@ -169,12 +174,17 @@ public class ServiceManager implements BaseView {
             }
             return;
         }
+        if (isSyncingData){
+            Utils.Log(TAG,"Syncing data. Please wait...");
+            return;
+        }
         Utils.Log(TAG,"Starting sync data");
         this.isDismiss = isDismissApp;
         onGetItemList();
     }
 
     public void onGetItemList(){
+        isSyncingData = true;
         myService.getFileListInApp(new QRScannerService.BaseListener<DriveResponse>() {
             @Override
             public void onShowListObjects(List<DriveResponse> list) {
@@ -183,17 +193,17 @@ public class ServiceManager implements BaseView {
                 mDriveIdList.addAll(list);
                 if (mDriveIdList.size()>0){
                     final DriveResponse mData = mDriveIdList.get(0);
-                    ServiceManager.getInstance().onPreparingDownloadItemData(mData.id);
+                    onPreparingDownloadItemData(mData.id);
                 }else{
                     onPreparingUploadItemData();
                 }
             }
             @Override
             public void onShowObjects(DriveResponse object) {
-
             }
             @Override
             public void onError(String message, EnumStatus status) {
+                isSyncingData = false;
                 Utils.Log(TAG,"response error " + message);
                 switch (status){
                     case REQUEST_REFRESH_ACCESS_TOKEN:
@@ -227,6 +237,7 @@ public class ServiceManager implements BaseView {
             @Override
             public void onError(String message, EnumStatus status) {
                 Utils.Log(TAG,message);
+                isSyncingData = false;
             }
 
             @Override
@@ -292,6 +303,7 @@ public class ServiceManager implements BaseView {
             if (isDismiss){
                 onDismissServices();
             }
+            isSyncingData = false;
         }else {
             Utils.Log(TAG,"Preparing delete old file...");
             Utils.Log(TAG,"Last time from cloud..." +mObject.updatedDateTime);
@@ -319,10 +331,13 @@ public class ServiceManager implements BaseView {
         /*Final step*/
         if (isDismiss){
             onDismissServices();
+            isSyncingData = false;
         }else{
             SaveSingleton.getInstance().reloadData();
             HistorySingleton.getInstance().reloadData();
             BackupSingleton.getInstance().reloadData();
+            isSyncingData = false;
+            Utils.Log(TAG,"Syncing data completed");
         }
     }
 
@@ -340,6 +355,7 @@ public class ServiceManager implements BaseView {
             if (isDismiss){
                 onDismissServices();
             }
+            isSyncingData = false;
             Utils.Log(TAG,"Not found data to delete");
         }
     }
@@ -406,6 +422,7 @@ public class ServiceManager implements BaseView {
                 if (isDismiss){
                     onDismissServices();
                 }
+                isSyncingData = false;
             }
             @Override
             public void onSuccessful(String message, EnumStatus status) {
@@ -524,6 +541,8 @@ public class ServiceManager implements BaseView {
     public void onSuccessful(String message, EnumStatus status) {
         switch (status) {
             case CONNECTED: {
+                isSyncingData = false;
+                onPreparingSyncData(false);
                 ResponseSingleton.getInstance().onNetworkConnectionChanged(true);
                 break;
             }
