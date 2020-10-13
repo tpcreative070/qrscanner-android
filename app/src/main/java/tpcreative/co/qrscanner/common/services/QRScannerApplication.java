@@ -75,7 +75,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
                 .setUseDefaultSharedPreference(true)
                 .build();
         isLive = true;
-        if (!Utils.isPremium()){
+        if (!Utils.isPremium() && Utils.isLiveAds()){
             Utils.Log(TAG,"Start ads");
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override

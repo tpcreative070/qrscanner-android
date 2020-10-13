@@ -6,7 +6,7 @@ public class MainPresenter extends Presenter<MainView> {
     public boolean isPremium;
     public void doShowAds(){
         MainView view = view();
-        if (!Utils.isPremium()){
+        if (!Utils.isPremium() && Utils.isLiveAds()){
             view.doShowAds(true);
         }else{
             view.doShowAds(false);

@@ -1072,4 +1072,8 @@ public class Utils {
     public static void setCheckoutValue(boolean value){
         PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_already_checkout),value);
     }
+
+    public static boolean isLiveAds(){
+        return false;
+    }
 }

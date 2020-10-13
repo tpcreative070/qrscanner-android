@@ -217,7 +217,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         presenter.bindView(this);
         setupRecyclerViewItem();
         presenter.getIntent(this);
-        if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium()){
+        if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium() && Utils.isLiveAds()){
             QRScannerApplication.getInstance().getAdsLargeView(this);
         }
         presenter.doShowAds();
