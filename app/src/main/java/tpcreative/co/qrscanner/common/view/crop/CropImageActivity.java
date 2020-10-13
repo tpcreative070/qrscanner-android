@@ -30,19 +30,22 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.Utils;
 
-/*
- * Modified from original in AOSP.
- */
 public class CropImageActivity extends MonitoredActivity implements CropImageView.ListenerState {
     private static final String TAG = CropImageActivity.class.getSimpleName();
     private static final int SIZE_DEFAULT = 2048;
     private static final int SIZE_LIMIT = 4096;
-    private final Handler handler  = new Handler(Looper.getMainLooper());;
+    private final Handler handler  = new Handler(Looper.getMainLooper());
+    CompositeDisposable compositeDisposable  = new CompositeDisposable();;
     private int aspectX;
     private int aspectY;
     // Output image
@@ -296,6 +299,7 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
         if (rotateBitmap != null) {
             rotateBitmap.recycle();
         }
+        compositeDisposable.dispose();
     }
 
     @Override
@@ -363,44 +367,55 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
     }
 
     public void onRenderCode(final Bitmap bitmap){
+        compositeDisposable.add(Observable.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                try{
+                    if(bitmap==null){
+                        isSaving = false;
+                        isProgressing = false;
+                        return null;
+                    }
+                    int[] intArray = new int[bitmap.getWidth()*bitmap.getHeight()];
+                    bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+                    LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
+                    BinaryBitmap mBitmap = new BinaryBitmap(new HybridBinarizer(source));
+                    Reader reader = new MultiFormatReader();
+                    try {
+                        Result result = reader.decode(mBitmap);
+                        Utils.Log(TAG,"This is type of qrcode");
+                        return new Gson().toJson(result);
+                    }
+                    catch (NotFoundException  | ChecksumException e){
+                        e.printStackTrace();
+                        Utils.Log(TAG,"Do not recognize qrcode type");
+                        return "";
+                    }
+                }
+                catch (FormatException e){
+                    e.printStackTrace();
+                    Utils.Log(TAG,"Do not recognize qrcode type");
+                    return "";
+                }
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(response ->{
+                    final Result mResult = new Gson().fromJson(response,Result.class);
+                    if (mResult!=null ){
+                        isSaving = false;
+                        isProgressing = false;
+                        layoutDone.setEnabled(true);
+                        layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
+                        setResultEncode(mResult);
+                    }else{
+                        isSaving = false;
+                        isProgressing = false;
+                        layoutDone.setEnabled(false);
+                        layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorAccent));
+                    }
+                }));
+
         Utils.Log(TAG,"onRenderCode");
-        try{
-            if(bitmap==null){
-                isSaving = false;
-                isProgressing = false;
-                return;
-            }
-            int[] intArray = new int[bitmap.getWidth()*bitmap.getHeight()];
-            bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-            LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
-            BinaryBitmap mBitmap = new BinaryBitmap(new HybridBinarizer(source));
-            Reader reader = new MultiFormatReader();
-            try {
-                Result result = reader.decode(mBitmap);
-                Utils.Log(TAG,"This is type of qrcode");
-                isSaving = false;
-                isProgressing = false;
-                layoutDone.setEnabled(true);
-                layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
-                setResultEncode(result);
-            }
-            catch (NotFoundException  | ChecksumException e){
-                e.printStackTrace();
-                Utils.Log(TAG,"Do not recognize qrcode type");
-                isSaving = false;
-                isProgressing = false;
-                layoutDone.setEnabled(false);
-                layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorAccent));
-            }
-        }
-        catch (FormatException e){
-            e.printStackTrace();
-            isSaving = false;
-            isProgressing = false;
-            Utils.Log(TAG,"Do not recognize qrcode type");
-            layoutDone.setEnabled(false);
-            layoutDone.setBackgroundColor(ContextCompat.getColor(this,R.color.colorAccent));
-        }
     }
 
     @Override
@@ -409,4 +424,6 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
         finish();
         super.onBackPressed();
     }
+
+
 }

@@ -107,17 +107,6 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
         }
     }
 
-    protected void getAccessToken(){
-        if (mSignInAccount!=null){
-            Utils.Log(TAG,"Request token");
-            //new GetAccessToken().execute(mSignInAccount.getAccount());
-            onRefreshAccessToken(mSignInAccount.getAccount());
-        }
-        else{
-            Utils.Log(TAG,"mSignInAccount is null");
-        }
-    }
-
     public void onRefreshAccessToken(Account accounts){
         compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(Observable.fromCallable(new Callable<String>() {
@@ -183,7 +172,6 @@ public abstract class BaseGoogleApi extends BaseActivitySlide {
                                     @Override
                                     public void onSuccessful(String message, EnumStatus status) {
                                         Utils.Log(TAG,"onSuccessful " +message + " - " +status.name());
-                                        final Author mAuthor = Author.getInstance().getAuthorInfo();
                                         if (isSignIn()) {
                                             Utils.Log(TAG,"Call onDriveClientReady");
                                             onDriveClientReady();

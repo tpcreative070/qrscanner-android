@@ -895,6 +895,17 @@ public class Utils {
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_history_deleted_list), new Gson().toJson(new HashMap<String,String>()));
     }
 
+    public static void cleanDataAlreadySynced(){
+        final List<SaveModel> mSaveSyncedList = SQLiteHelper.getSaveList(true);
+        final List<HistoryModel> mHistorySyncedList = SQLiteHelper.getHistoryList(true);
+        for (SaveModel index : mSaveSyncedList){
+            SQLiteHelper.onDelete(index);
+        }
+        for (HistoryModel index : mHistorySyncedList){
+            SQLiteHelper.onDelete(index);
+        }
+    }
+
     public static Map<String,SaveModel> convertSaveListToMap(List<SaveModel> list){
         Map<String,SaveModel> mMap = new HashMap<>();
         for (SaveModel index: list){

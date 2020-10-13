@@ -21,7 +21,6 @@ import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.SaveModel;
 
 public class WifiFragment extends BaseActivitySlide implements View.OnClickListener , GenerateSingleton.SingletonGenerateListener {
@@ -154,7 +153,7 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
 
     @Override
     public void onCompletedGenerate() {
-        SaveSingleton.getInstance().reLoadData();
+        SaveSingleton.getInstance().reloadData();
         Utils.Log(TAG,"Finish...........");
         finish();
     }

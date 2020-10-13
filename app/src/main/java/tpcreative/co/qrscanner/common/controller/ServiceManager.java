@@ -23,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.BackupSingleton;
 import tpcreative.co.qrscanner.common.HistorySingleton;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.RefreshTokenSingleton;
@@ -315,8 +316,9 @@ public class ServiceManager implements BaseView {
         if (isDismiss){
             onDismissServices();
         }else{
-            SaveSingleton.getInstance().reLoadData();
-            HistorySingleton.getInstance().reLoadData();
+            SaveSingleton.getInstance().reloadData();
+            HistorySingleton.getInstance().reloadData();
+            BackupSingleton.getInstance().reloadData();
         }
     }
 

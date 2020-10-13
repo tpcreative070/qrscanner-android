@@ -187,7 +187,7 @@ public class ScannerPresenter extends Presenter<ScannerView>{
         history.createDatetime = time;
         history.updatedDateTime = time;
         SQLiteHelper.onInsert(history);
-        HistorySingleton.getInstance().reLoadData();
+        HistorySingleton.getInstance().reloadData();
     }
 
     private String getResult(HashMap<Object,String> value){

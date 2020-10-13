@@ -27,7 +27,7 @@ class HighlightView {
     public static final int MOVE             = (1 << 5);
 
     private static final int DEFAULT_HIGHLIGHT_COLOR = ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.colorPrimary);
-    private static final float HANDLE_RADIUS_DP = 12f;
+    private static final float HANDLE_RADIUS_DP = 15f;
     private static final float OUTLINE_DP = 2f;
 
     enum ModifyMode { None, Move, Grow }

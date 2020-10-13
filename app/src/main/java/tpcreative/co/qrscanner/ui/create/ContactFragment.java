@@ -20,7 +20,6 @@ import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide;
 import tpcreative.co.qrscanner.model.Create;
-import tpcreative.co.qrscanner.model.EnumImplement;
 import tpcreative.co.qrscanner.model.SaveModel;
 
 public class ContactFragment extends BaseActivitySlide implements GenerateSingleton.SingletonGenerateListener {
@@ -145,7 +144,7 @@ public class ContactFragment extends BaseActivitySlide implements GenerateSingle
 
     @Override
     public void onCompletedGenerate() {
-        SaveSingleton.getInstance().reLoadData();
+        SaveSingleton.getInstance().reloadData();
         Utils.Log(TAG,"Finish...........");
         finish();
     }
@@ -156,7 +155,7 @@ public class ContactFragment extends BaseActivitySlide implements GenerateSingle
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG,"Finish...........");
-            SaveSingleton.getInstance().reLoadData();
+            SaveSingleton.getInstance().reloadData();
             finish();
         }
     }

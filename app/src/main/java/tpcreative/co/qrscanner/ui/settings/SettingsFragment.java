@@ -18,8 +18,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +30,6 @@ import tpcreative.co.qrscanner.common.HistorySingleton;
 import tpcreative.co.qrscanner.common.SaveSingleton;
 import tpcreative.co.qrscanner.common.SettingsSingleton;
 import tpcreative.co.qrscanner.common.Utils;
-import tpcreative.co.qrscanner.common.controller.PrefsController;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.preference.MyPreference;
 import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory;
@@ -92,8 +89,8 @@ public class SettingsFragment extends BaseFragment {
         } else {
             QRScannerApplication.getInstance().getActivity().onShowFloatingButton(SettingsFragment.this,false);
             Utils.Log(TAG, "isInVisible");
-            HistorySingleton.getInstance().reLoadData();
-            SaveSingleton.getInstance().reLoadData();
+            HistorySingleton.getInstance().reloadData();
+            SaveSingleton.getInstance().reloadData();
         }
     }
 
@@ -307,9 +304,10 @@ public class SettingsFragment extends BaseFragment {
                             if (Utils.isPremium()){
                                 final boolean mResult = (boolean)newValue;
                                 if (mResult) {
-                                    if (!Utils.isConnectedToGoogleDrive()) {
-                                        Navigator.onBackupData(getContext());
-                                    }
+                                    Navigator.onBackupData(getContext());
+//                                    if (!Utils.isConnectedToGoogleDrive()) {
+//
+//                                    }
                                 }
                             }
                         }

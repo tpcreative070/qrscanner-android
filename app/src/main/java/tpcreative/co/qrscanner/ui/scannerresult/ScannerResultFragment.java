@@ -862,7 +862,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
         history.createDatetime = time;
         history.updatedDateTime = time;
         SQLiteHelper.onInsert(history);
-        HistorySingleton.getInstance().reLoadData();
+        HistorySingleton.getInstance().reloadData();
         Utils.Log(TAG,"Parse result " + Utils.getCodeContentByHistory(history));
     }
 

@@ -8,16 +8,23 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.text.HtmlCompat;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
+import tpcreative.co.qrscanner.common.BackupSingleton;
 import tpcreative.co.qrscanner.common.Navigator;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseGoogleApi;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerService;
+import tpcreative.co.qrscanner.helper.SQLiteHelper;
+import tpcreative.co.qrscanner.model.HistoryModel;
+import tpcreative.co.qrscanner.model.SaveModel;
 
-public class BackupActivity extends BaseGoogleApi {
+public class BackupActivity extends BaseGoogleApi implements BackupSingleton.BackupSingletonListener {
 
     private static final String TAG = BackupActivity.class.getSimpleName();
     @BindView(R.id.tvEmail)
@@ -33,6 +40,7 @@ public class BackupActivity extends BaseGoogleApi {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        BackupSingleton.getInstance().setListener(this);
         final String  email = Utils.getDriveEmail();
         if (email!=null){
             String mValue = String.format(getString(R.string.current_email),email);
@@ -40,6 +48,13 @@ public class BackupActivity extends BaseGoogleApi {
             tvEmail.setText(HtmlCompat.fromHtml(newText,HtmlCompat.FROM_HTML_MODE_LEGACY));
             tvEmail.setVisibility(View.VISIBLE);
             btnEnable.setText(getText(R.string.switch_account));
+            if (Utils.isConnectedToGoogleDrive()){
+                final List<SaveModel> mSaveSyncedList = SQLiteHelper.getSaveList(true);
+                final List<HistoryModel> mHistorySyncedList = SQLiteHelper.getHistoryList(true);
+                tvUsedSpace.setVisibility(View.VISIBLE);
+                String mTextSynced = String.format(getString(R.string.synced_data),mSaveSyncedList.size()+"",mHistorySyncedList.size()+"");
+                tvUsedSpace.setText(HtmlCompat.fromHtml(mTextSynced,HtmlCompat.FROM_HTML_MODE_LEGACY));
+            }
         }
     }
 
@@ -56,6 +71,27 @@ public class BackupActivity extends BaseGoogleApi {
                 if (resultCode == Activity.RESULT_OK) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     Utils.Log(TAG,"account name " + accountName );
+                    if (Utils.getDriveEmail()!=null){
+                        if (!Utils.getDriveEmail().equals(accountName)){
+                            Utils.cleanDataAlreadySynced();
+                            Utils.setDefaultSaveHistoryDeletedKey();
+                            signOut(new QRScannerService.ServiceManagerSyncDataListener() {
+                                @Override
+                                public void onCompleted() {
+                                    signIn(accountName);
+                                }
+                                @Override
+                                public void onError() {
+                                    signIn(accountName);
+                                }
+                                @Override
+                                public void onCancel() {
+
+                                }
+                            });
+                            return;
+                        }
+                    }
                     signOut(new QRScannerService.ServiceManagerSyncDataListener() {
                         @Override
                         public void onCompleted() {
@@ -79,6 +115,7 @@ public class BackupActivity extends BaseGoogleApi {
 
     @Override
     protected void onDriveClientReady() {
+        Utils.Log(TAG,"onDriveClientReady...");
         final String  email = Utils.getDriveEmail();
         if (email!=null){
             String mValue = String.format(getString(R.string.current_email),email);
@@ -86,6 +123,11 @@ public class BackupActivity extends BaseGoogleApi {
             tvEmail.setText(HtmlCompat.fromHtml(newText,HtmlCompat.FROM_HTML_MODE_LEGACY));
             tvEmail.setVisibility(View.VISIBLE);
             btnEnable.setText(getText(R.string.switch_account));
+            final List<SaveModel> mSaveSyncedList = SQLiteHelper.getSaveList(true);
+            final List<HistoryModel> mHistorySyncedList = SQLiteHelper.getHistoryList(true);
+            tvUsedSpace.setVisibility(View.VISIBLE);
+            String mTextSynced = String.format(getString(R.string.synced_data),mSaveSyncedList.size()+"",mHistorySyncedList.size()+"");
+            tvUsedSpace.setText(HtmlCompat.fromHtml(mTextSynced,HtmlCompat.FROM_HTML_MODE_LEGACY));
         }
         ServiceManager.getInstance().onPreparingSyncData(false);
     }
@@ -112,11 +154,21 @@ public class BackupActivity extends BaseGoogleApi {
 
     @Override
     protected void startServiceNow() {
-
+        ServiceManager.getInstance().onStartService();
     }
 
     @Override
     protected void onStopListenerAWhile() {
 
+    }
+
+    @Override
+    public void reloadData() {
+        Utils.Log(TAG,"reloadData...");
+        final List<SaveModel> mSaveSyncedList = SQLiteHelper.getSaveList(true);
+        final List<HistoryModel> mHistorySyncedList = SQLiteHelper.getHistoryList(true);
+        tvUsedSpace.setVisibility(View.VISIBLE);
+        String mTextSynced = String.format(getString(R.string.synced_data),mSaveSyncedList.size()+"",mHistorySyncedList.size()+"");
+        tvUsedSpace.setText(HtmlCompat.fromHtml(mTextSynced,HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
 }

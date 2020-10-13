@@ -19,7 +19,7 @@ public class HistorySingleton {
         this.listener = listener;
     }
 
-    public void reLoadData(){
+    public void reloadData(){
         if (listener!=null){
             listener.reloadData();
         }

@@ -65,7 +65,8 @@
             android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:visibility="gone"
+            android:textColor="@color/colorPrimary"
+            android:visibility="invisible"
             android:id="@+id/tvUsedSpace"
             android:layout_marginTop="10dp"
             android:layout_marginRight="30dp"
