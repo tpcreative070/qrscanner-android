@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.view.crop;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -78,7 +77,7 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
     }
 
     private void setupViews() {
-        setContentView(R.layout.crop__activity_crop);
+        setContentView(R.layout.crop_activity_crop);
         imageView = (CropImageView) findViewById(R.id.crop_image);
         imageView.context = this;
         imageView.setRecycler(new ImageViewTouchBase.Recycler() {
