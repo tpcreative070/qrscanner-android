@@ -253,7 +253,7 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
     public AdView getAdsView(Context context){
         Utils.Log(TAG,"show ads...");
         adView = new AdView(context);
-        adView.setAdSize(AdSize.BANNER);
+        adView.setAdSize(AdSize.SMART_BANNER);
         if (Utils.isFreeRelease()){
             if(Utils.isDebug()){
                 adView.setAdUnitId(getString(R.string.banner_home_footer_test));
