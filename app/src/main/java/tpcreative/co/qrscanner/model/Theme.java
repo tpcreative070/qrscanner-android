@@ -58,30 +58,9 @@ public class Theme implements Serializable {
         this.id = id;
     }
 
-    public int getPrimaryColor() {
-        return primaryColor;
-    }
-
-    public void setPrimaryColor(int primaryColor) {
-        this.primaryColor = primaryColor;
-    }
-
     public int getPrimaryDarkColor() {
         return primaryDarkColor;
     }
-
-    public void setPrimaryDarkColor(int primaryDarkColor) {
-        this.primaryDarkColor = primaryDarkColor;
-    }
-
-    public int getAccentColor() {
-        return accentColor;
-    }
-
-    public void setAccentColor(int accentColor) {
-        this.accentColor = accentColor;
-    }
-
 
     public Theme getThemeInfo(){
         try{
@@ -123,14 +102,13 @@ public class Theme implements Serializable {
                 return value;
             }
             else{
-               final List<Theme> mList = new ArrayList<>();
-               mList.addAll(ThemeUtil.getThemeList());
-               PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list),new Gson().toJson(mList));
-               PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),BuildConfig.VERSION_CODE);
-               PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.we_are_a_team),false);
-               Utils.onSetCountRating(0);
-               Utils.Log(TAG,"New install this version");
-               return mList;
+                final List<Theme> mList = new ArrayList<>(ThemeUtil.getThemeList());
+                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list),new Gson().toJson(mList));
+                PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version),BuildConfig.VERSION_CODE);
+                PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.we_are_a_team),false);
+                Utils.onSetCountRating(0);
+                Utils.Log(TAG,"New install this version");
+                return mList;
             }
         }
         catch (Exception e){
