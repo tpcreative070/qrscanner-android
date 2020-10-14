@@ -34,6 +34,7 @@ import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.ResponseSingleton;
 import tpcreative.co.qrscanner.common.Utils;
+import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.api.request.CheckoutRequest;
 import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
@@ -244,8 +245,10 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         if (subscriptions == null) {
             return;
         }
-
-        subscriptions.add(QRScannerApplication.serverAPI.onCheckVersion()
+        if (!QRScannerApplication.getInstance().isRequestAds() || Utils.isPremium()){
+            return;
+        }
+        subscriptions.add(QRScannerApplication.serverAPI.onCheckVersion(RootAPI.CHECK_VERSION)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(__ -> view.onStartLoading(EnumStatus.CHECK_VERSION))
@@ -253,14 +256,13 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                     if (onResponse!=null){
                         if (onResponse.version!=null){
                             view.onSuccessful("Successful",EnumStatus.CHECK_VERSION);
-                            final Author author = Author.getInstance().getAuthorInfo();
-                            author.version = onResponse.version;
-                            Utils.setAuthor(author);
-                            ResponseSingleton.getInstance().onAlertLatestVersion();
+//                            final Author author = Author.getInstance().getAuthorInfo();
+//                            author.version = onResponse.version;
+//                            Utils.setAuthor(author);
                         }
                     }
                     view.onStopLoading(EnumStatus.CHECK_VERSION);
-                    Utils.Log(TAG, "Body : " + new Gson().toJson(onResponse));
+                    Utils.Log(TAG, "Check version body : " + new Gson().toJson(onResponse));
                 }, throwable -> {
                     if (throwable instanceof HttpException) {
                         ResponseBody bodys = ((HttpException) throwable).response().errorBody();

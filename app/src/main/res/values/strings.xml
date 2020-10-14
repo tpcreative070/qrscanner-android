@@ -193,7 +193,7 @@
     <string name="key_request_sign_out_google_drive">request_sign_out_google_drive</string>
     <string name="access_token">Bearer %1$s</string>
     <string name="choose_an_account">Please select %1$s to link to Google Drive</string>
-    <string name="choose_an_new_account">Please select or add your Google account to sign in with SuperSafe</string>
+    <string name="choose_an_new_account">Please select or add your Google account to sign in with QRScanner</string>
     <string name="key_device_id">device_id</string>
     <string name="key_device_type">device_type</string>
     <string name="key_manufacturer">manufacturer</string>
