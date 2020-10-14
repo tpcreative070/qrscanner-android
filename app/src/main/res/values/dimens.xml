@@ -20,7 +20,7 @@
     <dimen name="text_size_preference_item_title">17sp</dimen>
     <dimen name="text_size_preference_item_summary">15sp</dimen>
     <dimen name="bar_height">56dp</dimen>
-    <dimen name="banner_size_height">60dp</dimen>
+    <dimen name="banner_size_height">55dp</dimen>
 
     <dimen name="text_size_17">17sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
