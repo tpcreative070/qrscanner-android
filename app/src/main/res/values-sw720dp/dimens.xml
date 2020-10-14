@@ -2,5 +2,5 @@
 <resources>
     <!-- Header -->
     <dimen name="bar_height">64dp</dimen>
-    <dimen name="banner_size_height">95dp</dimen>
+    <dimen name="banner_size_height">100dp</dimen>
 </resources>
