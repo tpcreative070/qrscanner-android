@@ -200,7 +200,9 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
     @Override
     protected void onStart() {
         super.onStart();
-        requestSyncData();
+        if (Utils.isConnectedToGoogleDrive()){
+            requestSyncData();
+        }
     }
 
     @Override
