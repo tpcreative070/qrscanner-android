@@ -18,6 +18,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 import tpcreative.co.qrscanner.common.api.request.CheckoutRequest;
 import tpcreative.co.qrscanner.common.api.response.BaseResponse;
 import tpcreative.co.qrscanner.common.api.response.DriveResponse;
@@ -28,7 +29,7 @@ public interface RootAPI{
     String ROOT_GOOGLE_DRIVE = "https://www.googleapis.com/";
     String CHECKOUT = "/api/qrscanner/checkout/transaction";
     String AUTHOR = "/api/author/syncDevices";
-    String CHECK_VERSION = "/api/author/version";
+    String CHECK_VERSION = "http://tpcreative.me/qrscanner.php";
     String GET_DRIVE_ABOUT = "/drive/v3/about?fields=user,storageQuota,kind";
     String UPLOAD_FILE_TO_GOOGLE_DRIVE = "/upload/drive/v3/files?uploadType=multipart";
     String DOWNLOAD_FILE_FROM_GOOGLE_DRIVE = "/drive/v3/files/{id}?alt=media";
@@ -43,8 +44,8 @@ public interface RootAPI{
     Observable<BaseResponse> onAuthor(@FieldMap Map<String, String> request);
 
 
-    @POST(CHECK_VERSION)
-    Observable<BaseResponse> onCheckVersion();
+    @GET()
+    Observable<BaseResponse> onCheckVersion(@Url String url);
 
     @Headers({"Accept: application/json"})
     @GET(GET_DRIVE_ABOUT)
