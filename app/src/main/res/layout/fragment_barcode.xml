@@ -82,6 +82,7 @@
                             android:layout_height="wrap_content"/>
 
                         <androidx.appcompat.widget.AppCompatButton
+                            style="@style/brandonRegularTextView"
                             android:visibility="gone"
                             android:id="@+id/btnRandom"
                             android:textColor="@color/white"

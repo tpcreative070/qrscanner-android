@@ -20,6 +20,7 @@
             android:layout_width="@dimen/icon_size_45"
             android:layout_height="@dimen/icon_size_45" />
         <androidx.appcompat.widget.AppCompatTextView
+            style="@style/brandonRegularTextView"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/icApp"
             android:id="@+id/tvLoading"

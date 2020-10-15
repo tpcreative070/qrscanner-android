@@ -17,6 +17,7 @@
             android:layout_height="@dimen/icon_size_25"
             android:layout_gravity="center" />
         <androidx.appcompat.widget.AppCompatTextView
+            style="@style/brandonRegularTextView"
             android:textColor="@color/white"
             android:textSize="@dimen/small_12"
             android:id="@+id/textView"

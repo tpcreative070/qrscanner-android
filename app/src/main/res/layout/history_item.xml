@@ -4,8 +4,8 @@
     android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/lItem"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="@drawable/bg_history_rounded"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="20dp"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="0.7"
@@ -42,10 +42,9 @@
             android:layout_weight="0.3"
             android:layout_height="match_parent">
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_alignParentTop="true"
                 android:tint="?attr/colorAccent"
                 android:padding="10dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_alignParentEnd="true"
                 android:id="@+id/imgShare"
                 android:src="@drawable/baseline_share_white_48"
@@ -55,7 +54,7 @@
             <LinearLayout
                 android:id="@+id/llCheckedBox"
                 android:layout_centerInParent="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

@@ -179,6 +179,7 @@
         <item name="android:drawableLeft">@drawable/crop__ic_done</item>
         <item name="android:text">@string/crop__done</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/medium_16</item>
     </style>
 
     <style name="Crop.ActionButtonText.Cancel">
@@ -186,5 +187,6 @@
         <item name="android:drawableLeft">@drawable/crop__ic_cancel</item>
         <item name="android:text">@string/crop__cancel</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/medium_16</item>
     </style>
 </resources>
