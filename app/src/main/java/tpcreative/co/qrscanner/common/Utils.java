@@ -1074,6 +1074,6 @@ public class Utils {
     }
 
     public static boolean isLiveAds(){
-        return true;
+        return false;
     }
 }
