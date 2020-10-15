@@ -3,4 +3,5 @@
     <!-- Header -->
     <dimen name="bar_height">64dp</dimen>
     <dimen name="banner_size_height">100dp</dimen>
+    <dimen name="button_height">70dp</dimen>
 </resources>

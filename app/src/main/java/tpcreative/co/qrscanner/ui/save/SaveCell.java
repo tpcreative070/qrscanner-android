@@ -14,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.google.zxing.client.result.ParsedResultType;
 import com.jaychang.srv.SimpleCell;
 import com.jaychang.srv.SimpleViewHolder;
@@ -157,13 +161,13 @@ public class SaveCell extends SimpleCell<SaveModel,SaveCell.ViewHolder> {
      * */
     static class ViewHolder extends SimpleViewHolder {
         @BindView(R.id.tvDate)
-        TextView tvTime;
+        AppCompatTextView tvTime;
         @BindView(R.id.tvContent)
-        TextView tvContent;
+        AppCompatTextView tvContent;
         @BindView(R.id.ckDelete)
-        CheckBox ckDelete;
+        AppCompatCheckBox ckDelete;
         @BindView(R.id.imgEdit)
-        ImageView imgEdit;
+        AppCompatImageView imgEdit;
         @BindView(R.id.lItem)
         LinearLayout lItem;
         @BindView(R.id.llCheckedBox)

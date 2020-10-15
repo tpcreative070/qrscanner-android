@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
@@ -52,7 +54,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
     protected static final String TAG = ReviewActivity.class.getSimpleName();
     @BindView(R.id.imgResult)
-    ImageView imgResult;
+    AppCompatImageView imgResult;
     private ReviewPresenter presenter;
     private Create create;
     private Bitmap bitmap;
@@ -331,21 +333,50 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
     }
 
     public void onGenerateCode(String code, EnumAction enumAction) {
-        try {
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
-            hints.put(EncodeHintType.MARGIN, 2);
-            Theme theme = Theme.getInstance().getThemeInfo();
-            Utils.Log(TAG, "Starting save items 0");
-            if (create.createType == ParsedResultType.PRODUCT){
-                bitmap = barcodeEncoder.encodeBitmap(this, theme.getPrimaryDarkColor(), code, BarcodeFormat.valueOf(create.barcodeFormat), 400, 400, hints);
-            }else{
-                bitmap = barcodeEncoder.encodeBitmap(this, theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 400, 400, hints);
-            }
-            Utils.saveImage(bitmap, enumAction, create.createType.name(), code, ReviewActivity.this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Dexter.withContext(this)
+                .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            try {
+                                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+                                hints.put(EncodeHintType.MARGIN, 2);
+                                Theme theme = Theme.getInstance().getThemeInfo();
+                                Utils.Log(TAG, "Starting save items 0");
+                                if (create.createType == ParsedResultType.PRODUCT){
+                                    bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.valueOf(create.barcodeFormat), 400, 400, hints);
+                                }else{
+                                    bitmap = barcodeEncoder.encodeBitmap(getContext(), theme.getPrimaryDarkColor(), code, BarcodeFormat.QR_CODE, 400, 400, hints);
+                                }
+                                Utils.saveImage(bitmap, enumAction, create.createType.name(), code, ReviewActivity.this);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Utils.Log(TAG, "Permission is denied");
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            /*Miss add permission in manifest*/
+                            Utils.Log(TAG, "request permission is failed");
+                        }
+                    }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        /* ... */
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Utils.Log(TAG, "error ask permission");
+                    }
+                }).onSameThread().check();
     }
 
     @Override

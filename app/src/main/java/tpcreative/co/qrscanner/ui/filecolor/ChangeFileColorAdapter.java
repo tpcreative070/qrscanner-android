@@ -6,10 +6,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.adapter.BaseAdapter;
 import tpcreative.co.qrscanner.common.adapter.BaseHolder;
+import tpcreative.co.qrscanner.common.view.CircleImageView;
 import tpcreative.co.qrscanner.model.Theme;
 
 public class ChangeFileColorAdapter extends BaseAdapter<Theme, BaseHolder> {
@@ -39,7 +39,6 @@ public class ChangeFileColorAdapter extends BaseAdapter<Theme, BaseHolder> {
     }
 
     public class ItemHolder extends BaseHolder<Theme> {
-
         @BindView(R.id.imgTheme)
         CircleImageView imgTheme;
         @BindView(R.id.imgChecked)

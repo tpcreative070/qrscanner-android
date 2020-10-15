@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -28,17 +31,17 @@ public class WifiFragment extends BaseActivitySlide implements View.OnClickListe
     private static final String TAG = WifiFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
     @BindView(R.id.edtSSID)
-    EditText edtSSID;
+    AppCompatEditText edtSSID;
     @BindView(R.id.edtPassword)
-    EditText edtPassword;
+    AppCompatEditText edtPassword;
     @BindView(R.id.radioGroup1)
     RadioGroup radioGroup1;
     @BindView(R.id.radio0)
-    RadioButton radio0;
+    AppCompatRadioButton radio0;
     @BindView(R.id.radio1)
-    RadioButton radio1;
+    AppCompatRadioButton radio1;
     @BindView(R.id.radio2)
-    RadioButton radio2;
+    AppCompatRadioButton radio2;
     String typeEncrypt = "WPA";
     private SaveModel save;
 

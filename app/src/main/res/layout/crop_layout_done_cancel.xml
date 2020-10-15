@@ -1,11 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Crop.DoneCancelBar">
-
     <FrameLayout
         android:background="@color/colorPrimary"
         android:id="@+id/btn_cancel"
         style="@style/Crop.ActionButton">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:drawableTint="@color/white"
             style="@style/Crop.ActionButtonText.Cancel" />
     </FrameLayout>
@@ -14,9 +13,8 @@
         android:background="@color/colorPrimary"
         android:id="@+id/btn_done"
         style="@style/Crop.ActionButton">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:drawableTint="@color/white"
             style="@style/Crop.ActionButtonText.Done" />
     </FrameLayout>
-
 </LinearLayout>

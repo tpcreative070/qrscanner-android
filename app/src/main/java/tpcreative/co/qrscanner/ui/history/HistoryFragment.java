@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import com.google.zxing.client.result.ParsedResultType;
@@ -57,8 +58,7 @@ public class HistoryFragment extends BaseFragment implements HistoryView, Histor
     @BindView(R.id.rlRoot)
     RelativeLayout rlRoot;
     @BindView(R.id.tvNotFoundItems)
-    TextView tvNotFoundItems;
-
+    AppCompatTextView tvNotFoundItems;
 
     @BindView(R.id.recyclerView)
     SimpleRecyclerView recyclerView;

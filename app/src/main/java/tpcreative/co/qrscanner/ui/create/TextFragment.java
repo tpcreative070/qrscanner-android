@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -26,7 +28,7 @@ public class TextFragment extends BaseActivitySlide implements GenerateSingleton
     private static final String TAG = TextFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
     @BindView(R.id.edtText)
-    EditText editText;
+    AppCompatEditText editText;
     private SaveModel save;
 
     @Override

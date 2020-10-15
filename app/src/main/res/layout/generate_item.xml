@@ -12,25 +12,25 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_generate_rounded"
         android:padding="20dp">
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:tint="?attr/colorAccent"
             android:id="@+id/imgIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerInParent="true" />
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:textColor="@color/material_gray_800"
             android:textSize="@dimen/medium_16"
             style="@style/brandonBoldTextView"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/imgIcon"
+            android:layout_toEndOf="@+id/imgIcon"
             android:text="Hello" />
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgDefault"
             android:tint="?attr/colorAccent"
             android:layout_width="25dp"
@@ -38,6 +38,5 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:src="@drawable/baseline_add_box_white_48"/>
-
     </RelativeLayout>
 </LinearLayout>

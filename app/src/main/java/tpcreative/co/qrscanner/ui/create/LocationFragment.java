@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -53,11 +54,11 @@ public class LocationFragment extends BaseActivitySlide implements GoogleMap.OnM
 
     private static final String TAG = LocationFragment.class.getSimpleName();
     @BindView(R.id.edtLatitude)
-    EditText edtLatitude;
+    AppCompatEditText edtLatitude;
     @BindView(R.id.edtLongitude)
-    EditText edtLongitude;
+    AppCompatEditText edtLongitude;
     @BindView(R.id.edtQuery)
-    EditText edtQuery;
+    AppCompatEditText edtQuery;
     private SupportMapFragment mapFragment ;
     private GoogleMap mMap;
     private AwesomeValidation mAwesomeValidation ;

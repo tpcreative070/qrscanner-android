@@ -63,13 +63,13 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/latitude" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtLatitude"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -90,13 +90,13 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/longitude" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtLongitude"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -117,13 +117,13 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/query" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtQuery"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"

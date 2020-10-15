@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -76,92 +78,92 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @BindView(R.id.llEmail)
     LinearLayout llEmail;
     @BindView(R.id.emailTo)
-    TextView emailTo;
+    AppCompatTextView emailTo;
     @BindView(R.id.emailSubject)
-    TextView emailSubject;
+    AppCompatTextView emailSubject;
     @BindView(R.id.emailMessage)
-    TextView emailMessage;
+    AppCompatTextView emailMessage;
 
     /*SMS*/
     @BindView(R.id.llSMS)
     LinearLayout llSMS;
     @BindView(R.id.smsTo)
-    TextView smsTo;
+    AppCompatTextView smsTo;
     @BindView(R.id.smsMessage)
-    TextView smsMessage;
+    AppCompatTextView smsMessage;
 
     /*Contact*/
     @BindView(R.id.llContact)
     LinearLayout llContact;
     @BindView(R.id.contactFullName)
-    TextView contactFullName;
+    AppCompatTextView contactFullName;
     @BindView(R.id.contactAddress)
-    TextView contactAddress;
+    AppCompatTextView contactAddress;
     @BindView(R.id.contactPhone)
-    TextView contactPhone;
+    AppCompatTextView contactPhone;
     @BindView(R.id.contactEmail)
-    TextView contactEmail;
+    AppCompatTextView contactEmail;
 
 
     /*Location*/
     @BindView(R.id.llLocation)
     LinearLayout llLocation;
     @BindView(R.id.locationLatitude)
-    TextView locationLatitude;
+    AppCompatTextView locationLatitude;
     @BindView(R.id.locationLongitude)
-    TextView locationLongitude;
+    AppCompatTextView locationLongitude;
     @BindView(R.id.locationQuery)
-    TextView locationQuery;
+    AppCompatTextView locationQuery;
 
     /*Event*/
     @BindView(R.id.llEvent)
     LinearLayout llEvent;
     @BindView(R.id.eventTitle)
-    TextView eventTitle;
+    AppCompatTextView eventTitle;
     @BindView(R.id.eventLocation)
-    TextView eventLocation;
+    AppCompatTextView eventLocation;
     @BindView(R.id.eventDescription)
-    TextView eventDescription;
+    AppCompatTextView eventDescription;
     @BindView(R.id.eventBeginTime)
-    TextView eventBeginTime;
+    AppCompatTextView eventBeginTime;
     @BindView(R.id.eventEndTime)
-    TextView eventEndTime;
+    AppCompatTextView eventEndTime;
 
     /*Wifi*/
     @BindView(R.id.llWifi)
     LinearLayout llWifi;
     @BindView(R.id.wifiSSID)
-    TextView wifiSSID;
+    AppCompatTextView wifiSSID;
     @BindView(R.id.wifiPassword)
-    TextView wifiPassword;
+    AppCompatTextView wifiPassword;
     @BindView(R.id.wifiNetworkEncryption)
-    TextView wifiNetworkEncryption;
+    AppCompatTextView wifiNetworkEncryption;
     @BindView(R.id.wifiHidden)
-    TextView wifiHidden;
+    AppCompatTextView wifiHidden;
 
     /*Telephone*/
     @BindView(R.id.llTelephone)
     LinearLayout llTelephone;
     @BindView(R.id.telephoneNumber)
-    TextView telephoneNumber;
+    AppCompatTextView telephoneNumber;
 
     /*Text*/
     @BindView(R.id.llText)
     LinearLayout llText;
     @BindView(R.id.textMessage)
-    TextView textMessage;
+    AppCompatTextView textMessage;
 
     /*URL*/
     @BindView(R.id.llURL)
     LinearLayout llURL;
     @BindView(R.id.urlAddress)
-    TextView urlAddress;
+    AppCompatTextView urlAddress;
 
     /*ISBN*/
     @BindView(R.id.llISBN)
     LinearLayout llISBN;
     @BindView(R.id.textISBN)
-    TextView textISBN;
+    AppCompatTextView textISBN;
 
 
 
@@ -169,7 +171,7 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
     @BindView(R.id.llProduct)
     LinearLayout llProduct;
     @BindView(R.id.textProduct)
-    TextView textProduct;
+    AppCompatTextView textProduct;
 
 
 

@@ -13,13 +13,13 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icApp"
             android:src="@mipmap/ic_launcher"
             android:layout_centerInParent="true"
             android:layout_width="@dimen/icon_size_45"
             android:layout_height="@dimen/icon_size_45" />
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_marginTop="10dp"
             android:layout_below="@+id/icApp"
             android:id="@+id/tvLoading"

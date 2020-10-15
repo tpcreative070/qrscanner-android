@@ -62,13 +62,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/title" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtTitle"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -90,13 +90,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/location" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtLocation"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -116,13 +116,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/description" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtDescription"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -144,13 +144,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/beginTime" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:paddingLeft="5dp"
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
@@ -173,13 +173,13 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/endTime" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:paddingLeft="5dp"
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
