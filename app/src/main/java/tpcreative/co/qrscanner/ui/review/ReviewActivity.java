@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
@@ -52,7 +54,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
 
     protected static final String TAG = ReviewActivity.class.getSimpleName();
     @BindView(R.id.imgResult)
-    ImageView imgResult;
+    AppCompatImageView imgResult;
     private ReviewPresenter presenter;
     private Create create;
     private Bitmap bitmap;

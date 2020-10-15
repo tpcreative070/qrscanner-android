@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseData;
@@ -22,9 +25,9 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager;
 public class ProVersionActivity extends BaseActivitySlide implements View.OnClickListener, BillingProcessor.IBillingHandler {
 
     @BindView(R.id.btnUpgradeNow)
-    Button btnUpgradeNow;
+    AppCompatButton btnUpgradeNow;
     @BindView(R.id.tvPrice)
-    TextView tvPrice;
+    AppCompatTextView tvPrice;
     private BillingProcessor bp;
     private static String TAG = ProVersionActivity.class.getSimpleName();
 

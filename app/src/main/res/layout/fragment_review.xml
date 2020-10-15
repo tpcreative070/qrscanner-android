@@ -40,24 +40,20 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
                     <LinearLayout
                         android:layout_margin="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_location_group"
                         android:orientation="vertical">
-
                         <!-- Email -->
                         <LinearLayout
                             android:id="@+id/llEmail"
@@ -66,14 +62,12 @@
                             android:layout_margin="20dp"
                             android:orientation="vertical"
                             android:visibility="gone">
-
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/to" />
-
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/emailTo"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -83,21 +77,18 @@
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp"
                                 android:textColor="@color/material_gray_600" />
-
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
-
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/subject" />
-
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/emailSubject"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -107,21 +98,18 @@
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp"
                                 android:textColor="@color/material_gray_600" />
-
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
-
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/message" />
-
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/emailMessage"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -131,14 +119,12 @@
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp"
                                 android:textColor="@color/material_gray_600" />
-
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
-
                         </LinearLayout>
 
 
@@ -152,13 +138,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/to" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/smsTo"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -176,13 +162,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/message" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/smsMessage"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -212,13 +198,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/fullName" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/contactFullName"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -236,13 +222,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/address" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/contactAddress"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -261,13 +247,13 @@
                                 android:background="@color/grey_lighter" />
 
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/phone" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/contactPhone"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -285,13 +271,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/email" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/contactEmail"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -322,13 +308,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/latitude" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/locationLatitude"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -346,13 +332,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/longitude" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/locationLongitude"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -371,13 +357,13 @@
                                 android:background="@color/grey_lighter" />
 
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/query" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/locationQuery"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -407,13 +393,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/title" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/eventTitle"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -431,13 +417,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/location" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/eventLocation"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -456,13 +442,13 @@
                                 android:background="@color/grey_lighter" />
 
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/description" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/eventDescription"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -480,13 +466,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/beginTime" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/eventBeginTime"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -504,13 +490,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/endTime" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/eventEndTime"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -541,13 +527,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/ssid" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/wifiSSID"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -565,13 +551,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/password" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/wifiPassword"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -590,13 +576,13 @@
                                 android:background="@color/grey_lighter" />
 
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/networkEncryption" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/wifiNetworkEncryption"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -614,13 +600,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/hidden" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/wifiHidden"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -650,13 +636,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/phoneNumber" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/telephoneNumber"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -686,13 +672,13 @@
                             android:layout_margin="20dp"
                             android:orientation="vertical">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/text" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textMessage"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -723,13 +709,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/product_id" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textProduct"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -759,13 +745,13 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/isbs" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textISBN"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -795,13 +781,13 @@
                             android:layout_margin="20dp"
                             android:orientation="vertical">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/url" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/urlAddress"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
@@ -824,7 +810,6 @@
                             android:id="@+id/rlFooter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
                             android:layout_marginTop="20dp"
                             android:layout_marginBottom="5dp"
                             android:orientation="horizontal">
@@ -850,7 +835,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:textSize="@dimen/medium_16"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="2dp"

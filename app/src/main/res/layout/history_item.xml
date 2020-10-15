@@ -21,28 +21,27 @@
             android:layout_width="0dp"
             android:layout_weight="0.7"
             android:layout_height="wrap_content">
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:textColor="@color/colorDark"
                 style="@style/brandonRegularTextView"
                 android:id="@+id/tvDate"
                 android:text="2:40:35 PM - 8:24:16 PM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:textColor="@color/material_gray_600"
                 style="@style/brandonRegularTextView"
                 android:id="@+id/tvContent"
                 android:text="Distance: 14.0 m"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="0.3"
             android:layout_height="match_parent">
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_alignParentTop="true"
                 android:tint="?attr/colorAccent"
                 android:padding="10dp"
@@ -53,7 +52,6 @@
                 android:layout_centerInParent="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp" />
-
             <LinearLayout
                 android:id="@+id/llCheckedBox"
                 android:layout_centerInParent="true"
@@ -61,7 +59,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-            <CheckBox
+            <androidx.appcompat.widget.AppCompatCheckBox
                 android:clickable="false"
                 android:visibility="invisible"
                 android:id="@+id/ckDelete"
@@ -69,6 +67,5 @@
                 android:layout_height="40dp" />
             </LinearLayout>
         </RelativeLayout>
-
     </LinearLayout>
 </RelativeLayout>

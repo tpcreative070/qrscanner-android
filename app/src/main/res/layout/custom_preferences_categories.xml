@@ -21,7 +21,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:layout_weight="1">
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:textSize="18sp"
                 android:id="@android:id/title"
                 android:layout_width="match_parent"

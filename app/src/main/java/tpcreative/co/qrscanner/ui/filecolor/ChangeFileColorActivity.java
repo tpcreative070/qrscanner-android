@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -32,7 +34,7 @@ public class ChangeFileColorActivity extends BaseActivitySlide implements BaseVi
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.imgResult)
-    ImageView imgResult;
+    AppCompatImageView imgResult;
     private Bitmap bitmap;
     private ChangeFileColorPresenter presenter;
     private ChangeFileColorAdapter adapter;

@@ -45,12 +45,12 @@
             android:layout_below="@+id/rlButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/brandonRegularTextView"
                 android:text="@string/features"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:textColor="@color/colorPrimary"
                 android:layout_marginRight="20dp"
                 android:gravity="right"
@@ -72,13 +72,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/ic_no_ads"
                         android:layout_width="@dimen/icon_size_30"
                         android:layout_height="@dimen/icon_size_30"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/no_advertising"
@@ -97,13 +97,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/baseline_invert_colors_white_48"
                         android:layout_width="@dimen/icon_size_30"
                         android:layout_height="@dimen/icon_size_30"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/smart_export_csv"
@@ -123,13 +123,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/baseline_palette_white_48"
                         android:layout_width="@dimen/icon_size_30"
                         android:layout_height="@dimen/icon_size_30"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/key_color_code_detail"
@@ -150,13 +150,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/baseline_more_white_48"
                         android:layout_width="@dimen/icon_size_25"
                         android:layout_height="@dimen/icon_size_25"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/key_multiple_scan_detail"
@@ -175,13 +175,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/baseline_content_copy_white_24"
                         android:layout_width="@dimen/icon_size_25"
                         android:layout_height="@dimen/icon_size_25"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/key_skip_duplicates_detail"
@@ -200,13 +200,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/ic_barcode"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/generate_barcode"
@@ -225,13 +225,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/baseline_opacity_white_48"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/theme_title"
@@ -250,13 +250,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/ic_drive_cloud"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/key_backup_data"
@@ -275,13 +275,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
                         android:src="@drawable/baseline_mood_white_48"
                         android:layout_width="@dimen/icon_size_30"
                         android:layout_height="@dimen/icon_size_30"/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
                         android:text="@string/happy_developer"
@@ -299,7 +299,7 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:textColor="@color/white"
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
@@ -309,7 +309,7 @@
                         android:src="@drawable/baseline_mood_white_48"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/button_height"/>
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:text="@string/guideline_pro_version"
                         android:layout_marginTop="30dp"
                         android:layout_width="match_parent"

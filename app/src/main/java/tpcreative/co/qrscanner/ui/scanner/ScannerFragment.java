@@ -15,7 +15,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
@@ -69,7 +72,7 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
 
     private static final String TAG = ScannerFragment.class.getSimpleName();
     @BindView(R.id.zxing_status_view)
-    TextView zxing_status_view;
+    AppCompatTextView zxing_status_view;
     @BindView(R.id.switch_flashlight)
     AppCompatImageView switch_flashlight;
     @BindView(R.id.imgGallery)
@@ -81,9 +84,9 @@ public class ScannerFragment extends BaseFragment implements ScannerSingleton.Si
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView barcodeScannerView;
     @BindView(R.id.btnDone)
-    Button btnDone;
+    AppCompatButton btnDone;
     @BindView(R.id.tvCount)
-    TextView tvCount;
+    AppCompatTextView tvCount;
     private BeepManager beepManager;
     private CameraSettings cameraSettings = new CameraSettings();
     private int typeCamera = 0 ;

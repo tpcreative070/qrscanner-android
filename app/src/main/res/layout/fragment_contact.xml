@@ -62,13 +62,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/fullName" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtFullName"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -90,13 +90,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/address" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtAddress"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -116,13 +116,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/phone" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtPhone"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
@@ -144,13 +144,13 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/email" />
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtEmail"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"

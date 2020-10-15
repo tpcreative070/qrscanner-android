@@ -8,6 +8,8 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -27,7 +29,7 @@ public class TelephoneFragment extends BaseActivitySlide implements GenerateSing
     private static final String TAG = TelephoneFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
     @BindView(R.id.edtPhone)
-    EditText edtPhone;
+    AppCompatEditText edtPhone;
     private SaveModel save;
 
     @Override

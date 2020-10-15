@@ -60,12 +60,12 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/product_id" />
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:maxLength="13"
                             android:id="@+id/edtText"
                             style="@style/brandonRegularTextView"
@@ -75,13 +75,13 @@
                             android:inputType="numberDecimal"
                             android:singleLine="true" />
 
-                        <Spinner
+                        <androidx.appcompat.widget.AppCompatSpinner
                             android:id="@+id/spinner"
                             android:layout_marginTop="20dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:visibility="gone"
                             android:id="@+id/btnRandom"
                             android:textColor="@color/white"

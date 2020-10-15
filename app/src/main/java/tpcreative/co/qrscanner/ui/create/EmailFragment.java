@@ -7,6 +7,8 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -26,11 +28,11 @@ public class EmailFragment extends BaseActivitySlide implements GenerateSingleto
 
     private static final String TAG = EmailFragment.class.getSimpleName();
     @BindView(R.id.edtEmail)
-    EditText edtEmail;
+    AppCompatEditText edtEmail;
     @BindView(R.id.edtObject)
-    EditText edtObject;
+    AppCompatEditText edtObject;
     @BindView(R.id.edtMessage)
-    EditText edtMessage;
+    AppCompatEditText edtMessage;
     private AwesomeValidation mAwesomeValidation ;
     private SaveModel save;
 

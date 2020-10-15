@@ -11,6 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -36,9 +39,9 @@ public class BarcodeFragment extends BaseActivitySlide implements GenerateSingle
     private static final String TAG = BarcodeFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
     @BindView(R.id.edtText)
-    EditText editText;
+    AppCompatEditText editText;
     @BindView(R.id.spinner)
-    Spinner spinner;
+    AppCompatSpinner spinner;
     private SaveModel save;
     private GeneratePresenter presenter;
     private ArrayAdapter<FormatTypeModel> dataAdapter;

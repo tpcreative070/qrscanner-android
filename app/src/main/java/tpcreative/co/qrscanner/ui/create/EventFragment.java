@@ -6,9 +6,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -39,15 +39,15 @@ public class EventFragment extends BaseActivitySlide implements View.OnClickList
     @BindView(R.id.llEndTime)
     LinearLayout llEndTime;
     @BindView(R.id.edtTitle)
-    EditText edtTitle;
+    AppCompatEditText edtTitle;
     @BindView(R.id.edtLocation)
-    EditText edtLocation;
+    AppCompatEditText edtLocation;
     @BindView(R.id.edtDescription)
-    EditText edtDescription;
+    AppCompatEditText edtDescription;
     @BindView(R.id.tvBeginTime)
-    TextView tvBeginTime;
+    AppCompatTextView tvBeginTime;
     @BindView(R.id.tvEndTime)
-    TextView tvEndTime;
+    AppCompatTextView tvEndTime;
     private AwesomeValidation mAwesomeValidation;
     private long beginDateTimeMilliseconds = 0;
     private long endDateTimeMilliseconds = 0;

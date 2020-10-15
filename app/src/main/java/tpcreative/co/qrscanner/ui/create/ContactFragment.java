@@ -7,6 +7,8 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -26,13 +28,13 @@ public class ContactFragment extends BaseActivitySlide implements GenerateSingle
 
     private static final String TAG = ContactFragment.class.getSimpleName();
     @BindView(R.id.edtFullName)
-    EditText edtFullName;
+    AppCompatEditText edtFullName;
     @BindView(R.id.edtAddress)
-    EditText edtAddress;
+    AppCompatEditText edtAddress;
     @BindView(R.id.edtPhone)
-    EditText edtPhone;
+    AppCompatEditText edtPhone;
     @BindView(R.id.edtEmail)
-    EditText edtEmail;
+    AppCompatEditText edtEmail;
     private AwesomeValidation mAwesomeValidation ;
     private SaveModel save;
 

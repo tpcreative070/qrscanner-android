@@ -22,6 +22,7 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import com.google.zxing.BarcodeFormat;
@@ -75,7 +76,7 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     @BindView(R.id.rlRoot)
     RelativeLayout rlRoot;
     @BindView(R.id.tvNotFoundItems)
-    TextView tvNotFoundItems;
+    AppCompatTextView tvNotFoundItems;
     @BindView(R.id.recyclerView)
     SimpleRecyclerView recyclerView;
     private SavePresenter presenter;
@@ -87,7 +88,6 @@ public class SaverFragment extends BaseFragment implements SaveView, SaveCell.It
     private boolean isDeleted;
     private boolean isSelectedAll = false;
     private ActionMode actionMode;
-
 
     private ActionMode.Callback callback = new ActionMode.Callback() {
         @Override

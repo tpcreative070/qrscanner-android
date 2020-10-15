@@ -60,12 +60,12 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/text" />
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtText"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"

@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.jaychang.srv.SimpleCell;
 import com.jaychang.srv.SimpleViewHolder;
 import butterknife.BindView;
@@ -22,10 +25,7 @@ import tpcreative.co.qrscanner.model.QRCodeType;
 
 
 public class GenerateCell extends SimpleCell<QRCodeType,GenerateCell.ViewHolder> {
-
-
     private ItemSelectedListener listener;
-
     private static final String TAG = GenerateCell.class.getSimpleName();
 
     public GenerateCell(@NonNull QRCodeType item) {
@@ -76,11 +76,11 @@ public class GenerateCell extends SimpleCell<QRCodeType,GenerateCell.ViewHolder>
      * */
     static class ViewHolder extends SimpleViewHolder {
         @BindView(R.id.tvName)
-        TextView tvName;
+        AppCompatTextView tvName;
         @BindView(R.id.imgIcon)
-        ImageView imgIcon;
+        AppCompatImageView imgIcon;
         @BindView(R.id.imgDefault)
-        ImageView imgDefault;
+        AppCompatImageView imgDefault;
         @BindView(R.id.llRoot)
         LinearLayout llRoot;
         ViewHolder(View itemView) {

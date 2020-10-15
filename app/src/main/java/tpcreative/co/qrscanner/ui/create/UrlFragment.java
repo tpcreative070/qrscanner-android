@@ -7,6 +7,8 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -26,7 +28,7 @@ public class UrlFragment extends BaseActivitySlide implements GenerateSingleton.
     private static final String TAG = UrlFragment.class.getSimpleName();
     AwesomeValidation mAwesomeValidation ;
     @BindView(R.id.edtUrl)
-    EditText edtUrl;
+    AppCompatEditText edtUrl;
     private SaveModel save;
 
     @Override

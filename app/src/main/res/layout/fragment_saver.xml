@@ -30,7 +30,7 @@
             app:srv_layoutMode="linearVertical"
             app:srv_showDivider="false"
             app:srv_showLastDivider="false" />
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:visibility="invisible"
             android:id="@+id/tvNotFoundItems"
             style="@style/brandonBoldTextView"

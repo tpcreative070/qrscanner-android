@@ -64,7 +64,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/date_picker_year"
                 style="@style/Theme.SwitchDateTime.DateLabelYear"
                 android:gravity="top|end"
@@ -76,7 +76,7 @@
                 android:includeFontPadding="false"
                 android:layout_above="@+id/date_picker_month_and_day" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/date_picker_month_and_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.review.ReviewActivity">
-
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -18,7 +16,6 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
@@ -29,8 +26,6 @@
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"/>
     </com.google.android.material.appbar.AppBarLayout>
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,27 +38,22 @@
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/rlButton"
                 android:orientation="vertical">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:background="@drawable/bg_location_group"
                     android:orientation="vertical">
-
-
                     <RelativeLayout
                         android:id="@+id/rlResult"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imgResult"
                             android:layout_width="@dimen/icon_size_200"
                             android:layout_height="@dimen/icon_size_200"
@@ -71,8 +61,6 @@
                             android:layout_centerInParent="true"
                             android:layout_marginTop="20dp" />
                     </RelativeLayout>
-
-
                     <LinearLayout
                         android:id="@+id/llAction"
                         android:layout_width="match_parent"
@@ -82,14 +70,11 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="5dp"
                         android:gravity="center">
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
-
                     </LinearLayout>
-
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

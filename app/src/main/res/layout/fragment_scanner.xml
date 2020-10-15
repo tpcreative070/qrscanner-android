@@ -79,7 +79,7 @@
                     android:layout_height="50dp"
                     android:padding="2dp"/>
             </RelativeLayout>
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:visibility="invisible"
                     android:id="@+id/btnDone"
                     android:textColor="@color/white"
@@ -92,7 +92,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"/>
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:visibility="invisible"
                     android:id="@+id/tvCount"
                     android:textColor="@color/white"

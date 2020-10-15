@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/brandonBoldTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,26 +65,26 @@
                     android:layout_margin="20dp"
                     android:orientation="vertical">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/brandonRegularTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/barcode_guide" />
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_margin="20dp"
                         android:src="@drawable/scan_example" />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/brandonRegularTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/barcode_2d_guide" />
                 </LinearLayout>
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/brandonBoldTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -94,9 +94,7 @@
                     android:text="@string/scan_code_via_Gallery"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/medium_x"/>
-
-
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/brandonRegularTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,13 +102,12 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:text="@string/choose_files"/>
-
                 <LinearLayout
                     android:layout_gravity="center"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:paddingRight="20dp"
                         android:paddingLeft="20dp"
                         android:layout_gravity="center"
@@ -120,7 +117,7 @@
                         android:layout_height="400dp" />
                 </LinearLayout>
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/brandonRegularTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -143,7 +140,6 @@
                         android:layout_width="400dp"
                         android:layout_height="400dp" />
                 </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
