@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.common.activity;
 import android.accounts.Account;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -16,10 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.DriveScopes;
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.concurrent.Callable;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

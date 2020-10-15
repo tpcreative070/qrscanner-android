@@ -43,13 +43,11 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         System.gc();
     }
-
 
     protected void setDisplayHomeAsUpEnabled(boolean check){
         actionBar.setDisplayHomeAsUpEnabled(check);
