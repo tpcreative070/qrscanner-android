@@ -216,7 +216,6 @@ public class Utils {
     }
 
     public static boolean checkCameraFront(Context context) {
-
         if (context.getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA_FRONT)) {
             return true;
@@ -225,6 +224,9 @@ public class Utils {
     }
 
     public static long getMilliseconds(String value){
+        if (value==null){
+            return System.currentTimeMillis();
+        }
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Date date = dateFormat.parse(value);
@@ -232,7 +234,7 @@ public class Utils {
         }catch (ParseException e){
             e.printStackTrace();
         }
-        return 0;
+        return System.currentTimeMillis();
     }
 
     public static String getCurrentDateDisplay(String value) {
