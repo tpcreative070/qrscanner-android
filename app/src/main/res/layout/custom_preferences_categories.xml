@@ -22,6 +22,7 @@
             android:layout_marginBottom="2dp"
             android:layout_weight="1">
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/brandonRegularTextView"
                 android:textSize="18sp"
                 android:id="@android:id/title"
                 android:layout_width="match_parent"

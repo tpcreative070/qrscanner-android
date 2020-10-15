@@ -30,10 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="6dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:layout_weight="1">
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/brandonRegularTextView"
                 android:textSize="@dimen/medium_16"
                 android:id="@android:id/title"
                 android:layout_width="match_parent"
@@ -43,6 +44,7 @@
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal" />
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/brandonRegularTextView"
                 android:textSize="@dimen/small"
                 android:id="@android:id/summary"
                 android:layout_width="match_parent"

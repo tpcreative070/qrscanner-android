@@ -9,9 +9,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
-
+import com.tapadoo.alerter.Alerter;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import tpcreative.co.qrscanner.R;
@@ -21,6 +20,7 @@ import tpcreative.co.qrscanner.common.SettingsSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseGoogleApi;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
+import tpcreative.co.qrscanner.common.network.NetworkUtil;
 import tpcreative.co.qrscanner.common.services.QRScannerService;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.model.HistoryModel;
@@ -59,6 +59,9 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
                 requestSyncData();
             }
         }
+        if (NetworkUtil.pingIpAddress(this)){
+            onShowConnectionAlert();
+        }
     }
 
     public void requestSyncData(){
@@ -72,6 +75,10 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
 
     @OnClick(R.id.btnEnable)
     public void onClickedEnable(){
+        if (NetworkUtil.pingIpAddress(this)){
+            onShowConnectionAlert();
+            return;
+        }
         Utils.Log(ServiceManager.class,"isSyncingData 74 " +ServiceManager.getInstance().isSyncingData());
         if (!ServiceManager.getInstance().isSyncingData()){
             ServiceManager.getInstance().onPickUpNewEmail(this);
@@ -79,6 +86,14 @@ public class BackupActivity extends BaseGoogleApi implements BackupSingleton.Bac
             Utils.Log(ServiceManager.class,"isSyncingData 78 is running");
             requestSyncData();
         }
+    }
+
+    public void onShowConnectionAlert(){
+        Alerter.create(this)
+                .setTitle("Warning")
+                .setBackgroundColorInt(ContextCompat.getColor(this,R.color.colorAccent))
+                .setText("No connection. Please check your internet connection")
+                .show();
     }
 
     @Override

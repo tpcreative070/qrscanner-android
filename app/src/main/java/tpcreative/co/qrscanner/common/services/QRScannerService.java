@@ -32,7 +32,6 @@ import retrofit2.HttpException;
 import retrofit2.Response;
 import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
-import tpcreative.co.qrscanner.common.ResponseSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.api.RootAPI;
 import tpcreative.co.qrscanner.common.api.request.CheckoutRequest;

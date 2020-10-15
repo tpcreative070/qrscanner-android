@@ -312,9 +312,6 @@ public class SettingsFragment extends BaseFragment {
                                 final boolean mResult = (boolean)newValue;
                                 if (mResult) {
                                     Navigator.onBackupData(getContext());
-//                                    if (!Utils.isConnectedToGoogleDrive()) {
-//
-//                                    }
                                 }
                             }
                         }
