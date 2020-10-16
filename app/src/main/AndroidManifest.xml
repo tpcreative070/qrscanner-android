@@ -94,7 +94,7 @@
             android:label="@string/help" />
         <activity
             android:name=".ui.filecolor.ChangeFileColorActivity"
-            android:label="@string/change_theme" />
+            android:label="@string/key_color_code" />
         <activity android:name=".ui.pro.ProVersionActivity" />
         <activity
             android:name=".ui.create.EmailFragment"
