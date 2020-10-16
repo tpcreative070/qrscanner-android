@@ -216,7 +216,7 @@
     <string name="key_theme">Theme</string>
     <string name="key_theme_detail">Choose dark or light theme</string>
     <string name="theme_title">Change light or dark mode</string>
-    <string name="key_color_code">Change code color</string>
+    <string name="key_color_code">Change color</string>
     <string name="change_theme">Change theme</string>
     <string name="key_color_code_detail">Make QR codes in multi colors</string>
     <string name="key_size_code">Change resolution file size</string>

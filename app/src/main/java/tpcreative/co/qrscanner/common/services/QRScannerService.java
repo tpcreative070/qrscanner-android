@@ -141,11 +141,13 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
             mCheckout = new CheckoutRequest(purchaseData.autoRenewing,purchaseData.orderId,purchaseData.productId,purchaseData.purchaseState.name(),purchaseData.purchaseToken);
         }
         Utils.Log(TAG,"Preparing checkout");
+        Utils.Log(TAG,"Checkout value " + new Gson().toJson(mCheckout));
         subscriptions.add(QRScannerApplication.serverAPI.onCheckout(mCheckout)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(__ -> Utils.Log(TAG,""))
                 .subscribe(onResponse -> {
+                    Utils.Log(TAG,"Response checkout " +new Gson().toJson(onResponse));
                     if (onResponse.error){
                         listener.onError("Error",EnumStatus.NONE);
                     }
@@ -171,6 +173,7 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
                     } else {
                         Utils.Log(TAG, "Can not call " + throwable.getMessage());
                     }
+                    Utils.Log(TAG,"Checkout error occurred");
                 }));
     }
 
