@@ -238,6 +238,9 @@ public class Utils {
     }
 
     public static String getCurrentDateDisplay(String value) {
+        if (value==null){
+            return getCurrentDateTime();
+        }
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Date date = dateFormat.parse(value);
