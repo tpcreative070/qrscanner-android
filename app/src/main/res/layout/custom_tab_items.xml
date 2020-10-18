@@ -15,7 +15,7 @@
             android:id="@+id/imageView"
             android:layout_width="@dimen/icon_size_25"
             android:layout_height="@dimen/icon_size_25"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"/>
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/brandonRegularTextView"
             android:textColor="@color/white"
@@ -24,6 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="New Text" />
+            android:text="New Text"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,10 +16,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
@@ -205,12 +205,12 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
         }
     }
 
-    public View getTabView(int position) {
+    public View getTabView(int position){
         View view= LayoutInflater.from(QRScannerApplication.getInstance()).inflate(R.layout.custom_tab_items, null);
-        TextView textView= (TextView) view.findViewById(R.id.textView);
+        AppCompatTextView textView = view.findViewById(R.id.textView);
         textView.setText(adapter.getPageTitle(position));
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-        imageView .setImageResource(tabIcons[position]);
+        AppCompatImageView imageView = view.findViewById(R.id.imageView);
+        imageView.setImageResource(tabIcons[position]);
         imageView.setColorFilter(ContextCompat.getColor(this,R.color.white), PorterDuff.Mode.SRC_ATOP);
         return view;
     }
@@ -239,8 +239,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                     .setLabelBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.inbox_primary,
                             getTheme()))
                     .create());
-
-
             //Set option fabs clicklisteners.
             mSpeedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
                 @Override
@@ -425,7 +423,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                     Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
         }
     }
-
 
     public void showEncourage(){
         try {
