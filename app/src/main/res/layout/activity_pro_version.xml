@@ -160,7 +160,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
-                        android:text="@string/key_multiple_scan_detail"
+                        android:text="@string/key_multiple_scan"
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
