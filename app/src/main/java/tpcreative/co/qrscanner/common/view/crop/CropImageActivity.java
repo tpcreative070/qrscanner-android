@@ -373,7 +373,7 @@ public class CropImageActivity extends MonitoredActivity implements CropImageVie
                     if(bitmap==null){
                         isSaving = false;
                         isProgressing = false;
-                        return null;
+                        return "";
                     }
                     int[] intArray = new int[bitmap.getWidth()*bitmap.getHeight()];
                     bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
