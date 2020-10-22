@@ -17,23 +17,22 @@ android {
     }
     buildTypes {
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            minifyEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         freedevelop {
             initWith(buildTypes.debug)
             applicationIdSuffix ".free.develop"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            minifyEnabled true
         }
 
         freerelease {
             //initWith(buildTypes.debug)
             applicationIdSuffix ".free.release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            minifyEnabled true
         }
     }
+
 
     compileOptions {
         coreLibraryDesugaringEnabled true
