@@ -207,12 +207,36 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
 
     public View getTabView(int position){
         View view= LayoutInflater.from(QRScannerApplication.getInstance()).inflate(R.layout.custom_tab_items, null);
-        AppCompatTextView textView = view.findViewById(R.id.textView);
-        textView.setText(adapter.getPageTitle(position));
         AppCompatImageView imageView = view.findViewById(R.id.imageView);
-        imageView.setImageResource(tabIcons[position]);
-        imageView.setColorFilter(ContextCompat.getColor(this,R.color.white), PorterDuff.Mode.SRC_ATOP);
+        AppCompatTextView textView = view.findViewById(R.id.textView);
+        try {
+            textView.setText(adapter.getPageTitle(position));
+            imageView.setColorFilter(ContextCompat.getColor(this,R.color.white), PorterDuff.Mode.SRC_ATOP);
+            imageView.setImageDrawable(getRes(position));
+            return view;
+        }catch (Exception e){
+            imageView.setImageResource(0);
+        }
         return view;
+    }
+
+    public Drawable getRes(int position){
+        final Drawable mResult = ContextCompat.getDrawable(this,tabIcons[position]);
+        if (mResult!=null){
+            return mResult;
+        }
+        switch (position){
+            case 0:
+                return ContextCompat.getDrawable(this,R.drawable.baseline_history_white_48);
+            case 1:
+                return ContextCompat.getDrawable(this,R.drawable.baseline_add_box_white_48);
+            case 3:
+                return ContextCompat.getDrawable(this,R.drawable.baseline_save_alt_white_48);
+            case 4:
+                return ContextCompat.getDrawable(this,R.drawable.baseline_settings_white_48);
+            default:
+                return ContextCompat.getDrawable(this,R.drawable.ic_scanner);
+        }
     }
 
     private void initSpeedDial() {
