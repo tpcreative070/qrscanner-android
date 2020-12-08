@@ -1,21 +1,16 @@
 package tpcreative.co.qrscanner.ui.main;
 import android.Manifest;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -28,6 +23,10 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.Task;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -40,16 +39,12 @@ import com.leinardi.android.speeddial.SpeedDialView;
 import com.snatik.storage.Storage;
 import java.util.List;
 import butterknife.BindView;
-import de.mrapp.android.dialog.MaterialDialog;
-import tpcreative.co.qrscanner.BuildConfig;
 import tpcreative.co.qrscanner.R;
 import tpcreative.co.qrscanner.common.MainSingleton;
 import tpcreative.co.qrscanner.common.ResponseSingleton;
 import tpcreative.co.qrscanner.common.ScannerSingleton;
 import tpcreative.co.qrscanner.common.Utils;
 import tpcreative.co.qrscanner.common.activity.BaseActivity;
-import tpcreative.co.qrscanner.common.controller.PrefsController;
-import tpcreative.co.qrscanner.common.controller.PremiumManager;
 import tpcreative.co.qrscanner.common.controller.ServiceManager;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver;
@@ -138,19 +133,14 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
         if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium() && Utils.isLiveAds()){
             QRScannerApplication.getInstance().getAdsView(this);
         }
-        final boolean isPressed =  PrefsController.getBoolean(getString(R.string.we_are_a_team),false);
-        if (!isPressed){
-            final int  mCountRating = Utils.onGetCountRating();
-            if (mCountRating == 5){
-                final boolean isPositive = PrefsController.getBoolean(getString(R.string.we_are_a_team_positive),false);
-                if (!isPositive) {
-                    showEncourage();
-                }
-            }
+        final int  mCountRating = Utils.onGetCountRating();
+        if (mCountRating > 3){
+            showEncourage();
+            Utils.Log(TAG,"rating.......");
+            Utils.onSetCountRating(0);
         }
         Utils.onScanFile(this,".scan.log");
         presenter.doShowAds();
-        PremiumManager.getInstance().onStartInAppPurchase();
     }
 
     public void onShowFloatingButton(Fragment fragment,boolean isShow){
@@ -370,7 +360,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
         Utils.Log(TAG,"Network changed :"+ isConnected);
     }
 
-
     @Override
     protected void onResume() {
         presenter.doShowAds();
@@ -405,9 +394,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
             }
         }
         Utils.onSetCountRating(Utils.onGetCountRating() +1);
-        Utils.Log(TAG,"isSyncingData 386 " +ServiceManager.getInstance().isSyncingData());
         ServiceManager.getInstance().onPreparingSyncData(true);
-        PremiumManager.getInstance().onStop();
     }
 
     @Override
@@ -416,84 +403,21 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
         Utils.Log(TAG,"onBackPressed");
     }
 
-    public void onRateApp() {
-        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release));
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        try {
-            startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_free_release))));
-        }
-    }
-
-    public void onRateProApp() {
-        Uri uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release));
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        try {
-            startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))));
-        }
-    }
-
     public void showEncourage(){
-        try {
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(this,Utils.getCurrentTheme());
-            builder.setHeaderBackground(R.drawable.back);
-            builder.setPadding(40,40,40,0);
-            builder.setMargin(60,0,60,0);
-            builder.showHeader(true);
-            builder.setCustomMessage(R.layout.custom_body);
-            builder.setCustomHeader(R.layout.custom_header);
-            builder.setPositiveButton(getString(R.string.rate_app_5_stars), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
-                        onRateProApp();
-                    }else{
-                        onRateApp();
-                    }
-                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
-                    PrefsController.putBoolean(getString(R.string.we_are_a_team_positive),true);
-                }
-            });
-
-            builder.setNegativeButton(getText(R.string.no_thanks), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    PrefsController.putBoolean(getString(R.string.we_are_a_team),true);
-                }
-            });
-
-            MaterialDialog dialog = builder.show();
-            builder.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialogInterface) {
-                    Button positive = dialog.findViewById(android.R.id.button1);
-                    Button negative = dialog.findViewById(android.R.id.button2);
-                    if (positive!=null && negative!=null){
-                        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.brandon_bld);
-                        positive.setTextSize(14);
-                        negative.setTextSize(14);
-                    }
-                }
-            });
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = task.getResult();
+                Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
+                flow.addOnCompleteListener(tasks -> {
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                });
+            }
+        });
     }
 
     @Override

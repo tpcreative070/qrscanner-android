@@ -37,7 +37,6 @@ import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.helper.ThemeHelper;
-import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.EnumThemeMode;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SaveModel;
@@ -455,6 +454,9 @@ public class SettingsFragment extends BaseFragment {
                     myPreferenceTheme.getTvChoose().setText(Utils.getCurrentThemeName());
                 }
             });
+            if (!Utils.isPremium()){
+                myPreferenceTheme.setVisible(false);
+            }
 
             /*File color*/
             myPreferenceFileColor = (MyPreference) findPreference(getString(R.string.key_color_code));
@@ -467,6 +469,9 @@ public class SettingsFragment extends BaseFragment {
                     onGenerateReview("123");
                 }
             });
+            if (!Utils.isPremium()){
+                myPreferenceFileColor.setVisible(false);
+            }
 
             /*Multiple scan*/
             myPreferenceMultipleScan = (MySwitchPreference) findPreference(getString(R.string.key_multiple_scan));
@@ -478,6 +483,9 @@ public class SettingsFragment extends BaseFragment {
                     myPreferenceMultipleScan.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
+            if (!Utils.isPremium()){
+                myPreferenceMultipleScan.setVisible(false);
+            }
 
             /*Skip duplicates*/
             mySwitchPreferenceSkipDuplicates = (MySwitchPreference) findPreference(getString(R.string.key_skip_duplicates));
@@ -489,6 +497,9 @@ public class SettingsFragment extends BaseFragment {
                     mySwitchPreferenceSkipDuplicates.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
+            if (!Utils.isPremium()){
+                mySwitchPreferenceSkipDuplicates.setVisible(false);
+            }
 
             /*Backup data*/
             mySwitchPreferenceBackupData = (MySwitchPreference) findPreference(getString(R.string.key_backup_data));
@@ -500,6 +511,9 @@ public class SettingsFragment extends BaseFragment {
                     mySwitchPreferenceBackupData.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
+            if (!Utils.isPremium()){
+                mySwitchPreferenceBackupData.setVisible(false);
+            }
 
             myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
             myPreferenceCategoryFamilyApps.setOnPreferenceClickListener(createActionPreferenceClickListener());
@@ -518,27 +532,8 @@ public class SettingsFragment extends BaseFragment {
                     }
                 }
             });
-
-            final Author author = Author.getInstance().getAuthorInfo();
-            if (author!=null){
-                if (author.version!=null){
-                    if (author.version.isShowFamilyApps){
-                        myPreferenceCategoryFamilyApps.setVisible(true);
-                        myPreferenceSuperSafe.setVisible(true);
-                    }
-                    else {
-                        myPreferenceCategoryFamilyApps.setVisible(false);
-                        myPreferenceSuperSafe.setVisible(false);
-                    }
-                }else {
-                    myPreferenceCategoryFamilyApps.setVisible(false);
-                    myPreferenceSuperSafe.setVisible(false);
-                }
-            }
-            else{
-                myPreferenceCategoryFamilyApps.setVisible(false);
-                myPreferenceSuperSafe.setVisible(false);
-            }
+            myPreferenceCategoryFamilyApps.setVisible(false);
+            myPreferenceSuperSafe.setVisible(false);
         }
 
         public void onGenerateReview(String code){
