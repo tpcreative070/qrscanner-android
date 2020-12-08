@@ -368,7 +368,7 @@ public class SettingsFragment extends BaseFragment {
                     else if (preference.getKey().equals(getString(R.string.key_premium_version))){
                         Navigator.onMoveProVersion(getContext());
                     }
-                    else if (preference.getKey().equals(getString(R.string.key_theme))){
+                    else if (preference.getKey().equals(getString(R.string.key_dark_mode))){
                         if (!Utils.isPremium()){
                             Navigator.onMoveProVersion(getContext());
                         }else {
@@ -432,7 +432,7 @@ public class SettingsFragment extends BaseFragment {
             /*This area is premium*/
 
             /*Theme*/
-            myPreferenceTheme = (MyPreference) findPreference(getString(R.string.key_theme));
+            myPreferenceTheme = (MyPreference) findPreference(getString(R.string.key_dark_mode));
             myPreferenceTheme.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceTheme.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceTheme.setListener(new MyPreference.MyPreferenceListener() {

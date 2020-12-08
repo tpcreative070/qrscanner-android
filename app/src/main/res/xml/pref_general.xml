@@ -62,9 +62,9 @@
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_opacity_white_48"
-            android:title="@string/key_theme"
-            android:key="@string/key_theme"
-            android:summary="@string/key_theme_detail">
+            android:title="@string/key_dark_mode"
+            android:key="@string/key_dark_mode"
+            android:summary="@string/key_dark_mode_detail">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
