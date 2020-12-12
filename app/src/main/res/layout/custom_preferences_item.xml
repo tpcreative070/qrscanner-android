@@ -89,7 +89,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvChoose"
                 android:visibility="invisible"
-                android:text="@string/key_theme"
+                android:text="@string/key_dark_mode"
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

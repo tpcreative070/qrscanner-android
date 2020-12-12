@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import com.anjlab.android.iab.v3.PurchaseData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.snatik.storage.Storage;
@@ -130,16 +129,11 @@ public class QRScannerService extends PresenterService<BaseView> implements QRSc
         return mBinder;
     }
 
-    public void onAddCheckout(PurchaseData purchaseData,BaseListener<CheckoutModel> listener){
+    public void onAddCheckout(BaseListener<CheckoutModel> listener){
         if (subscriptions == null) {
             return;
         }
-        CheckoutRequest mCheckout;
-        if (purchaseData==null){
-            mCheckout = new CheckoutRequest();
-        }else {
-            mCheckout = new CheckoutRequest(purchaseData.autoRenewing,purchaseData.orderId,purchaseData.productId,purchaseData.purchaseState.name(),purchaseData.purchaseToken);
-        }
+        CheckoutRequest mCheckout = new CheckoutRequest();
         Utils.Log(TAG,"Preparing checkout");
         Utils.Log(TAG,"Checkout value " + new Gson().toJson(mCheckout));
         subscriptions.add(QRScannerApplication.serverAPI.onCheckout(mCheckout)

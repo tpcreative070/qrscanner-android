@@ -52,11 +52,19 @@
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_advance_features"
         android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MyPreference
+            android:layout="@layout/custom_preferences_item_small"
+            android:icon="@drawable/baseline_stars_white_48"
+            android:title="@string/premium_version"
+            android:summary="@string/summary"
+            android:key="@string/key_premium_version">
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item"
             android:icon="@drawable/baseline_opacity_white_48"
-            android:title="@string/key_theme"
-            android:key="@string/key_theme"
-            android:summary="@string/key_theme_detail">
+            android:title="@string/key_dark_mode"
+            android:key="@string/key_dark_mode"
+            android:summary="@string/key_dark_mode_detail">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
@@ -98,14 +106,6 @@
 
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/info"
         android:layout="@layout/custom_preferences_categories">
-        <tpcreative.co.qrscanner.common.preference.MyPreference
-            android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_stars_white_48"
-            android:title="@string/premium_version"
-            android:summary="@string/summary"
-            android:key="@string/key_premium_version">
-        </tpcreative.co.qrscanner.common.preference.MyPreference>
-
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_playlist_add_check_white_48"

@@ -37,7 +37,6 @@ import tpcreative.co.qrscanner.common.preference.MySwitchPreference;
 import tpcreative.co.qrscanner.common.services.QRScannerApplication;
 import tpcreative.co.qrscanner.helper.SQLiteHelper;
 import tpcreative.co.qrscanner.helper.ThemeHelper;
-import tpcreative.co.qrscanner.model.Author;
 import tpcreative.co.qrscanner.model.EnumThemeMode;
 import tpcreative.co.qrscanner.model.HistoryModel;
 import tpcreative.co.qrscanner.model.SaveModel;
@@ -257,67 +256,63 @@ public class SettingsFragment extends BaseFragment {
          */
 
         private Preference.OnPreferenceChangeListener createChangeListener() {
-            return new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(final Preference preference, final Object newValue) {
-                    if (preference instanceof MySwitchPreference) {
-                        if (preference.getKey().equals(getString(R.string.key_skip_duplicates))){
-                            if (!Utils.isPremium()){
-                                mySwitchPreferenceSkipDuplicates.setChecked(false);
-                                Navigator.onMoveProVersion(getContext());
-                                return false;
+            return (preference, newValue) -> {
+                if (preference instanceof MySwitchPreference) {
+                    if (preference.getKey().equals(getString(R.string.key_skip_duplicates))){
+                        if (!Utils.isPremium()){
+                            mySwitchPreferenceSkipDuplicates.setChecked(false);
+                            Navigator.onMoveProVersion(getContext());
+                            return false;
+                        }
+                        final boolean mResult = (boolean)newValue;
+                        if (mResult){
+                            final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getSaveList());
+                            Utils.Log(TAG,"need to be deleted at save "+mSaveList.size());
+                            final List<HistoryModel> mHistoryList = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getHistoryList());
+                            Utils.Log(TAG,"need to be deleted at history "+mHistoryList.size());
+                            final int mCount = mSaveList.size() + mHistoryList.size();
+                            if (mCount>0){
+                                askToDeleteDuplicatesItems(mCount, new ServiceManager.ServiceManagerClickedListener() {
+                                    @Override
+                                    public void onYes() {
+                                        for (SaveModel index : mSaveList){
+                                            SQLiteHelper.onDelete(index);
+                                        }
+                                        for (HistoryModel index : mHistoryList){
+                                            SQLiteHelper.onDelete(index);
+                                        }
+                                    }
+                                    @Override
+                                    public void onNo() {
+
+                                    }
+                                });
                             }
+                        }
+                       Utils.Log(TAG,"CLicked "+ newValue);
+                    }
+                    else if (preference.getKey().equals(getString(R.string.key_multiple_scan))){
+                        if (!Utils.isPremium()){
+                            myPreferenceMultipleScan.setChecked(false);
+                            Navigator.onMoveProVersion(getContext());
+                            return  false;
+                        }
+                    }
+                    else if (preference.getKey().equals(getString(R.string.key_backup_data))){
+                        if (!Utils.isPremium()){
+                            mySwitchPreferenceBackupData.setChecked(false);
+                            Navigator.onMoveProVersion(getContext());
+                            return false;
+                        }
+                        if (Utils.isPremium()){
                             final boolean mResult = (boolean)newValue;
-                            if (mResult){
-                                final List<SaveModel> mSaveList = Utils.filterDuplicationsSaveItems(SQLiteHelper.getSaveList());
-                                Utils.Log(TAG,"need to be deleted at save "+mSaveList.size());
-                                final List<HistoryModel> mHistoryList = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getHistoryList());
-                                Utils.Log(TAG,"need to be deleted at history "+mHistoryList.size());
-                                final int mCount = mSaveList.size() + mHistoryList.size();
-                                if (mCount>0){
-                                    askToDeleteDuplicatesItems(mCount, new ServiceManager.ServiceManagerClickedListener() {
-                                        @Override
-                                        public void onYes() {
-                                            for (SaveModel index : mSaveList){
-                                                SQLiteHelper.onDelete(index);
-                                            }
-                                            for (HistoryModel index : mHistoryList){
-                                                SQLiteHelper.onDelete(index);
-                                            }
-
-                                        }
-                                        @Override
-                                        public void onNo() {
-
-                                        }
-                                    });
-                                }
-                            }
-                           Utils.Log(TAG,"CLicked "+ newValue);
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_multiple_scan))){
-                            if (!Utils.isPremium()){
-                                myPreferenceMultipleScan.setChecked(false);
-                                Navigator.onMoveProVersion(getContext());
-                                return  false;
-                            }
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_backup_data))){
-                            if (!Utils.isPremium()){
-                                mySwitchPreferenceBackupData.setChecked(false);
-                                Navigator.onMoveProVersion(getContext());
-                                return false;
-                            }
-                            if (Utils.isPremium()){
-                                final boolean mResult = (boolean)newValue;
-                                if (mResult) {
-                                    Navigator.onBackupData(getContext());
-                                }
+                            if (mResult) {
+                                Navigator.onBackupData(getContext());
                             }
                         }
                     }
-                    return true;
                 }
+                return true;
             };
         }
 
@@ -330,68 +325,61 @@ public class SettingsFragment extends BaseFragment {
         }
 
         private Preference.OnPreferenceClickListener createActionPreferenceClickListener() {
-            return new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-
-                    if (preference instanceof MyPreference) {
-                        if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
-                            askPermission();
-                        } else if (preference.getKey().equals(getString(R.string.key_share))) {
-                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
-                                shareToSocial(getString(R.string.scanner_app_pro));
-                            }else{
-                                shareToSocial(getString(R.string.scanner_app));
-                            }
-                        } else if (preference.getKey().equals(getString(R.string.key_support))) {
-                            try {
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
-                                intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support");
-                                intent.putExtra(Intent.EXTRA_TEXT, "");
-                                startActivity(intent);
-                            } catch (ActivityNotFoundException e) {
-                                //TODO smth
-                            }
-                        } else if (preference.getKey().equals(getString(R.string.key_help))) {
-                            Utils.Log(TAG, "action here");
-                            Navigator.onMoveToHelp(getContext());
+            return preference -> {
+                if (preference instanceof MyPreference) {
+                    if (preference.getKey().equals(getString(R.string.key_app_permissions))) {
+                        askPermission();
+                    } else if (preference.getKey().equals(getString(R.string.key_share))) {
+                        if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
+                            shareToSocial(getString(R.string.scanner_app_pro));
+                        }else{
+                            shareToSocial(getString(R.string.scanner_app));
                         }
-                        else if (preference.getKey().equals(getString(R.string.key_color_code))){
-                            if (!Utils.isPremium()){
-                                Navigator.onMoveProVersion(getContext());
-                            }else{
-                                Navigator.onMoveToChangeFileColor(getActivity());
-                            }
+                    } else if (preference.getKey().equals(getString(R.string.key_support))) {
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"));
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support");
+                            intent.putExtra(Intent.EXTRA_TEXT, "");
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            //TODO smth
                         }
-                        else if (preference.getKey().equals(getString(R.string.key_rate))){
-                            if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
-                                onRateProApp();
-                            }else{
-                                onRateApp();
-                            }
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_supersafe))){
-                            onSuperSafe();
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_premium_version))){
+                    } else if (preference.getKey().equals(getString(R.string.key_help))) {
+                        Utils.Log(TAG, "action here");
+                        Navigator.onMoveToHelp(getContext());
+                    }
+                    else if (preference.getKey().equals(getString(R.string.key_color_code))){
+                        if (!Utils.isPremium()){
                             Navigator.onMoveProVersion(getContext());
-                        }
-                        else if (preference.getKey().equals(getString(R.string.key_theme))){
-                            if (!Utils.isPremium()){
-                                Navigator.onMoveProVersion(getContext());
-                            }else {
-                                askChooseTheme(new ServiceManager.ServiceManagerClickedItemsListener() {
-                                    @Override
-                                    public void onYes() {
-                                        ThemeHelper.applyTheme(EnumThemeMode.byPosition(Utils.getPositionTheme()));
-                                        Utils.Log(TAG, "Clicked say yes");
-                                    }
-                                });
-                            }
+                        }else{
+                            Navigator.onMoveToChangeFileColor(getActivity());
                         }
                     }
-                    return true;
+                    else if (preference.getKey().equals(getString(R.string.key_rate))){
+                        if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))){
+                            onRateProApp();
+                        }else{
+                            onRateApp();
+                        }
+                    }
+                    else if (preference.getKey().equals(getString(R.string.key_supersafe))){
+                        onSuperSafe();
+                    }
+                    else if (preference.getKey().equals(getString(R.string.key_premium_version))){
+                        Navigator.onMoveProVersion(getContext());
+                    }
+                    else if (preference.getKey().equals(getString(R.string.key_dark_mode))){
+                        if (!Utils.isPremium()){
+                            Navigator.onMoveProVersion(getContext());
+                        }else {
+                            askChooseTheme(() -> {
+                                ThemeHelper.applyTheme(EnumThemeMode.byPosition(Utils.getPositionTheme()));
+                                Utils.Log(TAG, "Clicked say yes");
+                            });
+                        }
+                    }
                 }
+                return true;
             };
         }
 
@@ -444,7 +432,7 @@ public class SettingsFragment extends BaseFragment {
             /*This area is premium*/
 
             /*Theme*/
-            myPreferenceTheme = (MyPreference) findPreference(getString(R.string.key_theme));
+            myPreferenceTheme = (MyPreference) findPreference(getString(R.string.key_dark_mode));
             myPreferenceTheme.setOnPreferenceClickListener(createActionPreferenceClickListener());
             myPreferenceTheme.setOnPreferenceChangeListener(createChangeListener());
             myPreferenceTheme.setListener(new MyPreference.MyPreferenceListener() {
@@ -455,6 +443,9 @@ public class SettingsFragment extends BaseFragment {
                     myPreferenceTheme.getTvChoose().setText(Utils.getCurrentThemeName());
                 }
             });
+            if (!Utils.isPremium()){
+                myPreferenceTheme.setVisible(false);
+            }
 
             /*File color*/
             myPreferenceFileColor = (MyPreference) findPreference(getString(R.string.key_color_code));
@@ -467,6 +458,9 @@ public class SettingsFragment extends BaseFragment {
                     onGenerateReview("123");
                 }
             });
+            if (!Utils.isPremium()){
+                myPreferenceFileColor.setVisible(false);
+            }
 
             /*Multiple scan*/
             myPreferenceMultipleScan = (MySwitchPreference) findPreference(getString(R.string.key_multiple_scan));
@@ -478,6 +472,9 @@ public class SettingsFragment extends BaseFragment {
                     myPreferenceMultipleScan.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
+            if (!Utils.isPremium()){
+                myPreferenceMultipleScan.setVisible(false);
+            }
 
             /*Skip duplicates*/
             mySwitchPreferenceSkipDuplicates = (MySwitchPreference) findPreference(getString(R.string.key_skip_duplicates));
@@ -489,6 +486,9 @@ public class SettingsFragment extends BaseFragment {
                     mySwitchPreferenceSkipDuplicates.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
+            if (!Utils.isPremium()){
+                mySwitchPreferenceSkipDuplicates.setVisible(false);
+            }
 
             /*Backup data*/
             mySwitchPreferenceBackupData = (MySwitchPreference) findPreference(getString(R.string.key_backup_data));
@@ -500,6 +500,9 @@ public class SettingsFragment extends BaseFragment {
                     mySwitchPreferenceBackupData.getImgPremium().setVisibility(View.VISIBLE);
                 }
             });
+            if (!Utils.isPremium()){
+                mySwitchPreferenceBackupData.setVisible(false);
+            }
 
             myPreferenceCategoryFamilyApps = (MyPreferenceCategory) findPreference(getString(R.string.key_family_apps));
             myPreferenceCategoryFamilyApps.setOnPreferenceClickListener(createActionPreferenceClickListener());
@@ -518,27 +521,8 @@ public class SettingsFragment extends BaseFragment {
                     }
                 }
             });
-
-            final Author author = Author.getInstance().getAuthorInfo();
-            if (author!=null){
-                if (author.version!=null){
-                    if (author.version.isShowFamilyApps){
-                        myPreferenceCategoryFamilyApps.setVisible(true);
-                        myPreferenceSuperSafe.setVisible(true);
-                    }
-                    else {
-                        myPreferenceCategoryFamilyApps.setVisible(false);
-                        myPreferenceSuperSafe.setVisible(false);
-                    }
-                }else {
-                    myPreferenceCategoryFamilyApps.setVisible(false);
-                    myPreferenceSuperSafe.setVisible(false);
-                }
-            }
-            else{
-                myPreferenceCategoryFamilyApps.setVisible(false);
-                myPreferenceSuperSafe.setVisible(false);
-            }
+            myPreferenceCategoryFamilyApps.setVisible(true);
+            myPreferenceSuperSafe.setVisible(true);
         }
 
         public void onGenerateReview(String code){

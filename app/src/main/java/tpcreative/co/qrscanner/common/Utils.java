@@ -474,12 +474,12 @@ public class Utils {
     }
 
     public static void onSetCountRating(int count){
+        Utils.Log(TAG,"rating.......set" + count);
        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.count_rating),count);
     }
 
     public static int onGetCountRating(){
-        final int  mCountRating = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.count_rating),0);
-        return mCountRating;
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.count_rating),0);
     }
 
     public static void onScanFile(Context activity, String nameLogs){
