@@ -521,8 +521,8 @@ public class SettingsFragment extends BaseFragment {
                     }
                 }
             });
-            myPreferenceCategoryFamilyApps.setVisible(false);
-            myPreferenceSuperSafe.setVisible(false);
+            myPreferenceCategoryFamilyApps.setVisible(true);
+            myPreferenceSuperSafe.setVisible(true);
         }
 
         public void onGenerateReview(String code){
