@@ -1025,7 +1025,15 @@ public class Utils {
         PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_already_checkout),value);
     }
 
+    public static void onAlertNotify(Activity activity,String message){
+        Alerter.create(activity)
+                .setTitle("Alert")
+                .setBackgroundColorInt(ContextCompat.getColor(activity,R.color.colorAccent))
+                .setText(message)
+                .show();
+    }
+
     public static boolean isLiveAds(){
-        return false;
+        return true;
     }
 }
