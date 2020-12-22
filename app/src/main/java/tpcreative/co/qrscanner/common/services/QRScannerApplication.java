@@ -288,13 +288,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             public void onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
             }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-                Utils.Log(TAG,"Ads left app");
-            }
-
             @Override
             public void onAdClosed() {
                 // Code to be executed when the user is about to return
@@ -342,11 +335,6 @@ public class QRScannerApplication extends MultiDexApplication implements Depende
             @Override
             public void onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
             }
 
             @Override

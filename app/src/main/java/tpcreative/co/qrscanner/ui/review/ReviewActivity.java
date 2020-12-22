@@ -9,9 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.Toast;
-
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
@@ -390,7 +387,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                     save.barcodeFormat = BarcodeFormat.QR_CODE.name();
                 }
                 save.favorite = false;
-                Toast.makeText(this, "Saved code successful => Path: " + path, Toast.LENGTH_LONG).show();
+                Utils.onAlertNotify(this,"Saved code successful => Path: " + path);
                 if (create.enumImplement == EnumImplement.CREATE) {
                     final String time = Utils.getCurrentDateTimeSort();
                     save.createDatetime = time;
@@ -419,7 +416,7 @@ public class ReviewActivity extends BaseActivitySlide implements ReviewView, Uti
                         shareToSocial(uri);
                     }
                 } else {
-                    Toast.makeText(ReviewActivity.this,getString(R.string.no_items_found),Toast.LENGTH_SHORT).show();
+                    Utils.onAlertNotify(this,getString(R.string.no_items_found));
                 }
                 break;
             }
