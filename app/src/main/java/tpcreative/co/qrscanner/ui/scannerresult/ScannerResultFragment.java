@@ -1023,6 +1023,8 @@ public class ScannerResultFragment extends BaseActivitySlide implements ScannerR
                 viewSeparateLine.setVisibility(View.GONE);
             }else{
                 QRScannerApplication.getInstance().loadLargeAd(llAds);
+                rlAdsRoot.setVisibility(View.VISIBLE);
+                viewSeparateLine.setVisibility(View.VISIBLE);
             }
         }else{
             rlAdsRoot.setVisibility(View.GONE);
