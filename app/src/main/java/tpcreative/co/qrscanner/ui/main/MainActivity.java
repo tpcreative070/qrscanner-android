@@ -139,7 +139,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
             Utils.Log(TAG,"rating.......");
             Utils.onSetCountRating(0);
         }
-        Utils.onScanFile(this,".scan.log");
         presenter.doShowAds();
     }
 
@@ -362,7 +361,6 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
 
     @Override
     protected void onResume() {
-        presenter.doShowAds();
         super.onResume();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver==null){
@@ -370,6 +368,7 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
             }
         }
         Utils.Log(TAG,"onResume");
+        reloadView();
     }
 
     @Override
@@ -427,9 +426,18 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
                 llAds.setVisibility(View.GONE);
             }else{
                 QRScannerApplication.getInstance().loadAd(llAds);
+                llAds.setVisibility(View.VISIBLE);
             }
         }else{
             llAds.setVisibility(View.GONE);
+        }
+    }
+
+    public void reloadView(){
+        if (llAds!=null){
+            if (llAds.getVisibility() == View.GONE){
+                presenter.doShowAds();
+            }
         }
     }
 }
