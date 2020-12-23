@@ -423,7 +423,11 @@ public class MainActivity extends BaseActivity implements ResponseSingleton.Sing
     @Override
     public void doShowAds(boolean value) {
         if (value){
-            QRScannerApplication.getInstance().loadAd(llAds);
+            if (QRScannerApplication.getInstance().isRequestAds()){
+                llAds.setVisibility(View.GONE);
+            }else{
+                QRScannerApplication.getInstance().loadAd(llAds);
+            }
         }else{
             llAds.setVisibility(View.GONE);
         }
