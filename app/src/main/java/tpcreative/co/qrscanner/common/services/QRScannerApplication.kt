@@ -1,89 +1,102 @@
 package tpcreative.co.qrscanner.common.services
-
+import android.accounts.Account
+import android.app.Activity
+import android.app.Application
 import android.content.Context
+import android.content.ContextWrapper
+import android.os.Build
+import android.os.Bundle
 import android.provider.Settings
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
+import com.google.android.gms.ads.*
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
+import com.google.api.services.drive.DriveScopes
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.snatik.storage.Storage
 import tpcreative.co.qrscanner.BuildConfig
+import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.api.RetrofitBuilder
+import tpcreative.co.qrscanner.common.api.RootAPI
+import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.controller.ServiceManager
-import tpcreative.co.qrscanner.common.network.Dependencies
+import tpcreative.co.qrscanner.common.entities.InstanceGenerator
+import tpcreative.co.qrscanner.helper.ThemeHelper
+import tpcreative.co.qrscanner.model.EnumThemeMode
+import tpcreative.co.qrscanner.model.EnumTypeServices
+import tpcreative.co.qrscanner.ui.main.MainActivity
 import java.util.*
 
 /**
  *
  */
-class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, ActivityLifecycleCallbacks {
+class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
     private var pathFolder: String? = null
-    private var storage: Storage? = null
+    private lateinit var storage: Storage
     private var isLive = false
     private var activity: MainActivity? = null
     private var adView: AdView? = null
     private var adLargeView: AdView? = null
     private var isRequestAds = true
     private var isRequestLargeAds = true
-    private val authorization: String? = null
     private var options: GoogleSignInOptions.Builder? = null
-    private var requiredScopes: MutableSet<Scope?>? = null
-    private var requiredScopesString: MutableList<String?>? = null
+    private var requiredScopes: MutableSet<Scope>? = null
+    private var requiredScopesString: MutableList<String>? = null
     override fun onCreate() {
         super.onCreate()
         mInstance = this
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        InstanceGenerator.Companion.getInstance(this)
+        serverAPI = RetrofitBuilder.getService(typeService = EnumTypeServices.SYSTEM)
+        serverDriveApi = RetrofitBuilder.getService(getString(R.string.url_google), typeService = EnumTypeServices.GOOGLE_DRIVE)
+        InstanceGenerator.getInstance(this)
         PrefsController.Builder()
-                .setContext(getApplicationContext())
+                .setContext(applicationContext)
                 .setMode(ContextWrapper.MODE_PRIVATE)
-                .setPrefsName(getPackageName())
+                .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
         isLive = true
         if (!Utils.isPremium() && Utils.isLiveAds()) {
             Utils.Log(TAG, "Start ads")
-            MobileAds.initialize(this, object : OnInitializationCompleteListener {
-                override fun onInitializationComplete(initializationStatus: InitializationStatus?) {}
-            })
+            MobileAds.initialize(this) { }
         }
-        ServiceManager.Companion.getInstance().setContext(this)
-        storage = Storage(getApplicationContext())
-        pathFolder = storage.getExternalStorageDirectory() + "/Pictures/QRScanner"
+        ServiceManager.getInstance()?.setContext(this)
+        storage = Storage(applicationContext)
+        pathFolder = storage.externalStorageDirectory + "/Pictures/QRScanner"
         storage.createDirectory(pathFolder)
-        val first_Running: Boolean = PrefsController.getBoolean(getString(R.string.key_not_first_running), false)
-        if (!first_Running) {
+        val firstRunning: Boolean = PrefsController.getBoolean(getString(R.string.key_not_first_running), false)
+        if (!firstRunning) {
             PrefsController.putBoolean(getString(R.string.key_not_first_running), true)
         }
         registerActivityLifecycleCallbacks(this)
-        /*Init own service api*/dependencies = Dependencies.Companion.getsInstance(getApplicationContext(), getUrl())
-        dependencies.dependenciesListener(this)
-        dependencies.init()
-        serverAPI = Dependencies.Companion.serverAPI as RootAPI
-        serverDriveApi = RetrofitHelper().getCityService(RootAPI.Companion.ROOT_GOOGLE_DRIVE)
         options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestScopes(Scope(DriveScopes.DRIVE_FILE))
                 .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
         requiredScopes = HashSet(2)
-        requiredScopes.add(Scope(DriveScopes.DRIVE_FILE))
-        requiredScopes.add(Scope(DriveScopes.DRIVE_APPDATA))
+        requiredScopes?.add(Scope(DriveScopes.DRIVE_FILE))
+        requiredScopes?.add(Scope(DriveScopes.DRIVE_APPDATA))
         requiredScopesString = ArrayList()
-        requiredScopesString.add(DriveScopes.DRIVE_APPDATA)
-        requiredScopesString.add(DriveScopes.DRIVE_FILE)
-        ThemeHelper.applyTheme(EnumThemeMode.Companion.byPosition(Utils.getPositionTheme()))
+        requiredScopesString?.add(DriveScopes.DRIVE_APPDATA)
+        requiredScopesString?.add(DriveScopes.DRIVE_FILE)
+        EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
     }
 
     fun getGoogleSignInOptions(account: Account?): GoogleSignInOptions? {
         if (options != null) {
             if (account != null) {
-                options.setAccountName(account.name)
+                options?.setAccountName(account.name)
             }
-            return options.build()
+            return options?.build()
         }
-        return options.build()
+        return options?.build()
     }
 
-    fun getRequiredScopesString(): MutableList<String?>? {
+    fun getRequiredScopesString(): MutableList<String>? {
         return requiredScopesString
     }
 
@@ -92,19 +105,19 @@ class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, 
         MultiDex.install(this)
     }
 
-    override fun onActivityCreated(activity: Activity?, bundle: Bundle?) {
+    override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
         if (activity is MainActivity) {
             this.activity = activity as MainActivity?
         }
     }
 
-    override fun onActivityStarted(activity: Activity?) {
+    override fun onActivityStarted(activity: Activity) {
         if (activity is MainActivity) {
             this.activity = activity as MainActivity?
         }
     }
 
-    override fun onActivityResumed(activity: Activity?) {
+    override fun onActivityResumed(activity: Activity) {
         if (activity is MainActivity) {
             this.activity = activity as MainActivity?
         }
@@ -114,32 +127,16 @@ class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, 
         return activity
     }
 
-    override fun onActivityPaused(activity: Activity?) {}
-    override fun onActivityStopped(activity: Activity?) {}
-    override fun onActivitySaveInstanceState(activity: Activity?, bundle: Bundle?) {}
-    override fun onActivityDestroyed(activity: Activity?) {}
+    override fun onActivityPaused(activity: Activity) {}
+    override fun onActivityStopped(activity: Activity) {}
+    override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
+    override fun onActivityDestroyed(activity: Activity) {}
     fun getPathFolder(): String? {
         return pathFolder
     }
 
-    fun setConnectivityListener(listener: ConnectivityReceiverListener?) {
-        QRScannerReceiver.Companion.connectivityReceiverListener = listener
-    }
-
-    override fun onObject(): Class<*>? {
-        return RootAPI::class.java
-    }
-
-    override fun onAuthorToken(): String? {
-        return null
-    }
-
-    override fun onCustomHeader(): HashMap<String?, String?>? {
-        return null
-    }
-
-    override fun isXML(): Boolean {
-        return false
+    fun setConnectivityListener(listener: QRScannerReceiver.ConnectivityReceiverListener?) {
+        QRScannerReceiver.connectivityReceiverListener = listener
     }
 
     fun getUrl(): String? {
@@ -175,26 +172,26 @@ class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, 
         return BuildConfig.APPLICATION_ID
     }
 
-    fun getStorage(): Storage? {
+    fun getStorage(): Storage {
         return storage
     }
 
     fun getAdsView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adView = AdView(context)
-        adView.setAdSize(AdSize.SMART_BANNER)
+        adView?.setAdSize(AdSize.SMART_BANNER)
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
-                adView.setAdUnitId(getString(R.string.banner_home_footer_test))
+                adView?.setAdUnitId(getString(R.string.banner_home_footer_test))
             } else {
-                adView.setAdUnitId(getString(R.string.banner_footer))
+                adView?.setAdUnitId(getString(R.string.banner_footer))
             }
         } else {
-            adView.setAdUnitId(getString(R.string.banner_home_footer_test))
+            adView?.setAdUnitId(getString(R.string.banner_home_footer_test))
         }
         val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
-        adView.setAdListener(object : AdListener() {
+        adView?.loadAd(adRequest)
+        adView?.setAdListener(object : AdListener() {
             override fun onAdLoaded() {
                 isRequestAds = false
                 Utils.Log(TAG, "Ads successful")
@@ -226,19 +223,19 @@ class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, 
     fun getAdsLargeView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adLargeView = AdView(context)
-        adLargeView.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        adLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
-                adLargeView.setAdUnitId(getString(R.string.banner_home_footer_test))
+                adLargeView?.setAdUnitId(getString(R.string.banner_home_footer_test))
             } else {
-                adLargeView.setAdUnitId(getString(R.string.banner_review))
+                adLargeView?.setAdUnitId(getString(R.string.banner_review))
             }
         } else {
-            adLargeView.setAdUnitId(getString(R.string.banner_home_footer_test))
+            adLargeView?.setAdUnitId(getString(R.string.banner_home_footer_test))
         }
         val adRequest = AdRequest.Builder().build()
-        adLargeView.loadAd(adRequest)
-        adLargeView.setAdListener(object : AdListener() {
+        adLargeView?.loadAd(adRequest)
+        adLargeView?.setAdListener(object : AdListener() {
             override fun onAdLoaded() {
                 isRequestLargeAds = false
                 Utils.Log(TAG, "Ads successful")
@@ -272,11 +269,11 @@ class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, 
             Utils.Log(TAG, "ads null")
             return
         }
-        if (adView.getParent() != null) {
-            val tempVg: ViewGroup = adView.getParent() as ViewGroup
+        if (adView?.getParent() != null) {
+            val tempVg: ViewGroup = adView?.getParent() as ViewGroup
             tempVg.removeView(adView)
         }
-        layAd.addView(adView)
+        layAd?.addView(adView)
     }
 
     fun loadLargeAd(layAd: LinearLayout?) {
@@ -284,11 +281,11 @@ class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, 
             Utils.Log(TAG, "ads null")
             return
         }
-        if (adLargeView.getParent() != null) {
-            val tempVg: ViewGroup = adLargeView.getParent() as ViewGroup
+        if (adLargeView?.getParent() != null) {
+            val tempVg: ViewGroup = adLargeView?.getParent() as ViewGroup
             tempVg.removeView(adLargeView)
         }
-        layAd.addView(adLargeView)
+        layAd?.addView(adLargeView)
     }
 
     fun isRequestAds(): Boolean {
@@ -299,16 +296,23 @@ class QRScannerApplication : MultiDexApplication(), DependenciesListener<Any?>, 
         return isRequestLargeAds
     }
 
+    fun isLiveMigration(): Boolean {
+        if (!BuildConfig.DEBUG){
+            return true
+        }
+        return true
+    }
+
     companion object {
+        @Volatile
         private var mInstance: QRScannerApplication? = null
-        protected var dependencies: Dependencies<*>? = null
         var serverAPI: RootAPI? = null
         private var url: String? = null
         var serverDriveApi: RootAPI? = null
         private val TAG = QRScannerApplication::class.java.simpleName
         @Synchronized
-        fun getInstance(): QRScannerApplication? {
-            return mInstance
+        fun getInstance(): QRScannerApplication {
+            return mInstance as QRScannerApplication
         }
     }
 }

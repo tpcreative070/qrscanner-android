@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common
-
 class MainSingleton {
     private var listener: SingleTonMainListener? = null
     fun setListener(listener: SingleTonMainListener?) {
@@ -8,12 +7,12 @@ class MainSingleton {
 
     fun isShowDeleteAction(isDelete: Boolean) {
         if (listener != null) {
-            listener.isShowDeleteAction(isDelete)
+            listener?.isShowDeleteAction(isDelete)
         }
     }
 
     interface SingleTonMainListener {
-        open fun isShowDeleteAction(isDelete: Boolean)
+        fun isShowDeleteAction(isDelete: Boolean)
     }
 
     companion object {

@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.model
-
 class Ads {
     var admob_app_id: String? = null
     var banner_home_footer: String? = null

@@ -1,85 +1,107 @@
-package tpcreative.co.qrscanner.common.adapter
-
+package co.tpcreative.supersafe.common.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
 
-open class BaseAdapter<V, VH : BaseHolder<*>?>(protected var inflater: LayoutInflater?) : RecyclerView.Adapter<VH?>() {
-    protected var dataSource: MutableList<V?>? = emptyList()
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): VH? {
-        return null
+open class BaseAdapter<V, VH : BaseHolder<V>>(inflater: LayoutInflater) : RecyclerView.Adapter<VH>() {
+    protected var inflater: LayoutInflater? = inflater
+    protected var mDataSource: MutableList<V> = mutableListOf()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        TODO("Not yet implemented")
     }
 
-    override fun onBindViewHolder(holder: VH?, position: Int) {
-        holder.bind(dataSource.get(position), position)
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        if (holder is FooterViewHolder<*>) {
+            return
+        }
+        holder.bind(mDataSource[position]!!, position)
         holder.event()
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).hashCode()
+        return getItemId(position).hashCode().toLong()
     }
 
     fun getItem(position: Int): V? {
-        return dataSource.get(position)
+        return mDataSource[position]
     }
 
     override fun getItemCount(): Int {
-        return dataSource.size
+        return mDataSource.size
     }
 
-    fun setDataSource(dataSource: MutableList<V?>?) {
+    fun setDataSource(dataSource: MutableList<V>?) {
         try {
-            this.dataSource = ArrayList(dataSource)
+            dataSource?.let {
+                this.mDataSource = it
+            } ?: run {
+                this.mDataSource = mutableListOf()
+            }
             notifyDataSetChanged()
         } catch (e: IllegalStateException) {
         }
     }
 
-    fun getDataSource(): MutableList<V?>? {
-        return dataSource
+    fun getDataSource(): MutableList<V>? {
+        return mDataSource
     }
 
-    fun appendItem(item: V?) {
-        if (dataSource.isEmpty()) {
-            dataSource = ArrayList()
+    fun appendItem(item: V) {
+        if (mDataSource.isEmpty()) {
+            mDataSource = mutableListOf()
         }
-        dataSource.add(item)
+        mDataSource.add(item)
         notifyItemInserted(itemCount)
     }
 
     fun removeAtPosition(position: Int) {
-        if (dataSource.size > position) {
-            dataSource.removeAt(position)
+        if (mDataSource.size > position) {
+            mDataSource.removeAt(position)
             notifyItemRangeRemoved(position, 1)
         }
     }
 
-    fun appendItems(items: MutableList<V?>) {
-        if (dataSource.isEmpty()) {
+    fun removeAt(position: Int) {
+        try {
+            mDataSource.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, mDataSource.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun appendItems(items: MutableList<V>) {
+        if (mDataSource.isEmpty()) {
             setDataSource(items)
         } else {
             val positionStart = itemCount - 1
-            dataSource.addAll(items)
+            mDataSource.addAll(items)
             notifyItemRangeInserted(positionStart, items.size)
         }
     }
 
-    fun addItemAtFirst(item: V?) {
-        if (dataSource.isEmpty()) {
-            dataSource = ArrayList()
+    fun addItemAtFirst(item: V) {
+        if (mDataSource.isEmpty()) {
+            mDataSource = mutableListOf()
         }
-        dataSource.add(0, item)
+        mDataSource.add(0, item)
         notifyItemInserted(0)
     }
 
-    fun addAtFirstAndRemoveEnd(item: V?) {
-        if (dataSource.isEmpty()) {
-            dataSource = ArrayList()
+    fun addAtFirstAndRemoveEnd(item: V) {
+        if (mDataSource.isEmpty()) {
+            mDataSource = mutableListOf()
         }
-        dataSource.add(0, item)
-        dataSource.removeAt(itemCount - 1)
-        notifyItemRemoved(itemCount - 1)
+        mDataSource.add(0, item)
         notifyItemInserted(0)
+        mDataSource.removeAt(itemCount - 1)
+        notifyItemRemoved(itemCount - 1)
     }
+
+    companion object {
+        private val TAG = BaseAdapter::class.java.simpleName
+    }
+
 }

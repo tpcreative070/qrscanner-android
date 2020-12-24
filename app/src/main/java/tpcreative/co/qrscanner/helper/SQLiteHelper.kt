@@ -1,7 +1,5 @@
 package tpcreative.co.qrscanner.helper
-
 import android.content.*
-import android.util.Log
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.entities.InstanceGenerator
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -13,12 +11,12 @@ import java.util.*
 
 object SQLiteHelper {
     private val TAG = SQLiteHelper::class.java.simpleName
-    fun getContext(): Context? {
-        return QRScannerApplication.Companion.getInstance()
+    fun getContext(): Context {
+        return QRScannerApplication.getInstance()
     }
 
     fun getInstance(): InstanceGenerator? {
-        return InstanceGenerator.Companion.getInstance(getContext())
+        return InstanceGenerator.getInstance(getContext())
     }
 
     fun onInsert(cTalkManager: HistoryModel?) {
@@ -36,58 +34,62 @@ object SQLiteHelper {
             }
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
-            InstanceGenerator.Companion.getInstance(getContext()).onInsert(mData)
+            InstanceGenerator.getInstance(getContext())?.onInsert(mData)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
     }
 
-    fun getHistoryList(): MutableList<HistoryModel?>? {
+    fun getHistoryList(): MutableList<HistoryModel> {
         try {
-            val mValue = getInstance().getHistoryList()
-            val mList: MutableList<HistoryModel?> = ArrayList()
-            for (index in mValue) {
-                mList.add(HistoryModel(index))
+            val mValue = getInstance()?.getHistoryList()
+            val mList: MutableList<HistoryModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    mList.add(HistoryModel(index))
+                }
             }
             return mList
         } catch (e: Exception) {
-            Utils.Log(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return ArrayList()
     }
 
-    fun getHistoryList(isSync: Boolean): MutableList<HistoryModel?>? {
+    fun getHistoryList(isSync: Boolean): MutableList<HistoryModel> {
         try {
-            val mValue = getInstance().getHistoryList(isSync)
-            val mList: MutableList<HistoryModel?> = ArrayList()
-            for (index in mValue) {
-                mList.add(HistoryModel(index))
+            val mValue = getInstance()?.getHistoryList(isSync)
+            val mList: MutableList<HistoryModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    mList.add(HistoryModel(index))
+                }
             }
             return mList
         } catch (e: Exception) {
-            Utils.Log(TAG, e.message)
+            Utils.Log(TAG, "${e.message}")
         }
         return ArrayList()
     }
 
-    fun onDelete(entity: HistoryModel?): Boolean {
+    fun onDelete(entity: HistoryModel?): Boolean? {
         try {
             val mData = HistoryEntityModel(entity)
             Utils.setHistoryDeletedMap(mData)
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
-            return getInstance().onDelete(mData)
+            return getInstance()?.onDelete(mData)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
 
-    fun onDeleteHistorySpecific(uuId: String?): Boolean {
+    fun onDeleteHistorySpecific(uuId: String?): Boolean? {
         try {
-            return getInstance().onDeleteHistorySpecific(uuId)
+            return getInstance()?.onDeleteHistorySpecific(uuId)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
@@ -107,9 +109,9 @@ object SQLiteHelper {
             }
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
-            getInstance().onInsert(mData)
+            getInstance()?.onInsert(mData)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
     }
 
@@ -123,9 +125,9 @@ object SQLiteHelper {
                 Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
                 Utils.setRequestSync(true)
             }
-            getInstance().onUpdate(mData)
+            getInstance()?.onUpdate(mData)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
     }
 
@@ -139,88 +141,92 @@ object SQLiteHelper {
                 Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
                 Utils.setRequestSync(true)
             }
-            getInstance().onUpdate(mData)
+            getInstance()?.onUpdate(mData)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
     }
 
-    fun getSaveList(): MutableList<SaveModel?>? {
+    fun getSaveList(): MutableList<SaveModel> {
         try {
-            val mValue = getInstance().getSaveList()
-            val mList: MutableList<SaveModel?> = ArrayList()
-            for (index in mValue) {
-                mList.add(SaveModel(index))
+            val mValue = getInstance()?.getSaveList()
+            val mList: MutableList<SaveModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    mList.add(SaveModel(index))
+                }
             }
             return mList
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return ArrayList()
     }
 
-    fun getSaveList(isSync: Boolean): MutableList<SaveModel?>? {
+    fun getSaveList(isSync: Boolean): MutableList<SaveModel> {
         try {
-            val mValue = getInstance().getSaveList(isSync)
-            val mList: MutableList<SaveModel?> = ArrayList()
-            for (index in mValue) {
-                mList.add(SaveModel(index))
+            val mValue = getInstance()?.getSaveList(isSync)
+            val mList: MutableList<SaveModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    mList.add(SaveModel(index))
+                }
             }
             return mList
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return ArrayList()
     }
 
-    fun onDelete(entity: SaveModel?): Boolean {
+    fun onDelete(entity: SaveModel?): Boolean? {
         try {
             val mData = SaveEntityModel(entity)
             Utils.setSaveDeletedMap(mData)
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
-            return getInstance().onDelete(mData)
+            return getInstance()?.onDelete(mData)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
 
-    fun onDeleteSaveSpecific(uuId: String?): Boolean {
+    fun onDeleteSaveSpecific(uuId: String?): Boolean? {
         try {
-            return getInstance().onDeleteSaveSpecific(uuId)
+            return getInstance()?.onDeleteSaveSpecific(uuId)
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
 
     fun getItemByHistory(contentUnique: String?): HistoryModel? {
         try {
-            val mResult = getInstance().getItemByHistory(contentUnique)
+            val mResult = getInstance()?.getItemByHistory(contentUnique)
             if (mResult != null) {
                 return HistoryModel(mResult)
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return null
     }
 
     fun getItemBySave(contentUnique: String?): SaveModel? {
         try {
-            val mResult = getInstance().getItemBySave(contentUnique)
+            val mResult = getInstance()?.getItemBySave(contentUnique)
             if (mResult != null) {
                 return SaveModel(mResult)
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return null
     }
 
     fun CleanUpData() {
-        getInstance().historyDao().deleteAllItems()
-        getInstance().saveDao().deleteAllItems()
+        getInstance()?.historyDao()?.deleteAllItems()
+        getInstance()?.saveDao()?.deleteAllItems()
     }
 }

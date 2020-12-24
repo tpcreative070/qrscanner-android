@@ -1,29 +1,44 @@
 package tpcreative.co.qrscanner.common
-
 import android.Manifest
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.google.zxing.client.result.ParsedResultType
 import com.snatik.storage.Storage
+import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.api.response.DriveResponse
+import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.*
 import java.io.*
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
+import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 object Utils {
     private val TAG = Utils::class.java.simpleName
-    val mStandardSortedDateTime: String? = "ddMMYYYYHHmmss"
-    val FORMAT_DISPLAY: String? = "EE dd MMM, yyyy HH:mm:ss a"
-    val GOOGLE_CONSOLE_KEY: String? = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxToUe5+7Xy+Q7YYZfuMofqZmNe0021vMBJ32VQVPa8+Hd0z9YWPWTVvplslRX4rKU2TQ1l93yMzPVIHVxLIwPuo9OC9I8sO7LpOi91pyPk9fT0IjVaWDTSv1h/qLUE6m3OS5/LVPYQNbHCp3yqujSmj6bIj7AvbjhF36XjxZaESfJI3KhtXy/RD+ZaM255TgY6g1vwN3ObsrXZ3e98VrT8ehJrry8u8RTpiZ6NWTgcsk/riMPYZiwebf6fUHQgidAtwdBfZx94hYgldt5kPN3hB2LcG4KVj9jI2QY9Y4WsOPQ643I9fP8e9VbYW8/uAOTZnvUeUW9qb9qIw3NHyV6wIDAQAB"
+    const val mStandardSortedDateTime: String = "ddMMYYYYHHmmss"
+    const val FORMAT_DISPLAY: String = "EE dd MMM, yyyy HH:mm:ss a"
+    const val GOOGLE_CONSOLE_KEY: String = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxToUe5+7Xy+Q7YYZfuMofqZmNe0021vMBJ32VQVPa8+Hd0z9YWPWTVvplslRX4rKU2TQ1l93yMzPVIHVxLIwPuo9OC9I8sO7LpOi91pyPk9fT0IjVaWDTSv1h/qLUE6m3OS5/LVPYQNbHCp3yqujSmj6bIj7AvbjhF36XjxZaESfJI3KhtXy/RD+ZaM255TgY6g1vwN3ObsrXZ3e98VrT8ehJrry8u8RTpiZ6NWTgcsk/riMPYZiwebf6fUHQgidAtwdBfZx94hYgldt5kPN3hB2LcG4KVj9jI2QY9Y4WsOPQ643I9fP8e9VbYW8/uAOTZnvUeUW9qb9qIw3NHyV6wIDAQAB"
     fun writeLogs(responseJson: String?) {
         if (!BuildConfig.DEBUG) {
             return
         }
-        if (ContextCompat.checkSelfPermission(QRScannerApplication.Companion.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             appendLog(responseJson)
             Log(TAG, "write logs...")
         }
@@ -72,7 +87,7 @@ object Utils {
         val date = Date(millisecond)
         val formatter: DateFormat = SimpleDateFormat("HH:mm:ss a", Locale.getDefault())
         val dateFormatted = formatter.format(date)
-        android.util.Log.d(TAG, "Millisecond : $millisecond data formatted :$dateFormatted")
+        Log(TAG, "Millisecond : $millisecond data formatted :$dateFormatted")
         return dateFormatted
     }
 
@@ -113,17 +128,13 @@ object Utils {
     }
 
     fun checkCameraBack(context: Context?): Boolean {
-        return if (context.getPackageManager().hasSystemFeature(
-                        PackageManager.FEATURE_CAMERA_ANY)) {
-            true
-        } else false
+        return context?.packageManager?.hasSystemFeature(
+                        PackageManager.FEATURE_CAMERA_ANY) == true
     }
 
     fun checkCameraFront(context: Context?): Boolean {
-        return if (context.getPackageManager().hasSystemFeature(
-                        PackageManager.FEATURE_CAMERA_FRONT)) {
-            true
-        } else false
+        return context?.packageManager?.hasSystemFeature(
+                        PackageManager.FEATURE_CAMERA_FRONT) == true
     }
 
     fun getMilliseconds(value: String?): Long {
@@ -177,7 +188,7 @@ object Utils {
     }
 
     fun saveImage(finalBitmap: Bitmap?, enumAction: EnumAction?, type: String?, code: String?, listenner: UtilsListener?) {
-        val root: String = QRScannerApplication.Companion.getInstance().getPathFolder()
+        val root: String? = QRScannerApplication.getInstance().getPathFolder()
         val myDir = File(root)
         myDir.mkdirs()
         var fname = "Image_" + type + "_" + geTimeFileName() + ".jpg"
@@ -185,12 +196,12 @@ object Utils {
         fname = fname.replace(":", "")
         val file = File(myDir, fname)
         try {
-            android.util.Log.d(TAG, "path :" + file.absolutePath)
+            Log(TAG, "path :" + file.absolutePath)
             val out = FileOutputStream(file)
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            finalBitmap?.compress(Bitmap.CompressFormat.JPEG, 90, out)
             out.flush()
             out.close()
-            listenner.onSaved(file.absolutePath, enumAction)
+            listenner?.onSaved(file.absolutePath, enumAction)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -211,59 +222,41 @@ object Utils {
 
     fun Log(TAG: String?, message: String?) {
         if (BuildConfig.DEBUG) {
-            android.util.Log.d(TAG, message)
+            android.util.Log.d(TAG, message ?:"")
         }
     }
 
-    fun <T> Log(mClass: Class<T?>?, message: String?) {
+    fun <T> Log(clazz: Class<T>, content: Any?) {
+        if (BuildConfig.DEBUG){
+            if (content is String) {
+                Log(clazz.simpleName, content)
+            } else {
+                Log(clazz.simpleName, Gson().toJson(content))
+            }
+        }
+    }
+
+    fun <T> Log(mClass: Class<T>, message: String) {
         if (BuildConfig.DEBUG) {
             android.util.Log.d(mClass.getSimpleName(), message)
         }
     }
 
     fun isDebug(): Boolean {
-        return if (BuildConfig.DEBUG) {
-            true
-        } else false
+        return BuildConfig.DEBUG
     }
 
     fun isFreeRelease(): Boolean {
-        return if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.Companion.getInstance().getString(R.string.qrscanner_free_release))) {
-            true
-        } else false
+        return BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_free_release)
     }
 
     fun copyToClipboard(copyText: String?) {
-        val clipboard = QRScannerApplication.Companion.getInstance().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboard = QRScannerApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip: ClipData? = ClipData
-                .newPlainText(QRScannerApplication.Companion.getInstance().getString(R.string.my_clipboad), copyText)
-        clipboard.setPrimaryClip(clip)
-    }
-
-    fun onObserveData(second: Long, ls: Listener?) {
-        Completable.timer(second, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .subscribe(object : CompletableObserver {
-                    override fun onSubscribe(d: Disposable?) {}
-                    override fun onComplete() {
-                        Log(TAG, "Completed")
-                        ls.onStart()
-                    }
-
-                    override fun onError(e: Throwable?) {}
-                })
-    }
-
-    fun onObserveVisitView(second: Long, ls: DelayShowUIListener?) {
-        Completable.timer(second, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .subscribe(object : CompletableObserver {
-                    override fun onSubscribe(d: Disposable?) {}
-                    override fun onComplete() {
-                        Log(TAG, "Completed")
-                        ls.onSetVisitView()
-                    }
-
-                    override fun onError(e: Throwable?) {}
-                })
+                .newPlainText(QRScannerApplication.getInstance().getString(R.string.my_clipboad), copyText)
+        if (clip != null) {
+            clipboard.setPrimaryClip(clip)
+        }
     }
 
     fun isMultipleScan(): Boolean {
@@ -275,23 +268,23 @@ object Utils {
     }
 
     fun generateEAN(barcode: String?): String? {
-        var barcode = barcode
+        var mBarcode = barcode
         var first = 0
         var second = 0
-        if (barcode.length == 7 || barcode.length == 12) {
+        if (mBarcode?.length == 7 || mBarcode?.length == 12) {
             var counter = 0
-            while (counter < barcode.length - 1) {
-                first = first + Integer.valueOf(barcode.substring(counter, counter + 1))
+            while (counter < mBarcode.length - 1) {
+                first += Integer.valueOf(mBarcode.substring(counter, counter + 1))
                 counter++
-                second = second + Integer.valueOf(barcode.substring(counter, counter + 1))
+                second += Integer.valueOf(mBarcode.substring(counter, counter + 1))
                 counter++
             }
-            second = second * 3
+            second *= 3
             val total = second + first
-            val roundedNum = Math.round(((total + 9) / 10 * 10).toFloat())
-            barcode = barcode + (roundedNum - total).toString()
+            val roundedNum = ((total + 9) / 10 * 10).toFloat().roundToInt()
+            mBarcode += (roundedNum - total).toString()
         }
-        return barcode
+        return mBarcode
     }
 
     fun generateRandomDigits(n: Int): Int {
@@ -301,8 +294,8 @@ object Utils {
 
     fun checkSum(code: String?): Int {
         var `val` = 0
-        for (i in 0 until code.length - 1) {
-            `val` += (code.get(i).toString() + "").toInt() as Int * if (i % 2 == 0) 1 else 3
+        for (i in 0 until (code?.length?.minus(1) ?: 0 )) {
+            `val` += (code?.get(i).toString() + "").toInt() as Int * if (i % 2 == 0) 1 else 3
         }
         return (10 - `val` % 10) % 10
     }
@@ -310,10 +303,10 @@ object Utils {
     fun checkGTIN(gtin: String?): Boolean {
         val CheckDigitArray = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         val gtinMaths = intArrayOf(3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3)
-        val BarcodeArray: Array<String?> = gtin.split("(?!^)".toRegex()).toTypedArray()
-        val gtinLength = gtin.length
+        val BarcodeArray: Array<String>? = gtin?.split("(?!^)".toRegex())?.toTypedArray()
+        val gtinLength = gtin?.length ?: 0
         val modifier = 17 - (gtinLength - 1)
-        val gtinCheckDigit = gtin.substring(gtinLength - 1).toInt()
+        val gtinCheckDigit = gtin?.substring(gtinLength - 1)?.toInt()
         var tmpCheckDigit = 0
         var tmpCheckSum = 0
         val tmpMath = 0
@@ -323,7 +316,7 @@ object Utils {
         // Run through and put digits into multiplication table
         i = 0
         while (i < gtinLength - 1) {
-            CheckDigitArray[modifier + i] = BarcodeArray[i].toInt() // Add barcode digits to Multiplication Table
+            CheckDigitArray[modifier + i] = BarcodeArray?.get(i)?.toInt() ?: 0 // Add barcode digits to Multiplication Table
             i++
         }
 
@@ -335,7 +328,7 @@ object Utils {
         }
 
         // Difference from Rounded-Up-To-Nearest-10 - Fianl Check Digit Calculation
-        tmpCheckDigit = (Math.ceil((tmpCheckSum as Float / 10 as Float).toDouble()) * 10 - tmpCheckSum) as Int
+        tmpCheckDigit = ((ceil((tmpCheckSum as Float / 10 as Float).toDouble()) * 10) - tmpCheckSum.toFloat()) as Int
 
         // Check if last digit is same as calculated check digit
         return if (gtinCheckDigit == tmpCheckDigit) true else false
@@ -348,12 +341,10 @@ object Utils {
     }
 
     fun onWriteLogs(activity: Activity?, nameLogs: String?, errorCode: String?) {
-        if (activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (activity?.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log(TAG, "Granted permission....")
-            val storage: Storage = QRScannerApplication.Companion.getInstance().getStorage()
-            if (storage != null) {
-                storage.createFile(storage.externalStorageDirectory + "/." + nameLogs, onLogAds("" + errorCode))
-            }
+            val storage: Storage = QRScannerApplication.getInstance().getStorage()
+            storage.createFile(storage.externalStorageDirectory + "/." + nameLogs, onLogAds("" + errorCode))
         } else {
             Log(TAG, "No permission")
         }
@@ -365,9 +356,9 @@ object Utils {
         }
         Log(TAG, "isPremium")
         try {
-            val value: String = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_is_premium), null)
+            val value: String? = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), null)
             if (value != null) {
-                val mPremium: PremiumModel = Gson().fromJson<PremiumModel?>(value, PremiumModel::class.java)
+                val mPremium: PremiumModel? = Gson().fromJson(value, PremiumModel::class.java)
                 if (mPremium != null) {
                     return mPremium.isPremium
                 }
@@ -379,24 +370,22 @@ object Utils {
     }
 
     fun isProVersion(): Boolean {
-        return if (BuildConfig.APPLICATION_ID.equals(QRScannerApplication.Companion.getInstance().getString(R.string.qrscanner_pro_release))) {
-            true
-        } else false
+        return BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))
     }
 
     fun setPremium(isPremium: Boolean) {
-        val value: String = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_is_premium), null)
+        val value: String? = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), null)
         val mPremiumLocal = PremiumModel(isPremium)
         if (value != null) {
-            val mPremium: PremiumModel = Gson().fromJson<PremiumModel?>(value, PremiumModel::class.java)
+            val mPremium: PremiumModel? = Gson().fromJson(value, PremiumModel::class.java)
             if (mPremium != null) {
                 mPremium.isPremium = isPremium
-                PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremium))
+                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremium))
             } else {
-                PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremiumLocal))
+                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremiumLocal))
             }
         } else {
-            PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremiumLocal))
+            PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremiumLocal))
         }
         Log(TAG, "setPremium")
     }
@@ -410,7 +399,7 @@ object Utils {
         return PrefsController.getInt(QRScannerApplication.Companion.getInstance().getString(R.string.count_rating), 0)
     }
 
-    fun onScanFile(activity: Context?, nameLogs: String?) {
+    fun onScanFile(activity: Context, nameLogs: String?) {
         if (PermissionChecker.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PermissionChecker.PERMISSION_GRANTED) {
             Log(TAG, "Granted permission....")
             val storage: Storage = QRScannerApplication.Companion.getInstance().getStorage()
@@ -431,11 +420,13 @@ object Utils {
 
     fun getCodeContentByHistory(item: HistoryModel?): String? {
         /*Product id must be plus barcode format type*/
+        var code : String? = ""
+        var mData = ""
         if (item != null) {
-            val mResult: ParsedResultType = ParsedResultType.valueOf(item.createType) ?: return null
+            val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
                 ParsedResultType.ADDRESSBOOK -> {
-                    val code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";"
+                    code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";"
                     mResult.name + "-" + code
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
@@ -445,7 +436,7 @@ object Utils {
                 }
                 ParsedResultType.PRODUCT -> {
                     code = item.text
-                    val barCodeType: String = item.barcodeFormat
+                    val barCodeType: String? = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
@@ -495,7 +486,7 @@ object Utils {
                 }
                 ParsedResultType.ISBN -> {
                     code = item.text
-                    barCodeType = item.barcodeFormat
+                    val barCodeType = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
@@ -511,11 +502,13 @@ object Utils {
 
     fun getCodeContentByGenerate(item: SaveModel?): String? {
         /*Product id must be plus barcode format type*/
+        var code : String? = ""
+        var mData = ""
         if (item != null) {
-            val mResult: ParsedResultType = ParsedResultType.valueOf(item.createType) ?: return null
+            val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
                 ParsedResultType.ADDRESSBOOK -> {
-                    val code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";"
+                    code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";"
                     mResult.name + "-" + code
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
@@ -525,7 +518,7 @@ object Utils {
                 }
                 ParsedResultType.PRODUCT -> {
                     code = item.text
-                    val barCodeType: String = item.barcodeFormat
+                    val barCodeType: String? = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
@@ -575,7 +568,7 @@ object Utils {
                 }
                 ParsedResultType.ISBN -> {
                     code = item.text
-                    barCodeType = item.barcodeFormat
+                    val barCodeType = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
@@ -592,7 +585,7 @@ object Utils {
     fun onDropDownAlert(activity: Activity?, content: String?) {
         Alerter.create(activity)
                 .setTitle("Alert")
-                .setText(content)
+                .setText("$content")
                 .setIcon(R.drawable.baseline_warning_white_24)
                 .setBackgroundColorRes(R.color.colorAccent) // or setBackgroundColorInt(Color.CYAN)
                 .show()
@@ -604,9 +597,9 @@ object Utils {
         } else true
     }
 
-    fun filterDuplicationsSaveItems(list: MutableList<SaveModel?>?): MutableList<SaveModel?>? {
+    fun filterDuplicationsSaveItems(list: MutableList<SaveModel>): MutableList<SaveModel> {
         val mMap: HashMap<String?, SaveModel?> = HashMap<String?, SaveModel?>()
-        val mList: MutableList<SaveModel?> = ArrayList<SaveModel?>()
+        val mList: MutableList<SaveModel> = ArrayList<SaveModel>()
         for (index in list) {
             if (isNotEmptyOrNull(index.contentUnique)) {
                 val mSave: SaveModel? = mMap[index.contentUnique]
@@ -628,9 +621,9 @@ object Utils {
         return mList
     }
 
-    fun filterDuplicationsHistoryItems(list: MutableList<HistoryModel?>?): MutableList<HistoryModel?>? {
+    fun filterDuplicationsHistoryItems(list: MutableList<HistoryModel>): MutableList<HistoryModel> {
         val mMap: HashMap<String?, HistoryModel?> = HashMap<String?, HistoryModel?>()
-        val mList: MutableList<HistoryModel?> = ArrayList<HistoryModel?>()
+        val mList: MutableList<HistoryModel> = ArrayList<HistoryModel>()
         for (index in list) {
             if (isNotEmptyOrNull(index.contentUnique)) {
                 val mHistory: HistoryModel? = mMap[index.contentUnique]
@@ -652,16 +645,16 @@ object Utils {
         return mList
     }
 
-    fun checkHistoryItemToInsertToLocal(mSyncedList: MutableList<HistoryModel?>?): MutableList<HistoryModel?>? {
+    fun checkHistoryItemToInsertToLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel> {
         /*Checking local items deleted*/
         val mHistoryMap = getHistoryDeletedMap()
-        val mSyncedMap: MutableMap<String?, HistoryModel?>? = convertHistoryListToMap(SQLiteHelper.getHistoryList(true))
-        val mList: MutableList<HistoryModel?> = ArrayList<HistoryModel?>()
+        val mSyncedMap: MutableMap<String?, HistoryModel> = convertHistoryListToMap(SQLiteHelper.getHistoryList(true))
+        val mList: MutableList<HistoryModel> = ArrayList<HistoryModel>()
         for (index in mSyncedList) {
             /*Checking item was deleted before*/
-            val mValue = mHistoryMap.get(index.uuId)
+            val mValue = mHistoryMap?.get(index.uuId)
             /*Checking item exiting before*/
-            val mItem: HistoryModel? = mSyncedMap.get(index.uuId)
+            val mItem: HistoryModel? = mSyncedMap?.get(index.uuId)
             if (mValue == null && mItem == null) {
                 index.id = 0
                 mList.add(index)
@@ -670,16 +663,16 @@ object Utils {
         return mList
     }
 
-    fun checkSaveItemToInsertToLocal(mSyncedList: MutableList<SaveModel?>?): MutableList<SaveModel?>? {
+    fun checkSaveItemToInsertToLocal(mSyncedList: MutableList<SaveModel>): MutableList<SaveModel> {
         /*Checking local items deleted*/
         val mHistoryMap = getSaveDeletedMap()
-        val mSyncedMap: MutableMap<String?, SaveModel?>? = convertSaveListToMap(SQLiteHelper.getSaveList(true))
-        val mList: MutableList<SaveModel?> = ArrayList<SaveModel?>()
+        val mSyncedMap: MutableMap<String?, SaveModel>? = convertSaveListToMap(SQLiteHelper.getSaveList(true))
+        val mList: MutableList<SaveModel> = ArrayList<SaveModel>()
         for (index in mSyncedList) {
             /*Checking item was deleted before*/
-            val mValue = mHistoryMap.get(index.uuId)
+            val mValue = mHistoryMap?.get(index.uuId)
             /*Checking item exiting before*/
-            val mItem: SaveModel? = mSyncedMap.get(index.uuId)
+            val mItem: SaveModel? = mSyncedMap?.get(index.uuId)
             if (mValue == null && mItem == null) {
                 index.id = 0
                 mList.add(index)
@@ -688,13 +681,13 @@ object Utils {
         return mList
     }
 
-    fun checkSaveItemToUpdateToLocal(mSyncedList: MutableList<SaveModel?>?): MutableList<SaveModel?>? {
+    fun checkSaveItemToUpdateToLocal(mSyncedList: MutableList<SaveModel>): MutableList<SaveModel> {
         /*Checking local items deleted*/
-        val mSyncedMap: MutableMap<String?, SaveModel?>? = convertSaveListToMap(SQLiteHelper.getSaveList(true))
-        val mList: MutableList<SaveModel?> = ArrayList<SaveModel?>()
+        val mSyncedMap: MutableMap<String?, SaveModel>? = convertSaveListToMap(SQLiteHelper.getSaveList(true))
+        val mList: MutableList<SaveModel> = ArrayList<SaveModel>()
         for (index in mSyncedList) {
             /*Checking item exiting before*/
-            val mItem: SaveModel? = mSyncedMap.get(index.uuId)
+            val mItem: SaveModel? = mSyncedMap?.get(index.uuId)
             if (mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) {
                 index.id = mItem.id
                 mList.add(index)
@@ -703,13 +696,13 @@ object Utils {
         return mList
     }
 
-    fun checkHistoryItemToUpdateToLocal(mSyncedList: MutableList<HistoryModel?>?): MutableList<HistoryModel?>? {
+    fun checkHistoryItemToUpdateToLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel>? {
         /*Checking local items deleted*/
-        val mSyncedMap: MutableMap<String?, HistoryModel?>? = convertHistoryListToMap(SQLiteHelper.getHistoryList(true))
-        val mList: MutableList<HistoryModel?> = ArrayList<HistoryModel?>()
+        val mSyncedMap: MutableMap<String?, HistoryModel>? = convertHistoryListToMap(SQLiteHelper.getHistoryList(true))
+        val mList: MutableList<HistoryModel> = ArrayList<HistoryModel>()
         for (index in mSyncedList) {
             /*Checking item exiting before*/
-            val mItem: HistoryModel? = mSyncedMap.get(index.uuId)
+            val mItem: HistoryModel? = mSyncedMap?.get(index.uuId)
             if (mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) {
                 index.id = mItem.id
                 mList.add(index)
@@ -718,12 +711,12 @@ object Utils {
         return mList
     }
 
-    fun checkHistoryDeleteSyncedLocal(mSyncedList: MutableList<HistoryModel?>?): MutableList<HistoryModel?>? {
-        val mListResult: MutableList<HistoryModel?> = ArrayList<HistoryModel?>()
-        val mListLocal: MutableList<HistoryModel?> = SQLiteHelper.getHistoryList(true)
-        val mMap: MutableMap<String?, HistoryModel?>? = convertHistoryListToMap(mSyncedList)
+    fun checkHistoryDeleteSyncedLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel>? {
+        val mListResult: MutableList<HistoryModel> = ArrayList<HistoryModel>()
+        val mListLocal: MutableList<HistoryModel> = SQLiteHelper.getHistoryList(true)
+        val mMap: MutableMap<String?, HistoryModel> = convertHistoryListToMap(mSyncedList)
         for (index in mListLocal) {
-            val mValue: HistoryModel? = mMap.get(index.uuId)
+            val mValue: HistoryModel? = mMap?.get(index.uuId)
             if (mValue == null) {
                 mListResult.add(index)
             }
@@ -731,10 +724,10 @@ object Utils {
         return mListResult
     }
 
-    fun checkSaveDeleteSyncedLocal(mSyncedList: MutableList<SaveModel?>?): MutableList<SaveModel?>? {
-        val mListResult: MutableList<SaveModel?> = ArrayList<SaveModel?>()
-        val mListLocal: MutableList<SaveModel?> = SQLiteHelper.getSaveList(true)
-        val mMap: MutableMap<String?, SaveModel?>? = convertSaveListToMap(mSyncedList)
+    fun checkSaveDeleteSyncedLocal(mSyncedList: MutableList<SaveModel>): MutableList<SaveModel>? {
+        val mListResult: MutableList<SaveModel> = mutableListOf()
+        val mListLocal: MutableList<SaveModel> = SQLiteHelper.getSaveList(true)
+        val mMap: MutableMap<String?, SaveModel> = convertSaveListToMap(mSyncedList)
         for (index in mListLocal) {
             val mValue: SaveModel? = mMap.get(index.uuId)
             if (mValue == null) {
@@ -744,8 +737,8 @@ object Utils {
         return mListResult
     }
 
-    fun getSaveDeletedMap(): MutableMap<String?, String?>? {
-        val mValue: String = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_save_deleted_list), null)
+    fun getSaveDeletedMap(): MutableMap<String?, String?> {
+        val mValue: String? = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_save_deleted_list), null)
         if (mValue != null) {
             val mData: MutableMap<String?, String?> = Gson().fromJson<MutableMap<String?, String?>?>(mValue, object : TypeToken<MutableMap<String?, String?>?>() {}.type)
             if (mData != null) {
@@ -755,10 +748,10 @@ object Utils {
         return HashMap()
     }
 
-    fun getHistoryDeletedMap(): MutableMap<String?, String?>? {
-        val mValue: String = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_history_deleted_list), null)
+    fun getHistoryDeletedMap(): MutableMap<String?, String> {
+        val mValue: String? = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_history_deleted_list), null)
         if (mValue != null) {
-            val mData: MutableMap<String?, String?> = Gson().fromJson<MutableMap<String?, String?>?>(mValue, object : TypeToken<MutableMap<String?, String?>?>() {}.type)
+            val mData: MutableMap<String?, String>? = Gson().fromJson<MutableMap<String?, String>>(mValue, object : TypeToken<MutableMap<String?, String>>() {}.type)
             if (mData != null) {
                 return mData
             }
@@ -767,17 +760,17 @@ object Utils {
     }
 
     fun setSaveDeletedMap(item: SaveEntityModel?) {
-        if (isPremium() && item.isSynced) {
+        if (isPremium() && item?.isSynced ?: false) {
             val mMap = getSaveDeletedMap()
-            mMap[item.uuId] = item.uuId
+            mMap[item?.uuId] = item?.uuId
             PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_save_deleted_list), Gson().toJson(mMap))
         }
     }
 
     fun setHistoryDeletedMap(item: HistoryEntityModel?) {
-        if (isPremium() && item.isSynced) {
+        if (isPremium() && item?.isSynced ?: false) {
             val mMap = getHistoryDeletedMap()
-            mMap[item.uuId] = item.uuId
+            mMap[item?.uuId] = item?.uuId ?: ""
             PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_history_deleted_list), Gson().toJson(mMap))
         }
     }
@@ -788,8 +781,8 @@ object Utils {
     }
 
     fun cleanDataAlreadySynced() {
-        val mSaveSyncedList: MutableList<SaveModel?> = SQLiteHelper.getSaveList(true)
-        val mHistorySyncedList: MutableList<HistoryModel?> = SQLiteHelper.getHistoryList(true)
+        val mSaveSyncedList: MutableList<SaveModel> = SQLiteHelper.getSaveList(true)
+        val mHistorySyncedList: MutableList<HistoryModel> = SQLiteHelper.getHistoryList(true)
         for (index in mSaveSyncedList) {
             SQLiteHelper.onDelete(index)
         }
@@ -798,18 +791,20 @@ object Utils {
         }
     }
 
-    fun convertSaveListToMap(list: MutableList<SaveModel?>?): MutableMap<String?, SaveModel?>? {
-        val mMap: MutableMap<String?, SaveModel?> = HashMap<String?, SaveModel?>()
+    fun convertSaveListToMap(list: MutableList<SaveModel>): MutableMap<String?, SaveModel> {
+        val mMap: MutableMap<String?, SaveModel> = HashMap<String?, SaveModel>()
         for (index in list) {
             mMap[index.uuId] = index
         }
         return mMap
     }
 
-    fun convertHistoryListToMap(list: MutableList<HistoryModel?>?): MutableMap<String?, HistoryModel?>? {
-        val mMap: MutableMap<String?, HistoryModel?> = HashMap<String?, HistoryModel?>()
-        for (index in list) {
-            mMap[index.uuId] = index
+    fun convertHistoryListToMap(list: MutableList<HistoryModel>?): MutableMap<String?, HistoryModel> {
+        val mMap: MutableMap<String?, HistoryModel> = HashMap<String?, HistoryModel>()
+        if (list != null) {
+            for (index in list) {
+                mMap[index.uuId] = index
+            }
         }
         return mMap
     }
@@ -824,7 +819,7 @@ object Utils {
     }
 
     fun getAccessToken(): String? {
-        val mAuthor: Author = Author.Companion.getInstance().getAuthorInfo()
+        val mAuthor: Author? = Author.getInstance()?.getAuthorInfo()
         if (mAuthor != null) {
             if (mAuthor.access_token != null) {
                 return mAuthor.access_token
@@ -834,10 +829,8 @@ object Utils {
     }
 
     fun isConnectedToGoogleDrive(): Boolean {
-        val mAuthor: Author = Author.Companion.getInstance().getAuthorInfo()
-        return if (mAuthor != null) {
-            mAuthor.isConnectedToGoogleDrive
-        } else false
+        val mAuthor: Author? = Author.getInstance()?.getAuthorInfo()
+        return mAuthor?.isConnectedToGoogleDrive ?: false
     }
 
     fun isTurnedOnBackup(): Boolean {
@@ -845,10 +838,8 @@ object Utils {
     }
 
     fun getDriveEmail(): String? {
-        val mAuthor: Author = Author.Companion.getInstance().getAuthorInfo()
-        return if (mAuthor != null) {
-            mAuthor.email
-        } else null
+        val mAuthor: Author? = Author.getInstance()?.getAuthorInfo()
+        return mAuthor?.email
     }
 
     fun writeToJson(data: String?, file: File?): File? {
@@ -893,10 +884,12 @@ object Utils {
     }
 
     /*Merge list to hash map for upload, download and delete*/
-    fun mergeListToHashMap(mList: MutableList<DriveResponse?>?): MutableMap<String?, String?>? {
-        val map: MutableMap<String?, String?> = HashMap()
-        for (index in mList) {
-            map[index.id] = index.id
+    fun mergeListToHashMap(mList: MutableList<DriveResponse>?): MutableMap<String?, String>? {
+        val map: MutableMap<String?, String> = HashMap()
+        if (mList != null) {
+            for (index in mList) {
+                map[index.id] = index.id ?: ""
+            }
         }
         return map
     }
@@ -924,9 +917,7 @@ object Utils {
     }
 
     fun isRealCheckedOut(orderId: String?): Boolean {
-        return if (orderId.contains("GPA")) {
-            true
-        } else false
+        return orderId?.contains("GPA") == true
     }
 
     fun getPositionTheme(): Int {
@@ -958,7 +949,7 @@ object Utils {
         PrefsController.putBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_already_checkout), value)
     }
 
-    fun onAlertNotify(activity: Activity?, message: String?) {
+    fun onAlertNotify(activity: Activity, message: String) {
         Alerter.create(activity)
                 .setTitle("Alert")
                 .setBackgroundColorInt(ContextCompat.getColor(activity, R.color.colorAccent))

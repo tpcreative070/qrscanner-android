@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.preference
-
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -11,8 +10,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import tpcreative.co.qrscanner.R
 
-class MyPreference : Preference {
-    private var context: Context?
+class MyPreference @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet,
+        defStyleAttr: Int = 0
+) : Preference(context, attrs, defStyleAttr) {
+    init {
+        widgetLayoutResource = 0
+    }
     private var imageViewCover: AppCompatImageView? = null
     private var imgSuperSafe: AppCompatImageView? = null
     private var tvChoose: AppCompatTextView? = null
@@ -22,30 +27,18 @@ class MyPreference : Preference {
         this.listener = listener
     }
 
-    constructor(context: Context?) : super(context) {
-        this.context = context
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        this.context = context
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
-        this.context = context
-    }
-
     override fun onBindViewHolder(view: PreferenceViewHolder?) {
         super.onBindViewHolder(view)
-        imageViewCover = view.findViewById(R.id.imgCover) as AppCompatImageView
+        imageViewCover = view?.findViewById(R.id.imgCover) as AppCompatImageView
         imgSuperSafe = view.findViewById(R.id.imgSuperSafe) as AppCompatImageView
         imgPremium = view.findViewById(R.id.imgPremium) as AppCompatImageView
         tvChoose = view.findViewById(R.id.tvChoose) as AppCompatTextView
-        imageViewCover.setVisibility(View.INVISIBLE)
-        imgSuperSafe.setVisibility(View.INVISIBLE)
-        imgPremium.setVisibility(View.GONE)
-        tvChoose.setVisibility(View.INVISIBLE)
+        imageViewCover?.visibility = View.INVISIBLE
+        imgSuperSafe?.visibility = View.INVISIBLE
+        imgPremium?.visibility = View.GONE
+        tvChoose?.visibility = View.INVISIBLE
         if (listener != null) {
-            listener.onUpdatePreference()
+            listener?.onUpdatePreference()
         }
     }
 
@@ -58,7 +51,7 @@ class MyPreference : Preference {
     }
 
     interface MyPreferenceListener {
-        open fun onUpdatePreference()
+        fun onUpdatePreference()
     }
 
     fun getTvChoose(): TextView? {

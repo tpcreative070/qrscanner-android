@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import com.karumi.dexter.listener.PermissionRequest
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration
 import tpcreative.co.qrscanner.model.Create
 import tpcreative.co.qrscanner.model.Theme
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultAdapter

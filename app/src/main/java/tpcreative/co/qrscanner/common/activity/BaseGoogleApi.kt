@@ -11,10 +11,6 @@ import com.google.android.gms.common.api.Scope
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.DriveScopes
-import io.reactivex.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.PrefsController
@@ -30,7 +26,6 @@ import java.util.concurrent.Callable
 abstract class BaseGoogleApi : BaseActivitySlide() {
     private var mSignInAccount: GoogleSignInAccount? = null
     private var mGoogleSignInClient: GoogleSignInClient? = null
-    var compositeDisposable: CompositeDisposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //mGoogleSignInClient = GoogleSignIn.getClient(this, QRScannerApplication.Companion.getInstance().getGoogleSignInOptions(null))

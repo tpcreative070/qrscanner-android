@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.entities
-
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.zxing.BarcodeFormat
@@ -10,40 +9,40 @@ import java.io.Serializable
 @Entity(tableName = "save")
 class SaveEntity : Serializable {
     @PrimaryKey(autoGenerate = true)
-    var id = 0
+    var id : Int? = 0
     var email: String?
     var subject: String?
     var message: String?
     var phone: String?
-    var lat: Double
-    var lon: Double
+    var lat: Double?
+    var lon: Double?
     var query: String?
     var title: String?
     var location: String?
     var description: String?
     var startEvent: String?
     var endEvent: String?
-    var startEventMilliseconds: Long
-    var endEventMilliseconds: Long
+    var startEventMilliseconds: Long?
+    var endEventMilliseconds: Long?
     var fullName: String?
     var address: String?
     var text: String?
     var ssId: String?
-    var hidden: Boolean
+    var hidden: Boolean?
     var password: String?
     var url: String?
     var createType: String?
     var networkEncryption: String?
     var createDatetime: String? = null
     var barcodeFormat: String?
-    var favorite: Boolean
+    var favorite: Boolean?
     var updatedDateTime: String?
 
     /*content_type_barcode*/
     var contentUnique: String? = null
 
     /*sync data*/
-    var isSynced = false
+    var isSynced : Boolean? = false
     var uuId: String? = null
 
     constructor(
@@ -95,7 +94,7 @@ class SaveEntity : Serializable {
         this.createType = createType
         this.networkEncryption = networkEncryption
         this.createDatetime = createDatetime
-        this.barcodeFormat = barcodeFormat.name
+        this.barcodeFormat = barcodeFormat?.name
         favorite = false
         this.updatedDateTime = updatedDateTime
     }
@@ -130,36 +129,36 @@ class SaveEntity : Serializable {
     }
 
     constructor(item: SaveEntityModel?) {
-        id = item.id
-        email = item.email
-        subject = item.subject
-        message = item.message
-        phone = item.phone
-        lat = item.lat
-        lon = item.lon
-        query = item.query
-        title = item.title
-        location = item.location
-        description = item.description
-        startEvent = item.startEvent
-        endEvent = item.endEvent
-        startEventMilliseconds = item.startEventMilliseconds
-        endEventMilliseconds = item.endEventMilliseconds
-        fullName = item.fullName
-        address = item.address
-        text = item.text
-        ssId = item.ssId
-        hidden = item.hidden
-        password = item.password
-        url = item.url
-        createType = item.createType
-        networkEncryption = item.networkEncryption
-        createDatetime = item.createDatetime
-        barcodeFormat = item.barcodeFormat
-        favorite = item.favorite
-        updatedDateTime = item.updatedDateTime
-        contentUnique = item.contentUnique
-        isSynced = item.isSynced
-        uuId = item.uuId
+        id = item?.id
+        email = item?.email
+        subject = item?.subject
+        message = item?.message
+        phone = item?.phone
+        lat = item?.lat
+        lon = item?.lon
+        query = item?.query
+        title = item?.title
+        location = item?.location
+        description = item?.description
+        startEvent = item?.startEvent
+        endEvent = item?.endEvent
+        startEventMilliseconds = item?.startEventMilliseconds
+        endEventMilliseconds = item?.endEventMilliseconds
+        fullName = item?.fullName
+        address = item?.address
+        text = item?.text
+        ssId = item?.ssId
+        hidden = item?.hidden
+        password = item?.password
+        url = item?.url
+        createType = item?.createType
+        networkEncryption = item?.networkEncryption
+        createDatetime = item?.createDatetime
+        barcodeFormat = item?.barcodeFormat
+        favorite = item?.favorite
+        updatedDateTime = item?.updatedDateTime
+        contentUnique = item?.contentUnique
+        isSynced = item?.isSynced
+        uuId = item?.uuId
     }
 }

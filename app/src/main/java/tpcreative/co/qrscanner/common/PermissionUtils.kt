@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package tpcreative.co.qrscanner.common
 
 import android.Manifest
@@ -37,8 +22,8 @@ object PermissionUtils {
      * Requests the fine location permission. If a rationale with an additional explanation should
      * be shown to the user, displays a dialog that triggers the request.
      */
-    fun requestPermission(activity: FragmentActivity?, requestId: Int,
-                          permission: String?, finishActivity: Boolean) {
+    fun requestPermission(activity: FragmentActivity, requestId: Int,
+                          permission: String, finishActivity: Boolean) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             // Display a dialog with rationale.
 //            PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity)
@@ -56,11 +41,11 @@ object PermissionUtils {
      *
      * @see ActivityCompat.OnRequestPermissionsResultCallback
      */
-    fun isPermissionGranted(grantPermissions: Array<String?>?, grantResults: IntArray?,
+    fun isPermissionGranted(grantPermissions: Array<String>, grantResults: IntArray,
                             permission: String?): Boolean {
         for (i in grantPermissions.indices) {
             if (permission == grantPermissions.get(i)) {
-                return grantResults.get(i) == PackageManager.PERMISSION_GRANTED
+                return grantResults[i] == PackageManager.PERMISSION_GRANTED
             }
         }
         return false
@@ -71,20 +56,20 @@ object PermissionUtils {
      */
     class PermissionDeniedDialog : DialogFragment() {
         private var mFinishActivity = false
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
-            mFinishActivity = arguments.getBoolean(ARGUMENT_FINISH_ACTIVITY)
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            mFinishActivity = arguments?.getBoolean(ARGUMENT_FINISH_ACTIVITY) == true
             return AlertDialog.Builder(activity)
                     .setMessage(R.string.location_permission_denied)
                     .setPositiveButton(android.R.string.ok, null)
                     .create()
         }
 
-        override fun onDismiss(dialog: DialogInterface?) {
+        override fun onDismiss(dialog: DialogInterface) {
             super.onDismiss(dialog)
             if (mFinishActivity) {
                 Toast.makeText(activity, R.string.permission_required_toast,
                         Toast.LENGTH_SHORT).show()
-                activity.finish()
+                activity?.finish()
             }
         }
 
@@ -116,15 +101,19 @@ object PermissionUtils {
      */
     class RationaleDialog : DialogFragment() {
         private var mFinishActivity = false
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val arguments = arguments
-            val requestCode = arguments.getInt(ARGUMENT_PERMISSION_REQUEST_CODE)
-            mFinishActivity = arguments.getBoolean(ARGUMENT_FINISH_ACTIVITY)
+            val requestCode = arguments?.getInt(ARGUMENT_PERMISSION_REQUEST_CODE)
+            mFinishActivity = arguments?.getBoolean(ARGUMENT_FINISH_ACTIVITY) == true
             return AlertDialog.Builder(activity)
                     .setMessage(R.string.permission_rationale_location)
                     .setPositiveButton(android.R.string.ok) { dialog, which -> // After click on Ok, request the permission.
-                        ActivityCompat.requestPermissions(activity, arrayOf<String?>(Manifest.permission.ACCESS_FINE_LOCATION),
-                                requestCode)
+                        activity?.let {
+                            if (requestCode != null) {
+                                ActivityCompat.requestPermissions(it, arrayOf<String?>(Manifest.permission.ACCESS_FINE_LOCATION),
+                                        requestCode)
+                            }
+                        }
                         // Do not finish the Activity while requesting permission.
                         mFinishActivity = false
                     }
@@ -132,7 +121,7 @@ object PermissionUtils {
                     .create()
         }
 
-        override fun onDismiss(dialog: DialogInterface?) {
+        override fun onDismiss(dialog: DialogInterface) {
             super.onDismiss(dialog)
         }
 

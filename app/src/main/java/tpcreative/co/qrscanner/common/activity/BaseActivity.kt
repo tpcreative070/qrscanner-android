@@ -2,17 +2,13 @@ package tpcreative.co.qrscanner.common.activity
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.snatik.storage.Storage
 
 open class BaseActivity : AppCompatActivity() {
-    var unbinder: Unbinder? = null
     protected var actionBar: ActionBar? = null
     var onStartCount = 0
     private var storage: Storage? = null
@@ -28,12 +24,9 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun setContentView(@LayoutRes layoutResID: Int) {
         super.setContentView(layoutResID)
-        Log.d(TAG, "action here")
-        unbinder = ButterKnife.bind(this)
     }
 
     override fun onDestroy() {
-        if (unbinder != null) unbinder?.unbind()
         super.onDestroy()
     }
 
@@ -47,7 +40,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             android.R.id.home -> {
                 finish()
                 return true

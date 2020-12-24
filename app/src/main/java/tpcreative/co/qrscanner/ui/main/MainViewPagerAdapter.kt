@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.main
-
 import android.util.Log
 import android.view.ViewGroup
 import androidx.fragment.app.*
@@ -13,35 +12,33 @@ import java.util.*
 /**
  *
  */
-class MainViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
-    private val fragments: ArrayList<Fragment?>? = ArrayList()
-    private val arrayList: ArrayList<String?>? = ArrayList()
+class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    private val fragments: ArrayList<Fragment>? = ArrayList()
+    private val arrayList: ArrayList<String>? = ArrayList()
     private var currentFragment: Fragment? = null
     override fun getItem(position: Int): Fragment? {
-        Log.d(TAG, "position :$position")
-        return fragments.get(position)
-        //return fragments.get(position);
+        return fragments?.get(position)
     }
 
     override fun getCount(): Int {
-        return fragments.size
+        return fragments?.size ?: 0
     }
 
-    override fun setPrimaryItem(container: ViewGroup?, position: Int, `object`: Any?) {
+    override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
         if (getCurrentFragment() !== `object`) {
             currentFragment = `object` as Fragment?
             if (currentFragment is HistoryFragment) {
                 Log.d(TAG, "history")
-                currentFragment.onResume()
-                fragments.get(3).onPause()
+                currentFragment?.onResume()
+                fragments?.get(3)?.onPause()
             } else if (currentFragment is GenerateFragment) {
                 Log.d(TAG, "generate")
-                currentFragment.onResume()
-                fragments.get(3).onPause()
+                currentFragment?.onResume()
+                fragments?.get(3)?.onPause()
             } else if (currentFragment is ScannerFragment) {
                 Log.d(TAG, "scanner")
-                currentFragment.onResume()
-                fragments.get(3).onPause()
+                currentFragment?.onResume()
+                fragments?.get(3)?.onPause()
             } else if (currentFragment is SaverFragment) {
                 Log.d(TAG, "reader")
                 currentFragment.onResume()

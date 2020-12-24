@@ -21,5 +21,5 @@ object TimeConstants {
 
     @IntDef(MSEC, SEC, MIN, HOUR, DAY)
     @Retention(RetentionPolicy.SOURCE)
-    inner annotation class Unit
+    annotation class Unit
 }

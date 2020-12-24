@@ -320,7 +320,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener, MainView {
     }
 
     override fun onResume() {
-        presenter.doShowAds()
         super.onResume()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver == null) {
@@ -328,6 +327,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener, MainView {
             }
         }
         Utils.Log(TAG, "onResume")
+        reloadView()
     }
 
     override fun onPause() {
@@ -385,4 +385,13 @@ class MainActivity : BaseActivity(), SingleTonResponseListener, MainView {
     companion object {
         private val TAG = MainActivity::class.java.simpleName
     }
+
+    fun reloadView() {
+        if (llAds != null) {
+            if (llAds!!.visibility == GONE) {
+                presenter!!.doShowAds()
+            }
+        }
+    }
+
 }

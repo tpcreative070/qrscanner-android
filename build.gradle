@@ -68,8 +68,6 @@ subprojects {
     ext.appVersionName = "2.0.4"
     ext.appMinSdkVersion = 23
     ext.appSupportVersion = "1.2.0"
-    ext.appReactivexAndroid = "2.1.1"
-    ext.appReactivexJava = "2.1.1"
     ext.appRetrofit = "2.9.0"
     ext.appCompileSdkVersion = 30
     ext.appTargetSdkVersion = 30

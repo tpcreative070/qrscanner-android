@@ -1,7 +1,5 @@
 package tpcreative.co.qrscanner.common.entities
-
 import android.content.Context
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Ignore
 import androidx.room.Room
@@ -26,66 +24,70 @@ abstract class InstanceGenerator : RoomDatabase() {
             if (cTalkManager == null) {
                 return
             }
-            instance.historyDao().insert(HistoryEntity(cTalkManager))
+            instance?.historyDao()?.insert(HistoryEntity(cTalkManager))
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG, "${e.message}")
         }
     }
 
-    fun getHistoryList(): MutableList<HistoryEntityModel?>? {
+    fun getHistoryList(): MutableList<HistoryEntityModel>? {
         try {
-            val mValue = instance.historyDao().loadAll()
-            val mList: MutableList<HistoryEntityModel?> = ArrayList()
-            for (index in mValue) {
-                val item = HistoryEntityModel(index)
-                if (item.uuId == null) {
-                    item.uuId = Utils.getUUId()
-                    SQLiteHelper.getInstance().onUpdate(item)
+            val mValue = instance?.historyDao()?.loadAll()
+            val mList: MutableList<HistoryEntityModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    val item = HistoryEntityModel(index)
+                    if (item.uuId == null) {
+                        item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    mList.add(item)
                 }
-                mList.add(item)
             }
             return mList
         } catch (e: Exception) {
-            Utils.Log(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return null
     }
 
-    fun getHistoryList(isSync: Boolean): MutableList<HistoryEntityModel?>? {
+    fun getHistoryList(isSync: Boolean): MutableList<HistoryEntityModel>? {
         try {
-            val mValue = instance.historyDao().loadAll(isSync)
-            val mList: MutableList<HistoryEntityModel?> = ArrayList()
-            for (index in mValue) {
-                val item = HistoryEntityModel(index)
-                if (item.uuId == null) {
-                    item.uuId = Utils.getUUId()
-                    SQLiteHelper.getInstance().onUpdate(item)
+            val mValue = instance?.historyDao()?.loadAll(isSync)
+            val mList: MutableList<HistoryEntityModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    val item = HistoryEntityModel(index)
+                    if (item.uuId == null) {
+                        item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    mList.add(item)
                 }
-                mList.add(item)
             }
             return mList
         } catch (e: Exception) {
-            Utils.Log(TAG, e.message)
+            Utils.Log(TAG, "${e.message}")
         }
         return null
     }
 
     fun onDelete(entity: HistoryEntityModel?): Boolean {
         try {
-            instance.historyDao().delete(HistoryEntity(entity))
+            instance?.historyDao()?.delete(HistoryEntity(entity))
             return true
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
 
     fun onDeleteHistorySpecific(uuId: String?): Boolean {
         try {
-            instance.historyDao().deleteSpecific(uuId)
+            instance?.historyDao()?.deleteSpecific(uuId)
             return true
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
@@ -95,9 +97,9 @@ abstract class InstanceGenerator : RoomDatabase() {
             if (cTalkManager == null) {
                 return
             }
-            instance.saveDao().insert(SaveEntity(cTalkManager))
+            instance?.saveDao()?.insert(SaveEntity(cTalkManager))
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
     }
 
@@ -106,9 +108,9 @@ abstract class InstanceGenerator : RoomDatabase() {
             if (cTalkManager == null) {
                 return
             }
-            instance.saveDao().update(SaveEntity(cTalkManager))
+            instance?.saveDao()?.update(SaveEntity(cTalkManager))
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
     }
 
@@ -117,90 +119,94 @@ abstract class InstanceGenerator : RoomDatabase() {
             if (cTalkManager == null) {
                 return
             }
-            instance.historyDao().update(HistoryEntity(cTalkManager))
+            instance?.historyDao()?.update(HistoryEntity(cTalkManager))
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
     }
 
-    fun getSaveList(): MutableList<SaveEntityModel?>? {
+    fun getSaveList(): MutableList<SaveEntityModel>? {
         try {
-            val mValue = instance.saveDao().loadAll()
-            val mList: MutableList<SaveEntityModel?> = ArrayList()
-            for (index in mValue) {
-                val item = SaveEntityModel(index)
-                if (item.uuId == null) {
-                    item.uuId = Utils.getUUId()
-                    SQLiteHelper.getInstance().onUpdate(item)
+            val mValue = instance?.saveDao()?.loadAll()
+            val mList: MutableList<SaveEntityModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    val item = SaveEntityModel(index)
+                    if (item.uuId == null) {
+                        item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    mList.add(item)
                 }
-                mList.add(item)
             }
             return mList
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return null
     }
 
-    fun getSaveList(isSynced: Boolean): MutableList<SaveEntityModel?>? {
+    fun getSaveList(isSynced: Boolean): MutableList<SaveEntityModel>? {
         try {
-            val mValue = instance.saveDao().loadAll(isSynced)
-            val mList: MutableList<SaveEntityModel?> = ArrayList()
-            for (index in mValue) {
-                val item = SaveEntityModel(index)
-                if (item.uuId == null) {
-                    item.uuId = Utils.getUUId()
-                    SQLiteHelper.getInstance().onUpdate(item)
+            val mValue = instance?.saveDao()?.loadAll(isSynced)
+            val mList: MutableList<SaveEntityModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    val item = SaveEntityModel(index)
+                    if (item.uuId == null) {
+                        item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    mList.add(item)
                 }
-                mList.add(item)
             }
             return mList
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return null
     }
 
     fun getItemByHistory(contentUnique: String?): HistoryEntityModel? {
         try {
-            val mResult = instance.historyDao().loadItem(contentUnique)
+            val mResult = instance?.historyDao()?.loadItem(contentUnique)
             if (mResult != null) {
                 return HistoryEntityModel(mResult)
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return null
     }
 
     fun getItemBySave(contentUnique: String?): SaveEntityModel? {
         try {
-            val mResult = instance.saveDao().loadItem(contentUnique)
+            val mResult = instance?.saveDao()?.loadItem(contentUnique)
             if (mResult != null) {
                 return SaveEntityModel(mResult)
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return null
     }
 
     fun onDelete(entity: SaveEntityModel?): Boolean {
         try {
-            instance.saveDao().delete(SaveEntity(entity))
+            instance?.saveDao()?.delete(SaveEntity(entity))
             return true
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
 
     fun onDeleteSaveSpecific(uuId: String?): Boolean {
         try {
-            instance.saveDao().deleteSpecific(uuId)
+            instance?.saveDao()?.deleteSpecific(uuId)
             return true
         } catch (e: Exception) {
-            Log.d(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
         return false
     }
@@ -211,8 +217,8 @@ abstract class InstanceGenerator : RoomDatabase() {
 
         @Ignore
         val TAG = InstanceGenerator::class.java.simpleName
-        val MIGRATION_1_2: Migration? = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase?) {
+        val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE 'save' ADD COLUMN  'barcodeFormat' TEXT")
                 database.execSQL("ALTER TABLE 'save' ADD COLUMN  'favorite' INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE 'save' ADD COLUMN  'updatedDateTime' TEXT")
@@ -221,14 +227,14 @@ abstract class InstanceGenerator : RoomDatabase() {
                 database.execSQL("ALTER TABLE 'history' ADD COLUMN  'updatedDateTime' TEXT")
             }
         }
-        val MIGRATION_2_3: Migration? = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase?) {
+        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE 'save' ADD COLUMN  'contentUnique' TEXT")
                 database.execSQL("ALTER TABLE 'history' ADD COLUMN  'contentUnique' TEXT")
             }
         }
-        val MIGRATION_3_4: Migration? = object : Migration(3, 4) {
-            override fun migrate(database: SupportSQLiteDatabase?) {
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE 'save' ADD COLUMN  'isSynced' INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE 'save' ADD COLUMN  'uuId' TEXT")
                 database.execSQL("ALTER TABLE 'history' ADD COLUMN  'isSynced' INTEGER NOT NULL DEFAULT 0")
@@ -238,11 +244,13 @@ abstract class InstanceGenerator : RoomDatabase() {
 
         fun getInstance(context: Context?): InstanceGenerator? {
             if (instance == null) {
-                instance = Room.databaseBuilder(context,
-                        InstanceGenerator::class.java, context.getString(R.string.database_name))
-                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
-                        .allowMainThreadQueries()
-                        .build()
+                instance = context?.let {
+                    Room.databaseBuilder(it,
+                            InstanceGenerator::class.java, it.getString(R.string.database_name))
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                            .allowMainThreadQueries()
+                            .build()
+                }
             }
             return instance
         }

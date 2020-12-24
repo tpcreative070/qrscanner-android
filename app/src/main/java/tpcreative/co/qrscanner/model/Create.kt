@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.model
-
 import com.google.zxing.client.result.ParsedResultType
 import tpcreative.co.qrscanner.common.Utils
 import java.io.Serializable
@@ -105,7 +104,7 @@ class Create : Serializable {
         createdDateTime = if (save != null) save.createDatetime else Utils.getCurrentDateTimeSort()
         enumImplement = if (save != null) EnumImplement.EDIT else EnumImplement.CREATE
         id = save?.id ?: 0
-        isSynced = save != null && save.isSynced
+        isSynced = save != null && save.isSynced ?: false
         uuId = if (save != null) save.uuId else Utils.getUUId()
         uuId = if (save != null) save.uuId else Utils.getUUId()
     }

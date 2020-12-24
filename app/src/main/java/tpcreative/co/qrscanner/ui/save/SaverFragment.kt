@@ -1,30 +1,26 @@
 package tpcreative.co.qrscanner.ui.save
-
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.view.*
+import androidx.core.content.ContextCompat
 import com.karumi.dexter.listener.PermissionRequest
 import de.mrapp.android.dialog.MaterialDialog
 import tpcreative.co.qrscanner.BuildConfig
-import tpcreative.co.qrscanner.common.Navigator
-import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.Create
+import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.model.Theme
 import java.io.File
 import java.util.*
 
-class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, SingletonSaveListener, UtilsListener, SingleTonMainListener {
-    @BindView(R.id.rlRoot)
-    var rlRoot: RelativeLayout? = null
-
-    @BindView(R.id.tvNotFoundItems)
-    var tvNotFoundItems: AppCompatTextView? = null
-
-    @BindView(R.id.recyclerView)
-    var recyclerView: SimpleRecyclerView? = null
+class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener, MainSingleton.SingleTonMainListener {
     private var presenter: SavePresenter? = null
     private var bitmap: Bitmap? = null
     private var code: String? = null
@@ -35,12 +31,12 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
     private var actionMode: ActionMode? = null
     private val callback: ActionMode.Callback? = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            val menuInflater: MenuInflater? = mode.getMenuInflater()
-            menuInflater.inflate(R.menu.menu_select_all, menu)
+            val menuInflater: MenuInflater? = mode?.getMenuInflater()
+            menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window = QRScannerApplication.Companion.getInstance().getActivity().getWindow()
-                window.statusBarColor = ContextCompat.getColor(context, R.color.colorAccentDark)
+                val window: Window = QRScannerApplication.getInstance()?.getActivity()?.window!!
+                window.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
             }
             return true
         }
@@ -50,10 +46,10 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            when (item.getItemId()) {
+            when (item?.getItemId()) {
                 R.id.menu_item_select_all -> {
-                    val list: MutableList<SaveModel?>? = presenter.getListGroup()
-                    presenter.mList.clear()
+                    val list: MutableList<SaveModel?>? = presenter?.getListGroup()
+                    presenter?.mList?.clear()
                     isSelectedAll = if (isSelectedAll) {
                         for (index in list) {
                             index.setDeleted(true)

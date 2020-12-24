@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.model
-
 import com.google.gson.Gson
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.controller.PrefsController

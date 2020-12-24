@@ -34,6 +34,10 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
@@ -249,7 +253,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
                 presenter.doSaveItems(create)
                 if (barcodeScannerView != null) {
                     barcodeScannerView.pauseAndWait()
-                    Utils.onObserveVisitView(1000) { barcodeScannerView.resume() }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000)
+                        barcodeScannerView.resume()
+                    }
                 }
             } else {
                 Navigator.onResultView(activity, create, ScannerResultFragment::class.java)

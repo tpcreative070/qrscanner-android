@@ -7,8 +7,8 @@ import java.util.*
  * Created by Pankaj on 12-11-2017.
  */
 object ThemeUtil {
-    fun getThemeList(): ArrayList<Theme?>? {
-        val themeArrayList = ArrayList<Theme?>()
+    fun getThemeList(): ArrayList<Theme> {
+        val themeArrayList = ArrayList<Theme>()
         themeArrayList.add(Theme(0, R.color.blackTheme, R.color.colorDarkTheme, R.color.colorButton))
         themeArrayList.add(Theme(1, R.color.inbox_primary, R.color.inbox_primary_dark, R.color.colorAccent))
         themeArrayList.add(Theme(2, R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorButton))

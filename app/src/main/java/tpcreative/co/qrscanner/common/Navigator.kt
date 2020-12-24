@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common
-
 import android.app.Activity
 import android.content.*
 import android.os.Bundle
@@ -26,22 +25,22 @@ object Navigator {
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_create_intent), create)
         intent.putExtras(bundle)
-        context.startActivityForResult(intent, CREATE)
+        context?.startActivityForResult(intent, CREATE)
     }
 
     fun onMoveToHelp(context: Context?) {
         val intent = Intent(context, HelpActivity::class.java)
-        context.startActivity(intent)
+        context?.startActivity(intent)
     }
 
     fun onMoveToChangeFileColor(context: Context?) {
         val intent = Intent(context, ChangeFileColorActivity::class.java)
-        context.startActivity(intent)
+        context?.startActivity(intent)
     }
 
     fun onMoveProVersion(context: Context?) {
         val intent = Intent(context, ProVersionActivity::class.java)
-        context.startActivity(intent)
+        context?.startActivity(intent)
     }
 
     fun <T> onGenerateView(context: Activity?, save: SaveModel?, clazz: Class<T?>?) {
@@ -49,7 +48,7 @@ object Navigator {
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
         intent.putExtras(bundle)
-        context.startActivity(intent)
+        context?.startActivity(intent)
     }
 
     fun <T> onResultView(context: Activity?, save: Create?, clazz: Class<T?>?) {
@@ -57,25 +56,25 @@ object Navigator {
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
         intent.putExtras(bundle)
-        context.startActivityForResult(intent, SCANNER)
+        context?.startActivityForResult(intent, SCANNER)
     }
 
     fun onMoveMainTab(context: AppCompatActivity?) {
         val intent = Intent(context, MainActivity::class.java)
-        context.startActivity(intent)
+        context?.startActivity(intent)
         Bungee.fade(context)
-        context.finish()
+        context?.finish()
     }
 
     fun onMoveSeeYouSoon(context: AppCompatActivity?) {
         val intent = Intent(context, SeeYouSoonActivity::class.java)
-        context.startActivity(intent)
+        context?.startActivity(intent)
         Bungee.fade(context)
-        context.finish()
+        context?.finish()
     }
 
     fun onBackupData(context: Context?) {
         val intent = Intent(context, BackupActivity::class.java)
-        context.startActivity(intent)
+        context?.startActivity(intent)
     }
 }

@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common
-
 class SaveSingleton {
     private var listener: SingletonSaveListener? = null
     fun setListener(listener: SingletonSaveListener?) {
@@ -8,12 +7,12 @@ class SaveSingleton {
 
     fun reloadData() {
         if (listener != null) {
-            listener.reloadData()
+            listener?.reloadData()
         }
     }
 
     interface SingletonSaveListener {
-        open fun reloadData()
+        fun reloadData()
     }
 
     companion object {

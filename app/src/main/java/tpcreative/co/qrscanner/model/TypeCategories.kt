@@ -1,12 +1,12 @@
 package tpcreative.co.qrscanner.model
-
 import java.io.Serializable
 
 class TypeCategories : Serializable {
-    var id: Int
-    var type: String?
+    var id: Int?
+    var mType: String?
+
     fun getId(): Int {
-        return id
+        return id ?: 0
     }
 
     fun setId(id: Int) {
@@ -14,20 +14,20 @@ class TypeCategories : Serializable {
     }
 
     fun getType(): String? {
-        return type
+        return mType
     }
 
     fun setType(type: String?) {
-        this.type = type
+        this.mType = type
     }
 
     constructor() {
         id = 0
-        type = ""
+        mType = ""
     }
 
     constructor(id: Int, type: String?) {
         this.id = id
-        this.type = type
+        this.mType = type
     }
 }

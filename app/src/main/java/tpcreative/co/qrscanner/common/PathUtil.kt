@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common
-
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
@@ -29,7 +28,7 @@ object PathUtil {
         var selectionArgs: Array<String?>? = null
         // Uri is different in versions after KITKAT (Android 4.4), we need to
         // deal with different Uris.
-        if (needToCheckUri && DocumentsContract.isDocumentUri(context.getApplicationContext(), uri)) {
+        if (needToCheckUri && DocumentsContract.isDocumentUri(context?.applicationContext, uri)) {
             if (isExternalStorageDocument(uri)) {
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split: Array<String?> = docId.split(":".toRegex()).toTypedArray()
@@ -53,20 +52,20 @@ object PathUtil {
                 selectionArgs = arrayOf(split[1])
             }
         }
-        if ("content".equals(uri.getScheme(), ignoreCase = true)) {
+        if ("content".equals(uri?.scheme, ignoreCase = true)) {
             val projection = arrayOf<String?>(MediaStore.Images.Media.DATA)
             var cursor: Cursor? = null
             try {
-                cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null)
-                val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index)
+                cursor = uri?.let { context?.contentResolver?.query(it, projection, selection, selectionArgs, null) }
+                val column_index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                if (cursor?.moveToFirst() == true) {
+                    return column_index?.let { cursor.getString(it) }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        } else if ("file".equals(uri.getScheme(), ignoreCase = true)) {
-            return uri.getPath()
+        } else if ("file".equals(uri?.scheme, ignoreCase = true)) {
+            return uri?.path
         }
         return null
     }
@@ -76,7 +75,7 @@ object PathUtil {
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
     fun isExternalStorageDocument(uri: Uri?): Boolean {
-        return "com.android.externalstorage.documents" == uri.getAuthority()
+        return "com.android.externalstorage.documents" == uri?.authority
     }
 
     /**
@@ -84,7 +83,7 @@ object PathUtil {
      * @return Whether the Uri authority is DownloadsProvider.
      */
     fun isDownloadsDocument(uri: Uri?): Boolean {
-        return "com.android.providers.downloads.documents" == uri.getAuthority()
+        return "com.android.providers.downloads.documents" == uri?.authority
     }
 
     /**
@@ -92,12 +91,12 @@ object PathUtil {
      * @return Whether the Uri authority is MediaProvider.
      */
     fun isMediaDocument(uri: Uri?): Boolean {
-        return "com.android.providers.media.documents" == uri.getAuthority()
+        return "com.android.providers.media.documents" == uri?.authority
     }
 
     fun onWorkingOnOreo(data: Uri?): String? {
         try {
-            val file = File(data.getPath()) //create path from uri
+            val file = File(data?.getPath()) //create path from uri
             val split: Array<String?> = file.path.split(":".toRegex()).toTypedArray() //split the path.
             return split[1] //assign it to a string(your choice).
         } catch (e: Exception) {
@@ -105,20 +104,20 @@ object PathUtil {
         return null
     }
 
-    fun getRealPathFromUri(context: Context?, contentUri: Uri?): String? {
-        var path: String? = contentUri.toString()
+    fun getRealPathFromUri(context: Context?, contentUri: Uri): String? {
+        var path: String = contentUri.toString()
         if (path.contains("file://")) {
-            path = contentUri.getPath()
+            path = contentUri.path ?:""
             return path
         }
         var cursor: Cursor? = null
         return try {
             /*    /external/video/media/3586    */
             val proj = arrayOf<String?>(MediaStore.Images.Media.DATA)
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null)
-            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            cursor.getString(column_index)
+            cursor = contentUri.let { context?.contentResolver?.query(it, proj, null, null, null) }
+            val column_index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor?.moveToFirst()
+            cursor?.getString(column_index!!)
         } finally {
             cursor?.close()
         }

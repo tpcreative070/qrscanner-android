@@ -8,12 +8,12 @@ class GenerateSingleton {
 
     fun onCompletedGenerate() {
         if (listener != null) {
-            listener.onCompletedGenerate()
+            listener?.onCompletedGenerate()
         }
     }
 
     interface SingletonGenerateListener {
-        open fun onCompletedGenerate()
+        fun onCompletedGenerate()
     }
 
     companion object {

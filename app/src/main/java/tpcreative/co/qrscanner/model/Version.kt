@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.model
-
 import java.io.Serializable
 import java.util.*
 

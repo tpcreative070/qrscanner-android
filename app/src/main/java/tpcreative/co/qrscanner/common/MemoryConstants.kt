@@ -20,5 +20,5 @@ object MemoryConstants {
 
     @IntDef(BYTE, KB, MB, GB)
     @Retention(RetentionPolicy.SOURCE)
-    inner annotation class Unit
+    annotation class Unit
 }

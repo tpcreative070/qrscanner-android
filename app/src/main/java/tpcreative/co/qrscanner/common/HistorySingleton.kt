@@ -8,12 +8,12 @@ class HistorySingleton {
 
     fun reloadData() {
         if (listener != null) {
-            listener.reloadData()
+            listener?.reloadData()
         }
     }
 
     interface SingletonHistoryListener {
-        open fun reloadData()
+        fun reloadData()
     }
 
     companion object {

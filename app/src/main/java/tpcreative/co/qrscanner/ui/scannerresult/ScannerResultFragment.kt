@@ -14,7 +14,6 @@ import com.karumi.dexter.listener.PermissionRequest
 import de.mrapp.android.dialog.MaterialDialog
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.adapter.DividerItemDecoration
 import tpcreative.co.qrscanner.model.Create
 import tpcreative.co.qrscanner.model.Theme
 import java.io.File

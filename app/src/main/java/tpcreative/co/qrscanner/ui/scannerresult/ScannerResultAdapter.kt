@@ -11,8 +11,6 @@ import androidx.core.content.ContextCompat
 import butterknife.BindView
 import butterknife.OnClick
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.adapter.BaseAdapter
-import tpcreative.co.qrscanner.common.adapter.BaseHolder
 import tpcreative.co.qrscanner.model.ItemNavigation
 
 class ScannerResultAdapter(inflater: LayoutInflater?, private val context: Context?, private val itemSelectedListener: ItemSelectedListener?) : BaseAdapter<ItemNavigation?, BaseHolder<*>?>(inflater) {

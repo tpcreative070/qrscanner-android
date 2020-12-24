@@ -1,15 +1,14 @@
-package tpcreative.co.qrscanner.common.adapter
-
+package co.tpcreative.supersafe.common.adapter
+import android.R
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-class DividerItemDecoration(context: Context?, orientation: Int) : ItemDecoration() {
+class DividerItemDecoration(context: Context?, orientation: Int) : RecyclerView.ItemDecoration() {
     private var mDivider: Drawable? = null
     private var mOrientation = 0
     private var mMarginTop = 0
@@ -29,55 +28,53 @@ class DividerItemDecoration(context: Context?, orientation: Int) : ItemDecoratio
         mOrientation = orientation
     }
 
-    override fun onDraw(canvas: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
-        val dividerLeft = parent.getPaddingLeft()
-        val dividerRight = parent.getWidth() - parent.getPaddingRight()
-        val childCount = parent.getChildCount()
-        for (i in 0..childCount - 2) {
-            val child = parent.getChildAt(i)
-            val params = child.layoutParams as RecyclerView.LayoutParams
-            val dividerTop = child.bottom + params.bottomMargin
-            val dividerBottom = dividerTop + mDivider.getIntrinsicHeight()
-            mDivider.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom)
-            mDivider.draw(canvas)
-        }
-    }
-
-    fun drawVertical(c: Canvas?, parent: RecyclerView?) {
-        val left = parent.getPaddingLeft()
-        val right = parent.getWidth() - parent.getPaddingRight()
-        val childCount = parent.getChildCount()
-        for (i in 0 until childCount) {
-            val child = parent.getChildAt(i)
-            val params = child
-                    .layoutParams as RecyclerView.LayoutParams
-            val top = child.bottom + params.bottomMargin
-            val bottom = top + mDivider.getIntrinsicHeight()
-            mDivider.setBounds(left, top, right, bottom)
-            mDivider.draw(c)
-        }
-    }
-
-    fun drawHorizontal(c: Canvas?, parent: RecyclerView?) {
-        val top = parent.getPaddingTop()
-        val bottom = parent.getHeight() - parent.getPaddingBottom()
-        val childCount = parent.getChildCount()
-        for (i in 0 until childCount) {
-            val child = parent.getChildAt(i)
-            val params = child
-                    .layoutParams as RecyclerView.LayoutParams
-            val left = child.right + params.rightMargin
-            val right = left + mDivider.getIntrinsicHeight()
-            mDivider.setBounds(left, top, right, bottom)
-            mDivider.draw(c)
-        }
-    }
-
-    override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         if (mOrientation == VERTICAL_LIST) {
-            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight())
+            drawVertical(c, parent)
         } else {
-            outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0)
+            drawHorizontal(c, parent)
+        }
+    }
+
+    fun drawVertical(c: Canvas?, parent: RecyclerView) {
+        val left: Int = parent.getPaddingLeft()
+        val right: Int = parent.getWidth() - parent.getPaddingRight()
+        val childCount: Int = parent.getChildCount()
+        for (i in 0 until childCount) {
+            val child: View = parent.getChildAt(i)
+            val params: RecyclerView.LayoutParams = child
+                    .layoutParams as RecyclerView.LayoutParams
+            val top: Int = child.bottom + params.bottomMargin
+            val bottom = top + mDivider?.getIntrinsicHeight()!!
+            mDivider?.setBounds(left, top, right, bottom)
+            if (c != null) {
+                mDivider?.draw(c)
+            }
+        }
+    }
+
+    fun drawHorizontal(c: Canvas?, parent: RecyclerView) {
+        val top: Int = parent.getPaddingTop()
+        val bottom: Int = parent.getHeight() - parent.getPaddingBottom()
+        val childCount: Int = parent.getChildCount()
+        for (i in 0 until childCount) {
+            val child: View = parent.getChildAt(i)
+            val params: RecyclerView.LayoutParams = child
+                    .layoutParams as RecyclerView.LayoutParams
+            val left: Int = child.right + params.rightMargin
+            val right = left + mDivider!!.getIntrinsicHeight()
+            mDivider?.setBounds(left, top, right, bottom)
+            if (c != null) {
+                mDivider?.draw(c)
+            }
+        }
+    }
+
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        if (mOrientation == VERTICAL_LIST) {
+            outRect.set(0, 0, 0, mDivider!!.intrinsicHeight)
+        } else {
+            outRect.set(0, 0, mDivider!!.intrinsicWidth, 0)
         }
     }
 
@@ -114,16 +111,16 @@ class DividerItemDecoration(context: Context?, orientation: Int) : ItemDecoratio
     }
 
     companion object {
-        private val ATTRS: IntArray? = intArrayOf(
-                android.R.attr.listDivider
+        private val ATTRS: IntArray = intArrayOf(
+                R.attr.listDivider
         )
         val TAG = DividerItemDecoration::class.java.simpleName
-        const val HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL
-        const val VERTICAL_LIST = LinearLayoutManager.VERTICAL
+        val HORIZONTAL_LIST: Int = androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
+        val VERTICAL_LIST: Int = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
     }
 
     init {
-        val a = context.obtainStyledAttributes(ATTRS)
+        val a: TypedArray = ATTRS.let { context!!.obtainStyledAttributes(it) }
         if (mDivider == null) {
             mDivider = a.getDrawable(0)
         }

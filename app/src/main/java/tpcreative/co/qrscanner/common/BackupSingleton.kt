@@ -8,7 +8,7 @@ class BackupSingleton {
 
     fun reloadData() {
         if (listener != null) {
-            listener.reloadData()
+            listener?.reloadData()
         }
     }
 

@@ -8,19 +8,19 @@ class ScannerSingleton {
 
     fun setVisible() {
         if (listener != null) {
-            listener.setVisible()
+            listener?.setVisible()
         }
     }
 
     fun setInvisible() {
         if (listener != null) {
-            listener.setInvisible()
+            listener?.setInvisible()
         }
     }
 
     interface SingletonScannerListener {
-        open fun setVisible()
-        open fun setInvisible()
+        fun setVisible()
+        fun setInvisible()
     }
 
     companion object {

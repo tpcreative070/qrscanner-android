@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.history
-
 import android.Manifest
 import android.content.Context
 import android.net.Uri
@@ -8,14 +7,13 @@ import android.view.*
 import com.karumi.dexter.listener.PermissionRequest
 import de.mrapp.android.dialog.MaterialDialog
 import tpcreative.co.qrscanner.BuildConfig
-import tpcreative.co.qrscanner.common.Navigator
-import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.model.Create
 import java.io.File
 import java.util.*
 
-class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedListener, SingletonHistoryListener, SingleTonMainListener {
+class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedListener, HistorySingleton.SingletonHistoryListener, MainSingleton.SingleTonMainListener {
     @BindView(R.id.rlRoot)
     var rlRoot: RelativeLayout? = null
 

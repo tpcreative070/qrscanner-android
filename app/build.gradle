@@ -85,8 +85,6 @@ dependencies {
     implementation 'com.snatik:storage:2.1.0'
     /*Google map*/
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     testImplementation 'junit:junit:4.13.1'
@@ -112,19 +110,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
-    /*Retrofit and RXJava 2*/
+    /*Retrofit*/
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation "io.reactivex.rxjava2:rxandroid:$appReactivexAndroid"
-    implementation "io.reactivex.rxjava2:rxjava:$appReactivexJava"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$appRetrofit"
     implementation "com.squareup.retrofit2:retrofit:$appRetrofit"
     implementation "com.squareup.retrofit2:converter-gson:$appRetrofit"
     implementation "com.squareup.retrofit2:converter-scalars:$appRetrofit"
-    implementation('com.squareup.retrofit2:converter-simplexml:2.4.0') {
-        exclude group: 'xpp3', module: 'xpp3'
-        exclude group: 'stax', module: 'stax-api'
-        exclude group: 'stax', module: 'stax'
-    }
     /*CSV*/
     implementation files('libs/opencsv-4.4.jar')
     /*Floating button*/
@@ -138,4 +128,9 @@ dependencies {
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-ktx:$kotlin_core_version"
+    implementation 'android.arch.lifecycle:extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
 }

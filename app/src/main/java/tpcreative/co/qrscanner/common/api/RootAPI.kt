@@ -1,6 +1,4 @@
 package tpcreative.co.qrscanner.common.api
-
-import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -14,18 +12,18 @@ import tpcreative.co.qrscanner.model.DriveAbout
 
 interface RootAPI {
     @POST(CHECKOUT)
-    open fun onCheckout(@Body request: CheckoutRequest?): Observable<RootResponse?>?
+    suspend fun onCheckout(@Body request: CheckoutRequest?): RootResponse?
     @FormUrlEncoded
     @POST(AUTHOR)
-    open fun onAuthor(@FieldMap request: MutableMap<String?, String?>?): Observable<BaseResponse?>?
+    suspend fun onAuthor(@FieldMap request: MutableMap<String?, String?>?): BaseResponse?
     @GET
-    open fun onCheckVersion(@Url url: String?): Observable<BaseResponse?>?
+    suspend fun onCheckVersion(@Url url: String?): BaseResponse?
     @Headers("Accept: application/json")
     @GET(GET_DRIVE_ABOUT)
-    open fun onGetDriveAbout(@Header("Authorization") token: String?): Observable<DriveAbout?>?
+    suspend fun onGetDriveAbout(@Header("Authorization") token: String?): DriveAbout?
     @POST(UPLOAD_FILE_TO_GOOGLE_DRIVE)
     @Multipart
-    open fun uploadFileMultipleInAppFolder(
+    suspend fun uploadFileMultipleInAppFolder(
             @Header("Authorization") authToken: String?,
             @Part metaPart: MultipartBody.Part?,
             @Part dataPart: MultipartBody.Part?,
@@ -33,24 +31,24 @@ interface RootAPI {
 
     @GET(DOWNLOAD_FILE_FROM_GOOGLE_DRIVE)
     @Streaming
-    open fun downloadDriveFile(@Header("Authorization") authToken: String?, @Path("id") id: String?): Observable<Response<ResponseBody?>?>?
+    suspend fun downloadDriveFile(@Header("Authorization") authToken: String?, @Path("id") id: String?): Response<ResponseBody?>
     @Headers("Accept: application/json")
     @GET(GET_LIST_FILE_IN_APP_FOLDER)
-    open fun onGetListFileInAppFolder(@Header("Authorization") token: String?, @Query("spaces") value: String?): Observable<DriveAbout?>?
+    suspend fun onGetListFileInAppFolder(@Header("Authorization") token: String?, @Query("spaces") value: String?): DriveAbout?
     @Headers("Accept: application/json")
     @DELETE(DELETE_CLOUD_ITEM)
-    open fun onDeleteCloudItem(@Header("Authorization") token: String?, @Path("id") id: String?): Observable<Response<DriveAbout?>?>?
+    suspend fun onDeleteCloudItem(@Header("Authorization") token: String?, @Path("id") id: String?): Response<DriveAbout>?
 
     companion object {
-        val ROOT_GOOGLE_DRIVE: String? = "https://www.googleapis.com/"
-        val CHECKOUT: String? = "/api/qrscanner/checkout/transaction"
-        val AUTHOR: String? = "/api/author/syncDevices"
-        val CHECK_VERSION: String? = "http://tpcreative.me/qrscanner.php"
-        val GET_DRIVE_ABOUT: String? = "/drive/v3/about?fields=user,storageQuota,kind"
-        val UPLOAD_FILE_TO_GOOGLE_DRIVE: String? = "/upload/drive/v3/files?uploadType=multipart"
-        val DOWNLOAD_FILE_FROM_GOOGLE_DRIVE: String? = "/drive/v3/files/{id}?alt=media"
-        val GET_LIST_FILE_IN_APP_FOLDER: String? = "/drive/v3/files"
-        val GET_FILES_INFO: String? = "/drive/v3/files/{id}"
-        val DELETE_CLOUD_ITEM: String? = "/drive/v3/files/{id}"
+        const val ROOT_GOOGLE_DRIVE: String = "https://www.googleapis.com/"
+        const val CHECKOUT: String = "/api/qrscanner/checkout/transaction"
+        const val AUTHOR: String = "/api/author/syncDevices"
+        const val CHECK_VERSION: String = "http://tpcreative.me/qrscanner.php"
+        const val GET_DRIVE_ABOUT: String = "/drive/v3/about?fields=user,storageQuota,kind"
+        const val UPLOAD_FILE_TO_GOOGLE_DRIVE: String = "/upload/drive/v3/files?uploadType=multipart"
+        const val DOWNLOAD_FILE_FROM_GOOGLE_DRIVE: String = "/drive/v3/files/{id}?alt=media"
+        const val GET_LIST_FILE_IN_APP_FOLDER: String = "/drive/v3/files"
+        const val GET_FILES_INFO: String = "/drive/v3/files/{id}"
+        const val DELETE_CLOUD_ITEM: String = "/drive/v3/files/{id}"
     }
 }

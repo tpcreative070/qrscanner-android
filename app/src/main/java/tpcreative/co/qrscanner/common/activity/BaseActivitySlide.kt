@@ -2,16 +2,12 @@ package tpcreative.co.qrscanner.common.activity
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
-import butterknife.Unbinder
 
 open class BaseActivitySlide : AppCompatActivity() {
-    var unbinder: Unbinder? = null
     protected var actionBar: ActionBar? = null
     var onStartCount = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,12 +21,9 @@ open class BaseActivitySlide : AppCompatActivity() {
 
     override fun setContentView(@LayoutRes layoutResID: Int) {
         super.setContentView(layoutResID)
-        Log.d(TAG, "action here")
-        unbinder = ButterKnife.bind(this)
     }
 
     override fun onDestroy() {
-        if (unbinder != null) unbinder?.unbind()
         super.onDestroy()
     }
 

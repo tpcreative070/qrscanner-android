@@ -8,26 +8,26 @@ class SettingsSingleton {
 
     fun onUpdated() {
         if (listener != null) {
-            listener.onUpdated()
+            listener?.onUpdated()
         }
     }
 
     fun onSyncDataRequest() {
         if (listener != null) {
-            listener.onSyncDataRequest()
+            listener?.onSyncDataRequest()
         }
     }
 
     fun onUpdateSharePreference(value: Boolean) {
         if (listener != null) {
-            listener.onUpdatedSharePreferences(value)
+            listener?.onUpdatedSharePreferences(value)
         }
     }
 
     interface SingletonSettingsListener {
-        open fun onUpdated()
-        open fun onUpdatedSharePreferences(value: Boolean)
-        open fun onSyncDataRequest()
+        fun onUpdated()
+        fun onUpdatedSharePreferences(value: Boolean)
+        fun onSyncDataRequest()
     }
 
     companion object {

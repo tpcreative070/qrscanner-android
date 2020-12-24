@@ -1,56 +1,51 @@
 package tpcreative.co.qrscanner.common.services.download
-
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
 import java.io.IOException
 
-/**
- * Created by PC on 9/1/2017.
- */
-class ProgressResponseBody(private val responseBody: ResponseBody?, private val progressListener: ProgressResponseBodyListener?) : ResponseBody() {
+class ProgressResponseBody(responseBody: ResponseBody?, progressListener: ProgressResponseBodyListener?) : ResponseBody() {
+    private val responseBody: ResponseBody? = responseBody
+    private val progressListener: ProgressResponseBodyListener? = progressListener
     private var bufferedSource: BufferedSource? = null
     override fun contentType(): MediaType? {
-        return responseBody.contentType()
+        return responseBody?.contentType()
     }
 
     override fun contentLength(): Long {
-        return responseBody.contentLength()
+        return responseBody!!.contentLength()
     }
 
-    override fun source(): BufferedSource? {
+    override fun source(): BufferedSource {
         if (bufferedSource == null) {
-            bufferedSource = Okio.buffer(source(responseBody.source()))
+            bufferedSource = source(responseBody!!.source())?.buffer()
         }
-        return bufferedSource
+        return bufferedSource!!
     }
 
     @Synchronized
-    private fun source(source: Source?): Source? {
+    private fun source(source: Source): Source? {
         return object : ForwardingSource(source) {
             var totalBytesRead = 0L
-            var allBytes = responseBody.contentLength()
+            var allBytes: Long = responseBody!!.contentLength()
             var startTime: Long? = System.currentTimeMillis()
-            @Throws(IOException::class)
-            override fun read(sink: Buffer?, byteCount: Long): Long {
-                val bytesRead = super.read(sink, byteCount)
 
-                //Long elapsedTime = System.nanoTime() - startTime;
-                //Long allTimeForDownloading = (elapsedTime * responseBody.contentLength() / bytesRead);
-                //Long remainingTime = allTimeForDownloading - elapsedTime;
+            @Throws(IOException::class)
+            override fun read(sink: Buffer, byteCount: Long): Long {
+                val bytesRead: Long = super.read(sink, byteCount)
                 totalBytesRead += if (bytesRead != -1L) bytesRead else 0
-                val percent = if (bytesRead == -1L) 100f else totalBytesRead as Float / responseBody.contentLength() as Float * 100
+                val percent = if (bytesRead == -1L) 100f else totalBytesRead.toFloat() / responseBody?.contentLength()!!.toFloat() * 100
                 if (progressListener != null) {
                     try {
                         if (percent > 1) {
                             if (percent > 99) {
-                                progressListener.onAttachmentDownloadUpdate(percent as Int)
+                                progressListener.onAttachmentDownloadUpdate(percent.toInt())
                                 progressListener.onAttachmentDownloadedSuccess()
                             } else {
-                                progressListener.onAttachmentDownloadUpdate(percent as Int)
+                                progressListener.onAttachmentDownloadUpdate(percent.toInt())
                             }
                             progressListener.onAttachmentTotalDownload(allBytes, totalBytesRead)
-                            val elapsedTime = System.currentTimeMillis() - startTime
+                            val elapsedTime = System.currentTimeMillis() - startTime!!
                             progressListener.onAttachmentElapsedTime(elapsedTime)
                             val allTimeForDownloading = elapsedTime * allBytes / totalBytesRead
                             progressListener.onAttachmentAllTimeForDownloading(allTimeForDownloading)
@@ -67,29 +62,24 @@ class ProgressResponseBody(private val responseBody: ResponseBody?, private val 
                         progressListener.onAttachmentDownloadedError(ae.message)
                     }
                 }
-
-                //Log.d(TAG,"byte read :" + (totalBytesRead/1024) + "MB");
-                //Log.d(TAG, "contentLength : " + responseBody.contentLength());
-                //Log.d(TAG, "elapsedtime minutes : " + elapsedTime / 1000000000);
-                //Log.d(TAG, "alltimefordownloading minutes : " + allTimeForDownloading / 1000000000);
-                //Log.d(TAG, "remainingtime minutes : " + remainingTime / 1000000000.0);
                 return bytesRead
             }
         }
     }
 
     interface ProgressResponseBodyListener {
-        open fun onAttachmentDownloadedSuccess()
-        open fun onAttachmentDownloadedError(message: String?)
-        open fun onAttachmentDownloadUpdate(percent: Int)
-        open fun onAttachmentElapsedTime(elapsed: Long)
-        open fun onAttachmentAllTimeForDownloading(all: Long)
-        open fun onAttachmentRemainingTime(all: Long)
-        open fun onAttachmentSpeedPerSecond(all: Double)
-        open fun onAttachmentTotalDownload(totalByte: Long, totalByteDownloaded: Long)
+        fun onAttachmentDownloadedSuccess()
+        fun onAttachmentDownloadedError(message: String?)
+        fun onAttachmentDownloadUpdate(percent: Int)
+        fun onAttachmentElapsedTime(elapsed: Long)
+        fun onAttachmentAllTimeForDownloading(all: Long)
+        fun onAttachmentRemainingTime(all: Long)
+        fun onAttachmentSpeedPerSecond(all: Double)
+        fun onAttachmentTotalDownload(totalByte: Long, totalByteDownloaded: Long)
     }
 
     companion object {
         val TAG = ProgressResponseBody::class.java.simpleName
     }
+
 }

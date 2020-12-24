@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.model
-
 import com.google.zxing.client.result.ParsedResultType
 import java.io.Serializable
 

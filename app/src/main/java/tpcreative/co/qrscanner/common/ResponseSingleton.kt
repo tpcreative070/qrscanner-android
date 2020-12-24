@@ -8,47 +8,47 @@ class ResponseSingleton {
 
     fun setScannerPosition() {
         if (listener != null) {
-            listener.showScannerPosition()
+            listener?.showScannerPosition()
         }
     }
 
     fun setCreatePosition() {
         if (listener != null) {
-            listener.showCreatePosition()
+            listener?.showCreatePosition()
         }
     }
 
     fun onAlertLatestVersion() {
         if (listener != null) {
-            listener.showAlertLatestVersion()
+            listener?.showAlertLatestVersion()
         }
     }
 
     fun onNetworkConnectionChanged(isConntected: Boolean) {
         if (listener != null) {
-            listener.onNetworkConnectionChanged(isConntected)
+            listener?.onNetworkConnectionChanged(isConntected)
         }
     }
 
     fun onResumeAds() {
         if (listener != null) {
-            listener.onResumeAds()
+            listener?.onResumeAds()
         }
     }
 
     fun onScannerDone() {
         if (listener != null) {
-            listener.onScannerDone()
+            listener?.onScannerDone()
         }
     }
 
     interface SingleTonResponseListener {
-        open fun showScannerPosition()
-        open fun showCreatePosition()
-        open fun showAlertLatestVersion()
-        open fun onNetworkConnectionChanged(isConnected: Boolean)
-        open fun onResumeAds()
-        open fun onScannerDone()
+        fun showScannerPosition()
+        fun showCreatePosition()
+        fun showAlertLatestVersion()
+        fun onNetworkConnectionChanged(isConnected: Boolean)
+        fun onResumeAds()
+        fun onScannerDone()
     }
 
     companion object {

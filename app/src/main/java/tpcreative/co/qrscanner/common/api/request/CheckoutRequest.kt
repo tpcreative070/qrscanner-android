@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.common.api.request
-
 import tpcreative.co.qrscanner.BuildConfig
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import java.io.Serializable
 
 class CheckoutRequest : Serializable {
@@ -24,14 +25,14 @@ class CheckoutRequest : Serializable {
         this.orderId = orderId
         this.state = state
         this.token = token
-        device_id = QRScannerApplication.Companion.getInstance().getDeviceId()
-        device_type = QRScannerApplication.Companion.getInstance().getString(R.string.device_type)
-        manufacturer = QRScannerApplication.Companion.getInstance().getManufacturer()
-        name_model = QRScannerApplication.Companion.getInstance().getModel()
-        version = "" + QRScannerApplication.Companion.getInstance().getVersion()
-        versionRelease = QRScannerApplication.Companion.getInstance().getVersionRelease()
+        device_id = QRScannerApplication.getInstance().getDeviceId()
+        device_type = QRScannerApplication.getInstance().getString(R.string.device_type)
+        manufacturer = QRScannerApplication.getInstance().getManufacturer()
+        name_model = QRScannerApplication.getInstance().getModel()
+        version = "" + QRScannerApplication.getInstance().getVersion()
+        versionRelease = QRScannerApplication.getInstance().getVersionRelease()
         appVersionRelease = BuildConfig.VERSION_NAME
-        packageName = QRScannerApplication.Companion.getInstance().getPackageId()
+        packageName = QRScannerApplication.getInstance().getPackageId()
     }
 
     constructor() {
@@ -40,13 +41,13 @@ class CheckoutRequest : Serializable {
         orderId = "Pro version"
         state = "Pro version"
         token = "Pro version"
-        device_id = QRScannerApplication.Companion.getInstance().getDeviceId()
-        device_type = QRScannerApplication.Companion.getInstance().getString(R.string.device_type)
-        manufacturer = QRScannerApplication.Companion.getInstance().getManufacturer()
-        name_model = QRScannerApplication.Companion.getInstance().getModel()
-        version = "" + QRScannerApplication.Companion.getInstance().getVersion()
-        versionRelease = QRScannerApplication.Companion.getInstance().getVersionRelease()
+        device_id = QRScannerApplication.getInstance().getDeviceId()
+        device_type = QRScannerApplication.getInstance().getString(R.string.device_type)
+        manufacturer = QRScannerApplication.getInstance().getManufacturer()
+        name_model = QRScannerApplication.getInstance().getModel()
+        version = "" + QRScannerApplication.getInstance().getVersion()
+        versionRelease = QRScannerApplication.getInstance().getVersionRelease()
         appVersionRelease = BuildConfig.VERSION_NAME
-        packageName = QRScannerApplication.Companion.getInstance().getPackageId()
+        packageName = QRScannerApplication.getInstance().getPackageId()
     }
 }
