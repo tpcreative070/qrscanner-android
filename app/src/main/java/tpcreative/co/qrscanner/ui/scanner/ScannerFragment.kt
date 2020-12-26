@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.scanner
-
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
@@ -13,12 +12,7 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import butterknife.BindView
-import butterknife.OnClick
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -27,13 +21,13 @@ import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.result.*
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -44,51 +38,29 @@ import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
+import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.pickImage
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.scanner.ScannerFragment
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
 
-class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
-    @BindView(R.id.zxing_status_view)
-    var zxing_status_view: AppCompatTextView? = null
-
-    @BindView(R.id.switch_flashlight)
-    var switch_flashlight: AppCompatImageView? = null
-
-    @BindView(R.id.imgGallery)
-    var imgGallery: AppCompatImageView? = null
-
-    @BindView(R.id.switch_camera)
-    var switch_camera: AppCompatImageView? = null
-
-    @BindView(R.id.imgCreate)
-    var imgCreate: AppCompatImageView? = null
-
-    @BindView(R.id.zxing_barcode_scanner)
-    var barcodeScannerView: DecoratedBarcodeView? = null
-
-    @BindView(R.id.btnDone)
-    var btnDone: AppCompatButton? = null
-
-    @BindView(R.id.tvCount)
-    var tvCount: AppCompatTextView? = null
-    private var beepManager: BeepManager? = null
-    private val cameraSettings: CameraSettings? = CameraSettings()
-    private var typeCamera = 0
-    private var isTurnOnFlash = false
-    private var mAnim: Animation? = null
-    private var presenter: ScannerPresenter? = null
-    private var isRunning = false
-    private val callback: BarcodeCallback? = object : BarcodeCallback {
+class ScannerFragment : BaseFragment(), SingletonScannerListener{
+    lateinit var viewModel : ScannerViewModel
+    var beepManager: BeepManager? = null
+    val cameraSettings: CameraSettings = CameraSettings()
+    var typeCamera = 0
+    var isTurnOnFlash = false
+    var mAnim: Animation? = null
+    var isRunning = false
+    private val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
-                Utils.Log(TAG, "Call back :" + result.getText() + "  type :" + result.getBarcodeFormat().name)
+                Utils.Log(TAG, "Call back :" + result?.getText() + "  type :" + result?.barcodeFormat?.name)
                 if (activity == null) {
                     return
                 }
                 // ResultHan resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
-                val parsedResult = ResultParser.parseResult(result.getResult())
+                val parsedResult = ResultParser.parseResult(result?.result)
                 val create = Create()
                 var address: String? = ""
                 var fullName: String? = ""
@@ -236,7 +208,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
 
                 /*Adding new columns*/create.barcodeFormat = BarcodeFormat.QR_CODE.name
                 create.favorite = false
-                if (result.getBarcodeFormat() != null) {
+                if (result?.getBarcodeFormat() != null) {
                     create.barcodeFormat = result.getBarcodeFormat().name
                 }
                 doNavigation(create)
@@ -247,24 +219,24 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
 
         fun doNavigation(create: Create?) {
             if (Utils.isMultipleScan()) {
-                btnDone.setVisibility(View.VISIBLE)
-                tvCount.setVisibility(View.VISIBLE)
-                presenter.updateValue(1)
-                presenter.doSaveItems(create)
-                if (barcodeScannerView != null) {
-                    barcodeScannerView.pauseAndWait()
+                btnDone.visibility = View.VISIBLE
+                tvCount.visibility = View.VISIBLE
+                updateValue(1)
+                viewModel.doSaveItems(create)
+                if (zxing_barcode_scanner != null) {
+                    zxing_barcode_scanner.pauseAndWait()
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(1000)
-                        barcodeScannerView.resume()
+                        zxing_barcode_scanner.resume()
                     }
                 }
             } else {
                 Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
-                if (barcodeScannerView != null) {
-                    barcodeScannerView.pauseAndWait()
+                if (zxing_barcode_scanner != null) {
+                    zxing_barcode_scanner.pauseAndWait()
                 }
             }
-            beepManager.playBeepSoundAndVibrate()
+            beepManager?.playBeepSoundAndVibrate()
         }
 
         override fun possibleResultPoints(resultPoints: MutableList<ResultPoint?>?) {}
@@ -275,37 +247,35 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
     }
 
     override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater.inflate(R.layout.fragment_scanner, viewGroup, false)
+        return inflater?.inflate(R.layout.fragment_scanner, viewGroup, false)
     }
 
     override fun work() {
         super.work()
-        ScannerSingleton.Companion.getInstance().setListener(this)
-        presenter = ScannerPresenter()
-        presenter.bindView(this)
-        barcodeScannerView.decodeContinuous(callback)
-        zxing_status_view.setVisibility(View.INVISIBLE)
-        imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-        imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-        switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-        switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+        initUI()
+        ScannerSingleton.getInstance()?.setListener(this)
+        zxing_barcode_scanner.decodeContinuous(callback)
+        imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+        imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+        switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+        switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         typeCamera = if (Utils.checkCameraBack(context)) {
-            cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_BACK)
+            cameraSettings.requestedCameraId = Camera.CameraInfo.CAMERA_FACING_BACK
             0
         } else {
             if (Utils.checkCameraFront(context)) {
-                cameraSettings.setRequestedCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT)
+                cameraSettings.requestedCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT
                 1
             } else {
                 2
             }
         }
-        barcodeScannerView.getBarcodeView().cameraSettings = cameraSettings
+        zxing_barcode_scanner.barcodeView.cameraSettings = cameraSettings
         beepManager = BeepManager(activity)
         onHandlerIntent()
-        if (barcodeScannerView != null) {
-            if (!barcodeScannerView.isActivated()) {
-                barcodeScannerView.resume()
+        if (zxing_barcode_scanner != null) {
+            if (!zxing_barcode_scanner.isActivated) {
+                zxing_barcode_scanner.resume()
             }
         }
         onBeepAndVibrate()
@@ -315,9 +285,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
         if (typeCamera == 2) {
             return
         }
-        cameraSettings.setRequestedCameraId(type) // front/back/etc
-        barcodeScannerView.getBarcodeView().cameraSettings = cameraSettings
-        barcodeScannerView.resume()
+        cameraSettings.requestedCameraId = type // front/back/etc
+        zxing_barcode_scanner.barcodeView.cameraSettings = cameraSettings
+        zxing_barcode_scanner.resume()
     }
 
     fun onAddPermissionGallery() {
@@ -327,16 +297,16 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
                         Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report.areAllPermissionsGranted()) {
-                            if (barcodeScannerView != null) {
-                                barcodeScannerView.pauseAndWait()
+                        if (report?.areAllPermissionsGranted() == true) {
+                            if (zxing_barcode_scanner != null) {
+                                zxing_barcode_scanner.pauseAndWait()
                             }
                             onGetGallery()
                         } else {
                             Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report.isAnyPermissionPermanentlyDenied()) {
+                        if (report?.isAnyPermissionPermanentlyDenied() == true) {
                             /*Miss add permission in manifest*/
                             Utils.Log(TAG, "request permission is failed")
                         }
@@ -344,7 +314,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
 
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
                         /* ... */
-                        token.continuePermissionRequest()
+                        token?.continuePermissionRequest()
                     }
                 })
                 .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
@@ -356,128 +326,26 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
         }
         val isBeep = PrefsController.getBoolean(getString(R.string.key_beep), false)
         val isVibrate = PrefsController.getBoolean(getString(R.string.key_vibrate), false)
-        beepManager.setBeepEnabled(isBeep)
-        beepManager.setVibrateEnabled(isVibrate)
+        beepManager?.isBeepEnabled = isBeep
+        beepManager?.isVibrateEnabled = isVibrate
     }
 
     override fun setVisible() {
-        if (barcodeScannerView != null) {
-            barcodeScannerView.resume()
+        if (zxing_barcode_scanner != null) {
+            zxing_barcode_scanner.resume()
         }
     }
 
     override fun setInvisible() {
-        if (barcodeScannerView != null) {
-            barcodeScannerView.pauseAndWait()
+        if (zxing_barcode_scanner != null) {
+            zxing_barcode_scanner.pauseAndWait()
         }
-    }
-
-    @OnClick(R.id.switch_camera)
-    fun switchCamera(view: View?) {
-        Utils.Log(TAG, "on clicked here : " + cameraSettings.getRequestedCameraId())
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                barcodeScannerView.pauseAndWait()
-                if (cameraSettings.getRequestedCameraId() == 0) {
-                    switchCamera(Camera.CameraInfo.CAMERA_FACING_FRONT)
-                } else {
-                    switchCamera(Camera.CameraInfo.CAMERA_FACING_BACK)
-                }
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
-    }
-
-    @OnClick(R.id.switch_flashlight)
-    fun switchFlash(view: View?) {
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                if (isTurnOnFlash) {
-                    barcodeScannerView.setTorchOff()
-                    isTurnOnFlash = false
-                    switch_flashlight.setImageDrawable(ContextCompat.getDrawable(QRScannerApplication.Companion.getInstance(), R.drawable.baseline_flash_off_white_48))
-                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-                } else {
-                    barcodeScannerView.setTorchOn()
-                    isTurnOnFlash = true
-                    switch_flashlight.setImageDrawable(ContextCompat.getDrawable(QRScannerApplication.Companion.getInstance(), R.drawable.baseline_flash_on_white_48))
-                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
-                }
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
-    }
-
-    @OnClick(R.id.imgCreate)
-    fun onClickCreate(view: View?) {
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                if (barcodeScannerView != null) {
-                    barcodeScannerView.pauseAndWait()
-                }
-                Navigator.onMoveToHelp(context)
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
-    }
-
-    @OnClick(R.id.imgGallery)
-    fun onClickGallery(view: View?) {
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                onAddPermissionGallery()
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
-    }
-
-    @OnClick(R.id.btnDone)
-    fun onclickDone() {
-        Log.d(TAG, "Done")
-        ResponseSingleton.Companion.getInstance().onScannerDone()
-        if (barcodeScannerView != null) {
-            barcodeScannerView.pause()
-        }
-        presenter.doRefreshView()
-    }
-
-    override fun doRefreshView() {
-        btnDone.setVisibility(View.INVISIBLE)
-        tvCount.setVisibility(View.INVISIBLE)
     }
 
     override fun onStop() {
         super.onStop()
-        if (barcodeScannerView != null) {
-            barcodeScannerView.pauseAndWait()
+        if (zxing_barcode_scanner != null) {
+            zxing_barcode_scanner.pauseAndWait()
         }
         Utils.Log(TAG, "onStop")
     }
@@ -485,10 +353,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
     override fun onStart() {
         super.onStart()
         if (!isRunning) {
-            ResponseSingleton.Companion.getInstance().setScannerPosition()
+            ResponseSingleton.getInstance()?.setScannerPosition()
             isRunning = true
         }
-        ResponseSingleton.Companion.getInstance().onResumeAds()
+        ResponseSingleton.getInstance()?.onResumeAds()
         Utils.Log(TAG, "onStart")
     }
 
@@ -496,8 +364,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
         super.onDestroy()
         Utils.Log(TAG, "onDestroy")
         if (typeCamera != 2) {
-            if (barcodeScannerView != null) {
-                barcodeScannerView.pause()
+            if (zxing_barcode_scanner != null) {
+                zxing_barcode_scanner.pause()
             }
         }
     }
@@ -513,9 +381,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
         if (resultCode == Activity.RESULT_OK && requestCode == Navigator.SCANNER) {
             setVisible()
             Utils.Log(TAG, "Resume camera")
-        } else if (requestCode == Crop.Companion.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
-            beginCrop(data.getData())
-        } else if (requestCode == Crop.Companion.REQUEST_CROP) {
+        } else if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
+            beginCrop(data?.data)
+        } else if (requestCode == Crop.REQUEST_CROP) {
             handleCrop(resultCode, data)
         } else {
             Utils.Log(TAG, "You haven't picked Image")
@@ -525,18 +393,18 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
     }
 
     private fun beginCrop(source: Uri?) {
-        val destination = Uri.fromFile(File(activity.getCacheDir(), "cropped"))
-        Crop.Companion.of(source, destination).asSquare().start(context, this)
+        val destination = Uri.fromFile(File(activity?.cacheDir, "cropped"))
+        Crop.of(source, destination)?.asSquare()?.start(context!!, this)
     }
 
     private fun handleCrop(resultCode: Int, result: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            val mData: String = Crop.Companion.getOutputString(result)
+            val mData: String? = Crop.getOutputString(result)
             val mResult = Gson().fromJson(mData, Result::class.java)
             mResult?.let { onFilterResult(it) }
             Utils.Log(TAG, "Result of cropped " + Gson().toJson(mResult))
-        } else if (resultCode == Crop.Companion.RESULT_ERROR) {
-            Toast.makeText(activity, Crop.Companion.getError(result).message, Toast.LENGTH_SHORT).show()
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Utils.onAlertNotify(activity!!,"${Crop.getError(result)?.message}")
         } else if (resultCode == Activity.RESULT_CANCELED) {
             setVisible()
         }
@@ -693,9 +561,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
         create.productId = productId
         create.ISBN = ISBN
         create.fragmentType = EnumFragmentType.SCANNER
-        beepManager.playBeepSoundAndVibrate()
-        if (barcodeScannerView != null) {
-            barcodeScannerView.pauseAndWait()
+        beepManager?.playBeepSoundAndVibrate()
+        if (zxing_barcode_scanner != null) {
+            zxing_barcode_scanner.pauseAndWait()
         }
         Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
     }
@@ -703,21 +571,21 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            QRScannerApplication.Companion.getInstance().getActivity().onShowFloatingButton(this@ScannerFragment, true)
+            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@ScannerFragment, true)
             Utils.Log(TAG, "isVisible")
         } else {
-            QRScannerApplication.Companion.getInstance().getActivity().onShowFloatingButton(this@ScannerFragment, false)
+            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@ScannerFragment, false)
             Utils.Log(TAG, "isInVisible")
         }
-        if (barcodeScannerView != null) {
+        if (zxing_barcode_scanner != null) {
             if (menuVisible) {
                 if (typeCamera != 2) {
                     onBeepAndVibrate()
-                    barcodeScannerView.resume()
+                    zxing_barcode_scanner.resume()
                 }
             } else {
                 if (typeCamera != 2) {
-                    barcodeScannerView.pause()
+                    zxing_barcode_scanner.pause()
                 }
             }
         }
@@ -728,16 +596,12 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
         super.onPause()
     }
 
-    override fun updateValue(value: String?) {
-        tvCount.setText(value)
-    }
-
     /*Share File To QRScanner*/
     fun onHandlerIntent() {
         try {
-            val intent = activity.getIntent()
-            val action = intent.action
-            val type = intent.type
+            val intent = activity?.getIntent()
+            val action = intent?.action
+            val type = intent?.type
             Utils.Log(TAG, "original type :$type")
             if (Intent.ACTION_SEND == action && type != null) {
                 handleSendSingleItem(intent)
@@ -751,7 +615,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
 
     fun handleSendSingleItem(intent: Intent?) {
         try {
-            val imageUri = intent.getParcelableExtra<Parcelable?>(Intent.EXTRA_STREAM) as Uri?
+            val imageUri = intent?.getParcelableExtra<Parcelable?>(Intent.EXTRA_STREAM) as Uri?
             if (imageUri != null) {
                 beginCrop(imageUri)
             } else {
@@ -767,7 +631,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener, ScannerView {
 
     companion object {
         private val TAG = ScannerFragment::class.java.simpleName
-        fun newInstance(index: Int): ScannerFragment? {
+        fun newInstance(index: Int): ScannerFragment {
             val fragment = ScannerFragment()
             val b = Bundle()
             b.putInt("index", index)

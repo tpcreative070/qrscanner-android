@@ -1,35 +1,27 @@
 package tpcreative.co.qrscanner.ui.pro
-
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
-import butterknife.BindView
+import kotlinx.android.synthetic.main.activity_pro_version.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 
 class ProVersionActivity : BaseActivitySlide(), View.OnClickListener {
-    @BindView(R.id.btnUpgradeNow)
-    var btnUpgradeNow: AppCompatButton? = null
-
-    @BindView(R.id.tvPrice)
-    var tvPrice: AppCompatTextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pro_version)
         val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         btnUpgradeNow.setOnClickListener(this)
         title = getString(R.string.pro_version)
     }
 
     override fun onClick(view: View?) {
-        when (view.getId()) {
+        when (view?.id) {
             R.id.btnUpgradeNow -> {
                 onProApp()
             }

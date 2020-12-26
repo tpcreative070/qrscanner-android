@@ -962,6 +962,6 @@ object Utils {
     }
 
     interface UtilsListener {
-        open fun onSaved(path: String?, action: EnumAction?)
+        fun onSaved(path: String?, action: EnumAction?)
     }
 }

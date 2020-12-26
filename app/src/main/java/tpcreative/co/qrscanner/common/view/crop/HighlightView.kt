@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.view.crop
-
 import android.annotation.SuppressLint
 import android.content.*
 import android.graphics.*
@@ -9,6 +8,8 @@ import android.view.*
 import androidx.core.content.ContextCompat
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 internal class HighlightView(  // View displaying image
         private val viewContext: View?) {
@@ -27,9 +28,9 @@ internal class HighlightView(  // View displaying image
     var matrix: Matrix? = null
     private var imageRect // Image space
             : RectF? = null
-    private val outsidePaint: Paint? = Paint()
-    private val outlinePaint: Paint? = Paint()
-    private val handlePaint: Paint? = Paint()
+    private val outsidePaint: Paint = Paint()
+    private val outlinePaint: Paint = Paint()
+    private val handlePaint: Paint = Paint()
     private var showThirds = false
     private var showCircle = false
     private var highlightColor = 0
@@ -42,16 +43,16 @@ internal class HighlightView(  // View displaying image
     private var isFocused = false
     private fun initStyles(context: Context?) {
         val outValue = TypedValue()
-        context.getTheme().resolveAttribute(R.attr.cropImageStyle, outValue, true)
-        val attributes = context.obtainStyledAttributes(outValue.resourceId, R.styleable.CropImageView)
+        context?.theme?.resolveAttribute(R.attr.cropImageStyle, outValue, true)
+        val attributes = context?.obtainStyledAttributes(outValue.resourceId, R.styleable.CropImageView)
         try {
-            showThirds = attributes.getBoolean(R.styleable.CropImageView_showThirds, false)
-            showCircle = attributes.getBoolean(R.styleable.CropImageView_showCircle, false)
-            highlightColor = attributes.getColor(R.styleable.CropImageView_highlightColor,
-                    DEFAULT_HIGHLIGHT_COLOR)
-            handleMode = HandleMode.values()[attributes.getInt(R.styleable.CropImageView_showHandles, 0)]
+            showThirds = attributes?.getBoolean(R.styleable.CropImageView_showThirds, false) == true
+            showCircle = attributes?.getBoolean(R.styleable.CropImageView_showCircle, false) == true
+            highlightColor = attributes?.getColor(R.styleable.CropImageView_highlightColor,
+                    DEFAULT_HIGHLIGHT_COLOR) ?:0
+            handleMode = HandleMode.values()[attributes?.getInt(R.styleable.CropImageView_showHandles, 0) ?:0]
         } finally {
-            attributes.recycle()
+            attributes?.recycle()
         }
     }
 
@@ -60,7 +61,7 @@ internal class HighlightView(  // View displaying image
         this.cropRect = cropRect
         this.imageRect = RectF(imageRect)
         this.maintainAspectRatio = maintainAspectRatio
-        initialAspectRatio = this.cropRect.width() / this.cropRect.height()
+        initialAspectRatio = (this.cropRect?.width() ?: 0F) / (this.cropRect?.height() ?:0F)
         drawRect = computeLayout()
         outsidePaint.setARGB(125, 50, 50, 50)
         outlinePaint.setStyle(Paint.Style.STROKE)
@@ -74,29 +75,29 @@ internal class HighlightView(  // View displaying image
     }
 
     private fun dpToPx(dp: Float): Float {
-        return dp * viewContext.getResources().displayMetrics.density
+        return dp * (viewContext?.resources?.displayMetrics?.density ?: 0F)
     }
 
     fun draw(canvas: Canvas?) {
-        canvas.save()
+        canvas?.save()
         val path = Path()
-        outlinePaint.setStrokeWidth(outlineWidth)
+        outlinePaint.strokeWidth = outlineWidth
         if (!hasFocus()) {
-            outlinePaint.setColor(Color.BLACK)
-            canvas.drawRect(drawRect, outlinePaint)
+            outlinePaint.color = Color.BLACK
+            drawRect?.let { canvas?.drawRect(it, outlinePaint) }
         } else {
             val viewDrawingRect = Rect()
-            viewContext.getDrawingRect(viewDrawingRect)
+            viewContext?.getDrawingRect(viewDrawingRect)
             path.addRect(RectF(drawRect), Path.Direction.CW)
-            outlinePaint.setColor(highlightColor)
+            outlinePaint.color = highlightColor
             if (isClipPathSupported(canvas)) {
-                canvas.clipPath(path, Region.Op.DIFFERENCE)
-                canvas.drawRect(viewDrawingRect, outsidePaint)
+                canvas?.clipPath(path, Region.Op.DIFFERENCE)
+                canvas?.drawRect(viewDrawingRect, outsidePaint)
             } else {
                 drawOutsideFallback(canvas)
             }
-            canvas.restore()
-            canvas.drawPath(path, outlinePaint)
+            canvas?.restore()
+            canvas?.drawPath(path, outlinePaint)
             if (showThirds) {
                 drawThirds(canvas)
             }
@@ -114,10 +115,10 @@ internal class HighlightView(  // View displaying image
      * Fall back to naive method for darkening outside crop area
      */
     private fun drawOutsideFallback(canvas: Canvas?) {
-        canvas.drawRect(0f, 0f, canvas.getWidth().toFloat(), drawRect.top.toFloat(), outsidePaint)
-        canvas.drawRect(0f, drawRect.bottom.toFloat(), canvas.getWidth().toFloat(), canvas.getHeight().toFloat(), outsidePaint)
-        canvas.drawRect(0f, drawRect.top.toFloat(), drawRect.left.toFloat(), drawRect.bottom.toFloat(), outsidePaint)
-        canvas.drawRect(drawRect.right.toFloat(), drawRect.top.toFloat(), canvas.getWidth().toFloat(), drawRect.bottom.toFloat(), outsidePaint)
+        canvas?.drawRect(0f, 0f, canvas.width.toFloat(), drawRect?.top?.toFloat() ?: 0F, outsidePaint)
+        canvas?.drawRect(0f, drawRect?.bottom?.toFloat() ?: 0F, canvas.width.toFloat(), canvas.height.toFloat(), outsidePaint)
+        canvas?.drawRect(0f, drawRect?.top?.toFloat() ?: 0F, drawRect?.left?.toFloat() ?:0F, drawRect?.bottom?.toFloat() ?: 0F, outsidePaint)
+        canvas?.drawRect(drawRect?.right?.toFloat() ?: 0F, drawRect?.top?.toFloat() ?: 0F, canvas.width.toFloat(), drawRect?.bottom?.toFloat() ?: 0F, outsidePaint)
     }
 
     /*
@@ -133,42 +134,42 @@ internal class HighlightView(  // View displaying image
                 || Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
             true
         } else {
-            !canvas.isHardwareAccelerated()
+            !(canvas?.isHardwareAccelerated ?: false)
         }
     }
 
     private fun drawHandles(canvas: Canvas?) {
-        val xMiddle = drawRect.left + (drawRect.right - drawRect.left) / 2
-        val yMiddle = drawRect.top + (drawRect.bottom - drawRect.top) / 2
-        canvas.drawCircle(drawRect.left.toFloat(), yMiddle.toFloat(), handleRadius, handlePaint)
-        canvas.drawCircle(xMiddle.toFloat(), drawRect.top.toFloat(), handleRadius, handlePaint)
-        canvas.drawCircle(drawRect.right.toFloat(), yMiddle.toFloat(), handleRadius, handlePaint)
-        canvas.drawCircle(xMiddle.toFloat(), drawRect.bottom.toFloat(), handleRadius, handlePaint)
+        val xMiddle = (drawRect?.left ?:0) + ((drawRect?.right ?:0) - (drawRect?.left ?:0)) / 2
+        val yMiddle = (drawRect?.top ?:0) + ((drawRect?.bottom ?:0) - (drawRect?.top ?:0)) / 2
+        canvas?.drawCircle(drawRect?.left?.toFloat() ?: 0F, yMiddle.toFloat(), handleRadius, handlePaint)
+        canvas?.drawCircle(xMiddle.toFloat(), drawRect?.top?.toFloat() ?:0F, handleRadius, handlePaint)
+        canvas?.drawCircle(drawRect?.right?.toFloat() ?:0F, yMiddle.toFloat(), handleRadius, handlePaint)
+        canvas?.drawCircle(xMiddle.toFloat(), drawRect?.bottom?.toFloat() ?:0F, handleRadius, handlePaint)
     }
 
     private fun drawThirds(canvas: Canvas?) {
-        outlinePaint.setStrokeWidth(1f)
-        val xThird = ((drawRect.right - drawRect.left) / 3).toFloat()
-        val yThird = ((drawRect.bottom - drawRect.top) / 3).toFloat()
-        canvas.drawLine(drawRect.left + xThird, drawRect.top.toFloat(),
-                drawRect.left + xThird, drawRect.bottom.toFloat(), outlinePaint)
-        canvas.drawLine(drawRect.left + xThird * 2, drawRect.top.toFloat(),
-                drawRect.left + xThird * 2, drawRect.bottom.toFloat(), outlinePaint)
-        canvas.drawLine(drawRect.left.toFloat(), drawRect.top + yThird,
-                drawRect.right.toFloat(), drawRect.top + yThird, outlinePaint)
-        canvas.drawLine(drawRect.left.toFloat(), drawRect.top + yThird * 2,
-                drawRect.right.toFloat(), drawRect.top + yThird * 2, outlinePaint)
+        outlinePaint.strokeWidth = 1f
+        val xThird = (((drawRect?.right ?:0) - (drawRect?.left ?:0)) / 3).toFloat()
+        val yThird = (((drawRect?.bottom ?:0) - (drawRect?.top ?:0)) / 3).toFloat()
+        canvas?.drawLine((drawRect?.left ?:0) + xThird, (drawRect?.top?.toFloat() ?:0F),
+                (drawRect?.left ?:0) + xThird, (drawRect?.bottom?.toFloat() ?:0F), outlinePaint)
+        canvas?.drawLine((drawRect?.left ?:0) + xThird * 2, (drawRect?.top?.toFloat() ?:0F),
+                (drawRect?.left ?:0) + xThird * 2, (drawRect?.bottom?.toFloat() ?:0F), outlinePaint)
+        canvas?.drawLine((drawRect?.left?.toFloat() ?:0F), (drawRect?.top ?:0) + yThird,
+                (drawRect?.right?.toFloat() ?:0F), (drawRect?.top ?:0) + yThird, outlinePaint)
+        canvas?.drawLine((drawRect?.left?.toFloat() ?:0F), (drawRect?.top ?:0) + yThird * 2,
+                (drawRect?.right?.toFloat() ?:0F), (drawRect?.top ?:0) + yThird * 2, outlinePaint)
     }
 
     private fun drawCircle(canvas: Canvas?) {
-        outlinePaint.setStrokeWidth(1f)
-        canvas.drawOval(RectF(drawRect), outlinePaint)
+        outlinePaint.strokeWidth = 1f
+        canvas?.drawOval(RectF(drawRect), outlinePaint)
     }
 
     fun setMode(mode: ModifyMode?) {
         if (mode != modifyMode) {
             modifyMode = mode
-            viewContext.invalidate()
+            viewContext?.invalidate()
         }
     }
 
@@ -180,27 +181,27 @@ internal class HighlightView(  // View displaying image
 
         // verticalCheck makes sure the position is between the top and
         // the bottom edge (with some tolerance). Similar for horizCheck.
-        val verticalCheck = (y >= r.top - hysteresis
-                && y < r.bottom + hysteresis)
-        val horizCheck = (x >= r.left - hysteresis
-                && x < r.right + hysteresis)
+        val verticalCheck = (y >= (r?.top ?:0) - hysteresis
+                && y < (r?.bottom ?:0) + hysteresis)
+        val horizCheck = (x >= (r?.left ?:0) - hysteresis
+                && x < (r?.right ?:0) + hysteresis)
 
         // Check whether the position is near some edge(s)
-        if (Math.abs(r.left - x) < hysteresis && verticalCheck) {
+        if (abs((r?.left ?:0) - x) < hysteresis && verticalCheck) {
             retval = retval or GROW_LEFT_EDGE
         }
-        if (Math.abs(r.right - x) < hysteresis && verticalCheck) {
+        if (abs((r?.right ?:0) - x) < hysteresis && verticalCheck) {
             retval = retval or GROW_RIGHT_EDGE
         }
-        if (Math.abs(r.top - y) < hysteresis && horizCheck) {
+        if (abs((r?.top ?:0) - y) < hysteresis && horizCheck) {
             retval = retval or GROW_TOP_EDGE
         }
-        if (Math.abs(r.bottom - y) < hysteresis && horizCheck) {
+        if (abs((r?.bottom ?:0) - y) < hysteresis && horizCheck) {
             retval = retval or GROW_BOTTOM_EDGE
         }
 
         // Not near any edge but inside the rectangle: move
-        if (retval == GROW_NONE && r.contains(x as Int, y as Int)) {
+        if (retval == GROW_NONE && r?.contains(x.toInt(), y.toInt()) == true) {
             retval = MOVE
         }
         return retval
@@ -214,8 +215,8 @@ internal class HighlightView(  // View displaying image
         val r = computeLayout()
         if (edge == MOVE) {
             // Convert to image space before sending to moveBy()
-            moveBy(dx * (cropRect.width() / r.width()),
-                    dy * (cropRect.height() / r.height()))
+            moveBy(dx * ((cropRect?.width() ?:0F).div(r?.width() ?:0)),
+                    dy * ((cropRect?.height() ?:0F).div(r?.height() ?:0)))
         } else {
             if (GROW_LEFT_EDGE or GROW_RIGHT_EDGE and edge == 0) {
                 dx = 0f
@@ -225,8 +226,8 @@ internal class HighlightView(  // View displaying image
             }
 
             // Convert to image space before sending to growBy()
-            val xDelta = dx * (cropRect.width() / r.width())
-            val yDelta = dy * (cropRect.height() / r.height())
+            val xDelta = dx * ((cropRect?.width() ?:0F) / (r?.width() ?:0))
+            val yDelta = dy * (cropRect?.height() ?:0F) / (r?.height()?:0)
             growBy((if (edge and GROW_LEFT_EDGE != 0) -1 else 1) * xDelta,
                     (if (edge and GROW_TOP_EDGE != 0) -1 else 1) * yDelta)
         }
@@ -235,19 +236,19 @@ internal class HighlightView(  // View displaying image
     // Grows the cropping rectangle by (dx, dy) in image space
     fun moveBy(dx: Float, dy: Float) {
         val invalRect = Rect(drawRect)
-        cropRect.offset(dx, dy)
+        cropRect?.offset(dx, dy)
 
         // Put the cropping rectangle inside image rectangle
-        cropRect.offset(
-                Math.max(0f, imageRect.left - cropRect.left),
-                Math.max(0f, imageRect.top - cropRect.top))
-        cropRect.offset(
-                Math.min(0f, imageRect.right - cropRect.right),
-                Math.min(0f, imageRect.bottom - cropRect.bottom))
+        cropRect?.offset(
+                Math.max(0f, (imageRect?.left ?:0F) - (cropRect?.left ?:0F)),
+                Math.max(0f, (imageRect?.top ?:0F) - (cropRect?.top ?:0F)))
+        cropRect?.offset(
+                Math.min(0f, (imageRect?.right ?:0F) - (cropRect?.right ?:0F)),
+                Math.min(0f, (imageRect?.bottom ?:0F) - (cropRect?.bottom ?:0F)))
         drawRect = computeLayout()
-        invalRect.union(drawRect)
-        invalRect.inset(-handleRadius as Int, -handleRadius as Int)
-        viewContext.invalidate(invalRect)
+        drawRect?.let { invalRect.union(it) }
+        invalRect.inset(-handleRadius.toInt(), -handleRadius.toInt())
+        viewContext?.invalidate(invalRect)
     }
 
     // Grows the cropping rectangle by (dx, dy) in image space.
@@ -266,14 +267,14 @@ internal class HighlightView(  // View displaying image
         // Grow at most half of the difference between the image rectangle and
         // the cropping rectangle.
         val r = RectF(cropRect)
-        if (dx > 0f && r.width() + 2 * dx > imageRect.width()) {
-            dx = (imageRect.width() - r.width()) / 2f
+        if (dx > 0f && r.width() + 2 * dx > (imageRect?.width() ?:0F)) {
+            dx = ((imageRect?.width() ?:0F) - r.width()) / 2f
             if (maintainAspectRatio) {
                 dy = dx / initialAspectRatio
             }
         }
-        if (dy > 0f && r.height() + 2 * dy > imageRect.height()) {
-            dy = (imageRect.height() - r.height()) / 2f
+        if (dy > 0f && r.height() + 2 * dy > (imageRect?.height() ?:0F)) {
+            dy = ((imageRect?.height() ?:0F) - r.height()) / 2f
             if (maintainAspectRatio) {
                 dx = dy * initialAspectRatio
             }
@@ -291,34 +292,34 @@ internal class HighlightView(  // View displaying image
         }
 
         // Put the cropping rectangle inside the image rectangle
-        if (r.left < imageRect.left) {
-            r.offset(imageRect.left - r.left, 0f)
-        } else if (r.right > imageRect.right) {
-            r.offset(-(r.right - imageRect.right), 0f)
+        if (r.left < imageRect?.left ?: 0F) {
+            r.offset((imageRect?.left ?: 0F) - r.left, 0f)
+        } else if (r.right > imageRect?.right ?:0F) {
+            r.offset(-(r.right - (imageRect?.right ?:0F)), 0f)
         }
-        if (r.top < imageRect.top) {
-            r.offset(0f, imageRect.top - r.top)
-        } else if (r.bottom > imageRect.bottom) {
-            r.offset(0f, -(r.bottom - imageRect.bottom))
+        if (r.top < (imageRect?.top ?:0F)) {
+            r.offset(0f, (imageRect?.top ?:0F) - r.top)
+        } else if (r.bottom > (imageRect?.bottom ?:0F)) {
+            r.offset(0f, -(r.bottom - (imageRect?.bottom ?:0F)))
         }
-        cropRect.set(r)
+        cropRect?.set(r)
         drawRect = computeLayout()
-        viewContext.invalidate()
+        viewContext?.invalidate()
     }
 
     // Returns the cropping rectangle in image space with specified scale
-    fun getScaledCropRect(scale: Float): Rect? {
-        return Rect((cropRect.left * scale) as Int, (cropRect.top * scale) as Int,
-                (cropRect.right * scale) as Int, (cropRect.bottom * scale) as Int)
+    fun getScaledCropRect(scale: Float): Rect {
+        return Rect(((cropRect?.left ?:0F) * scale).toInt(), ((cropRect?.top ?:0F) * scale).toInt(),
+                ((cropRect?.right ?:0F) * scale).toInt(), ((cropRect?.bottom ?:0F) * scale).toInt())
     }
 
     // Maps the cropping rectangle from image space to screen space
-    private fun computeLayout(): Rect? {
-        val r = RectF(cropRect.left, cropRect.top,
-                cropRect.right, cropRect.bottom)
-        matrix.mapRect(r)
-        return Rect(Math.round(r.left), Math.round(r.top),
-                Math.round(r.right), Math.round(r.bottom))
+    private fun computeLayout(): Rect {
+        val r = RectF((cropRect?.left ?:0F), (cropRect?.top ?:0F),
+                (cropRect?.right ?:0F), (cropRect?.bottom ?:0F))
+        matrix?.mapRect(r)
+        return Rect(r.left.roundToInt(), r.top.roundToInt(),
+                r.right.roundToInt(), r.bottom.roundToInt())
     }
 
     fun invalidate() {
@@ -346,6 +347,6 @@ internal class HighlightView(  // View displaying image
     }
 
     init {
-        initStyles(viewContext.getContext())
+        initStyles(viewContext?.context)
     }
 }

@@ -1,27 +1,43 @@
 package tpcreative.co.qrscanner.ui.save
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.util.Log
+import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.client.result.ParsedResultType
+import com.jaychang.srv.decoration.SectionHeaderProvider
+import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
+import kotlinx.android.synthetic.main.fragment_saver.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.model.Create
-import tpcreative.co.qrscanner.model.SaveModel
-import tpcreative.co.qrscanner.model.Theme
+import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.create.*
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.viewmodel.SaveViewModel
 import java.io.File
 import java.util.*
 
-class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener, MainSingleton.SingleTonMainListener {
-    private var presenter: SavePresenter? = null
+class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener, MainSingleton.SingleTonMainListener {
     private var bitmap: Bitmap? = null
     private var code: String? = null
     private var share: SaveModel? = null
@@ -29,14 +45,15 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
     private var isDeleted = false
     private var isSelectedAll = false
     private var actionMode: ActionMode? = null
-    private val callback: ActionMode.Callback? = object : ActionMode.Callback {
+    lateinit var viewModel : SaveViewModel
+    private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.getMenuInflater()
             menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window = QRScannerApplication.getInstance()?.getActivity()?.window!!
-                window.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
+                val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
+                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
             }
             return true
         }
@@ -46,27 +63,27 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            when (item?.getItemId()) {
+            when (item?.itemId) {
                 R.id.menu_item_select_all -> {
-                    val list: MutableList<SaveModel?>? = presenter?.getListGroup()
-                    presenter?.mList?.clear()
+                    val list: MutableList<SaveModel> = viewModel.getListGroup()
+                    viewModel.mList.clear()
                     isSelectedAll = if (isSelectedAll) {
                         for (index in list) {
                             index.setDeleted(true)
                             index.setChecked(false)
-                            presenter.mList.add(index)
+                            viewModel.mList.add(index)
                         }
                         false
                     } else {
                         for (index in list) {
                             index.setDeleted(true)
                             index.setChecked(true)
-                            presenter.mList.add(index)
+                            viewModel.mList.add(index)
                         }
                         true
                     }
                     if (actionMode != null) {
-                        actionMode.setTitle(presenter.getCheckedCount().toString() + " " + getString(R.string.selected))
+                        actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
                     }
                     recyclerView.removeAllCells()
                     bindData()
@@ -74,13 +91,13 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
                 }
                 R.id.menu_item_delete -> {
                     Utils.Log(TAG, "Delete call here")
-                    val listSave: MutableList<SaveModel?> = SQLiteHelper.getSaveList()
+                    val listSave: MutableList<SaveModel> = SQLiteHelper.getSaveList()
                     if (listSave.size == 0) {
                         Utils.Log(TAG, "Delete call here ???")
                         return false
                     }
                     Utils.Log(TAG, "start")
-                    if (presenter.getCheckedCount() > 0) {
+                    if (viewModel.getCheckedCount() > 0) {
                         dialogDelete()
                     }
                     return true
@@ -92,46 +109,42 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
         override fun onDestroyActionMode(mode: ActionMode?) {
             actionMode = null
             isSelectedAll = false
-            val list: MutableList<SaveModel?>? = presenter.getListGroup()
-            presenter.mList.clear()
+            val list: MutableList<SaveModel> = viewModel.getListGroup()
+            viewModel.mList.clear()
             for (index in list) {
                 index.setDeleted(false)
-                presenter.mList.add(index)
+                viewModel.mList.add(index)
             }
             recyclerView.removeAllCells()
             bindData()
             isDeleted = false
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window = QRScannerApplication.Companion.getInstance().getActivity().getWindow()
-                window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
+                val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
+                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
             }
         }
     }
 
-    protected override fun getLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return 0
     }
 
-    protected override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater.inflate(R.layout.fragment_saver, viewGroup, false)
+    override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
+        return inflater?.inflate(R.layout.fragment_saver, viewGroup, false)
     }
 
-    protected override fun work() {
+    override fun work() {
         super.work()
-        SaveSingleton.Companion.getInstance().setListener(this)
-        presenter = SavePresenter()
-        presenter.bindView(this)
-        presenter.getListGroup()
-        addRecyclerHeaders()
-        bindData()
+        SaveSingleton.getInstance()?.setListener(this)
+        initUI()
     }
 
-    private fun addRecyclerHeaders() {
+    fun addRecyclerHeaders() {
         val sh: SectionHeaderProvider<SaveModel?> = object : SimpleSectionHeaderProvider<SaveModel?>() {
             override fun getSectionHeaderView(save: SaveModel, i: Int): View {
                 val view: View = LayoutInflater.from(context).inflate(R.layout.save_item_header, null, false)
-                val textView: TextView = view.findViewById<TextView?>(R.id.tvHeader)
-                textView.setText(save.getCategoryName())
+                val textView: TextView = view.findViewById(R.id.tvHeader)
+                textView.text = save.getCategoryName()
                 return view
             }
 
@@ -147,20 +160,18 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
         recyclerView.setSectionHeader(sh)
     }
 
-    private fun bindData() {
-        val mListItems: MutableList<SaveModel?>? = presenter.mList
+    fun bindData() {
+        val mListItems: MutableList<SaveModel> = viewModel.mList
         val cells: MutableList<SaveCell?> = ArrayList()
         for (items in mListItems) {
             val cell = SaveCell(items)
             cell.setListener(this)
             cells.add(cell)
         }
-        if (mListItems != null) {
-            if (mListItems.size > 0) {
-                tvNotFoundItems.setVisibility(View.INVISIBLE)
-            } else {
-                tvNotFoundItems.setVisibility(View.VISIBLE)
-            }
+        if (mListItems.size > 0) {
+            tvNotFoundItems.visibility = View.INVISIBLE
+        } else {
+            tvNotFoundItems.visibility = View.VISIBLE
         }
         recyclerView.addCells(cells)
     }
@@ -170,31 +181,28 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
     }
 
     override fun getContext(): Context? {
-        return getActivity()
+        return activity
     }
 
     override fun isShowDeleteAction(isDelete: Boolean) {
-        val listSave: MutableList<SaveModel?> = SQLiteHelper.getSaveList()
+        val listSave: MutableList<SaveModel> = SQLiteHelper.getSaveList()
         if (isDelete) {
             if (actionMode == null) {
-                actionMode = QRScannerApplication.Companion.getInstance().getActivity().getToolbar().startActionMode(callback)
+                actionMode = QRScannerApplication.getInstance().getActivity()?.getToolbar()?.startActionMode(callback)
             }
             if (listSave.size == 0) {
                 return
             }
-            val list: MutableList<SaveModel?>? = presenter.getListGroup()
-            presenter.mList.clear()
+            val list: MutableList<SaveModel> = viewModel.getListGroup()
+            viewModel.mList.clear()
             for (index in list) {
                 index.setDeleted(true)
-                presenter.mList.add(index)
+                viewModel.mList.add(index)
             }
             recyclerView.removeAllCells()
             bindData()
             isDeleted = true
         } else {
-            if (listSave == null) {
-                return
-            }
             if (listSave.size == 0) {
                 return
             }
@@ -203,29 +211,28 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
     }
 
     override fun onClickItem(position: Int, isChecked: Boolean) {
-        Log.d(TAG, "position : $position - $isChecked")
-        val result = presenter.mList[position].isDeleted
-        presenter.mList[position].isChecked = isChecked
+        val result = viewModel.mList[position].isDeleted()
+        viewModel.mList[position].setChecked(isChecked)
         if (result) {
             if (actionMode != null) {
-                actionMode.setTitle(presenter.getCheckedCount().toString() + " " + getString(R.string.selected))
+                actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
             }
         }
     }
 
     override fun onLongClickItem(position: Int) {
         if (actionMode == null) {
-            actionMode = QRScannerApplication.Companion.getInstance().getActivity().getToolbar().startActionMode(callback)
+            actionMode = QRScannerApplication.getInstance().getActivity()?.getToolbar()?.startActionMode(callback)
         }
-        val list: MutableList<SaveModel?>? = presenter.getListGroup()
-        presenter.mList.clear()
+        val list: MutableList<SaveModel> = viewModel.getListGroup()
+        viewModel.mList.clear()
         for (index in list) {
             index.setDeleted(true)
-            presenter.mList.add(index)
+            viewModel.mList.add(index)
         }
-        presenter.mList[position].isChecked = true
+        viewModel.mList[position].setChecked(true)
         if (actionMode != null) {
-            actionMode.setTitle(presenter.getCheckedCount().toString() + " " + getString(R.string.selected))
+            actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
         }
         recyclerView.removeAllCells()
         bindData()
@@ -237,7 +244,7 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
             return
         }
         val create = Create()
-        val save: SaveModel? = presenter.mList[position]
+        val save: SaveModel = viewModel.mList[position]
         if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
             create.productId = save.text
             create.barcodeFormat = save.barcodeFormat
@@ -260,14 +267,14 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
             create.url = save.url
             create.createType = ParsedResultType.URI
         } else if (save.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            create.hidden = save.hidden
+            create.hidden = save.hidden == true
             create.ssId = save.ssId
             create.networkEncryption = save.networkEncryption
             create.password = save.password
             create.createType = ParsedResultType.WIFI
         } else if (save.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            create.lat = save.lat
-            create.lon = save.lon
+            create.lat = save.lat ?:0.0
+            create.lon = save.lon ?:0.0
             create.query = save.query
             create.createType = ParsedResultType.GEO
         } else if (save.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
@@ -283,8 +290,8 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
             create.location = save.location
             create.startEvent = save.startEvent
             create.endEvent = save.endEvent
-            create.startEventMilliseconds = save.startEventMilliseconds
-            create.endEventMilliseconds = save.endEventMilliseconds
+            create.startEventMilliseconds = save.startEventMilliseconds ?:0
+            create.endEventMilliseconds = save.endEventMilliseconds ?:0
             create.createType = ParsedResultType.CALENDAR
         } else {
             create.text = save.text
@@ -292,80 +299,80 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
         }
         Utils.Log(TAG, "Call intent")
         create.fragmentType = EnumFragmentType.SAVER
-        Navigator.onResultView<ScannerResultFragment?>(getActivity(), create, ScannerResultFragment::class.java)
+        Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
     }
 
     override fun onClickShare(position: Int) {
-        share = presenter.mList[position]
-        if (share.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            code = "MECARD:N:" + share.fullName + ";TEL:" + share.phone + ";EMAIL:" + share.email + ";ADR:" + share.address + ";"
-        } else if (share.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            code = "MATMSG:TO:" + share.email + ";SUB:" + share.subject + ";BODY:" + share.message + ";"
-        } else if (share.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-        } else if (share.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            code = share.url
-        } else if (share.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            code = "WIFI:S:" + share.ssId + ";T:" + share.password + ";P:" + share.networkEncryption + ";H:" + share.hidden + ";"
-        } else if (share.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            code = "geo:" + share.lat + "," + share.lon + "?q=" + share.query + ""
-        } else if (share.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            code = "tel:" + share.phone + ""
-        } else if (share.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            code = "smsto:" + share.phone + ":" + share.message
-        } else if (share.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
+        share = viewModel.mList[position]
+        if (share?.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
+            code = "MECARD:N:" + share?.fullName + ";TEL:" + share?.phone + ";EMAIL:" + share?.email + ";ADR:" + share?.address + ";"
+        } else if (share?.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
+            code = "MATMSG:TO:" + share?.email + ";SUB:" + share?.subject + ";BODY:" + share?.message + ";"
+        } else if (share?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+        } else if (share?.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
+            code = share?.url
+        } else if (share?.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
+            code = "WIFI:S:" + share?.ssId + ";T:" + share?.password + ";P:" + share?.networkEncryption + ";H:" + share?.hidden + ";"
+        } else if (share?.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
+            code = "geo:" + share?.lat + "," + share?.lon + "?q=" + share?.query + ""
+        } else if (share?.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
+            code = "tel:" + share?.phone + ""
+        } else if (share?.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
+            code = "smsto:" + share?.phone + ":" + share?.message
+        } else if (share?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
             val builder = StringBuilder()
             builder.append("BEGIN:VEVENT")
             builder.append("\n")
-            builder.append("SUMMARY:" + share.title)
+            builder.append("SUMMARY:" + share?.title)
             builder.append("\n")
-            builder.append("DTSTART:" + share.startEvent)
+            builder.append("DTSTART:" + share?.startEvent)
             builder.append("\n")
-            builder.append("DTEND:" + share.endEvent)
+            builder.append("DTEND:" + share?.endEvent)
             builder.append("\n")
-            builder.append("LOCATION:" + share.location)
+            builder.append("LOCATION:" + share?.location)
             builder.append("\n")
-            builder.append("DESCRIPTION:" + share.description)
+            builder.append("DESCRIPTION:" + share?.description)
             builder.append("\n")
             builder.append("END:VEVENT")
             code = builder.toString()
-        } else if (share.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            code = share.text
+        } else if (share?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+            code = share?.text
         } else {
-            code = share.text
+            code = share?.text
         }
         onGenerateCode(code)
     }
 
     override fun onClickEdit(position: Int) {
-        edit = presenter.mList[position]
-        if (edit.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            Navigator.onGenerateView<BarcodeFragment?>(getActivity(), edit, BarcodeFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            Navigator.onGenerateView<ContactFragment?>(getActivity(), edit, ContactFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            Navigator.onGenerateView<EmailFragment?>(getActivity(), edit, EmailFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-        } else if (edit.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            Navigator.onGenerateView<UrlFragment?>(getActivity(), edit, UrlFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            Navigator.onGenerateView<WifiFragment?>(getActivity(), edit, WifiFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            Navigator.onGenerateView<LocationFragment?>(getActivity(), edit, LocationFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            Navigator.onGenerateView<TelephoneFragment?>(getActivity(), edit, TelephoneFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            Navigator.onGenerateView<MessageFragment?>(getActivity(), edit, MessageFragment::class.java)
-        } else if (edit.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            Navigator.onGenerateView<EventFragment?>(getActivity(), edit, EventFragment::class.java)
+        edit = viewModel.mList[position]
+        if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, BarcodeFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, ContactFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, EmailFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+        } else if (edit?.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, UrlFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, WifiFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, LocationFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, TelephoneFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, MessageFragment::class.java)
+        } else if (edit?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
+            Navigator.onGenerateView(activity, edit, EventFragment::class.java)
         } else {
-            Navigator.onGenerateView<TextFragment?>(getActivity(), edit, TextFragment::class.java)
+            Navigator.onGenerateView(activity, edit, TextFragment::class.java)
         }
     }
 
     fun shareToSocial(value: Uri?) {
         val intent = Intent()
-        intent.setAction(Intent.ACTION_SEND)
-        intent.setType("image/*")
+        intent.action = Intent.ACTION_SEND
+        intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_STREAM, value)
         startActivity(Intent.createChooser(intent, "Share"))
     }
@@ -373,38 +380,34 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
     fun onGenerateCode(code: String?) {
         try {
             val barcodeEncoder = BarcodeEncoder()
-            val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType?, Any?>(EncodeHintType::class.java)
+            val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
             hints[EncodeHintType.MARGIN] = 2
-            val theme: Theme = Theme.Companion.getInstance().getThemeInfo()
-            bitmap = if (share.createType === ParsedResultType.PRODUCT.name) {
-                barcodeEncoder.encodeBitmap(context, theme.primaryDarkColor, code, BarcodeFormat.valueOf(share.barcodeFormat), 400, 400, hints)
+            val theme: Theme? = Theme.getInstance()?.getThemeInfo()
+            bitmap = if (share?.createType === ParsedResultType.PRODUCT.name) {
+                barcodeEncoder.encodeBitmap(context, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.valueOf(share?.barcodeFormat ?: ""), 400, 400, hints)
             } else {
-                barcodeEncoder.encodeBitmap(context, theme.primaryDarkColor, code, BarcodeFormat.QR_CODE, 400, 400, hints)
+                barcodeEncoder.encodeBitmap(context, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.QR_CODE, 400, 400, hints)
             }
-            Utils.saveImage(bitmap, EnumAction.SHARE, share.createType, code, this)
+            Utils.saveImage(bitmap, EnumAction.SHARE, share?.createType, code, this)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     override fun onSaved(path: String?, enumAction: EnumAction?) {
-        Log.d(TAG, "path : $path")
         val file = File(path)
         if (file.isFile) {
             val uri = Uri.fromFile(file)
             shareToSocial(uri)
         } else {
-            //Utils.showGotItSnackbar(getView(), R.string.no_items_found);
-            Utils.onDropDownAlert(getActivity(), getString(R.string.no_items_found))
+            Utils.onDropDownAlert(activity, getString(R.string.no_items_found))
         }
     }
 
     override fun reloadData() {
-        if (presenter != null && recyclerView != null) {
-            presenter.getListGroup()
-            recyclerView.removeAllCells()
-            bindData()
-        }
+        viewModel.getListGroup()
+        recyclerView.removeAllCells()
+        bindData()
     }
 
     fun onAddPermissionSave() {
@@ -414,14 +417,13 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report.areAllPermissionsGranted()) {
-                            ServiceManager.Companion.getInstance().onExportDatabaseCSVTask(EnumFragmentType.SAVER, object : ServiceManagerListener {
+                        if (report?.areAllPermissionsGranted() == true) {
+                            ServiceManager.getInstance()?.onExportDatabaseCSVTask(EnumFragmentType.SAVER, object : ServiceManager.ServiceManagerListener {
                                 override fun onExportingSVCCompleted(path: String?) {
                                     val file = File(path)
                                     if (file.isFile) {
-                                        Log.d(TAG, "path : $path")
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            val uri: Uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
+                                            val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
                                             shareToSocial(uri)
                                         } else {
                                             val uri = Uri.fromFile(file)
@@ -431,63 +433,59 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
                                 }
                             })
                         } else {
-                            Log.d(TAG, "Permission is denied")
+                            Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report.isAnyPermissionPermanentlyDenied()) {
+                        if (report?.isAnyPermissionPermanentlyDenied == true) {
                             /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed")
+                            Utils.Log(TAG, "request permission is failed")
                         }
                     }
 
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
                         /* ... */
-                        token.continuePermissionRequest()
+                        token?.continuePermissionRequest()
                     }
                 })
-                .withErrorListener(object : PermissionRequestErrorListener {
-                    override fun onError(error: DexterError?) {
-                        Log.d(TAG, "error ask permission")
-                    }
-                }).onSameThread().check()
+                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            Log.d(TAG, "isVisible")
-            MainSingleton.Companion.getInstance().setListener(this)
-            QRScannerApplication.Companion.getInstance().getActivity().onShowFloatingButton(this@SaverFragment, true)
+            Utils.Log(TAG, "isVisible")
+            MainSingleton.getInstance()?.setListener(this)
+            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@SaveFragment, true)
         } else {
-            MainSingleton.Companion.getInstance().setListener(null)
+            MainSingleton.getInstance()?.setListener(null)
             if (actionMode != null) {
-                actionMode.finish()
+                actionMode?.finish()
             }
-            Log.d(TAG, "isInVisible")
+            Utils.Log(TAG, "isInVisible")
         }
     }
 
     fun dialogDelete() {
-        val builder = MaterialDialog.Builder(context, Utils.getCurrentTheme())
+        val builder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
         builder.setTitle(getString(R.string.delete))
-        builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), presenter.getCheckedCount().toString() + ""))
+        builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
         builder.setNegativeButton(getString(R.string.no), object : DialogInterface.OnClickListener {
             override fun onClick(dialogInterface: DialogInterface?, i: Int) {}
         })
         builder.setPositiveButton(getString(R.string.yes), object : DialogInterface.OnClickListener {
             override fun onClick(dialogInterface: DialogInterface?, i: Int) {
-                presenter.deleteItem()
+                deleteItem()
                 isSelectedAll = false
                 isDeleted = false
                 if (actionMode != null) {
-                    actionMode.finish()
+                    actionMode?.finish()
                 }
             }
         })
         builder.show()
     }
 
-    override fun updateView() {
+    fun updateView() {
         recyclerView.removeAllCells()
         bindData()
     }
@@ -513,12 +511,12 @@ class SaverFragment : BaseFragment(), SaveView, SaveCell.ItemSelectedListener, S
     }
 
     companion object {
-        private val TAG = SaverFragment::class.java.simpleName
-        fun newInstance(index: Int): SaverFragment? {
-            val fragment = SaverFragment()
+        private val TAG = SaveFragment::class.java.simpleName
+        fun newInstance(index: Int): SaveFragment {
+            val fragment = SaveFragment()
             val b = Bundle()
             b.putInt("index", index)
-            fragment.setArguments(b)
+            fragment.arguments = b
             return fragment
         }
     }

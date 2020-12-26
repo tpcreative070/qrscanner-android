@@ -46,8 +46,8 @@ internal class RotateBitmap(private var bitmap: Bitmap?, rotation: Int) {
             // We want to do the rotation at origin, but since the bounding
             // rectangle will be changed after rotation, so the delta values
             // are based on old & new width/height respectively.
-            val cx = bitmap.getWidth() / 2
-            val cy = bitmap.getHeight() / 2
+            val cx = (bitmap?.width ?:0) / 2
+            val cy = (bitmap?.height ?:0) / 2
             matrix.preTranslate(-cx.toFloat(), -cy.toFloat())
             matrix.postRotate(rotation.toFloat())
             matrix.postTranslate((getWidth() / 2).toFloat(), (getHeight() / 2).toFloat())
@@ -62,24 +62,24 @@ internal class RotateBitmap(private var bitmap: Bitmap?, rotation: Int) {
     fun getHeight(): Int {
         if (bitmap == null) return 0
         return if (isOrientationChanged()) {
-            bitmap.getWidth()
+            bitmap?.width ?:0
         } else {
-            bitmap.getHeight()
+            bitmap?.height ?:0
         }
     }
 
     fun getWidth(): Int {
         if (bitmap == null) return 0
         return if (isOrientationChanged()) {
-            bitmap.getHeight()
+            bitmap?.height ?:0
         } else {
-            bitmap.getWidth()
+            bitmap?.width ?:0
         }
     }
 
     fun recycle() {
         if (bitmap != null) {
-            bitmap.recycle()
+            bitmap?.recycle()
             bitmap = null
         }
     }

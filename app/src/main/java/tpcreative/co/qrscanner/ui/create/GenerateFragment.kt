@@ -134,7 +134,7 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener, Gene
 
     companion object {
         private val TAG = GenerateFragment::class.java.simpleName
-        fun newInstance(index: Int): GenerateFragment? {
+        fun newInstance(index: Int): GenerateFragment {
             val fragment = GenerateFragment()
             val b = Bundle()
             b.putInt("index", index)

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package tpcreative.co.qrscanner.common.view.crop
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -24,7 +23,6 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.KeyEvent
 import androidx.appcompat.widget.AppCompatImageView
-
 /*
  * Modified from original in AOSP.
  */
@@ -47,36 +45,36 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
 
     // This is the final matrix which is computed as the concatentation
     // of the base matrix and the supplementary matrix.
-    private val displayMatrix: Matrix? = Matrix()
+    private val displayMatrix: Matrix = Matrix()
 
     // Temporary buffer used for getting the values out of a matrix.
-    private val matrixValues: FloatArray? = FloatArray(9)
+    private val matrixValues: FloatArray = FloatArray(9)
 
     // The current bitmap being displayed.
-    protected val bitmapDisplayed: RotateBitmap? = RotateBitmap(null, 0)
+    protected val bitmapDisplayed: RotateBitmap = RotateBitmap(null, 0)
     var thisWidth = -1
     var thisHeight = -1
     var maxZoom = 0f
     private var onLayoutRunnable: Runnable? = null
-    protected var handler: Handler? = Handler(Looper.getMainLooper())
+    protected var mHandler: Handler = Handler(Looper.getMainLooper())
 
     // ImageViewTouchBase will pass a Bitmap to the Recycler if it has finished
     // its use of that Bitmap
     interface Recycler {
-        open fun recycle(b: Bitmap?)
+        fun recycle(b: Bitmap?)
     }
 
     private var recycler: Recycler? = null
 
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context) : super(context) {
         init()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
         init()
     }
 
@@ -100,7 +98,7 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event?.getRepeatCount() == 0) {
             event.startTracking()
             return true
         }
@@ -108,7 +106,7 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking() && !event.isCanceled()) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event?.isTracking == true && !event.isCanceled) {
             if (getScale() > 1.0f) {
                 // If we're zoomed in, pressing Back jumps out to show the
                 // entire image, otherwise Back returns the user to the gallery
@@ -131,7 +129,7 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         bitmapDisplayed.setBitmap(bitmap)
         bitmapDisplayed.setRotation(rotation)
         if (old != null && old != bitmap && recycler != null) {
-            recycler.recycle(old)
+            recycler?.recycle(old)
         }
     }
 
@@ -151,15 +149,15 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
             onLayoutRunnable = Runnable { setImageRotateBitmapResetBase(bitmap, resetSupp) }
             return
         }
-        if (bitmap.getBitmap() != null) {
+        if (bitmap?.getBitmap() != null) {
             getProperBaseMatrix(bitmap, baseMatrix, true)
             setImageBitmap(bitmap.getBitmap(), bitmap.getRotation())
         } else {
-            baseMatrix.reset()
+            baseMatrix?.reset()
             setImageBitmap(null)
         }
         if (resetSupp) {
-            suppMatrix.reset()
+            suppMatrix?.reset()
         }
         imageMatrix = getImageViewMatrix()
         maxZoom = calculateMaxZoom()
@@ -171,8 +169,8 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
     fun center() {
         val bitmap = bitmapDisplayed.getBitmap() ?: return
         val m = getImageViewMatrix()
-        val rect = RectF(0, 0, bitmap.width, bitmap.height)
-        m.mapRect(rect)
+        val rect = RectF(0F, 0F, bitmap.width.toFloat(), bitmap.height.toFloat())
+        m?.mapRect(rect)
         val height = rect.height()
         val width = rect.width()
         var deltaX = 0f
@@ -187,11 +185,11 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         var deltaY = deltaY
         val viewHeight = getHeight()
         if (height < viewHeight) {
-            deltaY = (viewHeight - height) / 2 - rect.top
-        } else if (rect.top > 0) {
-            deltaY = -rect.top
-        } else if (rect.bottom < viewHeight) {
-            deltaY = getHeight() - rect.bottom
+            deltaY = (viewHeight - height) / 2 - (rect?.top ?:0F)
+        } else if ((rect?.top ?:0F) > 0) {
+            deltaY = -(rect?.top ?:0F)
+        } else if ((rect?.bottom ?:0F) < viewHeight) {
+            deltaY = getHeight() - (rect?.bottom ?:0F)
         }
         return deltaY
     }
@@ -200,11 +198,11 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         var deltaX = deltaX
         val viewWidth = getWidth()
         if (width < viewWidth) {
-            deltaX = (viewWidth - width) / 2 - rect.left
-        } else if (rect.left > 0) {
-            deltaX = -rect.left
-        } else if (rect.right < viewWidth) {
-            deltaX = viewWidth - rect.right
+            deltaX = (viewWidth - width) / 2 - (rect?.left ?: 0F)
+        } else if ((rect?.left ?:0F) > 0) {
+            deltaX = -(rect?.left ?:0F)
+        } else if ((rect?.right ?:0F) < viewWidth) {
+            deltaX = viewWidth - (rect?.right ?:0F)
         }
         return deltaX
     }
@@ -214,8 +212,8 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
     }
 
     protected fun getValue(matrix: Matrix?, whichValue: Int): Float {
-        matrix.getValues(matrixValues)
-        return matrixValues.get(whichValue)
+        matrix?.getValues(matrixValues)
+        return matrixValues.get(whichValue) ?:0F
     }
 
     // Get the scale factor out of the matrix.
@@ -231,23 +229,23 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
     private fun getProperBaseMatrix(bitmap: RotateBitmap?, matrix: Matrix?, includeRotation: Boolean) {
         val viewWidth = width.toFloat()
         val viewHeight = height.toFloat()
-        val w = bitmap.getWidth().toFloat()
-        val h = bitmap.getHeight().toFloat()
-        matrix.reset()
+        val w = bitmap?.getWidth()?.toFloat() ?:0F
+        val h = bitmap?.getHeight()?.toFloat() ?:0F
+        matrix?.reset()
 
         // We limit up-scaling to 3x otherwise the result may look bad if it's a small icon
         val widthScale = Math.min(viewWidth / w, 3.0f)
         val heightScale = Math.min(viewHeight / h, 3.0f)
-        val scale = Math.min(widthScale, heightScale)
+        val scale = widthScale.coerceAtMost(heightScale)
         if (includeRotation) {
-            matrix.postConcat(bitmap.getRotateMatrix())
+            matrix?.postConcat(bitmap?.getRotateMatrix())
         }
-        matrix.postScale(scale, scale)
-        matrix.postTranslate((viewWidth - w * scale) / 2f, (viewHeight - h * scale) / 2f)
+        matrix?.postScale(scale, scale)
+        matrix?.postTranslate((viewWidth - w * scale) / 2f, (viewHeight - h * scale) / 2f)
     }
 
     // Combine the base matrix and the supp matrix to make the final matrix
-    protected fun getImageViewMatrix(): Matrix? {
+    protected fun getImageViewMatrix(): Matrix {
         // The final matrix is computed as the concatentation of the base matrix
         // and the supplementary matrix
         displayMatrix.set(baseMatrix)
@@ -255,7 +253,7 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         return displayMatrix
     }
 
-    fun getUnrotatedMatrix(): Matrix? {
+    fun getUnrotatedMatrix(): Matrix {
         val unrotated = Matrix()
         getProperBaseMatrix(bitmapDisplayed, unrotated, false)
         unrotated.postConcat(suppMatrix)
@@ -266,9 +264,9 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         if (bitmapDisplayed.getBitmap() == null) {
             return 1f
         }
-        val fw = bitmapDisplayed.getWidth() as Float / thisWidth as Float
-        val fh = bitmapDisplayed.getHeight() as Float / thisHeight as Float
-        return Math.max(fw, fh) * 4 // 400%
+        val fw = bitmapDisplayed.getWidth().toFloat() / thisWidth.toFloat()
+        val fh = bitmapDisplayed.getHeight().toFloat() / thisHeight.toFloat()
+        return fw.coerceAtLeast(fh) * 4 // 400%
     }
 
     protected open fun zoomTo(scale: Float, centerX: Float, centerY: Float) {
@@ -278,7 +276,7 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         }
         val oldScale = getScale()
         val deltaScale = scale / oldScale
-        suppMatrix.postScale(deltaScale, deltaScale, centerX, centerY)
+        suppMatrix?.postScale(deltaScale, deltaScale, centerX, centerY)
         imageMatrix = getImageViewMatrix()
         center()
     }
@@ -288,14 +286,14 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         val incrementPerMs = (scale - getScale()) / durationMs
         val oldScale = getScale()
         val startTime = System.currentTimeMillis()
-        handler.post(object : Runnable {
+        mHandler.post(object : Runnable {
             override fun run() {
                 val now = System.currentTimeMillis()
-                val currentMs = Math.min(durationMs, (now - startTime).toFloat())
+                val currentMs = durationMs.coerceAtMost((now - startTime).toFloat())
                 val target = oldScale + incrementPerMs * currentMs
                 zoomTo(target, centerX, centerY)
                 if (currentMs < durationMs) {
-                    handler.post(this)
+                    mHandler.post(this)
                 }
             }
         })
@@ -319,17 +317,17 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         if (getScale() >= maxZoom) {
             return  // Don't let the user zoom into the molecular level
         }
-        if (bitmapDisplayed.getBitmap() == null) {
+        if (bitmapDisplayed?.getBitmap() == null) {
             return
         }
         val cx = width / 2f
         val cy = height / 2f
-        suppMatrix.postScale(rate, rate, cx, cy)
+        suppMatrix?.postScale(rate, rate, cx, cy)
         imageMatrix = getImageViewMatrix()
     }
 
     protected fun zoomOut(rate: Float) {
-        if (bitmapDisplayed.getBitmap() == null) {
+        if (bitmapDisplayed?.getBitmap() == null) {
             return
         }
         val cx = width / 2f
@@ -339,16 +337,16 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         val tmp = Matrix(suppMatrix)
         tmp.postScale(1f / rate, 1f / rate, cx, cy)
         if (getScale(tmp) < 1f) {
-            suppMatrix.setScale(1f, 1f, cx, cy)
+            suppMatrix?.setScale(1f, 1f, cx, cy)
         } else {
-            suppMatrix.postScale(1f / rate, 1f / rate, cx, cy)
+            suppMatrix?.postScale(1f / rate, 1f / rate, cx, cy)
         }
         imageMatrix = getImageViewMatrix()
         center()
     }
 
     protected open fun postTranslate(dx: Float, dy: Float) {
-        suppMatrix.postTranslate(dx, dy)
+        suppMatrix?.postTranslate(dx, dy)
     }
 
     protected fun panBy(dx: Float, dy: Float) {

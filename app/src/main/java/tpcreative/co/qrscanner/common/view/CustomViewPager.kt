@@ -10,8 +10,8 @@ class CustomViewPager : ViewPager {
     var mStartDragX = 0f
     var mOnSwipeOutListener: OnSwipeOutListener? = null
 
-    constructor(context: Context?) : super(context) {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor(context: Context) : super(context) {}
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
 
     fun setOnSwipeOutListener(listener: OnSwipeOutListener?) {
         mOnSwipeOutListener = listener
@@ -19,41 +19,43 @@ class CustomViewPager : ViewPager {
 
     private fun onSwipeOutAtStart() {
         if (mOnSwipeOutListener != null) {
-            mOnSwipeOutListener.onSwipeOutAtStart()
+            mOnSwipeOutListener?.onSwipeOutAtStart()
         }
     }
 
     private fun onSwipeMove() {
         if (mOnSwipeOutListener != null) {
-            mOnSwipeOutListener.onSwipeMove()
+            mOnSwipeOutListener?.onSwipeMove()
         }
     }
 
     private fun onSwipeOutAtEnd() {
         if (mOnSwipeOutListener != null) {
-            mOnSwipeOutListener.onSwipeOutAtEnd()
+            mOnSwipeOutListener?.onSwipeOutAtEnd()
         }
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        when (ev.getAction() and MotionEventCompat.ACTION_MASK) {
-            MotionEvent.ACTION_DOWN -> mStartDragX = ev.getX()
+        when (ev?.action?.and(MotionEventCompat.ACTION_MASK)) {
+            MotionEvent.ACTION_DOWN -> mStartDragX = ev.x
         }
         return super.onInterceptTouchEvent(ev)
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        if (currentItem == 0 || currentItem == adapter.getCount() - 1) {
-            val action = ev.getAction()
-            val x = ev.getX()
-            when (action and MotionEventCompat.ACTION_MASK) {
-                MotionEvent.ACTION_MOVE -> onSwipeMove()
-                MotionEvent.ACTION_UP -> {
-                    if (currentItem == 0 && x > mStartDragX) {
-                        onSwipeOutAtStart()
-                    }
-                    if (currentItem == adapter.getCount() - 1 && x < mStartDragX) {
-                        onSwipeOutAtEnd()
+        if (currentItem == 0 || currentItem == (adapter?.count ?:0) - 1) {
+            val action = ev?.action
+            val x = ev?.x
+            if (action != null) {
+                when (action and MotionEventCompat.ACTION_MASK) {
+                    MotionEvent.ACTION_MOVE -> onSwipeMove()
+                    MotionEvent.ACTION_UP -> {
+                        if (currentItem == 0 && (x ?:0F) > mStartDragX) {
+                            onSwipeOutAtStart()
+                        }
+                        if (currentItem == (adapter?.count ?:0) - 1 && (x ?:0F) < mStartDragX) {
+                            onSwipeOutAtEnd()
+                        }
                     }
                 }
             }
@@ -64,8 +66,8 @@ class CustomViewPager : ViewPager {
     }
 
     interface OnSwipeOutListener {
-        open fun onSwipeOutAtStart()
-        open fun onSwipeOutAtEnd()
-        open fun onSwipeMove()
+        fun onSwipeOutAtStart()
+        fun onSwipeOutAtEnd()
+        fun onSwipeMove()
     }
 }

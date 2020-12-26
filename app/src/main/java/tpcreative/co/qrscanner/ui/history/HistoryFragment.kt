@@ -1,39 +1,55 @@
 package tpcreative.co.qrscanner.ui.history
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.google.zxing.client.result.ParsedResultType
+import com.jaychang.srv.decoration.SectionHeaderProvider
+import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.DexterError
 import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.PermissionRequestErrorListener
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
+import kotlinx.android.synthetic.main.fragment_history.*
 import tpcreative.co.qrscanner.BuildConfig
+import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.Create
+import tpcreative.co.qrscanner.model.EnumFragmentType
+import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 import java.io.File
 import java.util.*
 
-class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedListener, HistorySingleton.SingletonHistoryListener, MainSingleton.SingleTonMainListener {
-    @BindView(R.id.rlRoot)
-    var rlRoot: RelativeLayout? = null
-
-    @BindView(R.id.tvNotFoundItems)
-    var tvNotFoundItems: AppCompatTextView? = null
-
-    @BindView(R.id.recyclerView)
-    var recyclerView: SimpleRecyclerView? = null
-    private var presenter: HistoryPresenter? = null
+class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, HistorySingleton.SingletonHistoryListener, MainSingleton.SingleTonMainListener {
+    lateinit var viewModel : HistoryViewModel
     private var isDeleted = false
     private var isSelectedAll = false
     private var actionMode: ActionMode? = null
-    private val callback: ActionMode.Callback? = object : ActionMode.Callback {
+    private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            val menuInflater: MenuInflater? = mode.getMenuInflater()
-            menuInflater.inflate(R.menu.menu_select_all, menu)
+            val menuInflater: MenuInflater? = mode?.getMenuInflater()
+            menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window = QRScannerApplication.Companion.getInstance().getActivity().getWindow()
-                window.statusBarColor = ContextCompat.getColor(context, R.color.colorAccentDark)
+                val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
+                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
             }
             return true
         }
@@ -43,41 +59,40 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            val i = item.getItemId()
-            when (item.getItemId()) {
+            val i = item?.getItemId()
+            when (item?.getItemId()) {
                 R.id.menu_item_select_all -> {
-                    val list: MutableList<HistoryModel?>? = presenter.getListGroup()
-                    presenter.mList.clear()
+                    val list: MutableList<HistoryModel> = viewModel.getListGroup()
+                    viewModel.mList.clear()
                     isSelectedAll = if (isSelectedAll) {
                         for (index in list) {
                             index.setDeleted(true)
                             index.setChecked(false)
-                            presenter.mList.add(index)
+                            viewModel.mList.add(index)
                         }
                         false
                     } else {
                         for (index in list) {
                             index.setDeleted(true)
                             index.setChecked(true)
-                            presenter.mList.add(index)
+                            viewModel.mList.add(index)
                         }
                         true
                     }
                     if (actionMode != null) {
-                        actionMode.setTitle(presenter.getCheckedCount().toString() + " " + getString(R.string.selected))
+                        actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
                     }
                     recyclerView.removeAllCells()
                     bindData()
                     return true
                 }
                 R.id.menu_item_delete -> {
-                    val listHistory: MutableList<HistoryModel?> = SQLiteHelper.getHistoryList()
-                            ?: return false
+                    val listHistory: MutableList<HistoryModel> = SQLiteHelper.getHistoryList()
                     if (listHistory.size == 0) {
                         return false
                     }
-                    Log.d(TAG, "start")
-                    if (presenter.getCheckedCount() > 0) {
+                    Utils.Log(TAG, "start")
+                    if (viewModel.getCheckedCount() > 0) {
                         dialogDelete()
                     }
                     return true
@@ -89,45 +104,40 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
         override fun onDestroyActionMode(mode: ActionMode?) {
             actionMode = null
             isSelectedAll = false
-            val list: MutableList<HistoryModel?>? = presenter.getListGroup()
-            presenter.mList.clear()
+            val list: MutableList<HistoryModel> = viewModel.getListGroup()
+            viewModel.mList.clear()
             for (index in list) {
                 index.setDeleted(false)
-                presenter.mList.add(index)
+                viewModel.mList.add(index)
             }
             recyclerView.removeAllCells()
             bindData()
             isDeleted = false
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window = QRScannerApplication.Companion.getInstance().getActivity().getWindow()
-                window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
+                val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
+                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
             }
         }
     }
 
-    protected override fun getLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return 0
     }
 
-    protected override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater.inflate(R.layout.fragment_history, viewGroup, false)
+    override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
+        return inflater?.inflate(R.layout.fragment_history, viewGroup, false)
     }
 
-    protected override fun work() {
+    override fun work() {
         super.work()
-        HistorySingleton.Companion.getInstance().setListener(this)
-        presenter = HistoryPresenter()
-        presenter.bindView(this)
-        presenter.getListGroup()
-        addRecyclerHeaders()
-        bindData()
+        initUI()
     }
 
     override fun isDeleted(): Boolean {
         return isDeleted
     }
 
-    private fun addRecyclerHeaders() {
+    fun addRecyclerHeaders() {
         val sh: SectionHeaderProvider<HistoryModel?> = object : SimpleSectionHeaderProvider<HistoryModel?>() {
             override fun getSectionHeaderView(history: HistoryModel, i: Int): View {
                 val view: View = LayoutInflater.from(context).inflate(R.layout.history_item_header, null, false)
@@ -148,8 +158,8 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
         recyclerView.setSectionHeader(sh)
     }
 
-    private fun bindData() {
-        val mListItems: MutableList<HistoryModel?>? = presenter.mList
+    fun bindData() {
+        val mListItems: MutableList<HistoryModel> = viewModel.mList
         val cells: MutableList<HistoryCell?> = ArrayList()
         //LOOP THROUGH GALAXIES INSTANTIATING THEIR CELLS AND ADDING TO CELLS COLLECTION
         for (items in mListItems) {
@@ -157,56 +167,48 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
             cell.setListener(this)
             cells.add(cell)
         }
-        if (mListItems != null) {
-            if (mListItems.size > 0) {
-                tvNotFoundItems.setVisibility(View.INVISIBLE)
-            } else {
-                tvNotFoundItems.setVisibility(View.VISIBLE)
-            }
+        if (mListItems.size > 0) {
+            tvNotFoundItems.visibility = View.INVISIBLE
+        } else {
+            tvNotFoundItems.visibility = View.VISIBLE
         }
         recyclerView.addCells(cells)
     }
 
     override fun getContext(): Context? {
-        return getActivity()
+        return activity
     }
 
     override fun onClickItem(position: Int, isChecked: Boolean) {
-        Log.d(TAG, "position : $position - $isChecked")
-        val result = presenter.mList[position].isDeleted
-        presenter.mList[position].isChecked = isChecked
+        Utils.Log(TAG, "position : $position - $isChecked")
+        val result = viewModel.mList[position].isDeleted()
+        viewModel.mList[position].setChecked(isChecked)
         if (result) {
             if (actionMode != null) {
-                actionMode.setTitle(presenter.getCheckedCount().toString() + " " + getString(R.string.selected))
+                actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
             }
         }
     }
 
     override fun isShowDeleteAction(isDelete: Boolean) {
-        val listHistory: MutableList<HistoryModel?> = SQLiteHelper.getHistoryList()
+        val listHistory: MutableList<HistoryModel> = SQLiteHelper.getHistoryList()
         if (isDelete) {
             if (actionMode == null) {
-                actionMode = QRScannerApplication.Companion.getInstance().getActivity().getToolbar().startActionMode(callback)
-            }
-            if (listHistory == null) {
-                return
+                actionMode = QRScannerApplication.getInstance().getActivity()?.getToolbar()?.startActionMode(callback)
             }
             if (listHistory.size == 0) {
                 return
             }
-            val list: MutableList<HistoryModel?>? = presenter.getListGroup()
-            presenter.mList.clear()
+            val list: MutableList<HistoryModel> = viewModel.getListGroup()
+            viewModel.mList.clear()
             for (index in list) {
                 index.setDeleted(true)
-                presenter.mList.add(index)
+                viewModel.mList.add(index)
             }
             recyclerView.removeAllCells()
             bindData()
             isDeleted = true
         } else {
-            if (listHistory == null) {
-                return
-            }
             if (listHistory.size == 0) {
                 return
             }
@@ -216,17 +218,17 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
 
     override fun onLongClickItem(position: Int) {
         if (actionMode == null) {
-            actionMode = QRScannerApplication.Companion.getInstance().getActivity().getToolbar().startActionMode(callback)
+            actionMode = QRScannerApplication.getInstance().getActivity()?.getToolbar()?.startActionMode(callback)
         }
-        val list: MutableList<HistoryModel?>? = presenter.getListGroup()
-        presenter.mList.clear()
+        val list: MutableList<HistoryModel> = viewModel.getListGroup()
+        viewModel.mList.clear()
         for (index in list) {
             index.setDeleted(true)
-            presenter.mList.add(index)
+            viewModel.mList.add(index)
         }
-        presenter.mList[position].isChecked = true
+        viewModel.mList[position].setChecked(true)
         if (actionMode != null) {
-            actionMode.setTitle(presenter.getCheckedCount().toString() + " " + getString(R.string.selected))
+            actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
         }
         recyclerView.removeAllCells()
         bindData()
@@ -238,7 +240,7 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
             return
         }
         val create = Create()
-        val history: HistoryModel? = presenter.mList[position]
+        val history: HistoryModel = viewModel.mList[position]
         if (history.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
             create.address = history.address
             create.fullName = history.fullName
@@ -257,14 +259,14 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
             create.url = history.url
             create.createType = ParsedResultType.URI
         } else if (history.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            create.hidden = history.hidden
+            create.hidden = history.hidden ?: false
             create.ssId = history.ssId
             create.networkEncryption = history.networkEncryption
             create.password = history.password
             create.createType = ParsedResultType.WIFI
         } else if (history.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            create.lat = history.lat
-            create.lon = history.lon
+            create.lat = history.lat ?:0.0
+            create.lon = history.lon ?:0.0
             create.query = history.query
             create.createType = ParsedResultType.GEO
         } else if (history.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
@@ -280,8 +282,8 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
             create.location = history.location
             create.startEvent = history.startEvent
             create.endEvent = history.endEvent
-            create.startEventMilliseconds = history.startEventMilliseconds
-            create.endEventMilliseconds = history.endEventMilliseconds
+            create.startEventMilliseconds = history.startEventMilliseconds ?:0
+            create.endEventMilliseconds = history.endEventMilliseconds ?:0
             create.createType = ParsedResultType.CALENDAR
         } else if (history.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) {
             create.ISBN = history.text
@@ -291,11 +293,11 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
             create.createType = ParsedResultType.TEXT
         }
         create.fragmentType = EnumFragmentType.HISTORY
-        Navigator.onResultView<ScannerResultFragment?>(getActivity(), create, ScannerResultFragment::class.java)
+        Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
     }
 
     override fun onClickShare(position: Int) {
-        val history: HistoryModel? = presenter.mList[position]
+        val history: HistoryModel = viewModel.mList[position]
         val sb = StringBuilder()
         if (history.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
             sb.append("Address :" + history.address)
@@ -355,28 +357,26 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
 
     fun shareToSocial(value: String?) {
         val intent = Intent()
-        intent.setAction(Intent.ACTION_SEND)
-        intent.setType("text/plain")
+        intent.action = Intent.ACTION_SEND
+        intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, value)
         startActivity(Intent.createChooser(intent, "Share"))
     }
 
     fun shareToSocial(value: Uri?) {
-        Log.d(TAG, "path call")
+        Utils.Log(TAG, "path call")
         val intent = Intent()
-        intent.setAction(Intent.ACTION_SEND)
-        intent.setType("image/*")
+        intent.action = Intent.ACTION_SEND
+        intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_STREAM, value)
         startActivity(Intent.createChooser(intent, "Share"))
     }
 
     override fun reloadData() {
-        if (presenter != null) {
-            if (recyclerView != null) {
-                presenter.getListGroup()
-                recyclerView.removeAllCells()
-                bindData()
-            }
+        if (recyclerView != null) {
+            viewModel.getListGroup()
+            recyclerView.removeAllCells()
+            bindData()
         }
     }
 
@@ -387,14 +387,14 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report.areAllPermissionsGranted()) {
-                            ServiceManager.Companion.getInstance().onExportDatabaseCSVTask(EnumFragmentType.HISTORY, object : ServiceManagerListener {
+                        if (report?.areAllPermissionsGranted() == true) {
+                            ServiceManager.getInstance()?.onExportDatabaseCSVTask(EnumFragmentType.HISTORY, object : ServiceManager.ServiceManagerListener {
                                 override fun onExportingSVCCompleted(path: String?) {
                                     val file = File(path)
                                     if (file.isFile) {
-                                        Log.d(TAG, "path : $path")
+                                        Utils.Log(TAG, "path : $path")
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            val uri: Uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
+                                            val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
                                             shareToSocial(uri)
                                         } else {
                                             val uri = Uri.fromFile(file)
@@ -404,23 +404,23 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
                                 }
                             })
                         } else {
-                            Log.d(TAG, "Permission is denied")
+                            Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report.isAnyPermissionPermanentlyDenied()) {
+                        if (report?.isAnyPermissionPermanentlyDenied() == true) {
                             /*Miss add permission in manifest*/
-                            Log.d(TAG, "request permission is failed")
+                            Utils.Log(TAG, "request permission is failed")
                         }
                     }
 
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
                         /* ... */
-                        token.continuePermissionRequest()
+                        token?.continuePermissionRequest()
                     }
                 })
                 .withErrorListener(object : PermissionRequestErrorListener {
                     override fun onError(error: DexterError?) {
-                        Log.d(TAG, "error ask permission")
+                        Utils.Log(TAG, "error ask permission")
                     }
                 }).onSameThread().check()
     }
@@ -428,70 +428,70 @@ class HistoryFragment : BaseFragment(), HistoryView, HistoryCell.ItemSelectedLis
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            Log.d(TAG, "isVisible")
-            MainSingleton.Companion.getInstance().setListener(this)
-            QRScannerApplication.Companion.getInstance().getActivity().onShowFloatingButton(this@HistoryFragment, true)
+            Utils.Log(TAG, "isVisible")
+            MainSingleton.getInstance()?.setListener(this)
+            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@HistoryFragment, true)
         } else {
-            MainSingleton.Companion.getInstance().setListener(null)
-            Log.d(TAG, "isInVisible")
+            MainSingleton.getInstance()?.setListener(null)
+            Utils.Log(TAG, "isInVisible")
             if (actionMode != null) {
-                actionMode.finish()
+                actionMode?.finish()
             }
         }
     }
 
     fun dialogDelete() {
-        val builder = MaterialDialog.Builder(context, Utils.getCurrentTheme())
+        val builder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
         builder.setTitle(getString(R.string.delete))
-        builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), presenter.getCheckedCount().toString() + ""))
+        builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
         builder.setNegativeButton(getString(R.string.no), object : DialogInterface.OnClickListener {
             override fun onClick(dialogInterface: DialogInterface?, i: Int) {}
         })
         builder.setPositiveButton(getString(R.string.yes), object : DialogInterface.OnClickListener {
             override fun onClick(dialogInterface: DialogInterface?, i: Int) {
-                presenter.deleteItem()
+                deleteItem()
                 isSelectedAll = false
                 isDeleted = false
                 if (actionMode != null) {
-                    actionMode.finish()
+                    actionMode?.finish()
                 }
             }
         })
         builder.show()
     }
 
-    override fun updateView() {
+    fun updateView() {
         recyclerView.removeAllCells()
         bindData()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop")
+        Utils.Log(TAG, "onStop")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart")
+        Utils.Log(TAG, "onStart")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "onDestroy")
+        Utils.Log(TAG, "onDestroy")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume")
+        Utils.Log(TAG, "onResume")
     }
 
     companion object {
         private val TAG = HistoryFragment::class.java.simpleName
-        fun newInstance(index: Int): HistoryFragment? {
+        fun newInstance(index: Int): HistoryFragment {
             val fragment = HistoryFragment()
             val b = Bundle()
             b.putInt("index", index)
-            fragment.setArguments(b)
+            fragment.arguments = b
             return fragment
         }
     }

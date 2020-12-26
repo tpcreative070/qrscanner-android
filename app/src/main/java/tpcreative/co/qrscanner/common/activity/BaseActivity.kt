@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.snatik.storage.Storage
 
 open class BaseActivity : AppCompatActivity() {
+    var TAG : String = this::class.java.simpleName
     protected var actionBar: ActionBar? = null
     var onStartCount = 0
     private var storage: Storage? = null

@@ -1,24 +1,25 @@
-package tpcreative.co.qrscanner.ui.save
-import androidx.fragment.app.Fragment
+package tpcreative.co.qrscanner.viewmodel
+import androidx.lifecycle.liveData
 import com.google.gson.Gson
-import tpcreative.co.qrscanner.common.*
-import tpcreative.co.qrscanner.common.presenter.Presenter
+import kotlinx.coroutines.Dispatchers
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.model.TypeCategories
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 
-class SavePresenter : Presenter<SaveView?>() {
-    private val TAG = SavePresenter::class.java.simpleName
-    protected var mListCategories: MutableList<TypeCategories>?
-    var mList: MutableList<SaveModel?>?
-    protected var mLatestValue: SaveModel?
-    protected var mFragment: MutableList<Fragment?>?
+class SaveViewModel  : BaseViewModel<TypeCategories>(){
+    val TAG = this::class.java.name
+    var mListCategories: MutableList<TypeCategories> = mutableListOf()
+    var mList: MutableList<SaveModel> = mutableListOf()
+    var mLatestValue: SaveModel?
     private var i = 0
+
     fun getLatestList(mData: MutableList<SaveModel>): MutableList<SaveModel> {
-        val mList: MutableList<SaveModel> = ArrayList()
+        val mList: MutableList<SaveModel> = mutableListOf()
         if (mData.size > 0) {
-            mLatestValue = mData.get(0)
+            mLatestValue = mData[0]
             for (index in mData) {
                 if (index.createType == mLatestValue?.createType) {
                     index.typeCategories = TypeCategories(0, mLatestValue?.createType)
@@ -26,7 +27,7 @@ class SavePresenter : Presenter<SaveView?>() {
                 }
             }
         }
-        mList.sortWith(Comparator { o1, o2 -> if (Utils.getMilliseconds(o1?.updatedDateTime) < Utils.getMilliseconds(o2?.updatedDateTime)) 0 else 1 })
+        mList.sortWith { o1, o2 -> if (Utils.getMilliseconds(o1?.updatedDateTime) < Utils.getMilliseconds(o2?.updatedDateTime)) 0 else 1 }
         return mList
     }
 
@@ -35,31 +36,28 @@ class SavePresenter : Presenter<SaveView?>() {
         Utils.Log(TAG, "Save list " + Gson().toJson(saver))
         Utils.Log(TAG, Gson().toJson(saver))
         val hashMap: MutableMap<String?, SaveModel?> = HashMap()
-        if (saver != null) {
-            for (index in saver) {
-                hashMap[index?.createType] = index
-            }
+        for (index in saver) {
+            hashMap[index.createType] = index
         }
-        mListCategories?.clear()
+        mListCategories.clear()
         i = 1
         for ((key) in hashMap) {
-            mListCategories?.add(TypeCategories(i, key))
+            mListCategories.add(TypeCategories(i, key))
             i += 1
         }
         return hashMap
     }
 
-    fun getListGroup(): MutableList<SaveModel>? {
+    fun getListGroup(): MutableList<SaveModel> {
         getUniqueList()
-        val view = view()
         val list = SQLiteHelper.getSaveList()
-        val mList: MutableList<SaveModel> = ArrayList()
+        val mList: MutableList<SaveModel> = mutableListOf()
         val mLatestType = getLatestList(list)
         Utils.Log(TAG, "Latest list " + Gson().toJson(mLatestType))
         Utils.Log(TAG, "Latest object " + Gson().toJson(mLatestValue))
         for (index in mListCategories) {
             for (save in list) {
-                if (index.type == save.createType && index.type != mLatestValue.createType) {
+                if (index.getType() == save.createType && index.getType() != mLatestValue?.createType) {
                     save.typeCategories = index
                     mList.add(save)
                 }
@@ -81,8 +79,7 @@ class SavePresenter : Presenter<SaveView?>() {
         return count
     }
 
-    fun deleteItem() {
-        val view = view()
+    fun deleteItem() = liveData(Dispatchers.Main) {
         val list = mList
         for (index in list) {
             if (index.isDeleted()) {
@@ -92,13 +89,12 @@ class SavePresenter : Presenter<SaveView?>() {
             }
         }
         getListGroup()
-        view.updateView()
+        emit(true)
     }
 
     init {
-        mListCategories = ArrayList()
-        mList = ArrayList()
-        mFragment = ArrayList()
         mLatestValue = SaveModel()
     }
+
 }
+

@@ -1,54 +1,50 @@
 package tpcreative.co.qrscanner.ui.main
-import android.util.Log
 import android.view.ViewGroup
 import androidx.fragment.app.*
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.ui.create.GenerateFragment
 import tpcreative.co.qrscanner.ui.history.HistoryFragment
-import tpcreative.co.qrscanner.ui.save.SaverFragment
+import tpcreative.co.qrscanner.ui.save.SaveFragment
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment
 import tpcreative.co.qrscanner.ui.settings.SettingsFragment
-import java.util.*
 
-/**
- *
- */
 class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-    private val fragments: ArrayList<Fragment>? = ArrayList()
-    private val arrayList: ArrayList<String>? = ArrayList()
+    private val fragments: MutableList<Fragment> = mutableListOf()
+    private val arrayList: MutableList<String> = mutableListOf()
     private var currentFragment: Fragment? = null
-    override fun getItem(position: Int): Fragment? {
-        return fragments?.get(position)
+    override fun getItem(position: Int): Fragment {
+        return fragments[position]
     }
 
     override fun getCount(): Int {
-        return fragments?.size ?: 0
+        return fragments.size
     }
 
-    override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
-        if (getCurrentFragment() !== `object`) {
-            currentFragment = `object` as Fragment?
+    override fun setPrimaryItem(container: ViewGroup, position: Int, mObject: Any) {
+        if (getCurrentFragment() !== mObject) {
+            currentFragment = mObject as Fragment?
             if (currentFragment is HistoryFragment) {
-                Log.d(TAG, "history")
+                Utils.Log(TAG, "history")
                 currentFragment?.onResume()
-                fragments?.get(3)?.onPause()
+                fragments[3].onPause()
             } else if (currentFragment is GenerateFragment) {
-                Log.d(TAG, "generate")
+                Utils.Log(TAG, "generate")
                 currentFragment?.onResume()
-                fragments?.get(3)?.onPause()
+                fragments[3].onPause()
             } else if (currentFragment is ScannerFragment) {
-                Log.d(TAG, "scanner")
+                Utils.Log(TAG, "scanner")
                 currentFragment?.onResume()
-                fragments?.get(3)?.onPause()
-            } else if (currentFragment is SaverFragment) {
-                Log.d(TAG, "reader")
-                currentFragment.onResume()
+                fragments[3].onPause()
+            } else if (currentFragment is SaveFragment) {
+                Utils.Log(TAG, "reader")
+                currentFragment?.onResume()
             } else if (currentFragment is SettingsFragment) {
-                Log.d(TAG, "settings")
-                currentFragment.onResume()
-                fragments.get(3).onPause()
+                Utils.Log(TAG, "settings")
+                currentFragment?.onResume()
+                fragments[3].onPause()
             }
         }
-        super.setPrimaryItem(container, position, `object`)
+        super.setPrimaryItem(container, position, mObject)
     }
 
     /**
@@ -58,8 +54,8 @@ class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVI
         return currentFragment
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return arrayList.get(position)
+    override fun getPageTitle(position: Int): CharSequence {
+        return arrayList[position]
     }
 
     companion object {
@@ -74,10 +70,10 @@ class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVI
         arrayList.add("Scanner")
         arrayList.add("Save")
         arrayList.add("Settings")
-        fragments.add(HistoryFragment.Companion.newInstance(0))
-        fragments.add(GenerateFragment.Companion.newInstance(1))
-        fragments.add(ScannerFragment.Companion.newInstance(2))
-        fragments.add(SaverFragment.Companion.newInstance(3))
-        fragments.add(SettingsFragment.Companion.newInstance(4))
+        fragments.add(HistoryFragment.newInstance(0))
+        fragments.add(GenerateFragment.newInstance(1))
+        fragments.add(ScannerFragment.newInstance(2))
+        fragments.add(SaveFragment.newInstance(3))
+        fragments.add(SettingsFragment.newInstance(4))
     }
 }

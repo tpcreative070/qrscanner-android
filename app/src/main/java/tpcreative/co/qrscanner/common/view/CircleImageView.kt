@@ -20,12 +20,12 @@ import androidx.appcompat.widget.AppCompatImageView
 import tpcreative.co.qrscanner.R
 
 class CircleImageView : AppCompatImageView {
-    private val mDrawableRect: RectF? = RectF()
-    private val mBorderRect: RectF? = RectF()
-    private val mShaderMatrix: Matrix? = Matrix()
-    private val mBitmapPaint: Paint? = Paint()
-    private val mBorderPaint: Paint? = Paint()
-    private val mCircleBackgroundPaint: Paint? = Paint()
+    private val mDrawableRect: RectF = RectF()
+    private val mBorderRect: RectF = RectF()
+    private val mShaderMatrix: Matrix = Matrix()
+    private val mBitmapPaint: Paint = Paint()
+    private val mBorderPaint: Paint = Paint()
+    private val mCircleBackgroundPaint: Paint = Paint()
     private var mBorderColor = DEFAULT_BORDER_COLOR
     private var mBorderWidth = DEFAULT_BORDER_WIDTH
     private var mCircleBackgroundColor = DEFAULT_CIRCLE_BACKGROUND_COLOR
@@ -41,12 +41,12 @@ class CircleImageView : AppCompatImageView {
     private var mBorderOverlay = false
     private var mDisableCircularTransformation = false
 
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context) : super(context) {
         init()
     }
 
     @JvmOverloads
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int = 0) : super(context, attrs, defStyle) {
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : super(context, attrs, defStyle) {
         val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0)
         mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_civ_border_width, DEFAULT_BORDER_WIDTH)
         mBorderColor = a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR)
@@ -59,18 +59,18 @@ class CircleImageView : AppCompatImageView {
     private fun init() {
         mInitialized = true
         super.setScaleType(SCALE_TYPE)
-        mBitmapPaint.setAntiAlias(true)
-        mBitmapPaint.setDither(true)
-        mBitmapPaint.setFilterBitmap(true)
-        mBitmapPaint.setAlpha(mImageAlpha)
-        mBitmapPaint.setColorFilter(mColorFilter)
-        mBorderPaint.setStyle(Paint.Style.STROKE)
-        mBorderPaint.setAntiAlias(true)
-        mBorderPaint.setColor(mBorderColor)
-        mBorderPaint.setStrokeWidth(mBorderWidth.toFloat())
-        mCircleBackgroundPaint.setStyle(Paint.Style.FILL)
-        mCircleBackgroundPaint.setAntiAlias(true)
-        mCircleBackgroundPaint.setColor(mCircleBackgroundColor)
+        mBitmapPaint.isAntiAlias = true
+        mBitmapPaint.isDither = true
+        mBitmapPaint.isFilterBitmap = true
+        mBitmapPaint.alpha = mImageAlpha
+        mBitmapPaint.colorFilter = mColorFilter
+        mBorderPaint.style = Paint.Style.STROKE
+        mBorderPaint.isAntiAlias = true
+        mBorderPaint.color = mBorderColor
+        mBorderPaint.strokeWidth = mBorderWidth.toFloat()
+        mCircleBackgroundPaint.style = Paint.Style.FILL
+        mCircleBackgroundPaint.isAntiAlias = true
+        mCircleBackgroundPaint.color = mCircleBackgroundColor
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             outlineProvider = OutlineProvider()
         }
@@ -91,25 +91,25 @@ class CircleImageView : AppCompatImageView {
             return
         }
         if (mCircleBackgroundColor != Color.TRANSPARENT) {
-            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mCircleBackgroundPaint)
+            canvas?.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mCircleBackgroundPaint)
         }
         if (mBitmap != null) {
             if (mDrawableDirty && mBitmapCanvas != null) {
                 mDrawableDirty = false
                 val drawable = drawable
-                drawable.setBounds(0, 0, mBitmapCanvas.getWidth(), mBitmapCanvas.getHeight())
-                drawable.draw(mBitmapCanvas)
+                drawable.setBounds(0, 0, mBitmapCanvas?.width ?:0, mBitmapCanvas?.height ?:0)
+                drawable.draw(mBitmapCanvas!!)
             }
             if (mRebuildShader) {
                 mRebuildShader = false
-                val bitmapShader = BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+                val bitmapShader = BitmapShader(mBitmap!!, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
                 bitmapShader.setLocalMatrix(mShaderMatrix)
                 mBitmapPaint.setShader(bitmapShader)
             }
-            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint)
+            canvas?.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint)
         }
         if (mBorderWidth > 0) {
-            canvas.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius, mBorderPaint)
+            canvas?.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius, mBorderPaint)
         }
     }
 
@@ -176,7 +176,7 @@ class CircleImageView : AppCompatImageView {
             return
         }
         mBorderWidth = borderWidth
-        mBorderPaint.setStrokeWidth(borderWidth.toFloat())
+        mBorderPaint.strokeWidth = borderWidth.toFloat()
         updateDimensions()
         invalidate()
     }
@@ -206,7 +206,7 @@ class CircleImageView : AppCompatImageView {
         if (disableCircularTransformation) {
             mBitmap = null
             mBitmapCanvas = null
-            mBitmapPaint.setShader(null)
+            mBitmapPaint.shader = null
         } else {
             initializeBitmap()
         }
@@ -248,7 +248,7 @@ class CircleImageView : AppCompatImageView {
         // This might be called during ImageView construction before
         // member initialization has finished on API level >= 16.
         if (mInitialized) {
-            mBitmapPaint.setAlpha(alpha)
+            mBitmapPaint.alpha = alpha
             invalidate()
         }
     }
@@ -266,7 +266,7 @@ class CircleImageView : AppCompatImageView {
         // This might be called during ImageView construction before
         // member initialization has finished on API level <= 19.
         if (mInitialized) {
-            mBitmapPaint.setColorFilter(cf)
+            mBitmapPaint.colorFilter = cf
             invalidate()
         }
     }
@@ -280,7 +280,7 @@ class CircleImageView : AppCompatImageView {
             return null
         }
         return if (drawable is BitmapDrawable) {
-            (drawable as BitmapDrawable?).getBitmap()
+            (drawable as BitmapDrawable?)?.bitmap
         } else try {
             val bitmap: Bitmap?
             bitmap = if (drawable is ColorDrawable) {
@@ -300,8 +300,8 @@ class CircleImageView : AppCompatImageView {
 
     private fun initializeBitmap() {
         mBitmap = getBitmapFromDrawable(drawable)
-        mBitmapCanvas = if (mBitmap != null && mBitmap.isMutable()) {
-            Canvas(mBitmap)
+        mBitmapCanvas = if (mBitmap != null && mBitmap?.isMutable == true) {
+            Canvas(mBitmap!!)
         } else {
             null
         }
@@ -311,13 +311,13 @@ class CircleImageView : AppCompatImageView {
         if (mBitmap != null) {
             updateShaderMatrix()
         } else {
-            mBitmapPaint.setShader(null)
+            mBitmapPaint.shader = null
         }
     }
 
     private fun updateDimensions() {
-        mBorderRect.set(calculateBounds())
-        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f, (mBorderRect.width() - mBorderWidth) / 2.0f)
+        calculateBounds()?.let { mBorderRect.set(it) }
+        mBorderRadius = ((mBorderRect.height() - mBorderWidth) / 2.0f).coerceAtMost((mBorderRect.width() - mBorderWidth) / 2.0f)
         mDrawableRect.set(mBorderRect)
         if (!mBorderOverlay && mBorderWidth > 0) {
             mDrawableRect.inset(mBorderWidth - 1.0f, mBorderWidth - 1.0f)
@@ -326,7 +326,7 @@ class CircleImageView : AppCompatImageView {
         updateShaderMatrix()
     }
 
-    private fun calculateBounds(): RectF? {
+    private fun calculateBounds(): RectF {
         val availableWidth = width - paddingLeft - paddingRight
         val availableHeight = height - paddingTop - paddingBottom
         val sideLength = Math.min(availableWidth, availableHeight)
@@ -343,17 +343,17 @@ class CircleImageView : AppCompatImageView {
         var dx = 0f
         var dy = 0f
         mShaderMatrix.set(null)
-        val bitmapHeight = mBitmap.getHeight()
-        val bitmapWidth = mBitmap.getWidth()
-        if (bitmapWidth * mDrawableRect.height() > mDrawableRect.width() * bitmapHeight) {
-            scale = mDrawableRect.height() / bitmapHeight as Float
+        val bitmapHeight = mBitmap?.height ?:0
+        val bitmapWidth = mBitmap?.width ?:0
+        if (((bitmapWidth ?:0) * mDrawableRect.height()) > (mDrawableRect.width() * (bitmapHeight ?:0))) {
+            scale = mDrawableRect.height() / (bitmapHeight.toFloat())
             dx = (mDrawableRect.width() - bitmapWidth * scale) * 0.5f
         } else {
-            scale = mDrawableRect.width() / bitmapWidth as Float
+            scale = mDrawableRect.width() / bitmapWidth
             dy = (mDrawableRect.height() - bitmapHeight * scale) * 0.5f
         }
         mShaderMatrix.setScale(scale, scale)
-        mShaderMatrix.postTranslate((dx + 0.5f) as Int + mDrawableRect.left, (dy + 0.5f) as Int + mDrawableRect.top)
+        mShaderMatrix.postTranslate((dx + 0.5f).toInt() + mDrawableRect.left, (dy + 0.5f).toInt() + mDrawableRect.top)
         mRebuildShader = true
     }
 
@@ -361,7 +361,7 @@ class CircleImageView : AppCompatImageView {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (mDisableCircularTransformation) {
             super.onTouchEvent(event)
-        } else inTouchableArea(event.getX(), event.getY()) && super.onTouchEvent(event)
+        } else inTouchableArea(event?.x ?:0F, event?.y ?:0F) && super.onTouchEvent(event)
     }
 
     private fun inTouchableArea(x: Float, y: Float): Boolean {
@@ -378,14 +378,14 @@ class CircleImageView : AppCompatImageView {
             } else {
                 val bounds = Rect()
                 mBorderRect.roundOut(bounds)
-                outline.setRoundRect(bounds, bounds.width() / 2.0f)
+                outline?.setRoundRect(bounds, bounds.width() / 2.0f)
             }
         }
     }
 
     companion object {
-        private val SCALE_TYPE: ScaleType? = ScaleType.CENTER_CROP
-        private val BITMAP_CONFIG: Bitmap.Config? = Bitmap.Config.ARGB_8888
+        private val SCALE_TYPE: ScaleType = ScaleType.CENTER_CROP
+        private val BITMAP_CONFIG: Bitmap.Config = Bitmap.Config.ARGB_8888
         private const val COLORDRAWABLE_DIMENSION = 2
         private const val DEFAULT_BORDER_WIDTH = 0
         private const val DEFAULT_BORDER_COLOR = Color.BLACK

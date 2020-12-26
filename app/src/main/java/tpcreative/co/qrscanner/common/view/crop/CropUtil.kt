@@ -16,8 +16,8 @@ import java.io.*
 * Modified from original in AOSP.
 */
 internal object CropUtil {
-    private val SCHEME_FILE: String? = "file"
-    private val SCHEME_CONTENT: String? = "content"
+    private val SCHEME_FILE: String = "file"
+    private val SCHEME_CONTENT: String = "content"
     fun closeSilently(c: Closeable?) {
         if (c == null) return
         try {
@@ -63,7 +63,7 @@ internal object CropUtil {
             val filePathColumn = arrayOf<String?>(MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME)
             var cursor: Cursor? = null
             try {
-                cursor = resolver.query(uri, filePathColumn, null, null, null)
+                cursor = resolver?.query(uri, filePathColumn, null, null, null)
                 if (cursor != null && cursor.moveToFirst()) {
                     val columnIndex = if (uri.toString().startsWith("content://com.google.android.gallery3d")) cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME) else cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
                     // Picasa images on API 13+
@@ -88,7 +88,7 @@ internal object CropUtil {
 
     @Throws(IOException::class)
     private fun getTempFilename(context: Context?): String? {
-        val outputDir = context.getCacheDir()
+        val outputDir = context?.getCacheDir()
         val outputFile = File.createTempFile("image", "tmp", outputDir)
         return outputFile.absolutePath
     }
@@ -98,8 +98,8 @@ internal object CropUtil {
         var input: FileInputStream? = null
         var output: FileOutputStream? = null
         try {
-            val pfd = resolver.openFileDescriptor(uri, "r")
-            val fd = pfd.getFileDescriptor()
+            val pfd = resolver?.openFileDescriptor(uri, "r")
+            val fd = pfd?.getFileDescriptor()
             input = FileInputStream(fd)
             val tempFilename = getTempFilename(context)
             output = FileOutputStream(tempFilename)
@@ -130,16 +130,16 @@ internal object CropUtil {
     private class BackgroundJob(private val activity: MonitoredActivity?, private val job: Runnable?,
                                 private val dialog: ProgressDialog?, handler: Handler?) : LifeCycleAdapter(), Runnable {
         private val handler: Handler?
-        private val cleanupRunner: Runnable? = Runnable {
-            activity.removeLifeCycleListener(this@BackgroundJob)
-            if (dialog.getWindow() != null) dialog.dismiss()
+        private val cleanupRunner: Runnable = Runnable {
+            activity?.removeLifeCycleListener(this@BackgroundJob)
+            if (dialog?.window != null) dialog.dismiss()
         }
 
         override fun run() {
             try {
-                job.run()
+                job?.run()
             } finally {
-                handler.post(cleanupRunner)
+                handler?.post(cleanupRunner)
             }
         }
 
@@ -147,19 +147,19 @@ internal object CropUtil {
             // We get here only when the onDestroyed being called before
             // the cleanupRunner. So, run it now and remove it from the queue
             cleanupRunner.run()
-            handler.removeCallbacks(cleanupRunner)
+            handler?.removeCallbacks(cleanupRunner)
         }
 
         override fun onActivityStopped(activity: MonitoredActivity?) {
-            dialog.hide()
+            dialog?.hide()
         }
 
         override fun onActivityStarted(activity: MonitoredActivity?) {
-            dialog.show()
+            dialog?.show()
         }
 
         init {
-            activity.addLifeCycleListener(this)
+            activity?.addLifeCycleListener(this)
             this.handler = handler
         }
     }

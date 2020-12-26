@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 
 open class BaseActivitySlide : AppCompatActivity() {
+    var TAG : String = this::class.java.simpleName
     protected var actionBar: ActionBar? = null
     var onStartCount = 0
     override fun onCreate(savedInstanceState: Bundle?) {

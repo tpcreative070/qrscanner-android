@@ -7,29 +7,24 @@ import android.opengl.GLES10
 import android.os.*
 import android.provider.MediaStore
 import android.view.*
-import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
-import butterknife.BindView
 import com.google.gson.Gson
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
-import io.reactivex.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.crop_layout_done_cancel.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.view.crop.Crop.Extra
 import tpcreative.co.qrscanner.common.view.crop.CropImageView.ListenerState
-import tpcreative.co.qrscanner.common.view.crop.ImageViewTouchBase
 import java.io.IOException
 import java.io.InputStream
-import java.util.concurrent.Callable
 import java.util.concurrent.CountDownLatch
 
-class CropImageActivity : MonitoredActivity(), ListenerState {
-    private val handler: Handler? = Handler(Looper.getMainLooper())
-    var compositeDisposable: CompositeDisposable? = CompositeDisposable()
+internal class CropImageActivity : MonitoredActivity(), ListenerState {
+    private val handler: Handler = Handler(Looper.getMainLooper())
     private var aspectX = 0
     private var aspectY = 0
 
@@ -44,9 +39,6 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
     private var imageView: CropImageView? = null
     private var cropView: HighlightView? = null
     private var isProgressing = false
-
-    @BindView(R.id.btn_done)
-    var layoutDone: FrameLayout? = null
     public override fun onCreate(icicle: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(icicle)
@@ -57,17 +49,22 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
             return
         }
         startCrop()
-        layoutDone.setEnabled(false)
-        layoutDone.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+        btn_done.isEnabled = false
+        btn_done.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
     }
+
+
+
 
     private fun setupViews() {
         setContentView(R.layout.crop_activity_crop)
         imageView = findViewById<View?>(R.id.crop_image) as CropImageView
-        imageView.context = this
-        imageView.setRecycler(ImageViewTouchBase.Recycler { b ->
-            b.recycle()
-            System.gc()
+        imageView?.mContext = this
+        imageView?.setRecycler(object : ImageViewTouchBase.Recycler {
+            override fun recycle(b: Bitmap?) {
+                b?.recycle()
+                System.gc()
+            }
         })
         findViewById<View?>(R.id.btn_cancel).setOnClickListener {
             setResult(RESULT_CANCELED)
@@ -88,13 +85,13 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
         sourceUri = intent.data
         if (sourceUri != null) {
             exifRotation = CropUtil.getExifRotation(CropUtil.getFromMediaUri(this, contentResolver, sourceUri))
-            var `is`: InputStream? = null
+            var mInputStream: InputStream? = null
             try {
                 sampleSize = calculateBitmapSampleSize(sourceUri)
-                `is` = contentResolver.openInputStream(sourceUri)
+                mInputStream = contentResolver.openInputStream(sourceUri!!)
                 val option = BitmapFactory.Options()
                 option.inSampleSize = sampleSize
-                rotateBitmap = RotateBitmap(BitmapFactory.decodeStream(`is`, null, option), exifRotation)
+                rotateBitmap = RotateBitmap(BitmapFactory.decodeStream(mInputStream, null, option), exifRotation)
             } catch (e: IOException) {
                 Log.e("Error reading image: " + e.message, e)
                 setResultException(e)
@@ -102,21 +99,21 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
                 Log.e("OOM reading image: " + e.message, e)
                 setResultException(e)
             } finally {
-                CropUtil.closeSilently(`is`)
+                CropUtil.closeSilently(mInputStream)
             }
         }
     }
 
     @Throws(IOException::class)
     private fun calculateBitmapSampleSize(bitmapUri: Uri?): Int {
-        var `is`: InputStream? = null
+        var mInputStream: InputStream? = null
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         try {
-            `is` = contentResolver.openInputStream(bitmapUri)
-            BitmapFactory.decodeStream(`is`, null, options) // Just get image size
+            mInputStream = bitmapUri?.let { contentResolver.openInputStream(it) }
+            BitmapFactory.decodeStream(mInputStream, null, options) // Just get image size
         } finally {
-            CropUtil.closeSilently(`is`)
+            CropUtil.closeSilently(mInputStream)
         }
         val maxSize = getMaxImageSize()
         var sampleSize = 1
@@ -146,14 +143,14 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
         if (isFinishing) {
             return
         }
-        imageView.setListenerState(this)
-        imageView.setImageRotateBitmapResetBase(rotateBitmap, true)
+        imageView?.setListenerState(this)
+        imageView?.setImageRotateBitmapResetBase(rotateBitmap, true)
         CropUtil.startBackgroundJob(this, null, resources.getString(R.string.crop__wait),
                 {
                     val latch = CountDownLatch(1)
-                    handler.post(Runnable {
-                        if (imageView.getScale() == 1f) {
-                            imageView.center()
+                    handler?.post(Runnable {
+                        if (imageView?.getScale() == 1f) {
+                            imageView?.center()
                         }
                         latch.countDown()
                     })
@@ -173,11 +170,11 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
                 return
             }
             val hv = HighlightView(imageView)
-            val width = rotateBitmap.getWidth()
-            val height = rotateBitmap.getHeight()
-            val imageRect = Rect(0, 0, width, height)
+            val width = rotateBitmap?.getWidth() ?:0
+            val height = rotateBitmap?.getHeight() ?:0
+            val imageRect = Rect(0, 0, width ?: 0, height ?: 0)
             // Make the default size about 4/5 of the width or height
-            var cropWidth = Math.min(width, height) * 4 / 5
+            var cropWidth = (width ?: 0).coerceAtMost(height ?: 0) * 4 / 5
             var cropHeight = cropWidth
             if (aspectX != 0 && aspectY != 0) {
                 if (aspectX > aspectY) {
@@ -188,18 +185,18 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
             }
             val x = (width - cropWidth) / 2
             val y = (height - cropHeight) / 2
-            val cropRect = RectF(x, y, x + cropWidth, y + cropHeight)
-            hv.setup(imageView.getUnrotatedMatrix(), imageRect, cropRect, aspectX != 0 && aspectY != 0)
-            imageView.add(hv)
+            val cropRect = RectF(x.toFloat(), y.toFloat(), x + cropWidth.toFloat(), y + cropHeight.toFloat())
+            hv.setup(imageView?.getUnrotatedMatrix(), imageRect, cropRect, aspectX != 0 && aspectY != 0)
+            imageView?.add(hv)
         }
 
         fun crop() {
-            handler.post(Runnable {
+            handler?.post(Runnable {
                 makeDefault()
-                imageView.invalidate()
-                if (imageView.highlightViews.size == 1) {
-                    cropView = imageView.highlightViews[0]
-                    cropView.setFocus(true)
+                imageView?.invalidate()
+                if (imageView?.highlightViews?.size == 1) {
+                    cropView = imageView?.highlightViews?.get(0)
+                    cropView?.setFocus(true)
                 }
             })
         }
@@ -209,29 +206,28 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
         // Release memory now
 //        clearImageView();
         var rect = rect
-        var `is`: InputStream? = null
+        var mInput: InputStream? = null
         var croppedImage: Bitmap? = null
         try {
-            `is` = contentResolver.openInputStream(sourceUri)
-            val decoder = BitmapRegionDecoder.newInstance(`is`, false)
-            val width = decoder.width
-            val height = decoder.height
+            mInput = sourceUri?.let { contentResolver.openInputStream(it) }
+            val decoder = BitmapRegionDecoder.newInstance(mInput, false)
+            val width = decoder.width.toFloat()
+            val height = decoder.height.toFloat()
             if (exifRotation != 0) {
                 // Adjust crop area to account for image rotation
                 val matrix = Matrix()
                 matrix.setRotate(-exifRotation.toFloat())
                 val adjusted = RectF()
                 matrix.mapRect(adjusted, RectF(rect))
-
                 // Adjust to account for origin at 0,0
                 adjusted.offset(if (adjusted.left < 0) width else 0.toFloat(), if (adjusted.top < 0) height else 0.toFloat())
-                rect = Rect(adjusted.left as Int, adjusted.top as Int, adjusted.right as Int, adjusted.bottom as Int)
+                rect = Rect(adjusted.left.toInt(), adjusted.top.toInt(), adjusted.right.toInt(), adjusted.bottom.toInt())
             }
             try {
                 croppedImage = decoder.decodeRegion(rect, BitmapFactory.Options())
-                if (croppedImage != null && (rect.width() > outWidth || rect.height() > outHeight)) {
+                if (croppedImage != null && (rect?.width()!! > outWidth || rect.height() > outHeight)) {
                     val matrix = Matrix()
-                    matrix.postScale(outWidth as Float / rect.width(), outHeight as Float / rect.height())
+                    matrix.postScale(outWidth.toFloat() / rect.width(), outHeight.toFloat() / rect.height())
                     croppedImage = Bitmap.createBitmap(croppedImage, 0, 0, croppedImage.width, croppedImage.height, matrix, true)
                 }
             } catch (e: IllegalArgumentException) {
@@ -246,15 +242,15 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
             Log.e("OOM cropping image: " + e.message, e)
             setResultException(e)
         } finally {
-            CropUtil.closeSilently(`is`)
+            CropUtil.closeSilently(mInput)
         }
         return croppedImage
     }
 
     private fun clearImageView() {
-        imageView.clear()
+        imageView?.clear()
         if (rotateBitmap != null) {
-            rotateBitmap.recycle()
+            rotateBitmap?.recycle()
         }
         System.gc()
     }
@@ -262,9 +258,8 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
     override fun onDestroy() {
         super.onDestroy()
         if (rotateBitmap != null) {
-            rotateBitmap.recycle()
+            rotateBitmap?.recycle()
         }
-        compositeDisposable.dispose()
     }
 
     override fun onSearchRequested(): Boolean {
@@ -303,23 +298,23 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
         isSaving = true
         isProgressing = true
         val croppedImage: Bitmap?
-        val r = cropView.getScaledCropRect(sampleSize.toFloat())
-        val width = r.width()
-        val height = r.height()
+        val r = cropView?.getScaledCropRect(sampleSize.toFloat())
+        val width = r?.width()?.toFloat() ?:0F
+        val height = r?.height()?.toFloat() ?:0F
         var outWidth = width
         var outHeight = height
         if (maxX > 0 && maxY > 0 && (width > maxX || height > maxY)) {
-            val ratio = width as Float / height as Float
-            if (maxX as Float / maxY as Float > ratio) {
-                outHeight = maxY
-                outWidth = (maxY as Float * ratio + .5f) as Int
+            val ratio = width as Float / height
+            if (maxX.toFloat() / maxY.toFloat() > ratio) {
+                outHeight = maxY.toFloat()
+                outWidth = (maxY.toFloat() * ratio + .5f)
             } else {
-                outWidth = maxX
-                outHeight = (maxX as Float / ratio + .5f) as Int
+                outWidth = maxX.toFloat()
+                outHeight = (maxX.toFloat() / ratio + .5f)
             }
         }
         croppedImage = try {
-            decodeRegionCrop(r, outWidth, outHeight)
+            decodeRegionCrop(r, outWidth.toInt(), outHeight.toInt())
         } catch (e: IllegalArgumentException) {
             setResultException(e)
             finish()
@@ -329,12 +324,12 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
     }
 
     fun onRenderCode(bitmap: Bitmap?) {
-        compositeDisposable.add(Observable.fromCallable(Callable {
+        CoroutineScope(Dispatchers.Main).launch {
             try {
                 if (bitmap == null) {
                     isSaving = false
                     isProgressing = false
-                    return@Callable ""
+                    return@launch
                 }
                 val intArray = IntArray(bitmap.width * bitmap.height)
                 bitmap.getPixels(intArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
@@ -342,40 +337,31 @@ class CropImageActivity : MonitoredActivity(), ListenerState {
                 val mBitmap = BinaryBitmap(HybridBinarizer(source))
                 val reader: Reader = MultiFormatReader()
                 try {
-                    val result = reader.decode(mBitmap)
-                    Utils.Log(TAG, "This is type of qrcode")
-                    return@Callable Gson().toJson(result)
-                } catch (e: NotFoundException) {
-                    e.printStackTrace()
-                    Utils.Log(TAG, "Do not recognize qrcode type")
-                    return@Callable ""
-                } catch (e: ChecksumException) {
-                    e.printStackTrace()
-                    Utils.Log(TAG, "Do not recognize qrcode type")
-                    return@Callable ""
-                }
-            } catch (e: FormatException) {
-                e.printStackTrace()
-                Utils.Log(TAG, "Do not recognize qrcode type")
-                return@Callable ""
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe { response: String? ->
-                    val mResult = Gson().fromJson(response, Result::class.java)
+                    val mResult = reader.decode(mBitmap)
                     if (mResult != null) {
                         isSaving = false
                         isProgressing = false
-                        layoutDone.setEnabled(true)
-                        layoutDone.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                        btn_done.setEnabled(true)
+                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
                         setResultEncode(mResult)
                     } else {
                         isSaving = false
                         isProgressing = false
-                        layoutDone.setEnabled(false)
-                        layoutDone.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+                        btn_done.setEnabled(false)
+                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
                     }
-                })
-        Utils.Log(TAG, "onRenderCode")
+                } catch (e: NotFoundException) {
+                    e.printStackTrace()
+                    Utils.Log(TAG, "Do not recognize qrcode type")
+                } catch (e: ChecksumException) {
+                    e.printStackTrace()
+                    Utils.Log(TAG, "Do not recognize qrcode type")
+                }
+            } catch (e: FormatException) {
+                e.printStackTrace()
+                Utils.Log(TAG, "Do not recognize qrcode type")
+            }
+        }
     }
 
     override fun onBackPressed() {

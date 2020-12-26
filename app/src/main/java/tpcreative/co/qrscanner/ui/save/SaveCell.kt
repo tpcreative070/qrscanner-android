@@ -1,7 +1,5 @@
 package tpcreative.co.qrscanner.ui.save
-
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
@@ -9,20 +7,15 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.SimpleCell
 import com.jaychang.srv.SimpleViewHolder
+import kotlinx.android.synthetic.main.save_item.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.model.SaveModel
 
-/**
- * Created by Oclemy on 2017 for ProgrammingWizards TV Channel and http://www.camposha.info.
- * - Our galaxycell class
- */
-class SaveCell(item: SaveModel) : SimpleCell<SaveModel?, SaveCell.ViewHolder?>(item) {
+class SaveCell(item: SaveModel) : SimpleCell<SaveModel, SaveCell.ViewHolder>(item) {
     private var listener: ItemSelectedListener? = null
     fun setListener(listener: ItemSelectedListener?) {
         this.listener = listener
@@ -35,7 +28,7 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel?, SaveCell.ViewHolder?>(i
     /*
     - Return a ViewHolder instance
      */
-    protected override fun onCreateViewHolder(parent: ViewGroup?, cellView: View?): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, cellView: View): ViewHolder {
         return ViewHolder(cellView)
     }
 
@@ -44,31 +37,31 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel?, SaveCell.ViewHolder?>(i
      */
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int, context: Context, o: Any?) {
         val data = item
-        if (data.isDeleted) {
-            viewHolder.ckDelete.setVisibility(View.VISIBLE)
-            viewHolder.llCheckedBox.setVisibility(View.VISIBLE)
-            viewHolder.imgEdit.setVisibility(View.INVISIBLE)
+        if (data.isDeleted()) {
+            viewHolder.ckDelete.visibility = View.VISIBLE
+            viewHolder.llCheckedBox.visibility = View.VISIBLE
+            viewHolder.imgEdit.visibility = View.INVISIBLE
         } else {
-            viewHolder.ckDelete.setVisibility(View.INVISIBLE)
-            viewHolder.llCheckedBox.setVisibility(View.INVISIBLE)
-            viewHolder.imgEdit.setVisibility(View.VISIBLE)
+            viewHolder.ckDelete.visibility = View.INVISIBLE
+            viewHolder.llCheckedBox.visibility = View.INVISIBLE
+            viewHolder.imgEdit.visibility = View.VISIBLE
         }
-        Log.d(TAG, "position :" + i + " checked :" + data.isChecked)
-        viewHolder.ckDelete.setChecked(data.isChecked)
+        Utils.Log(TAG, "position :" + i + " checked :" + data.isChecked())
+        viewHolder.ckDelete.isChecked = data.isChecked()
         viewHolder.llCheckedBox.setOnClickListener(View.OnClickListener {
             if (listener != null) {
-                viewHolder.ckDelete.setChecked(!item.isChecked)
-                listener.onClickItem(i, !item.isChecked)
+                viewHolder.ckDelete.isChecked = !item.isChecked()
+                listener?.onClickItem(i, !item.isChecked())
             }
         })
         viewHolder.lItem.setOnClickListener(View.OnClickListener {
             if (listener != null) {
-                if (listener.isDeleted()) {
-                    viewHolder.ckDelete.setChecked(!item.isChecked)
-                    listener.onClickItem(i, !item.isChecked)
+                if (listener?.isDeleted() == true) {
+                    viewHolder.ckDelete.isChecked = !item.isChecked()
+                    listener?.onClickItem(i, !item.isChecked())
                     Utils.Log(TAG, "delete")
                 } else {
-                    listener.onClickItem(i)
+                    listener?.onClickItem(i)
                     Utils.Log(TAG, "on clicked")
                 }
             } else {
@@ -77,35 +70,35 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel?, SaveCell.ViewHolder?>(i
         })
         viewHolder.lItem.setOnLongClickListener(OnLongClickListener {
             if (listener != null) {
-                if (!listener.isDeleted()) {
-                    listener.onLongClickItem(i)
+                if (listener?.isDeleted() != true) {
+                    listener?.onLongClickItem(i)
                 }
             }
             false
         })
-        viewHolder.tvTime.setText(Utils.getCurrentDateDisplay(data.updatedDateTime))
+        viewHolder.tvTime.text = Utils.getCurrentDateDisplay(data.updatedDateTime)
         if (data.createType == ParsedResultType.EMAIL_ADDRESS.name) {
-            viewHolder.tvContent.setText(data.email)
+            viewHolder.tvContent.text = data.email
         } else if (data.createType == ParsedResultType.SMS.name) {
-            viewHolder.tvContent.setText(data.message)
+            viewHolder.tvContent.text = data.message
         } else if (data.createType == ParsedResultType.GEO.name) {
-            viewHolder.tvContent.setText(data.lat.toString() + "," + data.lon + "(" + data.query + ")")
+            viewHolder.tvContent.text = data.lat.toString() + "," + data.lon + "(" + data.query + ")"
         } else if (data.createType == ParsedResultType.CALENDAR.name) {
-            viewHolder.tvContent.setText(data.title)
+            viewHolder.tvContent.text = data.title
         } else if (data.createType == ParsedResultType.ADDRESSBOOK.name) {
-            viewHolder.tvContent.setText(data.fullName)
+            viewHolder.tvContent.text = data.fullName
         } else if (data.createType == ParsedResultType.TEL.name) {
-            viewHolder.tvContent.setText(data.phone)
+            viewHolder.tvContent.text = data.phone
         } else if (data.createType == ParsedResultType.WIFI.name) {
-            viewHolder.tvContent.setText(data.ssId)
+            viewHolder.tvContent.text = data.ssId
         } else if (data.createType == ParsedResultType.URI.name) {
-            viewHolder.tvContent.setText(data.url)
+            viewHolder.tvContent.text = data.url
         } else {
-            viewHolder.tvContent.setText(data.text)
+            viewHolder.tvContent.text = data.text
         }
         viewHolder.imgEdit.setOnClickListener(View.OnClickListener {
             if (listener != null) {
-                listener.onClickEdit(i)
+                listener?.onClickEdit(i)
             }
         })
     }
@@ -115,37 +108,22 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel?, SaveCell.ViewHolder?>(i
      * - Inner static class.
      * Define your view holder, which must extend SimpleViewHolder.
      */
-    internal class ViewHolder(itemView: View?) : SimpleViewHolder(itemView) {
-        @BindView(R.id.tvDate)
-        var tvTime: AppCompatTextView? = null
-
-        @BindView(R.id.tvContent)
-        var tvContent: AppCompatTextView? = null
-
-        @BindView(R.id.ckDelete)
-        var ckDelete: AppCompatCheckBox? = null
-
-        @BindView(R.id.imgEdit)
-        var imgEdit: AppCompatImageView? = null
-
-        @BindView(R.id.lItem)
-        var lItem: LinearLayout? = null
-
-        @BindView(R.id.llCheckedBox)
-        var llCheckedBox: LinearLayout? = null
-
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+    class ViewHolder(itemView: View) : SimpleViewHolder(itemView) {
+        val tvTime: AppCompatTextView = itemView.tvDate
+        val tvContent: AppCompatTextView = itemView.tvContent
+        val ckDelete: AppCompatCheckBox = itemView.ckDelete
+        val imgEdit: AppCompatImageView = itemView.imgEdit
+        val lItem: LinearLayout = itemView.lItem
+        val llCheckedBox: LinearLayout =  itemView.llCheckedBox
     }
 
     interface ItemSelectedListener {
-        open fun onClickItem(position: Int, isChecked: Boolean)
-        open fun onClickItem(position: Int)
-        open fun onLongClickItem(position: Int)
-        open fun onClickShare(position: Int)
-        open fun onClickEdit(position: Int)
-        open fun isDeleted(): Boolean
+        fun onClickItem(position: Int, isChecked: Boolean)
+        fun onClickItem(position: Int)
+        fun onLongClickItem(position: Int)
+        fun onClickShare(position: Int)
+        fun onClickEdit(position: Int)
+        fun isDeleted(): Boolean
     }
 
     companion object {

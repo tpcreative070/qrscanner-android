@@ -43,7 +43,7 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-    fun <T> onGenerateView(context: Activity?, save: SaveModel?, clazz: Class<T?>?) {
+    fun <T> onGenerateView(context: Activity?, save: SaveModel?, clazz: Class<T>) {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
@@ -51,7 +51,7 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-    fun <T> onResultView(context: Activity?, save: Create?, clazz: Class<T?>?) {
+    fun <T> onResultView(context: Activity?, save: Create?, clazz: Class<T>) {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:id="@+id/zxing_barcode_scanner"
-            app:zxing_use_texture_view="true">
+            app:zxing_use_texture_view="false">
             <RelativeLayout
                 android:layout_alignParentTop="true"
                 android:id="@+id/rlHeader"
