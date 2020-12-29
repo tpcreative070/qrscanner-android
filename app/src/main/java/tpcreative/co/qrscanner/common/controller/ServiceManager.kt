@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.controller
-
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
@@ -9,10 +8,6 @@ import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.gson.Gson
 import com.google.zxing.client.result.ParsedResultType
 import com.opencsv.CSVWriter
-import io.reactivex.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
@@ -31,16 +26,15 @@ import java.util.*
 class ServiceManager : BaseView<Any?> {
     private var myService: QRScannerService? = null
     private var mContext: Context? = null
-    private var subscriptions: Disposable? = null
-    private var mMapDelete: MutableMap<String?, String?>? = HashMap()
-    private val mDriveIdList: MutableList<DriveResponse?>? = ArrayList()
+    private var mMapDelete: MutableMap<String?, String?> = mutableMapOf()
+    private val mDriveIdList: MutableList<DriveResponse> = mutableListOf()
     private var isDismiss = false
     private var isSyncingData = false
-    var myConnection: ServiceConnection? = object : ServiceConnection {
+    var myConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName?, binder: IBinder?) {
             Utils.Log(TAG, "connected")
-            myService = (binder as LocalBinder?).getService()
-            myService.bindView(this@ServiceManager)
+            myService = (binder as LocalBinder?)?.getService()
+            myService?.bindView(this@ServiceManager)
             getInstance().onPreparingSyncData(false)
             if (Utils.isProVersion() && !Utils.isAlreadyCheckout()) {
                 getInstance().onCheckout()
@@ -68,7 +62,7 @@ class ServiceManager : BaseView<Any?> {
             val account1 = Account(email, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE)
             val intent = AccountManager.newChooseAccountIntent(account1, null, arrayOf<String?>(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE), value, null, null, null)
             intent.putExtra("overrideTheme", 1)
-            context.startActivityForResult(intent, Navigator.REQUEST_CODE_EMAIL)
+            context?.startActivityForResult(intent, Navigator.REQUEST_CODE_EMAIL)
         } catch (e: ActivityNotFoundException) {
             e.printStackTrace()
         }
@@ -85,7 +79,7 @@ class ServiceManager : BaseView<Any?> {
         var intent: Intent? = null
         intent = Intent(mContext, QRScannerService::class.java)
         intent.putExtra(TAG, "Message")
-        mContext.bindService(intent, myConnection, Context.BIND_AUTO_CREATE)
+        mContext?.bindService(intent, myConnection, Context.BIND_AUTO_CREATE)
         Utils.Log(TAG, "onStartService")
     }
 
@@ -160,8 +154,8 @@ class ServiceManager : BaseView<Any?> {
     private fun onGetItemList() {
         isSyncingData = true
         Utils.Log(TAG, "isSyncingData 188 $isSyncingData")
-        myService.getFileListInApp(object : BaseListener<DriveResponse?> {
-            override fun onShowListObjects(list: MutableList<DriveResponse?>?) {
+        myService?.getFileListInApp(object : BaseListener<DriveResponse> {
+            override fun onShowListObjects(list: MutableList<DriveResponse>) {
                 Utils.Log(TAG, "Response data " + Gson().toJson(list))
                 mDriveIdList.clear()
                 mDriveIdList.addAll(list)
@@ -606,26 +600,26 @@ class ServiceManager : BaseView<Any?> {
     }
 
     interface ServiceManagerListener {
-        open fun onExportingSVCCompleted(path: String?)
+        fun onExportingSVCCompleted(path: String?)
     }
 
     interface ServiceManagerClickedListener {
-        open fun onYes()
-        open fun onNo()
+        fun onYes()
+        fun onNo()
     }
 
     interface ServiceManagerClickedItemsListener {
-        open fun onYes()
+        fun onYes()
     }
 
     companion object {
         private val TAG = ServiceManager::class.java.simpleName
         private var instance: ServiceManager? = null
-        fun getInstance(): ServiceManager? {
+        fun getInstance(): ServiceManager {
             if (instance == null) {
                 instance = ServiceManager()
             }
-            return instance
+            return instance as ServiceManager
         }
     }
 }

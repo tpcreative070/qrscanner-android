@@ -1,16 +1,13 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.*
-import androidx.appcompat.widget.*
-import butterknife.BindView
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.fragment_message.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -19,21 +16,14 @@ import tpcreative.co.qrscanner.model.*
 
 class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
     var mAwesomeValidation: AwesomeValidation? = null
-
-    @BindView(R.id.edtTo)
-    var edtTo: AppCompatEditText? = null
-
-    @BindView(R.id.edtMessage)
-    var edtMessage: AppCompatEditText? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_message)
-        val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val bundle = intent.extras
-        val mData = bundle.get("data") as SaveModel?
+        val mData = bundle?.get("data") as SaveModel?
         if (mData != null) {
             save = mData
             onSetData()
@@ -47,13 +37,13 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation.validate()) {
+                if (mAwesomeValidation?.validate() == true) {
                     val create = Create(save)
-                    create.phone = edtTo.getText().toString()
-                    create.message = edtMessage.getText().toString()
+                    create.phone = edtTo.text.toString()
+                    create.message = edtMessage.text.toString()
                     create.createType = ParsedResultType.SMS
                     Navigator.onMoveToReview(this, create)
                     Utils.Log(TAG, "Passed")
@@ -67,8 +57,8 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation.addValidation(this, R.id.edtTo, Patterns.PHONE, R.string.err_to)
-        mAwesomeValidation.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
+        mAwesomeValidation?.addValidation(this, R.id.edtTo, Patterns.PHONE, R.string.err_to)
+        mAwesomeValidation?.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
     }
 
     fun FocusUI() {
@@ -76,8 +66,8 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     fun onSetData() {
-        edtTo.setText(save.phone)
-        edtMessage.setText(save.message)
+        edtTo.setText(save?.phone)
+        edtMessage.setText(save?.message)
     }
 
     public override fun onStart() {
@@ -103,18 +93,18 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
 
     public override fun onDestroy() {
         super.onDestroy()
-        GenerateSingleton.Companion.getInstance().setListener(null)
-        Log.d(TAG, "onDestroy")
+        GenerateSingleton.getInstance()?.setListener(null)
+        Utils.Log(TAG, "onDestroy")
     }
 
     public override fun onResume() {
         super.onResume()
-        GenerateSingleton.Companion.getInstance().setListener(this)
-        Log.d(TAG, "onResume")
+        GenerateSingleton.getInstance()?.setListener(this)
+        Utils.Log(TAG, "onResume")
     }
 
     override fun onCompletedGenerate() {
-        SaveSingleton.Companion.getInstance().reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
     }
@@ -123,7 +113,7 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG, "Finish...........")
-            SaveSingleton.Companion.getInstance().reloadData()
+            SaveSingleton.getInstance()?.reloadData()
             finish()
         }
     }

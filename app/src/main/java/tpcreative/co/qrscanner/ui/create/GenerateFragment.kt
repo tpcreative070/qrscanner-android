@@ -1,49 +1,44 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.content.*
 import android.os.Bundle
 import android.view.*
-import butterknife.BindView
-import com.jaychang.srv.SimpleRecyclerView
+import kotlinx.android.synthetic.main.fragment_generate.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.ui.create.GenerateFragment
+import tpcreative.co.qrscanner.model.QRCodeType
+import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.*
 
-class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener, GenerateView {
-    @BindView(R.id.recyclerView)
-    var recyclerView: SimpleRecyclerView? = null
-    private var presenter: GeneratePresenter? = null
+class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
+    lateinit var viewModel : GenerateViewModel
     override fun getLayoutId(): Int {
         return 0
     }
 
     override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater.inflate(R.layout.fragment_generate, viewGroup, false)
+        return inflater?.inflate(R.layout.fragment_generate, viewGroup, false)
     }
 
     override fun work() {
         super.work()
-        presenter = GeneratePresenter()
-        presenter.bindView(this)
-        presenter.setList()
+        initUI()
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            QRScannerApplication.Companion.getInstance().getActivity().onShowFloatingButton(this@GenerateFragment, true)
+            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@GenerateFragment, true)
             Utils.Log(TAG, "isVisible")
             if (Utils.isPremium()) {
-                if (!presenter.isPremium) {
-                    presenter.setList()
-                    presenter.isPremium = Utils.isPremium()
+                if (!viewModel.isPremium) {
+                    getDataList()
+                    viewModel.isPremium = Utils.isPremium()
                     Utils.Log(TAG, "Call update ui")
                 }
             }
         } else {
-            QRScannerApplication.Companion.getInstance().getActivity().onShowFloatingButton(this@GenerateFragment, false)
+            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@GenerateFragment, false)
             Utils.Log(TAG, "isInVisible")
         }
     }
@@ -52,16 +47,11 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener, Gene
         return super.getContext()
     }
 
-    override fun onSetView() {
-        bindData()
-    }
-
-    private fun bindData() {
-        val Galaxys = presenter.mList
+    fun bindData(data : MutableList<QRCodeType>) {
         //CUSTOM SORT ACCORDING TO CATEGORIES
         val cells: MutableList<GenerateCell?> = ArrayList()
         //LOOP THROUGH GALAXIES INSTANTIATING THEIR CELLS AND ADDING TO CELLS COLLECTION
-        for (galaxy in Galaxys) {
+        for (galaxy in data) {
             val cell = GenerateCell(galaxy)
             cell.setListener(this)
             cells.add(cell)
@@ -71,11 +61,11 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener, Gene
     }
 
     override fun onClickItem(position: Int, isChecked: Boolean) {
-        var position = position
+        var mPosition = position
         if (!Utils.isPremium()) {
-            position = position + 1
+            mPosition += 1
         }
-        when (position) {
+        when (mPosition) {
             0 -> {
                 Navigator.onGenerateView(activity, null, BarcodeFragment::class.java)
             }
@@ -129,8 +119,6 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener, Gene
         super.onResume()
         Utils.Log(TAG, "onResume")
     }
-
-    override fun onInitView() {}
 
     companion object {
         private val TAG = GenerateFragment::class.java.simpleName

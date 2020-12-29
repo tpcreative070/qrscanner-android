@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,11 +10,9 @@ import android.os.Bundle
 import android.provider.*
 import android.view.*
 import android.widget.*
-import androidx.appcompat.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
-import butterknife.BindView
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -29,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.zxing.client.result.ParsedResultType
 import de.mrapp.android.dialog.MaterialDialog
+import kotlinx.android.synthetic.main.fragment_location.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -37,14 +35,6 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
 
 class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, OnMyLocationClickListener, OnMapReadyCallback, OnRequestPermissionsResultCallback, OnMapClickListener, LocationListener, SingletonGenerateListener {
-    @BindView(R.id.edtLatitude)
-    var edtLatitude: AppCompatEditText? = null
-
-    @BindView(R.id.edtLongitude)
-    var edtLongitude: AppCompatEditText? = null
-
-    @BindView(R.id.edtQuery)
-    var edtQuery: AppCompatEditText? = null
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var mAwesomeValidation: AwesomeValidation? = null
@@ -59,14 +49,13 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_location)
-        val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment.getMapAsync(this)
+        mapFragment?.getMapAsync(this)
         val bundle = intent.extras
-        val mData = bundle.get(getString(R.string.key_data)) as SaveModel?
+        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
         if (mData != null) {
             save = mData
             onSetData()
@@ -74,7 +63,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
             Utils.Log(TAG, "Data is null")
         }
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) != true) {
             showGpsWarningDialog()
         }
     }
@@ -107,17 +96,17 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     override fun onMapClick(latLng: LatLng?) {
-        Utils.Log(TAG, "lat : " + latLng.latitude + " - lon :" + latLng.longitude)
-        mMap.clear()
-        mMap.addMarker(MarkerOptions()
-                .position(LatLng(latLng.latitude, latLng.longitude))
+        Utils.Log(TAG, "lat : " + latLng?.latitude + " - lon :" + latLng?.longitude)
+        mMap?.clear()
+        mMap?.addMarker(MarkerOptions()
+                .position(LatLng(latLng?.latitude ?: 0.0, latLng?.longitude ?: 0.0))
                 .title("New Marker")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         )
-        lastLat = latLng.latitude
-        lastLon = latLng.longitude
-        edtLatitude.setText("" + lastLat)
-        edtLongitude.setText("" + lastLon)
+        lastLat = latLng?.latitude ?: 0.0
+        lastLon = latLng?.longitude ?: 0.0
+        edtLatitude.setText("$lastLat")
+        edtLongitude.setText("$lastLon")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -125,19 +114,18 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation.validate()) {
+                if (mAwesomeValidation?.validate() == true) {
                     val create = Create(save)
                     try {
                         if (lastLon == 0.0 || lastLon == 0.0) {
-                            //Utils.showGotItSnackbar(edtLatitude,"Please enable GPS in order to get accurate lat and lon");
                             Utils.onDropDownAlert(this, "Please enable GPS in order to get accurate lat and lon")
                         } else {
                             create.lat = lastLat
                             create.lon = lastLon
-                            create.query = edtQuery.getText().toString()
+                            create.query = edtQuery.text.toString()
                             create.createType = ParsedResultType.GEO
                             Navigator.onMoveToReview(this, create)
                         }
@@ -154,9 +142,9 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation.addValidation(this, R.id.edtLatitude, RegexTemplate.NOT_EMPTY, R.string.err_email)
-        mAwesomeValidation.addValidation(this, R.id.edtLongitude, RegexTemplate.NOT_EMPTY, R.string.err_object)
-        mAwesomeValidation.addValidation(this, R.id.edtQuery, RegexTemplate.NOT_EMPTY, R.string.err_query)
+        mAwesomeValidation?.addValidation(this, R.id.edtLatitude, RegexTemplate.NOT_EMPTY, R.string.err_email)
+        mAwesomeValidation?.addValidation(this, R.id.edtLongitude, RegexTemplate.NOT_EMPTY, R.string.err_object)
+        mAwesomeValidation?.addValidation(this, R.id.edtQuery, RegexTemplate.NOT_EMPTY, R.string.err_query)
     }
 
     fun FocusUI() {
@@ -171,16 +159,16 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     fun onSetData() {
-        edtLatitude.setText("" + save.lat)
-        edtLongitude.setText("" + save.lon)
-        edtQuery.setText(save.query)
+        edtLatitude.setText("${save?.lat}")
+        edtLongitude.setText("${save?.lon}")
+        edtQuery.setText(save?.query)
     }
 
     public override fun onStart() {
         super.onStart()
         Utils.Log(TAG, "onStart")
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
-        mAwesomeValidation.clear()
+        mAwesomeValidation?.clear()
         addValidationForEditText()
         if (save != null) {
             onSetData()
@@ -198,15 +186,15 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
             Utils.Log(TAG, "Permission is request")
         } else {
             Utils.Log(TAG, "Permission is ready")
-            mapFragment.getMapAsync(this)
+            mapFragment?.getMapAsync(this)
         }
-        GenerateSingleton.Companion.getInstance().setListener(this)
+        GenerateSingleton.getInstance()?.setListener(this)
     }
 
     public override fun onPause() {
         super.onPause()
         Utils.Log(TAG, "onPause")
-        locationManager.removeUpdates(this)
+        locationManager?.removeUpdates(this)
     }
 
     public override fun onStop() {
@@ -217,12 +205,12 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     public override fun onDestroy() {
         super.onDestroy()
         Utils.Log(TAG, "onDestroy")
-        locationManager.removeUpdates(this)
-        GenerateSingleton.Companion.getInstance().setListener(null)
+        locationManager?.removeUpdates(this)
+        GenerateSingleton.getInstance()?.setListener(null)
     }
 
     override fun onCompletedGenerate() {
-        SaveSingleton.Companion.getInstance().reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
     }
@@ -231,29 +219,29 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         try {
             mMap = map
             Utils.Log(TAG, "Map ready for services")
-            mMap.setOnMyLocationButtonClickListener(this)
-            mMap.setOnMyLocationClickListener(this)
-            mMap.setOnMapClickListener(this)
+            mMap?.setOnMyLocationButtonClickListener(this)
+            mMap?.setOnMyLocationClickListener(this)
+            mMap?.setOnMapClickListener(this)
             locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
             enableMyLocation()
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf<String?>(Manifest.permission.ACCESS_FINE_LOCATION), 1)
             } else {
-                if (!mMap.isMyLocationEnabled()) mMap.setMyLocationEnabled(true)
-                var myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                if (mMap?.isMyLocationEnabled != true) mMap?.isMyLocationEnabled = true
+                var myLocation = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                 if (myLocation == null) {
                     val criteria = Criteria()
                     criteria.accuracy = Criteria.ACCURACY_COARSE
-                    val provider = locationManager.getBestProvider(criteria, true)
-                    myLocation = locationManager.getLastKnownLocation(provider)
+                    val provider = locationManager?.getBestProvider(criteria, true)
+                    myLocation = locationManager?.getLastKnownLocation(provider ?: "")
                 }
                 if (myLocation != null) {
                     val userLocation = LatLng(myLocation.latitude, myLocation.longitude)
                     lastLat = myLocation.latitude
                     lastLon = myLocation.longitude
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f), 1500, null)
-                    edtLatitude.setText("" + lastLat)
-                    edtLongitude.setText("" + lastLon)
+                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f), 1500, null)
+                    edtLatitude.setText("$lastLat")
+                    edtLongitude.setText("$lastLon")
                 }
             }
         } catch (e: Exception) {
@@ -272,18 +260,18 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
                     Manifest.permission.ACCESS_FINE_LOCATION, true)
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true)
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0f, this)
+            mMap?.isMyLocationEnabled = true
+            locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0f, this)
         }
     }
 
-    override fun onLocationChanged(location: Location?) {
+    override fun onLocationChanged(location: Location) {
         if (!isRunning) {
             try {
-                lastLat = location.getLatitude()
-                lastLon = location.getLongitude()
-                edtLatitude.setText("" + lastLat)
-                edtLongitude.setText("" + lastLon)
+                lastLat = location.latitude
+                lastLon = location.longitude
+                edtLatitude.setText("$lastLat")
+                edtLongitude.setText("$lastLon")
                 if (location.hasAccuracy()) {
                     isRunning = true
                 }
@@ -295,26 +283,26 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     override fun onStatusChanged(s: String?, i: Int, bundle: Bundle?) {}
-    override fun onProviderEnabled(s: String?) {}
-    override fun onProviderDisabled(s: String?) {}
+    override fun onProviderEnabled(s: String) {}
+    override fun onProviderDisabled(s: String) {}
     override fun onMyLocationButtonClick(): Boolean {
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
-        mMap.clear()
+        mMap?.clear()
         enableMyLocation()
         isRunning = false
         return false
     }
 
     override fun onMyLocationClick(location: Location) {
-        mMap.clear()
+        mMap?.clear()
         lastLat = location.latitude
         lastLon = location.longitude
         edtLatitude.setText("" + lastLat)
         edtLongitude.setText("" + lastLon)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>,
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return
@@ -337,7 +325,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG, "Finish...........")
-            SaveSingleton.Companion.getInstance().reloadData()
+            SaveSingleton.getInstance()?.reloadData()
             finish()
         }
     }

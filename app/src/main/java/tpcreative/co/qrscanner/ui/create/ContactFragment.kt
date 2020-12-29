@@ -1,16 +1,14 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.*
 import androidx.appcompat.widget.*
-import butterknife.BindView
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.fragment_contact.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -18,27 +16,15 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.model.*
 
 class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
-    @BindView(R.id.edtFullName)
-    var edtFullName: AppCompatEditText? = null
-
-    @BindView(R.id.edtAddress)
-    var edtAddress: AppCompatEditText? = null
-
-    @BindView(R.id.edtPhone)
-    var edtPhone: AppCompatEditText? = null
-
-    @BindView(R.id.edtEmail)
-    var edtEmail: AppCompatEditText? = null
     private var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_contact)
-        val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val bundle = intent.extras
-        val mData = bundle.get(getString(R.string.key_data)) as SaveModel?
+        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
         if (mData != null) {
             save = mData
             onSetData()
@@ -52,16 +38,16 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation.validate()) {
+                if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
                     val create = Create(save)
-                    create.fullName = edtFullName.getText().toString().trim { it <= ' ' }
-                    create.address = edtAddress.getText().toString()
-                    create.phone = edtPhone.getText().toString()
-                    create.email = edtEmail.getText().toString()
+                    create.fullName = edtFullName?.text.toString().trim { it <= ' ' }
+                    create.address = edtAddress?.text.toString()
+                    create.phone = edtPhone?.text.toString()
+                    create.email = edtEmail?.text.toString()
                     create.createType = ParsedResultType.ADDRESSBOOK
                     Navigator.onMoveToReview(this, create)
                 } else {
@@ -74,10 +60,10 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation.addValidation(this, R.id.edtFullName, RegexTemplate.NOT_EMPTY, R.string.err_fullName)
-        mAwesomeValidation.addValidation(this, R.id.edtAddress, RegexTemplate.NOT_EMPTY, R.string.err_address)
-        mAwesomeValidation.addValidation(this, R.id.edtPhone, Patterns.PHONE, R.string.err_phone)
-        mAwesomeValidation.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
+        mAwesomeValidation?.addValidation(this, R.id.edtFullName, RegexTemplate.NOT_EMPTY, R.string.err_fullName)
+        mAwesomeValidation?.addValidation(this, R.id.edtAddress, RegexTemplate.NOT_EMPTY, R.string.err_address)
+        mAwesomeValidation?.addValidation(this, R.id.edtPhone, Patterns.PHONE, R.string.err_phone)
+        mAwesomeValidation?.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
     }
 
     fun FocusUI() {
@@ -85,10 +71,10 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     fun onSetData() {
-        edtFullName.setText(save.fullName)
-        edtAddress.setText(save.address)
-        edtPhone.setText(save.phone)
-        edtEmail.setText(save.email)
+        edtFullName.setText(save?.fullName)
+        edtAddress.setText(save?.address)
+        edtPhone.setText(save?.phone)
+        edtEmail.setText(save?.email)
     }
 
     public override fun onStart() {
@@ -114,18 +100,18 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
 
     public override fun onDestroy() {
         super.onDestroy()
-        GenerateSingleton.Companion.getInstance().setListener(null)
-        Log.d(TAG, "onDestroy")
+        GenerateSingleton.getInstance()?.setListener(null)
+        Utils.Log(TAG, "onDestroy")
     }
 
     public override fun onResume() {
         super.onResume()
-        GenerateSingleton.Companion.getInstance().setListener(this)
-        Log.d(TAG, "onResume")
+        GenerateSingleton.getInstance()?.setListener(this)
+        Utils.Log(TAG, "onResume")
     }
 
     override fun onCompletedGenerate() {
-        SaveSingleton.Companion.getInstance().reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
     }
@@ -134,7 +120,7 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG, "Finish...........")
-            SaveSingleton.Companion.getInstance().reloadData()
+            SaveSingleton.getInstance()?.reloadData()
             finish()
         }
     }

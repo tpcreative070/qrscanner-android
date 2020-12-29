@@ -1,15 +1,12 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.RadioGroup
-import androidx.appcompat.widget.*
-import butterknife.BindView
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.fragment_wifi.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -18,34 +15,15 @@ import tpcreative.co.qrscanner.model.*
 
 class WifiFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerateListener {
     var mAwesomeValidation: AwesomeValidation? = null
-
-    @BindView(R.id.edtSSID)
-    var edtSSID: AppCompatEditText? = null
-
-    @BindView(R.id.edtPassword)
-    var edtPassword: AppCompatEditText? = null
-
-    @BindView(R.id.radioGroup1)
-    var radioGroup1: RadioGroup? = null
-
-    @BindView(R.id.radio0)
-    var radio0: AppCompatRadioButton? = null
-
-    @BindView(R.id.radio1)
-    var radio1: AppCompatRadioButton? = null
-
-    @BindView(R.id.radio2)
-    var radio2: AppCompatRadioButton? = null
     var typeEncrypt: String? = "WPA"
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_wifi)
-        val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val bundle = intent.extras
-        val mData = bundle.get(getString(R.string.key_data)) as SaveModel?
+        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
         if (mData != null) {
             save = mData
             onSetData()
@@ -62,14 +40,14 @@ class WifiFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation.validate()) {
+                if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
                     val create = Create(save)
-                    create.ssId = edtSSID.getText().toString().trim { it <= ' ' }
-                    create.password = edtPassword.getText().toString()
+                    create.ssId = edtSSID.text.toString().trim { it <= ' ' }
+                    create.password = edtPassword.text.toString()
                     create.networkEncryption = typeEncrypt
                     create.createType = ParsedResultType.WIFI
                     Navigator.onMoveToReview(this, create)
@@ -83,8 +61,8 @@ class WifiFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation.addValidation(this, R.id.edtSSID, RegexTemplate.NOT_EMPTY, R.string.err_ssId)
-        mAwesomeValidation.addValidation(this, R.id.edtPassword, RegexTemplate.NOT_EMPTY, R.string.err_password)
+        mAwesomeValidation?.addValidation(this, R.id.edtSSID, RegexTemplate.NOT_EMPTY, R.string.err_ssId)
+        mAwesomeValidation?.addValidation(this, R.id.edtPassword, RegexTemplate.NOT_EMPTY, R.string.err_password)
     }
 
     fun FocusUI() {
@@ -92,14 +70,14 @@ class WifiFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     }
 
     fun onSetData() {
-        edtSSID.setText(save.ssId)
-        edtPassword.setText(save.password)
-        if (save.networkEncryption == "WPA") {
-            radio0.setChecked(true)
-        } else if (save.networkEncryption == "WEP") {
-            radio1.setChecked(true)
+        edtSSID.setText(save?.ssId)
+        edtPassword.setText(save?.password)
+        if (save?.networkEncryption == "WPA") {
+            radio0.isChecked = true
+        } else if (save?.networkEncryption == "WEP") {
+            radio1.isChecked = true
         } else {
-            radio2.setChecked(true)
+            radio2.isChecked = true
         }
     }
 
@@ -126,24 +104,24 @@ class WifiFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
 
     public override fun onDestroy() {
         super.onDestroy()
-        GenerateSingleton.Companion.getInstance().setListener(null)
+        GenerateSingleton.getInstance()?.setListener(null)
         Utils.Log(TAG, "onDestroy")
     }
 
     public override fun onResume() {
         super.onResume()
-        GenerateSingleton.Companion.getInstance().setListener(this)
+        GenerateSingleton.getInstance()?.setListener(this)
         Utils.Log(TAG, "onResume")
     }
 
     override fun onCompletedGenerate() {
-        SaveSingleton.Companion.getInstance().reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
     }
 
     override fun onClick(view: View?) {
-        when (view.getId()) {
+        when (view?.id) {
             R.id.radio0 -> {
                 typeEncrypt = "WPA"
                 Utils.Log(TAG, "Selected here: radio 0")

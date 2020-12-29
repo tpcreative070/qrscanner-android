@@ -88,7 +88,7 @@ class Theme : Serializable {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return ArrayList()
+        return mutableListOf()
     }
 
     companion object {

@@ -1,15 +1,12 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.*
-import androidx.appcompat.widget.*
-import butterknife.BindView
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.fragment_telephone.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -18,18 +15,14 @@ import tpcreative.co.qrscanner.model.*
 
 class TelephoneFragment : BaseActivitySlide(), SingletonGenerateListener {
     var mAwesomeValidation: AwesomeValidation? = null
-
-    @BindView(R.id.edtPhone)
-    var edtPhone: AppCompatEditText? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_telephone)
-        val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val bundle = intent.extras
-        val mData = bundle.get(getString(R.string.key_data)) as SaveModel?
+        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
         if (mData != null) {
             save = mData
             onSetData()
@@ -43,13 +36,13 @@ class TelephoneFragment : BaseActivitySlide(), SingletonGenerateListener {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation.validate()) {
+                if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
                     val create = Create(save)
-                    create.phone = edtPhone.getText().toString().trim { it <= ' ' }
+                    create.phone = edtPhone.text.toString().trim { it <= ' ' }
                     create.createType = ParsedResultType.TEL
                     Navigator.onMoveToReview(this, create)
                 } else {
@@ -62,7 +55,7 @@ class TelephoneFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation.addValidation(this, R.id.edtPhone, Patterns.PHONE, R.string.err_phone)
+        mAwesomeValidation?.addValidation(this, R.id.edtPhone, Patterns.PHONE, R.string.err_phone)
     }
 
     fun FocusUI() {
@@ -70,7 +63,7 @@ class TelephoneFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     fun onSetData() {
-        edtPhone.setText(save.phone)
+        edtPhone.setText(save?.phone)
     }
 
     public override fun onStart() {
@@ -96,18 +89,18 @@ class TelephoneFragment : BaseActivitySlide(), SingletonGenerateListener {
 
     public override fun onDestroy() {
         super.onDestroy()
-        GenerateSingleton.Companion.getInstance().setListener(null)
-        Log.d(TAG, "onDestroy")
+        GenerateSingleton.getInstance()?.setListener(null)
+        Utils.Log(TAG, "onDestroy")
     }
 
     public override fun onResume() {
         super.onResume()
-        GenerateSingleton.Companion.getInstance().setListener(this)
-        Log.d(TAG, "onResume")
+        GenerateSingleton.getInstance()?.setListener(this)
+        Utils.Log(TAG, "onResume")
     }
 
     override fun onCompletedGenerate() {
-        SaveSingleton.Companion.getInstance().reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
     }
@@ -116,7 +109,7 @@ class TelephoneFragment : BaseActivitySlide(), SingletonGenerateListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG, "Finish...........")
-            SaveSingleton.Companion.getInstance().reloadData()
+            SaveSingleton.getInstance()?.reloadData()
             finish()
         }
     }

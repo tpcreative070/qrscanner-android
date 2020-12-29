@@ -27,6 +27,12 @@ class ViewModelFactory() : ViewModelProvider.Factory{
         else if (modelClass.isAssignableFrom(HistoryViewModel::class.java)){
             return HistoryViewModel() as T
         }
+        else if (modelClass.isAssignableFrom(ChangeFileColorViewModel::class.java)){
+            return ChangeFileColorViewModel() as T
+        }
+        else if (modelClass.isAssignableFrom(GenerateViewModel::class.java)){
+            return GenerateViewModel() as T
+        }
         throw IllegalArgumentException("Unknown class name")
     }
 }

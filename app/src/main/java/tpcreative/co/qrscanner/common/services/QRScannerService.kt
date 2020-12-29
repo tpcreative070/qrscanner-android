@@ -585,7 +585,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
     }
 
     interface BaseListener<T> {
-        fun onShowListObjects(list: MutableList<T?>?)
+        fun onShowListObjects(list: MutableList<T>)
         fun onShowObjects(`object`: T?)
         fun onError(message: String?, status: EnumStatus?)
         fun onSuccessful(message: String?, status: EnumStatus?)

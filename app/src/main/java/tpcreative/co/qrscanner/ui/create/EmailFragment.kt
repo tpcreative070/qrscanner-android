@@ -1,42 +1,31 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.*
 import androidx.appcompat.widget.*
-import butterknife.BindView
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.fragment_email.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.create.EmailFragment
 
 class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
-    @BindView(R.id.edtEmail)
-    var edtEmail: AppCompatEditText? = null
-
-    @BindView(R.id.edtObject)
-    var edtObject: AppCompatEditText? = null
-
-    @BindView(R.id.edtMessage)
     var edtMessage: AppCompatEditText? = null
     private var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_email)
-        val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val bundle = intent.extras
-        val mData = bundle.get(getString(R.string.key_data)) as SaveModel?
+        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
         if (mData != null) {
             save = mData
             onSetData()
@@ -50,15 +39,15 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation.validate()) {
+                if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
                     val create = Create(save)
-                    create.email = edtEmail.getText().toString().trim { it <= ' ' }
-                    create.subject = edtObject.getText().toString()
-                    create.message = edtMessage.getText().toString()
+                    create.email = edtEmail.text.toString().trim { it <= ' ' }
+                    create.subject = edtObject.text.toString()
+                    create.message = edtMessage?.text.toString()
                     create.createType = ParsedResultType.EMAIL_ADDRESS
                     Navigator.onMoveToReview(this@EmailFragment, create)
                 } else {
@@ -71,9 +60,9 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
-        mAwesomeValidation.addValidation(this, R.id.edtObject, RegexTemplate.NOT_EMPTY, R.string.err_object)
-        mAwesomeValidation.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
+        mAwesomeValidation?.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
+        mAwesomeValidation?.addValidation(this, R.id.edtObject, RegexTemplate.NOT_EMPTY, R.string.err_object)
+        mAwesomeValidation?.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
     }
 
     fun FocusUI() {
@@ -81,9 +70,9 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     fun onSetData() {
-        edtEmail.setText("" + save.email)
-        edtObject.setText("" + save.subject)
-        edtMessage.setText(save.message)
+        edtEmail.setText("${save?.email}")
+        edtObject.setText("${save?.subject}")
+        edtMessage?.setText("${save?.message}")
     }
 
     public override fun onStart() {
@@ -109,18 +98,18 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
 
     public override fun onDestroy() {
         super.onDestroy()
-        GenerateSingleton.Companion.getInstance().setListener(null)
-        Log.d(TAG, "onDestroy")
+        GenerateSingleton.getInstance()?.setListener(null)
+        Utils.Log(TAG, "onDestroy")
     }
 
     public override fun onResume() {
         super.onResume()
-        GenerateSingleton.Companion.getInstance().setListener(this)
-        Log.d(TAG, "onResume")
+        GenerateSingleton.getInstance()?.setListener(this)
+        Utils.Log(TAG, "onResume")
     }
 
     override fun onCompletedGenerate() {
-        SaveSingleton.Companion.getInstance().reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
     }
@@ -129,7 +118,7 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG, "Finish...........")
-            SaveSingleton.Companion.getInstance().reloadData()
+            SaveSingleton.getInstance()?.reloadData()
             finish()
         }
     }

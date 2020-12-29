@@ -1,12 +1,8 @@
 package tpcreative.co.qrscanner.ui.create
-
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.LinearLayout
 import androidx.appcompat.widget.*
-import butterknife.BindView
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -14,36 +10,16 @@ import com.google.zxing.client.result.ParsedResultType
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.SimpleDateMonthAndDayFormatException
+import kotlinx.android.synthetic.main.fragment_event.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.create.EventFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
 class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerateListener {
-    @BindView(R.id.llBeginTime)
-    var llBeginTime: LinearLayout? = null
-
-    @BindView(R.id.llEndTime)
-    var llEndTime: LinearLayout? = null
-
-    @BindView(R.id.edtTitle)
-    var edtTitle: AppCompatEditText? = null
-
-    @BindView(R.id.edtLocation)
-    var edtLocation: AppCompatEditText? = null
-
-    @BindView(R.id.edtDescription)
-    var edtDescription: AppCompatEditText? = null
-
-    @BindView(R.id.tvBeginTime)
-    var tvBeginTime: AppCompatTextView? = null
-
-    @BindView(R.id.tvEndTime)
-    var tvEndTime: AppCompatTextView? = null
     private var mAwesomeValidation: AwesomeValidation? = null
     private var beginDateTimeMilliseconds: Long = 0
     private var endDateTimeMilliseconds: Long = 0
@@ -55,16 +31,15 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_event)
-        val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         llEndTime.setOnClickListener(this)
         llBeginTime.setOnClickListener(this)
         tvBeginTime.setOnClickListener(this)
         tvEndTime.setOnClickListener(this)
         initDateTimePicker()
         val bundle = intent.extras
-        val mData = bundle.get(getString(R.string.key_data)) as SaveModel?
+        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
         if (mData != null) {
             save = mData
             onSetData()
@@ -78,15 +53,15 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation.validate()) {
+                if (mAwesomeValidation?.validate() == true) {
                     if (beginDateTimeMilliseconds == 0L) {
                         isBegin = true
                         isClick = true
-                        dateTimeFragment.startAtCalendarView()
-                        dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime)
+                        dateTimeFragment?.startAtCalendarView()
+                        dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
                         val date = Date()
                         val cal = Calendar.getInstance()
                         currentMilliseconds = date.time
@@ -96,15 +71,15 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                         val days = cal[Calendar.DAY_OF_MONTH]
                         val hours = cal[Calendar.HOUR_OF_DAY]
                         val minutes = cal[Calendar.MINUTE]
-                        dateTimeFragment.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                        dateTimeFragment.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                        dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                        dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
                         return true
                     }
                     if (endDateTimeMilliseconds == 0L) {
                         isBegin = false
                         isClick = true
-                        dateTimeFragment.startAtCalendarView()
-                        dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime)
+                        dateTimeFragment?.startAtCalendarView()
+                        dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
                         val date = Date()
                         val cal = Calendar.getInstance()
                         currentMilliseconds = date.time
@@ -114,8 +89,8 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                         val days = cal[Calendar.DAY_OF_MONTH]
                         val hours = cal[Calendar.HOUR_OF_DAY]
                         val minutes = cal[Calendar.MINUTE]
-                        dateTimeFragment.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                        dateTimeFragment.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                        dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                        dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
                         return true
                     }
                     if (beginDateTimeMilliseconds > endDateTimeMilliseconds) {
@@ -149,13 +124,13 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     }
 
     override fun onClick(view: View?) {
-        when (view.getId()) {
+        when (view?.id) {
             R.id.llBeginTime -> {
                 if (!isClick) {
                     isBegin = true
                     isClick = true
-                    dateTimeFragment.startAtCalendarView()
-                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime)
+                    dateTimeFragment?.startAtCalendarView()
+                    dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
                     val date = Date()
                     val cal = Calendar.getInstance()
                     currentMilliseconds = date.time
@@ -165,16 +140,16 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                     val days = cal[Calendar.DAY_OF_MONTH]
                     val hours = cal[Calendar.HOUR_OF_DAY]
                     val minutes = cal[Calendar.MINUTE]
-                    dateTimeFragment.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                    dateTimeFragment.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                    dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                    dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
                 }
             }
             R.id.llEndTime -> {
                 if (!isClick) {
                     isBegin = false
                     isClick = true
-                    dateTimeFragment.startAtCalendarView()
-                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime)
+                    dateTimeFragment?.startAtCalendarView()
+                    dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
                     val date = Date()
                     val cal = Calendar.getInstance()
                     currentMilliseconds = date.time
@@ -184,16 +159,16 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                     val days = cal[Calendar.DAY_OF_MONTH]
                     val hours = cal[Calendar.HOUR_OF_DAY]
                     val minutes = cal[Calendar.MINUTE]
-                    dateTimeFragment.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                    dateTimeFragment.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                    dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                    dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
                 }
             }
             R.id.tvBeginTime -> {
                 if (!isClick) {
                     isBegin = true
                     isClick = true
-                    dateTimeFragment.startAtCalendarView()
-                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime)
+                    dateTimeFragment?.startAtCalendarView()
+                    dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
                     val date = Date()
                     val cal = Calendar.getInstance()
                     currentMilliseconds = date.time
@@ -203,16 +178,16 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                     val days = cal[Calendar.DAY_OF_MONTH]
                     val hours = cal[Calendar.HOUR_OF_DAY]
                     val minutes = cal[Calendar.MINUTE]
-                    dateTimeFragment.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                    dateTimeFragment.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                    dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                    dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
                 }
             }
             R.id.tvEndTime -> {
                 if (!isClick) {
                     isBegin = false
                     isClick = true
-                    dateTimeFragment.startAtCalendarView()
-                    dateTimeFragment.setAlertStyle(R.style.Theme_SwitchDateTime)
+                    dateTimeFragment?.startAtCalendarView()
+                    dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
                     val date = Date()
                     val cal = Calendar.getInstance()
                     currentMilliseconds = date.time
@@ -222,8 +197,8 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                     val days = cal[Calendar.DAY_OF_MONTH]
                     val hours = cal[Calendar.HOUR_OF_DAY]
                     val minutes = cal[Calendar.MINUTE]
-                    dateTimeFragment.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                    dateTimeFragment.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                    dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                    dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
                 }
             }
             else -> {
@@ -245,44 +220,44 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         }
 
         // Optionally define a timezone
-        dateTimeFragment.setTimeZone(TimeZone.getDefault())
+        dateTimeFragment?.setTimeZone(TimeZone.getDefault())
 
         // Init format
         val myDateFormat = SimpleDateFormat("d MMM yyyy HH:mm", Locale.getDefault())
         // Assign unmodifiable values
-        dateTimeFragment.set24HoursMode(false)
-        dateTimeFragment.setHighlightAMPMSelection(false)
-        dateTimeFragment.setMinimumDateTime(GregorianCalendar(2015, Calendar.JANUARY, 1).time)
-        dateTimeFragment.setMaximumDateTime(GregorianCalendar(2025, Calendar.DECEMBER, 31).time)
+        dateTimeFragment?.set24HoursMode(false)
+        dateTimeFragment?.setHighlightAMPMSelection(false)
+        dateTimeFragment?.minimumDateTime = GregorianCalendar(2015, Calendar.JANUARY, 1).time
+        dateTimeFragment?.maximumDateTime = GregorianCalendar(2025, Calendar.DECEMBER, 31).time
 
         // Define new day and month format
         try {
-            dateTimeFragment.setSimpleDateMonthAndDayFormat(SimpleDateFormat("MMMM dd", Locale.getDefault()))
+            dateTimeFragment?.simpleDateMonthAndDayFormat = SimpleDateFormat("MMMM dd", Locale.getDefault())
         } catch (e: SimpleDateMonthAndDayFormatException) {
-            Log.e(TAG, e.message)
+            Utils.Log(TAG,"${e.message}")
         }
 
         // Set listener for date
         // Or use dateTimeFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
-        dateTimeFragment.setOnButtonClickListener(object : OnButtonWithNeutralClickListener {
+        dateTimeFragment?.setOnButtonClickListener(object : OnButtonWithNeutralClickListener {
             override fun onPositiveButtonClick(date: Date?) {
                 if (isBegin) {
-                    if (currentMilliseconds > date.getTime()) {
+                    if (currentMilliseconds > date?.time ?: 0) {
                         //Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
                         Utils.onDropDownAlert(this@EventFragment, "Starting event data time must be greater than current date time")
                     } else {
-                        beginDateTimeMilliseconds = date.getTime()
+                        beginDateTimeMilliseconds = date?.time ?: 0
                         tvBeginTime.setText(myDateFormat.format(date))
                     }
                 } else {
-                    if (currentMilliseconds > date.getTime()) {
+                    if (currentMilliseconds > date?.time ?: 0) {
                         //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than current date time");
                         Utils.onDropDownAlert(this@EventFragment, "Ending event data time must be greater than current date time")
-                    } else if (beginDateTimeMilliseconds >= date.getTime()) {
+                    } else if (beginDateTimeMilliseconds >= date?.time ?: 0) {
                         //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
                         Utils.onDropDownAlert(this@EventFragment, "Ending event data time must be greater than begin date time")
                     } else {
-                        endDateTimeMilliseconds = date.getTime()
+                        endDateTimeMilliseconds = date?.time ?:0
                         tvEndTime.setText(myDateFormat.format(date))
                     }
                 }
@@ -306,9 +281,9 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation.addValidation(this, R.id.edtTitle, RegexTemplate.NOT_EMPTY, R.string.err_title)
-        mAwesomeValidation.addValidation(this, R.id.edtLocation, RegexTemplate.NOT_EMPTY, R.string.err_location)
-        mAwesomeValidation.addValidation(this, R.id.edtDescription, RegexTemplate.NOT_EMPTY, R.string.err_description)
+        mAwesomeValidation?.addValidation(this, R.id.edtTitle, RegexTemplate.NOT_EMPTY, R.string.err_title)
+        mAwesomeValidation?.addValidation(this, R.id.edtLocation, RegexTemplate.NOT_EMPTY, R.string.err_location)
+        mAwesomeValidation?.addValidation(this, R.id.edtDescription, RegexTemplate.NOT_EMPTY, R.string.err_description)
     }
 
     fun FocusUI() {
@@ -316,20 +291,20 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     }
 
     fun onSetData() {
-        edtTitle.setText("" + save.title)
-        edtDescription.setText("" + save.description)
-        edtLocation.setText(save.location)
-        tvBeginTime.setText(Utils.convertMillisecondsToDateTime(save.startEventMilliseconds))
-        tvEndTime.setText(Utils.convertMillisecondsToDateTime(save.endEventMilliseconds))
-        beginDateTimeMilliseconds = save.startEventMilliseconds
-        endDateTimeMilliseconds = save.endEventMilliseconds
+        edtTitle.setText("${save?.title}")
+        edtDescription.setText("${save?.description}")
+        edtLocation.setText("${save?.location}")
+        tvBeginTime.setText(Utils.convertMillisecondsToDateTime(save?.startEventMilliseconds ?: 0))
+        tvEndTime.setText(Utils.convertMillisecondsToDateTime(save?.endEventMilliseconds ?: 0))
+        beginDateTimeMilliseconds = save?.startEventMilliseconds ?: 0
+        endDateTimeMilliseconds = save?.endEventMilliseconds ?: 0
     }
 
     public override fun onStart() {
         super.onStart()
         Utils.Log(TAG, "onStart")
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
-        mAwesomeValidation.clear()
+        mAwesomeValidation?.clear()
         addValidationForEditText()
         if (save != null) {
             onSetData()
@@ -351,18 +326,18 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
 
     public override fun onDestroy() {
         super.onDestroy()
-        GenerateSingleton.Companion.getInstance().setListener(null)
-        Log.d(TAG, "onDestroy")
+        GenerateSingleton.getInstance()?.setListener(null)
+        Utils.Log(TAG, "onDestroy")
     }
 
     public override fun onResume() {
         super.onResume()
-        GenerateSingleton.Companion.getInstance().setListener(this)
-        Log.d(TAG, "onResume")
+        GenerateSingleton.getInstance()?.setListener(this)
+        Utils.Log(TAG, "onResume")
     }
 
     override fun onCompletedGenerate() {
-        SaveSingleton.Companion.getInstance().reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
     }
@@ -371,7 +346,7 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
             Utils.Log(TAG, "Finish...........")
-            SaveSingleton.Companion.getInstance().reloadData()
+            SaveSingleton.getInstance()?.reloadData()
             finish()
         }
     }
@@ -380,6 +355,6 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         private val TAG = EventFragment::class.java.simpleName
 
         /*Date time picker*/
-        private val TAG_DATETIME_FRAGMENT: String? = "TAG_DATETIME_FRAGMENT"
+        private val TAG_DATETIME_FRAGMENT: String = "TAG_DATETIME_FRAGMENT"
     }
 }
