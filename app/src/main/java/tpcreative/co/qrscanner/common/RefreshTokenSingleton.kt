@@ -15,7 +15,7 @@ class RefreshTokenSingleton private constructor() {
         return mGoogleSignInClient
     }
 
-    fun <T> onStart(tClass: Class<T?>?) {
+    fun <T> onStart(tClass: Class<T>) {
 //        if (tClass != null) {
 //            TAG = tClass.simpleName
 //        }

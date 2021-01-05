@@ -27,11 +27,11 @@ interface RootAPI {
             @Header("Authorization") authToken: String?,
             @Part metaPart: MultipartBody.Part?,
             @Part dataPart: MultipartBody.Part?,
-            @Query("type") type: String?): Call<DriveResponse?>?
+            @Query("type") type: String?): DriveResponse?
 
     @GET(DOWNLOAD_FILE_FROM_GOOGLE_DRIVE)
     @Streaming
-    suspend fun downloadDriveFile(@Header("Authorization") authToken: String?, @Path("id") id: String?): Response<ResponseBody?>
+    suspend fun downloadDriveFile(@Header("Authorization") authToken: String?, @Path("id") id: String?): ResponseBody?
     @Headers("Accept: application/json")
     @GET(GET_LIST_FILE_IN_APP_FOLDER)
     suspend fun onGetListFileInAppFolder(@Header("Authorization") token: String?, @Query("spaces") value: String?): DriveAbout?

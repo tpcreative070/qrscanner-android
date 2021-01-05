@@ -3,6 +3,7 @@ import okhttp3.ResponseBody
 import retrofit2.HttpException
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.response.BaseResponse
+import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.extension.toObjectMayBeNull
 import tpcreative.co.qrscanner.model.DriveAbout
@@ -40,7 +41,7 @@ open class ResponseHandler {
                         mDriveObject?.let {
                             /*Code = 401 request to refresh access token*/
                             if (mCode==401){
-                                //ServiceManager.getInstance()?.updatedDriveAccessToken()
+                                ServiceManager.getInstance().updatedDriveAccessToken()
                                 Utils.Log(TAG,"ServiceManager.getInstance()?.updatedDriveAccessToken()")
                             }
                             Utils.Log(TAG,"response code $mCode")

@@ -9,5 +9,5 @@ class DriveAbout : BaseResponseDrive(), Serializable {
     var storageQuota: StorageQuota? = null
 
     /*Create folder*/ /*Drive api queries*/
-    var files: MutableList<DriveResponse?>? = null
+    var files: MutableList<DriveResponse>? = null
 }

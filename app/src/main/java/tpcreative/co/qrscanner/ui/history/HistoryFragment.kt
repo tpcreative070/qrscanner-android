@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import co.tpcreative.supersafe.common.network.Status
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
@@ -23,6 +24,9 @@ import com.karumi.dexter.listener.PermissionRequestErrorListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_history.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -380,49 +384,52 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         }
     }
 
+    fun exportData() = CoroutineScope(Dispatchers.Main).launch {
+        val mResult =  ServiceManager.getInstance().onExportDatabaseCSVTask(EnumFragmentType.HISTORY)
+        when(mResult.status){
+            Status.SUCCESS -> {
+                val path = mResult.data ?: ""
+                val file = File(path)
+                if (file.isFile) {
+                    Utils.Log(TAG, "path : $path")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
+                        shareToSocial(uri)
+                    } else {
+                        val uri = Uri.fromFile(file)
+                        shareToSocial(uri)
+                    }
+                }
+            }else -> {
+                Utils.Log(TAG,"")
+            }
+        }
+    }
+
     fun onAddPermissionSave() {
-        Dexter.withContext(getActivity())
+        Dexter.withContext(activity)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         if (report?.areAllPermissionsGranted() == true) {
-                            ServiceManager.getInstance()?.onExportDatabaseCSVTask(EnumFragmentType.HISTORY, object : ServiceManager.ServiceManagerListener {
-                                override fun onExportingSVCCompleted(path: String?) {
-                                    val file = File(path)
-                                    if (file.isFile) {
-                                        Utils.Log(TAG, "path : $path")
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
-                                            shareToSocial(uri)
-                                        } else {
-                                            val uri = Uri.fromFile(file)
-                                            shareToSocial(uri)
-                                        }
-                                    }
-                                }
-                            })
+                            exportData()
                         } else {
                             Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied() == true) {
+                        if (report?.isAnyPermissionPermanentlyDenied == true) {
                             /*Miss add permission in manifest*/
                             Utils.Log(TAG, "request permission is failed")
                         }
                     }
-
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
                         /* ... */
                         token?.continuePermissionRequest()
                     }
                 })
-                .withErrorListener(object : PermissionRequestErrorListener {
-                    override fun onError(error: DexterError?) {
-                        Utils.Log(TAG, "error ask permission")
-                    }
-                }).onSameThread().check()
+                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {

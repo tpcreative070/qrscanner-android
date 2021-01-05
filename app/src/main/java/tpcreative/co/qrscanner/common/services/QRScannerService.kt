@@ -41,7 +41,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
         return mStorage
     }
 
-    fun onInitReceiver() {
+    private fun onInitReceiver() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)

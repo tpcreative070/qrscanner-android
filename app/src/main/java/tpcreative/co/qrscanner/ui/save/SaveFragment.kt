@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import co.tpcreative.supersafe.common.network.Status
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.client.result.ParsedResultType
@@ -24,6 +25,9 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_saver.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -410,28 +414,37 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         bindData()
     }
 
+    fun exportData() = CoroutineScope(Dispatchers.Main).launch {
+        val mResult =  ServiceManager.getInstance().onExportDatabaseCSVTask(EnumFragmentType.SAVER)
+        when(mResult.status){
+            Status.SUCCESS -> {
+                val path = mResult.data ?: ""
+                val file = File(path)
+                if (file.isFile) {
+                    Utils.Log(TAG, "path : $path")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID + ".provider", file)
+                        shareToSocial(uri)
+                    } else {
+                        val uri = Uri.fromFile(file)
+                        shareToSocial(uri)
+                    }
+                }
+            }else -> {
+            Utils.Log(TAG,"")
+        }
+        }
+    }
+
     fun onAddPermissionSave() {
-        Dexter.withContext(getActivity())
+        Dexter.withContext(activity)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         if (report?.areAllPermissionsGranted() == true) {
-                            ServiceManager.getInstance()?.onExportDatabaseCSVTask(EnumFragmentType.SAVER, object : ServiceManager.ServiceManagerListener {
-                                override fun onExportingSVCCompleted(path: String?) {
-                                    val file = File(path)
-                                    if (file.isFile) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
-                                            shareToSocial(uri)
-                                        } else {
-                                            val uri = Uri.fromFile(file)
-                                            shareToSocial(uri)
-                                        }
-                                    }
-                                }
-                            })
+                           exportData()
                         } else {
                             Utils.Log(TAG, "Permission is denied")
                         }

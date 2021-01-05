@@ -31,6 +31,7 @@ import kotlin.math.roundToInt
 
 object Utils {
     private val TAG = Utils::class.java.simpleName
+    const val CODE_EXCEPTION = 1111
     const val mStandardSortedDateTime: String = "ddMMYYYYHHmmss"
     const val FORMAT_DISPLAY: String = "EE dd MMM, yyyy HH:mm:ss a"
     const val GOOGLE_CONSOLE_KEY: String = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxToUe5+7Xy+Q7YYZfuMofqZmNe0021vMBJ32VQVPa8+Hd0z9YWPWTVvplslRX4rKU2TQ1l93yMzPVIHVxLIwPuo9OC9I8sO7LpOi91pyPk9fT0IjVaWDTSv1h/qLUE6m3OS5/LVPYQNbHCp3yqujSmj6bIj7AvbjhF36XjxZaESfJI3KhtXy/RD+ZaM255TgY6g1vwN3ObsrXZ3e98VrT8ehJrry8u8RTpiZ6NWTgcsk/riMPYZiwebf6fUHQgidAtwdBfZx94hYgldt5kPN3hB2LcG4KVj9jI2QY9Y4WsOPQ643I9fP8e9VbYW8/uAOTZnvUeUW9qb9qIw3NHyV6wIDAQAB"
@@ -696,10 +697,10 @@ object Utils {
         return mList
     }
 
-    fun checkHistoryItemToUpdateToLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel>? {
+    fun checkHistoryItemToUpdateToLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel> {
         /*Checking local items deleted*/
         val mSyncedMap: MutableMap<String?, HistoryModel>? = convertHistoryListToMap(SQLiteHelper.getHistoryList(true))
-        val mList: MutableList<HistoryModel> = ArrayList<HistoryModel>()
+        val mList: MutableList<HistoryModel> = mutableListOf()
         for (index in mSyncedList) {
             /*Checking item exiting before*/
             val mItem: HistoryModel? = mSyncedMap?.get(index.uuId)
@@ -711,12 +712,12 @@ object Utils {
         return mList
     }
 
-    fun checkHistoryDeleteSyncedLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel>? {
-        val mListResult: MutableList<HistoryModel> = ArrayList<HistoryModel>()
+    fun checkHistoryDeleteSyncedLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel> {
+        val mListResult: MutableList<HistoryModel> = mutableListOf()
         val mListLocal: MutableList<HistoryModel> = SQLiteHelper.getHistoryList(true)
         val mMap: MutableMap<String?, HistoryModel> = convertHistoryListToMap(mSyncedList)
         for (index in mListLocal) {
-            val mValue: HistoryModel? = mMap?.get(index.uuId)
+            val mValue: HistoryModel? = mMap.get(index.uuId)
             if (mValue == null) {
                 mListResult.add(index)
             }
@@ -724,7 +725,7 @@ object Utils {
         return mListResult
     }
 
-    fun checkSaveDeleteSyncedLocal(mSyncedList: MutableList<SaveModel>): MutableList<SaveModel>? {
+    fun checkSaveDeleteSyncedLocal(mSyncedList: MutableList<SaveModel>): MutableList<SaveModel> {
         val mListResult: MutableList<SaveModel> = mutableListOf()
         val mListLocal: MutableList<SaveModel> = SQLiteHelper.getSaveList(true)
         val mMap: MutableMap<String?, SaveModel> = convertSaveListToMap(mSyncedList)
