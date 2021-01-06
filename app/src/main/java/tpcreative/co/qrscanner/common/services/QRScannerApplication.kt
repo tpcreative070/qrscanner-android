@@ -55,7 +55,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
-        isLive = true
+        isLive = false
         if (!Utils.isPremium() && Utils.isLiveAds()) {
             Utils.Log(TAG, "Start ads")
             MobileAds.initialize(this) { }
@@ -178,6 +178,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adView?.adSize = AdSize.SMART_BANNER
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
                 adView?.adUnitId = getString(R.string.banner_home_footer_test)
             } else {
                 adView?.adUnitId = getString(R.string.banner_footer)
@@ -222,6 +223,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adLargeView?.adSize = AdSize.MEDIUM_RECTANGLE
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
                 adLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
             } else {
                 adLargeView?.adUnitId = getString(R.string.banner_review)
@@ -296,7 +298,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (!BuildConfig.DEBUG){
             return true
         }
-        return true
+        return false
     }
 
     companion object {

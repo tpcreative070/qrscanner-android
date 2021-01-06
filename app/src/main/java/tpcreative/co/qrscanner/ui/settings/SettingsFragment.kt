@@ -63,7 +63,7 @@ class SettingsFragment : BaseFragment() {
             QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@SettingsFragment, false)
             Utils.Log(TAG, "isInVisible")
             HistorySingleton.getInstance()?.reloadData()
-            SaveSingleton.Companion.getInstance()?.reloadData()
+            SaveSingleton.getInstance()?.reloadData()
         }
     }
 
