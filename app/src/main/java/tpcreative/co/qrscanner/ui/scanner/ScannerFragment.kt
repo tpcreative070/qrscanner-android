@@ -255,6 +255,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         initUI()
         ScannerSingleton.getInstance()?.setListener(this)
         zxing_barcode_scanner.decodeContinuous(callback)
+        zxing_barcode_scanner.statusView.visibility = View.GONE
         imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)

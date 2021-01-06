@@ -49,12 +49,12 @@ fun MainActivity.initUI(){
             Utils.Log(TAG, "Move swipe")
         }
     })
-    if (ContextCompat.checkSelfPermission(QRScannerApplication.Companion.getInstance(), Manifest.permission.CAMERA)
+    if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED) {
         onAddPermissionCamera()
     }
-    if (QRScannerApplication.Companion.getInstance().isRequestAds() && !Utils.isPremium() && Utils.isLiveAds()) {
-        QRScannerApplication.Companion.getInstance().getAdsView(this)
+    if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium() && Utils.isLiveAds()) {
+        QRScannerApplication.getInstance().getAdsView(this)
     }
     val mCountRating = Utils.onGetCountRating()
     if (mCountRating > 3) {

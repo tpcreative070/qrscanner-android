@@ -80,6 +80,7 @@ fun ScannerFragment.initUI(){
             override fun onAnimationRepeat(animation: Animation?) {}
         })
         view.startAnimation(mAnim)
+        zxing_barcode_scanner.statusView.visibility = View.GONE
     }
 
     imgGallery.setOnClickListener { view ->
