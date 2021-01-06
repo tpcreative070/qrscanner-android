@@ -16,6 +16,7 @@ import tpcreative.co.qrscanner.model.Theme
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
 fun MainActivity.initUI(){
+    setupViewModel()
     if (QRScannerApplication.getInstance().getDeviceId() == "66801ac00252fe84") {
         finish()
     }
@@ -62,7 +63,6 @@ fun MainActivity.initUI(){
         Utils.onSetCountRating(0)
     }
     showAds()
-    setupViewModel()
 }
 
 private fun MainActivity.setupViewModel() {

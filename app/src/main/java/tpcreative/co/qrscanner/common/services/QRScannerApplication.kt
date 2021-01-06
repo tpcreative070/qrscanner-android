@@ -49,7 +49,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         serverAPI = RetrofitBuilder.getService(typeService = EnumTypeServices.SYSTEM)
         serverDriveApi = RetrofitBuilder.getService(getString(R.string.url_google), typeService = EnumTypeServices.GOOGLE_DRIVE)
-        InstanceGenerator.getInstance(this)
         PrefsController.Builder()
                 .setContext(applicationContext)
                 .setMode(ContextWrapper.MODE_PRIVATE)
