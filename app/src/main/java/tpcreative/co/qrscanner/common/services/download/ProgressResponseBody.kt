@@ -4,37 +4,35 @@ import okhttp3.ResponseBody
 import okio.*
 import java.io.IOException
 
-class ProgressResponseBody(responseBody: ResponseBody?, progressListener: ProgressResponseBodyListener?) : ResponseBody() {
-    private val responseBody: ResponseBody? = responseBody
-    private val progressListener: ProgressResponseBodyListener? = progressListener
+class ProgressResponseBody(private val responseBody: ResponseBody?,private val progressListener: ProgressResponseBodyListener?) : ResponseBody() {
     private var bufferedSource: BufferedSource? = null
     override fun contentType(): MediaType? {
         return responseBody?.contentType()
     }
 
     override fun contentLength(): Long {
-        return responseBody!!.contentLength()
+        return responseBody?.contentLength() ?: 0
     }
 
     override fun source(): BufferedSource {
         if (bufferedSource == null) {
-            bufferedSource = source(responseBody!!.source())?.buffer()
+            bufferedSource = source(responseBody!!.source()).buffer()
         }
         return bufferedSource!!
     }
 
     @Synchronized
-    private fun source(source: Source): Source? {
+    private fun source(source: Source): Source {
         return object : ForwardingSource(source) {
             var totalBytesRead = 0L
             var allBytes: Long = responseBody!!.contentLength()
-            var startTime: Long? = System.currentTimeMillis()
+            var startTime: Long = System.currentTimeMillis()
 
             @Throws(IOException::class)
             override fun read(sink: Buffer, byteCount: Long): Long {
                 val bytesRead: Long = super.read(sink, byteCount)
                 totalBytesRead += if (bytesRead != -1L) bytesRead else 0
-                val percent = if (bytesRead == -1L) 100f else totalBytesRead.toFloat() / responseBody?.contentLength()!!.toFloat() * 100
+                val percent = if (bytesRead == -1L) 100f else totalBytesRead.toFloat() / (responseBody?.contentLength()?.toFloat() ?: 0F) * 100
                 if (progressListener != null) {
                     try {
                         if (percent > 1) {
@@ -45,7 +43,7 @@ class ProgressResponseBody(responseBody: ResponseBody?, progressListener: Progre
                                 progressListener.onAttachmentDownloadUpdate(percent.toInt())
                             }
                             progressListener.onAttachmentTotalDownload(allBytes, totalBytesRead)
-                            val elapsedTime = System.currentTimeMillis() - startTime!!
+                            val elapsedTime = System.currentTimeMillis() - startTime
                             progressListener.onAttachmentElapsedTime(elapsedTime)
                             val allTimeForDownloading = elapsedTime * allBytes / totalBytesRead
                             progressListener.onAttachmentAllTimeForDownloading(allTimeForDownloading)

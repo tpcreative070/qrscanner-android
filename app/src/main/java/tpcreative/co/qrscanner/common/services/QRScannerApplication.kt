@@ -31,9 +31,6 @@ import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
 import java.util.*
 
-/**
- *
- */
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
     private var pathFolder: String? = null
     private lateinit var storage: Storage
@@ -64,7 +61,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             Utils.Log(TAG, "Start ads")
             MobileAds.initialize(this) { }
         }
-        ServiceManager.getInstance()?.setContext(this)
+        ServiceManager.getInstance().setContext(this)
         storage = Storage(applicationContext)
         pathFolder = storage.externalStorageDirectory + "/Pictures/QRScanner"
         storage.createDirectory(pathFolder)
@@ -168,7 +165,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return Build.VERSION.RELEASE
     }
 
-    fun getPackageId(): String? {
+    fun getPackageId(): String {
         return BuildConfig.APPLICATION_ID
     }
 
@@ -179,19 +176,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun getAdsView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adView = AdView(context)
-        adView?.setAdSize(AdSize.SMART_BANNER)
+        adView?.adSize = AdSize.SMART_BANNER
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
-                adView?.setAdUnitId(getString(R.string.banner_home_footer_test))
+                adView?.adUnitId = getString(R.string.banner_home_footer_test)
             } else {
-                adView?.setAdUnitId(getString(R.string.banner_footer))
+                adView?.adUnitId = getString(R.string.banner_footer)
             }
         } else {
-            adView?.setAdUnitId(getString(R.string.banner_home_footer_test))
+            adView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adView?.loadAd(adRequest)
-        adView?.setAdListener(object : AdListener() {
+        adView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isRequestAds = false
                 Utils.Log(TAG, "Ads successful")
@@ -216,26 +213,26 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
             }
-        })
+        }
         return adView
     }
 
     fun getAdsLargeView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adLargeView = AdView(context)
-        adLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        adLargeView?.adSize = AdSize.MEDIUM_RECTANGLE
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
-                adLargeView?.setAdUnitId(getString(R.string.banner_home_footer_test))
+                adLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
             } else {
-                adLargeView?.setAdUnitId(getString(R.string.banner_review))
+                adLargeView?.adUnitId = getString(R.string.banner_review)
             }
         } else {
-            adLargeView?.setAdUnitId(getString(R.string.banner_home_footer_test))
+            adLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adLargeView?.loadAd(adRequest)
-        adLargeView?.setAdListener(object : AdListener() {
+        adLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isRequestLargeAds = false
                 Utils.Log(TAG, "Ads successful")
@@ -260,7 +257,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
             }
-        })
+        }
         return adLargeView
     }
 
@@ -269,8 +266,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             Utils.Log(TAG, "ads null")
             return
         }
-        if (adView?.getParent() != null) {
-            val tempVg: ViewGroup = adView?.getParent() as ViewGroup
+        if (adView?.parent != null) {
+            val tempVg: ViewGroup = adView?.parent as ViewGroup
             tempVg.removeView(adView)
         }
         layAd?.addView(adView)
@@ -281,7 +278,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             Utils.Log(TAG, "ads null")
             return
         }
-        if (adLargeView?.getParent() != null) {
+        if (adLargeView?.parent != null) {
             val tempVg: ViewGroup = adLargeView?.getParent() as ViewGroup
             tempVg.removeView(adLargeView)
         }

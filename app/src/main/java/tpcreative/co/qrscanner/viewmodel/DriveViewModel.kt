@@ -78,6 +78,15 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
         }
     }
 
+    fun deleteTemporaryFiles(){
+        if (uploadTempFile != null) {
+            uploadTempFile?.deleteOnExit()
+        }
+        if (downloadTempFile != null) {
+            downloadTempFile?.deleteOnExit()
+        }
+    }
+
     suspend fun getDriveAbout() : Resource<Boolean> {
         return withContext(Dispatchers.IO){
             try {

@@ -37,8 +37,14 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
         QRScannerApplication.getInstance().setConnectivityListener(this)
     }
 
+
+
     fun getStorage(): Storage? {
         return mStorage
+    }
+
+    override fun onActionScreenOff() {
+
     }
 
     private fun onInitReceiver() {
@@ -47,7 +53,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         androidReceiver = QRScannerReceiver()
         registerReceiver(androidReceiver, intentFilter)
-        QRScannerApplication.Companion.getInstance().setConnectivityListener(this)
+        QRScannerApplication.getInstance().setConnectivityListener(this)
     }
 
     override fun onDestroy() {

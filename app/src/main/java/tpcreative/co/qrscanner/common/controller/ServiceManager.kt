@@ -16,19 +16,19 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
+import tpcreative.co.qrscanner.common.api.request.CheckoutRequest
 import tpcreative.co.qrscanner.common.api.requester.DriveService
-import tpcreative.co.qrscanner.common.api.response.DriveResponse
+import tpcreative.co.qrscanner.common.api.requester.UserService
 import tpcreative.co.qrscanner.common.presenter.BaseView
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerService
-import tpcreative.co.qrscanner.common.services.QRScannerService.BaseListener
 import tpcreative.co.qrscanner.common.services.QRScannerService.LocalBinder
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumStatus
 import tpcreative.co.qrscanner.model.SyncDataModel
 import tpcreative.co.qrscanner.viewmodel.DriveViewModel
-import java.io.File
+import tpcreative.co.qrscanner.viewmodel.UserViewModel
 import java.io.FileWriter
 import java.util.*
 
@@ -38,6 +38,7 @@ class ServiceManager : BaseView<Any?> {
     private var isDismiss = false
     private var isSyncingData = false
     private val driveViewModel = DriveViewModel(DriveService())
+    private val userViewModel = UserViewModel(UserService())
     var myConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName?, binder: IBinder?) {
             Utils.Log(TAG, "connected")
@@ -478,24 +479,22 @@ class ServiceManager : BaseView<Any?> {
         }
         isDismiss = false
         Utils.setDefaultSaveHistoryDeletedKey()
+        driveViewModel.deleteTemporaryFiles()
         Utils.Log(TAG, "Dismiss Service manager")
     }
 
-    fun onCheckout() {
-//        if (myService != null) {
-//            Utils.Log(TAG, "Call checkcout here")
-//            myService.onAddCheckout(object : BaseListener<Any?> {
-//                override fun onShowListObjects(list: MutableList<*>?) {}
-//                override fun onShowObjects(`object`: Any?) {}
-//                override fun onError(message: String?, status: EnumStatus?) {
-//                    Utils.Log(TAG, message)
-//                }
-//
-//                override fun onSuccessful(message: String?, status: EnumStatus?) {
-//                    Utils.Log(TAG, message)
-//                }
-//            })
-//        }
+    fun onCheckout()  = CoroutineScope(Dispatchers.IO).launch{
+        val mCheckout = CheckoutRequest()
+        Utils.Log(TAG, "Preparing checkout")
+        Utils.Log(TAG, "Checkout value " + Gson().toJson(mCheckout))
+        val mResult = userViewModel.checkout(mCheckout)
+        when(mResult.status){
+            Status.SUCCESS ->{
+                Utils.setCheckoutValue(true)
+            } else -> {
+                Utils.Log(TAG,"Error occurred checkout ${mResult.message}")
+            }
+        }
     }
 
     override fun onError(message: String?, status: EnumStatus?) {
@@ -531,6 +530,7 @@ class ServiceManager : BaseView<Any?> {
                 onPreparingSyncData(false)
                 ResponseSingleton.getInstance()?.onNetworkConnectionChanged(true)
             }
+            else -> Utils.Log(TAG,"Nothing")
         }
     }
 

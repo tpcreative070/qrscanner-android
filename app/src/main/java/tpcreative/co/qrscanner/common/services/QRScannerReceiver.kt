@@ -1,38 +1,29 @@
 package tpcreative.co.qrscanner.common.services
-
 import android.content.*
 import android.net.ConnectivityManager
-import android.util.Log
+import tpcreative.co.qrscanner.common.network.NetworkUtil
 
 class QRScannerReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "onReceive")
-        val action = intent.getAction()
-        /*In the case status of network changed and then updating status for app(Connected/Disconnect)*/if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION, ignoreCase = true)) {
-            val cm = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetwork = cm.activeNetworkInfo
-            val isConnected = (activeNetwork != null
-                    && activeNetwork.isConnected)
-            if (connectivityReceiverListener != null) {
-                connectivityReceiverListener.onNetworkConnectionChanged(isConnected)
-            }
+    override fun onReceive(context: Context?, intent: Intent) {
+        val action: String? = intent.action
+        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION, ignoreCase = true)) {
+            connectivityReceiverListener?.onNetworkConnectionChanged(!NetworkUtil.pingIpAddress(QRScannerApplication.getInstance()))
+        }
+        if (action.equals(Intent.ACTION_SCREEN_OFF, ignoreCase = true)) {
+            connectivityReceiverListener?.onActionScreenOff()
         }
     }
 
     interface ConnectivityReceiverListener {
-        open fun onNetworkConnectionChanged(isConnected: Boolean)
+        fun onNetworkConnectionChanged(isConnected: Boolean)
+        fun onActionScreenOff()
     }
 
     companion object {
         val TAG = QRScannerReceiver::class.java.simpleName
         var connectivityReceiverListener: ConnectivityReceiverListener? = null
         fun isConnected(): Boolean {
-            val cm = QRScannerApplication.Companion.getInstance().getApplicationContext()
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetwork = cm.activeNetworkInfo
-            return (activeNetwork != null
-                    && activeNetwork.isConnectedOrConnecting)
+            return !NetworkUtil.pingIpAddress(QRScannerApplication.getInstance())
         }
     }
 }
