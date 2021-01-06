@@ -78,6 +78,25 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
         }
     }
 
+    suspend fun getDriveAbout() : Resource<Boolean> {
+        return withContext(Dispatchers.IO){
+            try {
+                val mResultDriveAbout = driveService.getDriveAbout()
+                when(mResultDriveAbout.status){
+                    Status.SUCCESS -> {
+                        Resource.success(true)
+                    }
+                    else -> {
+                        Utils.Log(TAG,mResultDriveAbout.message)
+                        Resource.error(mResultDriveAbout.code ?: Utils.CODE_EXCEPTION,mResultDriveAbout.message ?:"",null)
+                    }
+                }
+            }catch (e : Exception){
+                Resource.error(Utils.CODE_EXCEPTION, e.message ?:"",null)
+            }
+        }
+    }
+
     suspend fun uploadData() : Resource<DriveResponse>{
         return withContext(Dispatchers.IO){
             try {

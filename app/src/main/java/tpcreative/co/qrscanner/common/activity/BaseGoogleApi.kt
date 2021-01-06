@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.common.activity
 import android.accounts.Account
 import android.content.Intent
 import android.os.Bundle
+import co.tpcreative.supersafe.common.network.Status
 import com.google.android.gms.auth.GoogleAuthException
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -11,56 +12,56 @@ import com.google.android.gms.common.api.Scope
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.common.services.QRScannerService.GoogleDriveListener
 import tpcreative.co.qrscanner.common.services.QRScannerService.ServiceManagerSyncDataListener
 import tpcreative.co.qrscanner.model.Author
-import tpcreative.co.qrscanner.model.EnumStatus
 import java.io.IOException
-import java.util.concurrent.Callable
 
 abstract class BaseGoogleApi : BaseActivitySlide() {
     private var mSignInAccount: GoogleSignInAccount? = null
     private var mGoogleSignInClient: GoogleSignInClient? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //mGoogleSignInClient = GoogleSignIn.getClient(this, QRScannerApplication.Companion.getInstance().getGoogleSignInOptions(null))
+        mGoogleSignInClient = QRScannerApplication.getInstance().getGoogleSignInOptions(null)?.let { GoogleSignIn.getClient(this, it) }
     }
 
     protected fun signIn(email: String?) {
-//        Utils.Log(TAG, "Sign in")
-//        val account = Account(email, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE)
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, QRScannerApplication.Companion.getInstance().getGoogleSignInOptions(account))
-//        startActivityForResult(mGoogleSignInClient!!.signInIntent, REQUEST_CODE_SIGN_IN)
+        Utils.Log(TAG, "Sign in")
+        val account = Account(email, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE)
+        mGoogleSignInClient = QRScannerApplication.getInstance().getGoogleSignInOptions(account)?.let { GoogleSignIn.getClient(this, it) }
+        startActivityForResult(mGoogleSignInClient?.signInIntent, REQUEST_CODE_SIGN_IN)
     }
 
-//    private fun getGoogleSignInClient(account: Account?): GoogleSignInClient? {
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, QRScannerApplication.Companion.getInstance().getGoogleSignInOptions(account))
-//        return mGoogleSignInClient
-//    }
+    private fun getGoogleSignInClient(account: Account?): GoogleSignInClient? {
+        mGoogleSignInClient = QRScannerApplication.getInstance().getGoogleSignInOptions(account)?.let { GoogleSignIn.getClient(this, it) }
+        return mGoogleSignInClient
+    }
 
     override fun onStart() {
         super.onStart()
-//        Utils.Log(ServiceManager::class.java, "onStart " + Utils.isRequestSyncData())
-//        if (Utils.isRequestSyncData() || ServiceManager.getInstance()?.isSyncingData()) {
-//            val account = GoogleSignIn.getLastSignedInAccount(this)
-//            if (account != null && GoogleSignIn.hasPermissions(account, Scope(DriveScopes.DRIVE_FILE), Scope(DriveScopes.DRIVE_APPDATA))) {
-//                getGoogleSignInClient(account.account)
-//                initializeDriveClient(account)
-//                mSignInAccount = account
-//            } else {
-//                val mAuthor: Author = Author.getInstance().getAuthorInfo()
-//                if (mAuthor != null) {
-//                    mAuthor.isConnectedToGoogleDrive = false
-//                    Utils.setAuthor(mAuthor)
-//                    onDriveError()
-//                }
-//            }
-//        }
+        Utils.Log(ServiceManager::class.java, "onStart " + Utils.isRequestSyncData())
+        if (Utils.isRequestSyncData() || ServiceManager.getInstance().isSyncingData()) {
+            val account = GoogleSignIn.getLastSignedInAccount(this)
+            if (account != null && GoogleSignIn.hasPermissions(account, Scope(DriveScopes.DRIVE_FILE), Scope(DriveScopes.DRIVE_APPDATA))) {
+                getGoogleSignInClient(account.account)
+                initializeDriveClient(account)
+                mSignInAccount = account
+            } else {
+                val mAuthor: Author? = Author.getInstance()?.getAuthorInfo()
+                if (mAuthor != null) {
+                    mAuthor.isConnectedToGoogleDrive = false
+                    Utils.setAuthor(mAuthor)
+                    onDriveError()
+                }
+            }
+        }
     }
 
     /**
@@ -91,103 +92,63 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
         }
     }
 
-    fun onRefreshAccessToken(accounts: Account?) {
-//        compositeDisposable = CompositeDisposable()
-//        compositeDisposable.add(Observable.fromCallable(Callable {
-//            try {
-//                if (accounts == null) {
-//                    Utils.Log(TAG, "Account is null")
-//                    return@Callable null
-//                }
-//                val credential = GoogleAccountCredential.usingOAuth2(
-//                        QRScannerApplication.Companion.getInstance(), QRScannerApplication.Companion.getInstance().getRequiredScopesString())
-//                credential.selectedAccount = accounts
-//                try {
-//                    val value = credential.token
-//                    if (value != null) {
-//                        val mAuthor: Author = Author.Companion.getInstance().getAuthorInfo()
-//                        if (mAuthor != null) {
-//                            mAuthor.isConnectedToGoogleDrive = true
-//                            mAuthor.access_token = kotlin.String.format(QRScannerApplication.Companion.getInstance().getString(R.string.access_token), value)
-//                            Utils.Log(TAG, "Refresh access token value: " + mAuthor.access_token)
-//                            mAuthor.email = credential.selectedAccount.name
-//                            Utils.Log(ServiceManager::class.java, "isSyncingData 136 " + ServiceManager.Companion.getInstance().isSyncingData())
-//                            Utils.Log(ServiceManager::class.java, "onRefreshAccessToken!!!")
-//                            if (Utils.getDriveEmail() != null && mAuthor.email != Utils.getDriveEmail()) {
-//                                onSwitchedUser()
-//                            }
-//                            Utils.setAuthor(mAuthor)
-//                        }
-//                    }
-//                    return@Callable value
-//                } catch (e: GoogleAuthException) {
-//                    Utils.Log(TAG, "Error occurred on GoogleAuthException")
-//                }
-//            } catch (recoverableException: UserRecoverableAuthIOException) {
-//                Utils.Log(TAG, "Error occurred on UserRecoverableAuthIOException")
-//            } catch (e: IOException) {
-//                Utils.Log(TAG, "Error occurred on IOException")
-//            }
-//            null
-//        }).subscribeOn(Schedulers.computation())
-//                .observeOn(AndroidSchedulers.mainThread()).subscribe { response: String? ->
-//                    try {
-//                        if (response != null) {
-//                            val mUser: Author = Author.Companion.getInstance().getAuthorInfo()
-//                            if (mUser != null) {
-//                                //Log.d(TAG, "Call getDriveAbout " + new Gson().toJson(mUser));
-//                                if (ServiceManager.Companion.getInstance().getMyService() == null) {
-//                                    Utils.Log(TAG, "SuperSafeService is null")
-//                                    startServiceNow()
-//                                    compositeDisposable.dispose()
-//                                    return@subscribe
-//                                }
-//                                ServiceManager.Companion.getInstance().getMyService().getDriveAbout(object : GoogleDriveListener {
-//                                    override fun onError(message: String?, status: EnumStatus?) {
-//                                        Utils.Log(TAG, "onError " + message + " - " + status.name)
-//                                        when (status) {
-//                                            EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN -> {
-//                                                revokeAccess()
-//                                            }
-//                                        }
-//                                        compositeDisposable.dispose()
-//                                    }
-//
-//                                    override fun onSuccessful(message: String?, status: EnumStatus?) {
-//                                        Utils.Log(TAG, "onSuccessful " + message + " - " + status.name)
-//                                        if (isSignIn()) {
-//                                            Utils.Log(TAG, "Call onDriveClientReady")
-//                                            onDriveClientReady()
-//                                        }
-//                                        compositeDisposable.dispose()
-//                                    }
-//                                })
-//                            } else {
-//                                compositeDisposable.dispose()
-//                            }
-//                        } else {
-//                            compositeDisposable.dispose()
-//                        }
-//                    } catch (e: Exception) {
-//                        e.printStackTrace()
-//                        Utils.Log(TAG, "Call onDriveClientReady")
-//                        onDriveClientReady()
-//                        compositeDisposable.dispose()
-//                    }
-//                })
+    fun onRefreshAccessToken(accounts: Account?) = CoroutineScope(Dispatchers.Main).launch {
+        try {
+            if (accounts == null) {
+                Utils.Log(TAG, "Account is null")
+                return@launch
+            }
+            val credential = GoogleAccountCredential.usingOAuth2(
+                    QRScannerApplication.Companion.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString())
+            credential.selectedAccount = accounts
+            try {
+                val value = credential.token
+                if (value != null) {
+                    val mAuthor: Author? = Author.getInstance()?.getAuthorInfo()
+                    if (mAuthor != null) {
+                        mAuthor.isConnectedToGoogleDrive = true
+                        mAuthor.access_token = kotlin.String.format(QRScannerApplication.getInstance().getString(R.string.access_token), value)
+                        Utils.Log(TAG, "Refresh access token value: " + mAuthor.access_token)
+                        mAuthor.email = credential.selectedAccount.name
+                        Utils.Log(TAG, "isSyncingData 136 " + ServiceManager.getInstance().isSyncingData())
+                        Utils.Log(TAG, "onRefreshAccessToken!!!")
+                        if (Utils.getDriveEmail() != null && mAuthor.email != Utils.getDriveEmail()) {
+                            onSwitchedUser()
+                        }
+                        Utils.setAuthor(mAuthor)
+                        if (ServiceManager.getInstance().getMyService() == null) {
+                            Utils.Log(TAG, "SuperSafeService is null")
+                            startServiceNow()
+                            return@launch
+                        }
+
+                        val mResultDriveAbout = ServiceManager.getInstance().getDriveAbout()
+                        when(mResultDriveAbout.status){
+                            Status.SUCCESS ->{
+                                if (isSignIn()) {
+                                    Utils.Log(TAG, "Call onDriveClientReady")
+                                    onDriveClientReady()
+                                }
+                            }
+                            else -> {
+                                Utils.Log(TAG,mResultDriveAbout.message)
+                                revokeAccess()
+                            }
+                        }
+                    }
+                }
+            } catch (e: GoogleAuthException) {
+                Utils.Log(TAG, "Error occurred on GoogleAuthException")
+            }
+        } catch (recoverableException: UserRecoverableAuthIOException) {
+            Utils.Log(TAG, "Error occurred on UserRecoverableAuthIOException")
+        } catch (e: IOException) {
+            Utils.Log(TAG, "Error occurred on IOException")
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        if (compositeDisposable != null) {
-//            if (!compositeDisposable.isDisposed()) {
-//                compositeDisposable.dispose()
-//            }
-//            if (compositeDisposable.isDisposed()) {
-//                compositeDisposable.clear()
-//            }
-//            compositeDisposable = null
-//        }
     }
 
     /**
@@ -195,10 +156,10 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
      * user's account.
      */
     private fun initializeDriveClient(signInAccount: GoogleSignInAccount?) {
-//        mSignInAccount = signInAccount
-//        Utils.Log(TAG, "Google client ready")
-//        Utils.Log(TAG, "Account :" + mSignInAccount.getAccount())
-//        onRefreshAccessToken(mSignInAccount.getAccount())
+        mSignInAccount = signInAccount
+        Utils.Log(TAG, "Google client ready")
+        Utils.Log(TAG, "Account :" + mSignInAccount?.getAccount())
+        onRefreshAccessToken(mSignInAccount?.getAccount())
     }
 
     /**
@@ -213,26 +174,26 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
     protected abstract fun isSignIn(): Boolean
     protected abstract fun startServiceNow()
     protected fun signOut(ls: ServiceManagerSyncDataListener?) {
-//        Utils.Log(TAG, "Call signOut")
-//        if (mGoogleSignInClient == null) {
-//            return
-//        }
-//        mGoogleSignInClient.signOut().addOnCompleteListener(this) {
-//            onDriveSignOut()
-//            ls.onCompleted()
-//        }.addOnFailureListener { ls.onError() }
+        Utils.Log(TAG, "Call signOut")
+        if (mGoogleSignInClient == null) {
+            return
+        }
+        mGoogleSignInClient?.signOut()?.addOnCompleteListener(this) {
+            onDriveSignOut()
+            ls?.onCompleted()
+        }?.addOnFailureListener { ls?.onError() }
     }
 
     protected fun revokeAccess() {
-//        if (mGoogleSignInClient == null) {
-//            return
-//        }
-//        Utils.Log(TAG, "onRevokeAccess")
-//        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this
-//        ) {
-//            onDriveRevokeAccess()
-//            PrefsController.putBoolean(getString(R.string.key_request_sign_out_google_drive), false)
-//        }
+        if (mGoogleSignInClient == null) {
+            return
+        }
+        Utils.Log(TAG, "onRevokeAccess")
+        mGoogleSignInClient?.revokeAccess()?.addOnCompleteListener(this
+        ) {
+            onDriveRevokeAccess()
+            PrefsController.putBoolean(getString(R.string.key_request_sign_out_google_drive), false)
+        }
     }
 
     companion object {

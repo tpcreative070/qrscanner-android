@@ -3,7 +3,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.*
-import androidx.appcompat.widget.*
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
