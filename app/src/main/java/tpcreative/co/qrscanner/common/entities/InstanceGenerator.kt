@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.google.gson.Gson
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -150,6 +151,7 @@ abstract class InstanceGenerator : RoomDatabase() {
         try {
             val mValue = instance?.saveDao()?.loadAll(isSynced)
             val mList: MutableList<SaveEntityModel> = ArrayList()
+            Utils.Log(TAG,"mData ${Gson().toJson(mValue)}")
             if (mValue != null) {
                 for (index in mValue) {
                     val item = SaveEntityModel(index)
@@ -249,6 +251,7 @@ abstract class InstanceGenerator : RoomDatabase() {
                             InstanceGenerator::class.java, it.getString(R.string.database_name))
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                             .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
                             .build()
                 }
             }

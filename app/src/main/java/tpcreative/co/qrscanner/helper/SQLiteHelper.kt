@@ -11,12 +11,9 @@ import java.util.*
 
 object SQLiteHelper {
     private val TAG = SQLiteHelper::class.java.simpleName
-    fun getContext(): Context {
-        return QRScannerApplication.getInstance()
-    }
 
     fun getInstance(): InstanceGenerator? {
-        return InstanceGenerator.getInstance(getContext())
+        return InstanceGenerator.getInstance(QRScannerApplication.getInstance())
     }
 
     fun onInsert(cTalkManager: HistoryModel?) {
@@ -34,7 +31,7 @@ object SQLiteHelper {
             }
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
-            InstanceGenerator.getInstance(getContext())?.onInsert(mData)
+            getInstance()?.onInsert(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
         }
