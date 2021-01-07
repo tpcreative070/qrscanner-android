@@ -78,11 +78,9 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
                     override fun onCompleted() {
                         signIn(accountName)
                     }
-
                     override fun onError() {
                         signIn(accountName)
                     }
-
                     override fun onCancel() {}
                 })
             }
@@ -92,7 +90,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     }
 
     override fun onDriveClientReady() {
-        CoroutineScope(Dispatchers.Main).launch {
+        runOnUiThread {
             Utils.Log(TAG, "onDriveClientReady...")
             val email = Utils.getDriveEmail()
             if (email != null) {
@@ -143,14 +141,16 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     }
 
     override fun reloadData() {
-        Utils.Log(TAG, "reloadData...")
-        val mSaveSyncedList = SQLiteHelper.getSaveList(true)
-        val mHistorySyncedList = SQLiteHelper.getHistoryList(true)
-        tvUsedSpace?.visibility = View.VISIBLE
-        val mTextSynced = String.format(getString(R.string.synced_data), mSaveSyncedList.size.toString() + "", mHistorySyncedList.size.toString() + "")
-        tvUsedSpace?.text = HtmlCompat.fromHtml(mTextSynced, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        btnEnable.isEnabled = true
-        btnEnable.setTextColor(ContextCompat.getColor(this, R.color.white))
+        runOnUiThread {
+            Utils.Log(TAG, "reloadData...")
+            val mSaveSyncedList = SQLiteHelper.getSaveList(true)
+            val mHistorySyncedList = SQLiteHelper.getHistoryList(true)
+            tvUsedSpace?.visibility = View.VISIBLE
+            val mTextSynced = String.format(getString(R.string.synced_data), mSaveSyncedList.size.toString() + "", mHistorySyncedList.size.toString() + "")
+            tvUsedSpace?.text = HtmlCompat.fromHtml(mTextSynced, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            btnEnable.isEnabled = true
+            btnEnable.setTextColor(ContextCompat.getColor(this@BackupActivity, R.color.white))
+        }
     }
 
     companion object {
