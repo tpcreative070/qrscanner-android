@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.ui.review
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.FileProvider
 import androidx.print.PrintHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.client.result.ParsedResultType
@@ -19,9 +17,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.DexterError
 import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.PermissionRequestErrorListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_review.*
 import tpcreative.co.qrscanner.BuildConfig
@@ -44,7 +40,6 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
     private var save: SaveModel = SaveModel()
     private var isComplete = false
     var adapter: ScannerResultAdapter? = null
-    var llm: LinearLayoutManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
@@ -52,21 +47,20 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
     }
 
     override fun onClickItem(position: Int) {
-        val itemNavigation: ItemNavigation? = viewModel.mListItemNavigation[position]
-        if (itemNavigation != null) {
-            when (itemNavigation.enumAction) {
-                EnumAction.SHARE -> {
-                    if (code != null) {
-                        Utils.Log(TAG, "Share")
-                        onGenerateCode(code, EnumAction.SHARE)
-                    }
-                }
-                EnumAction.SAVE -> {
-                    if (code != null) {
-                        onAddPermissionSave(EnumAction.SAVE)
-                    }
+        val itemNavigation: ItemNavigation = viewModel.mListItemNavigation[position]
+        when (itemNavigation.enumAction) {
+            EnumAction.SHARE -> {
+                if (code != null) {
+                    Utils.Log(TAG, "Share")
+                    onGenerateCode(code, EnumAction.SHARE)
                 }
             }
+            EnumAction.SAVE -> {
+                if (code != null) {
+                    onAddPermissionSave(EnumAction.SAVE)
+                }
+            }
+            else -> Utils.Log(TAG,"Nothing")
         }
     }
 
@@ -94,7 +88,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
     }
 
     fun setView() {
-        create = viewModel?.create
+        create = viewModel.create
         when (create?.createType) {
             ParsedResultType.ADDRESSBOOK -> {
                 code = "MECARD:N:" + create?.fullName + ";TEL:" + create?.phone + ";EMAIL:" + create?.email + ";ADR:" + create?.address + ";"
@@ -224,7 +218,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                             Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied() == true) {
+                        if (report?.isAnyPermissionPermanentlyDenied == true) {
                             /*Miss add permission in manifest*/
                             Utils.Log(TAG, "request permission is failed")
                         }
@@ -239,7 +233,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_review, menu)
+        menuInflater.inflate(R.menu.menu_review, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -282,7 +276,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                             Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied() == true) {
+                        if (report?.isAnyPermissionPermanentlyDenied == true) {
                             /*Miss add permission in manifest*/
                             Utils.Log(TAG, "request permission is failed")
                         }
@@ -349,7 +343,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
     private fun onPhotoPrint(path: String?) {
         try {
             val photoPrinter = PrintHelper(this)
-            photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT)
+            photoPrinter.scaleMode = PrintHelper.SCALE_MODE_FIT
             val bitmap: Bitmap = BitmapFactory.decodeFile(path)
             Utils.getCurrentDate()?.let { photoPrinter.printBitmap(it, bitmap) }
         } catch (e: Exception) {

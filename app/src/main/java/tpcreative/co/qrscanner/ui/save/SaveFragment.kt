@@ -55,10 +55,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             val menuInflater: MenuInflater? = mode?.getMenuInflater()
             menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
-                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
-            }
+            val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
+            window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
             return true
         }
 

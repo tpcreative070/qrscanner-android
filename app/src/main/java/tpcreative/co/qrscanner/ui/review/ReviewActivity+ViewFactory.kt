@@ -13,12 +13,13 @@ import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultAdapter
 import tpcreative.co.qrscanner.viewmodel.ReviewViewModel
 
 fun ReviewActivity.initUI(){
+    TAG = this::class.java.simpleName
+    setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     scrollView.smoothScrollTo(0, 0)
     initRecycleView()
     getIntentData()
-    setupViewModel()
 }
 
 private fun ReviewActivity.setupViewModel() {

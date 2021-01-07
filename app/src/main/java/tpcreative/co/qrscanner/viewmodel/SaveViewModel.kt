@@ -6,7 +6,6 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.model.TypeCategories
-import java.util.ArrayList
 import java.util.HashMap
 
 class SaveViewModel  : BaseViewModel<TypeCategories>(){
@@ -51,7 +50,7 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
     fun getListGroup(): MutableList<SaveModel> {
         getUniqueList()
         val list = SQLiteHelper.getSaveList()
-        val mList: MutableList<SaveModel> = mutableListOf()
+        val mLocalList: MutableList<SaveModel> = mutableListOf()
         val mLatestType = getLatestList(list)
         Utils.Log(TAG, "Latest list " + Gson().toJson(mLatestType))
         Utils.Log(TAG, "Latest object " + Gson().toJson(mLatestValue))
@@ -59,13 +58,15 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
             for (save in list) {
                 if (index.getType() == save.createType && index.getType() != mLatestValue?.createType) {
                     save.typeCategories = index
-                    mList.add(save)
+                    mLocalList.add(save)
                 }
             }
         }
-        /*Added latest list to ArrayList*/mLatestType.addAll(mList)
+        /*Added latest list to ArrayList*/
+        mLatestType.addAll(mLocalList)
         this.mList.clear()
         this.mList.addAll(mLatestType)
+        Utils.Log(TAG, "Latest object final ${Gson().toJson(this.mList)}")
         return mLatestType
     }
 

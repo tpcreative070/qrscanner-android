@@ -128,7 +128,7 @@ abstract class InstanceGenerator : RoomDatabase() {
     fun getSaveList(): MutableList<SaveEntityModel>? {
         try {
             val mValue = instance?.saveDao()?.loadAll()
-            val mList: MutableList<SaveEntityModel> = ArrayList()
+            val mList: MutableList<SaveEntityModel> = mutableListOf()
             if (mValue != null) {
                 for (index in mValue) {
                     val item = SaveEntityModel(index)

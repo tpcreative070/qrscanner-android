@@ -51,10 +51,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             val menuInflater: MenuInflater? = mode?.getMenuInflater()
             menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
-                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
-            }
+            val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
+            window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
             return true
         }
 
@@ -117,10 +115,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             recyclerView.removeAllCells()
             bindData()
             isDeleted = false
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
-                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
-            }
+            val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
+            window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
         }
     }
 
@@ -377,10 +373,12 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     override fun reloadData() {
-        if (recyclerView != null) {
-            viewModel.getListGroup()
-            recyclerView.removeAllCells()
-            bindData()
+        CoroutineScope(Dispatchers.Main).launch {
+            if (recyclerView != null) {
+                viewModel.getListGroup()
+                recyclerView.removeAllCells()
+                bindData()
+            }
         }
     }
 
@@ -451,19 +449,15 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         val builder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
         builder.setTitle(getString(R.string.delete))
         builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
-        builder.setNegativeButton(getString(R.string.no), object : DialogInterface.OnClickListener {
-            override fun onClick(dialogInterface: DialogInterface?, i: Int) {}
-        })
-        builder.setPositiveButton(getString(R.string.yes), object : DialogInterface.OnClickListener {
-            override fun onClick(dialogInterface: DialogInterface?, i: Int) {
-                deleteItem()
-                isSelectedAll = false
-                isDeleted = false
-                if (actionMode != null) {
-                    actionMode?.finish()
-                }
+        builder.setNegativeButton(getString(R.string.no)) { dialogInterface, i -> }
+        builder.setPositiveButton(getString(R.string.yes)) { dialogInterface, i ->
+            deleteItem()
+            isSelectedAll = false
+            isDeleted = false
+            if (actionMode != null) {
+                actionMode?.finish()
             }
-        })
+        }
         builder.show()
     }
 
