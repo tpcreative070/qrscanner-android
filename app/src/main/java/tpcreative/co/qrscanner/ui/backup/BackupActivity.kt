@@ -8,9 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.activity_backup.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.BackupSingleton.BackupSingletonListener
