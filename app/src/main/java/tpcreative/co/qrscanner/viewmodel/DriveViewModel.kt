@@ -11,6 +11,7 @@ import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest
 import tpcreative.co.qrscanner.common.api.requester.DriveService
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
 import tpcreative.co.qrscanner.common.extension.getString
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.download.ProgressResponseBody
 import tpcreative.co.qrscanner.common.services.upload.ProgressRequestBody
@@ -146,6 +147,7 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
                 val mResult = driveService.getItemList(QRScannerApplication.getInstance().getString(R.string.key_appDataFolder))
                 when(mResult.status){
                     Status.SUCCESS -> {
+                        Utils.Log(TAG,"Result ${mResult.data?.toJson()}")
                         Resource.success(mResult.data?.files)
                     }else ->{
                        Resource.error(mResult.code ?: Utils.CODE_EXCEPTION,mResult.message ?:"",null)

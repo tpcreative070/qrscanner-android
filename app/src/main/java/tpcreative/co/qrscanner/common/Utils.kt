@@ -371,7 +371,10 @@ object Utils {
     }
 
     fun isProVersion(): Boolean {
-        return BuildConfig.APPLICATION_ID.equals(QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release))
+        if (QRScannerApplication.getInstance().isDebugPremium()){
+            return true
+        }
+        return BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release)
     }
 
     fun setPremium(isPremium: Boolean) {

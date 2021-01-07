@@ -92,14 +92,14 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
         }
     }
 
-    fun onRefreshAccessToken(accounts: Account?) = CoroutineScope(Dispatchers.Main).launch {
+    fun onRefreshAccessToken(accounts: Account?) = CoroutineScope(Dispatchers.IO).launch {
         try {
             if (accounts == null) {
                 Utils.Log(TAG, "Account is null")
                 return@launch
             }
             val credential = GoogleAccountCredential.usingOAuth2(
-                    QRScannerApplication.Companion.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString())
+                    QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString())
             credential.selectedAccount = accounts
             try {
                 val value = credential.token

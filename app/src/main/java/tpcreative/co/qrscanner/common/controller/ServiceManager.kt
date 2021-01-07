@@ -205,7 +205,6 @@ class ServiceManager : BaseView<Any?> {
                                             if (isDismiss){
                                                 onDismissServices()
                                             }
-
                                         }
                                     }
                                 }

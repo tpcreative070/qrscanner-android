@@ -8,6 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.activity_backup.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.BackupSingleton.BackupSingletonListener
@@ -89,18 +92,20 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     }
 
     override fun onDriveClientReady() {
-        Utils.Log(TAG, "onDriveClientReady...")
-        val email = Utils.getDriveEmail()
-        if (email != null) {
-            val mValue = String.format(getString(R.string.current_email), email)
-            val newText = mValue.replace(email, "<font color=#e19704><b>$email</b></font>")
-            tvEmail.setText(HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_LEGACY))
-            tvEmail.setVisibility(View.VISIBLE)
-            btnEnable.setText(getText(R.string.switch_account))
+        CoroutineScope(Dispatchers.Main).launch {
+            Utils.Log(TAG, "onDriveClientReady...")
+            val email = Utils.getDriveEmail()
+            if (email != null) {
+                val mValue = String.format(getString(R.string.current_email), email)
+                val newText = mValue.replace(email, "<font color=#e19704><b>$email</b></font>")
+                tvEmail.text = HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                tvEmail.visibility = View.VISIBLE
+                btnEnable.text = getText(R.string.switch_account)
+            }
+            Utils.Log(ServiceManager::class.java, "onDriveClientReady")
+            Utils.Log(ServiceManager::class.java, "isSyncingData 143" + ServiceManager.getInstance().isSyncingData())
+            ServiceManager.getInstance().onPreparingSyncData(false)
         }
-        Utils.Log(ServiceManager::class.java, "onDriveClientReady")
-        Utils.Log(ServiceManager::class.java, "isSyncingData 143" + ServiceManager.Companion.getInstance().isSyncingData())
-        ServiceManager.Companion.getInstance().onPreparingSyncData(false)
     }
 
     override fun onDriveError() {}

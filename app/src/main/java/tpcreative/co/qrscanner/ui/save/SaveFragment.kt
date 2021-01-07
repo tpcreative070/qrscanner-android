@@ -122,10 +122,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             recyclerView.removeAllCells()
             bindData()
             isDeleted = false
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
-                window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
-            }
+            val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
+            window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
         }
     }
 

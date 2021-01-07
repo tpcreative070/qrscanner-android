@@ -44,7 +44,7 @@ class RefreshTokenSingleton private constructor() {
         }
     }
 
-    fun onRefreshAccessToken(accounts: Account?)  = CoroutineScope(Dispatchers.Main).launch{
+    fun onRefreshAccessToken(accounts: Account?)  = CoroutineScope(Dispatchers.IO).launch{
         try {
             if (accounts == null) {
                return@launch

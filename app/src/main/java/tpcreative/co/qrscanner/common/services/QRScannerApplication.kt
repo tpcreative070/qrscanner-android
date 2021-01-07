@@ -172,6 +172,13 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return storage
     }
 
+    fun isDebugPremium(): Boolean {
+        if (BuildConfig.DEBUG){
+            return true
+        }
+        return false
+    }
+
     fun getAdsView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adView = AdView(context)
