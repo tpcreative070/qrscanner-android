@@ -407,10 +407,12 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     override fun reloadData() {
-        viewModel.getListGroup()
-        if (recyclerView!=null){
-            recyclerView.removeAllCells()
-            bindData()
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.getListGroup()
+            if (recyclerView!=null){
+                recyclerView.removeAllCells()
+                bindData()
+            }
         }
     }
 

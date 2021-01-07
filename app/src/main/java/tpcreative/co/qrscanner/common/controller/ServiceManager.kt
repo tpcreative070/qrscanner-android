@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.common.controller
+
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
@@ -163,80 +164,97 @@ class ServiceManager : BaseView<Any?> {
         }
     }
 
-    private suspend fun getItemList(){
+    private suspend fun getItemList() {
         isSyncingData = true
-        val mResult =  driveViewModel.getListFiles()
-        when(mResult.status){
-            Status.SUCCESS ->{
+        val mResult = driveViewModel.getListFiles()
+        when (mResult.status) {
+            Status.SUCCESS -> {
                 val mData = mResult.data
-                mData?.let {mDataList ->
-                    val mId = mDataList[0]
-                    val mResultDownload = driveViewModel.downLoadData(mId.id ?:"")
-                    when(mResultDownload.status){
-                        Status.SUCCESS -> {
-                            val mObject = mResultDownload.data
-                            mObject?.let {mObjectDownloaded ->
-                                onCheckingDataToSyncToLocalDB(mObjectDownloaded)
-                                /*Final step sync upload file*/
-                                if (Utils.isEqualTimeSynced(mObjectDownloaded.updatedDateTime)) {
-                                    Utils.Log(TAG, "The session of previous already synced")
-                                    if (isDismiss) {
-                                        onDismissServices()
-                                    }
-                                    isSyncingData = false
-                                    Utils.Log(TAG, "isSyncingData 308 $isSyncingData")
-                                } else {
-                                    Utils.Log(TAG, "Preparing delete old file...")
-                                    Utils.Log(TAG, "Last time from cloud..." + mObjectDownloaded.updatedDateTime)
-                                    Utils.Log(TAG, "Last time from local..." + Utils.getLastTimeSynced())
-                                    val mResultDeletedFromCloud = driveViewModel.deletedItems(mDataList)
-                                    when(mResultDeletedFromCloud.status){
-                                        Status.SUCCESS ->{
-                                            val mResultUploadedData = driveViewModel.uploadData()
-                                            when(mResultUploadedData.status){
-                                                Status.SUCCESS -> {
-                                                    onUpdatedHistoryAndSaveToSyncedItem()
-                                                }else -> {
-                                                Utils.Log(TAG,"Uploaded data item occurred issue")
+                mData?.let { mDataList ->
+                    if (mDataList.size == 0) {
+                        val mResultUploadedData = driveViewModel.uploadData()
+                        when (mResultUploadedData.status) {
+                            Status.SUCCESS -> {
+                                onUpdatedHistoryAndSaveToSyncedItem()
+                            }
+                            else -> {
+                                Utils.Log(TAG, "Uploaded data item occurred issue")
+                            }
+                        }
+                    } else {
+                        val mId = mDataList[0]
+                        val mResultDownload = driveViewModel.downLoadData(mId.id ?: "")
+                        when (mResultDownload.status) {
+                            Status.SUCCESS -> {
+                                val mObject = mResultDownload.data
+                                mObject?.let { mObjectDownloaded ->
+                                    onCheckingDataToSyncToLocalDB(mObjectDownloaded)
+                                    /*Final step sync upload file*/
+                                    if (Utils.isEqualTimeSynced(mObjectDownloaded.updatedDateTime)) {
+                                        Utils.Log(TAG, "The session of previous already synced")
+                                        if (isDismiss) {
+                                            onDismissServices()
+                                        }
+                                        isSyncingData = false
+                                        Utils.Log(TAG, "isSyncingData 308 $isSyncingData")
+                                    } else {
+                                        Utils.Log(TAG, "Preparing delete old file...")
+                                        Utils.Log(TAG, "Last time from cloud..." + mObjectDownloaded.updatedDateTime)
+                                        Utils.Log(TAG, "Last time from local..." + Utils.getLastTimeSynced())
+                                        val mResultDeletedFromCloud = driveViewModel.deletedItems(mDataList)
+                                        when (mResultDeletedFromCloud.status) {
+                                            Status.SUCCESS -> {
+                                                val mResultUploadedData = driveViewModel.uploadData()
+                                                when (mResultUploadedData.status) {
+                                                    Status.SUCCESS -> {
+                                                        onUpdatedHistoryAndSaveToSyncedItem()
+                                                    }
+                                                    else -> {
+                                                        Utils.Log(TAG, "Uploaded data item occurred issue")
+                                                    }
                                                 }
                                             }
-                                        }else -> {
-                                            Utils.Log(TAG,"Deleted item occurred issue")
-                                            if (isDismiss){
-                                                onDismissServices()
+                                            else -> {
+                                                Utils.Log(TAG, "Deleted item occurred issue")
+                                                if (isDismiss) {
+                                                    onDismissServices()
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }else -> {
-                             Utils.Log(TAG,"Downloaded item occurred issue")
+                            else -> {
+                                Utils.Log(TAG, "Downloaded item occurred issue")
+                            }
                         }
                     }
                 }
-            }else ->{
-                Utils.Log(TAG,mResult.message)
+            }
+            else -> {
+                Utils.Log(TAG, mResult.message)
             }
         }
         isSyncingData = false
-        Utils.Log(TAG,"Already synced completely")
+        Utils.Log(TAG, "Already synced completely")
     }
 
-    suspend fun getDriveAbout() : Resource<Boolean> = withContext(Dispatchers.IO){
+    suspend fun getDriveAbout(): Resource<Boolean> = withContext(Dispatchers.IO) {
         try {
             val mResult = driveViewModel.getDriveAbout()
-            when(mResult.status){
+            when (mResult.status) {
                 Status.SUCCESS -> {
-                    Utils.Log(TAG,"Fetch drive about completed")
+                    Utils.Log(TAG, "Fetch drive about completed")
                     mResult
                 }
-                else ->{
-                    Utils.Log(TAG,"Fetch drive about issue ${mResult.message}")
-                    Resource.error(mResult.code ?: Utils.CODE_EXCEPTION,mResult.message ?: "",null)
+                else -> {
+                    Utils.Log(TAG, "Fetch drive about issue ${mResult.message}")
+                    Resource.error(mResult.code ?: Utils.CODE_EXCEPTION, mResult.message
+                            ?: "", null)
                 }
             }
-        }catch (e : Exception){
-            Resource.error(Utils.CODE_EXCEPTION,e.message ?:"",null)
+        } catch (e: Exception) {
+            Resource.error(Utils.CODE_EXCEPTION, e.message ?: "", null)
         }
     }
 
@@ -299,7 +317,7 @@ class ServiceManager : BaseView<Any?> {
 //    }
 
     /*Checking data to insert to local db*/
-    private suspend fun onCheckingDataToSyncToLocalDB(mObject: SyncDataModel?)  = withContext(Dispatchers.IO){
+    private suspend fun onCheckingDataToSyncToLocalDB(mObject: SyncDataModel?) = withContext(Dispatchers.IO) {
         val mSaveList = mObject?.saveList ?: mutableListOf()
         val mHistoryList = mObject?.historyList ?: mutableListOf()
 
@@ -330,48 +348,48 @@ class ServiceManager : BaseView<Any?> {
         }
 
         /*Updating to local db*/for (index in mSaveUpdateResultList) {
-            SQLiteHelper.onUpdate(index, true)
-        }
+        SQLiteHelper.onUpdate(index, true)
+    }
         for (index in mHistoryUpdateResultList) {
             SQLiteHelper.onUpdate(index, true)
         }
 
         /*Deleting to local db*/for (index in mSaveDeleteResultList) {
-            SQLiteHelper.onDelete(index)
-        }
+        SQLiteHelper.onDelete(index)
+    }
         for (index in mHistoryDeleteResultList) {
             SQLiteHelper.onDelete(index)
         }
     }
 
     /*Updated history and save after upload file*/
-    private suspend fun onUpdatedHistoryAndSaveToSyncedItem()  = withContext(Dispatchers.IO){
+    private suspend fun onUpdatedHistoryAndSaveToSyncedItem() = withContext(Dispatchers.IO) {
         val mSaveList = SQLiteHelper.getSaveList(false)
         val mHistoryList = SQLiteHelper.getHistoryList(false)
         for (index in mSaveList) {
-            if (index.isSynced !=true) {
+            if (index.isSynced != true) {
                 index.isSynced = true
                 SQLiteHelper.onUpdate(index, false)
             }
         }
         for (index in mHistoryList) {
-            if (index.isSynced !=true) {
+            if (index.isSynced != true) {
                 index.isSynced = true
                 SQLiteHelper.onUpdate(index, false)
             }
         }
         /*Final step*/if (isDismiss) {
-            onDismissServices()
-            isSyncingData = false
-            Utils.Log(TAG, "isSyncingData 337 $isSyncingData")
-        } else {
-            SaveSingleton.getInstance()?.reloadData()
-            HistorySingleton.getInstance()?.reloadData()
-            BackupSingleton.getInstance()?.reloadData()
-            isSyncingData = false
-            Utils.Log(TAG, "isSyncingData 343 $isSyncingData")
-            Utils.Log(TAG, "Syncing data completed")
-        }
+        onDismissServices()
+        isSyncingData = false
+        Utils.Log(TAG, "isSyncingData 337 $isSyncingData")
+    } else {
+        SaveSingleton.getInstance()?.reloadData()
+        HistorySingleton.getInstance()?.reloadData()
+        BackupSingleton.getInstance()?.reloadData()
+        isSyncingData = false
+        Utils.Log(TAG, "isSyncingData 343 $isSyncingData")
+        Utils.Log(TAG, "Syncing data completed")
+    }
     }
 
     /*onPreparingDownload*/
@@ -482,16 +500,17 @@ class ServiceManager : BaseView<Any?> {
         Utils.Log(TAG, "Dismiss Service manager")
     }
 
-    fun onCheckout()  = CoroutineScope(Dispatchers.IO).launch{
+    fun onCheckout() = CoroutineScope(Dispatchers.IO).launch {
         val mCheckout = CheckoutRequest()
         Utils.Log(TAG, "Preparing checkout")
         Utils.Log(TAG, "Checkout value " + Gson().toJson(mCheckout))
         val mResult = userViewModel.checkout(mCheckout)
-        when(mResult.status){
-            Status.SUCCESS ->{
+        when (mResult.status) {
+            Status.SUCCESS -> {
                 Utils.setCheckoutValue(true)
-            } else -> {
-                Utils.Log(TAG,"Error occurred checkout ${mResult.message}")
+            }
+            else -> {
+                Utils.Log(TAG, "Error occurred checkout ${mResult.message}")
             }
         }
     }
@@ -529,12 +548,12 @@ class ServiceManager : BaseView<Any?> {
                 onPreparingSyncData(false)
                 ResponseSingleton.getInstance()?.onNetworkConnectionChanged(true)
             }
-            else -> Utils.Log(TAG,"Nothing")
+            else -> Utils.Log(TAG, "Nothing")
         }
     }
 
-    suspend fun onExportDatabaseCSVTask(enumFragmentType: EnumFragmentType?) : Resource<String> {
-        return withContext(Dispatchers.IO){
+    suspend fun onExportDatabaseCSVTask(enumFragmentType: EnumFragmentType?): Resource<String> {
+        return withContext(Dispatchers.IO) {
             val path: String = QRScannerApplication.getInstance().getPathFolder() + "/" + enumFragmentType?.name + "_" + System.currentTimeMillis() + ".csv"
             var csvWrite: CSVWriter? = null
             try {
@@ -584,8 +603,10 @@ class ServiceManager : BaseView<Any?> {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds ?: 0),
-                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds ?: 0),
+                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds
+                                            ?: 0),
+                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds
+                                            ?: 0),
                                     index.fullName,
                                     index.address,
                                     index.ssId,
@@ -640,8 +661,10 @@ class ServiceManager : BaseView<Any?> {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds ?: 0),
-                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds ?: 0),
+                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds
+                                            ?: 0),
+                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds
+                                            ?: 0),
                                     index.fullName,
                                     index.address,
                                     index.ssId,
@@ -661,11 +684,11 @@ class ServiceManager : BaseView<Any?> {
                     Resource.success(path)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Resource.error(Utils.CODE_EXCEPTION,"${e.message}",null)
+                    Resource.error(Utils.CODE_EXCEPTION, "${e.message}", null)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Resource.error(Utils.CODE_EXCEPTION,"${e.message}",null)
+                Resource.error(Utils.CODE_EXCEPTION, "${e.message}", null)
             }
         }
     }
