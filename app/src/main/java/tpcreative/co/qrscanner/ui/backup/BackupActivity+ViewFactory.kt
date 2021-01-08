@@ -10,6 +10,7 @@ import tpcreative.co.qrscanner.common.network.NetworkUtil
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 
 fun BackupActivity.initUI(){
+    TAG = this::class.java.simpleName
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     BackupSingleton.getInstance()?.setListener(this)
@@ -20,7 +21,9 @@ fun BackupActivity.initUI(){
         tvEmail.text = HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_LEGACY)
         tvEmail.visibility = View.VISIBLE
         btnEnable.text = getText(R.string.switch_account)
+        Utils.Log(TAG,"calling here...???")
         if (Utils.isConnectedToGoogleDrive()) {
+            Utils.Log(TAG,"calling here...")
             val mSaveSyncedList = SQLiteHelper.getSaveList(true)
             val mHistorySyncedList = SQLiteHelper.getHistoryList(true)
             tvUsedSpace?.visibility = View.VISIBLE
@@ -39,8 +42,8 @@ fun BackupActivity.initUI(){
             return@setOnClickListener
         }
         Utils.Log(ServiceManager::class.java, "isSyncingData 74 " + ServiceManager.Companion.getInstance().isSyncingData())
-        if (!ServiceManager.Companion.getInstance().isSyncingData()) {
-            ServiceManager.Companion.getInstance().onPickUpNewEmail(this)
+        if (!ServiceManager.getInstance().isSyncingData()) {
+            ServiceManager.getInstance().onPickUpNewEmail(this)
         } else {
             Utils.Log(ServiceManager::class.java, "isSyncingData 78 is running")
             requestSyncData()

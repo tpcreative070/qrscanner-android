@@ -907,7 +907,7 @@ object Utils {
     }
 
     fun isRequestSyncData(): Boolean {
-        return PrefsController.getBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_is_request_sync), false)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_sync), false)
     }
 
     fun setRequestSync(value: Boolean) {

@@ -30,6 +30,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
             tvUsedSpace?.visibility = View.VISIBLE
             btnEnable.setTextColor(ContextCompat.getColor(this, R.color.material_gray_400))
             btnEnable.isEnabled = false
+            Utils.Log(TAG,"Calling sync data")
         }
     }
 
@@ -58,11 +59,9 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
                             override fun onCompleted() {
                                 signIn(accountName)
                             }
-
                             override fun onError() {
                                 signIn(accountName)
                             }
-
                             override fun onCancel() {}
                         })
                         return
@@ -138,6 +137,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     }
 
     override fun reloadData() {
+        Utils.Log(TAG,"reloadData")
         runOnUiThread {
             Utils.Log(TAG, "reloadData...")
             val mSaveSyncedList = SQLiteHelper.getSaveList(true)
