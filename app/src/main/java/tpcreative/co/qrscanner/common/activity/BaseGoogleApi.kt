@@ -48,6 +48,7 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
         super.onStart()
         Utils.Log(ServiceManager::class.java, "onStart " + Utils.isRequestSyncData())
         if (Utils.isRequestSyncData() || ServiceManager.getInstance().isSyncingData()) {
+            Utils.Log(TAG,"Checking isSyncingData is true ")
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null && GoogleSignIn.hasPermissions(account, Scope(DriveScopes.DRIVE_FILE), Scope(DriveScopes.DRIVE_APPDATA))) {
                 getGoogleSignInClient(account.account)
