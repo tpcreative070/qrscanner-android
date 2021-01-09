@@ -21,6 +21,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chage_file_color)
+        initUI()
     }
 
     override fun onClickItem(position: Int) {

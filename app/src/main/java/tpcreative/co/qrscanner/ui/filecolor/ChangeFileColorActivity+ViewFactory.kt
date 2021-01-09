@@ -11,11 +11,11 @@ import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.viewmodel.ChangeFileColorViewModel
 
 fun ChangeFileColorActivity.initUI(){
+    setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     initRecycleView(layoutInflater)
     getData()
-    setupViewModel()
 }
 
 fun ChangeFileColorActivity.getData(){
