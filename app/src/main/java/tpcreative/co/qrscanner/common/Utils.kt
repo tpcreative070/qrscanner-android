@@ -289,14 +289,14 @@ object Utils {
     }
 
     fun generateRandomDigits(n: Int): Int {
-        val m = Math.pow(10.0, (n - 1).toDouble()) as Int
+        val m = Math.pow(10.0, (n - 1).toDouble()).toInt()
         return m + Random().nextInt(9 * m)
     }
 
     fun checkSum(code: String?): Int {
         var `val` = 0
         for (i in 0 until (code?.length?.minus(1) ?: 0 )) {
-            `val` += (code?.get(i).toString() + "").toInt() as Int * if (i % 2 == 0) 1 else 3
+            `val` += (code?.get(i).toString() + "").toInt() * if (i % 2 == 0) 1 else 3
         }
         return (10 - `val` % 10) % 10
     }
@@ -329,7 +329,7 @@ object Utils {
         }
 
         // Difference from Rounded-Up-To-Nearest-10 - Fianl Check Digit Calculation
-        tmpCheckDigit = ((ceil((tmpCheckSum as Float / 10 as Float).toDouble()) * 10) - tmpCheckSum.toFloat()) as Int
+        tmpCheckDigit = ((ceil((tmpCheckSum.toFloat() / 10.toFloat()).toDouble()) * 10) - tmpCheckSum.toFloat()).toInt()
 
         // Check if last digit is same as calculated check digit
         return if (gtinCheckDigit == tmpCheckDigit) true else false

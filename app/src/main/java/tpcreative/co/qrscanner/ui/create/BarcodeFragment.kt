@@ -154,7 +154,7 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     fun onInitView() {
         addItemsOnSpinner()
         addListenerOnSpinnerItemSelection()
-        viewModel.getBarcodeFormat()
+        getBarcodeFormat()
     }
 
     // add items into spinner dynamically
