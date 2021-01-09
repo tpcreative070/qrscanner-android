@@ -24,7 +24,6 @@ import tpcreative.co.qrscanner.common.api.RetrofitBuilder
 import tpcreative.co.qrscanner.common.api.RootAPI
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.controller.ServiceManager
-import tpcreative.co.qrscanner.common.entities.InstanceGenerator
 import tpcreative.co.qrscanner.helper.ThemeHelper
 import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.EnumTypeServices
@@ -103,19 +102,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
         if (activity is MainActivity) {
-            this.activity = activity as MainActivity?
+            this.activity = activity
         }
     }
 
     override fun onActivityStarted(activity: Activity) {
         if (activity is MainActivity) {
-            this.activity = activity as MainActivity?
+            this.activity = activity
         }
     }
 
     override fun onActivityResumed(activity: Activity) {
         if (activity is MainActivity) {
-            this.activity = activity as MainActivity?
+            this.activity = activity
         }
     }
 
@@ -287,7 +286,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             return
         }
         if (adLargeView?.parent != null) {
-            val tempVg: ViewGroup = adLargeView?.getParent() as ViewGroup
+            val tempVg: ViewGroup = adLargeView?.parent as ViewGroup
             tempVg.removeView(adLargeView)
         }
         layAd?.addView(adLargeView)
