@@ -64,12 +64,12 @@ internal class HighlightView(  // View displaying image
         initialAspectRatio = (this.cropRect?.width() ?: 0F) / (this.cropRect?.height() ?:0F)
         drawRect = computeLayout()
         outsidePaint.setARGB(125, 50, 50, 50)
-        outlinePaint.setStyle(Paint.Style.STROKE)
-        outlinePaint.setAntiAlias(true)
+        outlinePaint.style = Paint.Style.STROKE
+        outlinePaint.isAntiAlias = true
         outlineWidth = dpToPx(OUTLINE_DP)
-        handlePaint.setColor(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.colorAccent))
-        handlePaint.setStyle(Paint.Style.FILL)
-        handlePaint.setAntiAlias(true)
+        handlePaint.color = ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent)
+        handlePaint.style = Paint.Style.FILL
+        handlePaint.isAntiAlias = true
         handleRadius = dpToPx(HANDLE_RADIUS_DP)
         modifyMode = ModifyMode.Grow
     }
@@ -181,27 +181,27 @@ internal class HighlightView(  // View displaying image
 
         // verticalCheck makes sure the position is between the top and
         // the bottom edge (with some tolerance). Similar for horizCheck.
-        val verticalCheck = (y >= (r?.top ?:0) - hysteresis
-                && y < (r?.bottom ?:0) + hysteresis)
-        val horizCheck = (x >= (r?.left ?:0) - hysteresis
-                && x < (r?.right ?:0) + hysteresis)
+        val verticalCheck = (y >= r.top - hysteresis
+                && y < r.bottom + hysteresis)
+        val horizCheck = (x >= (r.left) - hysteresis
+                && x < (r.right) + hysteresis)
 
         // Check whether the position is near some edge(s)
-        if (abs((r?.left ?:0) - x) < hysteresis && verticalCheck) {
+        if (abs((r.left) - x) < hysteresis && verticalCheck) {
             retval = retval or GROW_LEFT_EDGE
         }
-        if (abs((r?.right ?:0) - x) < hysteresis && verticalCheck) {
+        if (abs((r.right) - x) < hysteresis && verticalCheck) {
             retval = retval or GROW_RIGHT_EDGE
         }
-        if (abs((r?.top ?:0) - y) < hysteresis && horizCheck) {
+        if (abs((r.top) - y) < hysteresis && horizCheck) {
             retval = retval or GROW_TOP_EDGE
         }
-        if (abs((r?.bottom ?:0) - y) < hysteresis && horizCheck) {
+        if (abs((r.bottom) - y) < hysteresis && horizCheck) {
             retval = retval or GROW_BOTTOM_EDGE
         }
 
         // Not near any edge but inside the rectangle: move
-        if (retval == GROW_NONE && r?.contains(x.toInt(), y.toInt()) == true) {
+        if (retval == GROW_NONE && r.contains(x.toInt(), y.toInt())) {
             retval = MOVE
         }
         return retval
@@ -215,8 +215,8 @@ internal class HighlightView(  // View displaying image
         val r = computeLayout()
         if (edge == MOVE) {
             // Convert to image space before sending to moveBy()
-            moveBy(dx * ((cropRect?.width() ?:0F).div(r?.width() ?:0)),
-                    dy * ((cropRect?.height() ?:0F).div(r?.height() ?:0)))
+            moveBy(dx * ((cropRect?.width() ?:0F).div(r.width())),
+                    dy * ((cropRect?.height() ?:0F).div(r.height())))
         } else {
             if (GROW_LEFT_EDGE or GROW_RIGHT_EDGE and edge == 0) {
                 dx = 0f
@@ -226,8 +226,8 @@ internal class HighlightView(  // View displaying image
             }
 
             // Convert to image space before sending to growBy()
-            val xDelta = dx * ((cropRect?.width() ?:0F) / (r?.width() ?:0))
-            val yDelta = dy * (cropRect?.height() ?:0F) / (r?.height()?:0)
+            val xDelta = dx * ((cropRect?.width() ?:0F) / r.width())
+            val yDelta = dy * (cropRect?.height() ?:0F) / r.height()
             growBy((if (edge and GROW_LEFT_EDGE != 0) -1 else 1) * xDelta,
                     (if (edge and GROW_TOP_EDGE != 0) -1 else 1) * yDelta)
         }
@@ -240,11 +240,11 @@ internal class HighlightView(  // View displaying image
 
         // Put the cropping rectangle inside image rectangle
         cropRect?.offset(
-                Math.max(0f, (imageRect?.left ?:0F) - (cropRect?.left ?:0F)),
-                Math.max(0f, (imageRect?.top ?:0F) - (cropRect?.top ?:0F)))
+                0f.coerceAtLeast((imageRect?.left ?: 0F) - (cropRect?.left ?: 0F)),
+                0f.coerceAtLeast((imageRect?.top ?: 0F) - (cropRect?.top ?: 0F)))
         cropRect?.offset(
-                Math.min(0f, (imageRect?.right ?:0F) - (cropRect?.right ?:0F)),
-                Math.min(0f, (imageRect?.bottom ?:0F) - (cropRect?.bottom ?:0F)))
+                0f.coerceAtMost((imageRect?.right ?: 0F) - (cropRect?.right ?: 0F)),
+                0f.coerceAtMost((imageRect?.bottom ?: 0F) - (cropRect?.bottom ?: 0F)))
         drawRect = computeLayout()
         drawRect?.let { invalRect.union(it) }
         invalRect.inset(-handleRadius.toInt(), -handleRadius.toInt())

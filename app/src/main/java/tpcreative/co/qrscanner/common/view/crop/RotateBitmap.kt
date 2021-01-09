@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package tpcreative.co.qrscanner.common.view.crop
-
 import android.graphics.Bitmap
 import android.graphics.Matrix
 
@@ -39,7 +38,7 @@ internal class RotateBitmap(private var bitmap: Bitmap?, rotation: Int) {
         this.bitmap = bitmap
     }
 
-    fun getRotateMatrix(): Matrix? {
+    fun getRotateMatrix(): Matrix {
         // By default this is an identity matrix
         val matrix = Matrix()
         if (bitmap != null && rotation != 0) {

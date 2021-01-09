@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.view.crop
-
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
@@ -53,9 +52,6 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         btn_done.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
     }
 
-
-
-
     private fun setupViews() {
         setContentView(R.layout.crop_activity_crop)
         imageView = findViewById<View?>(R.id.crop_image) as CropImageView
@@ -66,21 +62,21 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                 System.gc()
             }
         })
-        findViewById<View?>(R.id.btn_cancel).setOnClickListener {
+        btn_cancel.setOnClickListener {
             setResult(RESULT_CANCELED)
             finish()
         }
-        findViewById<View?>(R.id.btn_done).setOnClickListener { finish() }
+       btn_done.setOnClickListener { finish() }
     }
 
     private fun loadInput() {
         val intent = intent
         val extras = intent.extras
         if (extras != null) {
-            aspectX = extras.getInt(Extra.Companion.ASPECT_X)
-            aspectY = extras.getInt(Extra.Companion.ASPECT_Y)
-            maxX = extras.getInt(Extra.Companion.MAX_X)
-            maxY = extras.getInt(Extra.Companion.MAX_Y)
+            aspectX = extras.getInt(Extra.ASPECT_X)
+            aspectY = extras.getInt(Extra.ASPECT_Y)
+            maxX = extras.getInt(Extra.MAX_X)
+            maxY = extras.getInt(Extra.MAX_Y)
         }
         sourceUri = intent.data
         if (sourceUri != null) {
@@ -128,7 +124,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         return if (textureLimit == 0) {
             SIZE_DEFAULT
         } else {
-            Math.min(textureLimit, SIZE_LIMIT)
+            textureLimit.coerceAtMost(SIZE_LIMIT)
         }
     }
 
@@ -148,7 +144,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         CropUtil.startBackgroundJob(this, null, resources.getString(R.string.crop__wait),
                 {
                     val latch = CountDownLatch(1)
-                    handler?.post(Runnable {
+                    handler.post(Runnable {
                         if (imageView?.getScale() == 1f) {
                             imageView?.center()
                         }
@@ -191,7 +187,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         }
 
         fun crop() {
-            handler?.post(Runnable {
+            handler.post(Runnable {
                 makeDefault()
                 imageView?.invalidate()
                 if (imageView?.highlightViews?.size == 1) {
@@ -275,11 +271,11 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
     }
 
     private fun setResultEncode(encode: Result?) {
-        setResult(RESULT_OK, Intent().putExtra(Crop.Companion.REQUEST_DATA, Gson().toJson(encode)))
+        setResult(RESULT_OK, Intent().putExtra(Crop.REQUEST_DATA, Gson().toJson(encode)))
     }
 
     private fun setResultException(throwable: Throwable?) {
-        setResult(Crop.Companion.RESULT_ERROR, Intent().putExtra(Extra.Companion.ERROR, throwable))
+        setResult(Crop.RESULT_ERROR, Intent().putExtra(Extra.ERROR, throwable))
     }
 
     override fun isProgressingCropImage(): Boolean {
@@ -304,7 +300,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         var outWidth = width
         var outHeight = height
         if (maxX > 0 && maxY > 0 && (width > maxX || height > maxY)) {
-            val ratio = width as Float / height
+            val ratio = width / height
             if (maxX.toFloat() / maxY.toFloat() > ratio) {
                 outHeight = maxY.toFloat()
                 outWidth = (maxY.toFloat() * ratio + .5f)
@@ -341,25 +337,37 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                     if (mResult != null) {
                         isSaving = false
                         isProgressing = false
-                        btn_done.setEnabled(true)
+                        btn_done.isEnabled = true
                         btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
                         setResultEncode(mResult)
                     } else {
                         isSaving = false
                         isProgressing = false
-                        btn_done.setEnabled(false)
+                        btn_done.isEnabled = false
                         btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
                     }
                 } catch (e: NotFoundException) {
                     e.printStackTrace()
                     Utils.Log(TAG, "Do not recognize qrcode type")
+                    isSaving = false
+                    isProgressing = false
+                    btn_done.isEnabled = false
+                    btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
                 } catch (e: ChecksumException) {
                     e.printStackTrace()
                     Utils.Log(TAG, "Do not recognize qrcode type")
+                    isSaving = false
+                    isProgressing = false
+                    btn_done.isEnabled = false
+                    btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
                 }
             } catch (e: FormatException) {
                 e.printStackTrace()
                 Utils.Log(TAG, "Do not recognize qrcode type")
+                isSaving = false
+                isProgressing = false
+                btn_done.isEnabled = false
+                btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
             }
         }
     }

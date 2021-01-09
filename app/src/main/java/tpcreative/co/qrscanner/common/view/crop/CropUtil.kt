@@ -88,7 +88,7 @@ internal object CropUtil {
 
     @Throws(IOException::class)
     private fun getTempFilename(context: Context?): String? {
-        val outputDir = context?.getCacheDir()
+        val outputDir = context?.cacheDir
         val outputFile = File.createTempFile("image", "tmp", outputDir)
         return outputFile.absolutePath
     }
@@ -99,7 +99,7 @@ internal object CropUtil {
         var output: FileOutputStream? = null
         try {
             val pfd = resolver?.openFileDescriptor(uri, "r")
-            val fd = pfd?.getFileDescriptor()
+            val fd = pfd?.fileDescriptor
             input = FileInputStream(fd)
             val tempFilename = getTempFilename(context)
             output = FileOutputStream(tempFilename)

@@ -98,7 +98,7 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event?.getRepeatCount() == 0) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event?.repeatCount == 0) {
             event.startTracking()
             return true
         }
@@ -170,7 +170,7 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         val bitmap = bitmapDisplayed.getBitmap() ?: return
         val m = getImageViewMatrix()
         val rect = RectF(0F, 0F, bitmap.width.toFloat(), bitmap.height.toFloat())
-        m?.mapRect(rect)
+        m.mapRect(rect)
         val height = rect.height()
         val width = rect.width()
         var deltaX = 0f
@@ -234,8 +234,8 @@ internal abstract class ImageViewTouchBase : AppCompatImageView {
         matrix?.reset()
 
         // We limit up-scaling to 3x otherwise the result may look bad if it's a small icon
-        val widthScale = Math.min(viewWidth / w, 3.0f)
-        val heightScale = Math.min(viewHeight / h, 3.0f)
+        val widthScale = (viewWidth / w).coerceAtMost(3.0f)
+        val heightScale = (viewHeight / h).coerceAtMost(3.0f)
         val scale = widthScale.coerceAtMost(heightScale)
         if (includeRotation) {
             matrix?.postConcat(bitmap?.getRotateMatrix())

@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.view.crop.HighlightView.ModifyMode
 import java.util.*
+import kotlin.math.abs
 
 internal class CropImageView : ImageViewTouchBase {
     var highlightViews: MutableList<HighlightView> = mutableListOf()
@@ -150,7 +151,7 @@ internal class CropImageView : ImageViewTouchBase {
         var zoom = Math.min(z1, z2)
         zoom *= this.getScale()
         zoom = Math.max(1f, zoom)
-        if (Math.abs(zoom - getScale()) / zoom > .1) {
+        if (abs(zoom - getScale()) / zoom > .1) {
             val coordinates = floatArrayOf(hv?.cropRect?.centerX() ?:0F, hv?.cropRect?.centerY() ?:0F)
             getUnrotatedMatrix().mapPoints(coordinates)
             zoomTo(zoom, coordinates[0], coordinates[1], 300f)
