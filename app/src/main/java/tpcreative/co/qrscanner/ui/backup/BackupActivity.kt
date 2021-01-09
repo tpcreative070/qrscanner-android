@@ -17,7 +17,6 @@ import tpcreative.co.qrscanner.common.services.QRScannerService.ServiceManagerSy
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 
 class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
-    var tvUsedSpace: AppCompatTextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
@@ -67,7 +66,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
                         return
                     }
                 }
-                Utils.Log(TAG, "isSyncingData 109 " + ServiceManager.Companion.getInstance().isSyncingData())
+                Utils.Log(TAG, "isSyncingData 109 " + ServiceManager.getInstance().isSyncingData())
                 Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
                 Utils.setRequestSync(true)
                 signOut(object : ServiceManagerSyncDataListener {

@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.controller
-
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
@@ -50,7 +49,6 @@ class ServiceManager : BaseView<Any?> {
                 getInstance().onCheckout()
             }
         }
-
         //binder comes from server to communicate with method's of
         override fun onServiceDisconnected(className: ComponentName?) {
             Utils.Log(TAG, "disconnected")
