@@ -46,6 +46,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     override fun onCreate() {
         super.onCreate()
         mInstance = this
+        isLive = true
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         serverAPI = RetrofitBuilder.getService(typeService = EnumTypeServices.SYSTEM)
         serverDriveApi = RetrofitBuilder.getService(getString(R.string.url_google), typeService = EnumTypeServices.GOOGLE_DRIVE)
@@ -55,7 +56,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
-        isLive = false
         if (!Utils.isPremium() && Utils.isLiveAds()) {
             Utils.Log(TAG, "Start ads")
             MobileAds.initialize(this) { }
