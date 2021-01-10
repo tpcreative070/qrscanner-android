@@ -56,7 +56,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 if (activity == null) {
                     return
                 }
-                // ResultHan resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result.getResult());
                 val parsedResult = ResultParser.parseResult(result?.result)
                 val create = Create()
                 var address: String? = ""
@@ -406,11 +405,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         pickImage(context, this)
     }
 
-    fun onFilterResult(result: Result?) {
+    private fun onFilterResult(result: Result?) {
         if (activity == null) {
             return
         }
-        //ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(getActivity(), result);
         val parsedResult = ResultParser.parseResult(result)
         val create = Create()
         var address: String? = ""
@@ -568,6 +566,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 if (typeCamera != 2) {
                     onBeepAndVibrate()
                     zxing_barcode_scanner.resume()
+                    Utils.Log(TAG, "Fragment visit...resume...")
                 }
             } else {
                 if (typeCamera != 2) {
@@ -585,7 +584,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     /*Share File To QRScanner*/
     private fun onHandlerIntent() {
         try {
-            val intent = activity?.getIntent()
+            val intent = activity?.intent
             val action = intent?.action
             val type = intent?.type
             Utils.Log(TAG, "original type :$type")
@@ -593,7 +592,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 handleSendSingleItem(intent)
             }
         } catch (e: Exception) {
-            //Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
             Utils.onDropDownAlert(activity, getString(R.string.error_occurred_importing))
             e.printStackTrace()
         }
@@ -605,11 +603,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             if (imageUri != null) {
                 beginCrop(imageUri)
             } else {
-                //Utils.showGotItSnackbar(getView(),R.string.can_not_support_this_format);
                 Utils.onDropDownAlert(activity, getString(R.string.can_not_support_this_format))
             }
         } catch (e: Exception) {
-            //Utils.showGotItSnackbar(getView(),R.string.error_occurred_importing);
             Utils.onDropDownAlert(activity, getString(R.string.error_occurred_importing))
             e.printStackTrace()
         }
