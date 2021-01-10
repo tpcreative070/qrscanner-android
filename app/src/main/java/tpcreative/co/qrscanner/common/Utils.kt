@@ -406,7 +406,7 @@ object Utils {
     fun onScanFile(activity: Context, nameLogs: String?) {
         if (PermissionChecker.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PermissionChecker.PERMISSION_GRANTED) {
             Log(TAG, "Granted permission....")
-            val storage: Storage = QRScannerApplication.Companion.getInstance().getStorage()
+            val storage: Storage? = QRScannerApplication.getInstance().getStorage()
             if (storage != null) {
                 val file = File(storage.externalStorageDirectory + "/" + nameLogs)
                 MediaScannerConnection.scanFile(activity, arrayOf(file.absolutePath), null, null)
@@ -955,10 +955,6 @@ object Utils {
                 .setBackgroundColorInt(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setText(message)
                 .show()
-    }
-
-    fun isLiveAds(): Boolean {
-        return true
     }
 
     interface UtilsListener {

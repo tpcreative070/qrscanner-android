@@ -16,6 +16,7 @@ import tpcreative.co.qrscanner.model.Theme
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
 fun MainActivity.initUI(){
+    TAG = this::class.java.simpleName
     setupViewModel()
     if (QRScannerApplication.getInstance().getDeviceId() == "66801ac00252fe84") {
         finish()
@@ -53,7 +54,7 @@ fun MainActivity.initUI(){
             == PackageManager.PERMISSION_DENIED) {
         onAddPermissionCamera()
     }
-    if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium() && Utils.isLiveAds()) {
+    if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds()) {
         QRScannerApplication.getInstance().getAdsView(this)
     }
     val mCountRating = Utils.onGetCountRating()

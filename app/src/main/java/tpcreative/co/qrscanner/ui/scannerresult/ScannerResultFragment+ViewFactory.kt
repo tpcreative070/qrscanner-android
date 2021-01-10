@@ -29,7 +29,7 @@ fun ScannerResultFragment.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
-    if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium() && Utils.isLiveAds()) {
+    if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds()) {
         QRScannerApplication.getInstance().getAdsLargeView(this)
     }
     checkingShowAds()
