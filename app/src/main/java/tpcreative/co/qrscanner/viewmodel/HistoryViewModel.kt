@@ -15,7 +15,7 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
     var mLatestValue: HistoryModel = HistoryModel()
     private var i = 0
 
-    fun getLatestList(mData: MutableList<HistoryModel>): MutableList<HistoryModel> {
+    private fun getLatestList(mData: MutableList<HistoryModel>): MutableList<HistoryModel> {
         val mList: MutableList<HistoryModel> = mutableListOf()
         if (mData.size > 0) {
             mLatestValue = mData[0]
@@ -30,7 +30,7 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
         return mList
     }
 
-    fun getUniqueList(): MutableMap<String?, HistoryModel?> {
+    private fun getUniqueList(): MutableMap<String?, HistoryModel?> {
         val histories = SQLiteHelper.getHistoryList()
         Utils.Log(TAG, "History list " + Gson().toJson(histories))
         Utils.Log(TAG, Gson().toJson(histories))
@@ -81,10 +81,12 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
     }
 
     fun deleteItem() = liveData(Dispatchers.Main) {
-        val list = mList
-        for (index in list) {
+        for (index in mList) {
+            Utils.Log(TAG,"deleteItem 0")
             if (index.isDeleted()) {
+                Utils.Log(TAG,"deleteItem 1")
                 if (index.isChecked()) {
+                    Utils.Log(TAG,"deleteItem 2")
                     SQLiteHelper.onDelete(index)
                 }
             }

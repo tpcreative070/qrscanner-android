@@ -46,9 +46,9 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     private var code: String? = null
     private var share: SaveModel? = null
     private var edit: SaveModel? = null
-    private var isDeleted = false
-    private var isSelectedAll = false
-    private var actionMode: ActionMode? = null
+    var misDeleted = false
+    var isSelectedAll = false
+    var actionMode: ActionMode? = null
     lateinit var viewModel : SaveViewModel
     private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -119,7 +119,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             }
             recyclerView.removeAllCells()
             bindData()
-            isDeleted = false
+            misDeleted = false
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
         }
@@ -177,7 +177,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     override fun isDeleted(): Boolean {
-        return isDeleted
+        return misDeleted
     }
 
     override fun getContext(): Context? {
@@ -201,7 +201,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             }
             recyclerView.removeAllCells()
             bindData()
-            isDeleted = true
+            misDeleted = true
         } else {
             if (listSave.size == 0) {
                 return
@@ -236,7 +236,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         }
         recyclerView.removeAllCells()
         bindData()
-        isDeleted = true
+        misDeleted = true
     }
 
     override fun onClickItem(position: Int) {
@@ -488,11 +488,6 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         builder.setPositiveButton(getString(R.string.yes), object : DialogInterface.OnClickListener {
             override fun onClick(dialogInterface: DialogInterface?, i: Int) {
                 deleteItem()
-                isSelectedAll = false
-                isDeleted = false
-                if (actionMode != null) {
-                    actionMode?.finish()
-                }
             }
         })
         builder.show()

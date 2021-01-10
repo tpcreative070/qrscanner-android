@@ -23,6 +23,11 @@ private fun HistoryFragment.setupViewModel() {
 
 fun HistoryFragment.deleteItem(){
     viewModel.deleteItem().observe(this, Observer {
+        isSelectedAll = false
+        misDeleted = false
+        if (actionMode != null) {
+            actionMode?.finish()
+        }
         updateView()
     })
 }

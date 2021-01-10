@@ -20,6 +20,11 @@ private fun SaveFragment.setupViewModel() {
 
 fun SaveFragment.deleteItem() {
     viewModel.deleteItem().observe(this, Observer {
+        isSelectedAll = false
+        misDeleted = false
+        if (actionMode != null) {
+            actionMode?.finish()
+        }
         updateView()
     })
 }

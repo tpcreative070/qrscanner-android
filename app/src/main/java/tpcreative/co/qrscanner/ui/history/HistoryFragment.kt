@@ -1,12 +1,10 @@
 package tpcreative.co.qrscanner.ui.history
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -18,9 +16,7 @@ import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.DexterError
 import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.PermissionRequestErrorListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_history.*
@@ -43,9 +39,9 @@ import java.util.*
 
 class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, HistorySingleton.SingletonHistoryListener, MainSingleton.SingleTonMainListener {
     lateinit var viewModel : HistoryViewModel
-    private var isDeleted = false
-    private var isSelectedAll = false
-    private var actionMode: ActionMode? = null
+    var misDeleted = false
+    var isSelectedAll = false
+    var actionMode: ActionMode? = null
     private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.getMenuInflater()
@@ -61,8 +57,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            val i = item?.getItemId()
-            when (item?.getItemId()) {
+            when (item?.itemId) {
                 R.id.menu_item_select_all -> {
                     val list: MutableList<HistoryModel> = viewModel.getListGroup()
                     viewModel.mList.clear()
@@ -114,7 +109,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             }
             recyclerView.removeAllCells()
             bindData()
-            isDeleted = false
+            misDeleted = false
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
         }
@@ -134,7 +129,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     override fun isDeleted(): Boolean {
-        return isDeleted
+        return misDeleted
     }
 
     fun addRecyclerHeaders() {
@@ -142,7 +137,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             override fun getSectionHeaderView(history: HistoryModel, i: Int): View {
                 val view: View = LayoutInflater.from(context).inflate(R.layout.history_item_header, null, false)
                 val textView: TextView = view.findViewById<TextView?>(R.id.tvHeader)
-                textView.setText(history.getCategoryName())
+                textView.text = history.getCategoryName()
                 return view
             }
 
@@ -183,6 +178,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         Utils.Log(TAG, "position : $position - $isChecked")
         val result = viewModel.mList[position].isDeleted()
         viewModel.mList[position].setChecked(isChecked)
+        Utils.Log(TAG,"isChecked $result")
+        Utils.Log(TAG,"isDeleted ${viewModel.mList[position].isChecked()}")
         if (result) {
             if (actionMode != null) {
                 actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
@@ -191,6 +188,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     override fun isShowDeleteAction(isDelete: Boolean) {
+        Utils.Log(TAG,"isShowDeleteAction $isDelete")
         val listHistory: MutableList<HistoryModel> = SQLiteHelper.getHistoryList()
         if (isDelete) {
             if (actionMode == null) {
@@ -207,7 +205,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             }
             recyclerView.removeAllCells()
             bindData()
-            isDeleted = true
+            misDeleted = true
         } else {
             if (listHistory.size == 0) {
                 return
@@ -232,7 +230,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         }
         recyclerView.removeAllCells()
         bindData()
-        isDeleted = true
+        misDeleted = true
     }
 
     override fun onClickItem(position: Int) {
@@ -404,7 +402,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         }
     }
 
-    fun onAddPermissionSave() {
+    private fun onAddPermissionSave() {
         Dexter.withContext(activity)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -452,11 +450,6 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         builder.setNegativeButton(getString(R.string.no)) { dialogInterface, i -> }
         builder.setPositiveButton(getString(R.string.yes)) { dialogInterface, i ->
             deleteItem()
-            isSelectedAll = false
-            isDeleted = false
-            if (actionMode != null) {
-                actionMode?.finish()
-            }
         }
         builder.show()
     }

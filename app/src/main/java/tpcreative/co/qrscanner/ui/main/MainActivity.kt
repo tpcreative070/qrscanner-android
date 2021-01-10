@@ -165,7 +165,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
                     .create())
             //Set option fabs clicklisteners.
             speedDial.setOnActionSelectedListener(OnActionSelectedListener { actionItem ->
-                val listHistory = SQLiteHelper.getHistoryList()
                 when (actionItem.id) {
                     R.id.fab_track -> {
                         MainSingleton.getInstance()?.isShowDeleteAction(true)
