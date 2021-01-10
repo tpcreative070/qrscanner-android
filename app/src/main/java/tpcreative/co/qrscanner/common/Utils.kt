@@ -596,9 +596,7 @@ object Utils {
     }
 
     fun isNotEmptyOrNull(value: String?): Boolean {
-        return if (value == null || value == "" || value == "null") {
-            false
-        } else true
+        return !(value == null || value == "" || value == "null")
     }
 
     fun filterDuplicationsSaveItems(list: MutableList<SaveModel>): MutableList<SaveModel> {
@@ -656,9 +654,9 @@ object Utils {
         val mList: MutableList<HistoryModel> = ArrayList<HistoryModel>()
         for (index in mSyncedList) {
             /*Checking item was deleted before*/
-            val mValue = mHistoryMap?.get(index.uuId)
+            val mValue = mHistoryMap.get(index.uuId)
             /*Checking item exiting before*/
-            val mItem: HistoryModel? = mSyncedMap?.get(index.uuId)
+            val mItem: HistoryModel? = mSyncedMap[index.uuId]
             if (mValue == null && mItem == null) {
                 index.id = 0
                 mList.add(index)
@@ -670,13 +668,13 @@ object Utils {
     fun checkSaveItemToInsertToLocal(mSyncedList: MutableList<SaveModel>): MutableList<SaveModel> {
         /*Checking local items deleted*/
         val mHistoryMap = getSaveDeletedMap()
-        val mSyncedMap: MutableMap<String?, SaveModel>? = convertSaveListToMap(SQLiteHelper.getSaveList(true))
+        val mSyncedMap: MutableMap<String?, SaveModel> = convertSaveListToMap(SQLiteHelper.getSaveList(true))
         val mList: MutableList<SaveModel> = ArrayList<SaveModel>()
         for (index in mSyncedList) {
             /*Checking item was deleted before*/
-            val mValue = mHistoryMap?.get(index.uuId)
+            val mValue = mHistoryMap.get(index.uuId)
             /*Checking item exiting before*/
-            val mItem: SaveModel? = mSyncedMap?.get(index.uuId)
+            val mItem: SaveModel? = mSyncedMap[index.uuId]
             if (mValue == null && mItem == null) {
                 index.id = 0
                 mList.add(index)
@@ -687,11 +685,11 @@ object Utils {
 
     fun checkSaveItemToUpdateToLocal(mSyncedList: MutableList<SaveModel>): MutableList<SaveModel> {
         /*Checking local items deleted*/
-        val mSyncedMap: MutableMap<String?, SaveModel>? = convertSaveListToMap(SQLiteHelper.getSaveList(true))
+        val mSyncedMap: MutableMap<String?, SaveModel> = convertSaveListToMap(SQLiteHelper.getSaveList(true))
         val mList: MutableList<SaveModel> = ArrayList<SaveModel>()
         for (index in mSyncedList) {
             /*Checking item exiting before*/
-            val mItem: SaveModel? = mSyncedMap?.get(index.uuId)
+            val mItem: SaveModel? = mSyncedMap[index.uuId]
             if (mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) {
                 index.id = mItem.id
                 mList.add(index)
@@ -702,11 +700,11 @@ object Utils {
 
     fun checkHistoryItemToUpdateToLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel> {
         /*Checking local items deleted*/
-        val mSyncedMap: MutableMap<String?, HistoryModel>? = convertHistoryListToMap(SQLiteHelper.getHistoryList(true))
+        val mSyncedMap: MutableMap<String?, HistoryModel> = convertHistoryListToMap(SQLiteHelper.getHistoryList(true))
         val mList: MutableList<HistoryModel> = mutableListOf()
         for (index in mSyncedList) {
             /*Checking item exiting before*/
-            val mItem: HistoryModel? = mSyncedMap?.get(index.uuId)
+            val mItem: HistoryModel? = mSyncedMap[index.uuId]
             if (mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) {
                 index.id = mItem.id
                 mList.add(index)
@@ -744,7 +742,7 @@ object Utils {
     fun getSaveDeletedMap(): MutableMap<String?, String?> {
         val mValue: String? = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_save_deleted_list), null)
         if (mValue != null) {
-            val mData: MutableMap<String?, String?> = Gson().fromJson<MutableMap<String?, String?>?>(mValue, object : TypeToken<MutableMap<String?, String?>?>() {}.type)
+            val mData: MutableMap<String?, String?>? = Gson().fromJson(mValue, object : TypeToken<MutableMap<String?, String?>?>() {}.type)
             if (mData != null) {
                 return mData
             }
@@ -772,9 +770,9 @@ object Utils {
     }
 
     fun setHistoryDeletedMap(item: HistoryEntityModel?) {
-        if (isPremium() && item?.isSynced ?: false) {
+        if (isPremium() && item?.isSynced == true) {
             val mMap = getHistoryDeletedMap()
-            mMap[item?.uuId] = item?.uuId ?: ""
+            mMap[item.uuId] = item.uuId ?: ""
             PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_history_deleted_list), Gson().toJson(mMap))
         }
     }
@@ -813,8 +811,8 @@ object Utils {
         return mMap
     }
 
-    fun logPath(): String? {
-        val storage: Storage = QRScannerApplication.Companion.getInstance().getStorage()
+    fun logPath(): String {
+        val storage: Storage = QRScannerApplication.getInstance().getStorage()
         return storage.externalStorageDirectory + "/logsData.txt"
     }
 
@@ -876,7 +874,7 @@ object Utils {
     fun deletedIndexOfHashMap(id: String?, map: MutableMap<String?, String?>?): Boolean {
         try {
             if (map != null) {
-                if (map.size > 0) {
+                if (map.isNotEmpty()) {
                     map.remove(id)
                     return true
                 }
@@ -915,9 +913,7 @@ object Utils {
     }
 
     fun isEqualTimeSynced(value: String?): Boolean {
-        return if (value == getLastTimeSynced()) {
-            true
-        } else false
+        return value == getLastTimeSynced()
     }
 
     fun isRealCheckedOut(orderId: String?): Boolean {

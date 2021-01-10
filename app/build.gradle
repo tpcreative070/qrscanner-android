@@ -121,7 +121,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$appRetrofit"
     implementation "com.squareup.retrofit2:converter-scalars:$appRetrofit"
     /*CSV*/
-    implementation files('libs/opencsv-4.4.jar')
+    implementation 'com.opencsv:opencsv:5.3'
     /*Floating button*/
     //implementation project(':floatingbuttonlibrary')
     implementation "com.leinardi.android:speed-dial:3.1.1"
