@@ -7,11 +7,8 @@ import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.*
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -55,7 +52,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     private val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
-                Utils.Log(TAG, "Call back :" + result?.getText() + "  type :" + result?.barcodeFormat?.name)
+                Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)
                 if (activity == null) {
                     return
                 }
@@ -91,21 +88,17 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     ParsedResultType.ADDRESSBOOK -> {
                         create.createType = ParsedResultType.ADDRESSBOOK
                         val addressResult = parsedResult as AddressBookParsedResult
-                        if (addressResult != null) {
-                            address = Utils.convertStringArrayToString(addressResult.addresses, ",")
-                            fullName = Utils.convertStringArrayToString(addressResult.names, ",")
-                            email = Utils.convertStringArrayToString(addressResult.emails, ",")
-                            phone = Utils.convertStringArrayToString(addressResult.phoneNumbers, ",")
-                        }
+                        address = Utils.convertStringArrayToString(addressResult.addresses, ",")
+                        fullName = Utils.convertStringArrayToString(addressResult.names, ",")
+                        email = Utils.convertStringArrayToString(addressResult.emails, ",")
+                        phone = Utils.convertStringArrayToString(addressResult.phoneNumbers, ",")
                     }
                     ParsedResultType.EMAIL_ADDRESS -> {
                         create.createType = ParsedResultType.EMAIL_ADDRESS
                         val emailAddress = parsedResult as EmailAddressParsedResult
-                        if (emailAddress != null) {
-                            email = Utils.convertStringArrayToString(emailAddress.tos, ",")
-                            subject = if (emailAddress.subject == null) "" else emailAddress.subject
-                            message = if (emailAddress.body == null) "" else emailAddress.body
-                        }
+                        email = Utils.convertStringArrayToString(emailAddress.tos, ",")
+                        subject = if (emailAddress.subject == null) "" else emailAddress.subject
+                        message = if (emailAddress.body == null) "" else emailAddress.body
                     }
                     ParsedResultType.PRODUCT -> {
                         create.createType = ParsedResultType.PRODUCT
@@ -116,9 +109,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     ParsedResultType.URI -> {
                         create.createType = ParsedResultType.URI
                         val urlResult = parsedResult as URIParsedResult
-                        if (urlResult != null) {
-                            url = if (urlResult.uri == null) "" else urlResult.uri
-                        }
+                        url = if (urlResult.uri == null) "" else urlResult.uri
                     }
                     ParsedResultType.WIFI -> {
                         create.createType = ParsedResultType.WIFI
@@ -208,8 +199,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
                 /*Adding new columns*/create.barcodeFormat = BarcodeFormat.QR_CODE.name
                 create.favorite = false
-                if (result?.getBarcodeFormat() != null) {
-                    create.barcodeFormat = result.getBarcodeFormat().name
+                if (result?.barcodeFormat != null) {
+                    create.barcodeFormat = result.barcodeFormat.name
                 }
                 doNavigation(create)
             } catch (e: Exception) {
@@ -307,7 +298,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                             Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied() == true) {
+                        if (report?.isAnyPermissionPermanentlyDenied == true) {
                             /*Miss add permission in manifest*/
                             Utils.Log(TAG, "request permission is failed")
                         }
@@ -321,7 +312,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
-    fun onBeepAndVibrate() {
+    private fun onBeepAndVibrate() {
         if (beepManager == null) {
             return
         }
@@ -451,21 +442,17 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             ParsedResultType.ADDRESSBOOK -> {
                 create.createType = ParsedResultType.ADDRESSBOOK
                 val addressResult = parsedResult as AddressBookParsedResult
-                if (addressResult != null) {
-                    address = Utils.convertStringArrayToString(addressResult.addresses, ",")
-                    fullName = Utils.convertStringArrayToString(addressResult.names, ",")
-                    email = Utils.convertStringArrayToString(addressResult.emails, ",")
-                    phone = Utils.convertStringArrayToString(addressResult.phoneNumbers, ",")
-                }
+                address = Utils.convertStringArrayToString(addressResult.addresses, ",")
+                fullName = Utils.convertStringArrayToString(addressResult.names, ",")
+                email = Utils.convertStringArrayToString(addressResult.emails, ",")
+                phone = Utils.convertStringArrayToString(addressResult.phoneNumbers, ",")
             }
             ParsedResultType.EMAIL_ADDRESS -> {
                 create.createType = ParsedResultType.EMAIL_ADDRESS
                 val emailAddress = parsedResult as EmailAddressParsedResult
-                if (emailAddress != null) {
-                    email = Utils.convertStringArrayToString(emailAddress.tos, ",")
-                    subject = if (emailAddress.subject == null) "" else emailAddress.subject
-                    message = if (emailAddress.body == null) "" else emailAddress.body
-                }
+                email = Utils.convertStringArrayToString(emailAddress.tos, ",")
+                subject = if (emailAddress.subject == null) "" else emailAddress.subject
+                message = if (emailAddress.body == null) "" else emailAddress.body
             }
             ParsedResultType.PRODUCT -> {
                 create.createType = ParsedResultType.PRODUCT
@@ -475,9 +462,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             ParsedResultType.URI -> {
                 create.createType = ParsedResultType.URI
                 val urlResult = parsedResult as URIParsedResult
-                if (urlResult != null) {
-                    url = if (urlResult.uri == null) "" else urlResult.uri
-                }
+                url = if (urlResult.uri == null) "" else urlResult.uri
             }
             ParsedResultType.WIFI -> {
                 create.createType = ParsedResultType.WIFI
@@ -598,7 +583,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     }
 
     /*Share File To QRScanner*/
-    fun onHandlerIntent() {
+    private fun onHandlerIntent() {
         try {
             val intent = activity?.getIntent()
             val action = intent?.action
@@ -614,7 +599,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
     }
 
-    fun handleSendSingleItem(intent: Intent?) {
+    private fun handleSendSingleItem(intent: Intent?) {
         try {
             val imageUri = intent?.getParcelableExtra<Parcelable?>(Intent.EXTRA_STREAM) as Uri?
             if (imageUri != null) {
