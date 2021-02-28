@@ -175,7 +175,7 @@
     <string name="advertising">Advertising</string>
     <string name="key_created_datetime_sync">created_date_time_sync</string>
 
-
+    <string name="url_google">https://www.googleapis.com/</string>
     <string name="freedevelop">freedevelop</string>
     <string name="freerelease">freerelease</string>
     <string name="release">release</string>
