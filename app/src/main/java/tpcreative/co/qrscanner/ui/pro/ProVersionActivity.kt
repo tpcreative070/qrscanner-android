@@ -28,7 +28,7 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener {
         }
     }
 
-    fun onProApp() {
+    private fun onProApp() {
         val uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release))
         val goToMarket = Intent(Intent.ACTION_VIEW, uri)
         // To count with Play market backstack, After pressing back button,
