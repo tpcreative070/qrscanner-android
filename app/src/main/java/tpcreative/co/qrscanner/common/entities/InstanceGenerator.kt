@@ -14,7 +14,7 @@ import tpcreative.co.qrscanner.model.HistoryEntityModel
 import tpcreative.co.qrscanner.model.SaveEntityModel
 import java.util.*
 
-@Database(entities = [HistoryEntity::class, SaveEntity::class], version = 4, exportSchema = false)
+@Database(entities = [HistoryEntity::class, SaveEntity::class], version = 5, exportSchema = false)
 abstract class InstanceGenerator : RoomDatabase() {
     @Ignore
     abstract fun historyDao(): HistoryDao?
@@ -244,12 +244,17 @@ abstract class InstanceGenerator : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+            }
+        }
+
         fun getInstance(context: Context?): InstanceGenerator? {
             if (instance == null) {
                 instance = context?.let {
                     Room.databaseBuilder(it,
                             InstanceGenerator::class.java, it.getString(R.string.database_name))
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4,MIGRATION_4_5)
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .build()
