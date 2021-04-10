@@ -10,40 +10,40 @@ import java.io.Serializable
 class SaveEntity : Serializable {
     @PrimaryKey(autoGenerate = true)
     var id  = 0
-    var email: String
-    var subject: String
-    var message: String
-    var phone: String
+    var email: String?
+    var subject: String?
+    var message: String?
+    var phone: String?
     var lat: Double
     var lon: Double
-    var query: String
-    var title: String
-    var location: String
-    var description: String
-    var startEvent: String
-    var endEvent: String
+    var query: String?
+    var title: String?
+    var location: String?
+    var description: String?
+    var startEvent: String?
+    var endEvent: String?
     var startEventMilliseconds: Long
     var endEventMilliseconds: Long
-    var fullName: String
-    var address: String
-    var text: String
-    var ssId: String
+    var fullName: String?
+    var address: String?
+    var text: String?
+    var ssId: String?
     var hidden: Boolean
-    var password: String
-    var url: String
-    var createType: String
-    var networkEncryption: String
-    var createDatetime: String = ""
-    var barcodeFormat: String
+    var password: String?
+    var url: String?
+    var createType: String?
+    var networkEncryption: String?
+    var createDatetime: String? = ""
+    var barcodeFormat: String?
     var favorite: Boolean
-    var updatedDateTime: String
+    var updatedDateTime: String?
 
     /*content_type_barcode*/
-    var contentUnique: String = ""
+    var contentUnique: String? = ""
 
     /*sync data*/
     var isSynced : Boolean = false
-    var uuId: String = ""
+    var uuId: String? = ""
 
     constructor(
             email: String?,
