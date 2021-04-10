@@ -9,7 +9,7 @@ import java.io.Serializable
 @Entity(tableName = "save")
 class SaveEntity : Serializable {
     @PrimaryKey(autoGenerate = true)
-    var id : Int? = 0
+    var id  = 0
     var email: String?
     var subject: String?
     var message: String?
@@ -129,7 +129,7 @@ class SaveEntity : Serializable {
     }
 
     constructor(item: SaveEntityModel?) {
-        id = item?.id
+        id = item?.id ?: 0
         email = item?.email
         subject = item?.subject
         message = item?.message

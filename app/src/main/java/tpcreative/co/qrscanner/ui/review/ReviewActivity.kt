@@ -201,11 +201,11 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
         onReloadData()
     }
 
-    fun onReloadData() {
+    private fun onReloadData() {
         adapter?.setDataSource(viewModel.mListItemNavigation)
     }
 
-    fun onAddPermissionSave(enumAction: EnumAction?) {
+    private fun onAddPermissionSave(enumAction: EnumAction?) {
         Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -355,7 +355,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
         super.onBackPressed()
     }
 
-    fun shareToSocial(value: Uri?) {
+    private fun shareToSocial(value: Uri?) {
         Utils.Log(TAG, "path call")
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
@@ -365,7 +365,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
         startActivity(Intent.createChooser(intent, "Share"))
     }
 
-    fun onGenerateReview(code: String?) {
+    private fun onGenerateReview(code: String?) {
         try {
             val barcodeEncoder = BarcodeEncoder()
             val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
