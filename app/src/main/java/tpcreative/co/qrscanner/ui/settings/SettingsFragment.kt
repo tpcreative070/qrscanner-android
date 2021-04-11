@@ -142,7 +142,7 @@ class SettingsFragment : BaseFragment() {
             val dialog = dialogBuilder.create()
             dialogBuilder.setOnShowListener {
                 val positive = dialog.findViewById<Button?>(android.R.id.button1)
-                val title: TextView = dialog.findViewById<TextView?>(R.id.title)
+                val title: TextView = dialog.findViewById<TextView?>(android.R.id.title)
                 if (positive != null && title != null) {
                     positive.textSize = 14f
                 }
