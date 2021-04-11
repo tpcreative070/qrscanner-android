@@ -93,7 +93,7 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
         }
     }
 
-    fun onRefreshAccessToken(accounts: Account?) = CoroutineScope(Dispatchers.IO).launch {
+    private fun onRefreshAccessToken(accounts: Account?) = CoroutineScope(Dispatchers.IO).launch {
         try {
             if (accounts == null) {
                 Utils.Log(TAG, "Account is null")

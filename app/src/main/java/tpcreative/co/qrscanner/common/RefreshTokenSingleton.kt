@@ -44,7 +44,7 @@ class RefreshTokenSingleton private constructor() {
         }
     }
 
-    fun onRefreshAccessToken(accounts: Account?)  = CoroutineScope(Dispatchers.IO).launch{
+    private fun onRefreshAccessToken(accounts: Account?)  = CoroutineScope(Dispatchers.IO).launch{
         try {
             if (accounts == null) {
                return@launch
@@ -63,7 +63,7 @@ class RefreshTokenSingleton private constructor() {
                         mAuthor.email = credential.selectedAccount.name
                         Utils.setAuthor(mAuthor)
                         Utils.Log(TAG, "onRefreshAccessToken")
-                        Utils.Log(TAG, "isSyncingData 99 " + ServiceManager.Companion.getInstance().isSyncingData())
+                        Utils.Log(TAG, "isSyncingData 99 " + ServiceManager.getInstance().isSyncingData())
                         ServiceManager.getInstance().onPreparingSyncData(false)
                     }
                     val mResultDriveAbout = ServiceManager.getInstance().getDriveAbout()

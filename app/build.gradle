@@ -28,6 +28,7 @@ android {
         }
 
         freerelease {
+            //initWith(buildTypes.debug)
             applicationIdSuffix ".free.release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
@@ -89,7 +90,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-
+    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

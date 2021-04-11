@@ -832,11 +832,12 @@ object Utils {
 
     fun isConnectedToGoogleDrive(): Boolean {
         val mAuthor: Author? = Author.getInstance()?.getAuthorInfo()
+        Utils.Log(TAG,"author ${Gson().toJson(mAuthor)}")
         return mAuthor?.isConnectedToGoogleDrive ?: false
     }
 
     fun isTurnedOnBackup(): Boolean {
-        return PrefsController.getBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_backup_data), false)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_backup_data), false)
     }
 
     fun getDriveEmail(): String? {

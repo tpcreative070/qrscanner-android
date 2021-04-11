@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="tpcreative.co.qrscanner">
-
+    <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <application
         android:allowBackup="false"
+        tools:replace="allowBackup"
         android:name=".common.services.QRScannerApplication"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,7 +26,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.backup.BackupActivity"
-            android:label="@string/key_backup_data" />
+            android:label="@string/backup_title" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

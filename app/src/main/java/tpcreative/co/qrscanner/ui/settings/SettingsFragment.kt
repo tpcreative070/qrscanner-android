@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import co.tpcreative.supersafe.common.controller.EncryptedPreferenceDataStore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -36,6 +37,7 @@ import tpcreative.co.qrscanner.model.Theme
 import java.util.*
 
 class SettingsFragment : BaseFragment() {
+    private  var isPremium = Utils.isPremium()
     override fun getLayoutId(): Int {
         return 0
     }
@@ -85,6 +87,10 @@ class SettingsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         Utils.Log(TAG, "onResume")
+        if (isPremium != Utils.isPremium()){
+            work()
+            isPremium = Utils.isPremium()
+        }
     }
 
     class SettingsFragmentPreference : PreferenceFragmentCompat(), SettingsSingleton.SingletonSettingsListener {
@@ -116,11 +122,12 @@ class SettingsFragment : BaseFragment() {
 
         override fun onSyncDataRequest() {
             if (!Utils.isConnectedToGoogleDrive()) {
-                mySwitchPreferenceBackupData?.setChecked(false)
+                mySwitchPreferenceBackupData?.isChecked = false
             }
         }
 
-        override fun onUpdatedSharePreferences(value: Boolean) {}
+        override fun onUpdatedSharePreferences(value: Boolean) {
+        }
 
         /**
          * Initializes the preference, which allows to change the app's theme.
@@ -169,12 +176,10 @@ class SettingsFragment : BaseFragment() {
                     mPosition = i
                 }
             })
-            dialogBuilder.setPositiveButton(R.string.yes, object : DialogInterface.OnClickListener {
-                override fun onClick(dialogInterface: DialogInterface?, i: Int) {
-                    EnumThemeMode.byPosition(mPosition)?.ordinal?.let { Utils.setPositionTheme(it) }
-                    listener?.onYes()
-                }
-            })
+            dialogBuilder.setPositiveButton(R.string.yes) { _, i ->
+                EnumThemeMode.byPosition(mPosition)?.ordinal?.let { Utils.setPositionTheme(it) }
+                listener?.onYes()
+            }
             val dialog = dialogBuilder.create()
             dialog.show()
         }
@@ -243,8 +248,8 @@ class SettingsFragment : BaseFragment() {
 
         private fun shareToSocial(value: String?) {
             val intent = Intent()
-            intent.setAction(Intent.ACTION_SEND)
-            intent.setType("text/plain")
+            intent.action = Intent.ACTION_SEND
+            intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, value)
             startActivity(Intent.createChooser(intent, "Share"))
         }
@@ -447,6 +452,9 @@ class SettingsFragment : BaseFragment() {
         }
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            if (QRScannerApplication.getInstance().isLiveMigration()){
+                preferenceManager.preferenceDataStore = EncryptedPreferenceDataStore.getInstance(requireContext())
+            }
             addPreferencesFromResource(R.xml.pref_general)
         }
 

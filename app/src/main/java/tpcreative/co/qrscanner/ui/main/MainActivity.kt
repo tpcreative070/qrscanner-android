@@ -31,11 +31,11 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ResponseSingleton.SingleTonResponseListener
 import tpcreative.co.qrscanner.common.activity.BaseActivity
+import tpcreative.co.qrscanner.common.controller.PremiumManager
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
-import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.history.HistoryFragment
 import tpcreative.co.qrscanner.ui.save.SaveFragment
@@ -63,6 +63,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUI()
+        PremiumManager.getInstance().onStartInAppPurchase()
     }
 
     fun onShowFloatingButton(fragment: Fragment?, isShow: Boolean) {
@@ -278,7 +279,8 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         Utils.onSetCountRating(Utils.onGetCountRating() + 1)
-        ServiceManager.getInstance()?.onPreparingSyncData(true)
+        ServiceManager.getInstance().onPreparingSyncData(true)
+        PremiumManager.getInstance().onStop()
     }
 
     override fun onBackPressed() {
@@ -302,15 +304,15 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     fun doShowAds(value: Boolean) {
         if (value) {
             if (QRScannerApplication.getInstance().isRequestAds()) {
-                Utils.Log(TAG,"loading ads...1")
+                Utils.Log(TAG, "loading ads...1")
                 llAdsSub.visibility = View.GONE
             } else {
-                Utils.Log(TAG,"loading ads...2")
+                Utils.Log(TAG, "loading ads...2")
                 llAdsSub.visibility = View.VISIBLE
                 QRScannerApplication.getInstance().loadAd(llAdsSub)
             }
         } else {
-            Utils.Log(TAG,"loading ads...3")
+            Utils.Log(TAG, "loading ads...3")
             llAdsSub.visibility = View.GONE
         }
     }
