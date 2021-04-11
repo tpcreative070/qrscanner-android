@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import co.tpcreative.supersafe.common.controller.EncryptedPreferenceDataStore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -451,6 +452,9 @@ class SettingsFragment : BaseFragment() {
         }
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            if (QRScannerApplication.getInstance().isLiveMigration()){
+                preferenceManager.preferenceDataStore = EncryptedPreferenceDataStore.getInstance(requireContext())
+            }
             addPreferencesFromResource(R.xml.pref_general)
         }
 
