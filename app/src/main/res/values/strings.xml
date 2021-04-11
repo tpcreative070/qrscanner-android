@@ -297,6 +297,7 @@
     <string name="upgrade_now">Upgrade now</string>
     <string name="upgrade_later">Upgrade later</string>
     <string name="count_later">count_later</string>
+    <string name="backup_title">Backup data to Cloud</string>
     <string name="key_create_intent">create_intent</string>
     <string name="key_copy_to_clipboard">Copy to clipboard</string>
     <string name="key_copy_to_clipboard_detail">Content of code will be saved automatically to clipboard</string>
@@ -308,7 +309,8 @@
     <string name="key_multiple_scan_detail">Add scans to history only</string>
     <string name="key_skip_duplicates">Skip duplicates</string>
     <string name="key_skip_duplicates_detail">Skip and remove duplicates QRCode or Barcode</string>
-    <string name="key_backup_data">Backup data to Cloud</string>
+    <string name="key_backup_data">key_backup_data</string>
+
     <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
     <string name="key_already_checkout">key_already_checkout</string>
     <string name="key_is_request_sync">key_is_request_sync</string>
