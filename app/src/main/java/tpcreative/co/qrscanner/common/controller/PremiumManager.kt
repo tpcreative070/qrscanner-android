@@ -36,7 +36,7 @@ class PremiumManager : BillingProcessor.IBillingHandler {
 
     override fun onBillingInitialized() {
         if (bp?.isPurchased(QRScannerApplication.getInstance().getString(R.string.lifetime)) == true) {
-            val details = bp!!.getPurchaseTransactionDetails(QRScannerApplication.getInstance().getString(R.string.lifetime))
+            val details = bp?.getPurchaseTransactionDetails(QRScannerApplication.getInstance().getString(R.string.lifetime))
             if (details != null) {
                 Log(TAG, Gson().toJson(details))
                 val mPurchaseData = details.purchaseInfo.purchaseData
@@ -49,8 +49,14 @@ class PremiumManager : BillingProcessor.IBillingHandler {
                     } else {
                         setPremium(false)
                     }
+                }else{
+                    setPremium(false)
                 }
+            }else{
+                setPremium(false)
             }
+        }else{
+            setPremium(false)
         }
     }
 

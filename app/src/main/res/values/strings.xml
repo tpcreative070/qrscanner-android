@@ -309,7 +309,7 @@
     <string name="key_multiple_scan_detail">Add scans to history only</string>
     <string name="key_skip_duplicates">Skip duplicates</string>
     <string name="key_skip_duplicates_detail">Skip and remove duplicates QRCode or Barcode</string>
-    <string name="key_backup_data">key_backup_data</string>
+    <string name="key_backup_data">Backup data to Cloud</string>
 
     <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
     <string name="key_already_checkout">key_already_checkout</string>

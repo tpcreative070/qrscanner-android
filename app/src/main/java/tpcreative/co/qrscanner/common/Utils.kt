@@ -370,7 +370,7 @@ object Utils {
         return false
     }
 
-    fun isProVersion(): Boolean {
+    private fun isProVersion(): Boolean {
         if (QRScannerApplication.getInstance().isDebugPremium()){
             return true
         }
