@@ -46,7 +46,7 @@ class ServiceManager : BaseView<Any?> {
             myService = (binder as LocalBinder?)?.getService()
             myService?.bindView(this@ServiceManager)
             getInstance().onPreparingSyncData(false)
-            if (Utils.isProVersion() && !Utils.isAlreadyCheckout()) {
+            if (Utils.isPremium() && !Utils.isAlreadyCheckout()) {
                 getInstance().onCheckout()
             }
         }
