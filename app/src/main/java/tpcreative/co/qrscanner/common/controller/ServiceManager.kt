@@ -6,6 +6,7 @@ import android.content.*
 import android.os.IBinder
 import co.tpcreative.supersafe.common.network.Resource
 import co.tpcreative.supersafe.common.network.Status
+import com.anjlab.android.iab.v3.PurchaseData
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.gson.Gson
 import com.google.zxing.client.result.ParsedResultType
@@ -498,8 +499,7 @@ class ServiceManager : BaseView<Any?> {
         Utils.Log(TAG, "Dismiss Service manager")
     }
 
-    fun onCheckout() = CoroutineScope(Dispatchers.IO).launch {
-        val mCheckout = CheckoutRequest()
+    fun onCheckout(mCheckout : CheckoutRequest = CheckoutRequest()) = CoroutineScope(Dispatchers.IO).launch {
         Utils.Log(TAG, "Preparing checkout")
         Utils.Log(TAG, "Checkout value " + Gson().toJson(mCheckout))
         val mResult = userViewModel.checkout(mCheckout)
@@ -702,6 +702,10 @@ class ServiceManager : BaseView<Any?> {
 
     interface ServiceManagerClickedItemsListener {
         fun onYes()
+    }
+
+    fun onCheckout(data : PurchaseData){
+
     }
 
     companion object {
