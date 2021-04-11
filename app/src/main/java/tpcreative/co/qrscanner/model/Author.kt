@@ -10,9 +10,9 @@ class Author : Serializable {
     var access_token: String? = null
     var isConnectedToGoogleDrive = false
     var email: String? = null
-    fun getAuthorInfo(): Author? {
+    fun getAuthorInfo(): Author {
         try {
-            val value = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_author), null)
+            val value = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_author), null)
             if (value != null) {
                 val author = Gson().fromJson(value, Author::class.java)
                 if (author != null) {
