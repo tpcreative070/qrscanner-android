@@ -306,6 +306,14 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return true
     }
 
+    fun isEnableReviewAds() : Boolean {
+        return false
+    }
+
+    fun isEnableBannerAds() : Boolean {
+        return  true
+    }
+
     fun isDebugPremium(): Boolean {
         if (BuildConfig.DEBUG){
             return false
