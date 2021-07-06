@@ -54,7 +54,8 @@ fun ScannerResultFragment.getDataIntent() {
 
 fun ScannerResultFragment.checkingShowAds(){
     viewModel.doShowAds().observe(this, Observer {
-        doShowAds(it)
+        //Disable ads for review
+        doShowAds(false)
     })
 }
 

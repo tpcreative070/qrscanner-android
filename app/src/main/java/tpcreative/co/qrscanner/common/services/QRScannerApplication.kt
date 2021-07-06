@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.common.services
 import android.accounts.Account
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
@@ -143,8 +144,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return url
     }
 
+    @SuppressLint("HardwareIds")
     fun getDeviceId(): String? {
-        return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID)
+        return Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
     fun getManufacturer(): String? {
@@ -301,7 +303,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isLiveAds() : Boolean{
-        return false
+        return true
     }
 
     fun isDebugPremium(): Boolean {
