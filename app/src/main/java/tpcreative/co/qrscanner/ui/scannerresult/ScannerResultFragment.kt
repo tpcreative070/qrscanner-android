@@ -113,7 +113,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
     }
 
-    fun onReloadData() {
+    private fun onReloadData() {
         adapter?.setDataSource(viewModel.mListNavigation)
     }
 
@@ -150,7 +150,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
-    fun onAddPermissionSave() {
+    private fun onAddPermissionSave() {
         Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -556,7 +556,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
     }
 
-    fun shareToSocial(value: Uri?) {
+    private fun shareToSocial(value: Uri?) {
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
         intent.type = "image/*"
@@ -582,7 +582,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
     }
 
-    fun onShowUI(view: View?) {
+    private fun onShowUI(view: View?) {
         for (index in mList) {
             if (view === index) {
                 index.visibility = View.VISIBLE
@@ -643,7 +643,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         Utils.Log(TAG, "onResume")
     }
 
-    fun onClipboardDialog() {
+    private fun onClipboardDialog() {
         viewModel.hashClipboardResult?.clear()
         val dialogBuilder = MaterialDialog.Builder(this, Utils.getCurrentTheme())
         dialogBuilder.setTitle(R.string.copy_items)
@@ -687,7 +687,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 content.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.material_gray_700))
                 positive.textSize = 14f
                 negative.textSize = 14f
-                content.setTextSize(18f)
+                content.textSize = 18f
             }
         }
     }
@@ -710,7 +710,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
     }
 
-    fun onSearch(query: String?) {
+    private fun onSearch(query: String?) {
         try {
             val escapedQuery = URLEncoder.encode(query, "UTF-8")
             val uri = Uri.parse("https://www.google.com/search?q=$escapedQuery")
