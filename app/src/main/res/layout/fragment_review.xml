@@ -851,7 +851,7 @@
                             android:orientation="vertical"
                             android:id="@+id/llAds"
                             android:layout_width="match_parent"
-                            android:layout_height="260dp"
+                            android:layout_height="match_parent"
                             android:layout_centerHorizontal="true">
                         </LinearLayout>
                     </RelativeLayout>

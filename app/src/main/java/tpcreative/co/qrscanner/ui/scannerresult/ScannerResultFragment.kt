@@ -749,6 +749,20 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
     }
 
+    fun doShowAudienceAds(isShow : Boolean){
+        if (isShow) {
+            if (QRScannerApplication.getInstance().isRequestLargeAudienceAds()) {
+                rlAdsRoot.visibility = View.GONE
+                viewSeparateLine.visibility = View.GONE
+            } else {
+                QRScannerApplication.getInstance().loadLargeAudienceAd(llAds)
+            }
+        } else {
+            rlAdsRoot.visibility = View.GONE
+            viewSeparateLine.visibility = View.GONE
+        }
+    }
+
     val dataResult: Create
         get() {
             return viewModel.result ?: Create()
