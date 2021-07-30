@@ -822,8 +822,8 @@
 
                     <RelativeLayout
                         android:id="@+id/rlAdsRoot"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <LinearLayout
@@ -831,7 +831,7 @@
                             android:orientation="vertical"
                             android:id="@+id/llAds"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="@dimen/banner_rectangle_review_height"
                             android:layout_centerHorizontal="true">
                         </LinearLayout>
                     </RelativeLayout>

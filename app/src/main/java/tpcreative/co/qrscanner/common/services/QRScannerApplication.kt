@@ -33,6 +33,8 @@ import tpcreative.co.qrscanner.helper.ThemeHelper
 import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
+import tpcreative.co.qrscanner.ui.main.initUI
+import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.util.*
 
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
@@ -89,6 +91,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         requiredScopesString?.add(DriveScopes.DRIVE_APPDATA)
         requiredScopesString?.add(DriveScopes.DRIVE_FILE)
         EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
+        initAds()
     }
 
     fun getGoogleSignInOptions(account: Account?): GoogleSignInOptions? {
@@ -180,6 +183,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun getStorage(): Storage {
         return storage
+    }
+
+    private fun initAds(){
+        if (getInstance().isRequestAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableBannerAds()) {
+            getInstance().getAdsView(this)
+        }
+        if (getInstance().isRequestLargeAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
+            getInstance().getAdsLargeView(this)
+        }
+
+        if (getInstance().isRequestLargeAudienceAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableReviewAudienceAds()) {
+            getInstance().getAudienceAdsLargeView(this)
+        }
     }
 
     fun getAdsView(context: Context?): AdView? {
