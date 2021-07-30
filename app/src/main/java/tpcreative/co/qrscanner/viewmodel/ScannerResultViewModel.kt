@@ -35,6 +35,14 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
         }
     }
 
+    fun doShowAudienceAds() = liveData(Dispatchers.Main){
+        if (!Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds()) {
+            emit(true)
+        } else {
+            emit(false)
+        }
+    }
+
     fun getResult(value: HashMap<Any?, String?>?): String {
         stringBuilderClipboard = StringBuilder()
         if (value != null && value.size > 0) {

@@ -32,6 +32,10 @@ fun ScannerResultFragment.initUI(){
     if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAds()) {
         QRScannerApplication.getInstance().getAdsLargeView(this)
     }
+
+    if (QRScannerApplication.getInstance().isRequestLargeAudienceAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAudienceAds()) {
+        QRScannerApplication.getInstance().getAudienceAdsLargeView(this)
+    }
     checkingShowAds()
 }
 
@@ -55,7 +59,16 @@ fun ScannerResultFragment.getDataIntent() {
 fun ScannerResultFragment.checkingShowAds(){
     viewModel.doShowAds().observe(this, Observer {
         //Disable ads for review
+        if (QRScannerApplication.getInstance().isEnableReviewAudienceAds()){
+            return@Observer
+        }
         doShowAds(it)
+    })
+    viewModel.doShowAudienceAds().observe(this, Observer {
+        if (QRScannerApplication.getInstance().isEnableReviewAds()){
+            return@Observer
+        }
+        doShowAudienceAds(it)
     })
 }
 

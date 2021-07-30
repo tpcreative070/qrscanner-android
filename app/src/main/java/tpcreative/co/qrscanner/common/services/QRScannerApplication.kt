@@ -12,6 +12,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import com.facebook.ads.Ad
+import com.facebook.ads.AdError
+import com.facebook.ads.AdSettings
 import com.google.android.gms.ads.*
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
@@ -19,6 +22,7 @@ import com.google.api.services.drive.DriveScopes
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.snatik.storage.Storage
 import tpcreative.co.qrscanner.BuildConfig
+import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.RetrofitBuilder
@@ -29,6 +33,8 @@ import tpcreative.co.qrscanner.helper.ThemeHelper
 import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
+import tpcreative.co.qrscanner.ui.main.initUI
+import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.util.*
 
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
@@ -38,8 +44,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var activity: MainActivity? = null
     private var adView: AdView? = null
     private var adLargeView: AdView? = null
+    private var adAudienceLargeView : com.facebook.ads.AdView? = null
     private var isRequestAds = true
     private var isRequestLargeAds = true
+    private var isRequestAudienceAds = true
     private var options: GoogleSignInOptions.Builder? = null
     private var requiredScopes: MutableSet<Scope>? = null
     private var requiredScopesString: MutableList<String>? = null
@@ -47,6 +55,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         super.onCreate()
         mInstance = this
         isLive = true
+        if (DEBUG) {
+            AdSettings.setTestMode(true);
+        }
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         serverAPI = RetrofitBuilder.getService(typeService = EnumTypeServices.SYSTEM)
         serverDriveApi = RetrofitBuilder.getService(getString(R.string.url_google), typeService = EnumTypeServices.GOOGLE_DRIVE)
@@ -80,6 +91,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         requiredScopesString?.add(DriveScopes.DRIVE_APPDATA)
         requiredScopesString?.add(DriveScopes.DRIVE_FILE)
         EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
+        initAds()
     }
 
     fun getGoogleSignInOptions(account: Account?): GoogleSignInOptions? {
@@ -136,7 +148,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun getUrl(): String? {
-        if (!BuildConfig.DEBUG || isLive) {
+        if (!DEBUG || isLive) {
             url = getString(R.string.url_live)
         } else {
             url = getString(R.string.url_developer)
@@ -173,6 +185,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return storage
     }
 
+    private fun initAds(){
+        if (getInstance().isRequestAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableBannerAds()) {
+            getInstance().getAdsView(this)
+        }
+        if (getInstance().isRequestLargeAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
+            getInstance().getAdsLargeView(this)
+        }
+
+        if (getInstance().isRequestLargeAudienceAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableReviewAudienceAds()) {
+            getInstance().getAudienceAdsLargeView(this)
+        }
+    }
+
     fun getAdsView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adView = AdView(context)
@@ -188,7 +213,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             adView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
-        adView?.loadAd(adRequest)
         adView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isRequestAds = false
@@ -215,6 +239,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 // to the app after tapping on an ad.
             }
         }
+        adView?.loadAd(adRequest)
         return adView
     }
 
@@ -233,7 +258,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             adLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
-        adLargeView?.loadAd(adRequest)
         adLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isRequestLargeAds = false
@@ -260,7 +284,34 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 // to the app after tapping on an ad.
             }
         }
+        adLargeView?.loadAd(adRequest)
         return adLargeView
+    }
+
+    fun getAudienceAdsLargeView(context: Context?): com.facebook.ads.AdView? {
+        adAudienceLargeView?.destroy()
+        adAudienceLargeView = null
+        adAudienceLargeView = com.facebook.ads.AdView(context, getString(R.string.banner_audience_review), com.facebook.ads.AdSize.RECTANGLE_HEIGHT_250)
+        // Initiate a request to load an ad.
+        if (DEBUG){
+            AdSettings.addTestDevice("63434fe6-a4de-4b70-aac4-97852c36074e")
+        }
+        val mBuild = adAudienceLargeView?.buildLoadAdConfig()?.withAdListener(object : com.facebook.ads.AdListener {
+            override fun onError(p0: Ad?, p1: AdError?) {
+                isRequestAudienceAds = true
+                Utils.Log(TAG,"Audience error...")
+            }
+            override fun onAdClicked(p0: Ad?) {
+            }
+            override fun onLoggingImpression(p0: Ad?) {
+            }
+            override fun onAdLoaded(p0: Ad?) {
+                Utils.Log(TAG,"Audience loaded...")
+                isRequestAudienceAds = false
+            }
+        })
+        adAudienceLargeView?.loadAd(mBuild?.build())
+        return  adAudienceLargeView
     }
 
     fun loadAd(layAd: LinearLayout?) {
@@ -287,6 +338,18 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         layAd?.addView(adLargeView)
     }
 
+    fun loadLargeAudienceAd(layAd: LinearLayout?){
+        if (adAudienceLargeView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adAudienceLargeView?.parent != null) {
+            val tempVg: ViewGroup = adAudienceLargeView?.parent as ViewGroup
+            tempVg.removeView(adAudienceLargeView)
+        }
+        layAd?.addView(adAudienceLargeView)
+    }
+
     fun isRequestAds(): Boolean {
         return isRequestAds
     }
@@ -295,8 +358,12 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return isRequestLargeAds
     }
 
+    fun isRequestLargeAudienceAds(): Boolean {
+        return  isRequestAudienceAds
+    }
+
     fun isLiveMigration(): Boolean {
-        if (!BuildConfig.DEBUG){
+        if (!DEBUG){
             return true
         }
         return true
@@ -307,6 +374,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableReviewAds() : Boolean {
+        return true
+    }
+
+    fun isEnableReviewAudienceAds() : Boolean {
         return false
     }
 
@@ -315,7 +386,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isDebugPremium(): Boolean {
-        if (BuildConfig.DEBUG){
+        if (DEBUG){
             return false
         }
         return false
