@@ -737,11 +737,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            if (QRScannerApplication.getInstance().isRequestLargeAds()) {
-                rlAdsRoot.visibility = View.GONE
-            } else {
-                QRScannerApplication.getInstance().loadLargeAd(llAds)
-            }
+            QRScannerApplication.getInstance().loadLargeAd(llAds)
         } else {
             rlAdsRoot.visibility = View.GONE
         }
@@ -749,11 +745,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
 
     fun doShowAudienceAds(isShow : Boolean){
         if (isShow) {
-            if (QRScannerApplication.getInstance().isRequestLargeAudienceAds()) {
-                rlAdsRoot.visibility = View.GONE
-            } else {
-                QRScannerApplication.getInstance().loadLargeAudienceAd(llAds)
-            }
+            QRScannerApplication.getInstance().loadLargeAudienceAd(llAds)
         } else {
             rlAdsRoot.visibility = View.GONE
         }

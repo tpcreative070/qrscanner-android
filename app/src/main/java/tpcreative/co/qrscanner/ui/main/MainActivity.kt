@@ -305,14 +305,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     fun doShowAds(value: Boolean) {
         if (value) {
-            if (QRScannerApplication.getInstance().isRequestAds()) {
-                Utils.Log(TAG, "loading ads...1")
-                llAdsSub.visibility = View.GONE
-            } else {
-                Utils.Log(TAG, "loading ads...2")
-                llAdsSub.visibility = View.VISIBLE
-                QRScannerApplication.getInstance().loadAd(llAdsSub)
-            }
+            QRScannerApplication.getInstance().loadAd(llAdsSub)
         } else {
             Utils.Log(TAG, "loading ads...3")
             llAdsSub.visibility = View.GONE
