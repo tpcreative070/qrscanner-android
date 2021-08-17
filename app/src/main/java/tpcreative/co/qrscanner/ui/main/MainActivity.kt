@@ -259,7 +259,10 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         Utils.Log(TAG, "onResume")
-        reloadView()
+        if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
+            QRScannerApplication.getInstance().getAdsView(this)
+            Utils.Log(TAG,"Request ads")
+        }
     }
 
     override fun onPause() {
@@ -314,13 +317,5 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
-    }
-
-    private fun reloadView() {
-        if (llAdsSub != null) {
-            if (llAdsSub?.visibility == GONE) {
-               showAds()
-            }
-        }
     }
 }
