@@ -3,6 +3,7 @@ import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
@@ -109,6 +111,7 @@ class SettingsFragment : BaseFragment() {
         private var myPreferenceMultipleScan: MySwitchPreference? = null
         private var mySwitchPreferenceSkipDuplicates: MySwitchPreference? = null
         private var myPreferenceSuperSafe: MyPreference? = null
+        private var myPreferenceSaveYourVoicemails: MyPreference? = null
         private var myPreferenceCategoryFamilyApps: MyPreferenceCategory? = null
         private var bitmap: Bitmap? = null
         override fun onResume() {
@@ -291,7 +294,11 @@ class SettingsFragment : BaseFragment() {
                         }
                     } else if (preference.getKey() == getString(R.string.key_supersafe)) {
                         onSuperSafe()
-                    } else if (preference.getKey() == getString(R.string.key_premium_version)) {
+                    }
+                    else if (preference.getKey() == getString(R.string.key_save_your_voicemails)){
+                        onSaveYourVoicemails()
+                    }
+                    else if (preference.getKey() == getString(R.string.key_premium_version)) {
                         Navigator.onMoveProVersion(context)
                     } else if (preference.getKey() == getString(R.string.key_dark_mode)) {
                         if (!Utils.isPremium()) {
@@ -426,8 +433,26 @@ class SettingsFragment : BaseFragment() {
                     }
                 }
             })
-            myPreferenceCategoryFamilyApps?.isVisible = true
             myPreferenceSuperSafe?.isVisible = true
+
+            /*SuperSafe*/myPreferenceSaveYourVoicemails = findPreference(getString(R.string.key_save_your_voicemails)) as MyPreference?
+            myPreferenceSaveYourVoicemails?.onPreferenceClickListener = createActionPreferenceClickListener()
+            myPreferenceSaveYourVoicemails?.onPreferenceChangeListener = createChangeListener()
+            myPreferenceSaveYourVoicemails?.setListener(object : MyPreference.MyPreferenceListener {
+                override fun onUpdatePreference() {
+                    if (myPreferenceSaveYourVoicemails?.getImgSuperSafe() != null) {
+                        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_saveyourvoicemails)
+                        val rounded = RoundedBitmapDrawableFactory.create(resources, bitmap)
+                        rounded.cornerRadius = 50f
+                        myPreferenceSaveYourVoicemails?.getImgSuperSafe()?.setImageDrawable(rounded)
+                        myPreferenceSaveYourVoicemails?.getImgSuperSafe()?.visibility = View.VISIBLE
+                    }
+                }
+            })
+            myPreferenceSaveYourVoicemails?.isVisible = true
+
+            myPreferenceCategoryFamilyApps?.isVisible = true
+
         }
 
         fun onGenerateReview(code: String?) {
@@ -460,6 +485,22 @@ class SettingsFragment : BaseFragment() {
 
         private fun onSuperSafe() {
             val uri = Uri.parse("market://details?id=" + getString(R.string.supersafe_live))
+            val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+            try {
+                startActivity(goToMarket)
+            } catch (e: ActivityNotFoundException) {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.supersafe_live))))
+            }
+        }
+
+        private fun onSaveYourVoicemails() {
+            val uri = Uri.parse("market://details?id=" + getString(R.string.save_your_voicemails_live))
             val goToMarket = Intent(Intent.ACTION_VIEW, uri)
             // To count with Play market backstack, After pressing back button,
             // to taken back to our application, we need to add following flags to intent.

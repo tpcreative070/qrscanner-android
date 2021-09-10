@@ -80,6 +80,8 @@
     <string name="key_family_apps">Family Apps</string>
     <string name="key_supersafe">SuperSafe</string>
     <string name="key_supersafe_detail">Keep safe: Private photos, videos, audios and files</string>
+    <string name="key_save_your_voicemails">SaveYourVoicemails</string>
+    <string name="key_save_your_voicemails_detail">Save your Voicemails. Compatible with all cell phones.</string>
     <string name="err_title">Please check title input</string>
     <string name="err_location">Please check location input</string>
     <string name="err_description">Please check description input</string>
@@ -266,6 +268,7 @@
     <string name="lifetime">tpcreative.co.qrscanner.free.release.lifetime</string>
     <string name="qrscanner_pro_release">tpcreative.co.qrscanner</string>
     <string name="supersafe_live">co.tpcreative.supersafe</string>
+    <string name="save_your_voicemails_live">co.tpcreative.saveyourvoicemails</string>
     <string name="my_clipboad">Clipboard</string>
     <string name="copied_successful">Copied items successful</string>
     <string name="features">Features</string>
