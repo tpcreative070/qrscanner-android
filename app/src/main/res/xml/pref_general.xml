@@ -58,6 +58,16 @@
             android:key="@string/key_supersafe"
             android:summary="@string/key_supersafe_detail">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="true"
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/ic_record"
+            android:title="@string/key_save_your_voicemails"
+            android:key="@string/key_save_your_voicemails"
+            android:summary="@string/key_save_your_voicemails_detail">
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
 
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_advance_features"
