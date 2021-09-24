@@ -77,25 +77,7 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
             false
         })
         viewHolder.tvTime.text = Utils.getCurrentDateDisplay(data.updatedDateTime)
-        if (data.createType == ParsedResultType.EMAIL_ADDRESS.name) {
-            viewHolder.tvContent.text = data.email
-        } else if (data.createType == ParsedResultType.SMS.name) {
-            viewHolder.tvContent.text = data.message
-        } else if (data.createType == ParsedResultType.GEO.name) {
-            viewHolder.tvContent.text = data.lat.toString() + "," + data.lon + "(" + data.query + ")"
-        } else if (data.createType == ParsedResultType.CALENDAR.name) {
-            viewHolder.tvContent.text = data.title
-        } else if (data.createType == ParsedResultType.ADDRESSBOOK.name) {
-            viewHolder.tvContent.text = data.fullName
-        } else if (data.createType == ParsedResultType.TEL.name) {
-            viewHolder.tvContent.text = data.phone
-        } else if (data.createType == ParsedResultType.WIFI.name) {
-            viewHolder.tvContent.text = data.ssId
-        } else if (data.createType == ParsedResultType.URI.name) {
-            viewHolder.tvContent.text = data.url
-        } else {
-            viewHolder.tvContent.text = data.text
-        }
+        viewHolder.tvContent.text = data.getDisplay()
         viewHolder.imgShare.setOnClickListener(View.OnClickListener {
             if (listener != null) {
                 listener?.onClickShare(i)

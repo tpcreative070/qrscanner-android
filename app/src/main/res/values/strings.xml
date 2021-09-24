@@ -134,6 +134,8 @@
     <string name="support_detail">Report issues</string>
     <string name="app_permission">App permissions</string>
     <string name="update_app">Update app</string>
+    <string name="update">Update</string>
+    <string name="enter_take_note">Enter take note</string>
     <string name="github" translatable="false">https://github.com/flyingrub/SpeedMeter</string>
     <string name="version">QRScanner version</string>
     <string name="premium_version">Premium version</string>
@@ -357,5 +359,7 @@
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
     <string name="drag_the_orange_markers_to_detect_barcode">Drag the orange markers to detect barcode or qr-code</string>
+    <string name="add_note">Add note</string>
+    <string name="take_note">Take Note</string>
 
 </resources>

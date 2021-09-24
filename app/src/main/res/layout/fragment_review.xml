@@ -818,6 +818,30 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
                         </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_margin="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:textColor="@color/white"
+                                android:background="@drawable/bg_button"
+                                android:id="@+id/btnTakeNote"
+                                android:text="@string/take_note"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imgMarkFavorite"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="20dp"
+                                app:srcCompat="@drawable/ic_baseline_favorite_24"
+                                android:layout_toEndOf="@+id/btnTakeNote"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"/>
+
+                        </RelativeLayout>
+
                     </LinearLayout>
 
                     <RelativeLayout

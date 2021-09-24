@@ -306,9 +306,6 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         mAwesomeValidation?.clear()
         addValidationForEditText()
-        if (save != null) {
-            onSetData()
-        }
         FocusUI()
         Utils.Log(TAG, "current time : " + Utils.getCurrentDatetimeEvent())
     }

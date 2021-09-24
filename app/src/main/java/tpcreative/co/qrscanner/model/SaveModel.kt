@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.model
 import com.google.zxing.BarcodeFormat
+import com.google.zxing.client.result.ParsedResultType
 import tpcreative.co.qrscanner.common.Utils
 import java.io.Serializable
 
@@ -40,6 +41,7 @@ class SaveModel : Serializable {
     /*sync data*/
     var isSynced: Boolean?
     var uuId: String?
+    var noted: String?
 
     /*Custom fields*/
     var typeCategories: TypeCategories? = null
@@ -80,6 +82,7 @@ class SaveModel : Serializable {
         contentUniqueForUpdatedTime = ""
         isSynced = false
         uuId = Utils.getUUId()
+        noted = ""
     }
 
     constructor(item: SaveEntityModel?) {
@@ -115,6 +118,7 @@ class SaveModel : Serializable {
         contentUniqueForUpdatedTime = item?.contentUniqueForUpdatedTime
         isSynced = item?.isSynced
         uuId = item?.uuId
+        noted = item?.noted
     }
 
     constructor(item: SaveModel?, isSynced: Boolean) {
@@ -150,6 +154,7 @@ class SaveModel : Serializable {
         contentUniqueForUpdatedTime = item?.contentUniqueForUpdatedTime
         this.isSynced = isSynced
         uuId = item?.uuId
+        noted = item?.noted
     }
 
     fun isChecked(): Boolean {
@@ -183,4 +188,36 @@ class SaveModel : Serializable {
     fun getCategoryName(): String? {
         return typeCategories?.getType()
     }
+
+    private fun isContentNoted() : Boolean {
+        return !noted.isNullOrBlank()
+    }
+
+    fun getDisplay() : String?{
+        if (isContentNoted()){
+            return noted ?: ""
+        }
+        val mResult : String?
+        if (createType == ParsedResultType.EMAIL_ADDRESS.name) {
+            mResult = email
+        } else if (createType == ParsedResultType.SMS.name) {
+            mResult = message
+        } else if (createType == ParsedResultType.GEO.name) {
+            mResult = lat.toString() + "," + lon + "(" + query + ")"
+        } else if (createType == ParsedResultType.CALENDAR.name) {
+            mResult = title
+        } else if (createType == ParsedResultType.ADDRESSBOOK.name) {
+            mResult = fullName
+        } else if (createType == ParsedResultType.TEL.name) {
+            mResult = phone
+        } else if (createType == ParsedResultType.WIFI.name) {
+            mResult = ssId
+        } else if (createType == ParsedResultType.URI.name) {
+            mResult = url
+        } else {
+            mResult = text
+        }
+        return  mResult
+    }
+
 }

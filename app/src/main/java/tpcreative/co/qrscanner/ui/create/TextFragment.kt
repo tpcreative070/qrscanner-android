@@ -71,9 +71,6 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener {
         Utils.Log(TAG, "onStart")
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         addValidationForEditText()
-        if (save != null) {
-            onSetData()
-        }
         FocusUI()
     }
 

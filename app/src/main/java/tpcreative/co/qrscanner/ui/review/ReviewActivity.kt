@@ -313,6 +313,8 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                     save.id = create?.id
                     save.isSynced = create?.isSynced
                     save.uuId = create?.uuId
+                    save.favorite = viewModel.getFavorite(create?.id)
+                    save.noted = viewModel.getTakeNote(create?.id)
                     SQLiteHelper.onUpdate(save, true)
                 }
             }

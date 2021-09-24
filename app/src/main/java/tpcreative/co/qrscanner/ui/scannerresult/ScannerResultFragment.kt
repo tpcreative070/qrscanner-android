@@ -521,6 +521,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
         viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.CLIPBOARD, R.drawable.baseline_file_copy_white_48, "Clipboard"))
         onReloadData()
+        checkFavorite()
         try {
             val autoCopy: Boolean = PrefsController.getBoolean(getString(R.string.key_copy_to_clipboard), false)
             if (autoCopy) {
@@ -607,6 +608,8 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         history?.updatedDateTime = time
         SQLiteHelper.onInsert(history)
         HistorySingleton.getInstance()?.reloadData()
+        btnTakeNote.visibility  = View.INVISIBLE
+        imgMarkFavorite.visibility = View.INVISIBLE
         Utils.Log(TAG, "Parse result " + Utils.getCodeContentByHistory(history))
     }
 

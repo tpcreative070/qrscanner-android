@@ -19,4 +19,8 @@ interface HistoryDao {
     fun loadAll(isSynced: Boolean): MutableList<HistoryEntity>?
     @Query("Select * FROM history WHERE contentUnique = :contentUnique")
     fun loadItem(contentUnique: String?): HistoryEntity?
+    @Query("Select * FROM history WHERE id = :id")
+    fun loadItem(id: Int?): HistoryEntity?
+    @Query("Select * FROM history WHERE favorite = :isFavorite")
+    fun loadAllItem(isFavorite : Boolean): MutableList<HistoryEntity>?
 }
