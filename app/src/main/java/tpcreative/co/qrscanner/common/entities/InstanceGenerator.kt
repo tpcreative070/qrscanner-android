@@ -14,7 +14,7 @@ import tpcreative.co.qrscanner.model.HistoryEntityModel
 import tpcreative.co.qrscanner.model.SaveEntityModel
 import java.util.*
 
-@Database(entities = [HistoryEntity::class, SaveEntity::class], version = 4, exportSchema = false)
+@Database(entities = [HistoryEntity::class, SaveEntity::class], version = 5, exportSchema = false)
 abstract class InstanceGenerator : RoomDatabase() {
     @Ignore
     abstract fun historyDao(): HistoryDao?
@@ -193,6 +193,72 @@ abstract class InstanceGenerator : RoomDatabase() {
         return null
     }
 
+    fun getItemByHistory(id: Int?): HistoryEntityModel? {
+        try {
+            val mResult = instance?.historyDao()?.loadItem(id)
+            if (mResult != null) {
+                return HistoryEntityModel(mResult)
+            }
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
+
+    fun getItemBySave(id: Int?): SaveEntityModel? {
+        try {
+            val mResult = instance?.saveDao()?.loadItem(id)
+            if (mResult != null) {
+                return SaveEntityModel(mResult)
+            }
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
+
+    fun getLoadAllSaveFavoriteItems(isFavorite : Boolean): MutableList<SaveEntityModel>?{
+        try {
+            val mValue = instance?.saveDao()?.loadAllItem(isFavorite)
+            val mList: MutableList<SaveEntityModel> = mutableListOf()
+            if (mValue != null) {
+                for (index in mValue) {
+                    val item = SaveEntityModel(index)
+                    if (item.uuId == null) {
+                        item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    mList.add(item)
+                }
+            }
+            return mList
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
+
+    fun getLoadAllHistoryFavoriteItems(isFavorite : Boolean): MutableList<HistoryEntityModel>?{
+        try {
+            val mValue = instance?.historyDao()?.loadAllItem(isFavorite)
+            val mList: MutableList<HistoryEntityModel> = ArrayList()
+            if (mValue != null) {
+                for (index in mValue) {
+                    val item = HistoryEntityModel(index)
+                    if (item.uuId == null) {
+                        item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    mList.add(item)
+                }
+            }
+            return mList
+        } catch (e: Exception) {
+            Utils.Log(TAG, "${e.message}")
+        }
+        return null
+    }
+
     fun onDelete(entity: SaveEntityModel?): Boolean {
         try {
             instance?.saveDao()?.delete(SaveEntity(entity))
@@ -244,12 +310,19 @@ abstract class InstanceGenerator : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE 'save' ADD COLUMN  'noted' TEXT")
+                database.execSQL("ALTER TABLE 'history' ADD COLUMN  'noted' TEXT")
+            }
+        }
+
         fun getInstance(context: Context?): InstanceGenerator? {
             if (instance == null) {
                 instance = context?.let {
                     Room.databaseBuilder(it,
                             InstanceGenerator::class.java, it.getString(R.string.database_name))
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .build()

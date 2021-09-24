@@ -245,6 +245,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         }
         val create = Create()
         val save: SaveModel = viewModel.mList[position]
+        create.id = save.id ?: 0
+        create.favorite = save.favorite ?: false
         if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
             create.productId = save.text
             create.barcodeFormat = save.barcodeFormat
@@ -423,7 +425,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
                 if (file.isFile) {
                     Utils.Log(TAG, "path : $path")
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID + ".provider", file)
+                        val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file)
                         shareToSocial(uri)
                     } else {
                         val uri = Uri.fromFile(file)
@@ -479,7 +481,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     fun dialogDelete() {
-        val builder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
+        val builder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
         builder.setTitle(getString(R.string.delete))
         builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
         builder.setNegativeButton(getString(R.string.no), object : DialogInterface.OnClickListener {

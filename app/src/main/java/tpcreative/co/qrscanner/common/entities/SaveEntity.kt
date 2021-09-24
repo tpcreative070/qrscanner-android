@@ -44,60 +44,7 @@ class SaveEntity : Serializable {
     /*sync data*/
     var isSynced : Boolean = false
     var uuId: String? = ""
-
-    constructor(
-            email: String?,
-            subject: String?,
-            message: String?,
-            phone: String?,
-            lat: Double,
-            lon: Double,
-            query: String?,
-            title: String?,
-            location: String?,
-            description: String?,
-            startEvent: String?,
-            endEvent: String?,
-            startEventMilliseconds: Long,
-            endEventMilliseconds: Long,
-            fullName: String?,
-            address: String?,
-            text: String?,
-            ssId: String?,
-            hidden: Boolean,
-            password: String?,
-            url: String?,
-            createType: String?,
-            networkEncryption: String?,
-            createDatetime: String?, barcodeFormat: BarcodeFormat?, updatedDateTime: String?) {
-        this.email = email ?: ""
-        this.subject = subject ?: ""
-        this.message = message ?: ""
-        this.phone = phone ?: ""
-        this.lat = lat
-        this.lon = lon
-        this.query = query ?: ""
-        this.title = title ?: ""
-        this.location = location ?: ""
-        this.description = description ?: ""
-        this.startEvent = startEvent ?: ""
-        this.startEventMilliseconds = startEventMilliseconds
-        this.endEventMilliseconds = endEventMilliseconds
-        this.endEvent = endEvent ?: ""
-        this.fullName = fullName ?: ""
-        this.address = address ?: ""
-        this.text = text ?: ""
-        this.ssId = ssId ?: ""
-        this.hidden = hidden
-        this.password = password ?: ""
-        this.url = url ?: ""
-        this.createType = createType ?: ""
-        this.networkEncryption = networkEncryption ?: ""
-        this.createDatetime = createDatetime ?: ""
-        this.barcodeFormat = barcodeFormat?.name ?: ""
-        favorite = false
-        this.updatedDateTime = updatedDateTime ?: ""
-    }
+    var noted : String? = ""
 
     constructor() {
         email = ""
@@ -126,6 +73,7 @@ class SaveEntity : Serializable {
         barcodeFormat = BarcodeFormat.QR_CODE.name
         favorite = false
         updatedDateTime = Utils.getCurrentDateTimeSort() ?: ""
+        noted  = ""
     }
 
     constructor(item: SaveEntityModel?) {
@@ -160,5 +108,6 @@ class SaveEntity : Serializable {
         contentUnique = item?.contentUnique ?: ""
         isSynced = item?.isSynced ?: false
         uuId = item?.uuId ?: ""
+        noted = item?.noted ?: ""
     }
 }

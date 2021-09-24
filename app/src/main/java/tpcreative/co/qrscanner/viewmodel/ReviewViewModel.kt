@@ -8,6 +8,7 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.Create
 import tpcreative.co.qrscanner.model.ItemNavigation
 
@@ -30,4 +31,13 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
         }
     }
 
+    fun getTakeNote(id : Int?) : String? {
+        val mItem = SQLiteHelper.getSaveItemById(id)
+        return mItem?.noted
+    }
+
+    fun getFavorite(id : Int?) : Boolean? {
+        val mItem = SQLiteHelper.getSaveItemById(id)
+        return mItem?.favorite
+    }
 }

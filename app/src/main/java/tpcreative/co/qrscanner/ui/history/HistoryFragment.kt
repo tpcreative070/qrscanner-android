@@ -44,7 +44,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     var actionMode: ActionMode? = null
     private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            val menuInflater: MenuInflater? = mode?.getMenuInflater()
+            val menuInflater: MenuInflater? = mode?.menuInflater
             menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
@@ -239,6 +239,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         }
         val create = Create()
         val history: HistoryModel = viewModel.mList[position]
+        create.id = history.id ?: 0
+        create.favorite = history.favorite ?: false
         if (history.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
             create.address = history.address
             create.fullName = history.fullName
@@ -353,7 +355,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         shareToSocial(sb.toString())
     }
 
-    fun shareToSocial(value: String?) {
+    private fun shareToSocial(value: String?) {
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
         intent.type = "text/plain"
@@ -361,7 +363,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         startActivity(Intent.createChooser(intent, "Share"))
     }
 
-    fun shareToSocial(value: Uri?) {
+    private fun shareToSocial(value: Uri?) {
         Utils.Log(TAG, "path call")
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
@@ -389,7 +391,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
                 if (file.isFile) {
                     Utils.Log(TAG, "path : $path")
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        val uri: Uri = FileProvider.getUriForFile(context!!, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
+                        val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID.toString() + ".provider", file)
                         shareToSocial(uri)
                     } else {
                         val uri = Uri.fromFile(file)
@@ -444,7 +446,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     fun dialogDelete() {
-        val builder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
+        val builder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
         builder.setTitle(getString(R.string.delete))
         builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
         builder.setNegativeButton(getString(R.string.no)) { dialogInterface, i -> }

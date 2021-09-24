@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.model
+import okhttp3.internal.notify
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.entities.HistoryEntity
 
@@ -39,6 +40,7 @@ class HistoryEntityModel {
     /*sync data*/
     var isSynced: Boolean?
     var uuId: String?
+    var noted: String?
 
     constructor(item: HistoryEntity?) {
         id = item?.id
@@ -73,6 +75,7 @@ class HistoryEntityModel {
         contentUniqueForUpdatedTime = item?.contentUnique + "" + updatedDateTime
         isSynced = item?.isSynced
         uuId = item?.uuId
+        noted = item?.noted
     }
 
     constructor(item: HistoryModel?) {
@@ -108,5 +111,6 @@ class HistoryEntityModel {
         contentUniqueForUpdatedTime = contentUnique + "" + updatedDateTime
         isSynced = item?.isSynced
         uuId = item?.uuId
+        noted = item?.noted
     }
 }

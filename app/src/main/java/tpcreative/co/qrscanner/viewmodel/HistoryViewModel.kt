@@ -14,13 +14,25 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
     var mList: MutableList<HistoryModel> = mutableListOf()
     var mLatestValue: HistoryModel = HistoryModel()
     private var i = 0
+    var mFavoriteCategory = TypeCategories(-1,"Favorite")
+
+    private fun getFavorite() : MutableList<HistoryModel> {
+        val mList: MutableList<HistoryModel> = mutableListOf()
+        val mFavoriteList = SQLiteHelper.getHistoryFavoriteItemList(true)
+        for (index in mFavoriteList) {
+            index.typeCategories = mFavoriteCategory
+            mList.add(index)
+        }
+        mList.sortWith { o1, o2 -> if (Utils.getMilliseconds(o1?.updatedDateTime) < Utils.getMilliseconds(o2?.updatedDateTime)) 0 else 1 }
+        return mList
+    }
 
     private fun getLatestList(mData: MutableList<HistoryModel>): MutableList<HistoryModel> {
         val mList: MutableList<HistoryModel> = mutableListOf()
         if (mData.size > 0) {
             mLatestValue = mData[0]
             for (index in mData) {
-                if (index.createType == mLatestValue.createType) {
+                if (index.createType == mLatestValue.createType && index.favorite == false) {
                     index.typeCategories = TypeCategories(0, mLatestValue.createType)
                     mList.add(index)
                 }
@@ -52,11 +64,13 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
         val list = SQLiteHelper.getHistoryList()
         val mList: MutableList<HistoryModel> = mutableListOf()
         val mLatestType = getLatestList(list)
+        val mFavoriteList = getFavorite()
+        Utils.Log(TAG, "Favorite list " + Gson().toJson(mFavoriteList))
         Utils.Log(TAG, "Latest list " + Gson().toJson(mLatestType))
         Utils.Log(TAG, "Latest object " + Gson().toJson(mLatestValue))
         for (index in mListCategories) {
             for (history in list) {
-                if (index.getType() == history.createType && index.getType() != mLatestValue.createType) {
+                if (index.getType() == history.createType && index.getType() != mLatestValue.createType && history.favorite == false) {
                     history.typeCategories = index
                     mList.add(history)
                 }
@@ -64,10 +78,11 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
         }
 
         /*Added latest list to ArrayList*/
-        mLatestType.addAll(mList)
+        mFavoriteList.addAll(mLatestType)
+        mFavoriteList.addAll(mList)
         this.mList.clear()
-        this.mList.addAll(mLatestType)
-        return mLatestType
+        this.mList.addAll(mFavoriteList)
+        return mFavoriteList
     }
 
     fun getCheckedCount(): Int {

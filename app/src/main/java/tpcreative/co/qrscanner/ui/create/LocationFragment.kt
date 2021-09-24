@@ -170,9 +170,6 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         mAwesomeValidation?.clear()
         addValidationForEditText()
-        if (save != null) {
-            onSetData()
-        }
         FocusUI()
     }
 

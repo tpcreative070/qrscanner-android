@@ -19,4 +19,8 @@ interface SaveDao {
     fun loadAll(isSynced: Boolean): MutableList<SaveEntity>?
     @Query("Select * FROM save WHERE contentUnique = :contentUnique")
     fun loadItem(contentUnique: String?): SaveEntity?
+    @Query("Select * FROM save WHERE id = :id")
+    fun loadItem(id: Int?): SaveEntity?
+    @Query("Select * FROM save WHERE favorite = :isFavorite")
+    fun loadAllItem(isFavorite : Boolean): MutableList<SaveEntity>?
 }

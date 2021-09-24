@@ -39,6 +39,7 @@ class SaveEntityModel {
     /*sync data*/
     var isSynced: Boolean?
     var uuId: String?
+    var noted : String?
 
     constructor(item: SaveEntity?) {
         id = item?.id
@@ -73,6 +74,7 @@ class SaveEntityModel {
         contentUniqueForUpdatedTime = item?.contentUnique + "" + updatedDateTime
         isSynced = item?.isSynced
         uuId = item?.uuId
+        noted = item?.noted
     }
 
     constructor(item: SaveModel?) {
@@ -108,5 +110,6 @@ class SaveEntityModel {
         contentUniqueForUpdatedTime = contentUnique + "" + updatedDateTime
         isSynced = item?.isSynced
         uuId = item?.uuId
+        noted = item?.noted
     }
 }
