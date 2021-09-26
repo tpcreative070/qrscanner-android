@@ -35,24 +35,6 @@
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-            android:background="#610F6FE6"
-            android:id="@+id/overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:clickable_overlay="true"/>
-        <com.leinardi.android.speeddial.SpeedDialView
-            android:layout_above="@+id/llAds"
-            android:layout_gravity="bottom|end"
-            android:id="@+id/speedDial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:sdExpansionMode="top"
-            app:sdMainFabAnimationRotateAngle="180"
-            app:sdMainFabClosedSrc="@drawable/baseline_menu_white_24"
-            app:sdMainFabOpenedSrc="@drawable/baseline_menu_white_24"
-            app:sdOverlayLayout="@id/overlay"
-            app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <LinearLayout
         android:layout_centerVertical="true"
@@ -64,8 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:orientation="vertical"
             android:gravity="center_vertical|center"
             android:id="@+id/llAdsSub"

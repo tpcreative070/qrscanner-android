@@ -41,7 +41,7 @@ import tpcreative.co.qrscanner.viewmodel.SaveViewModel
 import java.io.File
 import java.util.*
 
-class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener, MainSingleton.SingleTonMainListener {
+class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener {
     private var bitmap: Bitmap? = null
     private var code: String? = null
     private var share: SaveModel? = null
@@ -50,9 +50,9 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     var isSelectedAll = false
     var actionMode: ActionMode? = null
     lateinit var viewModel : SaveViewModel
-    private val callback: ActionMode.Callback = object : ActionMode.Callback {
+    val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            val menuInflater: MenuInflater? = mode?.getMenuInflater()
+            val menuInflater: MenuInflater? = mode?.menuInflater
             menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
@@ -182,32 +182,6 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
 
     override fun getContext(): Context? {
         return activity
-    }
-
-    override fun isShowDeleteAction(isDelete: Boolean) {
-        val listSave: MutableList<SaveModel> = SQLiteHelper.getSaveList()
-        if (isDelete) {
-            if (actionMode == null) {
-                actionMode = QRScannerApplication.getInstance().getActivity()?.getToolbar()?.startActionMode(callback)
-            }
-            if (listSave.size == 0) {
-                return
-            }
-            val list: MutableList<SaveModel> = viewModel.getListGroup()
-            viewModel.mList.clear()
-            for (index in list) {
-                index.setDeleted(true)
-                viewModel.mList.add(index)
-            }
-            recyclerView.removeAllCells()
-            bindData()
-            misDeleted = true
-        } else {
-            if (listSave.size == 0) {
-                return
-            }
-            onAddPermissionSave()
-        }
     }
 
     override fun onClickItem(position: Int, isChecked: Boolean) {
@@ -467,16 +441,10 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
-        if (menuVisible) {
-            Utils.Log(TAG, "isVisible")
-            MainSingleton.getInstance()?.setListener(this)
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@SaveFragment, true)
-        } else {
-            MainSingleton.getInstance()?.setListener(null)
+        if (!menuVisible) {
             if (actionMode != null) {
                 actionMode?.finish()
             }
-            Utils.Log(TAG, "isInVisible")
         }
     }
 

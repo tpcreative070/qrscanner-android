@@ -61,10 +61,10 @@ class SettingsFragment : BaseFragment() {
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@SettingsFragment, true)
+            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isVisible")
         } else {
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@SettingsFragment, false)
+            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isInVisible")
             HistorySingleton.getInstance()?.reloadData()
             SaveSingleton.getInstance()?.reloadData()
@@ -136,7 +136,7 @@ class SettingsFragment : BaseFragment() {
          * Initializes the preference, which allows to change the app's theme.
          */
         private fun askPermission() {
-            val dialogBuilder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
+            val dialogBuilder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
             dialogBuilder.setTitle(R.string.app_permission)
             dialogBuilder.setPadding(40, 40, 40, 0)
             dialogBuilder.setMargin(60, 0, 60, 0)
@@ -154,7 +154,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         private fun askToDeleteDuplicatesItems(count: Int, listener: ServiceManager.ServiceManagerClickedListener?) {
-            val dialogBuilder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
+            val dialogBuilder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
             dialogBuilder.setTitle(R.string.alert)
             dialogBuilder.setPadding(40, 40, 40, 0)
             dialogBuilder.setMargin(60, 0, 60, 0)
@@ -170,7 +170,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         private fun askChooseTheme(listener: ServiceManager.ServiceManagerClickedItemsListener?) {
-            val dialogBuilder = MaterialDialog.Builder(context!!, Utils.getCurrentTheme())
+            val dialogBuilder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
             dialogBuilder.setTitle(R.string.change_theme)
             dialogBuilder.setPadding(40, 40, 40, 0)
             dialogBuilder.setMargin(60, 0, 60, 0)

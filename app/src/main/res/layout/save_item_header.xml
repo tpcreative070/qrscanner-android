@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.appcompat.widget.AppCompatTextView
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             style="@style/brandonBoldTextView"
             android:id="@+id/tvHeader"
             android:textSize="17sp"

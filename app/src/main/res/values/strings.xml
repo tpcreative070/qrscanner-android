@@ -166,6 +166,7 @@
     <string name="admob_app_id">ca-app-pub-4761335417049737~8922362230</string>
     <string name="banner_footer">ca-app-pub-7937924218801191/8753203161</string>
     <string name="banner_review">ca-app-pub-1640362259804989/2668382058</string>
+    <string name="banner_audience_review">964013677786207_964014441119464</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
 
     <string name="key_admob_app_id">admob_app_id</string>

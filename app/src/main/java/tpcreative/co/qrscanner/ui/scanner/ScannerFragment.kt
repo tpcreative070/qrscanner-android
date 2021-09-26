@@ -555,10 +555,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@ScannerFragment, true)
+            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isVisible")
         } else {
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@ScannerFragment, false)
+            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isInVisible")
         }
         if (zxing_barcode_scanner != null) {
