@@ -8,14 +8,9 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.*
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import com.google.android.ads.mediationtestsuite.MediationTestSuite
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
@@ -24,11 +19,8 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.leinardi.android.speeddial.SpeedDialActionItem
-import com.leinardi.android.speeddial.SpeedDialView.*
 import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
-import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ResponseSingleton.SingleTonResponseListener
@@ -38,9 +30,6 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
-import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.history.HistoryFragment
-import tpcreative.co.qrscanner.ui.save.SaveFragment
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity(), SingleTonResponseListener {
