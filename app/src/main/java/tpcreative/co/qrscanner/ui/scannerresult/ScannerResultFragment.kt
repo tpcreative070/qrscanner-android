@@ -608,8 +608,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         history?.updatedDateTime = time
         SQLiteHelper.onInsert(history)
         HistorySingleton.getInstance()?.reloadData()
-        btnTakeNote.visibility  = View.INVISIBLE
-        imgMarkFavorite.visibility = View.INVISIBLE
+        rlMarkFavoriteAndTakeNote.visibility = View.GONE
         Utils.Log(TAG, "Parse result " + Utils.getCodeContentByHistory(history))
     }
 

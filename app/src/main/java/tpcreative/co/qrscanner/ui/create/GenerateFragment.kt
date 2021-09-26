@@ -28,7 +28,7 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@GenerateFragment, true)
+            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isVisible")
             if (Utils.isPremium()) {
                 if (!viewModel.isPremium) {
@@ -38,7 +38,7 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
                 }
             }
         } else {
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@GenerateFragment, false)
+            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isInVisible")
         }
     }

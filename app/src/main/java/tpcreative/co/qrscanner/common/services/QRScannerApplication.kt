@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -73,7 +74,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         }
         ServiceManager.getInstance().setContext(this)
         storage = Storage(applicationContext)
-        pathFolder = storage.externalStorageDirectory + "/Pictures/QRScanner"
+        pathFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/QRScanner/"
         storage.createDirectory(pathFolder)
         val firstRunning: Boolean = PrefsController.getBoolean(getString(R.string.key_not_first_running), false)
         if (!firstRunning) {

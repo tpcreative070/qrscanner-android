@@ -36,7 +36,6 @@ fun MainActivity.initUI(){
     setupTabIcons()
     ServiceManager.getInstance()?.onStartService()
     Theme.getInstance()?.getList()
-    initSpeedDial()
     viewpager.setOnSwipeOutListener(object : CustomViewPager.OnSwipeOutListener {
         override fun onSwipeOutAtStart() {
             Utils.Log(TAG, "Start swipe")

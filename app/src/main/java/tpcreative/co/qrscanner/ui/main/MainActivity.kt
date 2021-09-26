@@ -68,29 +68,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         PremiumManager.getInstance().onStartInAppPurchase()
     }
 
-    fun onShowFloatingButton(fragment: Fragment?, isShow: Boolean) {
-        if (fragment is HistoryFragment) {
-            if (speedDial != null) {
-                speedDial.show()
-            }
-        } else if (fragment is SaveFragment) {
-            if (speedDial != null) {
-                speedDial.show()
-            }
-        } else {
-            if (isShow) {
-                val params = speedDial.layoutParams as CoordinatorLayout.LayoutParams
-                params.behavior = NoBehavior()
-                speedDial.requestLayout()
-            } else {
-                val params = speedDial.layoutParams as CoordinatorLayout.LayoutParams
-                params.behavior = ScrollingViewSnackbarBehavior()
-                speedDial.requestLayout()
-            }
-            if (speedDial != null) {
-                speedDial.hide()
-            }
-        }
+    fun onVisitableFragment() {
         if (Utils.isPremium()) {
             if (!viewModel.isPremium) {
                 showAds()
@@ -144,50 +122,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
                 }
     }
 
-    fun initSpeedDial() {
-        Utils.Log(TAG, "Init floating button")
-        try {
-            var drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_select_all_white_48)
-            speedDial.addActionItem(SpeedDialActionItem.Builder(R.id.fab_track, drawable)
-                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, theme))
-                    .setLabel(getString(R.string.select))
-                    .setLabelColor(Color.WHITE)
-                    .setFabImageTintColor(ContextCompat.getColor(this, R.color.white))
-                    .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.inbox_primary,
-                            theme))
-                    .create())
-            drawable = AppCompatResources.getDrawable(this, R.drawable.baseline_subtitles_white_48)
-            speedDial.addActionItem(SpeedDialActionItem.Builder(R.id.fab_csv, drawable)
-                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorPrimary,
-                            theme))
-                    .setLabel(R.string.csv)
-                    .setFabImageTintColor(ContextCompat.getColor(this, R.color.white))
-                    .setLabelColor(ContextCompat.getColor(this, R.color.white))
-                    .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.inbox_primary,
-                            theme))
-                    .create())
-            //Set option fabs clicklisteners.
-            speedDial.setOnActionSelectedListener(OnActionSelectedListener { actionItem ->
-                when (actionItem.id) {
-                    R.id.fab_track -> {
-                        MainSingleton.getInstance()?.isShowDeleteAction(true)
-                        return@OnActionSelectedListener false // false will close it without animation
-                    }
-                    R.id.fab_csv -> {
-                        MainSingleton.getInstance()?.isShowDeleteAction(false)
-                        return@OnActionSelectedListener false // closes without animation (same as mSpeedDialView.close(false); return false;)
-                    }
-                }
-                true // To keep the Speed Dial open
-            })
-            speedDial.mainFab.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_IN)
-            speedDial.show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    fun onInitReceiver() {
+    private fun onInitReceiver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             receiver = QRScannerReceiver()
             registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))

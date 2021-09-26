@@ -300,7 +300,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                     save.barcodeFormat = BarcodeFormat.QR_CODE.name
                 }
                 save.favorite = false
-                Utils.onAlertNotify(this, "Saved code successful => Path: $path")
+                Utils.onAlertNotify(this, "Saved code successful => Path: Download/QRScanner")
                 if (create?.enumImplement == EnumImplement.CREATE) {
                     val time = Utils.getCurrentDateTimeSort()
                     save.createDatetime = time

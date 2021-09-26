@@ -37,17 +37,17 @@ import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 import java.io.File
 import java.util.*
 
-class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, HistorySingleton.SingletonHistoryListener, MainSingleton.SingleTonMainListener {
+class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, HistorySingleton.SingletonHistoryListener{
     lateinit var viewModel : HistoryViewModel
     var misDeleted = false
     var isSelectedAll = false
     var actionMode: ActionMode? = null
-    private val callback: ActionMode.Callback = object : ActionMode.Callback {
+    val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
             menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
-            val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
+            val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
             return true
         }
@@ -184,33 +184,6 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             if (actionMode != null) {
                 actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
             }
-        }
-    }
-
-    override fun isShowDeleteAction(isDelete: Boolean) {
-        Utils.Log(TAG,"isShowDeleteAction $isDelete")
-        val listHistory: MutableList<HistoryModel> = SQLiteHelper.getHistoryList()
-        if (isDelete) {
-            if (actionMode == null) {
-                actionMode = QRScannerApplication.getInstance().getActivity()?.getToolbar()?.startActionMode(callback)
-            }
-            if (listHistory.size == 0) {
-                return
-            }
-            val list: MutableList<HistoryModel> = viewModel.getListGroup()
-            viewModel.mList.clear()
-            for (index in list) {
-                index.setDeleted(true)
-                viewModel.mList.add(index)
-            }
-            recyclerView.removeAllCells()
-            bindData()
-            misDeleted = true
-        } else {
-            if (listHistory.size == 0) {
-                return
-            }
-            onAddPermissionSave()
         }
     }
 
@@ -404,41 +377,9 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         }
     }
 
-    private fun onAddPermissionSave() {
-        Dexter.withContext(activity)
-                .withPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            exportData()
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                        }
-                    }
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
-    }
-
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            Utils.Log(TAG, "isVisible")
-            MainSingleton.getInstance()?.setListener(this)
-            QRScannerApplication.getInstance().getActivity()?.onShowFloatingButton(this@HistoryFragment, true)
-        } else {
-            MainSingleton.getInstance()?.setListener(null)
-            Utils.Log(TAG, "isInVisible")
             if (actionMode != null) {
                 actionMode?.finish()
             }
