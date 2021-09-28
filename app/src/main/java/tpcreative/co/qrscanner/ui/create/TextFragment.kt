@@ -58,7 +58,7 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener {
         mAwesomeValidation?.addValidation(this, R.id.edtText, RegexTemplate.NOT_EMPTY, R.string.err_text)
     }
 
-    fun FocusUI() {
+    private fun FocusUI() {
         edtText.requestFocus()
     }
 

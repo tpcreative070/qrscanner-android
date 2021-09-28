@@ -385,7 +385,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     private fun beginCrop(source: Uri?) {
         val destination = Uri.fromFile(File(activity?.cacheDir, "cropped"))
-        Crop.of(source, destination)?.asSquare()?.start(context!!, this)
+        Crop.of(source, destination)?.asSquare()?.start(requireContext(), this)
     }
 
     private fun handleCrop(resultCode: Int, result: Intent?) {
@@ -395,7 +395,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             mResult?.let { onFilterResult(it) }
             Utils.Log(TAG, "Result of cropped " + Gson().toJson(mResult))
         } else if (resultCode == Crop.RESULT_ERROR) {
-            Utils.onAlertNotify(activity!!,"${Crop.getError(result)?.message}")
+            Utils.onAlertNotify(requireActivity(),"${Crop.getError(result)?.message}")
         } else if (resultCode == Activity.RESULT_CANCELED) {
             setVisible()
         }
@@ -545,10 +545,12 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         create.productId = productId
         create.ISBN = ISBN
         create.fragmentType = EnumFragmentType.SCANNER
+        create.barcodeFormat = result?.barcodeFormat?.name
         beepManager?.playBeepSoundAndVibrate()
         if (zxing_barcode_scanner != null) {
             zxing_barcode_scanner.pauseAndWait()
         }
+        Utils.Log(TAG,"barcode format ${parsedResult.type}")
         Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
     }
 

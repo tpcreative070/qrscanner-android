@@ -16,7 +16,6 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.model.*
 
 class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
-    var edtMessage: AppCompatEditText? = null
     private var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,14 +64,14 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
         mAwesomeValidation?.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
     }
 
-    fun FocusUI() {
+    private fun FocusUI() {
         edtEmail.requestFocus()
     }
 
     fun onSetData() {
         edtEmail.setText("${save?.email}")
         edtObject.setText("${save?.subject}")
-        edtMessage?.setText("${save?.message}")
+        edtMessage.setText("${save?.message}")
     }
 
     public override fun onStart() {

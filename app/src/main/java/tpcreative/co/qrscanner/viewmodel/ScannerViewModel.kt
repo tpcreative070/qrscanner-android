@@ -192,4 +192,8 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
         }
         return ""
     }
+
+    fun isBarCode(type : String?) : Boolean{
+        return !type.isNullOrEmpty()
+    }
 }

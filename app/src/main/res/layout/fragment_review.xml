@@ -806,6 +806,42 @@
                                 android:background="@color/grey_lighter" />
 
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/llFormatType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonBoldTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/barcode_type" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvFormatType"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/material_gray_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/grey_lighter" />
+
+                        </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/rlFooter"
                             android:layout_width="match_parent"

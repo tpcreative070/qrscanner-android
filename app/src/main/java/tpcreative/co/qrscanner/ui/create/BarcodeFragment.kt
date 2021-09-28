@@ -9,6 +9,7 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.basgeekball.awesomevalidation.utility.custom.SimpleCustomValidation
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.fragment_barcode.*
@@ -42,8 +43,12 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
                     Utils.Log(TAG, "Passed")
                     val create = Create(save)
                     create.productId = edtText.text.toString().trim { it <= ' ' }
-                    create.createType = ParsedResultType.PRODUCT
                     create.barcodeFormat = viewModel.mType?.name
+                    if (create.barcodeFormat == BarcodeFormat.EAN_8.name || create.barcodeFormat == BarcodeFormat.EAN_13.name || create.barcodeFormat == BarcodeFormat.UPC_A.name || create.barcodeFormat == BarcodeFormat.UPC_E.name){
+                        create.createType = ParsedResultType.PRODUCT
+                    }else{
+                        create.createType = ParsedResultType.TEXT
+                    }
                     Navigator.onMoveToReview(this, create)
                 } else {
                     Utils.Log(TAG, "error")
@@ -168,6 +173,7 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
                 viewModel.mLength = 50
                 spinner.setSelection(1)
             }
+            Utils.Log(TAG,"Save ${Gson().toJson(save)}")
         }
     }
 
@@ -277,6 +283,10 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
                 viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, edtText)
             }
             viewModel.mType = BarcodeFormat.valueOf(type?.id ?:"")
+            if (viewModel.isText(save?.text)){
+                edtText.setText(save?.text)
+                edtText.requestFocus()
+            }
         }
 
         override fun onNothingSelected(arg0: AdapterView<*>?) {

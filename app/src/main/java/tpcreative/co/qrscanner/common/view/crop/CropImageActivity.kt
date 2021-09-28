@@ -168,7 +168,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
             val hv = HighlightView(imageView)
             val width = rotateBitmap?.getWidth() ?:0
             val height = rotateBitmap?.getHeight() ?:0
-            val imageRect = Rect(0, 0, width ?: 0, height ?: 0)
+            val imageRect = Rect(0, 0, width, height)
             // Make the default size about 4/5 of the width or height
             var cropWidth = (width ?: 0).coerceAtMost(height ?: 0) * 4 / 5
             var cropHeight = cropWidth
@@ -181,9 +181,14 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
             }
             val x = (width - cropWidth) / 2
             val y = (height - cropHeight) / 2
-            val cropRect = RectF(x.toFloat(), y.toFloat(), x + cropWidth.toFloat(), y + cropHeight.toFloat())
+            var cropRect = RectF(x.toFloat(), y.toFloat(), x + cropWidth.toFloat(), y + cropHeight.toFloat())
+            if (width>height){
+                 //Detect is barcode
+                 cropRect = RectF(1f, 1f, width.toFloat() - 1, height.toFloat() - 1)
+            }
             hv.setup(imageView?.getUnrotatedMatrix(), imageRect, cropRect, aspectX != 0 && aspectY != 0)
             imageView?.add(hv)
+            Utils.Log(TAG,"with: $width, height: $height")
         }
 
         fun crop() {
@@ -287,7 +292,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         handleCropping()
     }
 
-    fun handleCropping() {
+    private fun handleCropping() {
         if (cropView == null || isSaving) {
             return
         }
@@ -319,7 +324,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         onRenderCode(croppedImage)
     }
 
-    fun onRenderCode(bitmap: Bitmap?) {
+    private fun onRenderCode(bitmap: Bitmap?) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 if (bitmap == null) {

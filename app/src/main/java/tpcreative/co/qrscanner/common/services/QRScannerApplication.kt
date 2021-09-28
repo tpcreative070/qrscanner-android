@@ -388,7 +388,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun isDebugPremium(): Boolean {
         if (DEBUG){
-            return false
+            return true
         }
         return false
     }

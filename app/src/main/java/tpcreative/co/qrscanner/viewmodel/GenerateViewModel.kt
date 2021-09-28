@@ -37,10 +37,10 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     }
 
     fun getBarcodeFormat() = liveData(Dispatchers.Main) {
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_13.name, "EAN 13"))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_8.name, "EAN 8"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_E.name, "UPC E"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_13.name, "EAN 13"))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_A.name, "UPC A"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_E.name, "UPC E"))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODABAR.name, "CodaBar"))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.DATA_MATRIX.name, "Data Matrix"))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.PDF_417.name, "PDF 417"))
@@ -129,6 +129,10 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
                 Utils.Log(this::class.java.simpleName,"Nothing")
             }
         }
+    }
+
+    fun isText(mValue : String?) : Boolean{
+        return !mValue.isNullOrEmpty()
     }
 
 

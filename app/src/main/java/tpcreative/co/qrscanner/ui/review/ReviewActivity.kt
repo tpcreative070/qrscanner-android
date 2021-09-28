@@ -300,7 +300,6 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                     save.barcodeFormat = BarcodeFormat.QR_CODE.name
                 }
                 save.favorite = false
-                Utils.onAlertNotify(this, "Saved code successful => Path: Download/QRScanner")
                 if (create?.enumImplement == EnumImplement.CREATE) {
                     val time = Utils.getCurrentDateTimeSort()
                     save.createDatetime = time
@@ -317,6 +316,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                     save.noted = viewModel.getTakeNote(create?.id)
                     SQLiteHelper.onUpdate(save, true)
                 }
+                Utils.onBasicAlertSaved(this, "Saved code successfully => Path: Download/QRScanner/${File(path).name}")
             }
             EnumAction.SHARE -> {
                 val file = File(path)
