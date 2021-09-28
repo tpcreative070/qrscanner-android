@@ -369,5 +369,7 @@
     <string name="drag_the_orange_markers_to_detect_barcode">Drag the orange markers to detect barcode or qr-code</string>
     <string name="add_note">Add note</string>
     <string name="take_note">Take Note</string>
+    <string name="format_type">Format type</string>
+    <string name="barcode_type">Barcode type</string>
 
 </resources>

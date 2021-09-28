@@ -519,7 +519,12 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 title = "Text"
             }
         }
+        if (viewModel.isBarCode(create?.barcodeFormat)){
+            tvFormatType.text = create?.barcodeFormat
+            llFormatType.visibility = View.VISIBLE
+        }
         viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.CLIPBOARD, R.drawable.baseline_file_copy_white_48, "Clipboard"))
+        Utils.Log(TAG,"Format type ${create?.barcodeFormat}")
         onReloadData()
         checkFavorite()
         try {
@@ -610,6 +615,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         HistorySingleton.getInstance()?.reloadData()
         rlMarkFavoriteAndTakeNote.visibility = View.GONE
         Utils.Log(TAG, "Parse result " + Utils.getCodeContentByHistory(history))
+        Utils.Log(TAG,"Format type ${create?.barcodeFormat}")
     }
 
     override fun onStart() {

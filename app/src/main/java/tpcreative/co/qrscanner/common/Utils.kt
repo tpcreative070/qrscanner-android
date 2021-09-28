@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken
 import com.google.zxing.client.result.ParsedResultType
 import com.snatik.storage.Storage
 import com.tapadoo.alerter.Alerter
+import com.tapadoo.alerter.OnHideAlertListener
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
@@ -961,6 +962,18 @@ object Utils {
                 .setTitle("Alert")
                 .setBackgroundColorInt(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setText(message)
+                .show()
+    }
+
+    fun onBasicAlertSaved(activity: Activity, message: String) {
+        Alerter.create(activity)
+                .setTitle("Alert")
+                .setBackgroundColorInt(ContextCompat.getColor(activity, R.color.colorAccent))
+                .setText(message)
+                 .setDuration(4000)
+                .setOnHideListener(OnHideAlertListener {
+                    activity.finish()
+                })
                 .show()
     }
 

@@ -118,6 +118,10 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
         return ""
     }
 
+    fun isBarCode(type : String?) : Boolean{
+        return !type.isNullOrEmpty()
+    }
+
     init {
         result = Create()
     }

@@ -11,6 +11,7 @@ import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 fun BarcodeFragment.initUI(){
+    TAG = this::class.java.name
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)

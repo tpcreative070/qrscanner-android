@@ -265,6 +265,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             create.text = history.text
             create.createType = ParsedResultType.TEXT
         }
+        create.barcodeFormat = history.barcodeFormat
+        Utils.Log(TAG,"Format type ${history.barcodeFormat}")
         create.fragmentType = EnumFragmentType.HISTORY
         Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
     }

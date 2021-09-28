@@ -61,7 +61,7 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
         mAwesomeValidation?.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
     }
 
-    fun FocusUI() {
+    private fun FocusUI() {
         edtTo.requestFocus()
     }
 
