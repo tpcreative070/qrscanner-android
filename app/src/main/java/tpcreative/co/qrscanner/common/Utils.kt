@@ -302,29 +302,28 @@ object Utils {
     }
 
     fun checkGTIN(gtin: String?): Boolean {
-        val CheckDigitArray = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        val gtinMaths = intArrayOf(3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3)
-        val BarcodeArray: Array<String>? = gtin?.split("(?!^)".toRegex())?.toTypedArray()
-        val gtinLength = gtin?.length ?: 0
-        val modifier = 17 - (gtinLength - 1)
-        val gtinCheckDigit = gtin?.substring(gtinLength - 1)?.toInt()
+        val checkDigitArray = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        val gTinMaths = intArrayOf(3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3)
+        val barcodeArray: Array<String>? = gtin?.split("(?!^)".toRegex())?.toTypedArray()
+        val gTinLength = gtin?.length ?: 0
+        val modifier = 17 - (gTinLength - 1)
+        val gTinCheckDigit = gtin?.substring(gTinLength - 1)?.toInt()
         var tmpCheckDigit = 0
         var tmpCheckSum = 0
-        val tmpMath = 0
         var i = 0
         var ii = 0
 
         // Run through and put digits into multiplication table
         i = 0
-        while (i < gtinLength - 1) {
-            CheckDigitArray[modifier + i] = BarcodeArray?.get(i)?.toInt() ?: 0 // Add barcode digits to Multiplication Table
+        while (i < gTinLength - 1) {
+            checkDigitArray[modifier + i] = barcodeArray?.get(i)?.toInt() ?: 0 // Add barcode digits to Multiplication Table
             i++
         }
 
         // Calculate "Sum" of barcode digits
         ii = modifier
         while (ii < 17) {
-            tmpCheckSum += CheckDigitArray[ii] * gtinMaths[ii]
+            tmpCheckSum += checkDigitArray[ii] * gTinMaths[ii]
             ii++
         }
 
@@ -332,7 +331,14 @@ object Utils {
         tmpCheckDigit = ((ceil((tmpCheckSum.toFloat() / 10.toFloat()).toDouble()) * 10) - tmpCheckSum.toFloat()).toInt()
 
         // Check if last digit is same as calculated check digit
-        return if (gtinCheckDigit == tmpCheckDigit) true else false
+        return gTinCheckDigit == tmpCheckDigit
+    }
+
+    fun checkITF(gtin : String?) : Boolean{
+        if (gtin?.length?.rem(2) ?: 0 ==0){
+            return true
+        }
+        return  false
     }
 
     fun onLogAds(eventCode: String?): String? {

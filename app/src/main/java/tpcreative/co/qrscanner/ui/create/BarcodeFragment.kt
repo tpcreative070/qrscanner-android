@@ -41,7 +41,7 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
                     val create = Create(save)
-                    create.productId = edtText.getText().toString().trim { it <= ' ' }
+                    create.productId = edtText.text.toString().trim { it <= ' ' }
                     create.createType = ParsedResultType.PRODUCT
                     create.barcodeFormat = viewModel.mType?.name
                     Navigator.onMoveToReview(this, create)
@@ -67,8 +67,6 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             true
         }, R.string.warning_barcode_length_13)
         mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
-            val mValue = Utils.checkSum(input).toString() + ""
-            Utils.Log(TAG, mValue)
             if (viewModel.mType == BarcodeFormat.EAN_8) {
                 if (input.length == 8) {
                     return@SimpleCustomValidation Utils.checkGTIN(input)
@@ -78,9 +76,37 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             true
         }, R.string.warning_barcode_length_8)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.UPC_E) {
+                if (input.length == 8) {
+                    return@SimpleCustomValidation Utils.checkGTIN(input)
+                } else {
+                    return@SimpleCustomValidation false
+                }
+            }
+            true
+        }, R.string.warning_barcode_UPC_E_length_8)
+        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.UPC_A) {
+                if (input.length == 12) {
+                    return@SimpleCustomValidation Utils.checkGTIN(input)
+                } else {
+                    return@SimpleCustomValidation false
+                }
+            }
+            true
+        }, R.string.warning_barcode_UPC_A_length_12)
+        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.ITF) {
+                return@SimpleCustomValidation Utils.checkITF(input)
+            }
+            true
+        }, R.string.warning_barcode_ITF)
+
     }
 
-    fun FocusUI() {
+    private fun focusUI() {
         edtText.requestFocus()
     }
 
@@ -95,6 +121,52 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
                 viewModel.mType = BarcodeFormat.EAN_8
                 viewModel.mLength = 8
                 spinner.setSelection(1)
+            }else if (save?.barcodeFormat == BarcodeFormat.UPC_E.name){
+                viewModel.mType = BarcodeFormat.UPC_E
+                viewModel.mLength = 8
+                spinner.setSelection(1)
+            }else if (save?.barcodeFormat == BarcodeFormat.UPC_A.name){
+                viewModel.mType = BarcodeFormat.UPC_A
+                viewModel.mLength = 12
+                spinner.setSelection(1)
+            }else if (save?.barcodeFormat == BarcodeFormat.CODABAR.name){
+                viewModel.mType = BarcodeFormat.CODABAR
+                viewModel.mLength = 40
+                spinner.setSelection(1)
+            }else if (save?.barcodeFormat == BarcodeFormat.DATA_MATRIX.name){
+                viewModel.mType = BarcodeFormat.DATA_MATRIX
+                viewModel.mLength = 50
+                spinner.setSelection(1)
+            }
+            else if (save?.barcodeFormat == BarcodeFormat.PDF_417.name){
+                viewModel.mType = BarcodeFormat.PDF_417
+                viewModel.mLength = 50
+                spinner.setSelection(1)
+            }
+            else if (save?.barcodeFormat == BarcodeFormat.AZTEC.name){
+                viewModel.mType = BarcodeFormat.AZTEC
+                viewModel.mLength = 50
+                spinner.setSelection(1)
+            }
+            else if (save?.barcodeFormat == BarcodeFormat.CODE_128.name){
+                viewModel.mType = BarcodeFormat.CODE_128
+                viewModel.mLength = 50
+                spinner.setSelection(1)
+            }
+            else if (save?.barcodeFormat == BarcodeFormat.CODE_39.name){
+                viewModel.mType = BarcodeFormat.CODE_39
+                viewModel.mLength = 50
+                spinner.setSelection(1)
+            }
+            else if (save?.barcodeFormat == BarcodeFormat.CODE_93.name){
+                viewModel.mType = BarcodeFormat.CODE_93
+                viewModel.mLength = 50
+                spinner.setSelection(1)
+            }
+            else if (save?.barcodeFormat == BarcodeFormat.ITF.name){
+                viewModel.mType = BarcodeFormat.ITF
+                viewModel.mLength = 50
+                spinner.setSelection(1)
             }
         }
     }
@@ -104,7 +176,7 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         Utils.Log(TAG, "onStart")
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         addValidationForEditText()
-        FocusUI()
+        focusUI()
     }
 
     public override fun onStop() {
@@ -155,14 +227,14 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     // add items into spinner dynamically
-    fun addItemsOnSpinner() {
+    private fun addItemsOnSpinner() {
         dataAdapter = ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, viewModel.mBarcodeFormat)
         dataAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = dataAdapter
     }
 
-    fun addListenerOnSpinnerItemSelection() {
+    private fun addListenerOnSpinnerItemSelection() {
         spinner.onItemSelectedListener = CustomOnItemSelectedListener()
     }
 
@@ -171,10 +243,38 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             val type = dataAdapter?.getItem(pos)
             if (type?.id === BarcodeFormat.EAN_13.name) {
                 edtText.setHint(R.string.hint_13)
-                viewModel.doSetMaxLength(true, edtText)
-            } else {
+                viewModel.doSetMaxLength(BarcodeFormat.EAN_13, edtText)
+            }
+            else if (type?.id === BarcodeFormat.EAN_8.name){
                 edtText.setHint(R.string.hint_8)
-                viewModel.doSetMaxLength(false, edtText)
+                viewModel.doSetMaxLength(BarcodeFormat.EAN_8, edtText)
+            }
+            else if (type?.id === BarcodeFormat.UPC_E.name){
+                edtText.setHint(R.string.hint_8)
+                viewModel.doSetMaxLength(BarcodeFormat.UPC_E, edtText)
+            }else if (type?.id === BarcodeFormat.UPC_A.name){
+                edtText.setHint(R.string.hint_12)
+                viewModel.doSetMaxLength(BarcodeFormat.UPC_A, edtText)
+            }
+            else if (type?.id === BarcodeFormat.CODABAR.name){
+                edtText.setHint(R.string.hint_digits)
+                viewModel.doSetMaxLength(BarcodeFormat.CODABAR, edtText)
+            }
+            else if (type?.id === BarcodeFormat.CODE_39.name){
+                edtText.setHint(R.string.hint_uppercase_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.CODE_39, edtText)
+            }
+            else if (type?.id === BarcodeFormat.CODE_93.name){
+                edtText.setHint(R.string.hint_uppercase_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.CODE_93, edtText)
+            }
+            else if (type?.id === BarcodeFormat.ITF.name){
+                edtText.setHint(R.string.hint_digits)
+                viewModel.doSetMaxLength(BarcodeFormat.ITF, edtText)
+            }
+            else {
+                edtText.setHint(R.string.hint_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, edtText)
             }
             viewModel.mType = BarcodeFormat.valueOf(type?.id ?:"")
         }
