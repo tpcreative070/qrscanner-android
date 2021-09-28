@@ -1,5 +1,7 @@
 package tpcreative.co.qrscanner.viewmodel
 import android.text.InputFilter
+import android.text.InputType
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.liveData
 import com.google.zxing.BarcodeFormat
@@ -37,6 +39,16 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     fun getBarcodeFormat() = liveData(Dispatchers.Main) {
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_13.name, "EAN 13"))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_8.name, "EAN 8"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_E.name, "UPC E"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_A.name, "UPC A"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODABAR.name, "CodaBar"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.DATA_MATRIX.name, "Data Matrix"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.PDF_417.name, "PDF 417"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.AZTEC.name, "Aztec"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_128.name, "Code 128"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_39.name, "Code 39"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_93.name, "Code 93"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.ITF.name, "ITF"))
         emit(mBarcodeFormat)
     }
 
@@ -44,17 +56,78 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
         emit(true)
     }
 
-    fun doSetMaxLength(is13: Boolean, editText: EditText?) {
-        if (is13) {
-            val filterArray = arrayOfNulls<InputFilter?>(1)
-            filterArray[0] = InputFilter.LengthFilter(13)
-            editText?.setFilters(filterArray)
-            mLength = 13
-        } else {
-            val filterArray = arrayOfNulls<InputFilter?>(1)
-            filterArray[0] = InputFilter.LengthFilter(8)
-            editText?.filters = filterArray
-            mLength = 8
+    fun doSetMaxLength(type : BarcodeFormat, editText: EditText?) {
+        editText?.text?.clear()
+        editText?.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED + InputType.TYPE_CLASS_NUMBER
+        editText?.isSingleLine = true
+        editText?.imeOptions = EditorInfo.IME_ACTION_DONE
+        when(type){
+            BarcodeFormat.EAN_13 ->{
+                val filterArray = arrayOfNulls<InputFilter?>(1)
+                filterArray[0] = InputFilter.LengthFilter(13)
+                editText?.filters = filterArray
+                mLength = 13
+            }
+            BarcodeFormat.EAN_8 ->{
+                val filterArray = arrayOfNulls<InputFilter?>(1)
+                filterArray[0] = InputFilter.LengthFilter(8)
+                editText?.filters = filterArray
+                mLength = 8
+            }
+            BarcodeFormat.UPC_E ->{
+                val filterArray = arrayOfNulls<InputFilter?>(1)
+                filterArray[0] = InputFilter.LengthFilter(8)
+                editText?.filters = filterArray
+                mLength = 8
+            }
+            BarcodeFormat.UPC_A ->{
+                val filterArray = arrayOfNulls<InputFilter?>(1)
+                filterArray[0] = InputFilter.LengthFilter(12)
+                editText?.filters = filterArray
+                mLength = 12
+            }
+            BarcodeFormat.CODABAR ->{
+                val filterArray = arrayOfNulls<InputFilter?>(1)
+                filterArray[0] = InputFilter.LengthFilter(40)
+                editText?.filters = filterArray
+                mLength = 40
+            }
+            BarcodeFormat.ITF ->{
+                val filterArray = arrayOfNulls<InputFilter?>(1)
+                filterArray[0] = InputFilter.LengthFilter(40)
+                editText?.filters = filterArray
+                mLength = 50
+            }
+            BarcodeFormat.CODE_39 ->{
+                val filterArray = arrayOfNulls<InputFilter?>(2)
+                filterArray[0] = InputFilter.LengthFilter(50)
+                filterArray[1] = InputFilter.AllCaps()
+                editText?.filters = filterArray
+                editText?.isSingleLine = true
+                editText?.imeOptions = EditorInfo.IME_ACTION_DONE
+                editText?.inputType = InputType.TYPE_CLASS_TEXT
+                mLength = 50
+            }
+            BarcodeFormat.CODE_93 ->{
+                val filterArray = arrayOfNulls<InputFilter?>(2)
+                filterArray[0] = InputFilter.LengthFilter(50)
+                filterArray[1] = InputFilter.AllCaps()
+                editText?.filters = filterArray
+                editText?.isSingleLine = true
+                editText?.imeOptions = EditorInfo.IME_ACTION_DONE
+                editText?.inputType = InputType.TYPE_CLASS_TEXT
+                mLength = 50
+            }
+            else -> {
+                val filterArray = arrayOfNulls<InputFilter?>(1)
+                filterArray[0] = InputFilter.LengthFilter(50)
+                editText?.filters = filterArray
+                editText?.isSingleLine = true
+                editText?.imeOptions = EditorInfo.IME_ACTION_DONE
+                editText?.inputType = InputType.TYPE_CLASS_TEXT
+                mLength = 50
+                Utils.Log(this::class.java.simpleName,"Nothing")
+            }
         }
     }
 
