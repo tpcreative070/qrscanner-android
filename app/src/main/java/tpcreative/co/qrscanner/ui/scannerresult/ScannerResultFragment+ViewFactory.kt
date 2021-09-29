@@ -120,7 +120,6 @@ fun ScannerResultFragment.enterTakeNote() {
             .cancelable(true)
             .cancelOnTouchOutside(false)
             .negativeButton {
-                finish()
             }
             .positiveButton(R.string.update)
             .input(hintRes = R.string.enter_take_note, inputType = (InputType.TYPE_CLASS_TEXT),maxLength = 100, allowEmpty = false){ dialog, text->
@@ -128,7 +127,9 @@ fun ScannerResultFragment.enterTakeNote() {
                 updatedTakeNote()
             }
     val input: EditText = builder.getInputField()
-    input.setBackgroundColor(ContextCompat.getColor(this,R.color.white))
+    if (Utils.getCurrentTheme()==0){
+        input.setBackgroundColor(ContextCompat.getColor(this,R.color.white))
+    }
     input.setPadding(0,50,0,20)
     builder.show()
 }
