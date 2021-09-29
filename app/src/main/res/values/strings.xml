@@ -142,7 +142,7 @@
     <string name="app_permission">App permissions</string>
     <string name="update_app">Update app</string>
     <string name="update">Update</string>
-    <string name="enter_take_note">Enter take note</string>
+    <string name="enter_take_note">Enter a note</string>
     <string name="github" translatable="false">https://github.com/flyingrub/SpeedMeter</string>
     <string name="version">QRScanner version</string>
     <string name="premium_version">Premium version</string>

@@ -943,7 +943,7 @@ object Utils {
     }
 
     fun getCurrentThemeName(): String? {
-        val myResArray: Array<String?> = QRScannerApplication.Companion.getInstance().getResources().getStringArray(R.array.themeEntryArray)
+        val myResArray: Array<String?> = QRScannerApplication.getInstance().resources.getStringArray(R.array.themeEntryArray)
         return if (getPositionTheme() == 0) {
             myResArray[0]
         } else myResArray[1]
