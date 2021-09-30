@@ -37,12 +37,12 @@ class UrlFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
                     val create = Create(save)
-                    create.url = edtUrl.getText().toString().trim { it <= ' ' }
+                    create.url = edtUrl.text.toString().trim { it <= ' ' }
                     create.createType = ParsedResultType.URI
                     Navigator.onMoveToReview(this, create)
                 } else {
