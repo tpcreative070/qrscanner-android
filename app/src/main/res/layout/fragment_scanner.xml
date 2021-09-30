@@ -28,7 +28,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
                     android:id="@+id/switch_camera"
@@ -36,11 +36,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="5dp"
-                    app:srcCompat="@drawable/baseline_switch_camera_white_48"
+                    android:src="@drawable/baseline_switch_camera_white_48"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:id="@+id/switch_flashlight"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
@@ -48,12 +48,12 @@
                     android:layout_marginLeft="5dp"
                     android:layout_centerInParent="true"
                     android:layout_toEndOf="@+id/switch_camera"
-                    app:srcCompat="@drawable/baseline_flash_off_white_48"
+                    android:src="@drawable/baseline_flash_off_white_48"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:layout_toStartOf="@+id/imgGallery"
                     android:layout_centerInParent="true"
                     android:id="@+id/imgCreate"
@@ -61,11 +61,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="5dp"
-                    app:srcCompat="@drawable/baseline_help_white_48"
+                    android:src="@drawable/baseline_help_white_48"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:id="@+id/imgGallery"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
@@ -73,7 +73,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_centerInParent="true"
                     android:layout_alignParentEnd="true"
-                    app:srcCompat="@drawable/baseline_photo_white_48"
+                    android:src="@drawable/baseline_photo_white_48"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
