@@ -13,9 +13,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import com.facebook.ads.Ad
-import com.facebook.ads.AdError
-import com.facebook.ads.AdSettings
 import com.google.android.gms.ads.*
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
@@ -45,7 +42,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var activity: MainActivity? = null
     private var adView: AdView? = null
     private var adLargeView: AdView? = null
-    private var adAudienceLargeView : com.facebook.ads.AdView? = null
     private var isRequestAds = true
     private var isRequestLargeAds = true
     private var isRequestAudienceAds = true
@@ -56,9 +52,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         super.onCreate()
         mInstance = this
         isLive = true
-        if (DEBUG) {
-            AdSettings.setTestMode(true);
-        }
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         serverAPI = RetrofitBuilder.getService(typeService = EnumTypeServices.SYSTEM)
         serverDriveApi = RetrofitBuilder.getService(getString(R.string.url_google), typeService = EnumTypeServices.GOOGLE_DRIVE)
@@ -193,10 +186,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (getInstance().isRequestLargeAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
             getInstance().getAdsLargeView(this)
         }
-
-        if (getInstance().isRequestLargeAudienceAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableReviewAudienceAds()) {
-            getInstance().getAudienceAdsLargeView(this)
-        }
     }
 
     fun getAdsView(context: Context?): AdView? {
@@ -289,32 +278,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return adLargeView
     }
 
-    fun getAudienceAdsLargeView(context: Context?): com.facebook.ads.AdView? {
-        adAudienceLargeView?.destroy()
-        adAudienceLargeView = null
-        adAudienceLargeView = com.facebook.ads.AdView(context, getString(R.string.banner_audience_review), com.facebook.ads.AdSize.RECTANGLE_HEIGHT_250)
-        // Initiate a request to load an ad.
-        if (DEBUG){
-            AdSettings.addTestDevice("63434fe6-a4de-4b70-aac4-97852c36074e")
-        }
-        val mBuild = adAudienceLargeView?.buildLoadAdConfig()?.withAdListener(object : com.facebook.ads.AdListener {
-            override fun onError(p0: Ad?, p1: AdError?) {
-                isRequestAudienceAds = true
-                Utils.Log(TAG,"Audience error...")
-            }
-            override fun onAdClicked(p0: Ad?) {
-            }
-            override fun onLoggingImpression(p0: Ad?) {
-            }
-            override fun onAdLoaded(p0: Ad?) {
-                Utils.Log(TAG,"Audience loaded...")
-                isRequestAudienceAds = false
-            }
-        })
-        adAudienceLargeView?.loadAd(mBuild?.build())
-        return  adAudienceLargeView
-    }
-
     fun loadAd(layAd: LinearLayout?) {
         if (adView == null) {
             Utils.Log(TAG, "ads null")
@@ -337,18 +300,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             tempVg.removeView(adLargeView)
         }
         layAd?.addView(adLargeView)
-    }
-
-    fun loadLargeAudienceAd(layAd: LinearLayout?){
-        if (adAudienceLargeView == null) {
-            Utils.Log(TAG, "ads null")
-            return
-        }
-        if (adAudienceLargeView?.parent != null) {
-            val tempVg: ViewGroup = adAudienceLargeView?.parent as ViewGroup
-            tempVg.removeView(adAudienceLargeView)
-        }
-        layAd?.addView(adAudienceLargeView)
     }
 
     fun isRequestAds(): Boolean {

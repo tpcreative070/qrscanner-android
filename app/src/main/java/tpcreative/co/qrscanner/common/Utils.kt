@@ -403,30 +403,11 @@ object Utils {
 
     fun onSetCountRating(count: Int) {
         Log(TAG, "rating.......set$count")
-        PrefsController.putInt(QRScannerApplication.Companion.getInstance().getString(R.string.count_rating), count)
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.count_rating), count)
     }
 
     fun onGetCountRating(): Int {
-        return PrefsController.getInt(QRScannerApplication.Companion.getInstance().getString(R.string.count_rating), 0)
-    }
-
-    fun onScanFile(activity: Context, nameLogs: String?) {
-        if (PermissionChecker.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PermissionChecker.PERMISSION_GRANTED) {
-            Log(TAG, "Granted permission....")
-            val storage: Storage? = QRScannerApplication.getInstance().getStorage()
-            if (storage != null) {
-                val file = File(storage.externalStorageDirectory + "/" + nameLogs)
-                MediaScannerConnection.scanFile(activity, arrayOf(file.absolutePath), null, null)
-                MediaScannerConnection.scanFile(activity, arrayOf(storage.externalStorageDirectory), null, null)
-                try {
-                    storage.createFile(storage.externalStorageDirectory + "/" + nameLogs, "")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        } else {
-            Log(TAG, "No permission")
-        }
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.count_rating), 0)
     }
 
     fun getCodeContentByHistory(item: HistoryModel?): String? {

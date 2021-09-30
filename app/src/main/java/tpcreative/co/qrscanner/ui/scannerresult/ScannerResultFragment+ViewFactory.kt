@@ -40,10 +40,6 @@ fun ScannerResultFragment.initUI(){
     if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAds()) {
         QRScannerApplication.getInstance().getAdsLargeView(this)
     }
-
-    if (QRScannerApplication.getInstance().isRequestLargeAudienceAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAudienceAds()) {
-        QRScannerApplication.getInstance().getAudienceAdsLargeView(this)
-    }
     btnTakeNote.setOnClickListener {
         enterTakeNote()
         Utils.Log(TAG,"action take note")
@@ -80,12 +76,6 @@ fun ScannerResultFragment.checkingShowAds(){
             return@Observer
         }
         doShowAds(it)
-    })
-    viewModel.doShowAudienceAds().observe(this, Observer {
-        if (QRScannerApplication.getInstance().isEnableReviewAds()){
-            return@Observer
-        }
-        doShowAudienceAds(it)
     })
 }
 

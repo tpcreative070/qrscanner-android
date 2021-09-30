@@ -68,7 +68,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         }
     }
 
-    fun showGpsWarningDialog() {
+    private fun showGpsWarningDialog() {
         val dialogBuilder = MaterialDialog.Builder(this, Utils.getCurrentTheme())
         dialogBuilder.setTitle(getString(R.string.gps_disabled))
         dialogBuilder.setMessage("Please turn on your location or GPS to get exactly position")
@@ -147,7 +147,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mAwesomeValidation?.addValidation(this, R.id.edtQuery, RegexTemplate.NOT_EMPTY, R.string.err_query)
     }
 
-    fun FocusUI() {
+    private fun FocusUI() {
         edtLatitude.requestFocus()
     }
 
@@ -301,6 +301,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return
         }
