@@ -70,10 +70,15 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         when (item.itemId) {
             R.id.menu_item_report -> {
                 try {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"))
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support(Report issues)")
-                    intent.putExtra(Intent.EXTRA_TEXT, "")
-                    startActivity(intent)
+                    val to = "care@tpcreative.me"
+                    val subject = "Request new features||Need help"
+                    val body = ""
+                    val mailTo = "mailto:" + to +
+                            "?&subject=" + Uri.encode(subject) +
+                            "&body=" + Uri.encode(body)
+                    val emailIntent = Intent(Intent.ACTION_VIEW)
+                    emailIntent.data = Uri.parse(mailTo)
+                    startActivity(emailIntent)
                 } catch (e: ActivityNotFoundException) {
                     //TODO smth
                 }
@@ -104,7 +109,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                     ParsedResultType.TEXT -> {
                         onSearch(result.text)
                     }
-                    else -> Utils.Log(TAG,"Nothing")
+                    else -> Utils.Log(TAG, "Nothing")
                 }
             }
             else -> {
@@ -176,10 +181,16 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                                     }
                                     ParsedResultType.EMAIL_ADDRESS -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
                                         try {
-                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + create?.email))
-                                            intent.putExtra(Intent.EXTRA_SUBJECT, create?.subject)
-                                            intent.putExtra(Intent.EXTRA_TEXT, create?.message)
-                                            startActivity(intent)
+                                            val to = create?.email
+                                            val subject = create?.subject
+                                            val body = create?.message
+                                            val mailTo = "mailto:" + to +
+                                                    "?&subject=" + Uri.encode(subject) +
+                                                    "&body=" + Uri.encode(body)
+                                            val emailIntent = Intent(Intent.ACTION_VIEW)
+                                            emailIntent.data = Uri.parse(mailTo)
+                                            startActivity(emailIntent)
+                                            Utils.Log(TAG, "email object ${Gson().toJson(create)}")
                                         } catch (e: ActivityNotFoundException) {
                                             //TODO smth
                                         }
@@ -462,13 +473,17 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 viewModel.hashClipboard["title"] = create?.title
                 viewModel.hashClipboard["location"] = create?.location
                 viewModel.hashClipboard["description"] = create?.description
-                viewModel.hashClipboard["startEventMilliseconds"] = Utils.convertMillisecondsToDateTime(create?.startEventMilliseconds ?: 0)
-                viewModel.hashClipboard["endEventMilliseconds"] = Utils.convertMillisecondsToDateTime(create?.endEventMilliseconds ?: 0)
+                viewModel.hashClipboard["startEventMilliseconds"] = Utils.convertMillisecondsToDateTime(create?.startEventMilliseconds
+                        ?: 0)
+                viewModel.hashClipboard["endEventMilliseconds"] = Utils.convertMillisecondsToDateTime(create?.endEventMilliseconds
+                        ?: 0)
                 eventTitle.text = create?.title
                 eventLocation.text = create?.location
                 eventDescription.text = create?.description
-                eventBeginTime.text = Utils.convertMillisecondsToDateTime(create?.startEventMilliseconds ?: 0)
-                eventEndTime.text = Utils.convertMillisecondsToDateTime(create?.endEventMilliseconds ?: 0)
+                eventBeginTime.text = Utils.convertMillisecondsToDateTime(create?.startEventMilliseconds
+                        ?: 0)
+                eventEndTime.text = Utils.convertMillisecondsToDateTime(create?.endEventMilliseconds
+                        ?: 0)
                 history = HistoryModel()
                 history?.title = create?.title
                 history?.location = create?.location
@@ -524,7 +539,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
             llFormatType.visibility = View.VISIBLE
         }
         viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.CLIPBOARD, R.drawable.baseline_file_copy_white_48, "Clipboard"))
-        Utils.Log(TAG,"Format type ${create?.barcodeFormat}")
+        Utils.Log(TAG, "Format type ${create?.barcodeFormat}")
         onReloadData()
         checkFavorite()
         try {
@@ -552,7 +567,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                             shareToSocial(uri)
                         }
                     } else {
-                        Utils.onAlertNotify(this@ScannerResultFragment,getString(R.string.no_items_found))
+                        Utils.onAlertNotify(this@ScannerResultFragment, getString(R.string.no_items_found))
                     }
                 }
                 run {}
@@ -578,9 +593,12 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
             hints[EncodeHintType.MARGIN] = 2
             val theme: Theme? = Theme.getInstance()?.getThemeInfo()
             bitmap = if (history?.createType === ParsedResultType.PRODUCT.name) {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.valueOf(history?.barcodeFormat ?:""), 400, 400, hints)
+                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor()
+                        ?: 0, code, BarcodeFormat.valueOf(history?.barcodeFormat
+                        ?: ""), 400, 400, hints)
             } else {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.QR_CODE, 400, 400, hints)
+                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor()
+                        ?: 0, code, BarcodeFormat.QR_CODE, 400, 400, hints)
             }
             Utils.saveImage(bitmap, enumAction, create?.createType?.name, code, this)
         } catch (e: Exception) {
@@ -615,7 +633,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         HistorySingleton.getInstance()?.reloadData()
         rlMarkFavoriteAndTakeNote.visibility = View.GONE
         Utils.Log(TAG, "Parse result " + Utils.getCodeContentByHistory(history))
-        Utils.Log(TAG,"Format type ${create?.barcodeFormat}")
+        Utils.Log(TAG, "Format type ${create?.barcodeFormat}")
     }
 
     override fun onStart() {
@@ -641,7 +659,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 ScannerSingleton.getInstance()?.setVisible()
                 Utils.Log(TAG, "onDestroy.......")
             }
-            else -> Utils.Log(TAG,"Nothing")
+            else -> Utils.Log(TAG, "Nothing")
         }
     }
 
@@ -713,7 +731,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 i.setPackage(null)
                 startActivity(i)
             } catch (ex: Exception) {
-                Utils.onAlertNotify(this,"Can not open the link")
+                Utils.onAlertNotify(this, "Can not open the link")
             }
         }
     }
@@ -734,7 +752,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                     i.setPackage(null)
                     startActivity(i)
                 } catch (ex: Exception) {
-                    Utils.onAlertNotify(this,"Can not open the link")
+                    Utils.onAlertNotify(this, "Can not open the link")
                 }
             }
         } catch (e: Exception) {
