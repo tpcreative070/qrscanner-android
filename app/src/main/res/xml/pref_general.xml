@@ -2,6 +2,72 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_advance_features"
+        android:layout="@layout/custom_preferences_categories">
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/custom_preferences_item_small"
+            android:icon="@drawable/baseline_stars_white_48"
+            android:title="@string/premium_version"
+            android:summary="@string/summary"
+            android:key="@string/key_premium_version">
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_opacity_white_48"
+            android:title="@string/key_dark_mode"
+            android:key="@string/key_dark_mode"
+            android:summary="@string/key_dark_mode_detail">
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MyPreference
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_palette_white_48"
+            android:title="@string/key_color_code"
+            android:key="@string/key_color_code"
+            android:summary="@string/key_color_code_detail">
+        </tpcreative.co.qrscanner.common.preference.MyPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_more_white_48"
+            android:title="@string/key_multiple_scan"
+            android:key="@string/key_multiple_scan"
+            android:defaultValue="false"
+            android:summary="@string/key_multiple_scan_detail">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_content_copy_white_24"
+            android:title="@string/key_skip_duplicates"
+            android:key="@string/key_skip_duplicates"
+            android:defaultValue="false"
+            android:summary="@string/key_skip_duplicates_detail">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
+
+        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="true"
+            android:layout="@layout/custom_preferences_item"
+            android:icon="@drawable/baseline_backup_white_24"
+            android:title="@string/key_backup_data"
+            android:key="@string/key_backup_data"
+            android:defaultValue="false"
+            android:summary="@string/key_backup_data_detail">
+        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
+    </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
+
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_basic_features"
         android:layout="@layout/custom_preferences_categories">
         <tpcreative.co.qrscanner.common.preference.MySwitchPreference
@@ -69,73 +135,6 @@
             android:summary="@string/key_save_your_voicemails_detail">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
     </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
-
-    <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/key_advance_features"
-        android:layout="@layout/custom_preferences_categories">
-        <tpcreative.co.qrscanner.common.preference.MyPreference
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_stars_white_48"
-            android:title="@string/premium_version"
-            android:summary="@string/summary"
-            android:key="@string/key_premium_version">
-        </tpcreative.co.qrscanner.common.preference.MyPreference>
-
-        <tpcreative.co.qrscanner.common.preference.MyPreference
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_opacity_white_48"
-            android:title="@string/key_dark_mode"
-            android:key="@string/key_dark_mode"
-            android:summary="@string/key_dark_mode_detail">
-        </tpcreative.co.qrscanner.common.preference.MyPreference>
-
-        <tpcreative.co.qrscanner.common.preference.MyPreference
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_palette_white_48"
-            android:title="@string/key_color_code"
-            android:key="@string/key_color_code"
-            android:summary="@string/key_color_code_detail">
-        </tpcreative.co.qrscanner.common.preference.MyPreference>
-
-        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_more_white_48"
-            android:title="@string/key_multiple_scan"
-            android:key="@string/key_multiple_scan"
-            android:defaultValue="false"
-            android:summary="@string/key_multiple_scan_detail">
-        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
-
-        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_content_copy_white_24"
-            android:title="@string/key_skip_duplicates"
-            android:key="@string/key_skip_duplicates"
-            android:defaultValue="false"
-            android:summary="@string/key_skip_duplicates_detail">
-        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
-
-        <tpcreative.co.qrscanner.common.preference.MySwitchPreference
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="true"
-            android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_backup_white_24"
-            android:title="@string/key_backup_data"
-            android:key="@string/key_backup_data"
-            android:defaultValue="false"
-            android:summary="@string/key_backup_data_detail">
-        </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
-    </tpcreative.co.qrscanner.common.preference.MyPreferenceCategory>
-
 
     <tpcreative.co.qrscanner.common.preference.MyPreferenceCategory android:title="@string/info"
         android:layout="@layout/custom_preferences_categories">

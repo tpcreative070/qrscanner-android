@@ -269,31 +269,6 @@
 
                 <LinearLayout
                     android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:tint="?attr/colorAccent"
-                        android:src="@drawable/baseline_mood_white_48"
-                        android:layout_width="@dimen/icon_size_30"
-                        android:layout_height="@dimen/icon_size_30"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:textSize="@dimen/medium_16"
-                        style="@style/brandonRegularTextView"
-                        android:text="@string/happy_developer"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"

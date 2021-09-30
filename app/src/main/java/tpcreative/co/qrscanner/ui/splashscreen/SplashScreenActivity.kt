@@ -38,7 +38,7 @@ class SplashScreenActivity : BaseActivity() {
         }
     }
 
-    fun onAddPermissionCamera() {
+    private fun onAddPermissionCamera() {
         Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.CAMERA)

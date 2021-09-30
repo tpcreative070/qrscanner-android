@@ -41,14 +41,6 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
         }
     }
 
-    fun doShowAudienceAds() = liveData(Dispatchers.Main){
-        if (!Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds()) {
-            emit(true)
-        } else {
-            emit(false)
-        }
-    }
-
     fun reloadData(){
         when (result?.fragmentType) {
             EnumFragmentType.HISTORY -> {
@@ -119,6 +111,9 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     fun isBarCode(type : String?) : Boolean{
+        if (type == "QR_CODE"){
+            return false
+        }
         return !type.isNullOrEmpty()
     }
 
