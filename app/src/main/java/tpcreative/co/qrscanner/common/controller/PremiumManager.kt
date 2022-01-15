@@ -1,6 +1,6 @@
 package tpcreative.co.qrscanner.common.controller
 import com.anjlab.android.iab.v3.BillingProcessor
-import com.anjlab.android.iab.v3.TransactionDetails
+import com.anjlab.android.iab.v3.PurchaseInfo
 import com.google.gson.Gson
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
@@ -26,7 +26,7 @@ class PremiumManager : BillingProcessor.IBillingHandler {
         }
     }
 
-    override fun onProductPurchased(productId: String, details: TransactionDetails?) {
+    override fun onProductPurchased(productId: String, details: PurchaseInfo?) {
         TODO("Not yet implemented")
     }
 
@@ -36,10 +36,10 @@ class PremiumManager : BillingProcessor.IBillingHandler {
 
     override fun onBillingInitialized() {
         if (bp?.isPurchased(QRScannerApplication.getInstance().getString(R.string.lifetime)) == true) {
-            val details = bp?.getPurchaseTransactionDetails(QRScannerApplication.getInstance().getString(R.string.lifetime))
+            val details = bp?.getPurchaseInfo(QRScannerApplication.getInstance().getString(R.string.lifetime))
             if (details != null) {
                 Log(TAG, Gson().toJson(details))
-                val mPurchaseData = details.purchaseInfo.purchaseData
+                val mPurchaseData = details.purchaseData
                 if (mPurchaseData != null) {
                     if (isRealCheckedOut(mPurchaseData.orderId)) {
                         if (!isAlreadyCheckout()) {

@@ -1,9 +1,9 @@
 package tpcreative.co.qrscanner.ui.pro
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.anjlab.android.iab.v3.BillingProcessor
-import com.anjlab.android.iab.v3.TransactionDetails
+import com.anjlab.android.iab.v3.PurchaseInfo
+import com.anjlab.android.iab.v3.SkuDetails
 import com.google.gson.Gson
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.activity_pro_version.*
@@ -35,13 +35,6 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
         }
     }
 
-    /* Start in app purchase */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (bp?.handleActivityResult(requestCode, resultCode, data) != true) {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
     private fun askWarningFakeCheckout() {
         val dialogBuilder: MaterialDialog.Builder =  MaterialDialog.Builder(this, Utils.getCurrentTheme())
         dialogBuilder.setTitle(R.string.alert)
@@ -59,8 +52,18 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
             Utils.Log(TAG, "purchase new")
             if (bp?.isPurchased(getString(R.string.lifetime)) == true) {
                 Utils.Log(TAG, "Already charged")
-                bp?.consumePurchase(getString(R.string.lifetime))
-                bp?.loadOwnedPurchasesFromGoogle()
+                bp?.consumePurchaseAsync(getString(R.string.lifetime),object : BillingProcessor.IPurchasesResponseListener{
+                    override fun onPurchasesSuccess() {
+                    }
+                    override fun onPurchasesError() {
+                    }
+                })
+                bp?.loadOwnedPurchasesFromGoogleAsync(object  : BillingProcessor.IPurchasesResponseListener{
+                    override fun onPurchasesSuccess() {
+                    }
+                    override fun onPurchasesError() {
+                    }
+                })
             } else {
                 bp?.purchase(this, getString(R.string.lifetime))
             }
@@ -68,12 +71,15 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
     }
 
     override fun onDestroy() {
+        if (bp != null){
+            bp?.release()
+        }
         super.onDestroy()
     }
 
-    override fun onProductPurchased(productId: String, details: TransactionDetails?) {
+    override fun onProductPurchased(productId: String, details: PurchaseInfo?) {
         Utils.Log(TAG, Gson().toJson(details))
-        val mPurchaseData = details!!.purchaseInfo.purchaseData
+        val mPurchaseData = details!!.purchaseData
         if (mPurchaseData != null) {
             ServiceManager.getInstance().onCheckout(mPurchaseData)
             if (Utils.isRealCheckedOut(mPurchaseData.orderId)) {
@@ -86,7 +92,6 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
                 askWarningFakeCheckout()
             }
         }
-
     }
 
     override fun onPurchaseHistoryRestored() {
@@ -99,10 +104,13 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
 
     override fun onBillingInitialized() {
         Utils.Log(TAG, "Bill ready...")
-        val mProduction = bp?.getPurchaseListingDetails(getString(R.string.lifetime))
-        mProduction.let {
-            tvPrice.text = it?.priceText
-        }
-        Utils.Log(TAG, Gson().toJson(bp?.getPurchaseTransactionDetails(getString(R.string.lifetime))))
+        bp?.getPurchaseListingDetailsAsync(getString(R.string.lifetime),object  : BillingProcessor.ISkuDetailsResponseListener{
+            override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
+                val mPrice = products?.get(0)?.priceText
+                tvPrice.text = mPrice
+            }
+            override fun onSkuDetailsError(error: String?) {
+            }
+        })
     }
 }
