@@ -326,7 +326,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableReviewAds() : Boolean {
-        return true
+        return false
     }
 
     fun isEnableReviewAudienceAds() : Boolean {
