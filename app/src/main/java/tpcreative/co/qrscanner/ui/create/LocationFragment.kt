@@ -95,16 +95,16 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         dialog.show()
     }
 
-    override fun onMapClick(latLng: LatLng?) {
-        Utils.Log(TAG, "lat : " + latLng?.latitude + " - lon :" + latLng?.longitude)
+    override fun onMapClick(p0: LatLng) {
+        Utils.Log(TAG, "lat : " + p0?.latitude + " - lon :" + p0?.longitude)
         mMap?.clear()
         mMap?.addMarker(MarkerOptions()
-                .position(LatLng(latLng?.latitude ?: 0.0, latLng?.longitude ?: 0.0))
+                .position(LatLng(p0?.latitude ?: 0.0, p0?.longitude ?: 0.0))
                 .title("New Marker")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         )
-        lastLat = latLng?.latitude ?: 0.0
-        lastLon = latLng?.longitude ?: 0.0
+        lastLat = p0?.latitude ?: 0.0
+        lastLon = p0?.longitude ?: 0.0
         edtLatitude.setText("$lastLat")
         edtLongitude.setText("$lastLon")
     }
@@ -212,9 +212,9 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         finish()
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(p0: GoogleMap) {
         try {
-            mMap = map
+            mMap = p0
             Utils.Log(TAG, "Map ready for services")
             mMap?.setOnMyLocationButtonClickListener(this)
             mMap?.setOnMyLocationClickListener(this)

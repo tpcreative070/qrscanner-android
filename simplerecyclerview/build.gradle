@@ -6,8 +6,6 @@ android {
     defaultConfig {
         minSdkVersion appMinSdkVersion
         targetSdkVersion appTargetSdkVersion
-        versionCode 250
-        versionName "2.5.0"
     }
 
     buildTypes {
