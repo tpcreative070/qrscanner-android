@@ -211,9 +211,9 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         var croppedImage: Bitmap? = null
         try {
             mInput = sourceUri?.let { contentResolver.openInputStream(it) }
-            val decoder = BitmapRegionDecoder.newInstance(mInput, false)
-            val width = decoder.width.toFloat()
-            val height = decoder.height.toFloat()
+            val decoder = mInput?.let { BitmapRegionDecoder.newInstance(it, false) }
+            val width = decoder?.width?.toFloat()
+            val height = decoder?.height?.toFloat()
             if (exifRotation != 0) {
                 // Adjust crop area to account for image rotation
                 val matrix = Matrix()
@@ -221,11 +221,15 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                 val adjusted = RectF()
                 matrix.mapRect(adjusted, RectF(rect))
                 // Adjust to account for origin at 0,0
-                adjusted.offset(if (adjusted.left < 0) width else 0.toFloat(), if (adjusted.top < 0) height else 0.toFloat())
+                (if (adjusted.left < 0) width else 0.toFloat())?.let { (if (adjusted.top < 0) height else 0.toFloat())?.let { it1 ->
+                    adjusted.offset(it,
+                        it1
+                    )
+                } }
                 rect = Rect(adjusted.left.toInt(), adjusted.top.toInt(), adjusted.right.toInt(), adjusted.bottom.toInt())
             }
             try {
-                croppedImage = decoder.decodeRegion(rect, BitmapFactory.Options())
+                croppedImage = decoder?.decodeRegion(rect, BitmapFactory.Options())
                 if (croppedImage != null && (rect?.width()!! > outWidth || rect.height() > outHeight)) {
                     val matrix = Matrix()
                     matrix.postScale(outWidth.toFloat() / rect.width(), outHeight.toFloat() / rect.height())

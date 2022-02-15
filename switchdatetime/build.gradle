@@ -8,8 +8,6 @@ android {
     defaultConfig {
         minSdkVersion appMinSdkVersion
         targetSdkVersion appTargetSdkVersion
-        versionCode 20
-        versionName "2.0"
     }
 
     buildTypes {
