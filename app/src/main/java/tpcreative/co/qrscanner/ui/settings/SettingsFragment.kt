@@ -449,7 +449,7 @@ class SettingsFragment : BaseFragment() {
                     }
                 }
             })
-            myPreferenceSaveYourVoicemails?.isVisible = true
+            myPreferenceSaveYourVoicemails?.isVisible = false
 
             myPreferenceCategoryFamilyApps?.isVisible = true
 
