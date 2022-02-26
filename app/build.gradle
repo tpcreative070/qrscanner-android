@@ -84,7 +84,6 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation "com.anjlab.android.iab.v3:library:$v3Library"
     testImplementation "junit:junit:$junit"
     androidTestImplementation "com.android.support.test:runner:$testRnner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoCore"

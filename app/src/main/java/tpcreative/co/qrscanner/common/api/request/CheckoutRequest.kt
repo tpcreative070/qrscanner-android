@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.common.api.request
-import com.anjlab.android.iab.v3.PurchaseData
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -26,22 +25,6 @@ class CheckoutRequest : Serializable {
         this.orderId = orderId
         this.state = state
         this.token = token
-        device_id = QRScannerApplication.getInstance().getDeviceId()
-        device_type = QRScannerApplication.getInstance().getString(R.string.device_type)
-        manufacturer = QRScannerApplication.getInstance().getManufacturer()
-        name_model = QRScannerApplication.getInstance().getModel()
-        version = "" + QRScannerApplication.getInstance().getVersion()
-        versionRelease = QRScannerApplication.getInstance().getVersionRelease()
-        appVersionRelease = BuildConfig.VERSION_NAME
-        packageName = QRScannerApplication.getInstance().getPackageId()
-    }
-
-    constructor(data : PurchaseData){
-        this.autoRenewing = data.autoRenewing
-        this.sku = data.productId
-        this.orderId = data.orderId
-        this.state = data.purchaseState.name
-        this.token = data.purchaseToken
         device_id = QRScannerApplication.getInstance().getDeviceId()
         device_type = QRScannerApplication.getInstance().getString(R.string.device_type)
         manufacturer = QRScannerApplication.getInstance().getManufacturer()

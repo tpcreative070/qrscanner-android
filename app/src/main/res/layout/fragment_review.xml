@@ -879,6 +879,7 @@
                     </LinearLayout>
 
                     <RelativeLayout
+                        android:background="@color/colorPrimary"
                         android:id="@+id/rlAdsRoot"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"

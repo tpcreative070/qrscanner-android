@@ -34,7 +34,7 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (!Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds()) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
             emit(true)
         } else {
            emit(false)

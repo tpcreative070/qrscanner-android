@@ -29,14 +29,6 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
             QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
-            Utils.Log(TAG, "isVisible")
-            if (Utils.isPremium()) {
-                if (!viewModel.isPremium) {
-                    getDataList()
-                    viewModel.isPremium = Utils.isPremium()
-                    Utils.Log(TAG, "Call update ui")
-                }
-            }
         } else {
             QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isInVisible")
@@ -62,9 +54,6 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
 
     override fun onClickItem(position: Int, isChecked: Boolean) {
         var mPosition = position
-        if (!Utils.isPremium()) {
-            mPosition += 1
-        }
         when (mPosition) {
             0 -> {
                 Navigator.onGenerateView(activity, null, BarcodeFragment::class.java)

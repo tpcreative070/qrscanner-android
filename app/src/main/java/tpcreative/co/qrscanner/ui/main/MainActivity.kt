@@ -25,7 +25,6 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ResponseSingleton.SingleTonResponseListener
 import tpcreative.co.qrscanner.common.activity.BaseActivity
-import tpcreative.co.qrscanner.common.controller.PremiumManager
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
@@ -54,17 +53,10 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUI()
-        PremiumManager.getInstance().onStartInAppPurchase()
     }
 
     fun onVisitableFragment() {
-        if (Utils.isPremium()) {
-            if (!viewModel.isPremium) {
-                showAds()
-                viewModel.isPremium = Utils.isPremium()
-                Utils.Log(TAG, "Call update ui")
-            }
-        }
+        showAds()
     }
 
     fun setupViewPager(viewPager: ViewPager?) {
@@ -183,7 +175,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         Utils.Log(TAG, "onResume")
-        if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
+        if (QRScannerApplication.getInstance().isRequestAds()  && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
             QRScannerApplication.getInstance().getAdsView(this)
             Utils.Log(TAG,"Request ads")
         }
@@ -209,7 +201,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
         Utils.onSetCountRating(Utils.onGetCountRating() + 1)
         ServiceManager.getInstance().onPreparingSyncData(true)
-        PremiumManager.getInstance().onStop()
     }
 
     override fun onBackPressed() {

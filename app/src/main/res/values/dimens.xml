@@ -73,5 +73,5 @@
     <dimen name="margin">30dp</dimen>
     <dimen name="crop__bar_height">56dp</dimen>
     <dimen name="banner_height">55dp</dimen>
-    <dimen name="banner_rectangle_review_height">255dp</dimen>
+    <dimen name="banner_rectangle_review_height">265dp</dimen>
 </resources>

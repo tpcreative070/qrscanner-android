@@ -53,7 +53,7 @@ fun MainActivity.initUI(){
             == PackageManager.PERMISSION_DENIED) {
         onAddPermissionCamera()
     }
-    if (QRScannerApplication.getInstance().isRequestAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
+    if (QRScannerApplication.getInstance().isRequestAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
         QRScannerApplication.getInstance().getAdsView(this)
     }
     val mCountRating = Utils.onGetCountRating()

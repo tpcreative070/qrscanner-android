@@ -39,7 +39,6 @@ import tpcreative.co.qrscanner.model.Theme
 import java.util.*
 
 class SettingsFragment : BaseFragment() {
-    private  var isPremium = Utils.isPremium()
     override fun getLayoutId(): Int {
         return 0
     }
@@ -89,16 +88,11 @@ class SettingsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         Utils.Log(TAG, "onResume")
-        if (isPremium != Utils.isPremium()){
-            work()
-            isPremium = Utils.isPremium()
-        }
     }
 
     class SettingsFragmentPreference : PreferenceFragmentCompat(), SettingsSingleton.SingletonSettingsListener {
         var mPosition = Utils.getPositionTheme()
         private var mVersionApp: MyPreference? = null
-        private var mPreferencePremiumVersion: MyPreference? = null
         private var myPreferenceShare: MyPreference? = null
         private var myPreferencePermissions: MyPreference? = null
         private var myPreferenceRate: MyPreference? = null
@@ -197,11 +191,6 @@ class SettingsFragment : BaseFragment() {
             return Preference.OnPreferenceChangeListener { preference: Preference?, newValue: Any? ->
                 if (preference is MySwitchPreference) {
                     if (preference.getKey() == getString(R.string.key_skip_duplicates)) {
-                        if (!Utils.isPremium()) {
-                            mySwitchPreferenceSkipDuplicates?.isChecked = false
-                            Navigator.onMoveProVersion(context)
-                            return@OnPreferenceChangeListener false
-                        }
                         val mResult = newValue as Boolean
                         if (mResult) {
                             val mSaveList: MutableList<SaveModel> = Utils.filterDuplicationsSaveItems(SQLiteHelper.getSaveList())
@@ -225,23 +214,10 @@ class SettingsFragment : BaseFragment() {
                             }
                         }
                         Utils.Log(TAG, "CLicked $newValue")
-                    } else if (preference.getKey() == getString(R.string.key_multiple_scan)) {
-                        if (!Utils.isPremium()) {
-                            myPreferenceMultipleScan?.isChecked = false
-                            Navigator.onMoveProVersion(context)
-                            return@OnPreferenceChangeListener false
-                        }
                     } else if (preference.getKey() == getString(R.string.key_backup_data)) {
-                        if (!Utils.isPremium()) {
-                            mySwitchPreferenceBackupData?.isChecked = false
-                            Navigator.onMoveProVersion(context)
-                            return@OnPreferenceChangeListener false
-                        }
-                        if (Utils.isPremium()) {
-                            val mResult = newValue as Boolean
-                            if (mResult) {
-                                Navigator.onBackupData(context)
-                            }
+                        val mResult = newValue as Boolean
+                        if (mResult) {
+                            Navigator.onBackupData(context)
                         }
                     }
                 }
@@ -281,11 +257,7 @@ class SettingsFragment : BaseFragment() {
                         Utils.Log(TAG, "action here")
                         Navigator.onMoveToHelp(context)
                     } else if (preference.getKey() == getString(R.string.key_color_code)) {
-                        if (!Utils.isPremium()) {
-                            Navigator.onMoveProVersion(context)
-                        } else {
-                            Navigator.onMoveToChangeFileColor(activity)
-                        }
+                        Navigator.onMoveToChangeFileColor(activity)
                     } else if (preference.getKey() == getString(R.string.key_rate)) {
                         if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
                             onRateProApp()
@@ -298,19 +270,13 @@ class SettingsFragment : BaseFragment() {
                     else if (preference.getKey() == getString(R.string.key_save_your_voicemails)){
                         onSaveYourVoicemails()
                     }
-                    else if (preference.getKey() == getString(R.string.key_premium_version)) {
-                        Navigator.onMoveProVersion(context)
-                    } else if (preference.getKey() == getString(R.string.key_dark_mode)) {
-                        if (!Utils.isPremium()) {
-                            Navigator.onMoveProVersion(context)
-                        } else {
-                            askChooseTheme(object : ServiceManager.ServiceManagerClickedItemsListener {
-                                override fun onYes() {
-                                    EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
-                                    Utils.Log(TAG, "Clicked say yes")
-                                }
-                            })
-                        }
+                    else if (preference.getKey() == getString(R.string.key_dark_mode)) {
+                        askChooseTheme(object : ServiceManager.ServiceManagerClickedItemsListener {
+                            override fun onYes() {
+                                EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
+                                Utils.Log(TAG, "Clicked say yes")
+                            }
+                        })
                     }
                 }
                 true
@@ -324,12 +290,6 @@ class SettingsFragment : BaseFragment() {
             mVersionApp?.onPreferenceChangeListener = createChangeListener()
             mVersionApp?.onPreferenceClickListener = createActionPreferenceClickListener()
 
-            /*Premium*/mPreferencePremiumVersion = findPreference(getString(R.string.key_premium_version)) as MyPreference?
-            mPreferencePremiumVersion?.onPreferenceChangeListener = createChangeListener()
-            mPreferencePremiumVersion?.onPreferenceClickListener = createActionPreferenceClickListener()
-            if (Utils.isPremium()) {
-                mPreferencePremiumVersion?.isVisible = false
-            }
             /*App Permissions*/myPreferencePermissions = findPreference(getString(R.string.key_app_permissions)) as MyPreference?
             myPreferencePermissions?.onPreferenceChangeListener = createChangeListener()
             myPreferencePermissions?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -366,9 +326,6 @@ class SettingsFragment : BaseFragment() {
                     myPreferenceTheme?.getTvChoose()?.text = Utils.getCurrentThemeName()
                 }
             })
-            if (!Utils.isPremium()) {
-                myPreferenceTheme?.isVisible = false
-            }
 
             /*File color*/myPreferenceFileColor = findPreference(getString(R.string.key_color_code)) as MyPreference?
             myPreferenceFileColor?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -379,9 +336,6 @@ class SettingsFragment : BaseFragment() {
                     onGenerateReview("123")
                 }
             })
-            if (!Utils.isPremium()) {
-                myPreferenceFileColor?.isVisible = false
-            }
 
             /*Multiple scan*/myPreferenceMultipleScan = findPreference(getString(R.string.key_multiple_scan)) as MySwitchPreference?
             myPreferenceMultipleScan?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -391,9 +345,6 @@ class SettingsFragment : BaseFragment() {
                     myPreferenceMultipleScan?.getImgPremium()?.visibility = View.VISIBLE
                 }
             })
-            if (!Utils.isPremium()) {
-                myPreferenceMultipleScan?.isVisible = false
-            }
 
             /*Skip duplicates*/mySwitchPreferenceSkipDuplicates = findPreference(getString(R.string.key_skip_duplicates)) as MySwitchPreference?
             mySwitchPreferenceSkipDuplicates?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -403,9 +354,6 @@ class SettingsFragment : BaseFragment() {
                     mySwitchPreferenceSkipDuplicates?.getImgPremium()?.visibility = View.VISIBLE
                 }
             })
-            if (!Utils.isPremium()) {
-                mySwitchPreferenceSkipDuplicates?.isVisible = false
-            }
 
             /*Backup data*/mySwitchPreferenceBackupData = findPreference(getString(R.string.key_backup_data)) as MySwitchPreference?
             mySwitchPreferenceBackupData?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -415,9 +363,7 @@ class SettingsFragment : BaseFragment() {
                     mySwitchPreferenceBackupData?.getImgPremium()?.visibility = View.VISIBLE
                 }
             })
-            if (!Utils.isPremium()) {
-                mySwitchPreferenceBackupData?.isVisible = false
-            }
+
             myPreferenceCategoryFamilyApps = findPreference(getString(R.string.key_family_apps)) as MyPreferenceCategory?
             myPreferenceCategoryFamilyApps?.onPreferenceClickListener = createActionPreferenceClickListener()
             myPreferenceCategoryFamilyApps?.onPreferenceChangeListener = createChangeListener()
