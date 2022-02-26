@@ -21,9 +21,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     var isPremium = false
     fun getDataList() = liveData(Dispatchers.Main) {
         mList.clear()
-        if (Utils.isPremium()) {
-            mList.add(QRCodeType("0", getString(R.string.barcode), R.drawable.ic_barcode))
-        }
+        mList.add(QRCodeType("0", getString(R.string.barcode), R.drawable.ic_barcode))
         mList.add(QRCodeType("1", getString(R.string.email), R.drawable.baseline_email_white_48))
         mList.add(QRCodeType("2", getString(R.string.message), R.drawable.baseline_textsms_white_48))
         mList.add(QRCodeType("3", getString(R.string.location), R.drawable.baseline_location_on_white_48))

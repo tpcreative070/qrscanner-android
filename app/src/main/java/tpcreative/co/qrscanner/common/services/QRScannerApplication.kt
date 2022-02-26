@@ -61,7 +61,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
-        if (!Utils.isPremium() && isLiveAds()) {
+        if (isLiveAds()) {
             Utils.Log(TAG, "Start ads")
             MobileAds.initialize(this) { }
         }
@@ -180,10 +180,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     private fun initAds(){
-        if (getInstance().isRequestAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableBannerAds()) {
+        if (getInstance().isRequestAds()  && getInstance().isLiveAds() && getInstance().isEnableBannerAds()) {
             getInstance().getAdsView(this)
         }
-        if (getInstance().isRequestLargeAds() && !Utils.isPremium() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
+        if (getInstance().isRequestLargeAds() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
             getInstance().getAdsLargeView(this)
         }
     }
@@ -310,10 +310,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return isRequestLargeAds
     }
 
-    fun isRequestLargeAudienceAds(): Boolean {
-        return  isRequestAudienceAds
-    }
-
     fun isLiveMigration(): Boolean {
         if (!DEBUG){
             return true
@@ -326,24 +322,12 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableReviewAds() : Boolean {
-        return false
-    }
-
-    fun isEnableReviewAudienceAds() : Boolean {
-        return false
+        return true
     }
 
     fun isEnableBannerAds() : Boolean {
         return  true
     }
-
-    fun isDebugPremium(): Boolean {
-        if (DEBUG){
-            return false
-        }
-        return false
-    }
-
     companion object {
         @Volatile
         private var mInstance: QRScannerApplication? = null

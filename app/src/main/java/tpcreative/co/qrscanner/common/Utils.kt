@@ -6,9 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.media.MediaScannerConnection
 import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.zxing.client.result.ParsedResultType
@@ -356,49 +354,6 @@ object Utils {
         } else {
             Log(TAG, "No permission")
         }
-    }
-
-    fun isPremium(): Boolean {
-        if (isProVersion()) {
-            return true
-        }
-        Log(TAG, "isPremium")
-        try {
-            val value: String? = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), null)
-            if (value != null) {
-                val mPremium: PremiumModel? = Gson().fromJson(value, PremiumModel::class.java)
-                if (mPremium != null) {
-                    return mPremium.isPremium
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return false
-    }
-
-    private fun isProVersion(): Boolean {
-        if (QRScannerApplication.getInstance().isDebugPremium()){
-            return true
-        }
-        return BuildConfig.APPLICATION_ID == QRScannerApplication.getInstance().getString(R.string.qrscanner_pro_release)
-    }
-
-    fun setPremium(isPremium: Boolean) {
-        val value: String? = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), null)
-        val mPremiumLocal = PremiumModel(isPremium)
-        if (value != null) {
-            val mPremium: PremiumModel? = Gson().fromJson(value, PremiumModel::class.java)
-            if (mPremium != null) {
-                mPremium.isPremium = isPremium
-                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremium))
-            } else {
-                PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremiumLocal))
-            }
-        } else {
-            PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_is_premium), Gson().toJson(mPremiumLocal))
-        }
-        Log(TAG, "setPremium")
     }
 
     fun onSetCountRating(count: Int) {
@@ -750,7 +705,7 @@ object Utils {
     }
 
     fun setSaveDeletedMap(item: SaveEntityModel?) {
-        if (isPremium() && item?.isSynced ?: false) {
+        if (item?.isSynced ?: false) {
             val mMap = getSaveDeletedMap()
             mMap[item?.uuId] = item?.uuId
             PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_save_deleted_list), Gson().toJson(mMap))
@@ -758,7 +713,7 @@ object Utils {
     }
 
     fun setHistoryDeletedMap(item: HistoryEntityModel?) {
-        if (isPremium() && item?.isSynced == true) {
+        if (item?.isSynced == true) {
             val mMap = getHistoryDeletedMap()
             mMap[item.uuId] = item.uuId ?: ""
             PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_history_deleted_list), Gson().toJson(mMap))

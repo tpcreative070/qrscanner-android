@@ -37,7 +37,7 @@ fun ScannerResultFragment.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
-    if (QRScannerApplication.getInstance().isRequestLargeAds() && !Utils.isPremium() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAds()) {
+    if (QRScannerApplication.getInstance().isRequestLargeAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAds()) {
         QRScannerApplication.getInstance().getAdsLargeView(this)
     }
     btnTakeNote.setOnClickListener {
@@ -71,10 +71,6 @@ fun ScannerResultFragment.getDataIntent() {
 
 fun ScannerResultFragment.checkingShowAds(){
     viewModel.doShowAds().observe(this, Observer {
-        //Disable ads for review
-        if (QRScannerApplication.getInstance().isEnableReviewAudienceAds()){
-            return@Observer
-        }
         doShowAds(it)
     })
 }

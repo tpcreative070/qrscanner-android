@@ -6,7 +6,6 @@ import android.content.*
 import android.os.IBinder
 import co.tpcreative.supersafe.common.network.Resource
 import co.tpcreative.supersafe.common.network.Status
-import com.anjlab.android.iab.v3.PurchaseData
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.gson.Gson
 import com.google.zxing.client.result.ParsedResultType
@@ -17,7 +16,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
-import tpcreative.co.qrscanner.common.api.request.CheckoutRequest
 import tpcreative.co.qrscanner.common.api.requester.DriveService
 import tpcreative.co.qrscanner.common.api.requester.UserService
 import tpcreative.co.qrscanner.common.presenter.BaseView
@@ -46,9 +44,6 @@ class ServiceManager : BaseView<Any?> {
             myService = (binder as LocalBinder?)?.getService()
             myService?.bindView(this@ServiceManager)
             getInstance().onPreparingSyncData(false)
-            if (Utils.isPremium() && !Utils.isAlreadyCheckout()) {
-                getInstance().onCheckout()
-            }
         }
         //binder comes from server to communicate with method's of
         override fun onServiceDisconnected(className: ComponentName?) {
@@ -116,21 +111,12 @@ class ServiceManager : BaseView<Any?> {
 
     /*Sync data*/
     fun onPreparingSyncData(isDismissApp: Boolean) {
-        if (!Utils.isPremium()) {
-            Utils.Log(TAG, "Please upgrade to premium version")
+        if (!Utils.isTurnedOnBackup()) {
             if (isDismissApp) {
                 onDismissServices()
             }
+            Utils.Log(TAG, "Backup status is turn off. Please turn on it don't lose data")
             return
-        }
-        if (Utils.isPremium()) {
-            if (!Utils.isTurnedOnBackup()) {
-                if (isDismissApp) {
-                    onDismissServices()
-                }
-                Utils.Log(TAG, "Backup status is turn off. Please turn on it don't lose data")
-                return
-            }
         }
         if (myService == null) {
             Utils.Log(TAG, "Request service")
@@ -499,19 +485,19 @@ class ServiceManager : BaseView<Any?> {
         Utils.Log(TAG, "Dismiss Service manager")
     }
 
-    fun onCheckout(mCheckout : CheckoutRequest = CheckoutRequest()) = CoroutineScope(Dispatchers.IO).launch {
-        Utils.Log(TAG, "Preparing checkout")
-        Utils.Log(TAG, "Checkout value " + Gson().toJson(mCheckout))
-        val mResult = userViewModel.checkout(mCheckout)
-        when (mResult.status) {
-            Status.SUCCESS -> {
-                Utils.setCheckoutValue(true)
-            }
-            else -> {
-                Utils.Log(TAG, "Error occurred checkout ${mResult.message}")
-            }
-        }
-    }
+//    fun onCheckout(mCheckout : CheckoutRequest = CheckoutRequest()) = CoroutineScope(Dispatchers.IO).launch {
+//        Utils.Log(TAG, "Preparing checkout")
+//        Utils.Log(TAG, "Checkout value " + Gson().toJson(mCheckout))
+//        val mResult = userViewModel.checkout(mCheckout)
+//        when (mResult.status) {
+//            Status.SUCCESS -> {
+//                Utils.setCheckoutValue(true)
+//            }
+//            else -> {
+//                Utils.Log(TAG, "Error occurred checkout ${mResult.message}")
+//            }
+//        }
+//    }
 
     override fun onError(message: String?, status: EnumStatus?) {
         Utils.Log(TAG, "onError response :" + message + " - " + status?.name)
@@ -704,9 +690,9 @@ class ServiceManager : BaseView<Any?> {
         fun onYes()
     }
 
-    fun onCheckout(data : PurchaseData){
-
-    }
+//    fun onCheckout(data : PurchaseData){
+//
+//    }
 
     companion object {
         private val TAG = ServiceManager::class.java.simpleName
