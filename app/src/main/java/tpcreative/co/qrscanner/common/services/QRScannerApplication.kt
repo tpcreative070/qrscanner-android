@@ -328,6 +328,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun isEnableBannerAds() : Boolean {
         return  true
     }
+
+    fun refreshAds(){
+        isRequestAds = true
+        isRequestLargeAds = true
+    }
     companion object {
         @Volatile
         private var mInstance: QRScannerApplication? = null
