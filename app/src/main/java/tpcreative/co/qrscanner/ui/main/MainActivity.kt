@@ -201,6 +201,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
         Utils.onSetCountRating(Utils.onGetCountRating() + 1)
         ServiceManager.getInstance().onPreparingSyncData(true)
+        QRScannerApplication.getInstance().refreshAds()
     }
 
     override fun onBackPressed() {
