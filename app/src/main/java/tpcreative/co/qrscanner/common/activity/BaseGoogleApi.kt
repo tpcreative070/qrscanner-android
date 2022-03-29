@@ -1,7 +1,9 @@
 package tpcreative.co.qrscanner.common.activity
 import android.accounts.Account
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import co.tpcreative.supersafe.common.network.Status
 import com.google.android.gms.auth.GoogleAuthException
 import com.google.android.gms.auth.GoogleAuthUtil
@@ -36,7 +38,29 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
         Utils.Log(TAG, "Sign in")
         val account = Account(email, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE)
         mGoogleSignInClient = QRScannerApplication.getInstance().getGoogleSignInOptions(account)?.let { GoogleSignIn.getClient(this, it) }
-        startActivityForResult(mGoogleSignInClient?.signInIntent, REQUEST_CODE_SIGN_IN)
+        val intent = mGoogleSignInClient?.signInIntent
+        resultLauncher.launch(intent)
+    }
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK) {
+            // Sign-in may fail or be cancelled by the user. For this sample, sign-in is
+            // required and is fatal. For apps where sign-in is optional, handle
+            // appropriately
+            Utils.Log(TAG, "Sign-in failed.")
+            Utils.Log(TAG,"data "+result.data?.dataString)
+            onDriveError()
+            return@registerForActivityResult
+        }
+        val getAccountTask = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        if (getAccountTask.isSuccessful) {
+            Utils.Log(TAG, "sign in successful")
+            onSignedInSuccessful()
+            initializeDriveClient(getAccountTask.result)
+        } else {
+            onDriveError()
+            Utils.Log(TAG, "Sign-in failed..")
+        }
     }
 
     private fun getGoogleSignInClient(account: Account?): GoogleSignInClient? {
@@ -60,34 +84,6 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
                     mAuthor.isConnectedToGoogleDrive = false
                     Utils.setAuthor(mAuthor)
                     onDriveError()
-                }
-            }
-        }
-    }
-
-    /**
-     * Handles resolution callbacks.
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_SIGN_IN -> {
-                if (resultCode != RESULT_OK) {
-                    // Sign-in may fail or be cancelled by the user. For this sample, sign-in is
-                    // required and is fatal. For apps where sign-in is optional, handle
-                    // appropriately
-                    Utils.Log(TAG, "Sign-in failed.")
-                    onDriveError()
-                    return
-                }
-                val getAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data)
-                if (getAccountTask.isSuccessful) {
-                    Utils.Log(TAG, "sign in successful")
-                    onSignedInSuccessful()
-                    initializeDriveClient(getAccountTask.result)
-                } else {
-                    onDriveError()
-                    Utils.Log(TAG, "Sign-in failed..")
                 }
             }
         }
