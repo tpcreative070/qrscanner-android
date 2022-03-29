@@ -42,6 +42,7 @@
             android:layout_height="match_parent">
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scrollView"
+                android:layout_above="@+id/rlAdsRoot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <LinearLayout
@@ -877,25 +878,24 @@
                                 android:layout_height="30dp"/>
                         </RelativeLayout>
                     </LinearLayout>
-
-                    <RelativeLayout
-                        android:background="@color/colorPrimary"
-                        android:id="@+id/rlAdsRoot"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:id="@+id/llAds"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/banner_rectangle_review_height"
-                            android:layout_centerHorizontal="true">
-                        </LinearLayout>
-                    </RelativeLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"
+                android:id="@+id/rlAdsRoot"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/llAds"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/banner_rectangle_review_height"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:orientation="vertical"></LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
