@@ -322,7 +322,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableReviewAds() : Boolean {
-        return true
+        return false
     }
 
     fun isEnableBannerAds() : Boolean {
@@ -330,8 +330,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun refreshAds(){
-        isRequestAds = true
-        isRequestLargeAds = true
+        //isRequestAds = false
+        //isRequestLargeAds = false
     }
     companion object {
         @Volatile
