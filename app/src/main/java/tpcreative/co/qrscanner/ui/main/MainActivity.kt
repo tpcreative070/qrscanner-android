@@ -56,7 +56,9 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     fun onVisitableFragment() {
+        /*No need reload every switched tabs
         showAds()
+         */
     }
 
     fun setupViewPager(viewPager: ViewPager?) {
@@ -175,10 +177,9 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         Utils.Log(TAG, "onResume")
-        if (QRScannerApplication.getInstance().isRequestAds()  && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
-            QRScannerApplication.getInstance().getAdsView(this)
-            Utils.Log(TAG,"Request ads")
-        }
+        /*No need reload
+           showAds()
+        */
     }
 
     override fun onPause() {
