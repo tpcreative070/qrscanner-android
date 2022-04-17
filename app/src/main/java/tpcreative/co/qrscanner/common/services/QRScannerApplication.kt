@@ -180,18 +180,21 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     private fun initAds(){
+        /*
+        Try to open when opening the screen
         if (getInstance().isRequestAds()  && getInstance().isLiveAds() && getInstance().isEnableBannerAds()) {
             getInstance().getAdsView(this)
         }
         if (getInstance().isRequestLargeAds() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
             getInstance().getAdsLargeView(this)
         }
+        */
     }
 
     fun getAdsView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adView = AdView(context)
-        adView?.adSize = AdSize.SMART_BANNER
+        adView?.adSize = AdSize.BANNER
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
                 Utils.Log(TAG, "show ads isDebug...")
@@ -212,7 +215,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             override fun onAdFailedToLoad(loadAdError: LoadAdError?) {
                 super.onAdFailedToLoad(loadAdError)
                 isRequestAds = true
-                Utils.Log(TAG, "Ads failed")
+                Utils.Log(TAG, "Ads failed ${loadAdError?.message}")
             }
 
             override fun onAdOpened() {
