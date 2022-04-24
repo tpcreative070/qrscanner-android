@@ -53,6 +53,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUI()
+        newWaysLoadingGoogleAdmod()
     }
 
     fun onVisitableFragment() {
@@ -177,12 +178,14 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         Utils.Log(TAG, "onResume")
+        ad_view.resume()
         /*No need reload
            showAds()
         */
     }
 
     override fun onPause() {
+        ad_view.pause()
         super.onPause()
         Utils.Log(TAG, "onPause")
     }
@@ -193,6 +196,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     override fun onDestroy() {
+        ad_view.destroy()
         super.onDestroy()
         Utils.Log(TAG, "Destroy")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -224,12 +228,12 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     fun doShowAds(value: Boolean) {
-        if (value) {
-            QRScannerApplication.getInstance().loadAd(llAdsSub)
-        } else {
-            Utils.Log(TAG, "loading ads...3")
-            llAdsSub.visibility = View.GONE
-        }
+//        if (value) {
+//            QRScannerApplication.getInstance().loadAd(llAdsSub)
+//        } else {
+//            Utils.Log(TAG, "loading ads...3")
+//            llAdsSub.visibility = View.GONE
+//        }
     }
 
     companion object {
