@@ -44,14 +44,15 @@
         android:id="@+id/llAds"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:orientation="vertical"
-            android:gravity="center_vertical|center"
-            android:id="@+id/llAdsSub"
+        android:layout_height="@dimen/banner_height">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/banner_height"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner_footer"/>
     </LinearLayout>
 </RelativeLayout>
