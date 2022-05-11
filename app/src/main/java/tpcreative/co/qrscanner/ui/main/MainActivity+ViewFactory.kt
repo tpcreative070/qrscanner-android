@@ -17,6 +17,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.CustomViewPager
 import tpcreative.co.qrscanner.model.Theme
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
+import java.util.*
 
 fun MainActivity.initUI(){
     TAG = this::class.java.simpleName
