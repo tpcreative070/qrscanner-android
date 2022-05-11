@@ -66,7 +66,6 @@ fun MainActivity.initUI(){
         Utils.Log(TAG, "rating.......")
         Utils.onSetCountRating(0)
     }
-    showAds()
 }
 
 private fun MainActivity.setupViewModel() {
@@ -74,12 +73,6 @@ private fun MainActivity.setupViewModel() {
             this,
             ViewModelFactory()
     ).get(MainViewModel::class.java)
-}
-
-fun MainActivity.showAds(){
-//    viewModel.doShowAds().observe(this, Observer {
-//        doShowAds(it)
-//    })
 }
 
 fun MainActivity.newWaysLoadingGoogleAdmod(){
