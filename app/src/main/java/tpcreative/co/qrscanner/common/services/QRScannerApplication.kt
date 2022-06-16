@@ -85,7 +85,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         requiredScopesString?.add(DriveScopes.DRIVE_APPDATA)
         requiredScopesString?.add(DriveScopes.DRIVE_FILE)
         EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
-        initAds()
     }
 
     fun getGoogleSignInOptions(account: Account?): GoogleSignInOptions? {
@@ -179,19 +178,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return storage
     }
 
-    private fun initAds(){
-        if (getInstance().isRequestAds()  && getInstance().isLiveAds() && getInstance().isEnableBannerAds()) {
-            getInstance().getAdsView(this)
-        }
-        if (getInstance().isRequestLargeAds() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
-            getInstance().getAdsLargeView(this)
-        }
-    }
-
     fun getAdsView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
-        adView = AdView(context)
-        adView?.adSize = AdSize.SMART_BANNER
+         adView = AdView(context)
+        adView?.adSize = AdSize.BANNER
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
                 Utils.Log(TAG, "show ads isDebug...")

@@ -175,10 +175,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         Utils.Log(TAG, "onResume")
-        if (QRScannerApplication.getInstance().isRequestAds()  && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
-            QRScannerApplication.getInstance().getAdsView(this)
-            Utils.Log(TAG,"Request ads")
-        }
     }
 
     override fun onPause() {
