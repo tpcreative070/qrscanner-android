@@ -6,6 +6,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EmptyModel
 
 class MainViewModel : BaseViewModel<EmptyModel>() {
+    var isPremium = false
     fun doShowAds()  = liveData(Dispatchers.Main){
         if (QRScannerApplication.getInstance().isLiveAds()) {
             emit(true)

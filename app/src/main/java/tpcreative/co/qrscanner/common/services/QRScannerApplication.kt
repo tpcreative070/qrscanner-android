@@ -85,7 +85,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         requiredScopesString?.add(DriveScopes.DRIVE_APPDATA)
         requiredScopesString?.add(DriveScopes.DRIVE_FILE)
         EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
-        initAds()
     }
 
     fun getGoogleSignInOptions(account: Account?): GoogleSignInOptions? {
@@ -179,21 +178,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return storage
     }
 
-    private fun initAds(){
-        /*
-        Try to open when opening the screen
-        if (getInstance().isRequestAds()  && getInstance().isLiveAds() && getInstance().isEnableBannerAds()) {
-            getInstance().getAdsView(this)
-        }
-        if (getInstance().isRequestLargeAds() && getInstance().isLiveAds() && getInstance().isEnableReviewAds()) {
-            getInstance().getAdsLargeView(this)
-        }
-        */
-    }
-
     fun getAdsView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
-        adView = AdView(context)
+         adView = AdView(context)
         adView?.adSize = AdSize.BANNER
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
@@ -215,7 +202,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             override fun onAdFailedToLoad(loadAdError: LoadAdError?) {
                 super.onAdFailedToLoad(loadAdError)
                 isRequestAds = true
-                Utils.Log(TAG, "Ads failed ${loadAdError?.message}")
+                Utils.Log(TAG, "Ads failed")
             }
 
             override fun onAdOpened() {

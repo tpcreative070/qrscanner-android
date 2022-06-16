@@ -170,6 +170,11 @@
     <string name="tv_life_time">Lifetime</string>
     <string name="your_complimentary_premium_remaining">You have %1$s more days of complimentary Premium remaining. Upgrade now to keep using Premium without interruption.</string>
 
+    <string name="admob_app_id">ca-app-pub-7019113255489690~9657466810</string>
+    <string name="banner_footer">ca-app-pub-7019113255489690/9391156707</string>
+    <string name="banner_review">ca-app-pub-7019113255489690/2825748351</string>
+    <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="key_admob_app_id">admob_app_id</string>
     <string name="key_banner_home_footer">banner_home_footer</string>
     <string name="key_banner_review">banner_review</string>
