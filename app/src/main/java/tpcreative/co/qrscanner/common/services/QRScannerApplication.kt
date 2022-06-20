@@ -226,7 +226,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun getAdsLargeView(context: Context?): AdView? {
         Utils.Log(TAG, "show ads...")
         adLargeView = AdView(context)
-        adLargeView?.adSize = AdSize.MEDIUM_RECTANGLE
+        adLargeView?.adSize = AdSize.BANNER
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
                 Utils.Log(TAG, "show ads isDebug...")
@@ -312,7 +312,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableReviewAds() : Boolean {
-        return false
+        return true
     }
 
     fun isEnableBannerAds() : Boolean {
