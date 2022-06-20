@@ -881,21 +881,19 @@
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
             <RelativeLayout
-                android:visibility="gone"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"
                 android:id="@+id/rlAdsRoot"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:id="@+id/llAds"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/banner_rectangle_review_height"
-                    android:layout_centerHorizontal="true"
+                    android:layout_height="@dimen/banner_height"
                     android:gravity="center"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical"/>
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
