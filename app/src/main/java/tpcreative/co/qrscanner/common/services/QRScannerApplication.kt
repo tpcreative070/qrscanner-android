@@ -316,7 +316,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableBannerAds() : Boolean {
-        return  true
+        return  false
     }
 
     fun refreshAds(){
