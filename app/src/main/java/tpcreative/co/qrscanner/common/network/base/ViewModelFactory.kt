@@ -1,11 +1,12 @@
 package tpcreative.co.qrscanner.common.network.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import tpcreative.co.qrscanner.viewmodel.*
 import java.lang.IllegalArgumentException
 
 class ViewModelFactory() : ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SettingViewModel::class.java)){
             return SettingViewModel() as T
         }

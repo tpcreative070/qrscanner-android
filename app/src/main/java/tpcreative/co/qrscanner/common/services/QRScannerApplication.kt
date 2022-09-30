@@ -178,10 +178,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return storage
     }
 
-    fun getAdsView(context: Context?): AdView? {
+    fun getAdsView(context: Context): AdView? {
         Utils.Log(TAG, "show ads...")
          adView = AdView(context)
-        adView?.adSize = AdSize.BANNER
+        adView?.setAdSize(AdSize.BANNER)
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
                 Utils.Log(TAG, "show ads isDebug...")
@@ -199,7 +199,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 Utils.Log(TAG, "Ads successful")
             }
 
-            override fun onAdFailedToLoad(loadAdError: LoadAdError?) {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
                 isRequestAds = true
                 Utils.Log(TAG, "Ads failed")
@@ -223,10 +223,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return adView
     }
 
-    fun getAdsLargeView(context: Context?): AdView? {
+    fun getAdsLargeView(context: Context): AdView? {
         Utils.Log(TAG, "show ads...")
         adLargeView = AdView(context)
-        adLargeView?.adSize = AdSize.BANNER
+        adLargeView?.setAdSize(AdSize.BANNER)
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
                 Utils.Log(TAG, "show ads isDebug...")
@@ -244,7 +244,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 Utils.Log(TAG, "Ads successful")
             }
 
-            override fun onAdFailedToLoad(loadAdError: LoadAdError?) {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
                 isRequestLargeAds = true
                 Utils.Log(TAG, "Ads failed")
