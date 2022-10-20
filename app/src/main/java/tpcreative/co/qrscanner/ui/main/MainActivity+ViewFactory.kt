@@ -54,8 +54,13 @@ fun MainActivity.initUI(){
         onAddPermissionCamera()
     }
     if (QRScannerApplication.getInstance().isRequestAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
-        QRScannerApplication.getInstance().getAdsView(this)
+        QRScannerApplication.getInstance().requestAdsView(this)
     }
+
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
+        QRScannerApplication.getInstance().requestInterstitialAd()
+    }
+
     val mCountRating = Utils.onGetCountRating()
     if (mCountRating > 3) {
         showEncourage()

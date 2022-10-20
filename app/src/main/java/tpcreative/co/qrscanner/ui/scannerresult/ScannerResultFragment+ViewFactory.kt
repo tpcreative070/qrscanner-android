@@ -1,7 +1,11 @@
 package tpcreative.co.qrscanner.ui.scannerresult
+import android.os.Build
 import android.text.InputType
 import android.widget.EditText
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,8 +42,24 @@ fun ScannerResultFragment.initUI(){
     setupViewModel()
     getDataIntent()
     if (QRScannerApplication.getInstance().isRequestLargeAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAds()) {
-        QRScannerApplication.getInstance().getAdsLargeView(this)
+        QRScannerApplication.getInstance().requestAdsLargeView(this)
     }
+    if (Build.VERSION.SDK_INT >= 33) {
+        onBackInvokedDispatcher.registerOnBackInvokedCallback(
+            OnBackInvokedDispatcher.PRIORITY_DEFAULT
+        ) {
+           showAds()
+        }
+    } else {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showAds()
+                }
+            })
+    }
+
     btnTakeNote.setOnClickListener {
         enterTakeNote()
         Utils.Log(TAG,"action take note")
@@ -52,6 +72,17 @@ fun ScannerResultFragment.initUI(){
     checkingShowAds()
 }
 
+
+fun ScannerResultFragment.showAds(){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
+        // Back is pressed... Finishing the activity
+        finish()
+        Utils.Log(TAG,"333")
+    }else{
+        QRScannerApplication.getInstance().loadInterstitialAd(this)
+        Utils.Log(TAG,"444")
+    }
+}
 fun ScannerResultFragment.initRecycleView() {
     adapter = ScannerResultAdapter(layoutInflater, this, this)
     val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
