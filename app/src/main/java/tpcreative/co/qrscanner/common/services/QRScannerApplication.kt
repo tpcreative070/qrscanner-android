@@ -11,9 +11,12 @@ import android.os.Environment
 import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
@@ -42,6 +45,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var activity: MainActivity? = null
     private var adView: AdView? = null
     private var adLargeView: AdView? = null
+    private var mInterstitialAd: InterstitialAd? = null
     private var isRequestAds = true
     private var isRequestLargeAds = true
     private var isRequestAudienceAds = true
@@ -178,7 +182,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return storage
     }
 
-    fun getAdsView(context: Context): AdView? {
+    fun requestAdsView(context: Context){
         Utils.Log(TAG, "show ads...")
          adView = AdView(context)
         adView?.setAdSize(AdSize.BANNER)
@@ -220,10 +224,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             }
         }
         adView?.loadAd(adRequest)
-        return adView
     }
 
-    fun getAdsLargeView(context: Context): AdView? {
+    fun requestAdsLargeView(context: Context){
         Utils.Log(TAG, "show ads...")
         adLargeView = AdView(context)
         adLargeView?.setAdSize(AdSize.BANNER)
@@ -265,7 +268,59 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             }
         }
         adLargeView?.loadAd(adRequest)
-        return adLargeView
+    }
+
+    fun requestInterstitialAd(){
+        Utils.Log(TAG, "Interstitial requesting...")
+        val adRequest = AdRequest.Builder().build()
+        var id = ""
+        id = if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                getString(R.string.interstitial_test)
+            } else {
+                getString(R.string.interstitial)
+            }
+        } else {
+            getString(R.string.interstitial_test)
+        }
+        InterstitialAd.load(this,id, adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mInterstitialAd = null
+                Utils.Log(TAG, "Interstitial was failed")
+            }
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                mInterstitialAd = interstitialAd
+                Utils.Log(TAG, "Interstitial was loaded")
+            }
+        })
+    }
+
+    fun loadInterstitialAd(context: AppCompatActivity){
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
+                object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        Utils.Log(TAG, "Ad was dismissed.")
+                        // Don't forget to set the ad reference to null so you
+                        // don't show the ad a second time.
+                        mInterstitialAd = null
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                        Utils.Log(TAG, "Ad failed to show.")
+                        // Don't forget to set the ad reference to null so you
+                        // don't show the ad a second time.
+                        mInterstitialAd = null
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        Utils.Log(TAG, "Ad showed fullscreen content.")
+                        // Called when ad is dismissed.
+                    }
+                }
+            mInterstitialAd?.show(context)
+        }
     }
 
     fun loadAd(layAd: LinearLayout?) {
@@ -300,6 +355,13 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return isRequestLargeAds
     }
 
+    fun isRequestInterstitialAd() : Boolean {
+        if (mInterstitialAd!=null){
+            return false
+        }
+        return true
+    }
+
     fun isLiveMigration(): Boolean {
         if (!DEBUG){
             return true
@@ -317,6 +379,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun isEnableBannerAds() : Boolean {
         return  false
+    }
+
+    fun isEnableInterstitialAd() : Boolean {
+        return  true
     }
 
     fun refreshAds(){

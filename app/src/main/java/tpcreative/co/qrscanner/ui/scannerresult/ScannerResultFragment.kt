@@ -68,6 +68,10 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> {
+                showAds()
+                return true
+            }
             R.id.menu_item_report -> {
                 try {
                     val to = "care@tpcreative.me"
