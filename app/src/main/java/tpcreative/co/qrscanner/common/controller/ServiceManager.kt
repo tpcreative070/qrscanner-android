@@ -144,7 +144,7 @@ class ServiceManager : BaseView<Any?> {
         }
         Utils.Log(TAG, "Starting sync data")
         isDismiss = isDismissApp
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             getItemList()
         }
     }
@@ -243,64 +243,9 @@ class ServiceManager : BaseView<Any?> {
         }
     }
 
-//    private fun onGetItemList() {
-//        isSyncingData = true
-//        Utils.Log(TAG, "isSyncingData 188 $isSyncingData")
-//        myService?.getFileListInApp(object : BaseListener<DriveResponse> {
-//            override fun onShowListObjects(list: MutableList<DriveResponse>) {
-//                Utils.Log(TAG, "Response data " + Gson().toJson(list))
-//                mDriveIdList.clear()
-//                mDriveIdList.addAll(list)
-//                if (mDriveIdList.size > 0) {
-//                    val mData = mDriveIdList.get(0)
-//                    onPreparingDownloadItemData(mData.id)
-//                } else {
-//                    onPreparingUploadItemData()
-//                }
-//            }
-//            override fun onShowObjects(`object`: DriveResponse?) {}
-//            override fun onError(message: String?, status: EnumStatus?) {
-//                isSyncingData = false
-//                Utils.Log(TAG, "isSyncingData 207 $isSyncingData")
-//                Utils.Log(TAG, "response error $message")
-//                when (status) {
-//                    EnumStatus.REQUEST_REFRESH_ACCESS_TOKEN -> RefreshTokenSingleton.getInstance().onStart<ServiceManager?>(ServiceManager::class.java)
-//                    else -> {
-//                    }
-//                }
-//            }
-//            override fun onSuccessful(message: String?, status: EnumStatus?) {}
-//        })
-//    }
-
     fun updatedDriveAccessToken() = CoroutineScope(Dispatchers.IO).launch {
         RefreshTokenSingleton.getInstance()?.onStart(ServiceManager::class.java)
     }
-
-//    /*onPreparingDownload*/
-//    private fun onPreparingDownloadItemData(id: String?) {
-//        myService?.onDownloadFile(id, object : BaseListener<SyncDataModel> {
-//            override fun onShowListObjects(list: MutableList<SyncDataModel>) {
-//                Utils.Log(TAG, Gson().toJson(list))
-//            }
-//
-//            override fun onShowObjects(`object`: SyncDataModel?) {
-//                Utils.Log(TAG, Gson().toJson(`object`))
-//                onCheckingDataToSyncToLocalDB(`object`)
-//            }
-//
-//            override fun onError(message: String?, status: EnumStatus?) {
-//                Utils.Log(TAG, message)
-//                isSyncingData = false
-//                Utils.Log(TAG, "isSyncingData 401 $isSyncingData")
-//            }
-//
-//            override fun onSuccessful(message: String?, status: EnumStatus?) {
-//                Utils.Log(TAG, message)
-//            }
-//        })
-//    }
-
     /*Checking data to insert to local db*/
     private suspend fun onCheckingDataToSyncToLocalDB(mObject: SyncDataModel?) = withContext(Dispatchers.IO) {
         val mSaveList = mObject?.saveList ?: mutableListOf()
@@ -377,103 +322,6 @@ class ServiceManager : BaseView<Any?> {
     }
     }
 
-    /*onPreparingDownload*/
-//    private fun onPreparingDeleteItemData() {
-//        if (mDriveIdList.size > 0) {
-//            mMapDelete.clear()
-//            mMapDelete = Utils.mergeListToHashMap(mDriveIdList)
-//            val id = Utils.getIndexOfHashMap(mMapDelete)
-//            if (id != null) {
-//                Utils.Log(TAG, "onPreparingDeleteItemData total: " + mMapDelete.size)
-//                onDeleteItemData(id)
-//            }
-//        } else {
-//            if (isDismiss) {
-//                onDismissServices()
-//            }
-//            isSyncingData = false
-//            Utils.Log(TAG, "isSyncingData 363 $isSyncingData")
-//            Utils.Log(TAG, "Not found data to delete")
-//        }
-//    }
-
-//    private fun onDeleteItemData(id: String?) {
-//        myService.onDeleteCloudItems(id, object : BaseListener<Any?> {
-//            override fun onShowListObjects(list: MutableList<*>?) {}
-//            override fun onShowObjects(`object`: Any?) {}
-//            override fun onError(message: String?, status: EnumStatus?) {
-//                Utils.Log(TAG, "$message: $id")
-//                if (status == EnumStatus.DELETING_NOT_FOUND_ID) {
-//                    if (Utils.deletedIndexOfHashMap(id, mMapDelete)) {
-//                        val id = Utils.getIndexOfHashMap(mMapDelete)
-//                        if (id != null) {
-//                            onDeleteItemData(id)
-//                        } else {
-//                            Utils.Log(TAG, "Deleted item completely")
-//                            onPreparingUploadItemData()
-//                        }
-//                    }
-//                }
-//            }
-//
-//            override fun onSuccessful(message: String?, status: EnumStatus?) {
-//                Utils.Log(TAG, "$message: $id")
-//                if (status == EnumStatus.DELETED_SUCCESSFULLY) {
-//                    if (Utils.deletedIndexOfHashMap(id, mMapDelete)) {
-//                        val id = Utils.getIndexOfHashMap(mMapDelete)
-//                        if (id != null) {
-//                            onDeleteItemData(id)
-//                        } else {
-//                            Utils.Log(TAG, "Deleted item completely")
-//                            onPreparingUploadItemData()
-//                        }
-//                    }
-//                }
-//            }
-//        })
-//    }
-
-    /*onPreparingDownload*/
-//    private fun onPreparingUploadItemData() {
-//        myService.onUploadFileInAppFolder(object : BaseListener<Any?> {
-//            override fun onShowListObjects(list: MutableList<*>?) {}
-//            override fun onShowObjects(`object`: Any?) {}
-//            override fun onError(message: String?, status: EnumStatus?) {
-//                Utils.Log(TAG, message)
-//                if (isDismiss) {
-//                    onDismissServices()
-//                }
-//                isSyncingData = false
-//                Utils.Log(TAG, "isSyncingData 431 $isSyncingData")
-//            }
-//
-//            override fun onSuccessful(message: String?, status: EnumStatus?) {
-//                Utils.Log(TAG, message)
-//                if (status == EnumStatus.UPLOADED_SUCCESSFULLYY) {
-//                    onUpdatedHistoryAndSaveToSyncedItem()
-//                }
-//            }
-//        })
-//    }
-
-    /*User info*/
-    fun onAuthorSync() {
-//        if (myService != null) {
-//            myService.onSyncAuthor()
-//        } else {
-//            Utils.Log(TAG, "My services is null")
-//        }
-    }
-
-    /*Author info*/
-    fun onCheckVersion() {
-//        if (myService != null) {
-//            myService.onCheckVersion()
-//        } else {
-//            Utils.Log(TAG, "My services is null")
-//        }
-    }
-
     fun onDismissServices() {
         onStopService()
         if (myService != null) {
@@ -484,20 +332,6 @@ class ServiceManager : BaseView<Any?> {
         driveViewModel.deleteTemporaryFiles()
         Utils.Log(TAG, "Dismiss Service manager")
     }
-
-//    fun onCheckout(mCheckout : CheckoutRequest = CheckoutRequest()) = CoroutineScope(Dispatchers.IO).launch {
-//        Utils.Log(TAG, "Preparing checkout")
-//        Utils.Log(TAG, "Checkout value " + Gson().toJson(mCheckout))
-//        val mResult = userViewModel.checkout(mCheckout)
-//        when (mResult.status) {
-//            Status.SUCCESS -> {
-//                Utils.setCheckoutValue(true)
-//            }
-//            else -> {
-//                Utils.Log(TAG, "Error occurred checkout ${mResult.message}")
-//            }
-//        }
-//    }
 
     override fun onError(message: String?, status: EnumStatus?) {
         Utils.Log(TAG, "onError response :" + message + " - " + status?.name)
@@ -689,10 +523,6 @@ class ServiceManager : BaseView<Any?> {
     interface ServiceManagerClickedItemsListener {
         fun onYes()
     }
-
-//    fun onCheckout(data : PurchaseData){
-//
-//    }
 
     companion object {
         private val TAG = ServiceManager::class.java.simpleName
