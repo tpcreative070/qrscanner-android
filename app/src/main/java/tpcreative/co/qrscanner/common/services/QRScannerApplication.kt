@@ -48,7 +48,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var mInterstitialAd: InterstitialAd? = null
     private var isRequestAds = true
     private var isRequestLargeAds = true
-    private var isRequestAudienceAds = true
     private var options: GoogleSignInOptions.Builder? = null
     private var requiredScopes: MutableSet<Scope>? = null
     private var requiredScopesString: MutableList<String>? = null
@@ -227,7 +226,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun requestAdsLargeView(context: Context){
-        Utils.Log(TAG, "show ads...")
+        Utils.Log(TAG, "show  large view ads...")
         adLargeView = AdView(context)
         adLargeView?.setAdSize(AdSize.BANNER)
         if (Utils.isFreeRelease()) {
@@ -386,8 +385,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun refreshAds(){
-        //isRequestAds = false
-        //isRequestLargeAds = false
+        isRequestAds = true
+        isRequestLargeAds = true
     }
     companion object {
         @Volatile

@@ -92,11 +92,14 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
         return withContext(Dispatchers.IO){
             try {
                 val mResultDriveAbout = driveService.getDriveAbout()
+                Utils.Log(TAG,"getDriveAbout")
                 when(mResultDriveAbout.status){
                     Status.SUCCESS -> {
+                        Utils.Log(TAG,"getDriveAbout is successful")
                         Resource.success(true)
                     }
                     else -> {
+                        Utils.Log(TAG,"getDriveAbout is failed")
                         Utils.Log(TAG,mResultDriveAbout.message)
                         Resource.error(mResultDriveAbout.code ?: Utils.CODE_EXCEPTION,mResultDriveAbout.message ?:"",null)
                     }
