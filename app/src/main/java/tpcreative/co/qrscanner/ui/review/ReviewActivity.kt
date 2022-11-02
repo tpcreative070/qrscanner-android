@@ -38,7 +38,6 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
     private var bitmap: Bitmap? = null
     private var code: String? = null
     private var save: SaveModel = SaveModel()
-    private var isComplete = false
     var adapter: ScannerResultAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +81,6 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
 
     override fun onStop() {
         super.onStop()
-        if (isComplete) {
-            GenerateSingleton.getInstance()?.onCompletedGenerate()
-        }
     }
 
     fun setView() {
@@ -292,7 +288,6 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
 
     override fun onSaved(path: String?, enumAction: EnumAction?) {
         Utils.Log(TAG, "Saved successful")
-        isComplete = true
         when (enumAction) {
             EnumAction.SAVE -> {
                 /*Adding new columns*/
@@ -340,6 +335,7 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                 Utils.Log(TAG, "Other case")
             }
         }
+        GenerateSingleton.getInstance()?.onCompletedGenerate()
     }
 
     private fun onPhotoPrint(path: String?) {

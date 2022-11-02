@@ -379,9 +379,10 @@ class SettingsFragment : BaseFragment() {
                     }
                 }
             })
-            myPreferenceSuperSafe?.isVisible = true
+            myPreferenceSuperSafe?.isVisible = false
 
-            /*SuperSafe*/myPreferenceSaveYourVoicemails = findPreference(getString(R.string.key_save_your_voicemails)) as MyPreference?
+            /*SuperSafe*/
+            myPreferenceSaveYourVoicemails = findPreference(getString(R.string.key_save_your_voicemails)) as MyPreference?
             myPreferenceSaveYourVoicemails?.onPreferenceClickListener = createActionPreferenceClickListener()
             myPreferenceSaveYourVoicemails?.onPreferenceChangeListener = createChangeListener()
             myPreferenceSaveYourVoicemails?.setListener(object : MyPreference.MyPreferenceListener {
@@ -397,7 +398,7 @@ class SettingsFragment : BaseFragment() {
             })
             myPreferenceSaveYourVoicemails?.isVisible = false
 
-            myPreferenceCategoryFamilyApps?.isVisible = true
+            myPreferenceCategoryFamilyApps?.isVisible = false
 
         }
 
