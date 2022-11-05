@@ -60,9 +60,10 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <intent-filter
+                android:label="@string/scan_photo">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -72,7 +73,15 @@
         </activity>
         <activity
             android:name=".ui.review.ReviewActivity"
-            android:label="@string/review" />
+            android:label="@string/review"
+            android:exported="true">
+            <intent-filter
+                android:label="@string/view_code">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".common.services.QRScannerReceiver"

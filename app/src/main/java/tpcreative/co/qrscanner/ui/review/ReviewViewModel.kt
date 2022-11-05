@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.review
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.liveData
@@ -18,16 +19,20 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     var create: CreateModel = CreateModel()
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
         val bundle: Bundle? = activity?.intent?.extras
-        val data = if (Build.VERSION.SDK_INT >= 33) {
-            activity?.intent?.getParcelableExtra(QRScannerApplication.getInstance().getString(R.string.key_data), CreateModel::class.java)
-        } else {
-            bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_data)) as CreateModel
+        val action = activity?.intent?.action
+        if (action != Intent.ACTION_SEND){
+            Utils.Log(TAG,"type $bundle")
+            val data = if (Build.VERSION.SDK_INT >= 33) {
+                activity?.intent?.getParcelableExtra(QRScannerApplication.getInstance().getString(R.string.key_data), CreateModel::class.java)
+            } else {
+                bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_data)) as CreateModel
+            }
+            if (data != null) {
+                create = data
+                Utils.Log(TAG,Gson().toJson(create))
+                emit(true)
+            }
         }
-        if (data != null) {
-            create = data
-        }
-        Utils.Log(TAG,Gson().toJson(create))
-        emit(true)
     }
 
     fun getTakeNote(id : Int?) : String? {

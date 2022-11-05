@@ -1,14 +1,17 @@
 package tpcreative.co.qrscanner.ui.scanner
-import android.Manifest
+
 import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
-import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
 import android.view.animation.Animation
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -19,11 +22,6 @@ import com.google.zxing.client.result.*
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +38,7 @@ import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
+
 
 class ScannerFragment : BaseFragment(), SingletonScannerListener{
     lateinit var viewModel : ScannerViewModel
@@ -251,11 +250,11 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         typeCamera = if (Utils.checkCameraBack(context)) {
-            cameraSettings.requestedCameraId = Camera.CameraInfo.CAMERA_FACING_BACK
+            cameraSettings.requestedCameraId = Constant.CAMERA_FACING_BACK
             0
         } else {
             if (Utils.checkCameraFront(context)) {
-                cameraSettings.requestedCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT
+                cameraSettings.requestedCameraId = Constant.CAMERA_FACING_FRONT
                 1
             } else {
                 2
@@ -340,7 +339,17 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     override fun onResume() {
         super.onResume()
+         if (zxing_barcode_scanner != null && !zxing_barcode_scanner.isActivated) {
+             zxing_barcode_scanner.resume()
+         }
         Utils.Log(TAG, "onResume")
+    }
+
+    val scanForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            setVisible()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -350,8 +359,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             setVisible()
             Utils.Log(TAG, "Resume camera")
         } else if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_PICK")
             beginCrop(data?.data)
         } else if (requestCode == Crop.REQUEST_CROP) {
+            Utils.Log(TAG, "REQUEST_CROP")
             handleCrop(resultCode, data)
         } else {
             Utils.Log(TAG, "You haven't picked Image")

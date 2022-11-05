@@ -48,18 +48,38 @@
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:orientation="vertical">
-                    <RelativeLayout
-                        android:id="@+id/rlResult"
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_gravity="center"
+                        android:id="@+id/imgResult"
+                        android:layout_width="@dimen/icon_size_250"
+                        android:layout_height="@dimen/icon_size_250"
+                        android:layout_marginTop="20dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_margin="@dimen/margin_20"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textSize="@dimen/text_size_17"
+                        style="@style/brandonRedBoldTextView"
+                        android:id="@+id/txtSubject"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/imgResult"
-                            android:layout_width="@dimen/icon_size_250"
-                            android:layout_height="@dimen/icon_size_250"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerInParent="true"
-                            android:layout_marginTop="20dp" />
-                    </RelativeLayout>
+                        android:layout_height="wrap_content"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginTop="@dimen/margin_10"
+                        style="@style/brandonRegularTextView"
+                        android:id="@+id/txtDisplay"
+                        android:inputType="textMultiLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginTop="@dimen/margin_10"
+                        style="@style/brandonRegularTextView"
+                        android:id="@+id/txtFormat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

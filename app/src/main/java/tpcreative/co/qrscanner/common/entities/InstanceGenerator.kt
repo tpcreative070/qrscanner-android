@@ -181,6 +181,18 @@ abstract class InstanceGenerator : RoomDatabase() {
         return null
     }
 
+    fun getItemByUUId(uuId: String?): HistoryEntityModel? {
+        try {
+            val mResult = instance?.historyDao()?.loadUUId(uuId)
+            if (mResult != null) {
+                return HistoryEntityModel(mResult)
+            }
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
+
     fun getItemBySave(contentUnique: String?): SaveEntityModel? {
         try {
             val mResult = instance?.saveDao()?.loadItem(contentUnique)

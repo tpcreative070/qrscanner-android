@@ -138,6 +138,16 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
         return !type.isNullOrEmpty()
     }
 
+    fun updateId(uuId : String?){
+        if (result?.id == 0){
+            val mModel = SQLiteHelper.getItemByUUIdOfHistory(uuId)
+            result?.fragmentType = EnumFragmentType.HISTORY
+            result?.noted = ""
+            takeNoted = ""
+            result?.id = mModel?.id ?: 0
+        }
+    }
+
     init {
         result = CreateModel()
     }

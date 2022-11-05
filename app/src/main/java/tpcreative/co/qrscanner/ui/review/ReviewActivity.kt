@@ -19,8 +19,10 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_review.*
+import kotlinx.android.synthetic.main.activity_review.view.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.GenerateSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
@@ -34,7 +36,9 @@ class ReviewActivity : BaseActivitySlide() {
     lateinit var viewModel : ReviewViewModel
     private var create: CreateModel? = null
     var bitmap: Bitmap? = null
-    private var code: String? = null
+    var code: String? = null
+    var type : String? = null
+    var format : String? = null
     private var save: SaveModel = SaveModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,9 +68,11 @@ class ReviewActivity : BaseActivitySlide() {
 
     fun setView() {
         create = viewModel.create
+        format = viewModel.create.barcodeFormat
         when (create?.createType) {
             ParsedResultType.ADDRESSBOOK -> {
                 code = "MECARD:N:" + create?.fullName + ";TEL:" + create?.phone + ";EMAIL:" + create?.email + ";ADR:" + create?.address + ";"
+                type = Constant.addressBook
                 save = SaveModel()
                 save.fullName = create?.fullName
                 save.phone = create?.phone
@@ -76,6 +82,7 @@ class ReviewActivity : BaseActivitySlide() {
             }
             ParsedResultType.EMAIL_ADDRESS -> {
                 code = "MATMSG:TO:" + create?.email + ";SUB:" + create?.subject + ";BODY:" + create?.message + ";"
+                type = Constant.email
                 save = SaveModel()
                 save.email = create?.email
                 save.subject = create?.subject
@@ -84,6 +91,7 @@ class ReviewActivity : BaseActivitySlide() {
             }
             ParsedResultType.PRODUCT -> {
                 code = create?.productId
+                type = Constant.barCode
                 save = SaveModel()
                 save.text = create?.productId
                 save.createType = create?.createType?.name
@@ -91,12 +99,14 @@ class ReviewActivity : BaseActivitySlide() {
             }
             ParsedResultType.URI -> {
                 code = create?.url
+                type = Constant.webSite
                 save = SaveModel()
                 save.url = create?.url
                 save.createType = create?.createType?.name
             }
             ParsedResultType.WIFI -> {
                 code = "WIFI:S:" + create?.ssId + ";T:" + create?.networkEncryption + ";P:" + create?.password + ";H:" + create?.hidden + ";"
+                type = Constant.wifi
                 save = SaveModel()
                 save.ssId = create?.ssId
                 save.password = create?.password
@@ -107,6 +117,7 @@ class ReviewActivity : BaseActivitySlide() {
             }
             ParsedResultType.GEO -> {
                 code = "geo:" + create?.lat + "," + create?.lon + "?q=" + create?.query + ""
+                type = Constant.location
                 save = SaveModel()
                 save.lat = create?.lat
                 save.lon = create?.lon
@@ -115,12 +126,14 @@ class ReviewActivity : BaseActivitySlide() {
             }
             ParsedResultType.TEL -> {
                 code = "tel:" + create?.phone + ""
+                type = Constant.phoneNumber
                 save = SaveModel()
                 save.phone = create?.phone
                 save.createType = create?.createType?.name
             }
             ParsedResultType.SMS -> {
                 code = "smsto:" + create?.phone + ":" + create?.message
+                type = Constant.sms
                 save = SaveModel()
                 save.phone = create?.phone
                 save.message = create?.message
@@ -151,16 +164,21 @@ class ReviewActivity : BaseActivitySlide() {
                 save.description = create?.description
                 save.createType = create?.createType?.name
                 code = builder.toString()
+                type = Constant.calendar
             }
             ParsedResultType.ISBN -> {
             }
             else -> {
                 code = create?.text
+                type = Constant.text
                 save = SaveModel()
                 save.text = create?.text
                 save.createType = create?.createType?.name
             }
         }
+        txtSubject.text = type
+        txtDisplay.text = code
+        txtFormat.text = format
         onGenerateReview(code)
     }
 
@@ -211,7 +229,7 @@ class ReviewActivity : BaseActivitySlide() {
         GenerateSingleton.getInstance()?.onCompletedGenerate()
     }
 
-    private fun onGenerateReview(code: String?) {
+    fun onGenerateReview(code: String?) {
         try {
             val barcodeEncoder = BarcodeEncoder()
             val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)

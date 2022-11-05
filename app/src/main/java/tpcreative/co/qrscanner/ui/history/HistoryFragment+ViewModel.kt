@@ -18,7 +18,7 @@ import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 
 fun HistoryFragment.initUI(){
     setupViewModel()
-    HistorySingleton.Companion.getInstance()?.setListener(this)
+    HistorySingleton.getInstance()?.setListener(this)
     viewModel.getListGroup()
     addRecyclerHeaders()
     bindData()

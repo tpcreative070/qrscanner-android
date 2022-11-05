@@ -23,4 +23,6 @@ interface HistoryDao {
     fun loadItem(id: Int?): HistoryEntity?
     @Query("Select * FROM history WHERE favorite = :isFavorite")
     fun loadAllItem(isFavorite : Boolean): MutableList<HistoryEntity>?
+    @Query("Select * FROM history WHERE uuId = :uuId")
+    fun loadUUId(uuId: String?): HistoryEntity?
 }

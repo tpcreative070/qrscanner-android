@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.util.Patterns
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
@@ -11,11 +12,18 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.print.PrintHelper
-import kotlinx.android.synthetic.main.activity_review.scrollView
-import kotlinx.android.synthetic.main.activity_review.toolbar
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.activity_review.*
 import tpcreative.co.qrscanner.BuildConfig
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
+import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.EnumFragmentType
+import tpcreative.co.qrscanner.model.HistoryModel
 import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import tpcreative.co.qrscanner.ui.scannerresult.showAds
 import java.io.File
@@ -45,6 +53,28 @@ fun ReviewActivity.initUI(){
                     finish()
                 }
             })
+    }
+    onHandlerIntent()
+}
+
+/*Share File To QRScanner*/
+private fun ReviewActivity.onHandlerIntent() {
+    try {
+        val intent = intent
+        val action = intent?.action
+        val type = intent?.type
+        Utils.Log(TAG, "original type :$type")
+        if (Intent.ACTION_SEND == action && Constant.textType == intent.type) {
+            val message : String? = intent.getStringExtra(Intent.EXTRA_TEXT);
+            val subject : String? = intent.getStringExtra(Intent.EXTRA_SUBJECT)
+            txtSubject.text = subject
+            txtDisplay.text = message
+            Utils.Log(TAG,"intent result")
+            onSaveQRCode("$message")
+        }
+    } catch (e: Exception) {
+        Utils.onDropDownAlert(this, getString(R.string.error_occurred_importing))
+        e.printStackTrace()
     }
 }
 
@@ -92,6 +122,27 @@ fun ReviewActivity.onPhotoPrint() {
     }
 }
 
+fun ReviewActivity.onSaveQRCode(text : String){
+    val history = HistoryModel()
+    if (Patterns.WEB_URL.matcher(text).matches()){
+        code = text
+        history.url = text
+        history.createType = ParsedResultType.URI.name
+    }else{
+        code = text
+        history.text = text
+        history.createType = ParsedResultType.TEXT.name
+    }
+    history.favorite = false
+    history.barcodeFormat = BarcodeFormat.QR_CODE.name
+    format = BarcodeFormat.QR_CODE.name
+    val time = Utils.getCurrentDateTimeSort()
+    history.createDatetime = time
+    history.updatedDateTime = time
+    txtFormat.text = format
+    SQLiteHelper.onInsert(history)
+    onGenerateReview(code)
+}
 
 fun ReviewActivity.getIntentData(){
     viewModel.getIntent(this).observe(this, Observer {

@@ -55,7 +55,10 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/bg_location_group"
                         android:orientation="vertical">
                         <!-- Email -->
@@ -855,25 +858,11 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/rlFooter"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="5dp"
-                            android:orientation="horizontal">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/recyclerView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
                         <RelativeLayout
-                            android:id="@+id/rlMarkFavoriteAndTakeNote"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="20dp">
+
                             <RelativeLayout
                                 android:id="@+id/rlViewCode"
                                 android:layout_width="wrap_content"
@@ -881,48 +870,62 @@
 
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/imgTypeQRCode"
-                                    android:tint="@color/colorAccent"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerInParent="true"
+                                    android:tint="@color/colorAccent"
                                     app:srcCompat="@drawable/ic_baseline_qr_code_24" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_centerInParent="true"
                                     android:id="@+id/txtViewCode"
+                                    style="@style/brandonRegularTextView"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
                                     android:layout_marginStart="20dp"
                                     android:layout_toEndOf="@+id/imgTypeQRCode"
                                     android:text="@string/view_code"
-                                    style="@style/brandonRegularTextView"
-                                    android:textColor="@color/material_gray_600"/>
+                                    android:textColor="@color/material_gray_600" />
                             </RelativeLayout>
 
                             <RelativeLayout
-                                android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@+id/rlViewCode"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent">
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="20dp"
+                                android:layout_toEndOf="@+id/rlViewCode">
+
                                 <androidx.appcompat.widget.AppCompatImageView
-                                    android:tint="@color/colorAccent"
                                     android:id="@+id/btnTakeNote"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:layout_marginStart="20dp"
                                     android:layout_toStartOf="@+id/imgMarkFavorite"
+                                    android:tint="@color/colorAccent"
                                     app:srcCompat="@drawable/ic_baseline_edit_note_24" />
+
                                 <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_alignParentEnd="true"
                                     android:id="@+id/imgMarkFavorite"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
+                                    android:layout_alignParentEnd="true"
                                     android:layout_centerInParent="true"
                                     android:layout_marginStart="20dp"
                                     app:srcCompat="@drawable/ic_baseline_favorite_24" />
                             </RelativeLayout>
                         </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rlFooter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

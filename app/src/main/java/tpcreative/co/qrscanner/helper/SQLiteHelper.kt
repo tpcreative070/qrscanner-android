@@ -210,6 +210,18 @@ object SQLiteHelper {
         return null
     }
 
+    fun getItemByUUIdOfHistory(uuId: String?): HistoryModel? {
+        try {
+            val mResult = getInstance()?.getItemByUUId(uuId)
+            if (mResult != null) {
+                return HistoryModel(mResult)
+            }
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
+
     fun getItemBySave(contentUnique: String?): SaveModel? {
         try {
             val mResult = getInstance()?.getItemBySave(contentUnique)

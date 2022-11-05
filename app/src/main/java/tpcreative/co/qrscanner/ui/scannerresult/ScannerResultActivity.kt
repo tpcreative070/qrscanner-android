@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.scannerresult
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
@@ -513,7 +514,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         history?.updatedDateTime = time
         SQLiteHelper.onInsert(history)
         HistorySingleton.getInstance()?.reloadData()
-        rlMarkFavoriteAndTakeNote.visibility = View.GONE
+        viewModel.updateId(history?.uuId)
         Utils.Log(TAG, "Parse result " + Utils.getCodeContentByHistory(history))
         Utils.Log(TAG, "Format type ${create?.barcodeFormat}")
     }

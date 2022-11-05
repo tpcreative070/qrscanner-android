@@ -17,6 +17,7 @@
     <string name="title_activity_tabbed_scanning">Tabbed Scanning</string>
     <string name="tabs">Tabs</string>
     <string name="view_code">View code</string>
+    <string name="scan_photo">Scan photo</string>
 
     <string name="tab_1">History</string>
     <string name="tab_2">Create</string>
