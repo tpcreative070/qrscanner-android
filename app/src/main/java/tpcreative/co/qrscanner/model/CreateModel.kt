@@ -3,7 +3,7 @@ import com.google.zxing.client.result.ParsedResultType
 import tpcreative.co.qrscanner.common.Utils
 import java.io.Serializable
 
-class Create : Serializable {
+class CreateModel : Serializable {
     var id: Int
     var email: String?
     var subject: String?
@@ -36,6 +36,7 @@ class Create : Serializable {
     var networkEncryption: String? = null
     var fragmentType: EnumFragmentType?
     var enumImplement: EnumImplement?
+    var noted: String? = null
 
     /*Sync data*/
     var isSynced = false

@@ -41,7 +41,7 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener {
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.text = edtText.text.toString().trim { it <= ' ' }
                     create.createType = ParsedResultType.TEXT
                     Navigator.onMoveToReview(this, create)

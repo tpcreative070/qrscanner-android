@@ -45,7 +45,7 @@ class WifiFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.ssId = edtSSID.text.toString().trim { it <= ' ' }
                     create.password = edtPassword.text.toString()
                     create.networkEncryption = typeEncrypt

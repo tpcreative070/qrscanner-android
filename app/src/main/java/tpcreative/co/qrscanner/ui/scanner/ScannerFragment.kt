@@ -37,7 +37,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.pickImage
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
 
@@ -57,7 +57,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     return
                 }
                 val parsedResult = ResultParser.parseResult(result?.result)
-                val create = Create()
+                val create = CreateModel()
                 var address: String? = ""
                 var fullName: String? = ""
                 var email: String? = ""
@@ -207,7 +207,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             }
         }
 
-        fun doNavigation(create: Create?) {
+        fun doNavigation(create: CreateModel?) {
             if (Utils.isMultipleScan()) {
                 btnDone.visibility = View.VISIBLE
                 tvCount.visibility = View.VISIBLE
@@ -221,7 +221,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     }
                 }
             } else {
-                Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
+                Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
                 if (zxing_barcode_scanner != null) {
                     zxing_barcode_scanner.pauseAndWait()
                 }
@@ -410,7 +410,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             return
         }
         val parsedResult = ResultParser.parseResult(result)
-        val create = Create()
+        val create = CreateModel()
         var address: String? = ""
         var fullName: String? = ""
         var email: String? = ""
@@ -551,7 +551,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             zxing_barcode_scanner.pauseAndWait()
         }
         Utils.Log(TAG,"barcode format ${parsedResult.type}")
-        Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
+        Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {

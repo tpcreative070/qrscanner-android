@@ -1,7 +1,7 @@
 package tpcreative.co.qrscanner.ui.history
 import android.Manifest
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -27,7 +27,7 @@ fun HistoryFragment.initUI(){
 
 
 private fun HistoryFragment.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(HistoryViewModel::class.java)

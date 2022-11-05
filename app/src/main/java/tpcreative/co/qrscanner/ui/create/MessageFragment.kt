@@ -41,7 +41,7 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
         when (item.itemId) {
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.phone = edtTo.text.toString()
                     create.message = edtMessage.text.toString()
                     create.createType = ParsedResultType.SMS

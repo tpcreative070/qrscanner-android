@@ -1,28 +1,27 @@
 package tpcreative.co.qrscanner.ui.scannerresult
 import android.os.Build
 import android.text.InputType
-import android.widget.EditText
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
-import androidx.core.os.BuildCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.tpcreative.supersafe.common.adapter.DividerItemDecoration
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.getInputLayout
 import com.afollestad.materialdialogs.input.input
-import kotlinx.android.synthetic.main.fragment_review.*
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.viewmodel.ScannerResultViewModel
-import java.io.File
+import tpcreative.co.qrscanner.ui.viewcode.ViewCodeActivity
 
-fun ScannerResultFragment.initUI(){
+fun ScannerResultActivity.initUI(){
     TAG = this::class.java.name
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -69,11 +68,15 @@ fun ScannerResultFragment.initUI(){
         updatedFavorite()
         Utils.Log(TAG,"action mark favorite")
     }
+
+    rlViewCode.setOnClickListener {
+        Navigator.onResultView(this,viewModel.result,ViewCodeActivity::class.java)
+    }
     checkingShowAds()
 }
 
 
-fun ScannerResultFragment.showAds(){
+fun ScannerResultActivity.showAds(){
     if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
         // Back is pressed... Finishing the activity
         finish()
@@ -83,8 +86,8 @@ fun ScannerResultFragment.showAds(){
         Utils.Log(TAG,"444")
     }
 }
-fun ScannerResultFragment.initRecycleView() {
-    adapter = ScannerResultAdapter(layoutInflater, this, this)
+fun ScannerResultActivity.initRecycleView() {
+    adapter = ScannerResultActivityAdapter(layoutInflater, this, this)
     val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
     if (recyclerView == null) {
         Utils.Log(TAG, "recyclerview is null")
@@ -94,19 +97,19 @@ fun ScannerResultFragment.initRecycleView() {
     recyclerView.adapter = adapter
 }
 
-fun ScannerResultFragment.getDataIntent() {
+fun ScannerResultActivity.getDataIntent() {
     viewModel.getIntent(this).observe(this, Observer {
         setView()
     })
 }
 
-fun ScannerResultFragment.checkingShowAds(){
+fun ScannerResultActivity.checkingShowAds(){
     viewModel.doShowAds().observe(this, Observer {
         doShowAds(it)
     })
 }
 
-fun ScannerResultFragment.updatedFavorite(){
+fun ScannerResultActivity.updatedFavorite(){
     viewModel.doUpdatedFavoriteItem().observe(this, Observer { mResult ->
         Utils.Log(TAG,"Status $mResult")
         checkFavorite()
@@ -114,14 +117,22 @@ fun ScannerResultFragment.updatedFavorite(){
     })
 }
 
-fun ScannerResultFragment.updatedTakeNote(){
+fun ScannerResultActivity.updatedTakeNote(){
     viewModel.doUpdatedTakeNoteItem().observe(this, Observer { mResult ->
         Utils.Log(TAG,"Status $mResult")
         viewModel.reloadData()
     })
 }
 
-fun ScannerResultFragment.checkFavorite(){
+fun ScannerResultActivity.delete(){
+    viewModel.doDelete().observe(this) { mResult ->
+        Utils.Log(TAG, "Status $mResult")
+        viewModel.reloadData()
+        finish()
+    }
+}
+
+fun ScannerResultActivity.checkFavorite(){
     if (viewModel.isFavorite){
         imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_24))
     }else{
@@ -129,7 +140,7 @@ fun ScannerResultFragment.checkFavorite(){
     }
 }
 
-fun ScannerResultFragment.enterTakeNote() {
+fun ScannerResultActivity.enterTakeNote() {
     val mMessage = "Alert"
     val builder: MaterialDialog = MaterialDialog(this)
             .title(text = mMessage)
@@ -143,17 +154,21 @@ fun ScannerResultFragment.enterTakeNote() {
                 viewModel.takeNoted = text.toString()
                 updatedTakeNote()
             }
-    val input: EditText = builder.getInputField()
-    if (Utils.getCurrentTheme()==0){
-        input.setBackgroundColor(ContextCompat.getColor(this,R.color.white))
+    val input: TextInputLayout = builder.getInputLayout()
+    input.editText?.setText(viewModel.takeNoted)
+    input.editText?.setSelection(viewModel.takeNoted.length)
+    if (Utils.getPositionTheme()==0){
+        input.setBoxBackgroundColorResource(R.color.transparent)
+    }else{
+        input.setBoxBackgroundColorResource(R.color.grey_dark)
     }
     input.setPadding(0,50,0,20)
     builder.show()
 }
 
-private fun ScannerResultFragment.setupViewModel() {
-    viewModel = ViewModelProviders.of(
-            this,
-            ViewModelFactory()
-    ).get(ScannerResultViewModel::class.java)
+private fun ScannerResultActivity.setupViewModel() {
+    viewModel = ViewModelProvider(
+        this,
+        ViewModelFactory()
+    )[ScannerResultViewModel::class.java]
 }

@@ -3,7 +3,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.common.ResponseSingleton
@@ -71,7 +71,7 @@ fun MainActivity.initUI(){
 }
 
 private fun MainActivity.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(MainViewModel::class.java)

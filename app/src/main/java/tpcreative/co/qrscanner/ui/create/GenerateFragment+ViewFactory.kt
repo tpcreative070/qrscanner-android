@@ -1,6 +1,6 @@
 package tpcreative.co.qrscanner.ui.create
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
@@ -17,7 +17,7 @@ fun GenerateFragment.getDataList(){
 }
 
 private fun GenerateFragment.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(GenerateViewModel::class.java)

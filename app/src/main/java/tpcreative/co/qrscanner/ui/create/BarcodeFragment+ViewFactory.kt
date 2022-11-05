@@ -2,7 +2,7 @@ package tpcreative.co.qrscanner.ui.create
 
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_barcode.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
@@ -45,7 +45,7 @@ fun BarcodeFragment.getBarcodeFormat(){
 
 
 private fun BarcodeFragment.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(GenerateViewModel::class.java)

@@ -42,7 +42,7 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.fullName = edtFullName?.text.toString().trim { it <= ' ' }
                     create.address = edtAddress?.text.toString()
                     create.phone = edtPhone?.text.toString()

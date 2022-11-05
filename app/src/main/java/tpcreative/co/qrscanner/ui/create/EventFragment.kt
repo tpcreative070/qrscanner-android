@@ -2,7 +2,6 @@ package tpcreative.co.qrscanner.ui.create
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.*
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -104,7 +103,7 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                         Utils.onDropDownAlert(this, "Starting event data time must be greater than current date time")
                         return true
                     }
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.title = edtTitle.getText().toString()
                     create.location = edtLocation.getText().toString()
                     create.description = edtDescription.getText().toString()

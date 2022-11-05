@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.item_navigation.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.model.ItemNavigation
 
-class ScannerResultAdapter(inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?)  : BaseAdapter<ItemNavigation, BaseHolder<ItemNavigation>>(inflater){
-    private val TAG = ScannerResultAdapter::class.java.simpleName
+class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?)  : BaseAdapter<ItemNavigation, BaseHolder<ItemNavigation>>(inflater){
+    private val TAG = ScannerResultActivityAdapter::class.java.simpleName
     override fun getItemCount(): Int {
         return mDataSource.size
     }

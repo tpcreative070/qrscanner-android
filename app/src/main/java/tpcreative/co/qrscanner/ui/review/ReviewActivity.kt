@@ -27,18 +27,18 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultAdapter
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivityAdapter
 import tpcreative.co.qrscanner.viewmodel.ReviewViewModel
 import java.io.File
 import java.util.*
 
-class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAdapter.ItemSelectedListener {
+class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultActivityAdapter.ItemSelectedListener {
     lateinit var viewModel : ReviewViewModel
-    private var create: Create? = null
+    private var create: CreateModel? = null
     private var bitmap: Bitmap? = null
     private var code: String? = null
     private var save: SaveModel = SaveModel()
-    var adapter: ScannerResultAdapter? = null
+    var adapter: ScannerResultActivityAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
@@ -317,13 +317,8 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                 val file = File(path)
                 if (file.isFile) {
                     Utils.Log(TAG, "path : $path")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        val uri: Uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
-                        shareToSocial(uri)
-                    } else {
-                        val uri = Uri.fromFile(file)
-                        shareToSocial(uri)
-                    }
+                    val uri: Uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
+                    shareToSocial(uri)
                 } else {
                     Utils.onAlertNotify(this, getString(R.string.no_items_found))
                 }

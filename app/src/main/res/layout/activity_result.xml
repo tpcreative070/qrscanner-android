@@ -40,19 +40,22 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scrollView"
-                android:layout_above="@+id/rlAdsRoot"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_above="@+id/rlAdsRoot">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <LinearLayout
-                        android:layout_margin="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="10dp"
                         android:background="@drawable/bg_location_group"
                         android:orientation="vertical">
                         <!-- Email -->
@@ -63,11 +66,13 @@
                             android:layout_margin="20dp"
                             android:orientation="vertical"
                             android:visibility="gone">
+
                             <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/to" />
+
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/emailTo"
                                 style="@style/brandonRegularTextView"
@@ -78,17 +83,20 @@
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp"
                                 android:textColor="@color/material_gray_600" />
+
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
+
                             <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/subject" />
+
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/emailSubject"
                                 style="@style/brandonRegularTextView"
@@ -99,17 +107,20 @@
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp"
                                 android:textColor="@color/material_gray_600" />
+
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:background="@color/grey_lighter" />
+
                             <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/message" />
+
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/emailMessage"
                                 style="@style/brandonRegularTextView"
@@ -120,6 +131,7 @@
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp"
                                 android:textColor="@color/material_gray_600" />
+
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
@@ -809,13 +821,13 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:id="@+id/llFormatType"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/brandonBoldTextView"
@@ -850,32 +862,66 @@
                             android:layout_marginTop="20dp"
                             android:layout_marginBottom="5dp"
                             android:orientation="horizontal">
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recyclerView"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content" />
                         </LinearLayout>
 
                         <RelativeLayout
                             android:id="@+id/rlMarkFavoriteAndTakeNote"
-                            android:layout_margin="20dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <androidx.appcompat.widget.AppCompatButton
-                                android:textColor="@color/white"
-                                android:background="@drawable/bg_button"
-                                android:id="@+id/btnTakeNote"
-                                android:text="@string/take_note"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp">
+                            <RelativeLayout
+                                android:id="@+id/rlViewCode"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imgMarkFavorite"
-                                android:layout_centerInParent="true"
+                                android:layout_height="match_parent">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/imgTypeQRCode"
+                                    android:tint="@color/colorAccent"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerInParent="true"
+                                    app:srcCompat="@drawable/ic_baseline_public_24" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_centerInParent="true"
+                                    android:id="@+id/txtViewCode"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="20dp"
+                                    android:layout_toEndOf="@+id/imgTypeQRCode"
+                                    android:text="@string/view_code"
+                                    style="@style/brandonRegularTextView"
+                                    android:textColor="@color/material_gray_600"/>
+                            </RelativeLayout>
+
+                            <RelativeLayout
                                 android:layout_marginStart="20dp"
-                                app:srcCompat="@drawable/ic_baseline_favorite_24"
-                                android:layout_toEndOf="@+id/btnTakeNote"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"/>
+                                android:layout_toEndOf="@+id/rlViewCode"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent">
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:tint="@color/colorAccent"
+                                    android:id="@+id/btnTakeNote"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginStart="20dp"
+                                    android:layout_toStartOf="@+id/imgMarkFavorite"
+                                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_alignParentEnd="true"
+                                    android:id="@+id/imgMarkFavorite"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginStart="20dp"
+                                    app:srcCompat="@drawable/ic_baseline_favorite_24" />
+                            </RelativeLayout>
                         </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>

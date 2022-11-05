@@ -8,7 +8,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.Create
+import tpcreative.co.qrscanner.model.CreateModel
 import tpcreative.co.qrscanner.model.EmptyModel
 import tpcreative.co.qrscanner.model.HistoryModel
 import java.util.HashMap
@@ -26,7 +26,7 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
         emit(QRScannerApplication.getInstance().getString(R.string.total) + ": " + mCount)
     }
 
-    fun doSaveItems(mCreate: Create?) {
+    fun doSaveItems(mCreate: CreateModel?) {
         when (mCreate?.createType) {
             ParsedResultType.ADDRESSBOOK -> {
                 /*Put item to HashClipboard*/
@@ -164,7 +164,7 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
         emit(mCount)
     }
 
-    private fun onShowUI(create: Create?) {
+    private fun onShowUI(create: CreateModel?) {
         /*Adding new columns*/
         history?.barcodeFormat = create?.barcodeFormat
         history?.favorite = create?.favorite

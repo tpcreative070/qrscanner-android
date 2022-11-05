@@ -1,6 +1,6 @@
 package tpcreative.co.qrscanner.ui.review
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.tpcreative.supersafe.common.adapter.DividerItemDecoration
@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_review.scrollView
 import kotlinx.android.synthetic.main.activity_review.toolbar
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultAdapter
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivityAdapter
 import tpcreative.co.qrscanner.viewmodel.ReviewViewModel
 
 fun ReviewActivity.initUI(){
@@ -23,14 +23,14 @@ fun ReviewActivity.initUI(){
 }
 
 private fun ReviewActivity.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(ReviewViewModel::class.java)
 }
 
 fun ReviewActivity.initRecycleView() {
-    adapter = ScannerResultAdapter(layoutInflater, this, this)
+    adapter = ScannerResultActivityAdapter(layoutInflater, this, this)
     val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
     if (recyclerView == null) {
         Utils.Log(TAG, "recyclerview is null")

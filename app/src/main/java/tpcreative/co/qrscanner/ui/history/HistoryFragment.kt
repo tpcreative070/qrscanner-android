@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.history
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -13,11 +12,6 @@ import co.tpcreative.supersafe.common.network.Status
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.coroutines.CoroutineScope
@@ -29,10 +23,10 @@ import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.Create
+import tpcreative.co.qrscanner.model.CreateModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.HistoryModel
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 import java.io.File
 import java.util.*
@@ -210,7 +204,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         if (actionMode != null) {
             return
         }
-        val create = Create()
+        val create = CreateModel()
         val history: HistoryModel = viewModel.mList[position]
         create.id = history.id ?: 0
         create.favorite = history.favorite ?: false
@@ -266,9 +260,10 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             create.createType = ParsedResultType.TEXT
         }
         create.barcodeFormat = history.barcodeFormat
+        create.noted = history.noted
         Utils.Log(TAG,"Format type ${history.barcodeFormat}")
         create.fragmentType = EnumFragmentType.HISTORY
-        Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
+        Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
     }
 
     override fun onClickShare(position: Int) {

@@ -189,6 +189,10 @@ class SaveModel : Serializable {
         return typeCategories?.getType()
     }
 
+    fun getUpdatedTimeToMilliseconds(): Long{
+        return Utils.getMilliseconds(updatedDateTime)
+    }
+
     private fun isContentNoted() : Boolean {
         return !noted.isNullOrBlank()
     }

@@ -30,7 +30,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
-import kotlinx.android.synthetic.main.fragment_review.*
+import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
@@ -41,23 +41,22 @@ import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.viewmodel.ScannerResultViewModel
 import java.io.File
 import java.net.URLEncoder
 import java.util.*
 
-class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAdapter.ItemSelectedListener {
+class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultActivityAdapter.ItemSelectedListener {
     lateinit var viewModel : ScannerResultViewModel
-    private var create: Create? = null
+    private var create: CreateModel? = null
     var mList: MutableList<LinearLayout> = mutableListOf()
     private var history: HistoryModel? = HistoryModel()
-    var adapter: ScannerResultAdapter? = null
+    var adapter: ScannerResultActivityAdapter? = null
     var llm: LinearLayoutManager? = null
     private var code: String? = null
     private var bitmap: Bitmap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_review)
+        setContentView(R.layout.activity_result)
         initUI()
     }
 
@@ -86,6 +85,10 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 } catch (e: ActivityNotFoundException) {
                     //TODO smth
                 }
+                return true
+            }
+            R.id.menu_item_delete ->{
+                delete()
                 return true
             }
         }
@@ -571,7 +574,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                             shareToSocial(uri)
                         }
                     } else {
-                        Utils.onAlertNotify(this@ScannerResultFragment, getString(R.string.no_items_found))
+                        Utils.onAlertNotify(this@ScannerResultActivity, getString(R.string.no_items_found))
                     }
                 }
                 run {}
@@ -699,7 +702,7 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         dialogBuilder.setPositiveButton(R.string.copy) { dialogInterface, i ->
             if (viewModel.hashClipboardResult != null && (viewModel.hashClipboardResult?.size ?: 0) > 0) {
                 Utils.copyToClipboard(viewModel.getResult(viewModel.hashClipboardResult))
-                Utils.onAlertNotify(this@ScannerResultFragment, getString(R.string.copied_successful))
+                Utils.onAlertNotify(this@ScannerResultActivity, getString(R.string.copied_successful))
             }
         }
         dialogBuilder.setNegativeButton(R.string.cancel, object : DialogInterface.OnClickListener {
@@ -773,9 +776,9 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
     }
 
-    val dataResult: Create
+    val dataResult: CreateModel
         get() {
-            return viewModel.result ?: Create()
+            return viewModel.result ?: CreateModel()
         }
 
     private val dataSource : MutableList<ItemNavigation>
@@ -784,6 +787,6 @@ class ScannerResultFragment : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         }
 
     companion object {
-        private val TAG = ScannerResultFragment::class.java.simpleName
+        private val TAG = ScannerResultActivity::class.java.simpleName
     }
 }

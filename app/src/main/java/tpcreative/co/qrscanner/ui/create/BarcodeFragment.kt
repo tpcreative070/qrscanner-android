@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.appcompat.widget.*
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -41,7 +40,7 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.productId = edtText.text.toString().trim { it <= ' ' }
                     create.barcodeFormat = viewModel.mType?.name
                     if (create.barcodeFormat == BarcodeFormat.EAN_8.name || create.barcodeFormat == BarcodeFormat.EAN_13.name || create.barcodeFormat == BarcodeFormat.UPC_A.name || create.barcodeFormat == BarcodeFormat.UPC_E.name){

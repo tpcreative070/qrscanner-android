@@ -1,23 +1,24 @@
-package tpcreative.co.qrscanner.viewmodel
+package tpcreative.co.qrscanner.ui.scannerresult
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
 import tpcreative.co.qrscanner.common.SaveSingleton
-import tpcreative.co.qrscanner.common.ScannerSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 import java.util.HashMap
 
 class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
 
     override val dataList: MutableList<ItemNavigation>
         get() = super.dataList
-    var result: Create?
+    var result: CreateModel?
     var hashClipboard: HashMap<Any?, String?> = HashMap()
     var hashClipboardResult: HashMap<Any?, String?>? = HashMap()
     var isFavorite : Boolean = false
@@ -27,9 +28,14 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
 
     fun getIntent(activity: Activity?)  = liveData(Dispatchers.Main){
         val bundle: Bundle? = activity?.intent?.extras
-        val data = bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_data)) as Create
+        val data = if (Build.VERSION.SDK_INT >= 33) {
+            activity?.intent?.getParcelableExtra(QRScannerApplication.getInstance().getString(R.string.key_data), CreateModel::class.java)
+        } else {
+            bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_data)) as CreateModel
+        }
         result = data
-        isFavorite = data.favorite
+        isFavorite = data?.favorite ?: false
+        takeNoted = result?.noted.toString()
         emit(true)
     }
 
@@ -79,13 +85,26 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
                 val mItem = SQLiteHelper.getHistoryItemById(result?.id)
                 mItem?.noted = takeNoted
                 SQLiteHelper.onUpdate(mItem,true)
-                takeNoted = ""
             }
             EnumFragmentType.SAVER -> {
                 val mItem = SQLiteHelper.getSaveItemById(result?.id)
                 mItem?.noted = takeNoted
                 SQLiteHelper.onUpdate(mItem,true)
-                takeNoted = ""
+            }
+            else -> Utils.Log("ScannerResultViewModel", "Nothing")
+        }
+        emit(true)
+    }
+
+    fun doDelete() = liveData(Dispatchers.IO){
+        when (result?.fragmentType) {
+            EnumFragmentType.HISTORY -> {
+                val mItem = SQLiteHelper.getHistoryItemById(result?.id)
+                SQLiteHelper.onDelete(mItem)
+            }
+            EnumFragmentType.SAVER -> {
+                val mItem = SQLiteHelper.getSaveItemById(result?.id)
+                SQLiteHelper.onDelete(mItem)
             }
             else -> Utils.Log("ScannerResultViewModel", "Nothing")
         }
@@ -118,6 +137,6 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     init {
-        result = Create()
+        result = CreateModel()
     }
 }

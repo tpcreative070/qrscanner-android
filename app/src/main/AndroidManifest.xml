@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="tpcreative.co.qrscanner">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -11,18 +12,27 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <application
-        android:allowBackup="false"
-        tools:replace="allowBackup"
         android:name=".common.services.QRScannerApplication"
+        android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="allowBackup">
+        <activity
+            android:name=".ui.viewcode.ViewCodeActivity"
+            android:label="@string/view_code"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".ui.backup.BackupActivity"
             android:label="@string/backup_title" />
@@ -39,20 +49,21 @@
 
         <activity
             android:name=".ui.splashscreen.SplashScreenActivity"
-            android:screenOrientation="fullSensor"
             android:exported="true"
+            android:screenOrientation="fullSensor"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -65,10 +76,12 @@
             android:name=".ui.review.ReviewActivity"
             android:label="@string/review" />
 
-        <receiver android:name=".common.services.QRScannerReceiver"
+        <receiver
+            android:name=".common.services.QRScannerReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
                     tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
@@ -97,8 +110,7 @@
             android:label="@string/help" />
         <activity
             android:name=".ui.filecolor.ChangeFileColorActivity"
-            android:label="@string/key_color_code" />
-<!--        <activity android:name=".ui.pro.ProVersionActivity" />-->
+            android:label="@string/key_color_code" /> <!-- <activity android:name=".ui.pro.ProVersionActivity" /> -->
         <activity
             android:name=".ui.create.EmailFragment"
             android:label="@string/email" />
@@ -129,7 +141,7 @@
         <activity
             android:name=".ui.create.BarcodeFragment"
             android:label="@string/barcode" />
-        <activity android:name=".ui.scannerresult.ScannerResultFragment" />
+        <activity android:name=".ui.scannerresult.ScannerResultActivity" />
         <activity android:name=".common.view.crop.CropImageActivity" />
     </application>
 

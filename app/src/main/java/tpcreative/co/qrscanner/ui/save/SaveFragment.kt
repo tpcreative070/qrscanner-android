@@ -36,7 +36,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.create.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.SaveViewModel
 import java.io.File
 import java.util.*
@@ -217,7 +217,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         if (actionMode != null) {
             return
         }
-        val create = Create()
+        val create = CreateModel()
         val save: SaveModel = viewModel.mList[position]
         create.id = save.id ?: 0
         create.favorite = save.favorite ?: false
@@ -275,7 +275,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         }
         Utils.Log(TAG, "Call intent")
         create.fragmentType = EnumFragmentType.SAVER
-        Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
+        create.noted = save.noted
+        Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
     }
 
     override fun onClickShare(position: Int) {

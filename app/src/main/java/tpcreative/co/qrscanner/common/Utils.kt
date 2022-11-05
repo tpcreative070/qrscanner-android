@@ -191,14 +191,14 @@ object Utils {
         val root: String? = QRScannerApplication.getInstance().getPathFolder()
         val myDir = File(root)
         myDir.mkdirs()
-        var fname = "Image_" + type + "_" + geTimeFileName() + ".jpg"
+        var fname = "Image_" + type + "_" + geTimeFileName() + ".png"
         fname = fname.replace("/", "")
         fname = fname.replace(":", "")
         val file = File(myDir, fname)
         try {
             Log(TAG, "path :" + file.absolutePath)
             val out = FileOutputStream(file)
-            finalBitmap?.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            finalBitmap?.compress(Bitmap.CompressFormat.PNG, 90, out)
             out.flush()
             out.close()
             listenner?.onSaved(file.absolutePath, enumAction)

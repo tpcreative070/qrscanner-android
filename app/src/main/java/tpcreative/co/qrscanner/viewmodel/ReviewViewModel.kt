@@ -9,17 +9,17 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.Create
+import tpcreative.co.qrscanner.model.CreateModel
 import tpcreative.co.qrscanner.model.ItemNavigation
 
 class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     val TAG = this::class.java.name
-    var create: Create = Create()
+    var create: CreateModel = CreateModel()
     var mListItemNavigation: MutableList<ItemNavigation> = mutableListOf()
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
         try {
             val bundle: Bundle? = activity?.intent?.extras
-            val result : Create  = bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_create_intent)) as Create
+            val result : CreateModel  = bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_create_intent)) as CreateModel
             create = result
             emit(true)
             if (BuildConfig.DEBUG) {

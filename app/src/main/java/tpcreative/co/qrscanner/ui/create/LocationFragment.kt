@@ -118,7 +118,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         when (item.itemId) {
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     try {
                         if (lastLon == 0.0 || lastLon == 0.0) {
                             Utils.onDropDownAlert(this, "Please enable GPS in order to get accurate lat and lon")

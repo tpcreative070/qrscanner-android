@@ -3,7 +3,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.*
-import androidx.appcompat.widget.*
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -43,7 +42,7 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.email = edtEmail.text.toString().trim { it <= ' ' }
                     create.subject = edtObject.text.toString()
                     create.message = edtMessage?.text.toString()

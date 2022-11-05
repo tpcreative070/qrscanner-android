@@ -13,13 +13,14 @@ import tpcreative.co.qrscanner.ui.help.HelpActivity
 import tpcreative.co.qrscanner.ui.main.MainActivity
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity
+import tpcreative.co.qrscanner.ui.viewcode.ViewCodeActivity
 
 object Navigator {
     const val CREATE = 1000
     const val SCANNER = 1001
     const val REQUEST_CODE_EMAIL = 1007
     const val REQUEST_CODE_EMAIL_ANOTHER_ACCOUNT = 1008
-    fun onMoveToReview(context: Activity?, create: Create?) {
+    fun onMoveToReview(context: Activity?, create: CreateModel?) {
         val intent = Intent(context, ReviewActivity::class.java)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_create_intent), create)
@@ -50,7 +51,7 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-    fun <T> onResultView(context: Activity?, save: Create?, clazz: Class<T>) {
+    fun <T> onResultView(context: Activity?, save: CreateModel?, clazz: Class<T>) {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)

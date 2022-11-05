@@ -41,7 +41,7 @@ class TelephoneFragment : BaseActivitySlide(), SingletonGenerateListener {
             R.id.menu_item_select -> {
                 if (mAwesomeValidation?.validate() == true) {
                     Utils.Log(TAG, "Passed")
-                    val create = Create(save)
+                    val create = CreateModel(save)
                     create.phone = edtPhone.text.toString().trim { it <= ' ' }
                     create.createType = ParsedResultType.TEL
                     Navigator.onMoveToReview(this, create)

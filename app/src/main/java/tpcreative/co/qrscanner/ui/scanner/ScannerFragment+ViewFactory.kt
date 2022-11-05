@@ -6,7 +6,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
@@ -108,7 +108,7 @@ fun ScannerFragment.initUI(){
 }
 
 private fun ScannerFragment.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(ScannerViewModel::class.java)
