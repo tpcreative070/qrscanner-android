@@ -23,7 +23,7 @@ object Navigator {
     fun onMoveToReview(context: Activity?, create: CreateModel?) {
         val intent = Intent(context, ReviewActivity::class.java)
         val bundle = Bundle()
-        bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_create_intent), create)
+        bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), create)
         intent.putExtras(bundle)
         context?.startActivityForResult(intent, CREATE)
     }

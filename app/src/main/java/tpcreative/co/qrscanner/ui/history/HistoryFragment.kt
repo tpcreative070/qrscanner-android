@@ -1,8 +1,8 @@
 package tpcreative.co.qrscanner.ui.history
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -25,6 +25,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.CreateModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
+import tpcreative.co.qrscanner.model.EnumImplement
 import tpcreative.co.qrscanner.model.HistoryModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
@@ -104,7 +105,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             recyclerView.removeAllCells()
             bindData()
             misDeleted = false
-            val window: Window? = QRScannerApplication.getInstance().getActivity()?.getWindow()
+            val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
         }
     }
@@ -263,82 +264,18 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         create.noted = history.noted
         Utils.Log(TAG,"Format type ${history.barcodeFormat}")
         create.fragmentType = EnumFragmentType.HISTORY
+        create.enumImplement = EnumImplement.VIEW
         Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
-    }
-
-    override fun onClickShare(position: Int) {
-        val history: HistoryModel = viewModel.mList[position]
-        val sb = StringBuilder()
-        if (history.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            sb.append("Address :" + history.address)
-            sb.append("\n")
-            sb.append("FullName :" + history.fullName)
-            sb.append("\n")
-            sb.append("Email :" + history.email)
-            sb.append("\n")
-            sb.append("Phone :" + history.phone)
-        } else if (history.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            sb.append("Email :" + history.email)
-            sb.append("\n")
-            sb.append("Subject :" + history.subject)
-            sb.append("\n")
-            sb.append("Message :" + history.message)
-        } else if (history.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            sb.append("ProductId :" + history.text)
-        } else if (history.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            sb.append("Url :" + history.url)
-        } else if (history.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            sb.append("SSId :" + history.ssId)
-            sb.append("\n")
-            sb.append("Password :" + history.password)
-            sb.append("\n")
-            sb.append("Network encryption :" + history.networkEncryption)
-            sb.append("\n")
-            sb.append("Hidden :" + history.hidden)
-        } else if (history.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            sb.append("Latitude :" + history.lat)
-            sb.append("\n")
-            sb.append("Longitude :" + history.lon)
-            sb.append("\n")
-            sb.append("Query :" + history.query)
-        } else if (history.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            sb.append("Phone :" + history.phone)
-        } else if (history.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            sb.append("Phone :" + history.phone)
-            sb.append("\n")
-            sb.append("Message :" + history.message)
-        } else if (history.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            sb.append("Title :" + history.title)
-            sb.append("\n")
-            sb.append("Description :" + history.description)
-            sb.append("\n")
-            sb.append("Location :" + history.location)
-            sb.append("\n")
-            sb.append("Start event :" + history.startEvent)
-            sb.append("\n")
-            sb.append("End event :" + history.endEvent)
-        } else if (history.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) {
-            sb.append("ISBN :" + history.text)
-        } else {
-            sb.append("Text :" + history.text)
-        }
-        shareToSocial(sb.toString())
-    }
-
-    private fun shareToSocial(value: String?) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, value)
-        startActivity(Intent.createChooser(intent, "Share"))
     }
 
     private fun shareToSocial(value: Uri?) {
         Utils.Log(TAG, "path call")
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
-        intent.type = "image/*"
+        intent.type = "*/*"
         intent.putExtra(Intent.EXTRA_STREAM, value)
+        intent.clipData = ClipData.newRawUri("", value);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(Intent.createChooser(intent, "Share"))
     }
 
@@ -353,20 +290,15 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     fun exportData() = CoroutineScope(Dispatchers.Main).launch {
-        val mResult =  ServiceManager.getInstance().onExportDatabaseCSVTask(EnumFragmentType.HISTORY)
+        val mResult =  ServiceManager.getInstance().onExportDatabaseCSVTask(requireContext(),EnumFragmentType.HISTORY)
         when(mResult.status){
             Status.SUCCESS -> {
                 val path = mResult.data ?: ""
                 val file = File(path)
                 if (file.isFile) {
                     Utils.Log(TAG, "path : $path")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID.toString() + ".provider", file)
-                        shareToSocial(uri)
-                    } else {
-                        val uri = Uri.fromFile(file)
-                        shareToSocial(uri)
-                    }
+                    val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file)
+                    shareToSocial(uri)
                 }
             }else -> {
                 Utils.Log(TAG,"")

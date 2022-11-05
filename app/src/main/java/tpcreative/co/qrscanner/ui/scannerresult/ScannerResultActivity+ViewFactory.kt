@@ -1,4 +1,7 @@
 package tpcreative.co.qrscanner.ui.scannerresult
+import android.content.ClipData
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.text.InputType
 import android.window.OnBackInvokedDispatcher
@@ -19,6 +22,7 @@ import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import tpcreative.co.qrscanner.ui.viewcode.ViewCodeActivity
 
 fun ScannerResultActivity.initUI(){
@@ -70,7 +74,7 @@ fun ScannerResultActivity.initUI(){
     }
 
     rlViewCode.setOnClickListener {
-        Navigator.onResultView(this,viewModel.result,ViewCodeActivity::class.java)
+        Navigator.onResultView(this,viewModel.result,ReviewActivity::class.java)
     }
     checkingShowAds()
 }
@@ -164,6 +168,14 @@ fun ScannerResultActivity.enterTakeNote() {
     }
     input.setPadding(0,50,0,20)
     builder.show()
+}
+
+fun ScannerResultActivity.shareToSocial(value : String) {
+    val intent = Intent()
+    intent.action = Intent.ACTION_SEND
+    intent.type="text/plain"
+    intent.putExtra(Intent.EXTRA_TEXT,value)
+    startActivity(Intent.createChooser(intent, "Share"))
 }
 
 private fun ScannerResultActivity.setupViewModel() {

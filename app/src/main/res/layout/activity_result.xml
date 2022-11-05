@@ -886,7 +886,7 @@
                                     android:layout_height="30dp"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/ic_baseline_public_24" />
+                                    app:srcCompat="@drawable/ic_baseline_qr_code_24" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_centerInParent="true"
@@ -912,7 +912,7 @@
                                     android:layout_height="30dp"
                                     android:layout_marginStart="20dp"
                                     android:layout_toStartOf="@+id/imgMarkFavorite"
-                                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+                                    app:srcCompat="@drawable/ic_baseline_edit_note_24" />
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:layout_alignParentEnd="true"
                                     android:id="@+id/imgMarkFavorite"

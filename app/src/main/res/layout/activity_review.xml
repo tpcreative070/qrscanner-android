@@ -47,7 +47,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
-                    android:background="@drawable/bg_location_group"
                     android:orientation="vertical">
                     <RelativeLayout
                         android:id="@+id/rlResult"
@@ -55,24 +54,12 @@
                         android:layout_height="wrap_content">
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imgResult"
-                            android:layout_width="@dimen/icon_size_200"
-                            android:layout_height="@dimen/icon_size_200"
+                            android:layout_width="@dimen/icon_size_250"
+                            android:layout_height="@dimen/icon_size_250"
                             android:layout_alignParentTop="true"
                             android:layout_centerInParent="true"
                             android:layout_marginTop="20dp" />
                     </RelativeLayout>
-                    <LinearLayout
-                        android:id="@+id/llAction"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="5dp"
-                        android:gravity="center">
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

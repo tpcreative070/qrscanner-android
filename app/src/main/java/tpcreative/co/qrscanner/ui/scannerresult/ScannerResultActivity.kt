@@ -45,7 +45,7 @@ import java.io.File
 import java.net.URLEncoder
 import java.util.*
 
-class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultActivityAdapter.ItemSelectedListener {
+class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.ItemSelectedListener {
     lateinit var viewModel : ScannerResultViewModel
     private var create: CreateModel? = null
     var mList: MutableList<LinearLayout> = mutableListOf()
@@ -53,7 +53,6 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
     var adapter: ScannerResultActivityAdapter? = null
     var llm: LinearLayoutManager? = null
     private var code: String? = null
-    private var bitmap: Bitmap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
@@ -85,6 +84,10 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 } catch (e: ActivityNotFoundException) {
                     //TODO smth
                 }
+                return true
+            }
+            R.id.menu_item_txt_export ->{
+                code?.let { shareToSocial(it) }
                 return true
             }
             R.id.menu_item_delete ->{
@@ -120,7 +123,7 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 }
             }
             else -> {
-                onAddPermissionSave()
+                onShareIntent()
             }
         }
     }
@@ -129,7 +132,7 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
         adapter?.setDataSource(viewModel.mListNavigation)
     }
 
-    fun onAddPermissionPhoneCall() {
+    private fun onAddPermissionPhoneCall() {
         Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.CALL_PHONE)
@@ -137,13 +140,8 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         if (report?.areAllPermissionsGranted() == true) {
                             Utils.Log(TAG, "Action here phone call")
-                            if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                val intentPhoneCall = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + create?.phone))
-                                startActivity(intentPhoneCall)
-                            } else {
-                                code = "tel:" + create?.phone + ""
-                                onGenerateCode(code, EnumAction.SHARE)
-                            }
+                            val intentPhoneCall = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + create?.phone))
+                            startActivity(intentPhoneCall)
                         } else {
                             Utils.Log(TAG, "Permission is denied")
                         }
@@ -162,154 +160,103 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
-    private fun onAddPermissionSave() {
-        Dexter.withContext(this)
-                .withPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            create = dataResult
-                            try {
-                                when (create?.createType) {
-                                    ParsedResultType.ADDRESSBOOK -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        val intentContact = Intent()
-                                        intentContact.action = ContactsContract.Intents.SHOW_OR_CREATE_CONTACT
-                                        intentContact.data = Uri.fromParts("tel", create?.phone, null)
-                                        intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create?.fullName)
-                                        intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create?.address)
-                                        intentContact.putExtra(ContactsContract.Intents.Insert.PHONE, create?.phone)
-                                        intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL, create?.email)
-                                        startActivity(intentContact)
-                                    } else {
-                                        code = "MECARD:N:" + create?.fullName + ";TEL:" + create?.phone + ";EMAIL:" + create?.email + ";ADR:" + create?.address + ";"
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.EMAIL_ADDRESS -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        try {
-                                            val to = create?.email
-                                            val subject = create?.subject
-                                            val body = create?.message
-                                            val mailTo = "mailto:" + to +
-                                                    "?&subject=" + Uri.encode(subject) +
-                                                    "&body=" + Uri.encode(body)
-                                            val emailIntent = Intent(Intent.ACTION_VIEW)
-                                            emailIntent.data = Uri.parse(mailTo)
-                                            startActivity(emailIntent)
-                                            Utils.Log(TAG, "email object ${Gson().toJson(create)}")
-                                        } catch (e: ActivityNotFoundException) {
-                                            //TODO smth
-                                        }
-                                    } else {
-                                        code = "MATMSG:TO:" + create?.email + ";SUB:" + create?.subject + ";BODY:" + create?.message + ";"
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.PRODUCT -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
-                                        intent.putExtra("sms_body", create?.productId)
-                                        startActivity(intent)
-                                    } else {
-                                        code = create?.productId
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.URI -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        onOpenWebSites(create?.url)
-                                    } else {
-                                        code = create?.url
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.WIFI -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        startActivity(Intent(WifiManager.ACTION_PICK_WIFI_NETWORK))
-                                    } else {
-                                        code = "WIFI:S:" + create?.ssId + ";T:" + create?.password + ";P:" + create?.networkEncryption + ";H:" + create?.hidden + ";"
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.GEO -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        val uri = "geo:" + create?.lat + "," + create?.lon + ""
-                                        val intentMap = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                                        intentMap.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity")
-                                        startActivity(intentMap)
-                                    } else {
-                                        code = "geo:" + create?.lat + "," + create?.lon + "?q=" + create?.query + ""
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.TEL -> onAddPermissionPhoneCall()
-                                    ParsedResultType.SMS -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create?.phone))
-                                        intent.putExtra("sms_body", create?.message)
-                                        startActivity(intent)
-                                    } else {
-                                        code = "smsto:" + create?.phone + ":" + create?.message
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.CALENDAR -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        val intentCalendar = Intent(Intent.ACTION_INSERT)
-                                        intentCalendar.data = CalendarContract.Events.CONTENT_URI
-                                        intentCalendar.putExtra(CalendarContract.Events.TITLE, create?.title)
-                                        intentCalendar.putExtra(CalendarContract.Events.DESCRIPTION, create?.description)
-                                        intentCalendar.putExtra(CalendarContract.Events.EVENT_LOCATION, create?.location)
-                                        intentCalendar.putExtra(CalendarContract.Events.ALL_DAY, false)
-                                        intentCalendar.putExtra(
-                                                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                                create?.startEventMilliseconds)
-                                        intentCalendar.putExtra(
-                                                CalendarContract.EXTRA_EVENT_END_TIME, create?.endEventMilliseconds)
-                                        startActivity(intentCalendar)
-                                    } else {
-                                        val builder = StringBuilder()
-                                        builder.append("BEGIN:VEVENT")
-                                        builder.append("\n")
-                                        builder.append("SUMMARY:" + create?.title)
-                                        builder.append("\n")
-                                        builder.append("DTSTART:" + create?.startEvent)
-                                        builder.append("\n")
-                                        builder.append("DTEND:" + create?.endEvent)
-                                        builder.append("\n")
-                                        builder.append("LOCATION:" + create?.location)
-                                        builder.append("\n")
-                                        builder.append("DESCRIPTION:" + create?.description)
-                                        builder.append("\n")
-                                        builder.append("END:VEVENT")
-                                        code = builder.toString()
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    ParsedResultType.ISBN -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
-                                        intent.putExtra("sms_body", create?.ISBN)
-                                        startActivity(intent)
-                                    } else {
-                                        code = create?.ISBN
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                    else -> if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
-                                        intent.putExtra("sms_body", create?.text)
-                                        startActivity(intent)
-                                    } else {
-                                        code = create?.text
-                                        onGenerateCode(code, EnumAction.SHARE)
-                                    }
-                                }
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                        }
+    private fun onShareIntent() {
+        create = dataResult
+            when (create?.createType) {
+                ParsedResultType.ADDRESSBOOK -> {
+                    val intentContact = Intent()
+                    intentContact.action = ContactsContract.Intents.SHOW_OR_CREATE_CONTACT
+                    intentContact.data = Uri.fromParts("tel", create?.phone, null)
+                    intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create?.fullName)
+                    intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create?.address)
+                    intentContact.putExtra(ContactsContract.Intents.Insert.PHONE, create?.phone)
+                    intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL, create?.email)
+                    startActivity(intentContact)
+                    return
+                }
+                ParsedResultType.EMAIL_ADDRESS -> {
+                    try {
+                        val to = create?.email
+                        val subject = create?.subject
+                        val body = create?.message
+                        val mailTo = "mailto:" + to +
+                                "?&subject=" + Uri.encode(subject) +
+                                "&body=" + Uri.encode(body)
+                        val emailIntent = Intent(Intent.ACTION_VIEW)
+                        emailIntent.data = Uri.parse(mailTo)
+                        startActivity(emailIntent)
+                        Utils.Log(TAG, "email object ${Gson().toJson(create)}")
+                    } catch (e: ActivityNotFoundException) {
+                        //TODO smth
                     }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
+                    return
+                }
+                ParsedResultType.PRODUCT -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
+                    intent.putExtra("sms_body", create?.productId)
+                    startActivity(intent)
+                    return
+                }
+                ParsedResultType.URI -> {
+                    onOpenWebSites(create?.url)
+                    return
+                }
+                ParsedResultType.WIFI -> {
+                    startActivity(Intent(WifiManager.ACTION_PICK_WIFI_NETWORK))
+                    return
+                }
+                ParsedResultType.GEO -> {
+                    val uri = "geo:" + create?.lat + "," + create?.lon + ""
+                    val intentMap = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    intentMap.setClassName(
+                        "com.google.android.apps.maps",
+                        "com.google.android.maps.MapsActivity"
+                    )
+                    startActivity(intentMap)
+                    return
+                }
+                ParsedResultType.TEL -> onAddPermissionPhoneCall()
+                ParsedResultType.SMS -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create?.phone))
+                    intent.putExtra("sms_body", create?.message)
+                    startActivity(intent)
+                    return
+                }
+                ParsedResultType.CALENDAR -> {
+                    val intentCalendar = Intent(Intent.ACTION_INSERT)
+                    intentCalendar.data = CalendarContract.Events.CONTENT_URI
+                    intentCalendar.putExtra(CalendarContract.Events.TITLE, create?.title)
+                    intentCalendar.putExtra(
+                        CalendarContract.Events.DESCRIPTION,
+                        create?.description
+                    )
+                    intentCalendar.putExtra(
+                        CalendarContract.Events.EVENT_LOCATION,
+                        create?.location
+                    )
+                    intentCalendar.putExtra(CalendarContract.Events.ALL_DAY, false)
+                    intentCalendar.putExtra(
+                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        create?.startEventMilliseconds
+                    )
+                    intentCalendar.putExtra(
+                        CalendarContract.EXTRA_EVENT_END_TIME, create?.endEventMilliseconds
+                    )
+                    startActivity(intentCalendar)
+                    return
+                }
+                ParsedResultType.ISBN -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
+                    intent.putExtra("sms_body", create?.ISBN)
+                    startActivity(intent)
+                    return
+                }
+                else -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
+                    intent.putExtra("sms_body", create?.text)
+                    startActivity(intent)
+                }
+            }
     }
 
     fun setView() {
@@ -331,11 +278,8 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history?.phone = create?.phone
                 history?.email = create?.email
                 history?.createType = create?.createType?.name
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_perm_contact_calendar_white_48, "AddressBook"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                code = "MECARD:N:" + create?.fullName + ";TEL:" + create?.phone + ";EMAIL:" + create?.email + ";ADR:" + create?.address + ";"
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_perm_contact_calendar_white_48, "AddressBook"))
                 onShowUI(llContact)
                 title = "AddressBook"
             }
@@ -352,11 +296,8 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history?.subject = create?.subject
                 history?.message = create?.message
                 history?.createType = create?.createType?.name
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_email_white_48, "Email"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                code = "MATMSG:TO:" + create?.email + ";SUB:" + create?.subject + ";BODY:" + create?.message + ";"
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_email_white_48, "Email"))
                 onShowUI(llEmail)
                 title = "Email"
             }
@@ -368,12 +309,9 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history?.text = create?.productId
                 history?.createType = create?.createType?.name
                 history?.barcodeFormat = create?.barcodeFormat
+                code = create?.productId
                 viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Product"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Product"))
                 onShowUI(llProduct)
                 title = "Product"
             }
@@ -384,12 +322,9 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history = HistoryModel()
                 history?.url = create?.url
                 history?.createType = create?.createType?.name
+                code = create?.url
                 viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_language_white_48, "Url"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_language_white_48, "Url"))
                 onShowUI(llURL)
                 title = "Url"
                 val isAutoOpening: Boolean = PrefsController.getBoolean(getString(R.string.key_auto_navigate_to_browser), false)
@@ -413,11 +348,8 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history?.networkEncryption = create?.networkEncryption
                 history?.hidden = create?.hidden
                 history?.createType = create?.createType?.name
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_network_wifi_white_48, "Wifi"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                code = "WIFI:S:" + create?.ssId + ";T:" + create?.password + ";P:" + create?.networkEncryption + ";H:" + create?.hidden + ";"
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_network_wifi_white_48, "Wifi"))
                 onShowUI(llWifi)
                 title = "Wifi"
             }
@@ -434,11 +366,8 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history?.lon = create?.lon
                 history?.query = create?.query
                 history?.createType = create?.createType?.name
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_location_on_white_48, "Location"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                code = "geo:" + create?.lat + "," + create?.lon + "?q=" + create?.query + ""
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_location_on_white_48, "Location"))
                 onShowUI(llLocation)
                 title = "Location"
             }
@@ -449,11 +378,8 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history = HistoryModel()
                 history?.phone = create?.phone
                 history?.createType = create?.createType?.name
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_phone_white_48, "Telephone"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                code = "tel:" + create?.phone + ""
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_phone_white_48, "Telephone"))
                 onShowUI(llTelephone)
                 title = "Telephone"
             }
@@ -467,11 +393,8 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history?.phone = create?.phone
                 history?.message = create?.message
                 history?.createType = create?.createType?.name
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "SMS"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                code = "smsto:" + create?.phone + ":" + create?.message
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "SMS"))
                 onShowUI(llSMS)
                 title = "SMS"
             }
@@ -500,11 +423,23 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history?.startEventMilliseconds = create?.startEventMilliseconds
                 history?.endEventMilliseconds = create?.endEventMilliseconds
                 history?.createType = create?.createType?.name
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_event_white_48, "Calendar"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+
+                val builder = StringBuilder()
+                builder.append("BEGIN:VEVENT")
+                builder.append("\n")
+                builder.append("SUMMARY:" + create?.title)
+                builder.append("\n")
+                builder.append("DTSTART:" + create?.startEvent)
+                builder.append("\n")
+                builder.append("DTEND:" + create?.endEvent)
+                builder.append("\n")
+                builder.append("LOCATION:" + create?.location)
+                builder.append("\n")
+                builder.append("DESCRIPTION:" + create?.description)
+                builder.append("\n")
+                builder.append("END:VEVENT")
+                code = builder.toString()
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_event_white_48, "Calendar"))
                 onShowUI(llEvent)
                 title = "Calendar"
             }
@@ -515,12 +450,9 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history = HistoryModel()
                 history?.text = create?.ISBN
                 history?.createType = create?.createType?.name
+                code = create?.ISBN
                 viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Share"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "ISBN"))
-                }
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Share"))
                 onShowUI(llISBN)
                 title = "ISBN"
             }
@@ -531,12 +463,9 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
                 history = HistoryModel()
                 history?.text = create?.text
                 history?.createType = create?.createType?.name
+                code = create?.text
                 viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                if (create?.fragmentType == EnumFragmentType.HISTORY || create?.fragmentType == EnumFragmentType.SCANNER) {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Text"))
-                } else {
-                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-                }
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Text"))
                 onShowUI(llText)
                 title = "Text"
             }
@@ -556,60 +485,6 @@ class ScannerResultActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerR
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-    }
-
-    override fun onSaved(path: String?, enumAction: EnumAction?) {
-        when (enumAction) {
-            EnumAction.SHARE -> {
-                run {
-                    Utils.Log(TAG, "path : $path")
-                    val file = File(path)
-                    if (file.isFile) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            val uri: Uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
-                            shareToSocial(uri)
-                        } else {
-                            val uri = Uri.fromFile(file)
-                            shareToSocial(uri)
-                        }
-                    } else {
-                        Utils.onAlertNotify(this@ScannerResultActivity, getString(R.string.no_items_found))
-                    }
-                }
-                run {}
-            }
-            else -> {
-            }
-        }
-    }
-
-    private fun shareToSocial(value: Uri?) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_STREAM, value)
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(Intent.createChooser(intent, "Share"))
-    }
-
-    fun onGenerateCode(code: String?, enumAction: EnumAction?) {
-        try {
-            val barcodeEncoder = BarcodeEncoder()
-            val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
-            hints[EncodeHintType.MARGIN] = 2
-            val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-            bitmap = if (history?.createType === ParsedResultType.PRODUCT.name) {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor()
-                        ?: 0, code, BarcodeFormat.valueOf(history?.barcodeFormat
-                        ?: ""), 400, 400, hints)
-            } else {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor()
-                        ?: 0, code, BarcodeFormat.QR_CODE, 400, 400, hints)
-            }
-            Utils.saveImage(bitmap, enumAction, create?.createType?.name, code, this)
-        } catch (e: Exception) {
-            Utils.Log(TAG, e.message)
         }
     }
 

@@ -3,6 +3,7 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.liveData
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
@@ -15,7 +16,7 @@ import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 import java.util.HashMap
 
 class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
-
+    val TAG = ScannerResultViewModel::class.java
     override val dataList: MutableList<ItemNavigation>
         get() = super.dataList
     var result: CreateModel?
@@ -36,6 +37,7 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
         result = data
         isFavorite = data?.favorite ?: false
         takeNoted = result?.noted.toString()
+        Utils.Log(TAG,Gson().toJson(result))
         emit(true)
     }
 

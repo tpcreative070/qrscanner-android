@@ -1,34 +1,33 @@
-package tpcreative.co.qrscanner.viewmodel
+package tpcreative.co.qrscanner.ui.review
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.CreateModel
 import tpcreative.co.qrscanner.model.ItemNavigation
+import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
 class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     val TAG = this::class.java.name
     var create: CreateModel = CreateModel()
-    var mListItemNavigation: MutableList<ItemNavigation> = mutableListOf()
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
-        try {
-            val bundle: Bundle? = activity?.intent?.extras
-            val result : CreateModel  = bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_create_intent)) as CreateModel
-            create = result
-            emit(true)
-            if (BuildConfig.DEBUG) {
-                Utils.Log(TAG, Gson().toJson(create))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emit(false)
+        val bundle: Bundle? = activity?.intent?.extras
+        val data = if (Build.VERSION.SDK_INT >= 33) {
+            activity?.intent?.getParcelableExtra(QRScannerApplication.getInstance().getString(R.string.key_data), CreateModel::class.java)
+        } else {
+            bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_data)) as CreateModel
         }
+        if (data != null) {
+            create = data
+        }
+        Utils.Log(TAG,Gson().toJson(create))
+        emit(true)
     }
 
     fun getTakeNote(id : Int?) : String? {

@@ -12,8 +12,11 @@
     <dimen name="icon_size_25">25dp</dimen>
     <dimen name="icon_size_22">22dp</dimen>
     <dimen name="icon_size_20">18dp</dimen>
-    <dimen name="icon_size_200">200dp</dimen>
     <dimen name="icon_size_100">100dp</dimen>
+    <dimen name="icon_size_200">200dp</dimen>
+    <dimen name="icon_size_250">250dp</dimen>
+    <dimen name="icon_size_300">300dp</dimen>
+    <dimen name="icon_size_400">400dp</dimen>
 
     <dimen name="text_size_preference_categories_title">18sp</dimen>
     <dimen name="text_size_preference_categories_summary">16sp</dimen>

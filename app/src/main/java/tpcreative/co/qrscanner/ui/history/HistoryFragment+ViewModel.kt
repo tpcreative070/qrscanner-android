@@ -74,28 +74,6 @@ private fun HistoryFragment.onActionView() {
 }
 
 private fun HistoryFragment.onAddPermissionSave() {
-    Dexter.withContext(requireActivity())
-            .withPermissions(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    if (report?.areAllPermissionsGranted() == true) {
-                        exportData()
-                    } else {
-                        Utils.Log(TAG, "Permission is denied")
-                    }
-                    // check for permanent denial of any permission
-                    if (report?.isAnyPermissionPermanentlyDenied == true) {
-                        /*Miss add permission in manifest*/
-                        Utils.Log(TAG, "request permission is failed")
-                    }
-                }
-                override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                    /* ... */
-                    token?.continuePermissionRequest()
-                }
-            })
-            .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
+    exportData()
 }
 

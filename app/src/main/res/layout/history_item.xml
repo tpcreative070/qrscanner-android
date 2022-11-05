@@ -41,16 +41,6 @@
             android:layout_width="0dp"
             android:layout_weight="0.3"
             android:layout_height="match_parent">
-            <androidx.appcompat.widget.AppCompatImageView
-                android:tint="?attr/colorAccent"
-                android:padding="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/imgShare"
-                android:src="@drawable/baseline_share_white_48"
-                android:layout_centerInParent="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
             <LinearLayout
                 android:id="@+id/llCheckedBox"
                 android:layout_centerInParent="true"
