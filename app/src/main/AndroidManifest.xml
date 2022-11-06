@@ -23,14 +23,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup">
-        <activity
-            android:name=".ui.viewcode.ViewCodeActivity"
-            android:label="@string/view_code"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".ui.backup.BackupActivity"
             android:label="@string/backup_title" />

@@ -3,7 +3,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tpcreative.co.qrscanner.ui.review.ReviewViewModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultViewModel
-import tpcreative.co.qrscanner.ui.viewcode.ViewCodeViewModel
 import tpcreative.co.qrscanner.viewmodel.*
 import java.lang.IllegalArgumentException
 
@@ -35,9 +34,6 @@ class ViewModelFactory() : ViewModelProvider.Factory{
         }
         else if (modelClass.isAssignableFrom(GenerateViewModel::class.java)){
             return GenerateViewModel() as T
-        }
-        else if(modelClass.isAssignableFrom(ViewCodeViewModel::class.java)){
-            return ViewCodeViewModel() as T
         }
         throw IllegalArgumentException("Unknown class name")
     }

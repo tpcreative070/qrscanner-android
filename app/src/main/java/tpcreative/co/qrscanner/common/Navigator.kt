@@ -13,7 +13,6 @@ import tpcreative.co.qrscanner.ui.help.HelpActivity
 import tpcreative.co.qrscanner.ui.main.MainActivity
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity
-import tpcreative.co.qrscanner.ui.viewcode.ViewCodeActivity
 
 object Navigator {
     const val CREATE = 1000

@@ -1,26 +1,13 @@
 package tpcreative.co.qrscanner.ui.review
-import android.Manifest
-import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.content.FileProvider
-import androidx.print.PrintHelper
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.client.result.ParsedResultType
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_review.*
-import kotlinx.android.synthetic.main.activity_review.view.*
-import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.GenerateSingleton
@@ -28,8 +15,6 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivityAdapter
-import java.io.File
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -237,9 +222,9 @@ class ReviewActivity : BaseActivitySlide() {
             val theme: Theme? = Theme.getInstance()?.getThemeInfo()
             Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
             bitmap = if (create?.createType == ParsedResultType.PRODUCT) {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.valueOf(create?.barcodeFormat ?: ""), 200, 200, hints)
+                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.valueOf(create?.barcodeFormat ?: ""), Constant.QRCodeExportWidth, Constant.QRCodeExportHeight, hints)
             } else {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.QR_CODE, 200, 200, hints)
+                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.QR_CODE, Constant.QRCodeExportWidth, Constant.QRCodeExportHeight, hints)
             }
             imgResult.setImageBitmap(bitmap)
             onSavedData()

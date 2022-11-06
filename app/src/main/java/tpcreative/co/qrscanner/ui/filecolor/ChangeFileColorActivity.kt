@@ -10,6 +10,7 @@ import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_chage_file_color.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
@@ -74,7 +75,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
             val hints: MutableMap<EncodeHintType?, Any?> = EnumMap(EncodeHintType::class.java)
             hints[EncodeHintType.MARGIN] = 2
             val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-            bitmap = barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.QR_CODE, 100, 100, hints)
+            bitmap = barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.QR_CODE, Constant.QRCodeViewWidth, Constant.QRCodeViewHeight, hints)
             imgResult.setImageBitmap(bitmap)
         } catch (e: Exception) {
             e.printStackTrace()

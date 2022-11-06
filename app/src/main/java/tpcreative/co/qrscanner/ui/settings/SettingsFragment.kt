@@ -414,7 +414,7 @@ class SettingsFragment : BaseFragment() {
                 val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any>(EncodeHintType::class.java)
                 hints[EncodeHintType.MARGIN] = 2
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-                bitmap = barcodeEncoder.encodeBitmap(context, theme?.getPrimaryDarkColor()!!, code, BarcodeFormat.QR_CODE, 100, 100, hints)
+                bitmap = barcodeEncoder.encodeBitmap(context, theme?.getPrimaryDarkColor()!!, code, BarcodeFormat.QR_CODE, Constant.QRCodeViewWidth,Constant.QRCodeViewHeight, hints)
                 myPreferenceFileColor?.getImageView()?.setImageBitmap(bitmap)
                 myPreferenceFileColor?.getImageView()?.visibility = View.VISIBLE
                 Utils.Log(TAG, "onGenerateReview")

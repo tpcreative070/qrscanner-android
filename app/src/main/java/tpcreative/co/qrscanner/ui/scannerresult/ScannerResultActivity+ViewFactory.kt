@@ -26,7 +26,6 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
-import tpcreative.co.qrscanner.ui.viewcode.ViewCodeActivity
 
 fun ScannerResultActivity.initUI(){
     TAG = this::class.java.name
