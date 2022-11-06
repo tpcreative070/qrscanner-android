@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.save
 import android.Manifest
+import android.app.Activity
 import android.content.ClipData
 import android.content.Context
 import android.content.DialogInterface
@@ -10,6 +11,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
@@ -43,9 +46,6 @@ import java.io.File
 import java.util.*
 
 class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener {
-    private var bitmap: Bitmap? = null
-    private var code: String? = null
-    private var share: SaveModel? = null
     private var edit: SaveModel? = null
     var misDeleted = false
     var isSelectedAll = false
@@ -278,7 +278,13 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         create.fragmentType = EnumFragmentType.SAVER
         create.noted = save.noted
         create.enumImplement = EnumImplement.VIEW
-        Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
+        viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
+    }
+
+    private val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG,"${result.resultCode}")
+        }
     }
 
     override fun onClickEdit(position: Int) {

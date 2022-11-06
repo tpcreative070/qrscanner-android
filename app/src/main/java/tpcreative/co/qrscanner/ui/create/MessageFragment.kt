@@ -106,15 +106,6 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
         finish()
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
-            Utils.Log(TAG, "Finish...........")
-            SaveSingleton.getInstance()?.reloadData()
-            finish()
-        }
-    }
-
     companion object {
         private val TAG = MessageFragment::class.java.simpleName
     }

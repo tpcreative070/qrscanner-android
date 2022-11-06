@@ -1,7 +1,10 @@
 package tpcreative.co.qrscanner.ui.filecolor
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -22,6 +25,22 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chage_file_color)
         initUI()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                finish()
+            }
+        } else {
+            onBackPressedDispatcher.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    }
+                })
+        }
     }
 
     override fun onClickItem(position: Int) {
@@ -35,14 +54,10 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
         super.onResume()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
         }

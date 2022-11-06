@@ -1,7 +1,10 @@
 package tpcreative.co.qrscanner.ui.create
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -11,9 +14,10 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.model.*
 
-class TextFragment : BaseActivitySlide(), SingletonGenerateListener {
+class TextFragment : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,14 +25,22 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener {
         setContentView(R.layout.fragment_text)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val bundle = intent.extras
-        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
+        val mData = intent.serializable(getString(R.string.key_data),SaveModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
         } else {
             Utils.Log(TAG, "Data is null")
         }
+        edtText.setOnEditorActionListener(this)
+    }
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+           return  true
+        }
+        return false
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -39,19 +51,31 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation?.validate() == true) {
-                    Utils.Log(TAG, "Passed")
-                    val create = CreateModel(save)
-                    create.text = edtText.text.toString().trim { it <= ' ' }
-                    create.createType = ParsedResultType.TEXT
-                    Navigator.onMoveToReview(this, create)
-                } else {
-                    Utils.Log(TAG, "error")
-                }
+                onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun onSave(){
+        hideSoftKeyBoard()
+        if (mAwesomeValidation?.validate() == true) {
+            val create = CreateModel(save)
+            create.text = edtText.text.toString().trim { it <= ' ' }
+            create.createType = ParsedResultType.TEXT
+            Navigator.onMoveToReview(this, create)
+        } else {
+            Utils.Log(TAG, "error")
+        }
+    }
+
+    private fun hideSoftKeyBoard() {
+        val imm: InputMethodManager =
+           getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        if (imm.isAcceptingText) { // verify if the soft keyboard is open
+            imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+        }
     }
 
     private fun addValidationForEditText() {
@@ -100,15 +124,6 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
-            Utils.Log(TAG, "Finish...........")
-            SaveSingleton.getInstance()?.reloadData()
-            finish()
-        }
     }
 
     companion object {

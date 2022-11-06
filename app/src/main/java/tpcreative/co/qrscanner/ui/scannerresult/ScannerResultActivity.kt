@@ -163,7 +163,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     private fun onShareIntent() {
         create = dataResult
-            when (create?.createType) {
+            when (dataResult.createType) {
                 ParsedResultType.ADDRESSBOOK -> {
                     val intentContact = Intent()
                     intentContact.action = ContactsContract.Intents.SHOW_OR_CREATE_CONTACT
@@ -256,6 +256,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
                     intent.putExtra("sms_body", create?.text)
                     startActivity(intent)
+                    return
                 }
             }
     }

@@ -139,12 +139,6 @@ class WifiFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
-        }
-    }
-
     companion object {
         private val TAG = WifiFragment::class.java.simpleName
     }

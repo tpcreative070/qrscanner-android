@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.history
+import android.app.Activity
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -6,6 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
@@ -265,7 +268,13 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         Utils.Log(TAG,"Format type ${history.barcodeFormat}")
         create.fragmentType = EnumFragmentType.HISTORY
         create.enumImplement = EnumImplement.VIEW
-        Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
+        viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
+    }
+
+    private val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG,"${result.resultCode}")
+        }
     }
 
     private fun shareToSocial(value: Uri?) {

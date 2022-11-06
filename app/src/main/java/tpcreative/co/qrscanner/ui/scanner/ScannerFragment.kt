@@ -31,9 +31,10 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
-import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.pickImage
+import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
@@ -220,7 +221,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     }
                 }
             } else {
-                Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
+                scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
                 if (zxing_barcode_scanner != null) {
                     zxing_barcode_scanner.pauseAndWait()
                 }
@@ -345,35 +346,29 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         Utils.Log(TAG, "onResume")
     }
 
-    val scanForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val scanForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
             setVisible()
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Utils.Log(TAG, "onActivityResult : $requestCode - $resultCode")
-        if (resultCode == Activity.RESULT_OK && requestCode == Navigator.SCANNER) {
-            setVisible()
-            Utils.Log(TAG, "Resume camera")
-        } else if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
+    private val pickGalleryForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
             Utils.Log(TAG, "REQUEST_PICK")
-            beginCrop(data?.data)
-        } else if (requestCode == Crop.REQUEST_CROP) {
+            beginCrop(result.data?.data)
+        }
+    }
+
+    private val cropForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
             Utils.Log(TAG, "REQUEST_CROP")
-            handleCrop(resultCode, data)
-        } else {
-            Utils.Log(TAG, "You haven't picked Image")
-            setVisible()
-            Utils.Log(TAG, "Resume camera!!!")
+            handleCrop(result.resultCode, result.data)
         }
     }
 
     private fun beginCrop(source: Uri?) {
         val destination = Uri.fromFile(File(activity?.cacheDir, "cropped"))
-        Crop.of(source, destination)?.asSquare()?.start(requireContext(), this)
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(requireContext()))
     }
 
     private fun handleCrop(resultCode: Int, result: Intent?) {
@@ -389,8 +384,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
     }
 
-    fun onGetGallery() {
-        pickImage(context, this)
+    private fun onGetGallery() {
+        pickGalleryForResult.launch(getImagePicker())
     }
 
     private fun onFilterResult(result: Result?) {
@@ -539,7 +534,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             zxing_barcode_scanner.pauseAndWait()
         }
         Utils.Log(TAG,"barcode format ${parsedResult.type}")
-        Navigator.onResultView(activity, create, ScannerResultActivity::class.java)
+        scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
@@ -589,7 +584,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     private fun handleSendSingleItem(intent: Intent?) {
         try {
-            val imageUri = intent?.getParcelableExtra<Parcelable?>(Intent.EXTRA_STREAM) as Uri?
+            val imageUri = intent?.parcelable<Parcelable>(Intent.EXTRA_STREAM) as Uri?
             if (imageUri != null) {
                 beginCrop(imageUri)
             } else {

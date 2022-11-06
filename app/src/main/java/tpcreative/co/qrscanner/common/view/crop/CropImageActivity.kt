@@ -6,6 +6,8 @@ import android.opengl.GLES10
 import android.os.*
 import android.provider.MediaStore
 import android.view.*
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.zxing.*
@@ -18,6 +20,8 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.view.crop.Crop.Extra
 import tpcreative.co.qrscanner.common.view.crop.CropImageView.ListenerState
+import tpcreative.co.qrscanner.ui.scannerresult.initUI
+import tpcreative.co.qrscanner.ui.scannerresult.showAds
 import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.CountDownLatch
@@ -50,6 +54,23 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         startCrop()
         btn_done.isEnabled = false
         btn_done.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+        } else {
+            onBackPressedDispatcher.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    }
+                })
+        }
     }
 
     private fun setupViews() {
@@ -379,12 +400,6 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                 btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
             }
         }
-    }
-
-    override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        finish()
-        super.onBackPressed()
     }
 
     companion object {

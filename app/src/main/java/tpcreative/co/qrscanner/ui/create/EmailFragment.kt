@@ -1,8 +1,8 @@
 package tpcreative.co.qrscanner.ui.create
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.*
+import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.model.*
 
 class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
@@ -22,8 +23,7 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
         setContentView(R.layout.fragment_email)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val bundle = intent.extras
-        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
+        val mData = intent.serializable(getString(R.string.key_data),SaveModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -107,15 +107,6 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
         finish()
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
-            Utils.Log(TAG, "Finish...........")
-            SaveSingleton.getInstance()?.reloadData()
-            finish()
-        }
     }
 
     companion object {

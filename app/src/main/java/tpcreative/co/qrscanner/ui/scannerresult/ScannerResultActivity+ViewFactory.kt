@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.scannerresult
+import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
@@ -6,6 +7,8 @@ import android.os.Build
 import android.text.InputType
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -47,7 +50,7 @@ fun ScannerResultActivity.initUI(){
     if (QRScannerApplication.getInstance().isRequestLargeAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAds()) {
         QRScannerApplication.getInstance().requestAdsLargeView(this)
     }
-    if (Build.VERSION.SDK_INT >= 33) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT
         ) {
@@ -63,6 +66,12 @@ fun ScannerResultActivity.initUI(){
             })
     }
 
+    val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG,"${result.resultCode}")
+        }
+    }
+
     btnTakeNote.setOnClickListener {
         enterTakeNote()
         Utils.Log(TAG,"action take note")
@@ -74,10 +83,13 @@ fun ScannerResultActivity.initUI(){
     }
 
     rlViewCode.setOnClickListener {
-        Navigator.onResultView(this,viewModel.result,ReviewActivity::class.java)
+        viewForResult.launch(Navigator.onResultView(this,viewModel.result,ReviewActivity::class.java))
     }
     checkingShowAds()
+
 }
+
+
 
 
 fun ScannerResultActivity.showAds(){

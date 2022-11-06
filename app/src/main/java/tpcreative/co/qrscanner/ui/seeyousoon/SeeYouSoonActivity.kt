@@ -20,7 +20,6 @@ class SeeYouSoonActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {}
     companion object {
         private val TAG = SeeYouSoonActivity::class.java.simpleName
     }

@@ -1,6 +1,9 @@
 package tpcreative.co.qrscanner.ui.main
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +16,7 @@ import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.CustomViewPager
 import tpcreative.co.qrscanner.model.Theme
+import tpcreative.co.qrscanner.ui.review.initUI
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
 fun MainActivity.initUI(){
@@ -66,6 +70,24 @@ fun MainActivity.initUI(){
         showEncourage()
         Utils.Log(TAG, "rating.......")
         Utils.onSetCountRating(0)
+    }
+
+    if (Build.VERSION.SDK_INT >= 33) {
+        onBackInvokedDispatcher.registerOnBackInvokedCallback(
+            OnBackInvokedDispatcher.PRIORITY_DEFAULT
+        ) {
+            //showAds()
+            finish()
+        }
+    } else {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    //showAds()
+                    finish()
+                }
+            })
     }
     showAds()
 }

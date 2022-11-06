@@ -158,11 +158,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Utils.Log(TAG, "main activity : $requestCode - $resultCode")
-    }
-
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
         Utils.Log(TAG, "Network changed :$isConnected")
     }
@@ -199,12 +194,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         ServiceManager.getInstance().onPreparingSyncData(true)
         QRScannerApplication.getInstance().refreshAds()
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Utils.Log(TAG, "onBackPressed")
-    }
-
+    
     fun showEncourage() {
         val manager = ReviewManagerFactory.create(this)
         val request = manager.requestReviewFlow()

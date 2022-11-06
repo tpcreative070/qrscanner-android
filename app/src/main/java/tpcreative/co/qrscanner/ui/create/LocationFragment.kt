@@ -316,18 +316,6 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         }
     }
 
-    /**
-     * Displays a dialog with error message explaining that the location permission is missing.
-     */
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
-            Utils.Log(TAG, "Finish...........")
-            SaveSingleton.getInstance()?.reloadData()
-            finish()
-        }
-    }
-
     companion object {
         private val TAG = LocationFragment::class.java.simpleName
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1

@@ -1,11 +1,10 @@
 package tpcreative.co.qrscanner.common.view.crop
-import android.app.Activity
 import android.content.*
 import android.net.Uri
 import android.provider.MediaStore
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.extension.serializable
 
 /**
  * Builder for crop Intents and utils for handling result
@@ -46,41 +45,6 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
     }
 
     /**
-     * Set maximum crop size
-     *
-     * @param width  Max width
-     * @param height Max height
-     */
-    fun withMaxSize(width: Int, height: Int): Crop {
-        cropIntent?.putExtra(Extra.MAX_X, width)
-        cropIntent?.putExtra(Extra.MAX_Y, height)
-        return this
-    }
-
-    /**
-     * Set whether to save the result as a PNG or not. Helpful to preserve alpha.
-     * @param asPng whether to save the result as a PNG or not
-     */
-    fun asPng(asPng: Boolean): Crop {
-        cropIntent?.putExtra(Extra.AS_PNG, asPng)
-        return this
-    }
-    /**
-     * Send the crop Intent from an Activity with a custom request code
-     *
-     * @param activity    Activity to receive result
-     * @param requestCode requestCode for result
-     */
-    /**
-     * Send the crop Intent from an Activity
-     *
-     * @param activity Activity to receive result
-     */
-    @JvmOverloads
-    fun start(activity: Activity?, requestCode: Int = REQUEST_CROP) {
-        activity?.startActivityForResult(getIntent(activity), requestCode)
-    }
-    /**
      * Send the crop Intent with a custom request code
      *
      * @param context     Context
@@ -101,8 +65,8 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
      * @param fragment Fragment to receive result
      */
     @JvmOverloads
-    fun start(context: Context, fragment: Fragment?, requestCode: Int = REQUEST_CROP) {
-        fragment?.startActivityForResult(getIntent(context), requestCode)
+    fun start(context: Context) : Intent? {
+       return getIntent(context)
     }
 
     /**
@@ -111,7 +75,7 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
      * @param context Context
      * @return Intent for CropImageActivity
      */
-    fun getIntent(context: Context): Intent? {
+    private fun getIntent(context: Context): Intent? {
         cropIntent?.setClass(context, CropImageActivity::class.java)
         return cropIntent
     }
@@ -132,15 +96,6 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
             return Crop(source, destination)
         }
 
-        /**
-         * Retrieve URI for cropped image, as set in the Intent builder
-         *
-         * @param result Output Image URI
-         */
-        fun getOutput(result: Intent?): Uri? {
-            return result?.getParcelableExtra(MediaStore.EXTRA_OUTPUT)
-        }
-
         fun getOutputString(result: Intent?): String? {
             return result?.getStringExtra(REQUEST_DATA)
         }
@@ -152,55 +107,12 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
          * @return Throwable handled in CropImageActivity
          */
         fun getError(result: Intent?): Throwable? {
-            return result?.getSerializableExtra(Extra.ERROR) as Throwable?
-        }
-        /**
-         * Pick image from an Activity with a custom request code
-         *
-         * @param activity    Activity to receive result
-         * @param requestCode requestCode for result
-         */
-        /**
-         * Pick image from an Activity
-         *
-         * @param activity Activity to receive result
-         */
-        @JvmOverloads
-        fun pickImage(activity: Activity?, requestCode: Int = REQUEST_PICK) {
-            try {
-                activity?.startActivityForResult(getImagePicker(), requestCode)
-            } catch (e: ActivityNotFoundException) {
-                showImagePickerError(activity)
-            }
-        }
-        /**
-         * Pick image from a support library Fragment with a custom request code
-         *
-         * @param context     Context
-         * @param fragment    Fragment to receive result
-         * @param requestCode requestCode for result
-         */
-        /**
-         * Pick image from a support library Fragment
-         *
-         * @param context  Context
-         * @param fragment Fragment to receive result
-         */
-        @JvmOverloads
-        fun pickImage(context: Context?, fragment: Fragment?, requestCode: Int = REQUEST_PICK) {
-            try {
-                fragment?.startActivityForResult(getImagePicker(), requestCode)
-            } catch (e: ActivityNotFoundException) {
-                showImagePickerError(context)
-            }
+            return result?.serializable(Extra.ERROR,Throwable::class.java)
         }
 
-        private fun getImagePicker(): Intent {
+        @JvmOverloads
+        fun getImagePicker(): Intent {
             return Intent(Intent.ACTION_GET_CONTENT).setType("image/*")
-        }
-
-        private fun showImagePickerError(context: Context?) {
-            Toast.makeText(context?.getApplicationContext(), R.string.crop__pick_error, Toast.LENGTH_SHORT).show()
         }
     }
 
