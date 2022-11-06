@@ -1,13 +1,14 @@
 package tpcreative.co.qrscanner.ui.create
 import android.os.Bundle
-import android.util.Patterns
 import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.fragment_email.*
+import kotlinx.android.synthetic.main.activity_text.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -15,12 +16,12 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.model.*
 
-class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
-    private var mAwesomeValidation: AwesomeValidation? = null
+class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
+    var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_email)
+        setContentView(R.layout.activity_text)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val mData = intent.serializable(getString(R.string.key_data),SaveModel::class.java)
@@ -30,7 +31,10 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
         } else {
             Utils.Log(TAG, "Data is null")
         }
+        edtText.setOnEditorActionListener(this)
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_select, menu)
@@ -40,37 +44,43 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation?.validate() == true) {
-                    Utils.Log(TAG, "Passed")
-                    val create = CreateModel(save)
-                    create.email = edtEmail.text.toString().trim { it <= ' ' }
-                    create.subject = edtObject.text.toString()
-                    create.message = edtMessage?.text.toString()
-                    create.createType = ParsedResultType.EMAIL_ADDRESS
-                    Navigator.onMoveToReview(this@EmailFragment, create)
-                } else {
-                    Utils.Log(TAG, "error")
-                }
+                onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun addValidationForEditText() {
-        mAwesomeValidation?.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
-        mAwesomeValidation?.addValidation(this, R.id.edtObject, RegexTemplate.NOT_EMPTY, R.string.err_object)
-        mAwesomeValidation?.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+            return  true
+        }
+        return false
     }
 
-    private fun FocusUI() {
-        edtEmail.requestFocus()
+    private fun onSave(){
+        hideSoftKeyBoard()
+        if (mAwesomeValidation?.validate() == true) {
+            val create = CreateModel(save)
+            create.text = edtText.text.toString().trim { it <= ' ' }
+            create.createType = ParsedResultType.TEXT
+            Navigator.onMoveToReview(this, create)
+        } else {
+            Utils.Log(TAG, "error")
+        }
+    }
+
+    private fun addValidationForEditText() {
+        mAwesomeValidation?.addValidation(this, R.id.edtText, RegexTemplate.NOT_EMPTY, R.string.err_text)
+    }
+
+    private fun focusUI() {
+        edtText.requestFocus()
     }
 
     fun onSetData() {
-        edtEmail.setText("${save?.email}")
-        edtObject.setText("${save?.subject}")
-        edtMessage.setText("${save?.message}")
+        edtText.setText(save?.text)
     }
 
     public override fun onStart() {
@@ -78,7 +88,7 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
         Utils.Log(TAG, "onStart")
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         addValidationForEditText()
-        FocusUI()
+        focusUI()
     }
 
     public override fun onStop() {
@@ -110,6 +120,6 @@ class EmailFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     companion object {
-        private val TAG = EmailFragment::class.java.simpleName
+        private val TAG = TextActivity::class.java.simpleName
     }
 }

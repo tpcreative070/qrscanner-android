@@ -4,19 +4,19 @@ import androidx.lifecycle.ViewModelProvider
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
-fun GenerateFragment.initUI(){
+fun GenerateActivity.initUI(){
     setupViewModel()
     getDataList()
 }
 
 
-fun GenerateFragment.getDataList(){
+fun GenerateActivity.getDataList(){
     viewModel.getDataList().observe(this, Observer {
         bindData(it)
     })
 }
 
-private fun GenerateFragment.setupViewModel() {
+private fun GenerateActivity.setupViewModel() {
     viewModel = ViewModelProvider(
             this,
             ViewModelFactory()

@@ -119,34 +119,34 @@
             android:name=".ui.filecolor.ChangeFileColorActivity"
             android:label="@string/key_color_code" /> <!-- <activity android:name=".ui.pro.ProVersionActivity" /> -->
         <activity
-            android:name=".ui.create.EmailFragment"
+            android:name=".ui.create.EmailActivity"
             android:label="@string/email" />
         <activity
-            android:name=".ui.create.MessageFragment"
+            android:name=".ui.create.MessageActivity"
             android:label="@string/message" />
         <activity
-            android:name=".ui.create.LocationFragment"
+            android:name=".ui.create.LocationActivity"
             android:label="@string/location" />
         <activity
-            android:name=".ui.create.EventFragment"
+            android:name=".ui.create.EventActivity"
             android:label="@string/event" />
         <activity
-            android:name=".ui.create.ContactFragment"
+            android:name=".ui.create.ContactActivity"
             android:label="@string/contact" />
         <activity
-            android:name=".ui.create.TelephoneFragment"
+            android:name=".ui.create.TelephoneActivity"
             android:label="@string/telephone" />
         <activity
-            android:name=".ui.create.TextFragment"
+            android:name=".ui.create.TextActivity"
             android:label="@string/text" />
         <activity
-            android:name=".ui.create.WifiFragment"
+            android:name=".ui.create.WifiActivity"
             android:label="@string/wifi" />
         <activity
-            android:name=".ui.create.UrlFragment"
+            android:name=".ui.create.UrlActivity"
             android:label="@string/url" />
         <activity
-            android:name=".ui.create.BarcodeFragment"
+            android:name=".ui.create.BarcodeActivity"
             android:label="@string/barcode" />
         <activity android:name=".ui.scannerresult.ScannerResultActivity" />
         <activity android:name=".common.view.crop.CropImageActivity" />

@@ -67,7 +67,7 @@
                             android:text="@string/product_id" />
                         <androidx.appcompat.widget.AppCompatEditText
                             android:maxLength="13"
-                            android:id="@+id/edtText"
+                            android:id="@+id/edtBarCode"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

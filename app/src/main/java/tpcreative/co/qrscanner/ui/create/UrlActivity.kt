@@ -1,15 +1,16 @@
 package tpcreative.co.qrscanner.ui.create
 import android.os.Bundle
+import android.util.Patterns
 import android.view.*
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
-import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.fragment_text.*
+import kotlinx.android.synthetic.main.activity_url.*
+import kotlinx.android.synthetic.main.activity_url.toolbar
+import kotlinx.android.synthetic.main.activity_wifi.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -17,30 +18,22 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.model.*
 
-class TextFragment : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
+class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_text)
+        setContentView(R.layout.activity_url)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val mData = intent.serializable(getString(R.string.key_data),SaveModel::class.java)
+        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
         } else {
             Utils.Log(TAG, "Data is null")
         }
-        edtText.setOnEditorActionListener(this)
-    }
-
-    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-            onSave()
-           return  true
-        }
-        return false
+        edtUrl.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -58,36 +51,42 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+            return  true
+        }
+        return false
+    }
+
     private fun onSave(){
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
+            Utils.Log(TAG, "Passed")
             val create = CreateModel(save)
-            create.text = edtText.text.toString().trim { it <= ' ' }
-            create.createType = ParsedResultType.TEXT
+            create.url = edtUrl.text.toString().trim { it <= ' ' }
+            create.createType = ParsedResultType.URI
             Navigator.onMoveToReview(this, create)
         } else {
             Utils.Log(TAG, "error")
         }
     }
 
-    private fun hideSoftKeyBoard() {
-        val imm: InputMethodManager =
-           getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        if (imm.isAcceptingText) { // verify if the soft keyboard is open
-            imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
-        }
-    }
-
     private fun addValidationForEditText() {
-        mAwesomeValidation?.addValidation(this, R.id.edtText, RegexTemplate.NOT_EMPTY, R.string.err_text)
+        mAwesomeValidation?.addValidation(this, R.id.edtUrl, Patterns.WEB_URL, R.string.err_url)
     }
 
-    private fun FocusUI() {
-        edtText.requestFocus()
+    private fun focusUI() {
+        edtUrl.requestFocus()
+    }
+
+    fun clearAndFocusUI() {
+        edtUrl.requestFocus()
+        edtUrl.setText("")
     }
 
     fun onSetData() {
-        edtText.setText(save?.text)
+        edtUrl.setText(save?.url)
     }
 
     public override fun onStart() {
@@ -95,17 +94,12 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         Utils.Log(TAG, "onStart")
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         addValidationForEditText()
-        FocusUI()
+        focusUI()
     }
 
     public override fun onStop() {
         super.onStop()
         Utils.Log(TAG, "onStop")
-    }
-
-    public override fun onPause() {
-        super.onPause()
-        Utils.Log(TAG, "onPause")
     }
 
     public override fun onDestroy() {
@@ -127,6 +121,6 @@ class TextFragment : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     }
 
     companion object {
-        private val TAG = TextFragment::class.java.simpleName
+        private val TAG = UrlActivity::class.java.simpleName
     }
 }

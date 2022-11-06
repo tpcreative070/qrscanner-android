@@ -1,35 +1,41 @@
 package tpcreative.co.qrscanner.ui.create
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.fragment_message.*
+import kotlinx.android.synthetic.main.activity_message.*
+import kotlinx.android.synthetic.main.activity_message.toolbar
+import kotlinx.android.synthetic.main.activity_telephone.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.model.*
 
-class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
+class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_message)
+        setContentView(R.layout.activity_message)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val bundle = intent.extras
-        val mData = bundle?.get("data") as SaveModel?
+        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
         } else {
             Utils.Log(TAG, "Data is null")
         }
+        edtTo.setOnEditorActionListener(this)
+        edtMessage.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -40,20 +46,33 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation?.validate() == true) {
-                    val create = CreateModel(save)
-                    create.phone = edtTo.text.toString()
-                    create.message = edtMessage.text.toString()
-                    create.createType = ParsedResultType.SMS
-                    Navigator.onMoveToReview(this, create)
-                    Utils.Log(TAG, "Passed")
-                } else {
-                    Utils.Log(TAG, "error")
-                }
+                onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+            return  true
+        }
+        return false
+    }
+
+    private fun onSave(){
+        hideSoftKeyBoard()
+        if (mAwesomeValidation?.validate() == true) {
+            val create = CreateModel(save)
+            create.phone = edtTo.text.toString()
+            create.message = edtMessage.text.toString()
+            create.createType = ParsedResultType.SMS
+            Navigator.onMoveToReview(this, create)
+            Utils.Log(TAG, "Passed")
+        } else {
+            Utils.Log(TAG, "error")
+        }
     }
 
     private fun addValidationForEditText() {
@@ -107,6 +126,6 @@ class MessageFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     companion object {
-        private val TAG = MessageFragment::class.java.simpleName
+        private val TAG = MessageActivity::class.java.simpleName
     }
 }

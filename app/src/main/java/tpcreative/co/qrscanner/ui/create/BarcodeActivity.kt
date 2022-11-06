@@ -1,9 +1,11 @@
 package tpcreative.co.qrscanner.ui.create
-import android.content.*
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -11,7 +13,8 @@ import com.basgeekball.awesomevalidation.utility.custom.SimpleCustomValidation
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.fragment_barcode.*
+import kotlinx.android.synthetic.main.activity_barcode.*
+import kotlinx.android.synthetic.main.activity_contact.*
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -19,15 +22,16 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
-class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerateListener {
+class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     var save: SaveModel? = null
     var dataAdapter: ArrayAdapter<FormatTypeModel>? = null
     lateinit var viewModel : GenerateViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_barcode)
+        setContentView(R.layout.activity_barcode)
         initUI()
+        edtBarCode.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -38,24 +42,37 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation?.validate() == true) {
-                    Utils.Log(TAG, "Passed")
-                    val create = CreateModel(save)
-                    create.productId = edtText.text.toString().trim { it <= ' ' }
-                    create.barcodeFormat = viewModel.mType?.name
-                    if (create.barcodeFormat == BarcodeFormat.EAN_8.name || create.barcodeFormat == BarcodeFormat.EAN_13.name || create.barcodeFormat == BarcodeFormat.UPC_A.name || create.barcodeFormat == BarcodeFormat.UPC_E.name){
-                        create.createType = ParsedResultType.PRODUCT
-                    }else{
-                        create.createType = ParsedResultType.TEXT
-                    }
-                    Navigator.onMoveToReview(this, create)
-                } else {
-                    Utils.Log(TAG, "error")
-                }
+                onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+            return  true
+        }
+        return false
+    }
+
+    private fun onSave(){
+        hideSoftKeyBoard()
+        if (mAwesomeValidation?.validate() == true) {
+            Utils.Log(TAG, "Passed")
+            val create = CreateModel(save)
+            create.productId = edtBarCode.text.toString().trim { it <= ' ' }
+            create.barcodeFormat = viewModel.mType?.name
+            if (create.barcodeFormat == BarcodeFormat.EAN_8.name || create.barcodeFormat == BarcodeFormat.EAN_13.name || create.barcodeFormat == BarcodeFormat.UPC_A.name || create.barcodeFormat == BarcodeFormat.UPC_E.name){
+                create.createType = ParsedResultType.PRODUCT
+            }else{
+                create.createType = ParsedResultType.TEXT
+            }
+            Navigator.onMoveToReview(this, create)
+        } else {
+            Utils.Log(TAG, "error")
+        }
     }
 
     private fun addValidationForEditText() {
@@ -111,11 +128,11 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     private fun focusUI() {
-        edtText.requestFocus()
+        edtBarCode.requestFocus()
     }
 
     fun onSetData() {
-        edtText.setText(save?.text)
+        edtBarCode.setText(save?.text)
         if (save?.createType == ParsedResultType.PRODUCT.name) {
             if (save?.barcodeFormat == BarcodeFormat.EAN_13.name) {
                 viewModel.mType = BarcodeFormat.EAN_13
@@ -212,15 +229,6 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         finish()
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == Navigator.CREATE) {
-            Utils.Log(TAG, "Finish...........")
-            SaveSingleton.getInstance()?.reloadData()
-            finish()
-        }
-    }
-
     fun onSetView() {
         dataAdapter?.notifyDataSetChanged()
     }
@@ -247,44 +255,44 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
             val type = dataAdapter?.getItem(pos)
             if (type?.id === BarcodeFormat.EAN_13.name) {
-                edtText.setHint(R.string.hint_13)
-                viewModel.doSetMaxLength(BarcodeFormat.EAN_13, edtText)
+                edtBarCode.setHint(R.string.hint_13)
+                viewModel.doSetMaxLength(BarcodeFormat.EAN_13, edtBarCode)
             }
             else if (type?.id === BarcodeFormat.EAN_8.name){
-                edtText.setHint(R.string.hint_8)
-                viewModel.doSetMaxLength(BarcodeFormat.EAN_8, edtText)
+                edtBarCode.setHint(R.string.hint_8)
+                viewModel.doSetMaxLength(BarcodeFormat.EAN_8, edtBarCode)
             }
             else if (type?.id === BarcodeFormat.UPC_E.name){
-                edtText.setHint(R.string.hint_8)
-                viewModel.doSetMaxLength(BarcodeFormat.UPC_E, edtText)
+                edtBarCode.setHint(R.string.hint_8)
+                viewModel.doSetMaxLength(BarcodeFormat.UPC_E, edtBarCode)
             }else if (type?.id === BarcodeFormat.UPC_A.name){
-                edtText.setHint(R.string.hint_12)
-                viewModel.doSetMaxLength(BarcodeFormat.UPC_A, edtText)
+                edtBarCode.setHint(R.string.hint_12)
+                viewModel.doSetMaxLength(BarcodeFormat.UPC_A, edtBarCode)
             }
             else if (type?.id === BarcodeFormat.CODABAR.name){
-                edtText.setHint(R.string.hint_digits)
-                viewModel.doSetMaxLength(BarcodeFormat.CODABAR, edtText)
+                edtBarCode.setHint(R.string.hint_digits)
+                viewModel.doSetMaxLength(BarcodeFormat.CODABAR, edtBarCode)
             }
             else if (type?.id === BarcodeFormat.CODE_39.name){
-                edtText.setHint(R.string.hint_uppercase_characters)
-                viewModel.doSetMaxLength(BarcodeFormat.CODE_39, edtText)
+                edtBarCode.setHint(R.string.hint_uppercase_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.CODE_39, edtBarCode)
             }
             else if (type?.id === BarcodeFormat.CODE_93.name){
-                edtText.setHint(R.string.hint_uppercase_characters)
-                viewModel.doSetMaxLength(BarcodeFormat.CODE_93, edtText)
+                edtBarCode.setHint(R.string.hint_uppercase_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.CODE_93, edtBarCode)
             }
             else if (type?.id === BarcodeFormat.ITF.name){
-                edtText.setHint(R.string.hint_digits)
-                viewModel.doSetMaxLength(BarcodeFormat.ITF, edtText)
+                edtBarCode.setHint(R.string.hint_digits)
+                viewModel.doSetMaxLength(BarcodeFormat.ITF, edtBarCode)
             }
             else {
-                edtText.setHint(R.string.hint_characters)
-                viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, edtText)
+                edtBarCode.setHint(R.string.hint_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, edtBarCode)
             }
             viewModel.mType = BarcodeFormat.valueOf(type?.id ?:"")
             if (viewModel.isText(save?.text)){
-                edtText.setText(save?.text)
-                edtText.requestFocus()
+                edtBarCode.setText(save?.text)
+                edtBarCode.requestFocus()
             }
         }
 
@@ -294,6 +302,6 @@ class BarcodeFragment : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     companion object {
-        private val TAG = BarcodeFragment::class.java.simpleName
+        private val TAG = BarcodeActivity::class.java.simpleName
     }
 }

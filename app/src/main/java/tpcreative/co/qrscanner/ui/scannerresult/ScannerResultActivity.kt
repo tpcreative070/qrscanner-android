@@ -71,22 +71,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 showAds()
                 return true
             }
-            R.id.menu_item_report -> {
-                try {
-                    val to = "care@tpcreative.me"
-                    val subject = "Request new features||Need help"
-                    val body = ""
-                    val mailTo = "mailto:" + to +
-                            "?&subject=" + Uri.encode(subject) +
-                            "&body=" + Uri.encode(body)
-                    val emailIntent = Intent(Intent.ACTION_VIEW)
-                    emailIntent.data = Uri.parse(mailTo)
-                    startActivity(emailIntent)
-                } catch (e: ActivityNotFoundException) {
-                    //TODO smth
-                }
-                return true
-            }
             R.id.menu_item_txt_export ->{
                 code?.let { shareToSocial(it) }
                 return true

@@ -2,7 +2,7 @@ package tpcreative.co.qrscanner.ui.main
 import android.view.ViewGroup
 import androidx.fragment.app.*
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.ui.create.GenerateFragment
+import tpcreative.co.qrscanner.ui.create.GenerateActivity
 import tpcreative.co.qrscanner.ui.history.HistoryFragment
 import tpcreative.co.qrscanner.ui.save.SaveFragment
 import tpcreative.co.qrscanner.ui.scanner.ScannerFragment
@@ -27,7 +27,7 @@ class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVI
                 Utils.Log(TAG, "history")
                 currentFragment?.onResume()
                 fragments[3].onPause()
-            } else if (currentFragment is GenerateFragment) {
+            } else if (currentFragment is GenerateActivity) {
                 Utils.Log(TAG, "generate")
                 currentFragment?.onResume()
                 fragments[3].onPause()
@@ -71,7 +71,7 @@ class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVI
         arrayList.add("Save")
         arrayList.add("Settings")
         fragments.add(HistoryFragment.newInstance(0))
-        fragments.add(GenerateFragment.newInstance(1))
+        fragments.add(GenerateActivity.newInstance(1))
         fragments.add(ScannerFragment.newInstance(2))
         fragments.add(SaveFragment.newInstance(3))
         fragments.add(SettingsFragment.newInstance(4))

@@ -1,7 +1,9 @@
 package tpcreative.co.qrscanner.ui.create
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -9,16 +11,19 @@ import com.google.zxing.client.result.ParsedResultType
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.SimpleDateMonthAndDayFormatException
-import kotlinx.android.synthetic.main.fragment_event.*
+import kotlinx.android.synthetic.main.activity_event.*
+import kotlinx.android.synthetic.main.activity_event.toolbar
+import kotlinx.android.synthetic.main.activity_location.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.model.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenerateListener {
+class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerateListener,OnEditorActionListener {
     private var mAwesomeValidation: AwesomeValidation? = null
     private var beginDateTimeMilliseconds: Long = 0
     private var endDateTimeMilliseconds: Long = 0
@@ -29,7 +34,7 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_event)
+        setContentView(R.layout.activity_event)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         llEndTime.setOnClickListener(this)
@@ -37,14 +42,16 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         tvBeginTime.setOnClickListener(this)
         tvEndTime.setOnClickListener(this)
         initDateTimePicker()
-        val bundle = intent.extras
-        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
+        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
         } else {
             Utils.Log(TAG, "Data is null")
         }
+        edtTitle.setOnEditorActionListener(this)
+        edtLocation.setOnEditorActionListener(this)
+        edtDescription.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -55,71 +62,84 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation?.validate() == true) {
-                    if (beginDateTimeMilliseconds == 0L) {
-                        isBegin = true
-                        isClick = true
-                        dateTimeFragment?.startAtCalendarView()
-                        dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
-                        val date = Date()
-                        val cal = Calendar.getInstance()
-                        currentMilliseconds = date.time
-                        cal.time = date
-                        val year = cal[Calendar.YEAR]
-                        val month = cal[Calendar.MONTH]
-                        val days = cal[Calendar.DAY_OF_MONTH]
-                        val hours = cal[Calendar.HOUR_OF_DAY]
-                        val minutes = cal[Calendar.MINUTE]
-                        dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                        dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
-                        return true
-                    }
-                    if (endDateTimeMilliseconds == 0L) {
-                        isBegin = false
-                        isClick = true
-                        dateTimeFragment?.startAtCalendarView()
-                        dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
-                        val date = Date()
-                        val cal = Calendar.getInstance()
-                        currentMilliseconds = date.time
-                        cal.time = date
-                        val year = cal[Calendar.YEAR]
-                        val month = cal[Calendar.MONTH]
-                        val days = cal[Calendar.DAY_OF_MONTH]
-                        val hours = cal[Calendar.HOUR_OF_DAY]
-                        val minutes = cal[Calendar.MINUTE]
-                        dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
-                        dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
-                        return true
-                    }
-                    if (beginDateTimeMilliseconds > endDateTimeMilliseconds) {
-                        //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
-                        Utils.onDropDownAlert(this, "Ending event data time must be greater than begin date time")
-                        return true
-                    }
-                    val currentTime = System.currentTimeMillis()
-                    if (beginDateTimeMilliseconds <= currentTime) {
-                        //Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
-                        Utils.onDropDownAlert(this, "Starting event data time must be greater than current date time")
-                        return true
-                    }
-                    val create = CreateModel(save)
-                    create.title = edtTitle.getText().toString()
-                    create.location = edtLocation.getText().toString()
-                    create.description = edtDescription.getText().toString()
-                    create.startEvent = Utils.getCurrentDatetimeEvent(beginDateTimeMilliseconds)
-                    create.endEvent = Utils.getCurrentDatetimeEvent(endDateTimeMilliseconds)
-                    create.startEventMilliseconds = beginDateTimeMilliseconds
-                    create.endEventMilliseconds = endDateTimeMilliseconds
-                    create.createType = ParsedResultType.CALENDAR
-                    Navigator.onMoveToReview(this, create)
-                } else {
-                    Utils.Log(TAG, "error")
-                }
+                onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+            return  true
+        }
+        return false
+    }
+
+    private fun onSave(){
+        hideSoftKeyBoard()
+        if (mAwesomeValidation?.validate() == true) {
+            if (beginDateTimeMilliseconds == 0L) {
+                isBegin = true
+                isClick = true
+                dateTimeFragment?.startAtCalendarView()
+                dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
+                val date = Date()
+                val cal = Calendar.getInstance()
+                currentMilliseconds = date.time
+                cal.time = date
+                val year = cal[Calendar.YEAR]
+                val month = cal[Calendar.MONTH]
+                val days = cal[Calendar.DAY_OF_MONTH]
+                val hours = cal[Calendar.HOUR_OF_DAY]
+                val minutes = cal[Calendar.MINUTE]
+                dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                return
+            }
+            if (endDateTimeMilliseconds == 0L) {
+                isBegin = false
+                isClick = true
+                dateTimeFragment?.startAtCalendarView()
+                dateTimeFragment?.setAlertStyle(R.style.Theme_SwitchDateTime)
+                val date = Date()
+                val cal = Calendar.getInstance()
+                currentMilliseconds = date.time
+                cal.time = date
+                val year = cal[Calendar.YEAR]
+                val month = cal[Calendar.MONTH]
+                val days = cal[Calendar.DAY_OF_MONTH]
+                val hours = cal[Calendar.HOUR_OF_DAY]
+                val minutes = cal[Calendar.MINUTE]
+                dateTimeFragment?.setDefaultDateTime(GregorianCalendar(year, month, days, hours, minutes).time)
+                dateTimeFragment?.show(supportFragmentManager, TAG_DATETIME_FRAGMENT)
+                return
+            }
+            if (beginDateTimeMilliseconds > endDateTimeMilliseconds) {
+                //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
+                Utils.onDropDownAlert(this, "Ending event data time must be greater than begin date time")
+                return
+            }
+            val currentTime = System.currentTimeMillis()
+            if (beginDateTimeMilliseconds <= currentTime) {
+                //Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
+                Utils.onDropDownAlert(this, "Starting event data time must be greater than current date time")
+                return
+            }
+            val create = CreateModel(save)
+            create.title = edtTitle.getText().toString()
+            create.location = edtLocation.getText().toString()
+            create.description = edtDescription.getText().toString()
+            create.startEvent = Utils.getCurrentDatetimeEvent(beginDateTimeMilliseconds)
+            create.endEvent = Utils.getCurrentDatetimeEvent(endDateTimeMilliseconds)
+            create.startEventMilliseconds = beginDateTimeMilliseconds
+            create.endEventMilliseconds = endDateTimeMilliseconds
+            create.createType = ParsedResultType.CALENDAR
+            Navigator.onMoveToReview(this, create)
+        } else {
+            Utils.Log(TAG, "error")
+        }
     }
 
     override fun onClick(view: View?) {
@@ -243,7 +263,7 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                 if (isBegin) {
                     if (currentMilliseconds > date?.time ?: 0) {
                         //Utils.showGotItSnackbar(edtTitle,"Starting event data time must be greater than current date time");
-                        Utils.onDropDownAlert(this@EventFragment, "Starting event data time must be greater than current date time")
+                        Utils.onDropDownAlert(this@EventActivity, "Starting event data time must be greater than current date time")
                     } else {
                         beginDateTimeMilliseconds = date?.time ?: 0
                         tvBeginTime.setText(myDateFormat.format(date))
@@ -251,10 +271,10 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                 } else {
                     if (currentMilliseconds > date?.time ?: 0) {
                         //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than current date time");
-                        Utils.onDropDownAlert(this@EventFragment, "Ending event data time must be greater than current date time")
+                        Utils.onDropDownAlert(this@EventActivity, "Ending event data time must be greater than current date time")
                     } else if (beginDateTimeMilliseconds >= date?.time ?: 0) {
                         //Utils.showGotItSnackbar(edtTitle,"Ending event data time must be greater than begin date time");
-                        Utils.onDropDownAlert(this@EventFragment, "Ending event data time must be greater than begin date time")
+                        Utils.onDropDownAlert(this@EventActivity, "Ending event data time must be greater than begin date time")
                     } else {
                         endDateTimeMilliseconds = date?.time ?:0
                         tvEndTime.setText(myDateFormat.format(date))
@@ -285,7 +305,7 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         mAwesomeValidation?.addValidation(this, R.id.edtDescription, RegexTemplate.NOT_EMPTY, R.string.err_description)
     }
 
-    fun FocusUI() {
+    private fun focusUI() {
         edtTitle.requestFocus()
     }
 
@@ -305,7 +325,7 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         mAwesomeValidation?.clear()
         addValidationForEditText()
-        FocusUI()
+        focusUI()
         Utils.Log(TAG, "current time : " + Utils.getCurrentDatetimeEvent())
     }
 
@@ -339,7 +359,7 @@ class EventFragment : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     }
 
     companion object {
-        private val TAG = EventFragment::class.java.simpleName
+        private val TAG = EventActivity::class.java.simpleName
 
         /*Date time picker*/
         private val TAG_DATETIME_FRAGMENT: String = "TAG_DATETIME_FRAGMENT"

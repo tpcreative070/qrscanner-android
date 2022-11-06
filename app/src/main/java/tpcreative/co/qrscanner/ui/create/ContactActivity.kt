@@ -1,35 +1,44 @@
 package tpcreative.co.qrscanner.ui.create
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.fragment_contact.*
+import kotlinx.android.synthetic.main.activity_contact.*
+import kotlinx.android.synthetic.main.activity_contact.edtEmail
+import kotlinx.android.synthetic.main.activity_contact.toolbar
+import kotlinx.android.synthetic.main.activity_email.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.model.*
 
-class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
+class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     private var mAwesomeValidation: AwesomeValidation? = null
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_contact)
+        setContentView(R.layout.activity_contact)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val bundle = intent.extras
-        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
+        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
         } else {
             Utils.Log(TAG, "Data is null")
         }
+        edtFullName.setOnEditorActionListener(this)
+        edtAddress.setOnEditorActionListener(this)
+        edtPhone.setOnEditorActionListener(this)
+        edtEmail.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -40,22 +49,34 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation?.validate() == true) {
-                    Utils.Log(TAG, "Passed")
-                    val create = CreateModel(save)
-                    create.fullName = edtFullName?.text.toString().trim { it <= ' ' }
-                    create.address = edtAddress?.text.toString()
-                    create.phone = edtPhone?.text.toString()
-                    create.email = edtEmail?.text.toString()
-                    create.createType = ParsedResultType.ADDRESSBOOK
-                    Navigator.onMoveToReview(this, create)
-                } else {
-                    Utils.Log(TAG, "error")
-                }
+                onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+            return  true
+        }
+        return false
+    }
+
+    private fun onSave(){
+        hideSoftKeyBoard()
+        if (mAwesomeValidation?.validate() == true) {
+            val create = CreateModel(save)
+            create.fullName = edtFullName?.text.toString().trim { it <= ' ' }
+            create.address = edtAddress?.text.toString()
+            create.phone = edtPhone?.text.toString()
+            create.email = edtEmail?.text.toString()
+            create.createType = ParsedResultType.ADDRESSBOOK
+            Navigator.onMoveToReview(this, create)
+        } else {
+            Utils.Log(TAG, "error")
+        }
     }
 
     private fun addValidationForEditText() {
@@ -65,7 +86,7 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
         mAwesomeValidation?.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
     }
 
-    fun FocusUI() {
+    private fun focusUI() {
         edtFullName.requestFocus()
     }
 
@@ -81,7 +102,7 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
         Utils.Log(TAG, "onStart")
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         addValidationForEditText()
-        FocusUI()
+        focusUI()
     }
 
     public override fun onStop() {
@@ -113,6 +134,6 @@ class ContactFragment : BaseActivitySlide(), SingletonGenerateListener {
     }
 
     companion object {
-        private val TAG = ContactFragment::class.java.simpleName
+        private val TAG = ContactActivity::class.java.simpleName
     }
 }

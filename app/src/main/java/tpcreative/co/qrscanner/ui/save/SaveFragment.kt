@@ -1,13 +1,10 @@
 package tpcreative.co.qrscanner.ui.save
-import android.Manifest
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -16,17 +13,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_saver.*
 import kotlinx.coroutines.CoroutineScope
@@ -290,26 +279,26 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     override fun onClickEdit(position: Int) {
         edit = viewModel.mList[position]
         if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, BarcodeFragment::class.java)
+            Navigator.onGenerateView(activity, edit, BarcodeActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, ContactFragment::class.java)
+            Navigator.onGenerateView(activity, edit, ContactActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, EmailFragment::class.java)
+            Navigator.onGenerateView(activity, edit, EmailActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
         } else if (edit?.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, UrlFragment::class.java)
+            Navigator.onGenerateView(activity, edit, UrlActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, WifiFragment::class.java)
+            Navigator.onGenerateView(activity, edit, WifiActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, LocationFragment::class.java)
+            Navigator.onGenerateView(activity, edit, LocationActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, TelephoneFragment::class.java)
+            Navigator.onGenerateView(activity, edit, TelephoneActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, MessageFragment::class.java)
+            Navigator.onGenerateView(activity, edit, MessageActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, EventFragment::class.java)
+            Navigator.onGenerateView(activity, edit, EventActivity::class.java)
         } else {
-            Navigator.onGenerateView(activity, edit, TextFragment::class.java)
+            Navigator.onGenerateView(activity, edit, TextActivity::class.java)
         }
     }
 

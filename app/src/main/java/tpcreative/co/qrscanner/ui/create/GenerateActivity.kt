@@ -10,7 +10,7 @@ import tpcreative.co.qrscanner.model.QRCodeType
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.*
 
-class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
+class GenerateActivity : BaseFragment(), GenerateCell.ItemSelectedListener {
     lateinit var viewModel : GenerateViewModel
     override fun getLayoutId(): Int {
         return 0
@@ -56,34 +56,34 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
         var mPosition = position
         when (mPosition) {
             0 -> {
-                Navigator.onGenerateView(activity, null, BarcodeFragment::class.java)
+                Navigator.onGenerateView(activity, null, BarcodeActivity::class.java)
             }
             1 -> {
-                Navigator.onGenerateView(activity, null, EmailFragment::class.java)
+                Navigator.onGenerateView(activity, null, EmailActivity::class.java)
             }
             2 -> {
-                Navigator.onGenerateView(activity, null, MessageFragment::class.java)
+                Navigator.onGenerateView(activity, null, MessageActivity::class.java)
             }
             3 -> {
-                Navigator.onGenerateView(activity, null, LocationFragment::class.java)
+                Navigator.onGenerateView(activity, null, LocationActivity::class.java)
             }
             4 -> {
-                Navigator.onGenerateView(activity, null, EventFragment::class.java)
+                Navigator.onGenerateView(activity, null, EventActivity::class.java)
             }
             5 -> {
-                Navigator.onGenerateView(activity, null, ContactFragment::class.java)
+                Navigator.onGenerateView(activity, null, ContactActivity::class.java)
             }
             6 -> {
-                Navigator.onGenerateView(activity, null, TelephoneFragment::class.java)
+                Navigator.onGenerateView(activity, null, TelephoneActivity::class.java)
             }
             7 -> {
-                Navigator.onGenerateView(activity, null, TextFragment::class.java)
+                Navigator.onGenerateView(activity, null, TextActivity::class.java)
             }
             8 -> {
-                Navigator.onGenerateView(activity, null, WifiFragment::class.java)
+                Navigator.onGenerateView(activity, null, WifiActivity::class.java)
             }
             9 -> {
-                Navigator.onGenerateView(activity, null, UrlFragment::class.java)
+                Navigator.onGenerateView(activity, null, UrlActivity::class.java)
             }
         }
     }
@@ -110,9 +110,9 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
     }
 
     companion object {
-        private val TAG = GenerateFragment::class.java.simpleName
-        fun newInstance(index: Int): GenerateFragment {
-            val fragment = GenerateFragment()
+        private val TAG = GenerateActivity::class.java.simpleName
+        fun newInstance(index: Int): GenerateActivity {
+            val fragment = GenerateActivity()
             val b = Bundle()
             b.putInt("index", index)
             fragment.arguments = b

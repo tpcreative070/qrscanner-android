@@ -1,23 +1,22 @@
 package tpcreative.co.qrscanner.ui.create
 
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_barcode.*
+import kotlinx.android.synthetic.main.activity_barcode.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
-fun BarcodeFragment.initUI(){
+fun BarcodeActivity.initUI(){
     TAG = this::class.java.name
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     doInitView()
-    val bundle = intent.extras
-    val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
+    val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
     if (mData != null) {
         save = mData
         onSetData()
@@ -27,24 +26,24 @@ fun BarcodeFragment.initUI(){
     btnRandom.setOnClickListener {
         val mValue = Utils.generateRandomDigits(viewModel.mLength - 1).toString() + ""
         val mResult = Utils.generateEAN(mValue)
-        edtText.setText(mResult)
+        edtBarCode.setText(mResult)
     }
 }
 
-fun BarcodeFragment.doInitView(){
+fun BarcodeActivity.doInitView(){
     viewModel.doInitView().observe(this, Observer {
         onInitView()
     })
 }
 
-fun BarcodeFragment.getBarcodeFormat(){
+fun BarcodeActivity.getBarcodeFormat(){
     viewModel.getBarcodeFormat().observe(this, Observer {
         onSetView()
     })
 }
 
 
-private fun BarcodeFragment.setupViewModel() {
+private fun BarcodeActivity.setupViewModel() {
     viewModel = ViewModelProvider(
             this,
             ViewModelFactory()

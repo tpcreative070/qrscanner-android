@@ -9,7 +9,9 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.*
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.*
+import android.widget.TextView.OnEditorActionListener
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
@@ -26,15 +28,18 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.zxing.client.result.ParsedResultType
 import de.mrapp.android.dialog.MaterialDialog
-import kotlinx.android.synthetic.main.fragment_location.*
+import kotlinx.android.synthetic.main.activity_location.*
+import kotlinx.android.synthetic.main.activity_location.toolbar
+import kotlinx.android.synthetic.main.activity_message.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
 
-class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, OnMyLocationClickListener, OnMapReadyCallback, OnRequestPermissionsResultCallback, OnMapClickListener, LocationListener, SingletonGenerateListener {
+class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, OnMyLocationClickListener, OnMapReadyCallback, OnRequestPermissionsResultCallback, OnMapClickListener, LocationListener, SingletonGenerateListener,OnEditorActionListener {
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var mAwesomeValidation: AwesomeValidation? = null
@@ -48,14 +53,13 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     private var save: SaveModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_location)
+        setContentView(R.layout.activity_location)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
-        val bundle = intent.extras
-        val mData = bundle?.get(getString(R.string.key_data)) as SaveModel?
+        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -66,6 +70,9 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         if (locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) != true) {
             showGpsWarningDialog()
         }
+        edtLatitude.setOnEditorActionListener(this)
+        edtLongitude.setOnEditorActionListener(this)
+        edtQuery.setOnEditorActionListener(this)
     }
 
     private fun showGpsWarningDialog() {
@@ -117,28 +124,41 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_select -> {
-                if (mAwesomeValidation?.validate() == true) {
-                    val create = CreateModel(save)
-                    try {
-                        if (lastLon == 0.0 || lastLon == 0.0) {
-                            Utils.onDropDownAlert(this, "Please enable GPS in order to get accurate lat and lon")
-                        } else {
-                            create.lat = lastLat
-                            create.lon = lastLon
-                            create.query = edtQuery.text.toString()
-                            create.createType = ParsedResultType.GEO
-                            Navigator.onMoveToReview(this, create)
-                        }
-                    } catch (e: Exception) {
-                        Utils.Log(TAG, "error :" + e.message)
-                    }
-                } else {
-                    Utils.Log(TAG, "error")
-                }
+                onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+            onSave()
+            return  true
+        }
+        return false
+    }
+
+    private fun onSave(){
+        hideSoftKeyBoard()
+        if (mAwesomeValidation?.validate() == true) {
+            val create = CreateModel(save)
+            try {
+                if (lastLon == 0.0 || lastLon == 0.0) {
+                    Utils.onDropDownAlert(this, "Please enable GPS in order to get accurate lat and lon")
+                } else {
+                    create.lat = lastLat
+                    create.lon = lastLon
+                    create.query = edtQuery.text.toString()
+                    create.createType = ParsedResultType.GEO
+                    Navigator.onMoveToReview(this, create)
+                }
+            } catch (e: Exception) {
+                Utils.Log(TAG, "error :" + e.message)
+            }
+        } else {
+            Utils.Log(TAG, "error")
+        }
     }
 
     private fun addValidationForEditText() {
@@ -147,7 +167,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mAwesomeValidation?.addValidation(this, R.id.edtQuery, RegexTemplate.NOT_EMPTY, R.string.err_query)
     }
 
-    private fun FocusUI() {
+    private fun focusUI() {
         edtLatitude.requestFocus()
     }
 
@@ -170,7 +190,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         mAwesomeValidation?.clear()
         addValidationForEditText()
-        FocusUI()
+        focusUI()
     }
 
     public override fun onResume() {
@@ -317,7 +337,7 @@ class LocationFragment : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     companion object {
-        private val TAG = LocationFragment::class.java.simpleName
+        private val TAG = LocationActivity::class.java.simpleName
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 }
