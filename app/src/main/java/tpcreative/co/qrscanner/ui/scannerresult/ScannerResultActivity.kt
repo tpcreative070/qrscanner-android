@@ -1,13 +1,10 @@
 package tpcreative.co.qrscanner.ui.scannerresult
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.net.wifi.WifiManager
-import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
@@ -18,13 +15,9 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
 import com.google.zxing.client.result.ParsedResultType
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -32,7 +25,6 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.activity_result.*
-import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
 import tpcreative.co.qrscanner.common.ScannerSingleton
@@ -42,7 +34,6 @@ import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import java.io.File
 import java.net.URLEncoder
 import java.util.*
 
@@ -631,7 +622,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadLargeAd(llAds)
+            QRScannerApplication.getInstance().loadResultSmallView(llAds)
         } else {
             rlAdsRoot.visibility = View.GONE
         }

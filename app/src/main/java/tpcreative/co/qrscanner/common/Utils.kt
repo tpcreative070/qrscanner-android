@@ -333,7 +333,7 @@ object Utils {
 
     fun onLogAds(eventCode: String?): String? {
         val idAds: String = QRScannerApplication.Companion.getInstance().getString(R.string.admob_app_id)
-        val banner_id: String = QRScannerApplication.Companion.getInstance().getString(R.string.banner_footer)
+        val banner_id: String = QRScannerApplication.Companion.getInstance().getString(R.string.banner_main)
         return "event-code:" + eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id + " ;app id: " + BuildConfig.APPLICATION_ID + " ;variant: " + QRScannerApplication.Companion.getInstance().getString(R.string.qrscanner_free_release)
     }
 

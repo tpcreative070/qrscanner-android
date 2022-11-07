@@ -1,8 +1,6 @@
 package tpcreative.co.qrscanner.ui.scannerresult
 import android.app.Activity
-import android.content.ClipData
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.text.InputType
 import android.window.OnBackInvokedDispatcher
@@ -46,8 +44,8 @@ fun ScannerResultActivity.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
-    if (QRScannerApplication.getInstance().isRequestLargeAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewAds()) {
-        QRScannerApplication.getInstance().requestAdsLargeView(this)
+    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView()) {
+        QRScannerApplication.getInstance().requestResultSmallView(this)
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(

@@ -15,15 +15,22 @@ import androidx.print.PrintHelper
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_review.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.CreateModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
+import tpcreative.co.qrscanner.ui.scannerresult.checkingShowAds
 import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import tpcreative.co.qrscanner.ui.scannerresult.showAds
 import java.io.File
@@ -36,6 +43,13 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     scrollView.smoothScrollTo(0, 0)
     getIntentData()
+    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView()) {
+        QRScannerApplication.getInstance().requestReviewSmallView(this)
+    }
+    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView()) {
+        QRScannerApplication.getInstance().requestReviewLargeView(this)
+    }
+    checkingShowAds()
     /*Press back button*/
     if (Build.VERSION.SDK_INT >= 33) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
@@ -95,21 +109,21 @@ fun ReviewActivity.shareToSocial(value : Uri) {
     startActivity(Intent.createChooser(intent, "Share"))
 }
 
-fun ReviewActivity.getImageUri(): Uri? {
-    val imagefolder = File(cacheDir, "images")
+suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatchers.IO) {
+    val imageFolder = File(cacheDir, Constant.images_folder)
     var uri: Uri? = null
     try {
-        imagefolder.mkdirs()
-        val file = File(imagefolder, "shared_image.png")
+        imageFolder.mkdirs()
+        val file = File(imageFolder, "shared_code_${System.currentTimeMillis()}.png")
         val outputStream = FileOutputStream(file)
-        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 80, outputStream)
         outputStream.flush()
         outputStream.close()
-        uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
+        uri = FileProvider.getUriForFile(this@getImageUri, BuildConfig.APPLICATION_ID + ".provider", file)
+        mUri = uri
     } catch (e: java.lang.Exception) {
-        Toast.makeText(this, "" + e.message, Toast.LENGTH_LONG).show()
+        Toast.makeText(this@getImageUri, "" + e.message, Toast.LENGTH_LONG).show()
     }
-    return uri
 }
 
 fun ReviewActivity.onPhotoPrint() {
@@ -141,7 +155,17 @@ fun ReviewActivity.onSaveQRCode(text : String){
     history.updatedDateTime = time
     txtFormat.text = format
     SQLiteHelper.onInsert(history)
-    onGenerateReview(code)
+    viewModel.updateId(history.uuId)
+    CoroutineScope(Dispatchers.Main).launch {
+        onGenerateReview(code)
+        onGenerateQRCode(code)
+    }
+}
+
+fun ReviewActivity.checkingShowAds(){
+    viewModel.doShowAds().observe(this, Observer {
+        doShowAds(it)
+    })
 }
 
 fun ReviewActivity.getIntentData(){

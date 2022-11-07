@@ -31,7 +31,6 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumStatus
 import tpcreative.co.qrscanner.model.SyncDataModel
-import tpcreative.co.qrscanner.ui.review.getImageUri
 import tpcreative.co.qrscanner.viewmodel.DriveViewModel
 import tpcreative.co.qrscanner.viewmodel.UserViewModel
 import java.io.File

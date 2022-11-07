@@ -173,11 +173,13 @@
     <string name="your_complimentary_premium_remaining">You have %1$s more days of complimentary Premium remaining. Upgrade now to keep using Premium without interruption.</string>
 
     <string name="admob_app_id">ca-app-pub-7019113255489690~9657466810</string>
-    <string name="banner_footer">ca-app-pub-7019113255489690/9391156707</string>
-    <string name="banner_review">ca-app-pub-7019113255489690/2825748351</string>
-    <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_main">ca-app-pub-7019113255489690/9391156707</string>
+    <string name="banner_result_small">ca-app-pub-7019113255489690/2825748351</string>
+    <string name="banner_review_small">ca-app-pub-7019113255489690/4436866707</string>
+    <string name="banner_review_large">ca-app-pub-7019113255489690/4871980970</string>
     <string name="interstitial">ca-app-pub-7019113255489690/7266352245</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
 
     <string name="key_admob_app_id">admob_app_id</string>
     <string name="key_banner_home_footer">banner_home_footer</string>

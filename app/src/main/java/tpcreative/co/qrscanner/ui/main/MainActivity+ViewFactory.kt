@@ -16,7 +16,6 @@ import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.CustomViewPager
 import tpcreative.co.qrscanner.model.Theme
-import tpcreative.co.qrscanner.ui.review.initUI
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
 fun MainActivity.initUI(){
@@ -57,8 +56,8 @@ fun MainActivity.initUI(){
             == PackageManager.PERMISSION_DENIED) {
         onAddPermissionCamera()
     }
-    if (QRScannerApplication.getInstance().isRequestAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
-        QRScannerApplication.getInstance().requestAdsView(this)
+    if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView()) {
+        QRScannerApplication.getInstance().requestMainView(this)
     }
 
     if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {

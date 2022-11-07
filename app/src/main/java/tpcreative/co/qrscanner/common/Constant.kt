@@ -17,7 +17,8 @@ class Constant {
         const val CAMERA_FACING_FRONT = 1
         const val QRCodeExportWidth = 400
         const val QRCodeExportHeight = 400
-        const val QRCodeViewWidth = 200
-        const val QRCodeViewHeight = 200
+        const val QRCodeViewWidth = 250
+        const val QRCodeViewHeight = 250
+        const val images_folder = "images"
     }
 }

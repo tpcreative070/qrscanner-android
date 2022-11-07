@@ -66,7 +66,7 @@ class CreateModel : Serializable {
         hidden = false
         createType = ParsedResultType.TEXT
         fragmentType = EnumFragmentType.SCANNER
-        enumImplement = EnumImplement.CREATE
+        enumImplement = EnumImplement.VIEW
         id = 0
         barcodeFormat = ""
         favorite = false
@@ -96,7 +96,7 @@ class CreateModel : Serializable {
         url = ""
         hidden = false
         createType = ParsedResultType.TEXT
-        fragmentType = EnumFragmentType.SCANNER
+        fragmentType = EnumFragmentType.CREATE
         enumImplement = EnumImplement.CREATE
         id = 0
         barcodeFormat = ""

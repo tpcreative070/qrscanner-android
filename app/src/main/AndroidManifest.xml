@@ -53,16 +53,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
-            <intent-filter
-                android:label="@string/scan_photo">
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="image/*" />
-            </intent-filter>
+            android:screenOrientation="fullSensor">
         </activity>
         <activity
             android:name=".ui.review.ReviewActivity"
@@ -142,7 +133,15 @@
             android:name=".ui.create.BarcodeActivity"
             android:label="@string/barcode" />
         <activity android:name=".ui.scannerresult.ScannerResultActivity" />
-        <activity android:name=".common.view.crop.CropImageActivity" />
+        <activity android:name=".common.view.crop.CropImageActivity"
+            android:exported="true">
+            <intent-filter
+                android:label="@string/scan_photo">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

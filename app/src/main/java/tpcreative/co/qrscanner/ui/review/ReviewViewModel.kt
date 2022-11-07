@@ -11,6 +11,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.ItemNavigation
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
@@ -35,6 +36,14 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
         }
     }
 
+    fun doShowAds() = liveData(Dispatchers.Main) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
+            emit(true)
+        } else {
+            emit(false)
+        }
+    }
+
     fun getTakeNote(id : Int?) : String? {
         val mItem = SQLiteHelper.getSaveItemById(id)
         return mItem?.noted
@@ -43,5 +52,14 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     fun getFavorite(id : Int?) : Boolean? {
         val mItem = SQLiteHelper.getSaveItemById(id)
         return mItem?.favorite
+    }
+
+    fun updateId(uuId : String?){
+        if (create.id == 0){
+            val mModel = SQLiteHelper.getItemByUUIdOfHistory(uuId)
+            create.fragmentType = EnumFragmentType.HISTORY
+            create.noted = ""
+            create.id = mModel?.id ?: 0
+        }
     }
 }

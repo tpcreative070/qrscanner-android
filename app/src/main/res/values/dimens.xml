@@ -88,4 +88,5 @@
     <dimen name="margin_40">40sp</dimen>
     <dimen name="margin_45">45sp</dimen>
     <dimen name="margin_50">50sp</dimen>
+    <dimen name="margin_1">1sp</dimen>
 </resources>
