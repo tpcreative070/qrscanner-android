@@ -59,7 +59,7 @@ class SplashScreenActivity : BaseActivity() {
                             Utils.Log(TAG, "Permission is denied")
                         }
                         // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied() == true) {
+                        if (report?.isAnyPermissionPermanentlyDenied == true) {
                             /*Miss add permission in manifest*/
                             finish()
                             Utils.Log(TAG, "request permission is failed")

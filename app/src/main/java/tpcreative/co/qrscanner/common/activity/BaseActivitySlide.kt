@@ -3,6 +3,7 @@ import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +50,14 @@ open class BaseActivitySlide : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+    }
+
+    fun hideSoftKeyBoard() {
+        val imm: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        if (imm.isAcceptingText) { // verify if the soft keyboard is open
+            imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+        }
     }
 
     companion object {

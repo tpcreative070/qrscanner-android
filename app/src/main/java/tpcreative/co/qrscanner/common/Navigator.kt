@@ -19,10 +19,10 @@ object Navigator {
     const val SCANNER = 1001
     const val REQUEST_CODE_EMAIL = 1007
     const val REQUEST_CODE_EMAIL_ANOTHER_ACCOUNT = 1008
-    fun onMoveToReview(context: Activity?, create: Create?) {
+    fun onMoveToReview(context: Activity?, create: CreateModel?) {
         val intent = Intent(context, ReviewActivity::class.java)
         val bundle = Bundle()
-        bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_create_intent), create)
+        bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), create)
         intent.putExtras(bundle)
         context?.startActivityForResult(intent, CREATE)
     }
@@ -50,12 +50,20 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-    fun <T> onResultView(context: Activity?, save: Create?, clazz: Class<T>) {
+//    fun <T> onResultView(context: Activity?, save: CreateModel?, clazz: Class<T>){
+//        val intent = Intent(context, clazz)
+//        val bundle = Bundle()
+//        bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
+//        intent.putExtras(bundle)
+//        context?.startActivityForResult(intent, SCANNER)
+//    }
+
+    fun <T> onResultView(context: Activity?, save: CreateModel?, clazz: Class<T>) : Intent {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
         intent.putExtras(bundle)
-        context?.startActivityForResult(intent, SCANNER)
+        return  intent
     }
 
     fun onMoveMainTab(context: AppCompatActivity?) {

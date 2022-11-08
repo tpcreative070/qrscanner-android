@@ -35,6 +35,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         <androidx.core.widget.NestedScrollView
+            android:layout_above="@+id/rlAdsRoot"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -46,35 +47,95 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/bg_location_group"
                     android:orientation="vertical">
-                    <RelativeLayout
-                        android:id="@+id/rlResult"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/imgResult"
-                            android:layout_width="@dimen/icon_size_200"
-                            android:layout_height="@dimen/icon_size_200"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerInParent="true"
-                            android:layout_marginTop="20dp" />
-                    </RelativeLayout>
-                    <LinearLayout
-                        android:id="@+id/llAction"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="5dp"
-                        android:gravity="center">
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_gravity="center"
+                        android:id="@+id/imgResult"
+                        android:layout_width="@dimen/icon_size_250"
+                        android:layout_height="@dimen/icon_size_250"
+                        android:layout_marginTop="@dimen/margin_5"/>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_18"
+                        style="@style/brandonRedBoldTextView"
+                        android:id="@+id/txtSubject"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginTop="@dimen/margin_10"
+                        style="@style/brandonRegularTextView"
+                        android:id="@+id/txtDisplay"
+                        android:inputType="textMultiLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textSize="@dimen/text_size_15"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginTop="@dimen/margin_10"
+                        style="@style/brandonRegularTextView"
+                        android:id="@+id/txtFormat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/rlBannerLarger"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:id="@+id/viewUnderline"
+                        android:background="@color/grey_lighter"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:layout_below="@+id/viewUnderline"
+                        style="@style/brandonRegularTextView"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_14"
+                        android:text="@string/advertising"
+                        android:id="@+id/tvAdvertising"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_below="@+id/tvAdvertising"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/llLargeAds"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/banner_rectangle_review_height"
+                        android:gravity="center"
+                        android:orientation="vertical"/>
+                </RelativeLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:id="@+id/rlAdsRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/llSmallAds"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/banner_height"
+                android:gravity="center"
+                android:orientation="vertical"/>
+        </RelativeLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

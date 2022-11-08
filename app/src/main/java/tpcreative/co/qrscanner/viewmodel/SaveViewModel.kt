@@ -23,8 +23,9 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
             index.typeCategories = mFavoriteCategory
             mList.add(index)
         }
-        mList.sortWith { o1, o2 -> if (Utils.getMilliseconds(o1?.updatedDateTime) < Utils.getMilliseconds(o2?.updatedDateTime)) 0 else 1 }
-        return mList
+        mList.sortBy { it.getUpdatedTimeToMilliseconds()}
+        mList.reverse()
+        return  mList
     }
     private fun getLatestList(mData: MutableList<SaveModel>): MutableList<SaveModel> {
         val mList: MutableList<SaveModel> = mutableListOf()
@@ -37,8 +38,9 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
                 }
             }
         }
-        mList.sortWith { o1, o2 -> if (Utils.getMilliseconds(o1?.updatedDateTime) < Utils.getMilliseconds(o2?.updatedDateTime)) 0 else 1 }
-        return mList
+        mList.sortBy { it.getUpdatedTimeToMilliseconds()}
+        mList.reverse()
+        return  mList
     }
 
     private fun getUniqueList(){

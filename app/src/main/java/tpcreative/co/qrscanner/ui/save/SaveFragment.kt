@@ -1,28 +1,21 @@
 package tpcreative.co.qrscanner.ui.save
-import android.Manifest
+import android.app.Activity
+import android.content.ClipData
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_saver.*
 import kotlinx.coroutines.CoroutineScope
@@ -36,15 +29,12 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.create.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.SaveViewModel
 import java.io.File
 import java.util.*
 
 class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleton.SingletonSaveListener, Utils.UtilsListener {
-    private var bitmap: Bitmap? = null
-    private var code: String? = null
-    private var share: SaveModel? = null
     private var edit: SaveModel? = null
     var misDeleted = false
     var isSelectedAll = false
@@ -217,7 +207,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         if (actionMode != null) {
             return
         }
-        val create = Create()
+        val create = CreateModel()
         val save: SaveModel = viewModel.mList[position]
         create.id = save.id ?: 0
         create.favorite = save.favorite ?: false
@@ -274,100 +264,54 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             create.createType = ParsedResultType.TEXT
         }
         Utils.Log(TAG, "Call intent")
+
+        create.barcodeFormat = save.barcodeFormat
+        create.noted = save.noted
         create.fragmentType = EnumFragmentType.SAVER
-        Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
+        create.enumImplement = EnumImplement.VIEW
+        viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
-    override fun onClickShare(position: Int) {
-        share = viewModel.mList[position]
-        if (share?.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            code = "MECARD:N:" + share?.fullName + ";TEL:" + share?.phone + ";EMAIL:" + share?.email + ";ADR:" + share?.address + ";"
-        } else if (share?.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            code = "MATMSG:TO:" + share?.email + ";SUB:" + share?.subject + ";BODY:" + share?.message + ";"
-        } else if (share?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-        } else if (share?.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            code = share?.url
-        } else if (share?.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            code = "WIFI:S:" + share?.ssId + ";T:" + share?.password + ";P:" + share?.networkEncryption + ";H:" + share?.hidden + ";"
-        } else if (share?.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            code = "geo:" + share?.lat + "," + share?.lon + "?q=" + share?.query + ""
-        } else if (share?.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            code = "tel:" + share?.phone + ""
-        } else if (share?.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            code = "smsto:" + share?.phone + ":" + share?.message
-        } else if (share?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            val builder = StringBuilder()
-            builder.append("BEGIN:VEVENT")
-            builder.append("\n")
-            builder.append("SUMMARY:" + share?.title)
-            builder.append("\n")
-            builder.append("DTSTART:" + share?.startEvent)
-            builder.append("\n")
-            builder.append("DTEND:" + share?.endEvent)
-            builder.append("\n")
-            builder.append("LOCATION:" + share?.location)
-            builder.append("\n")
-            builder.append("DESCRIPTION:" + share?.description)
-            builder.append("\n")
-            builder.append("END:VEVENT")
-            code = builder.toString()
-        } else if (share?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            code = share?.text
-        } else {
-            code = share?.text
+    private val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG,"${result.resultCode}")
         }
-        onGenerateCode(code)
     }
 
     override fun onClickEdit(position: Int) {
         edit = viewModel.mList[position]
         if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, BarcodeFragment::class.java)
+            Navigator.onGenerateView(activity, edit, BarcodeActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, ContactFragment::class.java)
+            Navigator.onGenerateView(activity, edit, ContactActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, EmailFragment::class.java)
+            Navigator.onGenerateView(activity, edit, EmailActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
         } else if (edit?.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, UrlFragment::class.java)
+            Navigator.onGenerateView(activity, edit, UrlActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, WifiFragment::class.java)
+            Navigator.onGenerateView(activity, edit, WifiActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, LocationFragment::class.java)
+            Navigator.onGenerateView(activity, edit, LocationActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, TelephoneFragment::class.java)
+            Navigator.onGenerateView(activity, edit, TelephoneActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, MessageFragment::class.java)
+            Navigator.onGenerateView(activity, edit, MessageActivity::class.java)
         } else if (edit?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, EventFragment::class.java)
+            Navigator.onGenerateView(activity, edit, EventActivity::class.java)
         } else {
-            Navigator.onGenerateView(activity, edit, TextFragment::class.java)
+            Navigator.onGenerateView(activity, edit, TextActivity::class.java)
         }
     }
 
-    fun shareToSocial(value: Uri?) {
+    private fun shareToSocial(value: Uri?) {
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
-        intent.type = "image/*"
+        intent.type = "*/*"
         intent.putExtra(Intent.EXTRA_STREAM, value)
+        intent.clipData = ClipData.newRawUri("", value);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(Intent.createChooser(intent, "Share"))
-    }
-
-    fun onGenerateCode(code: String?) {
-        try {
-            val barcodeEncoder = BarcodeEncoder()
-            val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
-            hints[EncodeHintType.MARGIN] = 2
-            val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-            bitmap = if (share?.createType === ParsedResultType.PRODUCT.name) {
-                barcodeEncoder.encodeBitmap(context, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.valueOf(share?.barcodeFormat ?: ""), 400, 400, hints)
-            } else {
-                barcodeEncoder.encodeBitmap(context, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.QR_CODE, 400, 400, hints)
-            }
-            Utils.saveImage(bitmap, EnumAction.SHARE, share?.createType, code, this)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     override fun onSaved(path: String?, enumAction: EnumAction?) {
@@ -391,20 +335,15 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     fun exportData() = CoroutineScope(Dispatchers.Main).launch {
-        val mResult =  ServiceManager.getInstance().onExportDatabaseCSVTask(EnumFragmentType.SAVER)
+        val mResult =  ServiceManager.getInstance().onExportDatabaseCSVTask(requireContext(),EnumFragmentType.SAVER)
         when(mResult.status){
             Status.SUCCESS -> {
                 val path = mResult.data ?: ""
                 val file = File(path)
                 if (file.isFile) {
                     Utils.Log(TAG, "path : $path")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file)
-                        shareToSocial(uri)
-                    } else {
-                        val uri = Uri.fromFile(file)
-                        shareToSocial(uri)
-                    }
+                    val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file)
+                    shareToSocial(uri)
                 }
             }else -> {
             Utils.Log(TAG,"")
@@ -413,30 +352,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     fun onAddPermissionSave() {
-        Dexter.withContext(activity)
-                .withPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                           exportData()
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
+        exportData()
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {

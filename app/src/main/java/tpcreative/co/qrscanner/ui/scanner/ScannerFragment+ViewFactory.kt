@@ -6,9 +6,10 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
@@ -28,9 +29,9 @@ fun ScannerFragment.initUI(){
             override fun onAnimationEnd(animation: Animation?) {
                 zxing_barcode_scanner.pauseAndWait()
                 if (cameraSettings.requestedCameraId == 0) {
-                    switchCamera(Camera.CameraInfo.CAMERA_FACING_FRONT)
+                    switchCamera(Constant.CAMERA_FACING_FRONT)
                 } else {
-                    switchCamera(Camera.CameraInfo.CAMERA_FACING_BACK)
+                    switchCamera(Constant.CAMERA_FACING_BACK)
                 }
             }
             override fun onAnimationRepeat(animation: Animation?) {}
@@ -108,7 +109,7 @@ fun ScannerFragment.initUI(){
 }
 
 private fun ScannerFragment.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(ScannerViewModel::class.java)

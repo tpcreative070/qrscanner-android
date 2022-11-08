@@ -1,14 +1,17 @@
 package tpcreative.co.qrscanner.ui.scanner
-import android.Manifest
+
 import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
-import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
 import android.view.animation.Animation
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -19,11 +22,6 @@ import com.google.zxing.client.result.*
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,13 +31,15 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
-import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.pickImage
+import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultFragment
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
+
 
 class ScannerFragment : BaseFragment(), SingletonScannerListener{
     lateinit var viewModel : ScannerViewModel
@@ -57,7 +57,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     return
                 }
                 val parsedResult = ResultParser.parseResult(result?.result)
-                val create = Create()
+                val create = CreateModel()
                 var address: String? = ""
                 var fullName: String? = ""
                 var email: String? = ""
@@ -145,8 +145,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     ParsedResultType.CALENDAR -> {
                         create.createType = ParsedResultType.CALENDAR
                         val calendarParsedResult = parsedResult as CalendarParsedResult
-                        val startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.startTimestamp)
-                        val endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.endTimestamp)
+                        val startTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.startTimestamp)
+                        val endTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.endTimestamp)
                         title = if (calendarParsedResult.summary == null) "" else calendarParsedResult.summary
                         description = if (calendarParsedResult.description == null) "" else calendarParsedResult.description
                         location = if (calendarParsedResult.location == null) "" else calendarParsedResult.location
@@ -207,7 +207,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             }
         }
 
-        fun doNavigation(create: Create?) {
+        fun doNavigation(create: CreateModel?) {
             if (Utils.isMultipleScan()) {
                 btnDone.visibility = View.VISIBLE
                 tvCount.visibility = View.VISIBLE
@@ -221,7 +221,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     }
                 }
             } else {
-                Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
+                scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
                 if (zxing_barcode_scanner != null) {
                     zxing_barcode_scanner.pauseAndWait()
                 }
@@ -251,11 +251,11 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         typeCamera = if (Utils.checkCameraBack(context)) {
-            cameraSettings.requestedCameraId = Camera.CameraInfo.CAMERA_FACING_BACK
+            cameraSettings.requestedCameraId = Constant.CAMERA_FACING_BACK
             0
         } else {
             if (Utils.checkCameraFront(context)) {
-                cameraSettings.requestedCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT
+                cameraSettings.requestedCameraId = Constant.CAMERA_FACING_FRONT
                 1
             } else {
                 2
@@ -282,33 +282,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     }
 
     fun onAddPermissionGallery() {
-        Dexter.withContext(activity)
-                .withPermissions(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            if (zxing_barcode_scanner != null) {
-                                zxing_barcode_scanner.pauseAndWait()
-                            }
-                            onGetGallery()
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
+        if (zxing_barcode_scanner != null) {
+            zxing_barcode_scanner.pauseAndWait()
+        }
+        onGetGallery()
     }
 
     private fun onBeepAndVibrate() {
@@ -363,29 +340,35 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     override fun onResume() {
         super.onResume()
+         if (zxing_barcode_scanner != null && !zxing_barcode_scanner.isActivated) {
+             zxing_barcode_scanner.resume()
+         }
         Utils.Log(TAG, "onResume")
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Utils.Log(TAG, "onActivityResult : $requestCode - $resultCode")
-        if (resultCode == Activity.RESULT_OK && requestCode == Navigator.SCANNER) {
+    private val scanForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
             setVisible()
-            Utils.Log(TAG, "Resume camera")
-        } else if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
-            beginCrop(data?.data)
-        } else if (requestCode == Crop.REQUEST_CROP) {
-            handleCrop(resultCode, data)
-        } else {
-            Utils.Log(TAG, "You haven't picked Image")
-            setVisible()
-            Utils.Log(TAG, "Resume camera!!!")
+        }
+    }
+
+    private val pickGalleryForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_PICK")
+            beginCrop(result.data?.data)
+        }
+    }
+
+    private val cropForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_CROP")
+            handleCrop(result.resultCode, result.data)
         }
     }
 
     private fun beginCrop(source: Uri?) {
         val destination = Uri.fromFile(File(activity?.cacheDir, "cropped"))
-        Crop.of(source, destination)?.asSquare()?.start(requireContext(), this)
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(requireContext()))
     }
 
     private fun handleCrop(resultCode: Int, result: Intent?) {
@@ -401,8 +384,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
     }
 
-    fun onGetGallery() {
-        pickImage(context, this)
+    private fun onGetGallery() {
+        pickGalleryForResult.launch(getImagePicker())
     }
 
     private fun onFilterResult(result: Result?) {
@@ -410,7 +393,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             return
         }
         val parsedResult = ResultParser.parseResult(result)
-        val create = Create()
+        val create = CreateModel()
         var address: String? = ""
         var fullName: String? = ""
         var email: String? = ""
@@ -497,8 +480,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             ParsedResultType.CALENDAR -> {
                 create.createType = ParsedResultType.CALENDAR
                 val calendarParsedResult = parsedResult as CalendarParsedResult
-                val startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.startTimestamp)
-                val endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.endTimestamp)
+                val startTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.startTimestamp)
+                val endTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.endTimestamp)
                 title = if (calendarParsedResult.summary == null) "" else calendarParsedResult.summary
                 description = if (calendarParsedResult.description == null) "" else calendarParsedResult.description
                 location = if (calendarParsedResult.location == null) "" else calendarParsedResult.location
@@ -551,7 +534,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             zxing_barcode_scanner.pauseAndWait()
         }
         Utils.Log(TAG,"barcode format ${parsedResult.type}")
-        Navigator.onResultView(activity, create, ScannerResultFragment::class.java)
+        scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
@@ -601,7 +584,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     private fun handleSendSingleItem(intent: Intent?) {
         try {
-            val imageUri = intent?.getParcelableExtra<Parcelable?>(Intent.EXTRA_STREAM) as Uri?
+            val imageUri = intent?.parcelable<Parcelable>(Intent.EXTRA_STREAM) as Uri?
             if (imageUri != null) {
                 beginCrop(imageUri)
             } else {

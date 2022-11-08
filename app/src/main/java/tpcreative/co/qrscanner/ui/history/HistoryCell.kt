@@ -44,11 +44,9 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
         if (data.isDeleted()) {
             viewHolder.ckDelete.visibility = View.VISIBLE
             viewHolder.llCheckedBox.visibility = View.VISIBLE
-            viewHolder.imgShare.visibility = View.INVISIBLE
         } else {
             viewHolder.ckDelete.visibility = View.INVISIBLE
             viewHolder.llCheckedBox.visibility = View.INVISIBLE
-            viewHolder.imgShare.visibility = View.VISIBLE
         }
         Utils.Log(TAG, "position :" + i + " checked :" + data.isChecked())
         viewHolder.ckDelete.isChecked = data.isChecked()
@@ -78,11 +76,6 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
         })
         viewHolder.tvTime.text = Utils.getCurrentDateDisplay(data.updatedDateTime)
         viewHolder.tvContent.text = data.getDisplay()
-        viewHolder.imgShare.setOnClickListener(View.OnClickListener {
-            if (listener != null) {
-                listener?.onClickShare(i)
-            }
-        })
     }
 
     /**
@@ -94,7 +87,6 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
         val tvTime: AppCompatTextView = itemView.tvDate
         val tvContent: AppCompatTextView = itemView.tvContent
         val ckDelete: AppCompatCheckBox = itemView.ckDelete
-        var imgShare: AppCompatImageView = itemView.imgShare
         val lItem: LinearLayout = itemView.lItem
         var llCheckedBox: LinearLayout = itemView.llCheckedBox
     }
@@ -103,7 +95,6 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
         fun onClickItem(position: Int, isChecked: Boolean)
         fun onClickItem(position: Int)
         fun onLongClickItem(position: Int)
-        fun onClickShare(position: Int)
         fun isDeleted(): Boolean
     }
 

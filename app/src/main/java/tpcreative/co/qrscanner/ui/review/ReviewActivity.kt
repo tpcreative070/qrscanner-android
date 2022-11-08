@@ -1,74 +1,50 @@
 package tpcreative.co.qrscanner.ui.review
-import android.Manifest
-import android.content.Intent
+
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.content.FileProvider
-import androidx.print.PrintHelper
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
+import android.view.View
+import com.google.zxing.*
 import com.google.zxing.client.result.ParsedResultType
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_review.*
-import tpcreative.co.qrscanner.BuildConfig
+import kotlinx.android.synthetic.main.activity_review.rlAdsRoot
+import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.GenerateSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultAdapter
-import tpcreative.co.qrscanner.viewmodel.ReviewViewModel
 import java.io.File
 import java.util.*
 
-class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAdapter.ItemSelectedListener {
-    lateinit var viewModel : ReviewViewModel
-    private var create: Create? = null
-    private var bitmap: Bitmap? = null
-    private var code: String? = null
+class ReviewActivity : BaseActivitySlide() {
+    lateinit var viewModel: ReviewViewModel
+    private var create: CreateModel? = null
+    var bitmap: Bitmap? = null
+    var code: String? = null
+    var type: String? = null
+    var format: String? = null
+    var mUri : Uri? = null
     private var save: SaveModel = SaveModel()
-    var adapter: ScannerResultAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
         initUI()
     }
 
-    override fun onClickItem(position: Int) {
-        val itemNavigation: ItemNavigation = viewModel.mListItemNavigation[position]
-        when (itemNavigation.enumAction) {
-            EnumAction.SHARE -> {
-                if (code != null) {
-                    Utils.Log(TAG, "Share")
-                    onGenerateCode(code, EnumAction.SHARE)
-                }
-            }
-            EnumAction.SAVE -> {
-                if (code != null) {
-                    onAddPermissionSave(EnumAction.SAVE)
-                }
-            }
-            else -> Utils.Log(TAG,"Nothing")
-        }
-    }
-
     fun onCatch() {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
     }
 
     override fun onResume() {
         super.onResume()
+        checkingShowAds()
     }
 
     override fun onPause() {
@@ -77,6 +53,9 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
 
     override fun onDestroy() {
         super.onDestroy()
+        val mFile = File(this.cacheDir, Constant.images_folder)
+        mFile.deleteRecursively()
+        mFile.delete()
     }
 
     override fun onStop() {
@@ -85,75 +64,79 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
 
     fun setView() {
         create = viewModel.create
+        format = viewModel.create.barcodeFormat
         when (create?.createType) {
             ParsedResultType.ADDRESSBOOK -> {
-                code = "MECARD:N:" + create?.fullName + ";TEL:" + create?.phone + ";EMAIL:" + create?.email + ";ADR:" + create?.address + ";"
+                code =
+                    "MECARD:N:" + create?.fullName + ";TEL:" + create?.phone + ";EMAIL:" + create?.email + ";ADR:" + create?.address + ";"
+                type = Constant.addressBook
                 save = SaveModel()
                 save.fullName = create?.fullName
                 save.phone = create?.phone
                 save.email = create?.email
                 save.address = create?.address
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
             }
             ParsedResultType.EMAIL_ADDRESS -> {
-                code = "MATMSG:TO:" + create?.email + ";SUB:" + create?.subject + ";BODY:" + create?.message + ";"
+                code =
+                    "MATMSG:TO:" + create?.email + ";SUB:" + create?.subject + ";BODY:" + create?.message + ";"
+                type = Constant.email
                 save = SaveModel()
                 save.email = create?.email
                 save.subject = create?.subject
                 save.message = create?.message
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
             }
             ParsedResultType.PRODUCT -> {
                 code = create?.productId
+                type = Constant.barCode
                 save = SaveModel()
                 save.text = create?.productId
                 save.createType = create?.createType?.name
                 save.barcodeFormat = create?.barcodeFormat
-                onGenerateReview(code)
             }
             ParsedResultType.URI -> {
                 code = create?.url
+                type = Constant.webSite
                 save = SaveModel()
                 save.url = create?.url
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
             }
             ParsedResultType.WIFI -> {
-                code = "WIFI:S:" + create?.ssId + ";T:" + create?.networkEncryption + ";P:" + create?.password + ";H:" + create?.hidden + ";"
+                code =
+                    "WIFI:S:" + create?.ssId + ";T:" + create?.networkEncryption + ";P:" + create?.password + ";H:" + create?.hidden + ";"
+                type = Constant.wifi
                 save = SaveModel()
                 save.ssId = create?.ssId
                 save.password = create?.password
                 save.networkEncryption = create?.networkEncryption
                 save.hidden = create?.hidden
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
                 Utils.Log(TAG, "wifi " + create?.networkEncryption)
             }
             ParsedResultType.GEO -> {
                 code = "geo:" + create?.lat + "," + create?.lon + "?q=" + create?.query + ""
+                type = Constant.location
                 save = SaveModel()
                 save.lat = create?.lat
                 save.lon = create?.lon
                 save.query = create?.query
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
             }
             ParsedResultType.TEL -> {
                 code = "tel:" + create?.phone + ""
+                type = Constant.phoneNumber
                 save = SaveModel()
                 save.phone = create?.phone
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
             }
             ParsedResultType.SMS -> {
                 code = "smsto:" + create?.phone + ":" + create?.message
+                type = Constant.sms
                 save = SaveModel()
                 save.phone = create?.phone
                 save.message = create?.message
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
             }
             ParsedResultType.CALENDAR -> {
                 val builder = StringBuilder()
@@ -180,52 +163,25 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
                 save.description = create?.description
                 save.createType = create?.createType?.name
                 code = builder.toString()
-                onGenerateReview(code)
+                type = Constant.calendar
             }
             ParsedResultType.ISBN -> {
             }
             else -> {
                 code = create?.text
+                type = Constant.text
                 save = SaveModel()
                 save.text = create?.text
                 save.createType = create?.createType?.name
-                onGenerateReview(code)
             }
         }
-        viewModel.mListItemNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SHARE, R.drawable.baseline_share_white_48, "Share"))
-        viewModel.mListItemNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SAVE, R.drawable.baseline_save_alt_white_48, "Save"))
-        onReloadData()
-    }
-
-    private fun onReloadData() {
-        adapter?.setDataSource(viewModel.mListItemNavigation)
-    }
-
-    private fun onAddPermissionSave(enumAction: EnumAction?) {
-        Dexter.withContext(this)
-                .withPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            onGenerateCode(code, enumAction)
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
+        txtSubject.text = type
+        txtDisplay.text = code
+        txtFormat.text = format
+        CoroutineScope(Dispatchers.IO).launch {
+            onGenerateReview(code)
+            onGenerateQRCode(code)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -235,149 +191,128 @@ class ReviewActivity : BaseActivitySlide(), Utils.UtilsListener, ScannerResultAd
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menu_item_png_export -> {
+                mUri?.let { shareToSocial(it) }
+                return true
+            }
             R.id.menu_item_print -> {
-                if (code != null) {
-                    onAddPermissionSave(EnumAction.PRINT)
-                }
+                onPhotoPrint()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun onGenerateCode(code: String?, enumAction: EnumAction?) {
-        Dexter.withContext(this)
-                .withPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            try {
-                                val barcodeEncoder = BarcodeEncoder()
-                                val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
-                                hints[EncodeHintType.MARGIN] = 2
-                                val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-                                Utils.Log(TAG, "Starting save items 0")
-                                bitmap = if (create?.createType == ParsedResultType.PRODUCT) {
-                                    barcodeEncoder.encodeBitmap(this@ReviewActivity, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.valueOf(create?.barcodeFormat ?: ""), 400, 400, hints)
-                                } else {
-                                    barcodeEncoder.encodeBitmap(this@ReviewActivity, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.QR_CODE, 400, 400, hints)
-                                }
-                                Utils.saveImage(bitmap, enumAction, create?.createType?.name, code, this@ReviewActivity)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
-    }
-
-    override fun onSaved(path: String?, enumAction: EnumAction?) {
-        Utils.Log(TAG, "Saved successful")
-        when (enumAction) {
-            EnumAction.SAVE -> {
-                /*Adding new columns*/
-                if (save.createType !== ParsedResultType.PRODUCT.name) {
-                    save.barcodeFormat = BarcodeFormat.QR_CODE.name
-                }
-                save.favorite = false
-                if (create?.enumImplement == EnumImplement.CREATE) {
-                    val time = Utils.getCurrentDateTimeSort()
-                    save.createDatetime = time
-                    save.updatedDateTime = time
-                    SQLiteHelper.onInsert(save)
-                } else if (create?.enumImplement == EnumImplement.EDIT) {
-                    val time = Utils.getCurrentDateTimeSort()
-                    save.updatedDateTime = time
-                    save.createDatetime = create?.createdDateTime
-                    save.id = create?.id
-                    save.isSynced = create?.isSynced
-                    save.uuId = create?.uuId
-                    save.favorite = viewModel.getFavorite(create?.id)
-                    save.noted = viewModel.getTakeNote(create?.id)
-                    SQLiteHelper.onUpdate(save, true)
-                }
-                Utils.onBasicAlertSaved(this, "Saved code successfully => Path: Download/QRScanner/${File(path).name}")
-            }
-            EnumAction.SHARE -> {
-                val file = File(path)
-                if (file.isFile) {
-                    Utils.Log(TAG, "path : $path")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        val uri: Uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.toString() + ".provider", file)
-                        shareToSocial(uri)
-                    } else {
-                        val uri = Uri.fromFile(file)
-                        shareToSocial(uri)
-                    }
-                } else {
-                    Utils.onAlertNotify(this, getString(R.string.no_items_found))
-                }
-            }
-            EnumAction.PRINT -> {
-                onPhotoPrint(path)
-            }
-            else -> {
-                Utils.Log(TAG, "Other case")
-            }
+    private fun onSavedData() {
+        if (save.createType !== ParsedResultType.PRODUCT.name) {
+            save.barcodeFormat = BarcodeFormat.QR_CODE.name
+        }
+        save.favorite = false
+        if (create?.enumImplement == EnumImplement.CREATE) {
+            val time = Utils.getCurrentDateTimeSort()
+            save.createDatetime = time
+            save.updatedDateTime = time
+            Utils.Log(TAG, "Questing created")
+            SQLiteHelper.onInsert(save)
+        } else if (create?.enumImplement == EnumImplement.EDIT) {
+            val time = Utils.getCurrentDateTimeSort()
+            save.updatedDateTime = time
+            save.createDatetime = create?.createdDateTime
+            save.id = create?.id
+            save.isSynced = create?.isSynced
+            save.uuId = create?.uuId
+            save.favorite = viewModel.getFavorite(create?.id)
+            save.noted = viewModel.getTakeNote(create?.id)
+            Utils.Log(TAG, "Questing updated")
+            SQLiteHelper.onUpdate(save, true)
+        } else if (create?.enumImplement == EnumImplement.VIEW) {
+            Utils.Log(TAG, "Questing view")
         }
         GenerateSingleton.getInstance()?.onCompletedGenerate()
     }
 
-    private fun onPhotoPrint(path: String?) {
-        try {
-            val photoPrinter = PrintHelper(this)
-            photoPrinter.scaleMode = PrintHelper.SCALE_MODE_FIT
-            val bitmap: Bitmap = BitmapFactory.decodeFile(path)
-            Utils.getCurrentDate()?.let { photoPrinter.printBitmap(it, bitmap) }
-        } catch (e: Exception) {
-        }
-    }
+    suspend fun onGenerateReview(code: String?) =
+        withContext(Dispatchers.Main) {
+            try {
+                val barcodeEncoder = BarcodeEncoder()
+                val hints: MutableMap<EncodeHintType?, Any?> =
+                    EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
 
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
-    }
-
-    private fun shareToSocial(value: Uri?) {
-        Utils.Log(TAG, "path call")
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_STREAM, value)
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(Intent.createChooser(intent, "Share"))
-    }
-
-    private fun onGenerateReview(code: String?) {
-        try {
-            val barcodeEncoder = BarcodeEncoder()
-            val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
-            hints[EncodeHintType.MARGIN] = 2
-            val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-            Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-            bitmap = if (create?.createType == ParsedResultType.PRODUCT) {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.valueOf(create?.barcodeFormat ?: ""), 200, 200, hints)
-            } else {
-                barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?: 0, code, BarcodeFormat.QR_CODE, 200, 200, hints)
+                val theme: Theme? = Theme.getInstance()?.getThemeInfo()
+                Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
+                val mBitmap = if (create?.createType == ParsedResultType.PRODUCT) {
+                    hints[EncodeHintType.MARGIN] = 5
+                    barcodeEncoder.encodeBitmap(
+                        this@ReviewActivity,
+                        theme?.getPrimaryDarkColor() ?: 0,
+                        code,
+                        BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
+                        Constant.QRCodeViewWidth,
+                        Constant.QRCodeViewHeight,
+                        hints
+                    )
+                } else {
+                    hints[EncodeHintType.MARGIN] = 2
+                    barcodeEncoder.encodeBitmap(
+                        this@ReviewActivity,
+                        theme?.getPrimaryDarkColor() ?: 0,
+                        code,
+                        BarcodeFormat.QR_CODE,
+                        Constant.QRCodeViewHeight,
+                        Constant.QRCodeViewHeight,
+                        hints
+                    )
+                }
+                imgResult.setImageBitmap(mBitmap)
+                onSavedData()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            imgResult.setImageBitmap(bitmap)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        }
+
+    suspend fun onGenerateQRCode(code: String?) =
+        withContext(Dispatchers.IO) {
+            try {
+                val barcodeEncoder = BarcodeEncoder()
+                val hints: MutableMap<EncodeHintType?, Any?> =
+                    EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
+                val theme: Theme? = Theme.getInstance()?.getThemeInfo()
+                Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
+                bitmap = if (create?.createType == ParsedResultType.PRODUCT) {
+                    hints[EncodeHintType.MARGIN] = 15
+                    barcodeEncoder.encodeBitmap(
+                        this@ReviewActivity,
+                        theme?.getPrimaryDarkColor() ?: 0,
+                        code,
+                        BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
+                        Constant.QRCodeExportWidth,
+                        Constant.QRCodeExportHeight,
+                        hints
+                    )
+                } else {
+                    Utils.Log(TAG,"code $code")
+                    hints[EncodeHintType.MARGIN] = 2
+                    barcodeEncoder.encodeBitmap(
+                        this@ReviewActivity,
+                        theme?.getPrimaryDarkColor() ?: 0,
+                        code,
+                        BarcodeFormat.QR_CODE,
+                        Constant.QRCodeExportWidth,
+                        Constant.QRCodeExportHeight,
+                        hints
+                    )
+                }
+                getImageUri(bitmap)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    /*show ads*/
+    fun doShowAds(isShow: Boolean) {
+        if (isShow) {
+            QRScannerApplication.getInstance().loadReviewSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadReviewLargeView(llLargeAds)
         }
     }
 

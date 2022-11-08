@@ -1,12 +1,16 @@
 package tpcreative.co.qrscanner.ui.filecolor
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_chage_file_color.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
@@ -22,6 +26,22 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chage_file_color)
         initUI()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                finish()
+            }
+        } else {
+            onBackPressedDispatcher.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    }
+                })
+        }
     }
 
     override fun onClickItem(position: Int) {
@@ -35,14 +55,10 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
         super.onResume()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
         }
@@ -59,7 +75,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
             val hints: MutableMap<EncodeHintType?, Any?> = EnumMap(EncodeHintType::class.java)
             hints[EncodeHintType.MARGIN] = 2
             val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-            bitmap = barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.QR_CODE, 100, 100, hints)
+            bitmap = barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.QR_CODE, Constant.QRCodeViewWidth, Constant.QRCodeViewHeight, hints)
             imgResult.setImageBitmap(bitmap)
         } catch (e: Exception) {
             e.printStackTrace()

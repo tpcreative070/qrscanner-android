@@ -1,7 +1,7 @@
 package tpcreative.co.qrscanner.ui.filecolor
 import android.view.LayoutInflater
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +35,7 @@ fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
 }
 
 private fun ChangeFileColorActivity.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(ChangeFileColorViewModel::class.java)

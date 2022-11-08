@@ -34,8 +34,6 @@ import tpcreative.co.qrscanner.helper.ThemeHelper
 import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
-import tpcreative.co.qrscanner.ui.main.initUI
-import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.util.*
 
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
@@ -43,11 +41,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private lateinit var storage: Storage
     private var isLive = false
     private var activity: MainActivity? = null
-    private var adView: AdView? = null
-    private var adLargeView: AdView? = null
+    private var adMainView: AdView? = null
+    private var adResultSmallView: AdView? = null
+    private var adReviewSmallView : AdView? = null
+    private var adReviewLargeView : AdView? = null
+    private var adCreateSmallView : AdView? = null
+    private var adCreateLargeView : AdView? = null
     private var mInterstitialAd: InterstitialAd? = null
-    private var isRequestAds = true
-    private var isRequestLargeAds = true
+    private var isMainView = true
+    private var isResultSmallView = true
+    private var isReviewSmallView = true
+    private var isReviewLargeView = true
+    private var isCreateSmallView = true
+    private var isCreateLargeView = true
     private var options: GoogleSignInOptions.Builder? = null
     private var requiredScopes: MutableSet<Scope>? = null
     private var requiredScopesString: MutableList<String>? = null
@@ -181,30 +187,30 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return storage
     }
 
-    fun requestAdsView(context: Context){
+    fun requestMainView(context: Context){
         Utils.Log(TAG, "show ads...")
-         adView = AdView(context)
-        adView?.setAdSize(AdSize.BANNER)
+         adMainView = AdView(context)
+        adMainView?.setAdSize(AdSize.BANNER)
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
                 Utils.Log(TAG, "show ads isDebug...")
-                adView?.adUnitId = getString(R.string.banner_home_footer_test)
+                adMainView?.adUnitId = getString(R.string.banner_home_footer_test)
             } else {
-                adView?.adUnitId = getString(R.string.banner_footer)
+                adMainView?.adUnitId = getString(R.string.banner_main)
             }
         } else {
-            adView?.adUnitId = getString(R.string.banner_home_footer_test)
+            adMainView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
-        adView?.adListener = object : AdListener() {
+        adMainView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
-                isRequestAds = false
+                isMainView = false
                 Utils.Log(TAG, "Ads successful")
             }
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isRequestAds = true
+                isMainView = true
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -222,33 +228,33 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 // to the app after tapping on an ad.
             }
         }
-        adView?.loadAd(adRequest)
+        adMainView?.loadAd(adRequest)
     }
 
-    fun requestAdsLargeView(context: Context){
-        Utils.Log(TAG, "show  large view ads...")
-        adLargeView = AdView(context)
-        adLargeView?.setAdSize(AdSize.BANNER)
+    fun requestResultSmallView(context: Context){
+        Utils.Log(TAG, "requestResultSmallView ads...")
+        adResultSmallView = AdView(context)
+        adResultSmallView?.setAdSize(AdSize.BANNER)
         if (Utils.isFreeRelease()) {
             if (Utils.isDebug()) {
                 Utils.Log(TAG, "show ads isDebug...")
-                adLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+                adResultSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
             } else {
-                adLargeView?.adUnitId = getString(R.string.banner_review)
+                adResultSmallView?.adUnitId = getString(R.string.banner_result_small)
             }
         } else {
-            adLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+            adResultSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
-        adLargeView?.adListener = object : AdListener() {
+        adResultSmallView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
-                isRequestLargeAds = false
+                isResultSmallView = false
                 Utils.Log(TAG, "Ads successful")
             }
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isRequestLargeAds = true
+                isResultSmallView = true
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -266,7 +272,183 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 // to the app after tapping on an ad.
             }
         }
-        adLargeView?.loadAd(adRequest)
+        adResultSmallView?.loadAd(adRequest)
+    }
+
+    fun requestReviewSmallView(context: Context){
+        Utils.Log(TAG, "requestReviewSmallView ads...")
+        adReviewSmallView = AdView(context)
+        adReviewSmallView?.setAdSize(AdSize.BANNER)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adReviewSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adReviewSmallView?.adUnitId = getString(R.string.banner_review_small)
+            }
+        } else {
+            adReviewSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adReviewSmallView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isReviewSmallView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isReviewSmallView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adReviewSmallView?.loadAd(adRequest)
+    }
+
+    fun requestReviewLargeView(context: Context){
+        Utils.Log(TAG, "requestReviewLargeView ads...")
+        adReviewLargeView = AdView(context)
+        adReviewLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adReviewLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adReviewLargeView?.adUnitId = getString(R.string.banner_review_large)
+            }
+        } else {
+            adReviewLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adReviewLargeView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isReviewLargeView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isReviewLargeView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adReviewLargeView?.loadAd(adRequest)
+    }
+
+    fun requestCreateSmallView(context: Context){
+        Utils.Log(TAG, "requestCreateSmallView ads...")
+        adCreateSmallView = AdView(context)
+        adCreateSmallView?.setAdSize(AdSize.BANNER)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adCreateSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adCreateSmallView?.adUnitId = getString(R.string.banner_create_small)
+            }
+        } else {
+            adCreateSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adCreateSmallView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isCreateSmallView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isCreateSmallView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adCreateSmallView?.loadAd(adRequest)
+    }
+
+    fun requestCreateLargeView(context: Context){
+        Utils.Log(TAG, "requestCreateLargeView ads...")
+        adCreateLargeView = AdView(context)
+        adCreateLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adCreateLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adCreateLargeView?.adUnitId = getString(R.string.banner_create_large)
+            }
+        } else {
+            adCreateLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adCreateLargeView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isCreateLargeView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isCreateLargeView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adCreateLargeView?.loadAd(adRequest)
     }
 
     fun requestInterstitialAd(){
@@ -322,36 +504,100 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         }
     }
 
-    fun loadAd(layAd: LinearLayout?) {
-        if (adView == null) {
+    fun loadMainView(layAd: LinearLayout?) {
+        if (adMainView == null) {
             Utils.Log(TAG, "ads null")
             return
         }
-        if (adView?.parent != null) {
-            val tempVg: ViewGroup = adView?.parent as ViewGroup
-            tempVg.removeView(adView)
+        if (adMainView?.parent != null) {
+            val tempVg: ViewGroup = adMainView?.parent as ViewGroup
+            tempVg.removeView(adMainView)
         }
-        layAd?.addView(adView)
+        layAd?.addView(adMainView)
     }
 
-    fun loadLargeAd(layAd: LinearLayout?) {
-        if (adLargeView == null) {
+    fun loadResultSmallView(layAd: LinearLayout?) {
+        if (adResultSmallView == null) {
             Utils.Log(TAG, "ads null")
             return
         }
-        if (adLargeView?.parent != null) {
-            val tempVg: ViewGroup = adLargeView?.parent as ViewGroup
-            tempVg.removeView(adLargeView)
+        if (adResultSmallView?.parent != null) {
+            val tempVg: ViewGroup = adResultSmallView?.parent as ViewGroup
+            tempVg.removeView(adResultSmallView)
         }
-        layAd?.addView(adLargeView)
+        layAd?.addView(adResultSmallView)
     }
 
-    fun isRequestAds(): Boolean {
-        return isRequestAds
+    fun loadReviewSmallView(layAd: LinearLayout?) {
+        if (adReviewSmallView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adReviewSmallView?.parent != null) {
+            val tempVg: ViewGroup = adReviewSmallView?.parent as ViewGroup
+            tempVg.removeView(adReviewSmallView)
+        }
+        layAd?.addView(adReviewSmallView)
     }
 
-    fun isRequestLargeAds(): Boolean {
-        return isRequestLargeAds
+    fun loadReviewLargeView(layAd: LinearLayout?) {
+        if (adReviewLargeView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adReviewLargeView?.parent != null) {
+            val tempVg: ViewGroup = adReviewLargeView?.parent as ViewGroup
+            tempVg.removeView(adReviewLargeView)
+        }
+        layAd?.addView(adReviewLargeView)
+    }
+
+    fun loadCreateSmallView(layAd: LinearLayout?) {
+        if (adCreateSmallView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adCreateSmallView?.parent != null) {
+            val tempVg: ViewGroup = adCreateSmallView?.parent as ViewGroup
+            tempVg.removeView(adCreateSmallView)
+        }
+        layAd?.addView(adCreateSmallView)
+    }
+
+    fun loadCreateLargeView(layAd: LinearLayout?) {
+        if (adCreateLargeView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adCreateLargeView?.parent != null) {
+            val tempVg: ViewGroup = adCreateLargeView?.parent as ViewGroup
+            tempVg.removeView(adCreateLargeView)
+        }
+        layAd?.addView(adCreateLargeView)
+    }
+
+    fun isMainView(): Boolean {
+        return isMainView
+    }
+
+    fun isResultSmallView(): Boolean {
+        return isResultSmallView
+    }
+
+    fun isReviewSmallView(): Boolean {
+        return isReviewSmallView
+    }
+
+    fun isReviewLargeView(): Boolean {
+        return isReviewLargeView
+    }
+
+    fun isCreateSmallView() : Boolean {
+        return isCreateSmallView
+    }
+
+    fun isCreateLargeView() : Boolean {
+        return isCreateLargeView
     }
 
     fun isRequestInterstitialAd() : Boolean {
@@ -372,11 +618,27 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return true
     }
 
-    fun isEnableReviewAds() : Boolean {
+    fun isEnableResultSmallView() : Boolean {
         return true
     }
 
-    fun isEnableBannerAds() : Boolean {
+    fun isEnableReviewSmallView() : Boolean {
+        return true
+    }
+
+    fun isEnableReviewLargeView() : Boolean {
+        return true
+    }
+
+    fun isEnableCreateSmallView() : Boolean {
+        return  true
+    }
+
+    fun isEnableCreateLargeView() : Boolean {
+        return  true
+    }
+
+    fun isEnableMainView() : Boolean {
         return  false
     }
 
@@ -385,8 +647,12 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun refreshAds(){
-        isRequestAds = true
-        isRequestLargeAds = true
+        isMainView = true
+        isResultSmallView = true
+        isReviewSmallView = true
+        isReviewLargeView = true
+        isCreateSmallView = true
+        isCreateLargeView = true
     }
     companion object {
         @Volatile

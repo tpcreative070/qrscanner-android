@@ -1,6 +1,6 @@
 package tpcreative.co.qrscanner.ui.save
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_saver.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -17,7 +17,7 @@ fun SaveFragment.initUI(){
 }
 
 private fun SaveFragment.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(SaveViewModel::class.java)

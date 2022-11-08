@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 
 dependencies {
-    implementation 'com.google.zxing:core:3.4.1'
+    implementation "com.google.zxing:core:$zxingCore"
     implementation "androidx.appcompat:appcompat:$appSupportVersion"
 }
 

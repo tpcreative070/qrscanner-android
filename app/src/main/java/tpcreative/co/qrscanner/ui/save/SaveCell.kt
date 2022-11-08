@@ -103,7 +103,6 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel, SaveCell.ViewHolder>(ite
         fun onClickItem(position: Int, isChecked: Boolean)
         fun onClickItem(position: Int)
         fun onLongClickItem(position: Int)
-        fun onClickShare(position: Int)
         fun onClickEdit(position: Int)
         fun isDeleted(): Boolean
     }

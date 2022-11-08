@@ -1,7 +1,8 @@
 package tpcreative.co.qrscanner.common.network.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
+import tpcreative.co.qrscanner.ui.review.ReviewViewModel
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultViewModel
 import tpcreative.co.qrscanner.viewmodel.*
 import java.lang.IllegalArgumentException
 

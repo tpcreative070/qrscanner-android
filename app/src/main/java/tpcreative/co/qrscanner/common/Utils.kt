@@ -34,15 +34,6 @@ object Utils {
     const val mStandardSortedDateTime: String = "ddMMYYYYHHmmss"
     const val FORMAT_DISPLAY: String = "EE dd MMM, yyyy HH:mm:ss a"
     const val GOOGLE_CONSOLE_KEY: String = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxToUe5+7Xy+Q7YYZfuMofqZmNe0021vMBJ32VQVPa8+Hd0z9YWPWTVvplslRX4rKU2TQ1l93yMzPVIHVxLIwPuo9OC9I8sO7LpOi91pyPk9fT0IjVaWDTSv1h/qLUE6m3OS5/LVPYQNbHCp3yqujSmj6bIj7AvbjhF36XjxZaESfJI3KhtXy/RD+ZaM255TgY6g1vwN3ObsrXZ3e98VrT8ehJrry8u8RTpiZ6NWTgcsk/riMPYZiwebf6fUHQgidAtwdBfZx94hYgldt5kPN3hB2LcG4KVj9jI2QY9Y4WsOPQ643I9fP8e9VbYW8/uAOTZnvUeUW9qb9qIw3NHyV6wIDAQAB"
-    fun writeLogs(responseJson: String?) {
-        if (!BuildConfig.DEBUG) {
-            return
-        }
-        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            appendLog(responseJson)
-            Log(TAG, "write logs...")
-        }
-    }
 
     private fun appendLog(text: String?) {
         val logFile = File(logPath())
@@ -191,14 +182,14 @@ object Utils {
         val root: String? = QRScannerApplication.getInstance().getPathFolder()
         val myDir = File(root)
         myDir.mkdirs()
-        var fname = "Image_" + type + "_" + geTimeFileName() + ".jpg"
+        var fname = "Image_" + type + "_" + geTimeFileName() + ".png"
         fname = fname.replace("/", "")
         fname = fname.replace(":", "")
         val file = File(myDir, fname)
         try {
             Log(TAG, "path :" + file.absolutePath)
             val out = FileOutputStream(file)
-            finalBitmap?.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            finalBitmap?.compress(Bitmap.CompressFormat.PNG, 90, out)
             out.flush()
             out.close()
             listenner?.onSaved(file.absolutePath, enumAction)
@@ -342,7 +333,7 @@ object Utils {
 
     fun onLogAds(eventCode: String?): String? {
         val idAds: String = QRScannerApplication.Companion.getInstance().getString(R.string.admob_app_id)
-        val banner_id: String = QRScannerApplication.Companion.getInstance().getString(R.string.banner_footer)
+        val banner_id: String = QRScannerApplication.Companion.getInstance().getString(R.string.banner_main)
         return "event-code:" + eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id + " ;app id: " + BuildConfig.APPLICATION_ID + " ;variant: " + QRScannerApplication.Companion.getInstance().getString(R.string.qrscanner_free_release)
     }
 

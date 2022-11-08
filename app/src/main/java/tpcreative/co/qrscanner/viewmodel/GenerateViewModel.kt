@@ -1,17 +1,22 @@
 package tpcreative.co.qrscanner.viewmodel
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.liveData
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.getString
-import tpcreative.co.qrscanner.model.EmptyModel
-import tpcreative.co.qrscanner.model.FormatTypeModel
-import tpcreative.co.qrscanner.model.QRCodeType
+import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.model.*
 
 class GenerateViewModel : BaseViewModel<EmptyModel>(){
     var mList: MutableList<QRCodeType> = mutableListOf()
@@ -19,6 +24,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     var mType: BarcodeFormat? = BarcodeFormat.EAN_13
     var mLength = 13
     var isPremium = false
+    val TAG = this::class.java.simpleName
     fun getDataList() = liveData(Dispatchers.Main) {
         mList.clear()
         mList.add(QRCodeType("0", getString(R.string.barcode), R.drawable.ic_barcode))
@@ -133,5 +139,21 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
         return !mValue.isNullOrEmpty()
     }
 
+    fun doShowAds() = liveData(Dispatchers.Main) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
+            emit(true)
+        } else {
+            emit(false)
+        }
+    }
 
+    fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
+        val mData = activity?.intent?.serializable(getString(R.string.key_data), SaveModel::class.java)
+        if (mData != null) {
+            emit(mData)
+        } else {
+            emit(null)
+            Utils.Log(TAG, "Data is null")
+        }
+    }
 }

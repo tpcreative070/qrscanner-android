@@ -3,7 +3,11 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
 import android.content.*
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.IBinder
+import android.widget.Toast
+import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Resource
 import co.tpcreative.supersafe.common.network.Status
 import com.google.android.gms.auth.GoogleAuthUtil
@@ -14,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.api.requester.DriveService
@@ -28,6 +33,8 @@ import tpcreative.co.qrscanner.model.EnumStatus
 import tpcreative.co.qrscanner.model.SyncDataModel
 import tpcreative.co.qrscanner.viewmodel.DriveViewModel
 import tpcreative.co.qrscanner.viewmodel.UserViewModel
+import java.io.File
+import java.io.FileOutputStream
 import java.io.FileWriter
 import java.util.*
 
@@ -370,12 +377,19 @@ class ServiceManager : BaseView<Any?> {
         }
     }
 
-    suspend fun onExportDatabaseCSVTask(enumFragmentType: EnumFragmentType?): Resource<String> {
+    suspend fun onExportDatabaseCSVTask(context : Context,enumFragmentType: EnumFragmentType?): Resource<String> {
         return withContext(Dispatchers.IO) {
-            val path: String = QRScannerApplication.getInstance().getPathFolder() + "/" + enumFragmentType?.name + "_" + System.currentTimeMillis() + ".csv"
+            val imagefolder = File(context.cacheDir, "csvs")
+            var file  : File? = null
+            try {
+                imagefolder.mkdirs()
+                 file = File(imagefolder, enumFragmentType?.name + "_" + System.currentTimeMillis() + ".csv")
+            } catch (e: java.lang.Exception) {
+                Toast.makeText(context, "" + e.message, Toast.LENGTH_LONG).show()
+            }
             var csvWrite: CSVWriter? = null
             try {
-                csvWrite = CSVWriter(FileWriter(path))
+                csvWrite = CSVWriter(FileWriter(file?.absolutePath))
                 when (enumFragmentType) {
                     EnumFragmentType.HISTORY -> {
                         val listHistory = SQLiteHelper.getHistoryList()
@@ -421,9 +435,9 @@ class ServiceManager : BaseView<Any?> {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds
+                                    if (index.startEvent == "") "" else Utils.getCurrentDatetimeEvent(index.startEventMilliseconds
                                             ?: 0),
-                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds
+                                    if (index.endEvent == "") "" else Utils.getCurrentDatetimeEvent(index.endEventMilliseconds
                                             ?: 0),
                                     index.fullName,
                                     index.address,
@@ -479,9 +493,9 @@ class ServiceManager : BaseView<Any?> {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds
+                                    if (index.startEvent == "") "" else Utils.getCurrentDatetimeEvent(index.startEventMilliseconds
                                             ?: 0),
-                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds
+                                    if (index.endEvent == "") "" else Utils.getCurrentDatetimeEvent(index.endEventMilliseconds
                                             ?: 0),
                                     index.fullName,
                                     index.address,
@@ -499,7 +513,7 @@ class ServiceManager : BaseView<Any?> {
                 try {
                     csvWrite.flush()
                     csvWrite.close()
-                    Resource.success(path)
+                    Resource.success(file?.absolutePath)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Resource.error(Utils.CODE_EXCEPTION, "${e.message}", null)

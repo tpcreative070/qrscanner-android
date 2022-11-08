@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.ui.main
 import android.Manifest
-import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -91,7 +90,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         return view
     }
 
-    fun getRes(position: Int): Drawable? {
+    private fun getRes(position: Int): Drawable? {
         val mResult = ContextCompat.getDrawable(this, tabIcons.get(position))
         return mResult
                 ?: when (position) {
@@ -158,11 +157,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Utils.Log(TAG, "main activity : $requestCode - $resultCode")
-    }
-
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
         Utils.Log(TAG, "Network changed :$isConnected")
     }
@@ -200,11 +194,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         QRScannerApplication.getInstance().refreshAds()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Utils.Log(TAG, "onBackPressed")
-    }
-
     fun showEncourage() {
         val manager = ReviewManagerFactory.create(this)
         val request = manager.requestReviewFlow()
@@ -220,7 +209,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     fun doShowAds(value: Boolean) {
         if (value) {
-            QRScannerApplication.getInstance().loadAd(llAdsSub)
+            QRScannerApplication.getInstance().loadMainView(llAdsSub)
         } else {
             Utils.Log(TAG, "loading ads...3")
             llAdsSub.visibility = View.GONE

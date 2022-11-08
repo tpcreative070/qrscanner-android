@@ -3,4 +3,11 @@
     <external-path name="external_files" path="."/>
 
     <external-path name="external" path="." />
+<!--    https://developer.android.com/reference/androidx/core/content/FileProvider-->
+
+    <!--Support for cacheDir-->
+<!--    <root-path name="root" path="." />-->
+
+    <cache-path name="images" path="." />
+
 </paths>

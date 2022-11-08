@@ -1,8 +1,10 @@
 package tpcreative.co.qrscanner.viewmodel
 import androidx.lifecycle.liveData
+import com.google.api.client.json.Json
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.HistoryModel
 import tpcreative.co.qrscanner.model.TypeCategories
@@ -23,7 +25,8 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
             index.typeCategories = mFavoriteCategory
             mList.add(index)
         }
-        mList.sortWith { o1, o2 -> if (Utils.getMilliseconds(o1?.updatedDateTime) < Utils.getMilliseconds(o2?.updatedDateTime)) 0 else 1 }
+        mList.sortBy { it.getUpdatedTimeToMilliseconds()}
+        mList.reverse()
         return mList
     }
 
@@ -38,7 +41,8 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
                 }
             }
         }
-        mList.sortWith(Comparator { o1, o2 -> if (Utils.getMilliseconds(o1.updatedDateTime) < Utils.getMilliseconds(o2.updatedDateTime)) 0 else 1 })
+        mList.sortBy { it.getUpdatedTimeToMilliseconds()}
+        mList.reverse()
         return mList
     }
 

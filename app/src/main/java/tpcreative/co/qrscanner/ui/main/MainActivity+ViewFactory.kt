@@ -1,9 +1,12 @@
 package tpcreative.co.qrscanner.ui.main
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.common.ResponseSingleton
@@ -34,7 +37,7 @@ fun MainActivity.initUI(){
         tab?.customView = getTabView(i)
     }
     setupTabIcons()
-    ServiceManager.getInstance()?.onStartService()
+    ServiceManager.getInstance().onStartService()
     Theme.getInstance()?.getList()
     viewpager.setOnSwipeOutListener(object : CustomViewPager.OnSwipeOutListener {
         override fun onSwipeOutAtStart() {
@@ -53,8 +56,8 @@ fun MainActivity.initUI(){
             == PackageManager.PERMISSION_DENIED) {
         onAddPermissionCamera()
     }
-    if (QRScannerApplication.getInstance().isRequestAds() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBannerAds()) {
-        QRScannerApplication.getInstance().requestAdsView(this)
+    if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView()) {
+        QRScannerApplication.getInstance().requestMainView(this)
     }
 
     if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
@@ -67,11 +70,29 @@ fun MainActivity.initUI(){
         Utils.Log(TAG, "rating.......")
         Utils.onSetCountRating(0)
     }
+
+    if (Build.VERSION.SDK_INT >= 33) {
+        onBackInvokedDispatcher.registerOnBackInvokedCallback(
+            OnBackInvokedDispatcher.PRIORITY_DEFAULT
+        ) {
+            //showAds()
+            finish()
+        }
+    } else {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    //showAds()
+                    finish()
+                }
+            })
+    }
     showAds()
 }
 
 private fun MainActivity.setupViewModel() {
-    viewModel = ViewModelProviders.of(
+    viewModel = ViewModelProvider(
             this,
             ViewModelFactory()
     ).get(MainViewModel::class.java)
