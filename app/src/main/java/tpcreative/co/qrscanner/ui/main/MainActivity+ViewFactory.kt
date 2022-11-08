@@ -37,7 +37,7 @@ fun MainActivity.initUI(){
         tab?.customView = getTabView(i)
     }
     setupTabIcons()
-    ServiceManager.getInstance()?.onStartService()
+    ServiceManager.getInstance().onStartService()
     Theme.getInstance()?.getList()
     viewpager.setOnSwipeOutListener(object : CustomViewPager.OnSwipeOutListener {
         override fun onSwipeOutAtStart() {
