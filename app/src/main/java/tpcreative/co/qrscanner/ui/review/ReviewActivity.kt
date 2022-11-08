@@ -53,8 +53,7 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val imageFolder = File(cacheDir, Constant.images_folder)
-        imageFolder.deleteOnExit()
+        File(this.cacheDir, Constant.images_folder).deleteRecursively()
     }
 
     override fun onStop() {
@@ -289,6 +288,7 @@ class ReviewActivity : BaseActivitySlide() {
                         hints
                     )
                 } else {
+                    Utils.Log(TAG,"code $code")
                     hints[EncodeHintType.MARGIN] = 2
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,

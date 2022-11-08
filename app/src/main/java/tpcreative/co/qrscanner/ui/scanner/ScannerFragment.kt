@@ -145,8 +145,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     ParsedResultType.CALENDAR -> {
                         create.createType = ParsedResultType.CALENDAR
                         val calendarParsedResult = parsedResult as CalendarParsedResult
-                        val startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.startTimestamp)
-                        val endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.endTimestamp)
+                        val startTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.startTimestamp)
+                        val endTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.endTimestamp)
                         title = if (calendarParsedResult.summary == null) "" else calendarParsedResult.summary
                         description = if (calendarParsedResult.description == null) "" else calendarParsedResult.description
                         location = if (calendarParsedResult.location == null) "" else calendarParsedResult.location
@@ -480,8 +480,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             ParsedResultType.CALENDAR -> {
                 create.createType = ParsedResultType.CALENDAR
                 val calendarParsedResult = parsedResult as CalendarParsedResult
-                val startTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.startTimestamp)
-                val endTime = Utils.convertMillisecondsToDateTime(calendarParsedResult.endTimestamp)
+                val startTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.startTimestamp)
+                val endTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.endTimestamp)
                 title = if (calendarParsedResult.summary == null) "" else calendarParsedResult.summary
                 description = if (calendarParsedResult.description == null) "" else calendarParsedResult.description
                 location = if (calendarParsedResult.location == null) "" else calendarParsedResult.location

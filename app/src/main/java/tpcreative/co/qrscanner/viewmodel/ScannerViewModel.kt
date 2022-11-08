@@ -119,8 +119,8 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
                 hashClipboard?.set("title", mCreate.title)
                 hashClipboard?.set("location", mCreate.location)
                 hashClipboard?.set("description", mCreate.description)
-                hashClipboard?.set("startEventMilliseconds", Utils.convertMillisecondsToDateTime(mCreate.startEventMilliseconds))
-                hashClipboard?.set("endEventMilliseconds", Utils.convertMillisecondsToDateTime(mCreate.endEventMilliseconds))
+                hashClipboard?.set("startEventMilliseconds", Utils.getCurrentDatetimeEvent(mCreate.startEventMilliseconds))
+                hashClipboard?.set("endEventMilliseconds", Utils.getCurrentDatetimeEvent(mCreate.endEventMilliseconds))
                 history = HistoryModel()
                 history?.title = mCreate.title
                 history?.location = mCreate.location

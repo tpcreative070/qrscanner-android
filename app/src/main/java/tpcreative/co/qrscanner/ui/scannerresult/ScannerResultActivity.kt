@@ -408,9 +408,9 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 viewModel.hashClipboard["title"] = create?.title
                 viewModel.hashClipboard["location"] = create?.location
                 viewModel.hashClipboard["description"] = create?.description
-                viewModel.hashClipboard["startEventMilliseconds"] = Utils.convertMillisecondsToDateTime(create?.startEventMilliseconds
+                viewModel.hashClipboard["startEventMilliseconds"] = Utils.getCurrentDatetimeEvent(create?.startEventMilliseconds
                         ?: 0)
-                viewModel.hashClipboard["endEventMilliseconds"] = Utils.convertMillisecondsToDateTime(create?.endEventMilliseconds
+                viewModel.hashClipboard["endEventMilliseconds"] = Utils.getCurrentDatetimeEvent(create?.endEventMilliseconds
                         ?: 0)
                 eventTitle.text = create?.title
                 eventLocation.text = create?.location

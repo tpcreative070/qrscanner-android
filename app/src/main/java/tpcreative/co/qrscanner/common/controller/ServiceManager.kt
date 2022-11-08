@@ -435,9 +435,9 @@ class ServiceManager : BaseView<Any?> {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds
+                                    if (index.startEvent == "") "" else Utils.getCurrentDatetimeEvent(index.startEventMilliseconds
                                             ?: 0),
-                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds
+                                    if (index.endEvent == "") "" else Utils.getCurrentDatetimeEvent(index.endEventMilliseconds
                                             ?: 0),
                                     index.fullName,
                                     index.address,
@@ -493,9 +493,9 @@ class ServiceManager : BaseView<Any?> {
                                     index.title,
                                     index.location,
                                     index.description,
-                                    if (index.startEvent == "") "" else Utils.convertMillisecondsToDateTime(index.startEventMilliseconds
+                                    if (index.startEvent == "") "" else Utils.getCurrentDatetimeEvent(index.startEventMilliseconds
                                             ?: 0),
-                                    if (index.endEvent == "") "" else Utils.convertMillisecondsToDateTime(index.endEventMilliseconds
+                                    if (index.endEvent == "") "" else Utils.getCurrentDatetimeEvent(index.endEventMilliseconds
                                             ?: 0),
                                     index.fullName,
                                     index.address,
