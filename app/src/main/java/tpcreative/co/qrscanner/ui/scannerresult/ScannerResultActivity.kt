@@ -570,15 +570,14 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         val cs = list.toTypedArray<CharSequence?>()
         Utils.Log(TAG, "Result " + Gson().toJson(list))
         Utils.Log(TAG, "show size of list " + cs.size)
-        dialogBuilder.setMultiChoiceItems(cs, null, object : DialogInterface.OnMultiChoiceClickListener {
-            override fun onClick(dialogInterface: DialogInterface?, i: Int, b: Boolean) {
-                if (b) {
-                    viewModel.hashClipboardResult?.set(i, list[i])
-                } else {
-                    viewModel.hashClipboardResult?.remove(i)
-                }
+        dialogBuilder.setMultiChoiceItems(cs, null
+        ) { dialogInterface, i, b ->
+            if (b) {
+                viewModel.hashClipboardResult?.set(i, list[i])
+            } else {
+                viewModel.hashClipboardResult?.remove(i)
             }
-        })
+        }
         dialogBuilder.setPositiveButton(R.string.copy) { dialogInterface, i ->
             if (viewModel.hashClipboardResult != null && (viewModel.hashClipboardResult?.size ?: 0) > 0) {
                 Utils.copyToClipboard(viewModel.getResult(viewModel.hashClipboardResult))
