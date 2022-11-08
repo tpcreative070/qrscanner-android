@@ -98,6 +98,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         edtPhone.setText(save?.phone)
         edtEmail.setText(save?.email)
         edtFullName.setSelection(edtFullName.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

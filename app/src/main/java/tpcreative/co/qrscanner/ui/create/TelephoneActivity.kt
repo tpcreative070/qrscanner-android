@@ -71,7 +71,6 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
         }
     }
 
-
     private fun addValidationForEditText() {
         mAwesomeValidation?.addValidation(this, R.id.edtPhone, Patterns.PHONE, R.string.err_phone)
     }
@@ -83,6 +82,7 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
     fun onSetData() {
         edtPhone.setText(save?.phone)
         edtPhone.setSelection(edtPhone.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

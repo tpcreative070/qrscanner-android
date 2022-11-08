@@ -175,6 +175,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         edtLongitude.setText("${save?.lon}")
         edtQuery.setText(save?.query)
         edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

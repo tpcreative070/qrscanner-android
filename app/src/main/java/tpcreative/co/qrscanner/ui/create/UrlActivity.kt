@@ -87,6 +87,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
     fun onSetData() {
         edtUrl.setText(save?.url)
         edtUrl.setSelection(edtUrl.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

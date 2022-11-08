@@ -191,6 +191,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             Utils.Log(TAG,"Save ${Gson().toJson(save)}")
         }
         edtBarCode.setSelection(edtBarCode.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

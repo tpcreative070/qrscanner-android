@@ -107,6 +107,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
             radio2.isChecked = true
         }
         edtSSID.setSelection(edtSSID.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

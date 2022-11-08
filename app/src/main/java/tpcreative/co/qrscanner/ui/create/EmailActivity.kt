@@ -92,6 +92,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
         edtObject.setText("${save?.subject}")
         edtMessage.setText("${save?.message}")
         edtEmail.setSelection(edtEmail.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

@@ -317,6 +317,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         beginDateTimeMilliseconds = save?.startEventMilliseconds ?: 0
         endDateTimeMilliseconds = save?.endEventMilliseconds ?: 0
         edtTitle.setSelection(edtTitle.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

@@ -87,6 +87,7 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         edtTo.setText(save?.phone)
         edtMessage.setText(save?.message)
         edtTo.setSelection(edtTo.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {

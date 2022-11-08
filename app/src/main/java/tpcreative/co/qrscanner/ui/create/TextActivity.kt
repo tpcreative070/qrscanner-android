@@ -90,6 +90,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     fun onSetData() {
         edtText.setText(save?.text)
         edtText.setSelection(edtText.text?.length ?: 0)
+        hideSoftKeyBoard()
     }
 
     public override fun onStart() {
