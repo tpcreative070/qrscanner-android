@@ -150,7 +150,10 @@
                             android:id="@+id/llSMS"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -914,6 +917,16 @@
                                     app:srcCompat="@drawable/ic_baseline_favorite_24" />
                             </RelativeLayout>
                         </RelativeLayout>
+
+                        <View
+                            android:id="@+id/viewUnderline"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:background="@color/grey_lighter" />
 
                         <LinearLayout
                             android:id="@+id/rlFooter"
