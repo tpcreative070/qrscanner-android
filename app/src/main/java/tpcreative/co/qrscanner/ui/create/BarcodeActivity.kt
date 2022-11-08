@@ -14,7 +14,6 @@ import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_barcode.*
-import kotlinx.android.synthetic.main.activity_contact.*
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -50,7 +49,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -191,6 +190,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             Utils.Log(TAG,"Save ${Gson().toJson(save)}")
         }
+        edtBarCode.setSelection(edtBarCode.text?.length ?: 0)
     }
 
     public override fun onStart() {

@@ -264,8 +264,10 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             create.createType = ParsedResultType.TEXT
         }
         Utils.Log(TAG, "Call intent")
-        create.fragmentType = EnumFragmentType.SAVER
+
+        create.barcodeFormat = save.barcodeFormat
         create.noted = save.noted
+        create.fragmentType = EnumFragmentType.SAVER
         create.enumImplement = EnumImplement.VIEW
         viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }

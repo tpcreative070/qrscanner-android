@@ -9,6 +9,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
 import tpcreative.co.qrscanner.common.SaveSingleton
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -28,12 +29,7 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     val mListNavigation : MutableList<ItemNavigation> = mutableListOf()
 
     fun getIntent(activity: Activity?)  = liveData(Dispatchers.Main){
-        val bundle: Bundle? = activity?.intent?.extras
-        val data = if (Build.VERSION.SDK_INT >= 33) {
-            activity?.intent?.getParcelableExtra(QRScannerApplication.getInstance().getString(R.string.key_data), CreateModel::class.java)
-        } else {
-            bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_data)) as CreateModel
-        }
+        val data = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),CreateModel::class.java)
         result = data
         isFavorite = data?.favorite ?: false
         takeNoted = result?.noted.toString()

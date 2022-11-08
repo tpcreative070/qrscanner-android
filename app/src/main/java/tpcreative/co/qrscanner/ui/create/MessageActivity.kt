@@ -11,7 +11,6 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_message.*
 import kotlinx.android.synthetic.main.activity_message.toolbar
-import kotlinx.android.synthetic.main.activity_telephone.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -54,7 +53,7 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -80,13 +79,14 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         mAwesomeValidation?.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
     }
 
-    private fun FocusUI() {
+    private fun focusUI() {
         edtTo.requestFocus()
     }
 
     fun onSetData() {
         edtTo.setText(save?.phone)
         edtMessage.setText(save?.message)
+        edtTo.setSelection(edtTo.text?.length ?: 0)
     }
 
     public override fun onStart() {
@@ -94,7 +94,7 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         mAwesomeValidation = AwesomeValidation(ValidationStyle.BASIC)
         Utils.Log(TAG, "onStart")
         addValidationForEditText()
-        FocusUI()
+        focusUI()
     }
 
     public override fun onStop() {

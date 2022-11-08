@@ -30,7 +30,6 @@ import com.google.zxing.client.result.ParsedResultType
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.activity_location.*
 import kotlinx.android.synthetic.main.activity_location.toolbar
-import kotlinx.android.synthetic.main.activity_message.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -93,7 +92,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
             val title = dialog.findViewById<TextView?>(android.R.id.title)
             val content = dialog.findViewById<TextView?>(android.R.id.message)
             if (positive != null && negative != null && title != null) {
-                title.setTextColor(QRScannerApplication.Companion.getInstance().getResources().getColor(R.color.black))
+                title.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.black))
                 positive.textSize = 14f
                 negative.textSize = 14f
                 content.textSize = 18f
@@ -103,15 +102,15 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     override fun onMapClick(p0: LatLng) {
-        Utils.Log(TAG, "lat : " + p0?.latitude + " - lon :" + p0?.longitude)
+        Utils.Log(TAG, "lat : " + p0.latitude + " - lon :" + p0.longitude)
         mMap?.clear()
         mMap?.addMarker(MarkerOptions()
-                .position(LatLng(p0?.latitude ?: 0.0, p0?.longitude ?: 0.0))
+                .position(LatLng(p0.latitude, p0.longitude))
                 .title("New Marker")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         )
-        lastLat = p0?.latitude ?: 0.0
-        lastLon = p0?.longitude ?: 0.0
+        lastLat = p0.latitude
+        lastLon = p0.longitude
         edtLatitude.setText("$lastLat")
         edtLongitude.setText("$lastLon")
     }
@@ -132,7 +131,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -162,8 +161,8 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation?.addValidation(this, R.id.edtLatitude, RegexTemplate.NOT_EMPTY, R.string.err_email)
-        mAwesomeValidation?.addValidation(this, R.id.edtLongitude, RegexTemplate.NOT_EMPTY, R.string.err_object)
+        mAwesomeValidation?.addValidation(this, R.id.edtLatitude, RegexTemplate.NOT_EMPTY, R.string.err_latitude)
+        mAwesomeValidation?.addValidation(this, R.id.edtLongitude, RegexTemplate.NOT_EMPTY, R.string.err_longitude)
         mAwesomeValidation?.addValidation(this, R.id.edtQuery, RegexTemplate.NOT_EMPTY, R.string.err_query)
     }
 
@@ -171,17 +170,11 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         edtLatitude.requestFocus()
     }
 
-    fun clearAndFocusUI() {
-        edtLatitude.requestFocus()
-        edtLatitude.setText("")
-        edtLongitude.setText("")
-        edtQuery.setText("")
-    }
-
     fun onSetData() {
         edtLatitude.setText("${save?.lat}")
         edtLongitude.setText("${save?.lon}")
         edtQuery.setText(save?.query)
+        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
     }
 
     public override fun onStart() {
@@ -315,8 +308,8 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mMap?.clear()
         lastLat = location.latitude
         lastLon = location.longitude
-        edtLatitude.setText("" + lastLat)
-        edtLongitude.setText("" + lastLon)
+        edtLatitude.setText("$lastLat")
+        edtLongitude.setText("$lastLon")
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,

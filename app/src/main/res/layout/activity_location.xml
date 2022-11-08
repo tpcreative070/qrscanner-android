@@ -41,7 +41,7 @@
             android:background="@drawable/bg_location_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:scrollbars="none"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -132,7 +132,7 @@
                             android:singleLine="true" />
                     </LinearLayout>
                 </LinearLayout>
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
             <fragment
                 android:layout_margin="5dp"

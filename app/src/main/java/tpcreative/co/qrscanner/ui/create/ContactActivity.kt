@@ -11,8 +11,10 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_contact.edtEmail
+import kotlinx.android.synthetic.main.activity_contact.edtPhone
 import kotlinx.android.synthetic.main.activity_contact.toolbar
 import kotlinx.android.synthetic.main.activity_email.*
+import kotlinx.android.synthetic.main.activity_telephone.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -57,7 +59,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -95,6 +97,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         edtAddress.setText(save?.address)
         edtPhone.setText(save?.phone)
         edtEmail.setText(save?.email)
+        edtFullName.setSelection(edtFullName.text?.length ?: 0)
     }
 
     public override fun onStart() {

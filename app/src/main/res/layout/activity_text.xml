@@ -38,18 +38,22 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/bg_location_group"
-            android:padding="5dp">
-            <ScrollView
+            android:layout_height="match_parent">
+            <androidx.core.widget.NestedScrollView
+                android:layout_above="@+id/rlAdsRoot"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none">
+                android:layout_height="match_parent">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/bg_location_group"
+                        android:padding="5dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -71,11 +75,60 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionDone"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
                             android:singleLine="true" />
                     </LinearLayout>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/rlBannerLarger"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:id="@+id/viewUnderline"
+                            android:background="@color/grey_lighter"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_below="@+id/viewUnderline"
+                            style="@style/brandonRegularTextView"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14"
+                            android:text="@string/advertising"
+                            android:id="@+id/tvAdvertising"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <LinearLayout
+                            android:layout_below="@+id/tvAdvertising"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:id="@+id/llLargeAds"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/banner_rectangle_review_height"
+                            android:gravity="center"
+                            android:orientation="vertical"/>
+                    </RelativeLayout>
                 </LinearLayout>
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"
+                android:id="@+id/rlAdsRoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:id="@+id/llSmallAds"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/banner_height"
+                    android:gravity="center"
+                    android:orientation="vertical"/>
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

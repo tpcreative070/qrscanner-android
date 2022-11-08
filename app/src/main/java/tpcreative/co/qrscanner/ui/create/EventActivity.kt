@@ -13,7 +13,6 @@ import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.OnButtonWithNeu
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.SimpleDateMonthAndDayFormatException
 import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.activity_event.toolbar
-import kotlinx.android.synthetic.main.activity_location.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -70,7 +69,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -128,9 +127,9 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                 return
             }
             val create = CreateModel(save)
-            create.title = edtTitle.getText().toString()
-            create.location = edtLocation.getText().toString()
-            create.description = edtDescription.getText().toString()
+            create.title = edtTitle.text.toString()
+            create.location = edtLocation.text.toString()
+            create.description = edtDescription.text.toString()
             create.startEvent = Utils.getCurrentDatetimeEvent(beginDateTimeMilliseconds)
             create.endEvent = Utils.getCurrentDatetimeEvent(endDateTimeMilliseconds)
             create.startEventMilliseconds = beginDateTimeMilliseconds
@@ -226,7 +225,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     }
 
     /*Init Date time picker*/
-    fun initDateTimePicker() {
+    private fun initDateTimePicker() {
         // Construct SwitchDateTimePicker
         dateTimeFragment = supportFragmentManager.findFragmentByTag(TAG_DATETIME_FRAGMENT) as SwitchDateTimeDialogFragment?
         if (dateTimeFragment == null) {
@@ -266,7 +265,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                         Utils.onDropDownAlert(this@EventActivity, "Starting event data time must be greater than current date time")
                     } else {
                         beginDateTimeMilliseconds = date?.time ?: 0
-                        tvBeginTime.setText(myDateFormat.format(date))
+                        tvBeginTime.text = myDateFormat.format(date)
                     }
                 } else {
                     if (currentMilliseconds > date?.time ?: 0) {
@@ -277,7 +276,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                         Utils.onDropDownAlert(this@EventActivity, "Ending event data time must be greater than begin date time")
                     } else {
                         endDateTimeMilliseconds = date?.time ?:0
-                        tvEndTime.setText(myDateFormat.format(date))
+                        tvEndTime.text = myDateFormat.format(date)
                     }
                 }
                 isClick = false
@@ -313,10 +312,11 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         edtTitle.setText("${save?.title}")
         edtDescription.setText("${save?.description}")
         edtLocation.setText("${save?.location}")
-        tvBeginTime.setText(Utils.convertMillisecondsToDateTime(save?.startEventMilliseconds ?: 0))
-        tvEndTime.setText(Utils.convertMillisecondsToDateTime(save?.endEventMilliseconds ?: 0))
+        tvBeginTime.text = Utils.convertMillisecondsToDateTime(save?.startEventMilliseconds ?: 0)
+        tvEndTime.text = Utils.convertMillisecondsToDateTime(save?.endEventMilliseconds ?: 0)
         beginDateTimeMilliseconds = save?.startEventMilliseconds ?: 0
         endDateTimeMilliseconds = save?.endEventMilliseconds ?: 0
+        edtTitle.setSelection(edtTitle.text?.length ?: 0)
     }
 
     public override fun onStart() {

@@ -10,7 +10,6 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_telephone.*
 import kotlinx.android.synthetic.main.activity_telephone.toolbar
-import kotlinx.android.synthetic.main.activity_text.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -52,7 +51,7 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -83,6 +82,7 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
 
     fun onSetData() {
         edtPhone.setText(save?.phone)
+        edtPhone.setSelection(edtPhone.text?.length ?: 0)
     }
 
     public override fun onStart() {

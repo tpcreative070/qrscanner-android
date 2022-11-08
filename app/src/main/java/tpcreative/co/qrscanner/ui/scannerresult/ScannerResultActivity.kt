@@ -1,5 +1,7 @@
 package tpcreative.co.qrscanner.ui.scannerresult
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
@@ -14,6 +16,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -27,6 +31,7 @@ import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ScannerSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
@@ -34,6 +39,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import java.net.URLEncoder
 import java.util.*
 
@@ -70,8 +76,30 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 delete()
                 return true
             }
+            R.id.menu_item_view_code ->{
+                viewForResult.launch(Navigator.onResultView(this,viewModel.result, ReviewActivity::class.java))
+                 return true
+            }
+            R.id.menu_item_add_to_favorites -> {
+                updatedFavorite()
+                return true
+            }
+            R.id.menu_item_notes -> {
+                enterTakeNote()
+                return true
+            }
+            R.id.menu_item_copy -> {
+                onClipboardDialog()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG,"${result.resultCode}")
+        }
     }
 
     override fun onClickItem(position: Int) {
@@ -99,6 +127,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 }
             }
             else -> {
+                create = dataResult
                 onShareIntent()
             }
         }
@@ -137,7 +166,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     }
 
     private fun onShareIntent() {
-        create = dataResult
             when (dataResult.createType) {
                 ParsedResultType.ADDRESSBOOK -> {
                     val intentContact = Intent()
@@ -577,7 +605,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         }
     }
 
-    fun onOpenWebSites(url: String?) {
+    private fun onOpenWebSites(url: String?) {
         val i = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         i.setPackage("com.android.chrome")

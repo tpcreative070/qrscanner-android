@@ -64,7 +64,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:textSize="@dimen/text_size_17"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_18"
                         style="@style/brandonRedBoldTextView"
                         android:id="@+id/txtSubject"
                         android:layout_width="match_parent"
@@ -78,6 +79,8 @@
                         android:layout_height="wrap_content"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:textSize="@dimen/text_size_15"
+                        android:textColor="@color/colorAccent"
                         android:layout_marginTop="@dimen/margin_10"
                         style="@style/brandonRegularTextView"
                         android:id="@+id/txtFormat"
@@ -98,6 +101,8 @@
                         android:layout_below="@+id/viewUnderline"
                         style="@style/brandonRegularTextView"
                         android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_14"
                         android:text="@string/advertising"
                         android:id="@+id/tvAdvertising"
                         android:layout_width="match_parent"

@@ -13,4 +13,32 @@
         app:showAsAction="always"
         android:title="@string/delete"
         android:orderInCategory="100"/>
+
+    <item
+        android:id="@+id/menu_item_view_code"
+        android:icon="@drawable/ic_baseline_qr_code_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/view_code"
+        android:orderInCategory="100"/>
+
+    <item
+        android:id="@+id/menu_item_add_to_favorites"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/add_favorite"
+        android:orderInCategory="100"/>
+
+    <item
+        android:id="@+id/menu_item_notes"
+        android:icon="@drawable/ic_baseline_edit_note_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/notes"
+        android:orderInCategory="100"/>
+
+    <item
+        android:id="@+id/menu_item_copy"
+        android:icon="@drawable/baseline_content_copy_white_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/copy"
+        android:orderInCategory="100"/>
 </menu>

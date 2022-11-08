@@ -177,6 +177,8 @@
     <string name="banner_result_small">ca-app-pub-7019113255489690/2825748351</string>
     <string name="banner_review_small">ca-app-pub-7019113255489690/4436866707</string>
     <string name="banner_review_large">ca-app-pub-7019113255489690/4871980970</string>
+    <string name="banner_create_large">ca-app-pub-7019113255489690/6876764573</string>
+    <string name="banner_create_small">ca-app-pub-7019113255489690/8264215478</string>
     <string name="interstitial">ca-app-pub-7019113255489690/7266352245</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
@@ -374,7 +376,9 @@
     <string name="drag_the_orange_markers_to_detect_barcode">Drag the orange markers to detect barcode or qr-code</string>
     <string name="add_note">Add note</string>
     <string name="take_note">Take Note</string>
+    <string name="add_favorite">Add to favorites</string>
     <string name="format_type">Format type</string>
+    <string name="notes">Notes</string>
     <string name="barcode_type">Barcode type</string>
 
 </resources>

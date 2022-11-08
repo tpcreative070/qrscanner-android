@@ -4,21 +4,27 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_text.*
 import kotlinx.android.synthetic.main.activity_wifi.*
+import kotlinx.android.synthetic.main.activity_wifi.llLargeAds
+import kotlinx.android.synthetic.main.activity_wifi.llSmallAds
 import kotlinx.android.synthetic.main.activity_wifi.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerateListener,OnEditorActionListener {
+    lateinit var viewModel: GenerateViewModel
     var mAwesomeValidation: AwesomeValidation? = null
     var typeEncrypt: String? = "WPA"
     private var save: SaveModel? = null
@@ -26,14 +32,16 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wifi)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
-        if (mData != null) {
-            save = mData
-            onSetData()
-        } else {
-            Utils.Log(TAG, "Data is null")
+        setupViewModel()
+        getIntentData()
+        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView()) {
+            QRScannerApplication.getInstance().requestCreateSmallView(this)
         }
+        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView()) {
+            QRScannerApplication.getInstance().requestCreateLargeView(this)
+        }
+        checkingShowAds()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         radio0.setOnClickListener(this)
         radio1.setOnClickListener(this)
         radio2.setOnClickListener(this)
@@ -57,7 +65,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -98,6 +106,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         } else {
             radio2.isChecked = true
         }
+        edtSSID.setSelection(edtSSID.text?.length ?: 0)
     }
 
     public override fun onStart() {
@@ -127,6 +136,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     public override fun onResume() {
         super.onResume()
         GenerateSingleton.getInstance()?.setListener(this)
+        checkingShowAds()
         Utils.Log(TAG, "onResume")
     }
 
@@ -155,6 +165,36 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
             }
             else -> {
             }
+        }
+    }
+
+    private fun getIntentData(){
+        viewModel.getIntent(this).observe(this, Observer {
+            if (it!=null){
+                save = it
+                onSetData()
+            }
+        })
+    }
+
+    private fun setupViewModel() {
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory()
+        )[GenerateViewModel::class.java]
+    }
+
+    private fun checkingShowAds(){
+        viewModel.doShowAds().observe(this, Observer {
+            doShowAds(it)
+        })
+    }
+
+    /*show ads*/
+    private fun doShowAds(isShow: Boolean) {
+        if (isShow) {
+            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadCreateLargeView(llLargeAds)
         }
     }
 

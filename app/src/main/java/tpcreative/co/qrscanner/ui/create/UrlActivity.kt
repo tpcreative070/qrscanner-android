@@ -10,7 +10,6 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_url.*
 import kotlinx.android.synthetic.main.activity_url.toolbar
-import kotlinx.android.synthetic.main.activity_wifi.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -52,7 +51,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -87,6 +86,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
 
     fun onSetData() {
         edtUrl.setText(save?.url)
+        edtUrl.setSelection(edtUrl.text?.length ?: 0)
     }
 
     public override fun onStart() {

@@ -10,8 +10,8 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_email.*
+import kotlinx.android.synthetic.main.activity_email.edtMessage
 import kotlinx.android.synthetic.main.activity_email.toolbar
-import kotlinx.android.synthetic.main.activity_location.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -55,7 +55,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (p1 == EditorInfo.IME_ACTION_DONE || p2?.keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
             onSave()
             return  true
         }
@@ -91,6 +91,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
         edtEmail.setText("${save?.email}")
         edtObject.setText("${save?.subject}")
         edtMessage.setText("${save?.message}")
+        edtEmail.setSelection(edtEmail.text?.length ?: 0)
     }
 
     public override fun onStart() {

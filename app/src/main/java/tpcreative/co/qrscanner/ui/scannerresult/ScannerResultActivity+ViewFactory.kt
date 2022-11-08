@@ -63,12 +63,6 @@ fun ScannerResultActivity.initUI(){
             })
     }
 
-    val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            Utils.Log(TAG,"${result.resultCode}")
-        }
-    }
-
     btnTakeNote.setOnClickListener {
         enterTakeNote()
         Utils.Log(TAG,"action take note")
