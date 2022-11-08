@@ -53,7 +53,9 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onDestroy() {
         super.onDestroy()
-        File(this.cacheDir, Constant.images_folder).deleteRecursively()
+        val mFile = File(this.cacheDir, Constant.images_folder)
+        mFile.deleteRecursively()
+        mFile.delete()
     }
 
     override fun onStop() {
