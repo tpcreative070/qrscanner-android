@@ -5,12 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.google.zxing.*
 import com.google.zxing.client.result.ParsedResultType
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_review.*
-import kotlinx.android.synthetic.main.activity_review.rlAdsRoot
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant

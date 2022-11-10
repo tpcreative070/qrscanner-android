@@ -10,7 +10,6 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.android.synthetic.main.activity_text.*
 import kotlinx.android.synthetic.main.activity_text.llLargeAds
 import kotlinx.android.synthetic.main.activity_text.llSmallAds

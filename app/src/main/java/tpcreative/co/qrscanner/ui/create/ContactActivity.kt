@@ -13,8 +13,6 @@ import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_contact.edtEmail
 import kotlinx.android.synthetic.main.activity_contact.edtPhone
 import kotlinx.android.synthetic.main.activity_contact.toolbar
-import kotlinx.android.synthetic.main.activity_email.*
-import kotlinx.android.synthetic.main.activity_telephone.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener

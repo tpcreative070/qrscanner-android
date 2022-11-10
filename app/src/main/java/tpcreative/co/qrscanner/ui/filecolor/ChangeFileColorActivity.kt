@@ -1,10 +1,7 @@
 package tpcreative.co.qrscanner.ui.filecolor
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder

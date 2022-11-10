@@ -1,10 +1,5 @@
 package tpcreative.co.qrscanner.ui.scannerresult
-import android.annotation.SuppressLint
-import android.os.Build
 import android.text.InputType
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,14 +12,10 @@ import com.afollestad.materialdialogs.input.input
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EnumAction
-import tpcreative.co.qrscanner.model.EnumItem
-import tpcreative.co.qrscanner.ui.review.ReviewActivity
-import tpcreative.co.qrscanner.ui.review.initUI
 
 fun ScannerResultActivity.initUI(){
     TAG = this::class.java.name

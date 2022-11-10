@@ -12,9 +12,6 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.network.NetworkUtil
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.ui.review.ReviewActivity
-import tpcreative.co.qrscanner.ui.review.initUI
-import tpcreative.co.qrscanner.ui.review.showAds
 
 fun BackupActivity.initUI(){
     TAG = this::class.java.simpleName

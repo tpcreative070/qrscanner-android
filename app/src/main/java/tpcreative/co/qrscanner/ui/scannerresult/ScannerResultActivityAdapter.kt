@@ -4,21 +4,13 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
 import kotlinx.android.synthetic.main.item_navigation.view.*
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Navigator
-import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.model.EnumAction
-import tpcreative.co.qrscanner.model.EnumItem
 import tpcreative.co.qrscanner.model.ItemNavigation
-import tpcreative.co.qrscanner.ui.review.ReviewActivity
 
 class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?)  : BaseAdapter<ItemNavigation, BaseHolder<ItemNavigation>>(inflater){
     private val TAG = ScannerResultActivityAdapter::class.java.simpleName

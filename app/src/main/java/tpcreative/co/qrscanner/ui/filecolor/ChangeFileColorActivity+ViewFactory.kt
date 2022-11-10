@@ -3,19 +3,15 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_chage_file_color.*
-import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
-import tpcreative.co.qrscanner.ui.backup.BackupActivity
-import tpcreative.co.qrscanner.ui.backup.showAds
 import tpcreative.co.qrscanner.viewmodel.ChangeFileColorViewModel
 
 fun ChangeFileColorActivity.initUI(){
