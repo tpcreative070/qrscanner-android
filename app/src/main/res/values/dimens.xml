@@ -81,7 +81,7 @@
     <dimen name="banner_height">57dp</dimen>
     <dimen name="banner_rectangle_review_height">265dp</dimen>
 
-    <dimen name="margin_5">5sp</dimen>
+
     <dimen name="margin_10">10sp</dimen>
     <dimen name="margin_15">15sp</dimen>
     <dimen name="margin_20">20sp</dimen>
@@ -91,5 +91,9 @@
     <dimen name="margin_40">40sp</dimen>
     <dimen name="margin_45">45sp</dimen>
     <dimen name="margin_50">50sp</dimen>
+    <dimen name="margin_5">5sp</dimen>
+    <dimen name="margin_4">4sp</dimen>
+    <dimen name="margin_3">3sp</dimen>
+    <dimen name="margin_2">2sp</dimen>
     <dimen name="margin_1">1sp</dimen>
 </resources>

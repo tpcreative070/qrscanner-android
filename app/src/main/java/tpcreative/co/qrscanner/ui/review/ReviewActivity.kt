@@ -5,12 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.google.zxing.*
 import com.google.zxing.client.result.ParsedResultType
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_review.*
-import kotlinx.android.synthetic.main.activity_review.rlAdsRoot
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
@@ -191,6 +189,10 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> {
+                showAds()
+                return true
+            }
             R.id.menu_item_png_export -> {
                 mUri?.let { shareToSocial(it) }
                 return true
@@ -248,7 +250,7 @@ class ReviewActivity : BaseActivitySlide() {
                         code,
                         BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
                         Constant.QRCodeViewWidth,
-                        Constant.QRCodeViewHeight,
+                        Constant.QRCodeViewHeight - 150,
                         hints
                     )
                 } else {
@@ -286,7 +288,7 @@ class ReviewActivity : BaseActivitySlide() {
                         code,
                         BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
                         Constant.QRCodeExportWidth,
-                        Constant.QRCodeExportHeight,
+                        Constant.QRCodeExportHeight - 200,
                         hints
                     )
                 } else {

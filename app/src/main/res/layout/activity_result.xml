@@ -59,867 +59,51 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/bg_location_group"
                         android:orientation="vertical">
-                        <!-- Email -->
+                        <!-- All in one -->
                         <LinearLayout
-                            android:id="@+id/llEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/to" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/emailTo"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/subject" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/emailSubject"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/message" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/emailMessage"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-                        </LinearLayout>
-
-
-                        <!-- SMS -->
-
-                        <LinearLayout
-                            android:id="@+id/llSMS"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_20"
-                            android:layout_marginEnd="@dimen/margin_20"
-                            android:layout_marginTop="@dimen/margin_10"
-                            android:layout_marginBottom="@dimen/margin_10"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/to" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/smsTo"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/message" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/smsMessage"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-                        </LinearLayout>
-
-
-                        <!-- Contact -->
-
-                        <LinearLayout
-                            android:id="@+id/llContact"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/fullName" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/contactFullName"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/address" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/contactAddress"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/phone" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/contactPhone"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/email" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/contactEmail"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                        </LinearLayout>
-
-
-                        <!-- Location -->
-
-                        <LinearLayout
-                            android:id="@+id/llLocation"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/latitude" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/locationLatitude"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/longitude" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/locationLongitude"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/query" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/locationQuery"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-                        </LinearLayout>
-
-
-                        <!-- Event -->
-
-                        <LinearLayout
-                            android:id="@+id/llEvent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/title" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/eventTitle"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/location" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/eventLocation"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/description" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/eventDescription"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/beginTime" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/eventBeginTime"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/endTime" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/eventEndTime"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                        </LinearLayout>
-
-
-                        <!-- Wifi -->
-
-                        <LinearLayout
-                            android:id="@+id/llWifi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/ssid" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/wifiSSID"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/password" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/wifiPassword"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/networkEncryption" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/wifiNetworkEncryption"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/hidden" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/wifiHidden"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-                        </LinearLayout>
-
-
-                        <!-- Phone number -->
-
-                        <LinearLayout
-                            android:id="@+id/llTelephone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/phoneNumber" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/telephoneNumber"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                        </LinearLayout>
-
-
-                        <!-- Text -->
-
-                        <LinearLayout
-                            android:id="@+id/llText"
+                            android:id="@+id/llAllInOne"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="20dp"
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textMessage"
+                                android:autoLink="email|web"
+                                android:linksClickable="true"
+                                android:textSize="@dimen/text_size_17"
+                                android:id="@+id/tvContent"
+                                android:text="@string/key_content"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                        </LinearLayout>
-
-
-                        <!-- Product -->
-
-                        <LinearLayout
-                            android:id="@+id/llProduct"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                                android:paddingTop="@dimen/margin_2"
+                                android:paddingBottom="@dimen/margin_2"/>
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/product_id" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textProduct"
+                                android:textSize="@dimen/text_size_16"
+                                android:id="@+id/tvBarCodeFormat"
+                                android:text="@string/barcode"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
+                                android:paddingTop="@dimen/margin_2"
+                                android:paddingBottom="@dimen/margin_2"
                                 android:textColor="@color/material_gray_600" />
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                        </LinearLayout>
-
-                        <!-- ISBN -->
-
-                        <LinearLayout
-                            android:id="@+id/llISBN"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/isbs" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textISBN"
+                                android:textSize="@dimen/text_size_16"
+                                android:id="@+id/tvCreatedDatetime"
+                                android:text="@string/web_09_nov_21_16"
                                 style="@style/brandonRegularTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
+                                android:paddingTop="@dimen/margin_2"
+                                android:paddingBottom="@dimen/margin_2"
                                 android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
                         </LinearLayout>
-
-
-                        <!-- Url -->
-
-                        <LinearLayout
-                            android:id="@+id/llURL"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="vertical">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/url" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/urlAddress"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llFormatType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/barcode_type" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvFormatType"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="5dp"
-                                android:textColor="@color/material_gray_600" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@color/grey_lighter" />
-
-                        </LinearLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp">
-
-                            <RelativeLayout
-                                android:id="@+id/rlViewCode"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent">
-
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:id="@+id/imgTypeQRCode"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_alignParentStart="true"
-                                    android:layout_centerInParent="true"
-                                    android:tint="@color/colorAccent"
-                                    app:srcCompat="@drawable/ic_baseline_qr_code_24" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/txtViewCode"
-                                    style="@style/brandonRegularTextView"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:layout_marginStart="20dp"
-                                    android:layout_toEndOf="@+id/imgTypeQRCode"
-                                    android:text="@string/view_code"
-                                    android:textColor="@color/material_gray_600" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@+id/rlViewCode">
-
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:id="@+id/btnTakeNote"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_marginStart="20dp"
-                                    android:layout_toStartOf="@+id/imgMarkFavorite"
-                                    android:tint="@color/colorAccent"
-                                    app:srcCompat="@drawable/ic_baseline_edit_note_24" />
-
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:id="@+id/imgMarkFavorite"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_alignParentEnd="true"
-                                    android:layout_centerInParent="true"
-                                    android:layout_marginStart="20dp"
-                                    app:srcCompat="@drawable/ic_baseline_favorite_24" />
-                            </RelativeLayout>
-                        </RelativeLayout>
 
                         <View
-                            android:id="@+id/viewUnderline"
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="5dp"
@@ -940,6 +124,39 @@
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
                     </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/rlBannerLarger"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:id="@+id/viewUnderline"
+                            android:background="@color/grey_lighter"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_below="@+id/viewUnderline"
+                            style="@style/brandonRegularTextView"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14"
+                            android:text="@string/advertising"
+                            android:id="@+id/tvAdvertising"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <LinearLayout
+                            android:layout_below="@+id/tvAdvertising"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:id="@+id/llLargeAds"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/banner_rectangle_review_height"
+                            android:gravity="center"
+                            android:orientation="vertical"/>
+                    </RelativeLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
             <RelativeLayout
@@ -951,7 +168,7 @@
                 <LinearLayout
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
-                    android:id="@+id/llAds"
+                    android:id="@+id/llSmallAds"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/banner_height"
                     android:gravity="center"

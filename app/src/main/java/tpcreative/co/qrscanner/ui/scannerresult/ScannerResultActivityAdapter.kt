@@ -4,13 +4,12 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
 import kotlinx.android.synthetic.main.item_navigation.view.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.ItemNavigation
 
 class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?)  : BaseAdapter<ItemNavigation, BaseHolder<ItemNavigation>>(inflater){
@@ -24,22 +23,42 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
     }
 
     interface ItemSelectedListener {
-        fun onClickItem(position: Int)
+        fun onClickItem(position: Int,action : EnumAction)
     }
 
     inner class ItemHolder(itemView: View) : BaseHolder<ItemNavigation>(itemView) {
-        val imgAction: AppCompatImageView = itemView.imgAction
-        val tvTitle: AppCompatTextView = itemView.tvTitle
         private var mPosition = 0
         override fun bind(data: ItemNavigation, position: Int) {
             super.bind(data, position)
             this.mPosition = position
-            tvTitle.text = data.value
-            imgAction.setImageDrawable(ContextCompat.getDrawable(context, data.res))
-            imgAction.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
+            if (data.enumAction == EnumAction.DO_ADVANCE){
+                itemView.rlBasic.visibility = View.GONE
+                itemView.rlAdvance.visibility = View.VISIBLE
+                if (data.isFavorite == true){
+                    itemView.imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_favorite_24))
+                }else{
+                    itemView.imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_unfavorite_24))
+                }
+            }else{
+                itemView.rlAdvance.visibility = View.GONE
+                itemView.rlBasic.visibility = View.VISIBLE
+                itemView.tvTitle.text = data.value
+                itemView.imgAction.setImageDrawable(ContextCompat.getDrawable(context, data.res))
+                itemView.imgAction.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
+            }
             itemView.rlHome.setOnClickListener {
-                itemSelectedListener?.onClickItem(mPosition)
+                itemSelectedListener?.onClickItem(mPosition,EnumAction.VIEW_CODE)
+            }
+            itemView.imgTakeNote.setOnClickListener {
+                itemSelectedListener?.onClickItem(mPosition,EnumAction.TAKE_NOTE)
+            }
+            itemView.imgMarkFavorite.setOnClickListener {
+                itemSelectedListener?.onClickItem(mPosition,EnumAction.MARK_FAVORITE)
+            }
+            itemView.rlViewCode.setOnClickListener {
+                itemSelectedListener?.onClickItem(mPosition,EnumAction.VIEW_CODE)
             }
         }
+
     }
 }

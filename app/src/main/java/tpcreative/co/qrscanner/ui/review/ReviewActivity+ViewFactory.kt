@@ -26,13 +26,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.CreateModel
-import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.HistoryModel
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
-import tpcreative.co.qrscanner.ui.scannerresult.checkingShowAds
-import tpcreative.co.qrscanner.ui.scannerresult.initUI
-import tpcreative.co.qrscanner.ui.scannerresult.showAds
 import java.io.File
 import java.io.FileOutputStream
 
@@ -55,21 +49,29 @@ fun ReviewActivity.initUI(){
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT
         ) {
-            //showAds()
-            finish()
+            showAds()
         }
     } else {
         onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    //showAds()
-                    finish()
+                    showAds()
                 }
             })
     }
     onHandlerIntent()
 }
+
+fun ReviewActivity.showAds(){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
+        // Back is pressed... Finishing the activity
+        finish()
+    }else{
+        QRScannerApplication.getInstance().loadInterstitialAd(this)
+    }
+}
+
 
 /*Share File To QRScanner*/
 private fun ReviewActivity.onHandlerIntent() {

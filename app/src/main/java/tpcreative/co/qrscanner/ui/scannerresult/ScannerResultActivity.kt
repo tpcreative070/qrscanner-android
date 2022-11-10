@@ -1,6 +1,4 @@
 package tpcreative.co.qrscanner.ui.scannerresult
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
@@ -14,26 +12,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.zxing.client.result.ParsedResultType
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.HistorySingleton
-import tpcreative.co.qrscanner.common.Navigator
-import tpcreative.co.qrscanner.common.ScannerSingleton
-import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -46,10 +34,7 @@ import java.util.*
 class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.ItemSelectedListener {
     lateinit var viewModel : ScannerResultViewModel
     private var create: CreateModel? = null
-    var mList: MutableList<LinearLayout> = mutableListOf()
-    private var history: HistoryModel? = HistoryModel()
     var adapter: ScannerResultActivityAdapter? = null
-    var llm: LinearLayoutManager? = null
     private var code: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,12 +49,8 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                showAds()
-                return true
-            }
             R.id.menu_item_txt_export ->{
-                code?.let { shareToSocial(it) }
+                code?.let { Utils.onShareText(this,it) }
                 return true
             }
             R.id.menu_item_delete ->{
@@ -96,20 +77,26 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         return super.onOptionsItemSelected(item)
     }
 
-    val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             Utils.Log(TAG,"${result.resultCode}")
         }
     }
 
-    override fun onClickItem(position: Int) {
+    override fun onClickItem(position: Int,action: EnumAction) {
         val navigation: ItemNavigation = dataSource[position]
+        val result = dataResult
         when (navigation.enumAction) {
             EnumAction.CLIPBOARD -> {
                 onClipboardDialog()
             }
+            EnumAction.PHONE_CALL ->{
+                Utils.onPhoneCall(this,result)
+            }
+            EnumAction.EMAIL ->{
+                Utils.onSendMail(this,result)
+            }
             EnumAction.SEARCH -> {
-                val result = dataResult ?: return
                 when (result.createType) {
                     ParsedResultType.URI -> {
                         onSearch(result.url)
@@ -126,43 +113,30 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     else -> Utils.Log(TAG, "Nothing")
                 }
             }
+            EnumAction.DO_ADVANCE ->{
+                when(action){
+                    EnumAction.VIEW_CODE ->{
+                        viewForResult.launch(Navigator.onResultView(this,viewModel.result,ReviewActivity::class.java))
+                    }
+                    EnumAction.MARK_FAVORITE ->{
+                        updatedFavorite()
+                    }
+                    EnumAction.TAKE_NOTE ->{
+                        enterTakeNote()
+                    }
+                    else -> {}
+                }
+            }
             else -> {
+                /*This is other action*/
                 create = dataResult
                 onShareIntent()
             }
         }
     }
 
-    private fun onReloadData() {
+    fun onReloadData() {
         adapter?.setDataSource(viewModel.mListNavigation)
-    }
-
-    private fun onAddPermissionPhoneCall() {
-        Dexter.withContext(this)
-                .withPermissions(
-                        Manifest.permission.CALL_PHONE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            Utils.Log(TAG, "Action here phone call")
-                            val intentPhoneCall = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + create?.phone))
-                            startActivity(intentPhoneCall)
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
     private fun onShareIntent() {
@@ -180,25 +154,14 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
                     try {
-                        val to = create?.email
-                        val subject = create?.subject
-                        val body = create?.message
-                        val mailTo = "mailto:" + to +
-                                "?&subject=" + Uri.encode(subject) +
-                                "&body=" + Uri.encode(body)
-                        val emailIntent = Intent(Intent.ACTION_VIEW)
-                        emailIntent.data = Uri.parse(mailTo)
-                        startActivity(emailIntent)
-                        Utils.Log(TAG, "email object ${Gson().toJson(create)}")
+                      Utils.onSendMail(this,create)
                     } catch (e: ActivityNotFoundException) {
                         //TODO smth
                     }
                     return
                 }
                 ParsedResultType.PRODUCT -> {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
-                    intent.putExtra("sms_body", create?.productId)
-                    startActivity(intent)
+                    Utils.Log(TAG,"Nothing")
                     return
                 }
                 ParsedResultType.URI -> {
@@ -211,19 +174,12 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 }
                 ParsedResultType.GEO -> {
                     val uri = "geo:" + create?.lat + "," + create?.lon + ""
-                    val intentMap = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                    intentMap.setClassName(
-                        "com.google.android.apps.maps",
-                        "com.google.android.maps.MapsActivity"
-                    )
-                    startActivity(intentMap)
+                    Utils.onShareMap(this,uri)
                     return
                 }
-                ParsedResultType.TEL -> onAddPermissionPhoneCall()
+                ParsedResultType.TEL -> Utils.onPhoneCall(this,create)
                 ParsedResultType.SMS -> {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create?.phone))
-                    intent.putExtra("sms_body", create?.message)
-                    startActivity(intent)
+                    Utils.onSendSMS(this,create?.phone,create?.message)
                     return
                 }
                 ParsedResultType.CALENDAR -> {
@@ -265,73 +221,68 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     }
 
     fun setView() {
+        val history : HistoryModel?
         create = dataResult
+        val mMap = Utils.getCodeDisplay(create)
+        code = Utils.getCode(create)
+        tvContent.text = mMap?.get(ConstantKey.CONTENT) ?: ""
+        tvBarCodeFormat.text = mMap?.get(ConstantKey.BARCODE_FORMAT) ?: ""
+        tvCreatedDatetime.text = mMap?.get(ConstantKey.CREATED_DATETIME) ?: ""
+        viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.DO_ADVANCE, R.drawable.baseline_location_on_white_48, ConstantValue.ADVANCE,create?.favorite))
         when (create?.createType) {
             ParsedResultType.ADDRESSBOOK -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["fullName"] = create?.fullName
-                viewModel.hashClipboard["address"] = create?.address
-                viewModel.hashClipboard["phone"] = create?.phone
-                viewModel.hashClipboard["email"] = create?.email
-                contactFullName.text = create?.fullName
-                contactAddress.text = create?.address
-                contactPhone.text = create?.phone
-                contactEmail.text = create?.email
+                viewModel.hashClipboard[ConstantKey.FULL_NAME] = create?.fullName
+                viewModel.hashClipboard[ConstantKey.ADDRESS] = create?.address
+                viewModel.hashClipboard[ConstantKey.PHONE] = create?.phone
+                viewModel.hashClipboard[ConstantKey.EMAIL] = create?.email
                 history = HistoryModel()
-                history?.fullName = create?.fullName
-                history?.address = create?.address
-                history?.phone = create?.phone
-                history?.email = create?.email
-                history?.createType = create?.createType?.name
-                code = "MECARD:N:" + create?.fullName + ";TEL:" + create?.phone + ";EMAIL:" + create?.email + ";ADR:" + create?.address + ";"
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_perm_contact_calendar_white_48, "AddressBook"))
-                onShowUI(llContact)
-                title = "AddressBook"
+                history.fullName = create?.fullName
+                history.address = create?.address
+                history.phone = create?.phone
+                history.email = create?.email
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_perm_contact_calendar_white_48, ConstantValue.ADDRESS_BOOK,create?.favorite))
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.PHONE_CALL, R.drawable.baseline_phone_white_48, ConstantValue.PHONE_CALL,create?.favorite))
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.EMAIL, R.drawable.baseline_email_white_48, ConstantValue.EMAIL,create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.ADDRESS_BOOK
             }
             ParsedResultType.EMAIL_ADDRESS -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["email"] = create?.email
-                viewModel.hashClipboard["subject"] = create?.subject
-                viewModel.hashClipboard["message"] = create?.message
-                emailTo.text = create?.email
-                emailSubject.text = create?.subject
-                emailMessage.text = create?.message
+                viewModel.hashClipboard[ConstantKey.EMAIL] = create?.email
+                viewModel.hashClipboard[ConstantKey.SUBJECT] = create?.subject
+                viewModel.hashClipboard[ConstantKey.MESSAGE] = create?.message
                 history = HistoryModel()
-                history?.email = create?.email
-                history?.subject = create?.subject
-                history?.message = create?.message
-                history?.createType = create?.createType?.name
-                code = "MATMSG:TO:" + create?.email + ";SUB:" + create?.subject + ";BODY:" + create?.message + ";"
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_email_white_48, "Email"))
-                onShowUI(llEmail)
-                title = "Email"
+                history.email = create?.email
+                history.subject = create?.subject
+                history.message = create?.message
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_email_white_48, "Email",create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.EMAIL
             }
             ParsedResultType.PRODUCT -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["productId"] = create?.productId
-                textProduct.text = create?.productId
+                viewModel.hashClipboard[ConstantKey.PRODUCT_ID] = create?.productId
                 history = HistoryModel()
-                history?.text = create?.productId
-                history?.createType = create?.createType?.name
-                history?.barcodeFormat = create?.barcodeFormat
-                code = create?.productId
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Product"))
-                onShowUI(llProduct)
-                title = "Product"
+                history.text = create?.productId
+                history.createType = create?.createType?.name
+                history.barcodeFormat = create?.barcodeFormat
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search",create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.PRODUCT
             }
             ParsedResultType.URI -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["url"] = create?.url
-                urlAddress.text = create?.url
+                viewModel.hashClipboard[ConstantKey.URL] = create?.url
                 history = HistoryModel()
-                history?.url = create?.url
-                history?.createType = create?.createType?.name
-                code = create?.url
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_language_white_48, "Url"))
-                onShowUI(llURL)
-                title = "Url"
+                history.url = create?.url
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search",create?.favorite))
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_language_white_48, "Url",create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.WEBSITE
                 val isAutoOpening: Boolean = PrefsController.getBoolean(getString(R.string.key_auto_navigate_to_browser), false)
                 if (isAutoOpening) {
                     onOpenWebSites(create?.url)
@@ -339,150 +290,108 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             }
             ParsedResultType.WIFI -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["ssId"] = create?.ssId
-                viewModel.hashClipboard["password"] = create?.password
-                viewModel.hashClipboard["networkEncryption"] = create?.networkEncryption
-                viewModel.hashClipboard["hidden"] = if (create?.hidden == true) "Yes" else "No"
-                wifiSSID.text = create?.ssId
-                wifiPassword.text = create?.password
-                wifiNetworkEncryption.text = create?.networkEncryption
-                wifiHidden.text = if (create?.hidden == true) "Yes" else "No"
+                viewModel.hashClipboard[ConstantKey.SSID] = create?.ssId
+                viewModel.hashClipboard[ConstantKey.PASSWORD] = create?.password
+                viewModel.hashClipboard[ConstantKey.NETWORK_ENCRYPTION] = create?.networkEncryption
+                viewModel.hashClipboard[ConstantKey.HIDDEN] = if (create?.hidden == true) "Yes" else "No"
                 history = HistoryModel()
-                history?.ssId = create?.ssId
-                history?.password = create?.password
-                history?.networkEncryption = create?.networkEncryption
-                history?.hidden = create?.hidden
-                history?.createType = create?.createType?.name
-                code = "WIFI:S:" + create?.ssId + ";T:" + create?.password + ";P:" + create?.networkEncryption + ";H:" + create?.hidden + ";"
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_network_wifi_white_48, "Wifi"))
-                onShowUI(llWifi)
-                title = "Wifi"
+                history.ssId = create?.ssId
+                history.password = create?.password
+                history.networkEncryption = create?.networkEncryption
+                history.hidden = create?.hidden
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_network_wifi_white_48, "Wifi",create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.WIFI
             }
             ParsedResultType.GEO -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["lat"] = create?.lat.toString() + ""
-                viewModel.hashClipboard["lon"] = create?.lon.toString() + ""
-                viewModel.hashClipboard["query"] = create?.query
-                locationLatitude.text = "${create?.lat}"
-                locationLongitude.text = "${create?.lon}"
-                locationQuery.text = "${create?.query}"
+                viewModel.hashClipboard[ConstantKey.LAT] = create?.lat.toString() + ""
+                viewModel.hashClipboard[ConstantKey.LON] = create?.lon.toString() + ""
+                viewModel.hashClipboard[ConstantKey.QUERY] = create?.query
                 history = HistoryModel()
-                history?.lat = create?.lat
-                history?.lon = create?.lon
-                history?.query = create?.query
-                history?.createType = create?.createType?.name
-                code = "geo:" + create?.lat + "," + create?.lon + "?q=" + create?.query + ""
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_location_on_white_48, "Location"))
-                onShowUI(llLocation)
-                title = "Location"
+                history.lat = create?.lat
+                history.lon = create?.lon
+                history.query = create?.query
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_location_on_white_48, "Location",create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.LOCATION
             }
             ParsedResultType.TEL -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["phone"] = create?.phone
-                telephoneNumber.text = create?.phone
+                viewModel.hashClipboard[ConstantKey.PHONE] = create?.phone
                 history = HistoryModel()
-                history?.phone = create?.phone
-                history?.createType = create?.createType?.name
-                code = "tel:" + create?.phone + ""
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_phone_white_48, "Telephone"))
-                onShowUI(llTelephone)
+                history.phone = create?.phone
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_phone_white_48, ConstantValue.PHONE_CALL,create?.favorite))
+                onInsertUpdateHistory(history)
                 title = "Telephone"
             }
             ParsedResultType.SMS -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["phone"] = create?.phone
-                viewModel.hashClipboard["message"] = create?.message
-                smsTo.text = create?.phone
-                smsMessage.text = create?.message
+                viewModel.hashClipboard[ConstantKey.PHONE] = create?.phone
+                viewModel.hashClipboard[ConstantKey.MESSAGE] = create?.message
                 history = HistoryModel()
-                history?.phone = create?.phone
-                history?.message = create?.message
-                history?.createType = create?.createType?.name
-                code = "smsto:" + create?.phone + ":" + create?.message
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "SMS"))
-                onShowUI(llSMS)
-                title = "SMS"
+                history.phone = create?.phone
+                history.message = create?.message
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.SMS,create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.SMS
             }
             ParsedResultType.CALENDAR -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["title"] = create?.title
-                viewModel.hashClipboard["location"] = create?.location
-                viewModel.hashClipboard["description"] = create?.description
-                viewModel.hashClipboard["startEventMilliseconds"] = Utils.getCurrentDatetimeEvent(create?.startEventMilliseconds
+                viewModel.hashClipboard[ConstantKey.TITLE] = create?.title
+                viewModel.hashClipboard[ConstantKey.LOCATION] = create?.location
+                viewModel.hashClipboard[ConstantKey.DESCRIPTION] = create?.description
+                viewModel.hashClipboard[ConstantKey.START_EVENT_MILLISECONDS] = Utils.getCurrentDatetimeEvent(create?.startEventMilliseconds
                         ?: 0)
-                viewModel.hashClipboard["endEventMilliseconds"] = Utils.getCurrentDatetimeEvent(create?.endEventMilliseconds
-                        ?: 0)
-                eventTitle.text = create?.title
-                eventLocation.text = create?.location
-                eventDescription.text = create?.description
-                eventBeginTime.text = Utils.convertMillisecondsToDateTime(create?.startEventMilliseconds
-                        ?: 0)
-                eventEndTime.text = Utils.convertMillisecondsToDateTime(create?.endEventMilliseconds
+                viewModel.hashClipboard[ConstantKey.END_EVENT_MILLISECONDS] = Utils.getCurrentDatetimeEvent(create?.endEventMilliseconds
                         ?: 0)
                 history = HistoryModel()
-                history?.title = create?.title
-                history?.location = create?.location
-                history?.description = create?.description
-                history?.startEvent = create?.startEvent
-                history?.endEvent = create?.endEvent
-                history?.startEventMilliseconds = create?.startEventMilliseconds
-                history?.endEventMilliseconds = create?.endEventMilliseconds
-                history?.createType = create?.createType?.name
-
-                val builder = StringBuilder()
-                builder.append("BEGIN:VEVENT")
-                builder.append("\n")
-                builder.append("SUMMARY:" + create?.title)
-                builder.append("\n")
-                builder.append("DTSTART:" + create?.startEvent)
-                builder.append("\n")
-                builder.append("DTEND:" + create?.endEvent)
-                builder.append("\n")
-                builder.append("LOCATION:" + create?.location)
-                builder.append("\n")
-                builder.append("DESCRIPTION:" + create?.description)
-                builder.append("\n")
-                builder.append("END:VEVENT")
-                code = builder.toString()
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_event_white_48, "Calendar"))
-                onShowUI(llEvent)
-                title = "Calendar"
+                history.title = create?.title
+                history.location = create?.location
+                history.description = create?.description
+                history.startEvent = create?.startEvent
+                history.endEvent = create?.endEvent
+                history.startEventMilliseconds = create?.startEventMilliseconds
+                history.endEventMilliseconds = create?.endEventMilliseconds
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_event_white_48, "Calendar",create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.CALENDAR
             }
             ParsedResultType.ISBN -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["ISBN"] = create?.ISBN
-                textISBN.text = create?.ISBN
+                viewModel.hashClipboard[ConstantKey.ISBN] = create?.ISBN
                 history = HistoryModel()
-                history?.text = create?.ISBN
-                history?.createType = create?.createType?.name
-                code = create?.ISBN
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Share"))
-                onShowUI(llISBN)
-                title = "ISBN"
+                history.text = create?.ISBN
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, ConstantValue.SEARCH,create?.favorite))
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.SHARE,create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.ISBN
             }
             else -> {
                 /*Put item to HashClipboard*/
-                viewModel.hashClipboard["text"] = create?.text
-                textMessage.text = create?.text
+                viewModel.hashClipboard[ConstantKey.TEXT] = create?.text
                 history = HistoryModel()
-                history?.text = create?.text
-                history?.createType = create?.createType?.name
-                code = create?.text
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, "Search"))
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, "Text"))
-                onShowUI(llText)
-                title = "Text"
+                history.text = create?.text
+                history.createType = create?.createType?.name
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, ConstantValue.SEARCH,create?.favorite))
+                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.TEXT,create?.favorite))
+                onInsertUpdateHistory(history)
+                title = ConstantValue.TEXT
             }
         }
-        if (viewModel.isBarCode(create?.barcodeFormat)){
-            tvFormatType.text = create?.barcodeFormat
-            llFormatType.visibility = View.VISIBLE
-        }
-        viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.CLIPBOARD, R.drawable.baseline_file_copy_white_48, "Clipboard"))
-        Utils.Log(TAG, "Format type ${create?.barcodeFormat}")
+        viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.CLIPBOARD, R.drawable.ic_baseline_content_copy_24, ConstantValue.CLIPBOARD,create?.favorite))
         onReloadData()
-        checkFavorite()
+        onCheckFavorite()
+        onCopy()
+    }
+
+    private fun onCopy(){
         try {
             val autoCopy: Boolean = PrefsController.getBoolean(getString(R.string.key_copy_to_clipboard), false)
             if (autoCopy) {
@@ -493,32 +402,24 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         }
     }
 
-    private fun onShowUI(view: View?) {
-        for (index in mList) {
-            if (view === index) {
-                index.visibility = View.VISIBLE
-            } else {
-                index.visibility = View.GONE
-            }
-        }
+    private fun onInsertUpdateHistory(history : HistoryModel) {
         if (create != null) {
             if (create?.fragmentType != EnumFragmentType.SCANNER) {
                 return
             }
         }
-        Utils.Log(TAG, "History :" + (history != null))
         Utils.Log(TAG, "Create :" + (create != null))
         Utils.Log(TAG, "fragmentType :" + create?.fragmentType)
 
         /*Adding new columns*/
-        history?.barcodeFormat = create?.barcodeFormat
-        history?.favorite = create?.favorite
+        history.barcodeFormat = create?.barcodeFormat
+        history.favorite = create?.favorite
         val time = Utils.getCurrentDateTimeSort()
-        history?.createDatetime = time
-        history?.updatedDateTime = time
+        history.createDatetime = time
+        history.updatedDateTime = time
         SQLiteHelper.onInsert(history)
         HistorySingleton.getInstance()?.reloadData()
-        viewModel.updateId(history?.uuId)
+        viewModel.updateId(history.uuId)
         Utils.Log(TAG, "Parse result " + Utils.getCodeContentByHistory(history))
         Utils.Log(TAG, "Format type ${create?.barcodeFormat}")
     }
@@ -649,13 +550,14 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadResultSmallView(llAds)
+            QRScannerApplication.getInstance().loadResultSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadResultLargeView(llLargeAds)
         } else {
             rlAdsRoot.visibility = View.GONE
         }
     }
 
-    val dataResult: CreateModel
+    private val dataResult: CreateModel
         get() {
             return viewModel.result ?: CreateModel()
         }

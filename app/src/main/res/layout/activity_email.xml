@@ -91,10 +91,10 @@
                             style="@style/brandonBoldTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/object" />
+                            android:text="@string/subject" />
 
                         <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/edtObject"
+                            android:id="@+id/edtSubject"
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

@@ -128,3 +128,10 @@ class DividerItemDecoration(context: Context?, orientation: Int) : RecyclerView.
         setOrientation(orientation)
     }
 }
+fun RecyclerView.clearDecorations() {
+    if (itemDecorationCount > 0) {
+        for (i in itemDecorationCount - 1 downTo 0) {
+            removeItemDecorationAt(i)
+        }
+    }
+}

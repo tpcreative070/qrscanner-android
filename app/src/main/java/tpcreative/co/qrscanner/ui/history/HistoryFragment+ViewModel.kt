@@ -1,15 +1,8 @@
 package tpcreative.co.qrscanner.ui.history
-import android.Manifest
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_history.*
 import tpcreative.co.qrscanner.common.HistorySingleton
-import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper

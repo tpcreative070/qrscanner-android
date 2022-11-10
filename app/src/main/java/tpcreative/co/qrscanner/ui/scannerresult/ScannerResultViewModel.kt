@@ -1,7 +1,5 @@
 package tpcreative.co.qrscanner.ui.scannerresult
 import android.app.Activity
-import android.os.Build
-import android.os.Bundle
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers

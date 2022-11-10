@@ -5,9 +5,7 @@ import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.SimpleCell
 import com.jaychang.srv.SimpleViewHolder
 import kotlinx.android.synthetic.main.history_item.view.*

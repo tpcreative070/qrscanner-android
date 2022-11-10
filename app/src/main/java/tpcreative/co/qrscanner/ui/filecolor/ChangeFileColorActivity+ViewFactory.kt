@@ -1,5 +1,8 @@
 package tpcreative.co.qrscanner.ui.filecolor
+import android.os.Build
 import android.view.LayoutInflater
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -7,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_chage_file_color.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.viewmodel.ChangeFileColorViewModel
 
@@ -16,6 +20,21 @@ fun ChangeFileColorActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     initRecycleView(layoutInflater)
     getData()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        onBackInvokedDispatcher.registerOnBackInvokedCallback(
+            OnBackInvokedDispatcher.PRIORITY_DEFAULT
+        ) {
+            showAds()
+        }
+    } else {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showAds()
+                }
+            })
+    }
 }
 
 fun ChangeFileColorActivity.getData(){
@@ -32,6 +51,15 @@ fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
     recyclerView.addItemDecoration(GridSpacingItemDecoration(4, 4, true))
     recyclerView.itemAnimator = DefaultItemAnimator()
     recyclerView.adapter = adapter
+}
+
+fun ChangeFileColorActivity.showAds(){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
+        // Back is pressed... Finishing the activity
+        finish()
+    }else{
+        QRScannerApplication.getInstance().loadInterstitialAd(this)
+    }
 }
 
 private fun ChangeFileColorActivity.setupViewModel() {

@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.ui.scanner
 import android.graphics.PorterDuff
-import android.hardware.Camera
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils

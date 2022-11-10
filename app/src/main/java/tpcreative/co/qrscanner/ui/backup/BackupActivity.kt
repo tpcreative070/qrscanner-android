@@ -3,7 +3,6 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.tapadoo.alerter.Alerter
@@ -82,6 +81,16 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
             else -> {
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                showAds()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDriveClientReady() {

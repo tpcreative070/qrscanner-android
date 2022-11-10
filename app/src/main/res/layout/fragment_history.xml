@@ -28,10 +28,10 @@
                 android:layout_toStartOf="@+id/rlSelect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:tint="?attr/colorAccent"
+                <ImageView
+                    app:tint="?attr/colorAccent"
                     android:id="@+id/imgCSV"
-                    app:srcCompat="@drawable/baseline_subtitles_white_48"
+                    app:srcCompat="@drawable/ic_baseline_subtitles_24"
                     android:layout_width="20dp"
                     android:layout_height="20dp"/>
                 <androidx.appcompat.widget.AppCompatTextView
@@ -47,10 +47,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:tint="?attr/colorAccent"
+                <ImageView
+                    app:tint="?attr/colorAccent"
                     android:id="@+id/imgSelect"
-                    app:srcCompat="@drawable/baseline_select_all_white_48"
+                    app:srcCompat="@drawable/ic_baseline_select_all_24"
                     android:layout_width="20dp"
                     android:layout_height="20dp"/>
                 <androidx.appcompat.widget.AppCompatTextView

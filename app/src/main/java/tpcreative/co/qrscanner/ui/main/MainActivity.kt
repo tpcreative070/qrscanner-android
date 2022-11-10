@@ -76,7 +76,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     fun getTabView(position: Int): View? {
-        val view = LayoutInflater.from(QRScannerApplication.Companion.getInstance()).inflate(R.layout.custom_tab_items, null)
+        val view = LayoutInflater.from(QRScannerApplication.getInstance()).inflate(R.layout.custom_tab_items, null)
         val imageView: AppCompatImageView = view.findViewById(R.id.imageView)
         val textView: AppCompatTextView = view.findViewById(R.id.textView)
         try {

@@ -4,12 +4,20 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.snatik.storage.Storage
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
@@ -21,10 +29,12 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.io.*
+import java.net.URL
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
@@ -520,6 +530,172 @@ object Utils {
         return null
     }
 
+    fun getCode(create: CreateModel?): String? {
+        /*Product id must be plus barcode format type*/
+        var code : String? = ""
+        if (create != null) {
+             when (create.createType) {
+                ParsedResultType.ADDRESSBOOK -> {
+                    code = "MECARD:N:" + create.fullName + ";TEL:" + create.phone + ";EMAIL:" + create.email + ";ADR:" + create.address + ";"
+                }
+                ParsedResultType.EMAIL_ADDRESS -> {
+                    code = "MATMSG:TO:" + create.email + ";SUB:" + create.subject + ";BODY:" + create.message + ";"
+                }
+                ParsedResultType.PRODUCT -> {
+                    code = create.productId
+                }
+                ParsedResultType.URI -> {
+                    code = create.url
+                }
+                ParsedResultType.WIFI -> {
+                    code = "WIFI:S:" + create.ssId + ";T:" + create.password + ";P:" + create.networkEncryption + ";H:" + create.hidden + ";"
+                }
+                ParsedResultType.GEO -> {
+                    code = "geo:" + create.lat + "," + create.lon + "?q=" + create.query + ""
+                }
+                ParsedResultType.TEL -> {
+                    code = "tel:" + create.phone + ""
+                }
+                ParsedResultType.SMS -> {
+                    code = "smsto:" + create.phone + ":" + create.message
+                }
+                ParsedResultType.CALENDAR -> {
+                    val builder = StringBuilder()
+                    builder.append("BEGIN:VEVENT")
+                    builder.append("\n")
+                    builder.append("SUMMARY:" + create.title)
+                    builder.append("\n")
+                    builder.append("DTSTART:" + create.startEvent)
+                    builder.append("\n")
+                    builder.append("DTEND:" + create.endEvent)
+                    builder.append("\n")
+                    builder.append("LOCATION:" + create.location)
+                    builder.append("\n")
+                    builder.append("DESCRIPTION:" + create.description)
+                    builder.append("\n")
+                    builder.append("END:VEVENT")
+                    code = builder.toString()
+                }
+                ParsedResultType.ISBN -> {
+                    code = create.text
+                }
+                else -> {
+                    code = create.text
+                }
+            }
+            return code
+        }
+        return null
+    }
+
+    fun getCodeDisplay(create: CreateModel?): HashMap<String,String?>? {
+        /*Product id must be plus barcode format type*/
+        val mMap = java.util.HashMap<String,String?>()
+        val mContent = StringBuilder()
+        if (create != null) {
+            when (create.createType) {
+                ParsedResultType.ADDRESSBOOK -> {
+                    mContent.append(create.fullName)
+                    mContent.append("\n")
+                    mContent.append(create.phone)
+                    mContent.append("\n")
+                    mContent.append(create.email)
+                    mContent.append("\n")
+                    mContent.append(create.address)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.EMAIL_ADDRESS -> {
+                    mContent.append(create.email)
+                    mContent.append("\n")
+                    mContent.append(create.subject)
+                    mContent.append("\n")
+                    mContent.append(create.message)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.PRODUCT -> {
+                    mContent.append(create.productId)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.URI -> {
+                    mContent.append(create.url)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.WIFI -> {
+                    mContent.append(create.ssId)
+                    mContent.append("\n")
+                    mContent.append(create.password)
+                    mContent.append("\n")
+                    mContent.append(create.networkEncryption)
+                    mContent.append("\n")
+                    mContent.append(create.hidden)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.GEO -> {
+                    mContent.append(create.lat)
+                    mContent.append("\n")
+                    mContent.append(create.lon)
+                    mContent.append("\n")
+                    mContent.append(create.query)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.TEL -> {
+                    mContent.append(create.phone)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.SMS -> {
+                    mContent.append(create.phone)
+                    mContent.append("\n")
+                    mContent.append(create.message)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.CALENDAR -> {
+                    mContent.append(create.title)
+                    mContent.append("\n")
+                    mContent.append(create.startEvent)
+                    mContent.append("\n")
+                    mContent.append(create.endEvent)
+                    mContent.append("\n")
+                    mContent.append(create.location)
+                    mContent.append("\n")
+                    mContent.append(create.description)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                ParsedResultType.ISBN -> {
+                    mContent.append(create.text)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+                else -> {
+                    mContent.append(create.text)
+                    mMap[ConstantKey.CONTENT] = mContent.toString()
+                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
+                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
+                }
+            }
+            return mMap
+        }
+        return null
+    }
+
     fun onDropDownAlert(activity: Activity?, content: String?) {
         Alerter.create(activity)
                 .setTitle("Alert")
@@ -903,6 +1079,71 @@ object Utils {
                 })
                 .show()
     }
+
+    fun onSendMail(context: Context,create : CreateModel?){
+        val to = create?.email
+        val subject = create?.subject
+        val body = create?.message
+        val mailTo = "mailto:" + to +
+                "?&subject=" + Uri.encode(subject) +
+                "&body=" + Uri.encode(body)
+        val emailIntent = Intent(Intent.ACTION_VIEW)
+        emailIntent.data = Uri.parse(mailTo)
+        context.startActivity(emailIntent)
+        Utils.Log(TAG, "email object ${Gson().toJson(create)}")
+    }
+
+    fun onPhoneCall(context: Context,create: CreateModel?) {
+        Dexter.withContext(context)
+            .withPermissions(
+                Manifest.permission.CALL_PHONE)
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    if (report?.areAllPermissionsGranted() == true) {
+                        Utils.Log(TAG, "Action here phone call")
+                        val intentPhoneCall = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + create?.phone))
+                        context.startActivity(intentPhoneCall)
+                    } else {
+                        Utils.Log(TAG, "Permission is denied")
+                    }
+                    // check for permanent denial of any permission
+                    if (report?.isAnyPermissionPermanentlyDenied == true) {
+                        /*Miss add permission in manifest*/
+                        Utils.Log(TAG, "request permission is failed")
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
+                    /* ... */
+                    token?.continuePermissionRequest()
+                }
+            })
+            .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
+    }
+
+    fun onSendSMS(context: Context,phone : String?,message : String?){
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:$phone"))
+        intent.putExtra("sms_body", message)
+        context.startActivity(intent)
+    }
+
+    fun onShareText(context: Context,value: String?){
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.type="text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT,value)
+        context.startActivity(Intent.createChooser(intent, ConstantValue.SHARE))
+    }
+
+    fun onShareMap(context: Context,uri : String){
+        val intentMap = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        intentMap.setClassName(
+            "com.google.android.apps.maps",
+            "com.google.android.maps.MapsActivity"
+        )
+        context.startActivity(intentMap)
+    }
+
 
     interface UtilsListener {
         fun onSaved(path: String?, action: EnumAction?)
