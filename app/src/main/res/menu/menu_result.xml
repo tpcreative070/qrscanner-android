@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_item_txt_export"
-        android:icon="@drawable/ic_baseline_txt_export_32"
+        android:id="@+id/menu_item_delete"
+        android:icon="@drawable/baseline_delete_white_48"
         app:showAsAction="always"
         android:title="@string/delete"
         android:orderInCategory="100"/>
     <item
-        android:id="@+id/menu_item_delete"
-        android:icon="@drawable/baseline_delete_white_48"
+        android:id="@+id/menu_item_txt_export"
+        android:icon="@drawable/ic_baseline_txt_export_32"
         app:showAsAction="always"
         android:title="@string/delete"
         android:orderInCategory="100"/>

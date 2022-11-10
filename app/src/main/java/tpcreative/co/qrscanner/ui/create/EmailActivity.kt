@@ -35,7 +35,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
             Utils.Log(TAG, "Data is null")
         }
         edtEmail.setOnEditorActionListener(this)
-        edtObject.setOnEditorActionListener(this)
+        edtSubject.setOnEditorActionListener(this)
         edtMessage.setOnEditorActionListener(this)
     }
 
@@ -68,7 +68,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
             Utils.Log(TAG, "Passed")
             val create = CreateModel(save)
             create.email = edtEmail.text.toString().trim { it <= ' ' }
-            create.subject = edtObject.text.toString()
+            create.subject = edtSubject.text.toString()
             create.message = edtMessage?.text.toString()
             create.createType = ParsedResultType.EMAIL_ADDRESS
             Navigator.onMoveToReview(this@EmailActivity, create)
@@ -79,7 +79,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
 
     private fun addValidationForEditText() {
         mAwesomeValidation?.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
-        mAwesomeValidation?.addValidation(this, R.id.edtObject, RegexTemplate.NOT_EMPTY, R.string.err_object)
+        mAwesomeValidation?.addValidation(this, R.id.edtSubject, RegexTemplate.NOT_EMPTY, R.string.err_subject)
         mAwesomeValidation?.addValidation(this, R.id.edtMessage, RegexTemplate.NOT_EMPTY, R.string.err_message)
     }
 
@@ -89,7 +89,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
 
     fun onSetData() {
         edtEmail.setText("${save?.email}")
-        edtObject.setText("${save?.subject}")
+        edtSubject.setText("${save?.subject}")
         edtMessage.setText("${save?.message}")
         edtEmail.setSelection(edtEmail.text?.length ?: 0)
         hideSoftKeyBoard()

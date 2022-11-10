@@ -27,6 +27,8 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
+
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
 
@@ -65,7 +67,7 @@ public class ViewfinderView extends View {
     protected Rect framingRect;
     protected Size previewSize;
 
-    private final int mDefaultBorderColor = getResources().getColor(R.color.zxing_colorBlueLight);
+    private final int mDefaultBorderColor = ContextCompat.getColor(getContext(),R.color.zxing_colorBlueLight);
     private final int mDefaultBorderStrokeWidth = getResources().getInteger(R.integer.zxing_viewfinder_border_width);
     private final int mDefaultBorderLineLength = getResources().getInteger(R.integer.zxing_viewfinder_border_length);
 
@@ -85,13 +87,13 @@ public class ViewfinderView extends View {
         TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_finder);
 
         this.maskColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_mask,
-                resources.getColor(R.color.zxing_viewfinder_mask));
+                ContextCompat.getColor(getContext(),R.color.zxing_viewfinder_mask));
         this.resultColor = attributes.getColor(R.styleable.zxing_finder_zxing_result_view,
-                resources.getColor(R.color.zxing_result_view));
+                ContextCompat.getColor(getContext(),R.color.zxing_result_view));
         this.laserColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_laser,
-                resources.getColor(R.color.zxing_viewfinder_laser));
+                ContextCompat.getColor(getContext(),R.color.zxing_viewfinder_laser));
         this.resultPointColor = attributes.getColor(R.styleable.zxing_finder_zxing_possible_result_points,
-                resources.getColor(R.color.zxing_possible_result_points));
+                ContextCompat.getColor(getContext(),R.color.zxing_possible_result_points));
         this.laserVisibility = attributes.getBoolean(R.styleable.zxing_finder_zxing_viewfinder_laser_visibility,
                 true);
 
@@ -196,8 +198,8 @@ public class ViewfinderView extends View {
         final Rect frame = framingRect;
         final Size previewSize = this.previewSize;
 
-        final int width = canvas.getWidth();
-        final int height = canvas.getHeight();
+        final int width = getWidth();
+        final int height = getHeight();
 
         // Draw the exterior (i.e. outside the framing rect) darkened
         paint.setColor(resultBitmap != null ? resultColor : maskColor);

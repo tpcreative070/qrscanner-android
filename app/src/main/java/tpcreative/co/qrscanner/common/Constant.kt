@@ -21,4 +21,5 @@ class Constant {
         const val QRCodeViewHeight = 250
         const val images_folder = "images"
     }
+
 }

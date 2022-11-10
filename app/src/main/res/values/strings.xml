@@ -45,7 +45,7 @@
     <string name="email_address">Email address</string>
     <string name="err_email">Please check email input</string>
     <string name="err_tech_stacks">Something!!!</string>
-    <string name="err_object">Input an object</string>
+    <string name="err_subject">Input an subject</string>
     <string name="err_message">Input a message</string>
     <string name="to">To</string>
     <string name="subject">Subject</string>
@@ -175,11 +175,12 @@
     <string name="admob_app_id">ca-app-pub-7019113255489690~9657466810</string>
     <string name="banner_main">ca-app-pub-7019113255489690/9391156707</string>
     <string name="banner_result_small">ca-app-pub-7019113255489690/2825748351</string>
+    <string name="banner_result_large">ca-app-pub-7019113255489690/1769731951</string>
     <string name="banner_review_small">ca-app-pub-7019113255489690/4436866707</string>
     <string name="banner_review_large">ca-app-pub-7019113255489690/4871980970</string>
     <string name="banner_create_large">ca-app-pub-7019113255489690/6876764573</string>
     <string name="banner_create_small">ca-app-pub-7019113255489690/8264215478</string>
-    <string name="interstitial">ca-app-pub-7019113255489690/7266352245</string>
+    <string name="interstitial_anywhere">ca-app-pub-7019113255489690/7266352245</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
 
@@ -330,6 +331,7 @@
     <string name="key_skip_duplicates">Skip duplicates</string>
     <string name="key_skip_duplicates_detail">Skip and remove duplicates QRCode or Barcode</string>
     <string name="key_backup_data">Backup data to Cloud</string>
+    <string name="key_content">Content</string>
 
     <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
     <string name="key_already_checkout">key_already_checkout</string>
@@ -380,5 +382,6 @@
     <string name="format_type">Format type</string>
     <string name="notes">Notes</string>
     <string name="barcode_type">Barcode type</string>
+    <string name="web_09_nov_21_16">Web 09 Nov 21:16</string>
 
 </resources>

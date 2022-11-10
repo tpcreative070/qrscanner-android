@@ -191,6 +191,10 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> {
+                showAds()
+                return true
+            }
             R.id.menu_item_png_export -> {
                 mUri?.let { shareToSocial(it) }
                 return true
@@ -248,7 +252,7 @@ class ReviewActivity : BaseActivitySlide() {
                         code,
                         BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
                         Constant.QRCodeViewWidth,
-                        Constant.QRCodeViewHeight,
+                        Constant.QRCodeViewHeight - 150,
                         hints
                     )
                 } else {
@@ -286,7 +290,7 @@ class ReviewActivity : BaseActivitySlide() {
                         code,
                         BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
                         Constant.QRCodeExportWidth,
-                        Constant.QRCodeExportHeight,
+                        Constant.QRCodeExportHeight - 200,
                         hints
                     )
                 } else {

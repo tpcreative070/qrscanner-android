@@ -1,13 +1,13 @@
 package tpcreative.co.qrscanner.ui.review
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.CreateModel
@@ -23,11 +23,7 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
         val action = activity?.intent?.action
         if (action != Intent.ACTION_SEND){
             Utils.Log(TAG,"type $bundle")
-            val data = if (Build.VERSION.SDK_INT >= 33) {
-                activity?.intent?.getParcelableExtra(QRScannerApplication.getInstance().getString(R.string.key_data), CreateModel::class.java)
-            } else {
-                bundle?.get(QRScannerApplication.getInstance().getString(R.string.key_data)) as CreateModel
-            }
+            val data  = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),CreateModel::class.java)
             if (data != null) {
                 create = data
                 Utils.Log(TAG,Gson().toJson(create))
