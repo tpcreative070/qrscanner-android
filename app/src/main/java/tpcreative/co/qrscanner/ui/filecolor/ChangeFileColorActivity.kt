@@ -26,22 +26,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chage_file_color)
         initUI()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            onBackInvokedDispatcher.registerOnBackInvokedCallback(
-                OnBackInvokedDispatcher.PRIORITY_DEFAULT
-            ) {
-                finish()
-            }
-        } else {
-            onBackPressedDispatcher.addCallback(
-                this,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        setResult(RESULT_CANCELED)
-                        finish()
-                    }
-                })
-        }
+
     }
 
     override fun onClickItem(position: Int) {
@@ -58,11 +43,11 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                onBackPressedDispatcher.onBackPressed()
+                showAds()
                 return true
             }
         }
-        return false
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {

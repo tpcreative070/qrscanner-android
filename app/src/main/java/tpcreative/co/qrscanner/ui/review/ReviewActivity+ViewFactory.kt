@@ -67,10 +67,8 @@ fun ReviewActivity.showAds(){
     if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
         // Back is pressed... Finishing the activity
         finish()
-        Utils.Log(TAG,"333")
     }else{
         QRScannerApplication.getInstance().loadInterstitialAd(this)
-        Utils.Log(TAG,"444")
     }
 }
 

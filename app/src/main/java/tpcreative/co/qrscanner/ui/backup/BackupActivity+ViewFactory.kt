@@ -1,5 +1,8 @@
 package tpcreative.co.qrscanner.ui.backup
+import android.os.Build
 import android.view.View
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.core.text.HtmlCompat
 import kotlinx.android.synthetic.main.activity_backup.*
 import tpcreative.co.qrscanner.R
@@ -7,7 +10,11 @@ import tpcreative.co.qrscanner.common.BackupSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.network.NetworkUtil
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.ui.review.ReviewActivity
+import tpcreative.co.qrscanner.ui.review.initUI
+import tpcreative.co.qrscanner.ui.review.showAds
 
 fun BackupActivity.initUI(){
     TAG = this::class.java.simpleName
@@ -48,5 +55,31 @@ fun BackupActivity.initUI(){
             Utils.Log(ServiceManager::class.java, "isSyncingData 78 is running")
             requestSyncData()
         }
+    }
+
+    /*Press back button*/
+    if (Build.VERSION.SDK_INT >= 33) {
+        onBackInvokedDispatcher.registerOnBackInvokedCallback(
+            OnBackInvokedDispatcher.PRIORITY_DEFAULT
+        ) {
+            showAds()
+        }
+    } else {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showAds()
+                }
+            })
+    }
+}
+
+fun BackupActivity.showAds(){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
+        // Back is pressed... Finishing the activity
+        finish()
+    }else{
+        QRScannerApplication.getInstance().loadInterstitialAd(this)
     }
 }
