@@ -161,7 +161,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     return
                 }
                 ParsedResultType.PRODUCT -> {
-                    Utils.onSendSMS(this,create)
+                    Utils.Log(TAG,"Nothing")
                     return
                 }
                 ParsedResultType.URI -> {
@@ -174,19 +174,12 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 }
                 ParsedResultType.GEO -> {
                     val uri = "geo:" + create?.lat + "," + create?.lon + ""
-                    val intentMap = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                    intentMap.setClassName(
-                        "com.google.android.apps.maps",
-                        "com.google.android.maps.MapsActivity"
-                    )
-                    startActivity(intentMap)
+                    Utils.onShareMap(this,uri)
                     return
                 }
                 ParsedResultType.TEL -> Utils.onPhoneCall(this,create)
                 ParsedResultType.SMS -> {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + create?.phone))
-                    intent.putExtra("sms_body", create?.message)
-                    startActivity(intent)
+                    Utils.onSendSMS(this,create?.phone,create?.message)
                     return
                 }
                 ParsedResultType.CALENDAR -> {

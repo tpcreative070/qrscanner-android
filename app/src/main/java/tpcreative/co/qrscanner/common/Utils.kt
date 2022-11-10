@@ -29,6 +29,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.io.*
+import java.net.URL
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -1120,9 +1121,9 @@ object Utils {
             .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
-    fun onSendSMS(context: Context,create: CreateModel?){
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:"))
-        intent.putExtra("sms_body", create?.productId)
+    fun onSendSMS(context: Context,phone : String?,message : String?){
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:$phone"))
+        intent.putExtra("sms_body", message)
         context.startActivity(intent)
     }
 
@@ -1132,6 +1133,15 @@ object Utils {
         intent.type="text/plain"
         intent.putExtra(Intent.EXTRA_TEXT,value)
         context.startActivity(Intent.createChooser(intent, ConstantValue.SHARE))
+    }
+
+    fun onShareMap(context: Context,uri : String){
+        val intentMap = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        intentMap.setClassName(
+            "com.google.android.apps.maps",
+            "com.google.android.maps.MapsActivity"
+        )
+        context.startActivity(intentMap)
     }
 
 
