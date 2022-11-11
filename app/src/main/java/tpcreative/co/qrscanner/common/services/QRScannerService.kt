@@ -7,10 +7,12 @@ import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
 import com.snatik.storage.Storage
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.presenter.BaseView
 import tpcreative.co.qrscanner.common.presenter.PresenterService
 import tpcreative.co.qrscanner.model.EnumStatus
+import java.io.File
 
 
 class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.ConnectivityReceiverListener {
@@ -23,6 +25,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
         mStorage = Storage(this)
         onInitReceiver()
         QRScannerApplication.getInstance().setConnectivityListener(this)
+        QRScannerApplication.getInstance().setRequestClearCacheData(false)
     }
 
     override fun onActionScreenOff() {
@@ -40,6 +43,9 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
 
     override fun onDestroy() {
         super.onDestroy()
+        if (QRScannerApplication.getInstance().isRequestClearCacheData()){
+            this.cacheDir.deleteRecursively()
+        }
         Utils.Log(TAG, "onDestroy")
         if (androidReceiver != null) {
             unregisterReceiver(androidReceiver)

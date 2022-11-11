@@ -56,6 +56,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var isReviewLargeView = true
     private var isCreateSmallView = true
     private var isCreateLargeView = true
+    private var requestClearCacheData = false
     private var options: GoogleSignInOptions.Builder? = null
     private var requiredScopes: MutableSet<Scope>? = null
     private var requiredScopesString: MutableList<String>? = null
@@ -711,6 +712,14 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun isEnableInterstitialAd() : Boolean {
         return  true
+    }
+
+    fun setRequestClearCacheData(data : Boolean){
+        this.requestClearCacheData = data
+    }
+
+    fun isRequestClearCacheData() : Boolean{
+        return requestClearCacheData
     }
 
     fun refreshAds(){

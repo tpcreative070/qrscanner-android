@@ -51,9 +51,7 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val mFile = File(this.cacheDir, Constant.images_folder)
-        mFile.deleteRecursively()
-        mFile.delete()
+        QRScannerApplication.getInstance().setRequestClearCacheData(true)
     }
 
     override fun onStop() {

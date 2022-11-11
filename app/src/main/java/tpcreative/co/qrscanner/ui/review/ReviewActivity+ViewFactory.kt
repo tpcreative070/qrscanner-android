@@ -115,8 +115,6 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
     val imageFolder = File(cacheDir, Constant.images_folder)
     var uri: Uri? = null
     try {
-        imageFolder.deleteRecursively()
-        imageFolder.delete()
         imageFolder.mkdirs()
         val file = File(imageFolder, "shared_code_${System.currentTimeMillis()}.png")
         val outputStream = FileOutputStream(file)
