@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,13 @@ import tpcreative.co.qrscanner.model.Theme
 import java.util.*
 
 class SettingsFragment : BaseFragment() {
+    private var mStateSaved = false
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        mStateSaved = true;
+        super.onSaveInstanceState(outState)
+    }
+
     override fun getLayoutId(): Int {
         return 0
     }
@@ -49,6 +57,15 @@ class SettingsFragment : BaseFragment() {
 
     override fun work() {
         super.work()
+        //Avoid crack app
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (activity?.supportFragmentManager?.isStateSaved == true) {
+                return;
+            }
+        }
+        if (mStateSaved) {
+            return
+        }
         val fragment: Fragment? = activity?.supportFragmentManager?.instantiate(SettingsFragmentPreference::class.java.name)
         val transaction: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         fragment?.let {

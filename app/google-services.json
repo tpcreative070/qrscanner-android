@@ -73,6 +73,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "369444282152-l252vivg4g5e7qc1ijbghg48k30rn0dt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tpcreative.co.qrscanner.free.develop",
+            "certificate_hash": "0caa82009e9145c5b3dbc97fd63e5c82ebbaf7dd"
+          }
+        },
+        {
           "client_id": "369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -114,14 +122,6 @@
         }
       },
       "oauth_client": [
-        {
-          "client_id": "369444282152-am7vujmoml5cr07uptc8q727jlh2pq6a.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "tpcreative.co.qrscanner.free.release",
-            "certificate_hash": "07f0c8f4f0601e17ed799664ac8b1904679c40a2"
-          }
-        },
         {
           "client_id": "369444282152-u9vk5kgqg9251gq9o08roof83762j0r8.apps.googleusercontent.com",
           "client_type": 1,
