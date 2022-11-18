@@ -52,6 +52,7 @@ class ReviewActivity : BaseActivitySlide() {
     override fun onDestroy() {
         super.onDestroy()
         QRScannerApplication.getInstance().setRequestClearCacheData(true)
+        bitmap?.recycle()
     }
 
     override fun onStop() {
@@ -188,7 +189,7 @@ class ReviewActivity : BaseActivitySlide() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                showAds()
+                finish()
                 return true
             }
             R.id.menu_item_png_export -> {

@@ -49,28 +49,20 @@ fun ReviewActivity.initUI(){
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT
         ) {
-            showAds()
+            finish()
         }
     } else {
         onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    showAds()
+                    finish()
                 }
             })
     }
     onHandlerIntent()
 }
 
-fun ReviewActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
-        // Back is pressed... Finishing the activity
-        finish()
-    }else{
-        QRScannerApplication.getInstance().loadInterstitialAd(this)
-    }
-}
 
 
 /*Share File To QRScanner*/

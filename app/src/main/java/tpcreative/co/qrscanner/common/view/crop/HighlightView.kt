@@ -292,9 +292,9 @@ internal class HighlightView(  // View displaying image
         }
 
         // Put the cropping rectangle inside the image rectangle
-        if (r.left < imageRect?.left ?: 0F) {
+        if (r.left < (imageRect?.left ?: 0F)) {
             r.offset((imageRect?.left ?: 0F) - r.left, 0f)
-        } else if (r.right > imageRect?.right ?:0F) {
+        } else if (r.right > (imageRect?.right ?: 0F)) {
             r.offset(-(r.right - (imageRect?.right ?:0F)), 0f)
         }
         if (r.top < (imageRect?.top ?:0F)) {

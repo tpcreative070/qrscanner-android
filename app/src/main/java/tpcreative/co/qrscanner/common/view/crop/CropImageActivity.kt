@@ -407,7 +407,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
             val height = rotateBitmap?.getHeight() ?:0
             val imageRect = Rect(0, 0, width, height)
             // Make the default size about 4/5 of the width or height
-            var cropWidth = (width ?: 0).coerceAtMost(height ?: 0) * 4 / 5
+            var cropWidth = width.coerceAtMost(height) * 4 / 5
             var cropHeight = cropWidth
             if (aspectX != 0 && aspectY != 0) {
                 if (aspectX > aspectY) {
@@ -448,7 +448,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         var croppedImage: Bitmap? = null
         try {
             mInput = sourceUri?.let { contentResolver.openInputStream(it) }
-            val decoder = mInput?.let { BitmapRegionDecoder.newInstance(it, false) }
+            val decoder = mInput?.let { bitmapRecognize(it) }
             val width = decoder?.width?.toFloat()
             val height = decoder?.height?.toFloat()
             if (exifRotation != 0) {
@@ -639,6 +639,14 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
         tmpHintsMap[DecodeHintType.POSSIBLE_FORMATS] = EnumSet.allOf(BarcodeFormat::class.java)
         tmpHintsMap[DecodeHintType.PURE_BARCODE] = java.lang.Boolean.TRUE
         return tmpHintsMap
+    }
+
+    private fun bitmapRecognize(input : InputStream) : BitmapRegionDecoder?{
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            BitmapRegionDecoder.newInstance(input)
+        }else{
+            BitmapRegionDecoder.newInstance(input,false)
+        }
     }
 
     companion object {
