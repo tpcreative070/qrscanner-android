@@ -115,6 +115,7 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
         outputStream.close()
         uri = FileProvider.getUriForFile(this@getImageUri, BuildConfig.APPLICATION_ID + ".provider", file)
         mUri = uri
+        bitmap?.recycle()
     } catch (e: java.lang.Exception) {
         Toast.makeText(this@getImageUri, "" + e.message, Toast.LENGTH_LONG).show()
     }

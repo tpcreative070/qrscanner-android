@@ -186,6 +186,10 @@ public class CameraInstance {
         });
     }
 
+    public void setZoom(float value){
+        cameraManager.setZoom(value);
+    }
+
     private void validateOpen() {
         if (!open) {
             throw new IllegalStateException("CameraInstance is not open");

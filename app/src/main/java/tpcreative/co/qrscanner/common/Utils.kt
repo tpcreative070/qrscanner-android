@@ -8,9 +8,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.zxing.BarcodeFormat
@@ -30,13 +30,12 @@ import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.getImageUri
 import java.io.*
-import java.net.URL
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
@@ -1146,6 +1145,21 @@ object Utils {
         context.startActivity(intentMap)
     }
 
+    fun getImageUri(bitmap : Bitmap?) : Uri? {
+        val imageFolder = File(QRScannerApplication.getInstance().cacheDir,  Constant.images_folder)
+        try {
+            imageFolder.mkdirs()
+            val file = File(imageFolder, "scanner.png")
+            val outputStream = FileOutputStream(file)
+            bitmap?.compress(Bitmap.CompressFormat.PNG, 80, outputStream)
+            outputStream.flush()
+            outputStream.close()
+            bitmap?.recycle()
+            return FileProvider.getUriForFile(QRScannerApplication.getInstance(), BuildConfig.APPLICATION_ID + ".provider", file)
+        } catch (e: java.lang.Exception) {
+            return null;
+        }
+    }
 
     interface UtilsListener {
         fun onSaved(path: String?, action: EnumAction?)

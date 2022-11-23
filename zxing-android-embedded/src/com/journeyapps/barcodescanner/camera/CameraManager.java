@@ -496,6 +496,10 @@ public final class CameraManager {
         }
     }
 
+    public void setZoom(float value){
+        CameraConfigurationUtils.setZoom(camera.getParameters(),value);
+    }
+
     /**
      *
      * @return true if the torch is on

@@ -3,10 +3,14 @@ package tpcreative.co.qrscanner.ui.scanner
 import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.graphics.Rect
+import android.graphics.RectF
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,8 +21,11 @@ import com.google.zxing.Result
 import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.result.*
+import com.isseiaoki.simplecropview.CropImageView
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.CameraPreview.StateListener
+import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +40,8 @@ import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
-import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
@@ -47,6 +55,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     var isTurnOnFlash = false
     var mAnim: Animation? = null
     var isRunning = false
+    var mFrameRect: RectF? = null
     private val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
@@ -265,6 +274,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         if (zxing_barcode_scanner != null) {
             if (!zxing_barcode_scanner.isActivated) {
                 zxing_barcode_scanner.resume()
+                zxing_barcode_scanner.barcodeView.addStateListener(stateListener)
             }
         }
         onBeepAndVibrate()

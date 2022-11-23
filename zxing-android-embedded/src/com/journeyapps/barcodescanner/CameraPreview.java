@@ -116,6 +116,10 @@ public class CameraPreview extends ViewGroup {
     // Size of this container, non-null after layout is performed
     private Size containerSize;
 
+    private Size containerKeepSize;
+
+    private Rect rectKeep;
+
     // Size of the preview resolution
     private Size previewSize;
 
@@ -424,6 +428,8 @@ public class CameraPreview extends ViewGroup {
 
     private void containerSized(Size containerSize) {
         this.containerSize = containerSize;
+        this.containerKeepSize = containerSize;
+        this.rectKeep  = new Rect(50,300,containerKeepSize.width-50,containerKeepSize.height-300);
         if (cameraInstance != null) {
             if (cameraInstance.getDisplayConfiguration() == null) {
                 displayConfiguration = new DisplayConfiguration(getDisplayRotation(), containerSize);
@@ -579,6 +585,14 @@ public class CameraPreview extends ViewGroup {
         return previewSize;
     }
 
+    public Size getContainerKeepSize(){
+        return containerKeepSize;
+    }
+
+    public Rect getRectKeep() {
+        return rectKeep;
+    }
+
     /**
      * @return the CameraSettings currently in use
      */
@@ -732,6 +746,10 @@ public class CameraPreview extends ViewGroup {
      */
     public void setUseTextureView(boolean useTextureView) {
         this.useTextureView = useTextureView;
+    }
+
+    public void setZoom(float value){
+        cameraInstance.setZoom(value);
     }
 
     /**
