@@ -2,9 +2,7 @@ package tpcreative.co.qrscanner.ui.scanner
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -16,16 +14,13 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.Result
-import com.google.zxing.ResultPoint
+import com.google.zxing.*
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.result.*
-import com.isseiaoki.simplecropview.CropImageView
+import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.common.detector.WhiteRectangleDetector
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.CameraPreview.StateListener
-import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
@@ -209,6 +204,12 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     create.barcodeFormat = result.barcodeFormat.name
                 }
                 doNavigation(create)
+                val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(mBitmap);
+                canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
+                zxing_barcode_scanner.viewFinder.addResultPoint(result?.resultPoints?.toMutableList())
+                zxing_barcode_scanner.viewFinder.drawResultBitmap(mBitmap)
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -308,6 +309,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     override fun setVisible() {
         if (zxing_barcode_scanner != null) {
+            zxing_barcode_scanner.viewFinder.drawViewfinder()
             zxing_barcode_scanner.resume()
         }
     }
@@ -349,6 +351,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun onResume() {
         super.onResume()
          if (zxing_barcode_scanner != null && !zxing_barcode_scanner.isActivated) {
+             zxing_barcode_scanner.viewFinder.drawViewfinder()
              zxing_barcode_scanner.resume()
          }
         Utils.Log(TAG, "onResume")

@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -60,6 +61,9 @@ public class ViewfinderView extends View {
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
+    protected List<ResultPoint> lastPossibleResultPointsTest;
+    protected Rect mFRectFinalPoint;
+    protected List<ResultPoint> mResultPoint;
     protected CameraPreview cameraPreview;
 
     // Cache the framingRect and previewSize, so that we can still draw it after the preview
@@ -102,6 +106,10 @@ public class ViewfinderView extends View {
         scannerAlpha = 0;
         possibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
         lastPossibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
+        lastPossibleResultPointsTest = new ArrayList<>();
+        mResultPoint = new ArrayList<>();
+        mFRectFinalPoint = new Rect();
+        //detector = new WhiteRectangleDetector();
         init();
     }
 
@@ -210,8 +218,14 @@ public class ViewfinderView extends View {
 
         if (resultBitmap != null) {
             // Draw the opaque result bitmap over the scanning rectangle
-            paint.setAlpha(CURRENT_POINT_OPACITY);
-            canvas.drawBitmap(resultBitmap, null, frame, paint);
+            paint.setAlpha(CURRENT_POINT_OPACITY / 2);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(resultPointColor);
+            mFRectFinalPoint.left = Math.round(mResultPoint.get(0).getX()) + framingRect.left;
+            mFRectFinalPoint.right = Math.round(mResultPoint.get(2).getX()) +framingRect.left;
+            mFRectFinalPoint.top = Math.round(mResultPoint.get(2).getY())+ framingRect.top;
+            mFRectFinalPoint.bottom =  Math.round(mResultPoint.get(0).getY()) + framingRect.top;
+            canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
         } else {
             // If wanted, draw a red "laser scanner" line through the middle to show decoding is active
             if (laserVisibility) {
@@ -289,6 +303,11 @@ public class ViewfinderView extends View {
     public void drawResultBitmap(Bitmap result) {
         resultBitmap = result;
         invalidate();
+    }
+
+    public void addResultPoint(List<ResultPoint> ls){
+        mResultPoint.clear();
+        mResultPoint.addAll(ls);
     }
 
     /**
