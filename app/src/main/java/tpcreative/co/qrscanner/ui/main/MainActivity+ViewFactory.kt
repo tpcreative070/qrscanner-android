@@ -43,7 +43,6 @@ fun MainActivity.initUI(){
         QRScannerApplication.getInstance().requestMainView(this)
     }
 
-
     val mCountRating = Utils.onGetCountRating()
     if (mCountRating > 3) {
         showEncourage()

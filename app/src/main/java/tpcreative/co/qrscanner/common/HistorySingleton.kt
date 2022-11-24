@@ -8,7 +8,10 @@ class HistorySingleton {
 
     fun reloadData() {
         if (listener != null) {
-            listener?.reloadData()
+            if (Utils.isRequestHistoryReload()){
+                listener?.reloadData()
+                Utils.setRequestHistoryReload(false)
+            }
         }
     }
 

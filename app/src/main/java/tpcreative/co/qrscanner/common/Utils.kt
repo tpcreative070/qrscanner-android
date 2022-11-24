@@ -1021,7 +1021,23 @@ object Utils {
     }
 
     fun setRequestSync(value: Boolean) {
-        PrefsController.putBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_is_request_sync), value)
+        PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_sync), value)
+    }
+
+    fun setRequestHistoryReload(value: Boolean){
+        PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_history_reload), value)
+    }
+
+    fun isRequestHistoryReload() : Boolean{
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_history_reload), true)
+    }
+
+    fun setRequestSaverReload(value: Boolean){
+        PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_saver_reload), value)
+    }
+
+    fun isRequestSaverReload() : Boolean{
+       return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_saver_reload), true)
     }
 
     fun isEqualTimeSynced(value: String?): Boolean {

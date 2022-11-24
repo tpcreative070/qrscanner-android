@@ -336,6 +336,8 @@
     <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
     <string name="key_already_checkout">key_already_checkout</string>
     <string name="key_is_request_sync">key_is_request_sync</string>
+    <string name="key_is_request_history_reload">key_is_request_history_reload</string>
+    <string name="key_is_request_saver_reload">key_is_request_saver_reload</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>
