@@ -221,7 +221,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 updateValue(1)
                 viewModel.doSaveItems(create)
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    zxing_barcode_scanner.pause()
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(1000)
                         zxing_barcode_scanner.resume()
@@ -230,7 +230,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             } else {
                 scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    zxing_barcode_scanner.pause()
                 }
             }
             beepManager?.playBeepSoundAndVibrate()
@@ -291,7 +291,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     fun onAddPermissionGallery() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            zxing_barcode_scanner.pause()
         }
         onGetGallery()
     }
@@ -314,14 +314,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     override fun setInvisible() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            zxing_barcode_scanner.pause()
         }
     }
 
     override fun onStop() {
         super.onStop()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            zxing_barcode_scanner.pause()
         }
         Utils.Log(TAG, "onStop")
     }
@@ -539,7 +539,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         create.barcodeFormat = result?.barcodeFormat?.name
         beepManager?.playBeepSoundAndVibrate()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            zxing_barcode_scanner.pause()
         }
         Utils.Log(TAG,"barcode format ${parsedResult.type}")
         scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))

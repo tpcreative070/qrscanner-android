@@ -722,7 +722,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
     switch (event.getAction()) {
       case MotionEvent.ACTION_DOWN:
         onDown(event);
-        onDown();
+        if (mIsOnlyRB){
+          if (mTouchArea == TouchArea.RIGHT_BOTTOM) {
+            onDown();
+          }
+        }else{
+          onDown();
+        }
         return true;
       case MotionEvent.ACTION_MOVE:
         onMove(event);

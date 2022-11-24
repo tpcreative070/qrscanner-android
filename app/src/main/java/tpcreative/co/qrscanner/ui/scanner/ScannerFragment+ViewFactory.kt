@@ -6,17 +6,13 @@ import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
-import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.isseiaoki.simplecropview.CropImageView
 import com.isseiaoki.simplecropview.callback.LoadCallback
 import com.isseiaoki.simplecropview.callback.MoveUpCallback
 import com.journeyapps.barcodescanner.CameraPreview
 import com.journeyapps.barcodescanner.Size
-import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
-import kotlinx.android.synthetic.main.fragment_scanner.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
@@ -37,7 +33,7 @@ fun ScannerFragment.initUI(){
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                zxing_barcode_scanner.pauseAndWait()
+                zxing_barcode_scanner.pause()
                 if (cameraSettings.requestedCameraId == 0) {
                     switchCamera(Constant.CAMERA_FACING_FRONT)
                 } else {
@@ -83,7 +79,7 @@ fun ScannerFragment.initUI(){
             }
             override fun onAnimationEnd(animation: Animation?) {
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    zxing_barcode_scanner.pause()
                 }
                 Navigator.onMoveToHelp(context)
             }
@@ -116,27 +112,32 @@ fun ScannerFragment.initUI(){
         }
         doRefreshView()
     }
+
     seekbarZoom.setOnSeekBarChangeListener(object :OnSeekBarChangeListener{
         override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
             Utils.Log(TAG,"onProgressChanged $p1")
+            if (zxing_barcode_scanner.barcodeView.cameraInstance!=null){
+                zxing_barcode_scanner.barcodeView.cameraInstance.setZoom(p1)
+                zxing_barcode_scanner.barcodeView.cameraInstance.cameraSettings.zoom = p1
+            }
+
         }
 
         override fun onStartTrackingTouch(p0: SeekBar?) {
-
+            QRScannerApplication.getInstance().getActivity()?.lock(true)
         }
 
         override fun onStopTrackingTouch(p0: SeekBar?) {
             Utils.Log(TAG,"onStopTrackingTouch")
+            QRScannerApplication.getInstance().getActivity()?.lock(false)
         }
     })
 
     imgZoomIn.setOnClickListener {
-        seekbarZoom.max = 100
         seekbarZoom.progress = 100
     }
 
     imgZoomOut.setOnClickListener {
-        seekbarZoom.max = 100
         seekbarZoom.progress = 0
     }
 }
@@ -180,14 +181,18 @@ private val ScannerFragment.mMoveUpCallback: MoveUpCallback
             override fun onSuccess(width: Int, height: Int) {
                 zxing_barcode_scanner.barcodeView.framingRectSize = Size(width,height)
                 Utils.Log(TAG,"rect $width $height")
+                Utils.Log(TAG,"onSuccess")
+                zxing_barcode_scanner.pauseAndWait()
             }
             override fun onError(e: Throwable) {}
              override fun onDown() {
-                 zxing_barcode_scanner.pause()
+                 //zxing_barcode_scanner.pause()
+                 Utils.Log(TAG,"onDown")
             }
 
             override fun onRelease() {
                 zxing_barcode_scanner.resume()
+                Utils.Log(TAG,"onRelease")
             }
         }
 
@@ -216,6 +221,9 @@ val ScannerFragment.stateListener: CameraPreview.StateListener
                 )
                 Utils.Log(TAG,"rect ${mFrameRect}")
                 initCropView(mFrameRect,mRect)
+                if ( zxing_barcode_scanner.barcodeView.cameraInstance!=null){
+                    seekbarZoom.max =  zxing_barcode_scanner.barcodeView.cameraInstance.maxZoom()
+                }
             }
         }
 

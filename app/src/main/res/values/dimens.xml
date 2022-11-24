@@ -25,6 +25,11 @@
     <dimen name="bar_height">56dp</dimen>
     <dimen name="banner_size_height">55dp</dimen>
     <dimen name="button_height">60dp</dimen>
+    <dimen name="height_50">50dp</dimen>
+    <dimen name="height_40">40dp</dimen>
+    <dimen name="height_30">30dp</dimen>
+    <dimen name="height_20">20dp</dimen>
+    <dimen name="height_10">10dp</dimen>
 
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_15">15sp</dimen>

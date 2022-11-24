@@ -1,6 +1,7 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.content.Context;
+import android.hardware.Camera;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -186,10 +187,6 @@ public class CameraInstance {
         });
     }
 
-    public void setZoom(float value){
-        cameraManager.setZoom(value);
-    }
-
     private void validateOpen() {
         if (!open) {
             throw new IllegalStateException("CameraInstance is not open");
@@ -273,6 +270,21 @@ public class CameraInstance {
      */
     protected CameraManager getCameraManager() {
         return cameraManager;
+    }
+
+    public int maxZoom(){
+        if (cameraManager!=null){
+            return cameraManager.getCamera().getParameters().getMaxZoom();
+        }
+        return 30;
+    }
+
+    public void setZoom(int value){
+        if (cameraManager!=null){
+            Camera.Parameters parameters = cameraManager.getCamera().getParameters();
+            parameters.setZoom(value);
+            cameraManager.getCamera().setParameters(parameters);
+        }
     }
 
     /**

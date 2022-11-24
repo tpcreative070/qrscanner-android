@@ -7,6 +7,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.common.ResponseSingleton
@@ -29,29 +32,9 @@ fun MainActivity.initUI(){
     supportActionBar?.hide()
     ResponseSingleton.getInstance()?.setListener(this)
     storage = Storage(applicationContext)
-    setupViewPager(viewpager)
-    tabs.setupWithViewPager(viewpager)
-    viewpager.currentItem = 2
-    for (i in 0 until tabs.tabCount) {
-        val tab = tabs.getTabAt(i)
-        tab?.customView = getTabView(i)
-    }
-    setupTabIcons()
+    setupViewPager()
     ServiceManager.getInstance().onStartService()
     Theme.getInstance()?.getList()
-    viewpager.setOnSwipeOutListener(object : CustomViewPager.OnSwipeOutListener {
-        override fun onSwipeOutAtStart() {
-            Utils.Log(TAG, "Start swipe")
-        }
-
-        override fun onSwipeOutAtEnd() {
-            Utils.Log(TAG, "End swipe")
-        }
-
-        override fun onSwipeMove() {
-            Utils.Log(TAG, "Move swipe")
-        }
-    })
     if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED) {
         onAddPermissionCamera()
@@ -60,9 +43,6 @@ fun MainActivity.initUI(){
         QRScannerApplication.getInstance().requestMainView(this)
     }
 
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
-        QRScannerApplication.getInstance().requestInterstitialAd()
-    }
 
     val mCountRating = Utils.onGetCountRating()
     if (mCountRating > 3) {

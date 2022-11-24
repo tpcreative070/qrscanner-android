@@ -10,6 +10,8 @@ import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
@@ -58,14 +60,25 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         showAds()
     }
 
-    fun setupViewPager(viewPager: ViewPager?) {
-        viewPager?.offscreenPageLimit = 5
-        adapter = MainViewPagerAdapter(supportFragmentManager)
-        viewPager?.adapter = adapter
+    fun lock(isLock : Boolean){
+        viewpager.isUserInputEnabled = !isLock
     }
 
-    fun setupTabIcons() {
+    fun setupViewPager() {
+        adapter = MainViewPagerAdapter(this)
+        viewpager.adapter = adapter
+        viewpager.offscreenPageLimit = 5
+        viewpager.setCurrentItem(2,false)
+        TabLayoutMediator(tabs,viewpager) { tab, position ->
+            tab.customView = getTabView(position)
+
+        }.attach()
+        setupTabIcons()
+    }
+
+    private fun setupTabIcons() {
         try {
+            tabs.getTabAt(0)?.setIcon(tabIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(1)?.setIcon(tabIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(2)?.setIcon(tabIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(3)?.setIcon(tabIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
@@ -75,12 +88,12 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
     }
 
-    fun getTabView(position: Int): View? {
+    private fun getTabView(position: Int): View? {
         val view = LayoutInflater.from(QRScannerApplication.getInstance()).inflate(R.layout.custom_tab_items, null)
         val imageView: AppCompatImageView = view.findViewById(R.id.imageView)
         val textView: AppCompatTextView = view.findViewById(R.id.textView)
         try {
-            textView.text = adapter?.getPageTitle(position)
+            textView.text = adapter?.getTabTitle(position)
             imageView.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP)
             imageView.setImageDrawable(getRes(position))
             return view

@@ -40,6 +40,10 @@ fun BackupActivity.initUI(){
         onShowConnectionAlert()
     }
 
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
+        QRScannerApplication.getInstance().requestInterstitialAd()
+    }
+
     btnEnable.setOnClickListener {
         if (NetworkUtil.pingIpAddress(this)) {
             onShowConnectionAlert()

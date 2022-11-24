@@ -267,7 +267,7 @@ public final class CameraManager {
             Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
         }
 
-        CameraConfigurationUtils.setFocus(parameters, settings.getFocusMode(), safeMode);
+        CameraConfigurationUtils.setFocus(parameters, settings.getFocusMode(),settings.getZoom(), safeMode);
 
         if (!safeMode) {
             CameraConfigurationUtils.setTorch(parameters, false);

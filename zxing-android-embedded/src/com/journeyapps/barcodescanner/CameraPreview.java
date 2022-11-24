@@ -748,9 +748,6 @@ public class CameraPreview extends ViewGroup {
         this.useTextureView = useTextureView;
     }
 
-    public void setZoom(float value){
-        cameraInstance.setZoom(value);
-    }
 
     /**
      * Considered active if between resume() and pause().

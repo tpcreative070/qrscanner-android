@@ -128,7 +128,7 @@
                     android:layout_toEndOf="@+id/imgZoomOut"
                     android:layout_toStartOf="@+id/imgZoomIn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="@dimen/height_30"/>
 
                 <ImageView
                     app:srcCompat="@drawable/ic_baseline_zoom_in_24"
