@@ -15,6 +15,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import com.journeyapps.barcodescanner.Size
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -1038,6 +1039,31 @@ object Utils {
 
     fun isRequestSaverReload() : Boolean{
        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_saver_reload), true)
+    }
+
+    fun setFrameWidth(value: Int){
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_frame_width), value)
+    }
+
+    private fun getFrameWidth() : Int{
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_frame_width), 0)
+    }
+
+    fun setFrameHeight(value: Int){
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_frame_height), value)
+    }
+
+    private fun getFrameHeight() : Int{
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_frame_height), 0)
+    }
+
+    fun getFrameSize() : Size? {
+        val mWidth = getFrameWidth()
+        val mHeight = getFrameHeight()
+        if (mWidth>0 && mHeight>0){
+            return Size(mWidth,mHeight)
+        }
+        return null
     }
 
     fun isEqualTimeSynced(value: String?): Boolean {

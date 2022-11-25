@@ -1515,11 +1515,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
     }
     else if (mResult < 60 && (mTinyWidth || mTinyHeight)){
       Log.d(TAG,"workload tiny "+mResult);
-      mValue = "tiny";
+      mValue = "small-sized";
     }
     else if (mResult < 70){
       Log.d(TAG,"workload tiny "+mResult);
-      mValue = "tiny";
+      mValue = "small-sized";
     }
     else if ((getFrameW() > 300 && getFrameH() > 300) && mResult < 150){
       Log.d(TAG,"workload medium "+mResult);
@@ -1530,7 +1530,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
     }
     else{
       Log.d(TAG,"workload medium "+mResult);
-      mValue = "medium";
+      mValue = "medium-sized";
     }
     mMap.put(0,mResult+"%");
     mMap.put(1,mValue);

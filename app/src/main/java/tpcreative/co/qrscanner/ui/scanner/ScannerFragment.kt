@@ -21,6 +21,7 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.common.detector.WhiteRectangleDetector
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
@@ -51,7 +52,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     var mAnim: Animation? = null
     var isRunning = false
     var mFrameRect: RectF? = null
-    private val callback: BarcodeCallback = object : BarcodeCallback {
+    val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
                 Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)
@@ -222,7 +223,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 updateValue(1)
                 viewModel.doSaveItems(create)
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pause()
+                    zxing_barcode_scanner.pauseAndWait()
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(1000)
                         zxing_barcode_scanner.resume()
@@ -231,7 +232,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             } else {
                 scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pause()
+                    zxing_barcode_scanner.pauseAndWait()
                 }
             }
             beepManager?.playBeepSoundAndVibrate()
@@ -292,7 +293,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     fun onAddPermissionGallery() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pause()
+            zxing_barcode_scanner.pauseAndWait()
         }
         onGetGallery()
     }
@@ -316,14 +317,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     override fun setInvisible() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pause()
+            zxing_barcode_scanner.pauseAndWait()
         }
     }
 
     override fun onStop() {
         super.onStop()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pause()
+            zxing_barcode_scanner.pauseAndWait()
         }
         Utils.Log(TAG, "onStop")
     }
@@ -343,7 +344,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         Utils.Log(TAG, "onDestroy")
         if (typeCamera != 2) {
             if (zxing_barcode_scanner != null) {
-                zxing_barcode_scanner.pause()
+                zxing_barcode_scanner.pauseAndWait()
             }
         }
     }
@@ -542,7 +543,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         create.barcodeFormat = result?.barcodeFormat?.name
         beepManager?.playBeepSoundAndVibrate()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pause()
+            zxing_barcode_scanner.pauseAndWait()
         }
         Utils.Log(TAG,"barcode format ${parsedResult.type}")
         scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
@@ -566,7 +567,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 }
             } else {
                 if (typeCamera != 2) {
-                    zxing_barcode_scanner.pause()
+                    zxing_barcode_scanner.pauseAndWait()
                 }
             }
         }

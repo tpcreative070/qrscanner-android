@@ -13,6 +13,9 @@ import com.isseiaoki.simplecropview.callback.MoveUpCallback
 import com.journeyapps.barcodescanner.CameraPreview
 import com.journeyapps.barcodescanner.Size
 import kotlinx.android.synthetic.main.fragment_scanner.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
@@ -33,7 +36,7 @@ fun ScannerFragment.initUI(){
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                zxing_barcode_scanner.pause()
+                zxing_barcode_scanner.pauseAndWait()
                 if (cameraSettings.requestedCameraId == 0) {
                     switchCamera(Constant.CAMERA_FACING_FRONT)
                 } else {
@@ -108,7 +111,7 @@ fun ScannerFragment.initUI(){
     btnDone.setOnClickListener {
         ResponseSingleton.getInstance()?.onScannerDone()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pause()
+            zxing_barcode_scanner.pauseAndWait()
         }
         doRefreshView()
     }
@@ -120,16 +123,17 @@ fun ScannerFragment.initUI(){
                 zxing_barcode_scanner.barcodeView.cameraInstance.setZoom(p1)
                 zxing_barcode_scanner.barcodeView.cameraInstance.cameraSettings.zoom = p1
             }
-
         }
 
         override fun onStartTrackingTouch(p0: SeekBar?) {
+            zxing_barcode_scanner.barcodeView.stopDecoding()
             QRScannerApplication.getInstance().getActivity()?.lock(true)
         }
 
         override fun onStopTrackingTouch(p0: SeekBar?) {
             Utils.Log(TAG,"onStopTrackingTouch")
             QRScannerApplication.getInstance().getActivity()?.lock(false)
+            zxing_barcode_scanner.decodeContinuous(callback)
         }
     })
 
@@ -179,18 +183,21 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
 private val ScannerFragment.mMoveUpCallback: MoveUpCallback
     get() = object : MoveUpCallback {
             override fun onSuccess(width: Int, height: Int) {
-                zxing_barcode_scanner.barcodeView.framingRectSize = Size(width,height)
-                Utils.Log(TAG,"rect $width $height")
-                Utils.Log(TAG,"onSuccess")
                 zxing_barcode_scanner.pauseAndWait()
+                zxing_barcode_scanner.barcodeView.framingRectSize = Size(width,height)
+                Utils.setFrameWidth(width)
+                Utils.setFrameHeight(height)
+                Utils.Log(TAG,"onSuccess")
             }
             override fun onError(e: Throwable) {}
              override fun onDown() {
                  //zxing_barcode_scanner.pause()
                  Utils.Log(TAG,"onDown")
+                 zxing_barcode_scanner.barcodeView.stopDecoding()
             }
 
             override fun onRelease() {
+                zxing_barcode_scanner.decodeContinuous(callback)
                 zxing_barcode_scanner.resume()
                 Utils.Log(TAG,"onRelease")
             }
@@ -210,7 +217,6 @@ val ScannerFragment.stateListener: CameraPreview.StateListener
             if (mFrameRect==null){
                 Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.framingRect}")
                 Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.containerKeepSize}")
-                //val mRect = Rect(20,250,zxing_barcode_scanner.barcodeView.containerKeepSize.width-20,zxing_barcode_scanner.barcodeView.containerKeepSize.height-250)
                 val mRect = Rect(zxing_barcode_scanner.barcodeView.framingRect)
                 Utils.Log(TAG,"rect $mRect")
                 Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.containerKeepSize}")
