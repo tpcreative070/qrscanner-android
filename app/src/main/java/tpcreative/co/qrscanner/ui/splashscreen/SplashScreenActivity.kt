@@ -22,19 +22,15 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 class SplashScreenActivity : BaseActivity() {
     private var storage: Storage? = null
-    private val LOADING_APP = 1000
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         storage = Storage(this)
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(LOADING_APP.toLong())
-            if (ContextCompat.checkSelfPermission(QRScannerApplication.Companion.getInstance(), Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_DENIED) {
-                onAddPermissionCamera()
-            } else {
-                Navigator.onMoveMainTab(this@SplashScreenActivity)
-            }
+        if (ContextCompat.checkSelfPermission(QRScannerApplication.Companion.getInstance(), Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_DENIED) {
+            onAddPermissionCamera()
+        } else {
+            Navigator.onMoveMainTab(this@SplashScreenActivity)
         }
     }
 

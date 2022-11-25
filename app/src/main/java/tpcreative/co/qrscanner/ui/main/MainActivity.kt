@@ -31,6 +31,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
+import kotlin.system.measureNanoTime
 
 class MainActivity : BaseActivity(), SingleTonResponseListener {
 
@@ -57,7 +58,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     fun onVisitableFragment() {
-        showAds()
     }
 
     fun lock(isLock : Boolean){

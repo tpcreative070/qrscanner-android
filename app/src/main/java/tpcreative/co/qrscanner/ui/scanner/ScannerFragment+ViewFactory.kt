@@ -182,11 +182,10 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
 
 private val ScannerFragment.mMoveUpCallback: MoveUpCallback
     get() = object : MoveUpCallback {
-            override fun onSuccess(width: Int, height: Int) {
+            override fun onSuccess(width: Int, height: Int,rectF: RectF) {
                 zxing_barcode_scanner.pauseAndWait()
                 zxing_barcode_scanner.barcodeView.framingRectSize = Size(width,height)
-                Utils.setFrameWidth(width)
-                Utils.setFrameHeight(height)
+                Utils.setFrameRect(rectF)
                 Utils.Log(TAG,"onSuccess")
             }
             override fun onError(e: Throwable) {}
@@ -217,7 +216,7 @@ val ScannerFragment.stateListener: CameraPreview.StateListener
             if (mFrameRect==null){
                 Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.framingRect}")
                 Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.containerKeepSize}")
-                val mRect = Rect(zxing_barcode_scanner.barcodeView.framingRect)
+                val mRect = Rect(zxing_barcode_scanner.barcodeView.defaultFramingRect)
                 Utils.Log(TAG,"rect $mRect")
                 Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.containerKeepSize}")
                 mFrameRect = RectF(zxing_barcode_scanner.barcodeView.framingRect.left.toFloat(),

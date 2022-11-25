@@ -338,8 +338,7 @@
     <string name="key_is_request_sync">key_is_request_sync</string>
     <string name="key_is_request_history_reload">key_is_request_history_reload</string>
     <string name="key_is_request_saver_reload">key_is_request_saver_reload</string>
-    <string name="key_frame_width">key_frame_width</string>
-    <string name="key_frame_height">key_frame_height</string>
+    <string name="key_frame_rect">key_frame_rect</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>

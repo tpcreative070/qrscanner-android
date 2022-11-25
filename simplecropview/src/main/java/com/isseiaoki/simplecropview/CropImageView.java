@@ -1991,7 +1991,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
   }
 
   private void onPointMoveUp(){
-    if (mMoveUpCallback != null) mMoveUpCallback.onSuccess(Math.round(getFrameW()),Math.round(getFrameH()));
+    if (mMoveUpCallback != null) mMoveUpCallback.onSuccess(Math.round(getFrameW()),Math.round(getFrameH()),mFrameRect);
   }
 
   private void onRelease(){

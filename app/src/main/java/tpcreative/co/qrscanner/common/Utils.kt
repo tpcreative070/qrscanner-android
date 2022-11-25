@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.RectF
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.zxing.BarcodeFormat
@@ -31,7 +31,6 @@ import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.review.getImageUri
 import java.io.*
 import java.text.DateFormat
 import java.text.ParseException
@@ -1041,27 +1040,21 @@ object Utils {
        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_saver_reload), true)
     }
 
-    fun setFrameWidth(value: Int){
-        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_frame_width), value)
+    fun setFrameRect(mRect : RectF){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect),Gson().toJson(mRect))
     }
 
-    private fun getFrameWidth() : Int{
-        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_frame_width), 0)
-    }
-
-    fun setFrameHeight(value: Int){
-        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_frame_height), value)
-    }
-
-    private fun getFrameHeight() : Int{
-        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_frame_height), 0)
+    private fun getFrameRect() : RectF?{
+        val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect),null)
+        return Gson().fromJson(json, RectF::class.java)
     }
 
     fun getFrameSize() : Size? {
-        val mWidth = getFrameWidth()
-        val mHeight = getFrameHeight()
-        if (mWidth>0 && mHeight>0){
-            return Size(mWidth,mHeight)
+        val mRect = getFrameRect()
+        mRect?.let { node ->
+            val mWidth = node.right - node.left
+            val mHeight = node.bottom - node.top
+            return Size(mWidth.toInt(),mHeight.toInt())
         }
         return null
     }

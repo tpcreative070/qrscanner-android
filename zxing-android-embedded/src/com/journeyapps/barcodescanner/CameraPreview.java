@@ -132,6 +132,9 @@ public class CameraPreview extends ViewGroup {
     // Framing rectangle relative to this view
     private Rect framingRect = null;
 
+    // Framing rectangle relative to this default of view
+    private Rect defaultFramingRect = null;
+
     // Framing rectangle relative to the preview resolution
     private Rect previewFramingRect = null;
 
@@ -385,6 +388,7 @@ public class CameraPreview extends ViewGroup {
 
         Rect container = new Rect(0, 0, width, height);
         framingRect = calculateFramingRect(container, surfaceRect);
+        defaultFramingRect = calculateDefaultFramingRect(container,surfaceRect);
         Rect frameInPreview = new Rect(framingRect);
         frameInPreview.offset(-surfaceRect.left, -surfaceRect.top);
 
@@ -567,6 +571,18 @@ public class CameraPreview extends ViewGroup {
      */
     public Rect getFramingRect() {
         return framingRect;
+    }
+
+    /**
+     * The framing rectangle, relative to this view. Use to draw the rectangle.
+     *
+     * Will never be null while the preview is active.
+     *
+     * @return the framing rect, or null
+     * @see #isPreviewActive()
+     */
+    public Rect getDefaultFramingRect(){
+        return defaultFramingRect;
     }
 
     /**
@@ -856,6 +872,30 @@ public class CameraPreview extends ViewGroup {
             intersection.inset(horizontalMargin, verticalMargin);
             return intersection;
         }
+        // margin as 10% (default) of the smaller of width, height
+        int margin = (int) Math.min(intersection.width() * marginFraction, intersection.height() * marginFraction);
+        intersection.inset(margin, margin);
+        if (intersection.height() > intersection.width()) {
+            // We don't want a frame that is taller than wide.
+            intersection.inset(0, (intersection.height() - intersection.width()) / 2);
+        }
+        return intersection;
+    }
+
+    /**
+     * Calculate framing rectangle, relative to the preview frame.
+     *
+     * Note that the SurfaceView may be larger than the container.
+     *
+     * Override this for more control over the framing rect calculations.
+     *
+     * @param container this container, with left = top = 0
+     * @param surface   the SurfaceView, relative to this container
+     * @return the framing rect, relative to this container
+     */
+    protected Rect calculateDefaultFramingRect(Rect container, Rect surface) {
+        // intersection is the part of the container that is used for the preview
+        Rect intersection = new Rect(container);
         // margin as 10% (default) of the smaller of width, height
         int margin = (int) Math.min(intersection.width() * marginFraction, intersection.height() * marginFraction);
         intersection.inset(margin, margin);
