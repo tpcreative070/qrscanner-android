@@ -44,32 +44,6 @@ object Utils {
     const val CODE_EXCEPTION = 1111
     const val mStandardSortedDateTime: String = "ddMMYYYYHHmmss"
     const val FORMAT_DISPLAY: String = "EE dd MMM, yyyy HH:mm:ss a"
-    const val GOOGLE_CONSOLE_KEY: String = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxToUe5+7Xy+Q7YYZfuMofqZmNe0021vMBJ32VQVPa8+Hd0z9YWPWTVvplslRX4rKU2TQ1l93yMzPVIHVxLIwPuo9OC9I8sO7LpOi91pyPk9fT0IjVaWDTSv1h/qLUE6m3OS5/LVPYQNbHCp3yqujSmj6bIj7AvbjhF36XjxZaESfJI3KhtXy/RD+ZaM255TgY6g1vwN3ObsrXZ3e98VrT8ehJrry8u8RTpiZ6NWTgcsk/riMPYZiwebf6fUHQgidAtwdBfZx94hYgldt5kPN3hB2LcG4KVj9jI2QY9Y4WsOPQ643I9fP8e9VbYW8/uAOTZnvUeUW9qb9qIw3NHyV6wIDAQAB"
-
-    private fun appendLog(text: String?) {
-        val logFile = File(logPath())
-        if (!logFile.exists()) {
-            try {
-                logFile.createNewFile()
-            } catch (e: IOException) {
-                // TODO Auto-generated catch block
-                e.printStackTrace()
-            }
-        }
-        try {
-            //BufferedWriter for performance, true to set append to file flag
-            val buf = BufferedWriter(FileWriter(logFile, true))
-            buf.append("""
-    $text
-    
-    """.trimIndent())
-            buf.newLine()
-            buf.close()
-        } catch (e: IOException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        }
-    }
 
     fun getUUId(): String? {
         return try {
@@ -77,20 +51,6 @@ object Utils {
         } catch (e: Exception) {
             "" + System.currentTimeMillis()
         }
-    }
-
-    fun convertMillisecondsToHMmSs(millisecond: Long): String? {
-        val date = Date(millisecond)
-        val formatter: DateFormat = SimpleDateFormat("HH:mm:ss:SSS", Locale.getDefault())
-        return formatter.format(date)
-    }
-
-    fun convertMillisecondsToHMS(millisecond: Long): String? {
-        val date = Date(millisecond)
-        val formatter: DateFormat = SimpleDateFormat("HH:mm:ss a", Locale.getDefault())
-        val dateFormatted = formatter.format(date)
-        Log(TAG, "Millisecond : $millisecond data formatted :$dateFormatted")
-        return dateFormatted
     }
 
     fun convertMillisecondsToDateTime(millisecond: Long): String? {
@@ -346,16 +306,6 @@ object Utils {
         val idAds: String = QRScannerApplication.Companion.getInstance().getString(R.string.admob_app_id)
         val banner_id: String = QRScannerApplication.Companion.getInstance().getString(R.string.banner_main)
         return "event-code:" + eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id + " ;app id: " + BuildConfig.APPLICATION_ID + " ;variant: " + QRScannerApplication.Companion.getInstance().getString(R.string.qrscanner_free_release)
-    }
-
-    fun onWriteLogs(activity: Activity?, nameLogs: String?, errorCode: String?) {
-        if (activity?.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Log(TAG, "Granted permission....")
-            val storage: Storage = QRScannerApplication.getInstance().getStorage()
-            storage.createFile(storage.externalStorageDirectory + "/." + nameLogs, onLogAds("" + errorCode))
-        } else {
-            Log(TAG, "No permission")
-        }
     }
 
     fun onSetCountRating(count: Int) {
@@ -970,33 +920,6 @@ object Utils {
         return file
     }
 
-    /*Get the first of category data*/
-    fun getIndexOfHashMap(mMapDelete: MutableMap<String?, String?>?): String? {
-        if (mMapDelete != null) {
-            if (mMapDelete.size > 0) {
-                val id = mMapDelete[mMapDelete.keys.toTypedArray()[0]]
-                Log(TAG, "Id need to be deleting $id")
-                return id
-            }
-        }
-        return null
-    }
-
-    /*Delete hash map after delete Google drive or Server system*/
-    fun deletedIndexOfHashMap(id: String?, map: MutableMap<String?, String?>?): Boolean {
-        try {
-            if (map != null) {
-                if (map.isNotEmpty()) {
-                    map.remove(id)
-                    return true
-                }
-            }
-        } catch (e: Exception) {
-            Log(TAG, "Could not delete hash map==============================>")
-        }
-        return false
-    }
-
     /*Merge list to hash map for upload, download and delete*/
     fun mergeListToHashMap(mList: MutableList<DriveResponse>?): MutableMap<String?, String>? {
         val map: MutableMap<String?, String> = HashMap()
@@ -1047,6 +970,14 @@ object Utils {
     private fun getFrameRect() : RectF?{
         val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect),null)
         return Gson().fromJson(json, RectF::class.java)
+    }
+
+    fun getBeep():Boolean{
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_beep), true)
+    }
+
+    fun getVibrate() : Boolean{
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_vibrate), false)
     }
 
     fun getFrameSize() : Size? {
@@ -1101,18 +1032,6 @@ object Utils {
                 .setTitle("Alert")
                 .setBackgroundColorInt(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setText(message)
-                .show()
-    }
-
-    fun onBasicAlertSaved(activity: Activity, message: String) {
-        Alerter.create(activity)
-                .setTitle("Alert")
-                .setBackgroundColorInt(ContextCompat.getColor(activity, R.color.colorAccent))
-                .setText(message)
-                 .setDuration(4000)
-                .setOnHideListener(OnHideAlertListener {
-                    activity.finish()
-                })
                 .show()
     }
 

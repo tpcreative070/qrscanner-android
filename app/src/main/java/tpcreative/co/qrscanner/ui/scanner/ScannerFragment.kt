@@ -45,7 +45,7 @@ import java.io.File
 
 class ScannerFragment : BaseFragment(), SingletonScannerListener{
     lateinit var viewModel : ScannerViewModel
-    var beepManager: BeepManager? = null
+    private var beepManager: BeepManager? = null
     val cameraSettings: CameraSettings = CameraSettings()
     var typeCamera = 0
     var isTurnOnFlash = false
@@ -204,13 +204,15 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 if (result?.barcodeFormat != null) {
                     create.barcodeFormat = result.barcodeFormat.name
                 }
-                doNavigation(create)
                 val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
                 val canvas = Canvas(mBitmap);
                 canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
                 zxing_barcode_scanner.viewFinder.addResultPoint(result?.resultPoints?.toMutableList())
                 zxing_barcode_scanner.viewFinder.drawResultBitmap(mBitmap)
-
+                zxing_barcode_scanner.viewFinder.addTransferResultPoint(result?.transformedResultPoints)
+                Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
+                Utils.Log(TAG, "barcode ==> format ${result?.barcodeFormat?.name}")
+                doNavigation(create)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -223,16 +225,26 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 updateValue(1)
                 viewModel.doSaveItems(create)
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(1000)
-                        zxing_barcode_scanner.resume()
+                        zxing_barcode_scanner.viewFinder.drawViewfinder()
+                        if (!viewModel.isResume){
+                            zxing_barcode_scanner.resume()
+                            viewModel.isResume = true
+                        }
                     }
                 }
             } else {
                 scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
                 }
             }
             beepManager?.playBeepSoundAndVibrate()
@@ -276,7 +288,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         onHandlerIntent()
         if (zxing_barcode_scanner != null) {
             if (!zxing_barcode_scanner.isActivated) {
-                zxing_barcode_scanner.resume()
+                if (!viewModel.isResume){
+                    zxing_barcode_scanner.resume()
+                    viewModel.isResume = true
+                }
                 zxing_barcode_scanner.barcodeView.addStateListener(stateListener)
             }
         }
@@ -289,12 +304,18 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
         cameraSettings.requestedCameraId = type // front/back/etc
         zxing_barcode_scanner.barcodeView.cameraSettings = cameraSettings
-        zxing_barcode_scanner.resume()
+        if (!viewModel.isResume){
+            zxing_barcode_scanner.resume()
+            viewModel.isResume = true
+        }
     }
 
     fun onAddPermissionGallery() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
         onGetGallery()
     }
@@ -303,29 +324,36 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         if (beepManager == null) {
             return
         }
-        val isBeep = PrefsController.getBoolean(getString(R.string.key_beep), false)
-        val isVibrate = PrefsController.getBoolean(getString(R.string.key_vibrate), false)
-        beepManager?.isBeepEnabled = isBeep
-        beepManager?.isVibrateEnabled = isVibrate
+        beepManager?.isBeepEnabled = Utils.getBeep()
+        beepManager?.isVibrateEnabled = Utils.getVibrate()
     }
 
     override fun setVisible() {
         if (zxing_barcode_scanner != null) {
             zxing_barcode_scanner.viewFinder.drawViewfinder()
-            zxing_barcode_scanner.resume()
+            if (!viewModel.isResume){
+                zxing_barcode_scanner.resume()
+                viewModel.isResume = true
+            }
         }
     }
 
     override fun setInvisible() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
     }
 
     override fun onStop() {
         super.onStop()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
         Utils.Log(TAG, "onStop")
     }
@@ -345,7 +373,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         Utils.Log(TAG, "onDestroy")
         if (typeCamera != 2) {
             if (zxing_barcode_scanner != null) {
-                zxing_barcode_scanner.pauseAndWait()
+                if (viewModel.isResume){
+                    zxing_barcode_scanner.pauseAndWait()
+                    viewModel.isResume = false
+                }
             }
         }
     }
@@ -354,7 +385,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         super.onResume()
          if (zxing_barcode_scanner != null && !zxing_barcode_scanner.isActivated) {
              zxing_barcode_scanner.viewFinder.drawViewfinder()
-             zxing_barcode_scanner.resume()
+             if (!viewModel.isResume){
+                 zxing_barcode_scanner.resume()
+                 viewModel.isResume = true
+             }
          }
         Utils.Log(TAG, "onResume")
     }
@@ -544,9 +578,13 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         create.barcodeFormat = result?.barcodeFormat?.name
         beepManager?.playBeepSoundAndVibrate()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
-        Utils.Log(TAG,"barcode format ${parsedResult.type}")
+        Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
+        Utils.Log(TAG, "barcode ==> format ${result?.barcodeFormat?.name}")
         scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
@@ -563,12 +601,18 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             if (menuVisible) {
                 if (typeCamera != 2) {
                     onBeepAndVibrate()
-                    zxing_barcode_scanner.resume()
+                    if (!viewModel.isResume){
+                        zxing_barcode_scanner.resume()
+                        viewModel.isResume = true
+                    }
                     Utils.Log(TAG, "Fragment visit...resume...")
                 }
             } else {
                 if (typeCamera != 2) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
                 }
             }
         }

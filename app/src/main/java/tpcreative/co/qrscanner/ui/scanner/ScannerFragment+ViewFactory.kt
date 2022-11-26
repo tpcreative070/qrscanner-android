@@ -36,7 +36,10 @@ fun ScannerFragment.initUI(){
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                zxing_barcode_scanner.pauseAndWait()
+                if (viewModel.isResume){
+                    zxing_barcode_scanner.pauseAndWait()
+                    viewModel.isResume = false
+                }
                 if (cameraSettings.requestedCameraId == 0) {
                     switchCamera(Constant.CAMERA_FACING_FRONT)
                 } else {
@@ -82,7 +85,10 @@ fun ScannerFragment.initUI(){
             }
             override fun onAnimationEnd(animation: Animation?) {
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pause()
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
                 }
                 Navigator.onMoveToHelp(context)
             }
@@ -111,7 +117,10 @@ fun ScannerFragment.initUI(){
     btnDone.setOnClickListener {
         ResponseSingleton.getInstance()?.onScannerDone()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
         doRefreshView()
     }
@@ -183,7 +192,10 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
 private val ScannerFragment.mMoveUpCallback: MoveUpCallback
     get() = object : MoveUpCallback {
             override fun onSuccess(width: Int, height: Int,rectF: RectF) {
-                zxing_barcode_scanner.pauseAndWait()
+                if (viewModel.isResume){
+                    zxing_barcode_scanner.pauseAndWait()
+                    viewModel.isResume = false
+                }
                 zxing_barcode_scanner.barcodeView.framingRectSize = Size(width,height)
                 Utils.setFrameRect(rectF)
                 Utils.Log(TAG,"onSuccess")
@@ -197,7 +209,10 @@ private val ScannerFragment.mMoveUpCallback: MoveUpCallback
 
             override fun onRelease() {
                 zxing_barcode_scanner.decodeContinuous(callback)
-                zxing_barcode_scanner.resume()
+                if (!viewModel.isResume){
+                    zxing_barcode_scanner.resume()
+                    viewModel.isResume = true
+                }
                 Utils.Log(TAG,"onRelease")
             }
         }

@@ -241,14 +241,14 @@ class ReviewActivity : BaseActivitySlide() {
 
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                val mBitmap = if (create?.createType == ParsedResultType.PRODUCT) {
+                val mBitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: "")) {
                     hints[EncodeHintType.MARGIN] = 5
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
                         BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
-                        Constant.QRCodeViewWidth,
+                        Constant.QRCodeViewWidth + 100,
                         Constant.QRCodeViewHeight - 150,
                         hints
                     )
@@ -279,14 +279,14 @@ class ReviewActivity : BaseActivitySlide() {
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                bitmap = if (create?.createType == ParsedResultType.PRODUCT) {
+                bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: ""))  {
                     hints[EncodeHintType.MARGIN] = 15
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
                         BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
-                        Constant.QRCodeExportWidth,
+                        Constant.QRCodeExportWidth + 150,
                         Constant.QRCodeExportHeight - 200,
                         hints
                     )
