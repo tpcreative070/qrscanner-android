@@ -290,7 +290,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
                 edtBarCode.setHint(R.string.hint_characters)
                 viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, edtBarCode)
             }
-            viewModel.mType = BarcodeFormat.valueOf(type?.id ?:"")
+            viewModel.mType = BarcodeFormat.valueOf(type?.id ?:BarcodeFormat.QR_CODE.name)
             if (viewModel.isText(save?.text)){
                 edtBarCode.setText(save?.text)
                 edtBarCode.requestFocus()

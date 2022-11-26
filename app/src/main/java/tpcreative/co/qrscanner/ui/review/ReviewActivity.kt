@@ -241,15 +241,15 @@ class ReviewActivity : BaseActivitySlide() {
 
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                val mBitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: "")) {
+                val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)) && !viewModel.isSharedIntent) {
                     hints[EncodeHintType.MARGIN] = 5
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
+                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
                         Constant.QRCodeViewWidth + 100,
-                        Constant.QRCodeViewHeight - 150,
+                        Constant.QRCodeViewHeight - 100,
                         hints
                     )
                 } else {
@@ -279,13 +279,13 @@ class ReviewActivity : BaseActivitySlide() {
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: ""))  {
+                bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name) && !viewModel.isSharedIntent)  {
                     hints[EncodeHintType.MARGIN] = 15
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
+                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
                         Constant.QRCodeExportWidth + 150,
                         Constant.QRCodeExportHeight - 200,
                         hints

@@ -376,7 +376,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             }
             else -> {
                 //Text query
-                if (BarcodeFormat.QR_CODE ==  BarcodeFormat.valueOf(create?.barcodeFormat ?: "")){
+                if (BarcodeFormat.QR_CODE ==  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)){
                     viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.TEXT,create?.favorite))
                 }
                 /*Put item to HashClipboard*/

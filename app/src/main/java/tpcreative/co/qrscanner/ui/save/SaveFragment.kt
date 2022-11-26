@@ -334,7 +334,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         }
     }
 
-    fun exportData() = CoroutineScope(Dispatchers.Main).launch {
+    private fun exportData() = CoroutineScope(Dispatchers.Main).launch {
         val mResult =  ServiceManager.getInstance().onExportDatabaseCSVTask(requireContext(),EnumFragmentType.SAVER)
         when(mResult.status){
             Status.SUCCESS -> {

@@ -18,6 +18,7 @@ import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     val TAG = this::class.java.name
     var create: CreateModel = CreateModel()
+    var isSharedIntent : Boolean = false
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
