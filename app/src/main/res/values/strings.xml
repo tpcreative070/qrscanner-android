@@ -386,5 +386,8 @@
     <string name="notes">Notes</string>
     <string name="barcode_type">Barcode type</string>
     <string name="web_09_nov_21_16">Web 09 Nov 21:16</string>
+    <string name="_6_android_permission_call_phone_share_qrcode_to_your_phone_call">6. android.permission.CALL_PHONE: Share QRCode to your phone call</string>
+    <string name="_5_android_permission_camera_scanner_code">5. android.permission.CAMERA: Scanner code</string>
+    <string name="_4_access_fine_location_access_coarse_location_getting_longitude_and_latitude_for_qrcode_type_of_location">4. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location</string>
 
 </resources>
