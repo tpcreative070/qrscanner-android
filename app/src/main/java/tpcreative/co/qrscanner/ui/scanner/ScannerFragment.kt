@@ -396,6 +396,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                  zxing_barcode_scanner.resume()
                  viewModel.isResume = true
              }
+             if (!Utils.isMultipleScan()) {
+                 btnDone.visibility = View.INVISIBLE
+                 tvCount.visibility = View.INVISIBLE
+             }
          }
         Utils.Log(TAG, "onResume")
     }
@@ -603,10 +607,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         } else {
             QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isInVisible")
-        }
-        if (!Utils.isMultipleScan()) {
-            btnDone.visibility = View.INVISIBLE
-            tvCount.visibility = View.INVISIBLE
         }
         if (zxing_barcode_scanner != null) {
             if (menuVisible) {

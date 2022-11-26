@@ -9,7 +9,7 @@ import androidx.viewpager.widget.ViewPager
 class CustomViewPager : ViewPager {
     var mStartDragX = 0f
     var mOnSwipeOutListener: OnSwipeOutListener? = null
-
+    private var mDisable = false
     constructor(context: Context) : super(context) {}
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
 
@@ -35,7 +35,14 @@ class CustomViewPager : ViewPager {
         }
     }
 
+    fun setSwipeableDisable(swipeableDisable: Boolean) {
+        this.mDisable = swipeableDisable
+    }
+
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        if (this.mDisable) {
+            return false
+        }
         when (ev?.action?.and(MotionEventCompat.ACTION_MASK)) {
             MotionEvent.ACTION_DOWN -> mStartDragX = ev.x
         }
@@ -43,6 +50,9 @@ class CustomViewPager : ViewPager {
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        if (this.mDisable) {
+            return false
+        }
         if (currentItem == 0 || currentItem == (adapter?.count ?:0) - 1) {
             val action = ev?.action
             val x = ev?.x

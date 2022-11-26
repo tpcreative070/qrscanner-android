@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -59,22 +61,16 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     fun lock(isLock : Boolean){
-        viewpager.isUserInputEnabled = !isLock
+        viewpager.setSwipeableDisable(isLock)
     }
 
-    fun setupViewPager() {
-        adapter = MainViewPagerAdapter(this)
-        viewpager.adapter = adapter
-        viewpager.offscreenPageLimit = 5
-        viewpager.setCurrentItem(2,false)
-        TabLayoutMediator(tabs,viewpager) { tab, position ->
-            tab.customView = getTabView(position)
-
-        }.attach()
-        setupTabIcons()
+    fun setupViewPager(viewPager: ViewPager?) {
+        viewPager?.offscreenPageLimit = 5
+        adapter = MainViewPagerAdapter(supportFragmentManager)
+        viewPager?.adapter = adapter
     }
 
-    private fun setupTabIcons() {
+    fun setupTabIcons() {
         try {
             tabs.getTabAt(0)?.setIcon(tabIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(1)?.setIcon(tabIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
@@ -86,12 +82,12 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
     }
 
-    private fun getTabView(position: Int): View? {
+    fun getTabView(position: Int): View? {
         val view = LayoutInflater.from(QRScannerApplication.getInstance()).inflate(R.layout.custom_tab_items, null)
         val imageView: AppCompatImageView = view.findViewById(R.id.imageView)
         val textView: AppCompatTextView = view.findViewById(R.id.textView)
         try {
-            textView.text = adapter?.getTabTitle(position)
+            textView.text = adapter?.getPageTitle(position)
             imageView.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP)
             imageView.setImageDrawable(getRes(position))
             return view

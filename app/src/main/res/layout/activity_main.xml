@@ -30,7 +30,7 @@
                 app:tabMode="fixed" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
+        <tpcreative.co.qrscanner.common.view.CustomViewPager
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/viewpager"
             android:layout_width="match_parent"

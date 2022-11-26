@@ -32,7 +32,14 @@ fun MainActivity.initUI(){
     supportActionBar?.hide()
     ResponseSingleton.getInstance()?.setListener(this)
     storage = Storage(applicationContext)
-    setupViewPager()
+    setupViewPager(viewpager)
+    tabs.setupWithViewPager(viewpager)
+    viewpager.currentItem = 2
+    for (i in 0 until tabs.tabCount) {
+        val tab = tabs.getTabAt(i)
+        tab?.customView = getTabView(i)
+    }
+    setupTabIcons()
     ServiceManager.getInstance().onStartService()
     Theme.getInstance()?.getList()
     if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
