@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.model
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import tpcreative.co.qrscanner.common.Utils
 import java.io.Serializable
@@ -68,7 +69,7 @@ class CreateModel : Serializable {
         fragmentType = EnumFragmentType.SCANNER
         enumImplement = EnumImplement.VIEW
         id = 0
-        barcodeFormat = ""
+        barcodeFormat = BarcodeFormat.QR_CODE.name
         favorite = false
         updatedDateTime = Utils.getCurrentDateTimeSort()
     }
@@ -99,7 +100,7 @@ class CreateModel : Serializable {
         fragmentType = EnumFragmentType.CREATE
         enumImplement = EnumImplement.CREATE
         id = 0
-        barcodeFormat = ""
+        barcodeFormat = BarcodeFormat.QR_CODE.name
         favorite = false
         updatedDateTime = Utils.getCurrentDateTimeSort()
         createdDateTime = if (save != null) save.createDatetime else Utils.getCurrentDateTimeSort()
