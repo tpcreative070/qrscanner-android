@@ -99,7 +99,7 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
         return count
     }
 
-    fun deleteItem() = liveData(Dispatchers.Main) {
+    fun deleteItem() = liveData(Dispatchers.IO) {
         for (index in mList) {
             Utils.Log(TAG,"deleteItem 0")
             if (index.isDeleted()) {

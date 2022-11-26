@@ -3,22 +3,17 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
 import android.content.*
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.IBinder
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Resource
 import co.tpcreative.supersafe.common.network.Status
 import com.google.android.gms.auth.GoogleAuthUtil
-import com.google.gson.Gson
 import com.google.zxing.client.result.ParsedResultType
 import com.opencsv.CSVWriter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.api.requester.DriveService
@@ -34,9 +29,7 @@ import tpcreative.co.qrscanner.model.SyncDataModel
 import tpcreative.co.qrscanner.viewmodel.DriveViewModel
 import tpcreative.co.qrscanner.viewmodel.UserViewModel
 import java.io.File
-import java.io.FileOutputStream
 import java.io.FileWriter
-import java.util.*
 
 class ServiceManager : BaseView<Any?> {
     private var myService: QRScannerService? = null
@@ -480,9 +473,9 @@ class ServiceManager : BaseView<Any?> {
                             val value = arrayOf(
                                     index.createType,
                                     index.url,
-                                    if (index.createType.equals(ParsedResultType.TEXT.name, ignoreCase = true)) index.text else "",
-                                    if (index.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) index.text else "",
-                                    if (index.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) index.text else "",
+                                    if (index.createType.equals(ParsedResultType.TEXT.name, ignoreCase = true)) index.textProductIdISNB else "",
+                                    if (index.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) index.textProductIdISNB else "",
+                                    if (index.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) index.textProductIdISNB else "",
                                     index.phone,
                                     index.email,
                                     index.subject,

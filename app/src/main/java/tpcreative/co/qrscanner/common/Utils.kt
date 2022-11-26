@@ -23,7 +23,6 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.snatik.storage.Storage
 import com.tapadoo.alerter.Alerter
-import com.tapadoo.alerter.OnHideAlertListener
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
@@ -32,7 +31,6 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.io.*
-import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -416,7 +414,7 @@ object Utils {
                     mData
                 }
                 ParsedResultType.PRODUCT -> {
-                    code = item.text
+                    code = item.textProductIdISNB
                     val barCodeType: String? = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
@@ -466,13 +464,13 @@ object Utils {
                     mData
                 }
                 ParsedResultType.ISBN -> {
-                    code = item.text
+                    code = item.textProductIdISNB
                     val barCodeType = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
                 else -> {
-                    code = item.text
+                    code = item.textProductIdISNB
                     mData = mResult.name + "-" + code
                     mData
                 }

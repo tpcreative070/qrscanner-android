@@ -18,7 +18,6 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import java.io.File
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -88,7 +87,7 @@ class ReviewActivity : BaseActivitySlide() {
                 code = create?.productId
                 type = Constant.barCode
                 save = SaveModel()
-                save.text = create?.productId
+                save.textProductIdISNB = create?.productId
                 save.createType = create?.createType?.name
                 save.barcodeFormat = create?.barcodeFormat
             }
@@ -169,7 +168,7 @@ class ReviewActivity : BaseActivitySlide() {
                 code = create?.text
                 type = Constant.text
                 save = SaveModel()
-                save.text = create?.text
+                save.textProductIdISNB = create?.text
                 save.createType = create?.createType?.name
             }
         }

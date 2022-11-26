@@ -131,7 +131,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     fun onSetData() {
-        edtBarCode.setText(save?.text)
+        edtBarCode.setText(save?.textProductIdISNB)
         if (save?.createType == ParsedResultType.PRODUCT.name) {
             if (save?.barcodeFormat == BarcodeFormat.EAN_13.name) {
                 viewModel.mType = BarcodeFormat.EAN_13
@@ -291,8 +291,8 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
                 viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, edtBarCode)
             }
             viewModel.mType = BarcodeFormat.valueOf(type?.id ?:BarcodeFormat.QR_CODE.name)
-            if (viewModel.isText(save?.text)){
-                edtBarCode.setText(save?.text)
+            if (viewModel.isText(save?.textProductIdISNB)){
+                edtBarCode.setText(save?.textProductIdISNB)
                 edtBarCode.requestFocus()
             }
         }

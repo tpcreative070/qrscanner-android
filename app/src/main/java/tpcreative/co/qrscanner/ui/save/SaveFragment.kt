@@ -212,7 +212,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         create.id = save.id ?: 0
         create.favorite = save.favorite ?: false
         if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            create.productId = save.text
+            create.productId = save.textProductIdISNB
             create.barcodeFormat = save.barcodeFormat
             Utils.Log(TAG, "Show..." + save.barcodeFormat)
             create.createType = ParsedResultType.PRODUCT
@@ -260,7 +260,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             create.endEventMilliseconds = save.endEventMilliseconds ?:0
             create.createType = ParsedResultType.CALENDAR
         } else {
-            create.text = save.text
+            create.text = save.textProductIdISNB
             create.createType = ParsedResultType.TEXT
         }
         Utils.Log(TAG, "Call intent")
