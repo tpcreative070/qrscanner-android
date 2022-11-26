@@ -9,8 +9,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -31,7 +29,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
-import kotlin.system.measureNanoTime
+
 
 class MainActivity : BaseActivity(), SingleTonResponseListener {
 
