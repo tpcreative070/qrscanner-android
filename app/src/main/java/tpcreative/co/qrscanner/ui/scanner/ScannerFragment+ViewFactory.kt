@@ -115,14 +115,15 @@ fun ScannerFragment.initUI(){
     }
 
     btnDone.setOnClickListener {
-        ResponseSingleton.getInstance()?.onScannerDone()
         if (zxing_barcode_scanner != null) {
             if (viewModel.isResume){
                 zxing_barcode_scanner.pauseAndWait()
                 viewModel.isResume = false
             }
         }
+        viewModel.isRequestDone = true
         doRefreshView()
+        ResponseSingleton.getInstance()?.onScannerDone()
     }
 
     seekbarZoom.setOnSeekBarChangeListener(object :OnSeekBarChangeListener{
@@ -252,5 +253,9 @@ val ScannerFragment.stateListener: CameraPreview.StateListener
 
         }
         override fun cameraClosed() {
+            if (viewModel.isRequestDone){
+                viewModel.isRequestDone = false
+            }
+            Utils.Log(TAG,"camera close")
         }
     }

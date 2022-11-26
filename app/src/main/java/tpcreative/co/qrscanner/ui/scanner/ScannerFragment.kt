@@ -220,6 +220,13 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
         fun doNavigation(create: CreateModel?) {
             if (Utils.isMultipleScan()) {
+                if (viewModel.isRequestDone){
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
+                    return
+                }
                 btnDone.visibility = View.VISIBLE
                 tvCount.visibility = View.VISIBLE
                 updateValue(1)
@@ -596,6 +603,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         } else {
             QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isInVisible")
+        }
+        if (!Utils.isMultipleScan()) {
+            btnDone.visibility = View.INVISIBLE
+            tvCount.visibility = View.INVISIBLE
         }
         if (zxing_barcode_scanner != null) {
             if (menuVisible) {

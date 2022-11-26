@@ -20,6 +20,7 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
     var mCount = 0
     var history: HistoryModel? = HistoryModel()
     var isResume : Boolean = false
+    var isRequestDone : Boolean = false
 
 
     fun updateValue(mValue: Int) = liveData(Dispatchers.Main){
