@@ -978,6 +978,15 @@ object Utils {
         return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_vibrate), false)
     }
 
+    fun setQRCodeThemePosition(position : Int){
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_theme_object), position)
+    }
+
+    fun getQRCodeThemePosition() : Int{
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_theme_object), 0)
+    }
+
+
     fun getFrameSize() : Size? {
         val mRect = getFrameRect()
         mRect?.let { node ->

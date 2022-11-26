@@ -47,10 +47,10 @@ class Theme : Serializable {
 
     fun getThemeInfo(): Theme {
         try {
-            val value: Int = PrefsController.getInt(QRScannerApplication.Companion.getInstance().getString(R.string.key_theme_object), 0)
+            val value: Int = Utils.getQRCodeThemePosition()
             val mThem: MutableList<Theme> = ThemeUtil.getThemeList()
             if (mThem.size > value) {
-                return mThem.get(value)
+                return mThem[value]
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -58,7 +58,7 @@ class Theme : Serializable {
         return Theme(0, R.color.black, R.color.colorDark, R.color.colorButton)
     }
 
-    fun getDefaultThemeList(): MutableList<Theme>? {
+    private fun getDefaultThemeList(): MutableList<Theme>? {
         try {
             val result: String? = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_theme_list), null)
             val listType = object : TypeToken<ArrayList<Theme>>() {}.type
@@ -72,8 +72,8 @@ class Theme : Serializable {
     fun getList(): MutableList<Theme> {
         try {
             val value = getDefaultThemeList()
-            val current_code_version: Int = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), 0)
-            return if (value != null && current_code_version == BuildConfig.VERSION_CODE) {
+            val currentCodeVersion: Int = PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), 0)
+            return if (value != null && currentCodeVersion == BuildConfig.VERSION_CODE) {
                 Utils.Log(TAG, "Already install this version")
                 value
             } else {
