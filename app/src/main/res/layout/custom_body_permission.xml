@@ -20,7 +20,7 @@
                     android:layout_gravity="center"
                     android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
-                    android:text="@string/_4_access_fine_location_access_coarse_location_getting_longitude_and_latitude_for_qrcode_type_of_location"
+                    android:text="@string/1_access_fine_location_access_coarse_location_getting_longitude_and_latitude_for_qrcode_type_of_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -31,7 +31,7 @@
                     style="@style/brandonRegularTextView"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="@string/_5_android_permission_camera_scanner_code"
+                    android:text="@string/2_android_permission_camera_scanner_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -42,7 +42,7 @@
                     android:layout_marginBottom="4dp"
                     android:textSize="@dimen/medium_16"
                     style="@style/brandonRegularTextView"
-                    android:text="@string/_6_android_permission_call_phone_share_qrcode_to_your_phone_call"
+                    android:text="@string/3_android_permission_call_phone_share_qrcode_to_your_phone_call"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
