@@ -370,7 +370,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 history.text = create?.ISBN
                 history.createType = create?.createType?.name
                 viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, ConstantValue.SEARCH,create?.favorite))
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.SHARE,create?.favorite))
                 onInsertUpdateHistory(history)
                 title = ConstantValue.ISBN
             }

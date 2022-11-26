@@ -56,7 +56,7 @@ public final class CameraConfigurationUtils {
                                 boolean safeMode) {
         List<String> supportedFocusModes = parameters.getSupportedFocusModes();
         String focusMode = null;
-        setZoom(parameters,zoom);
+        parameters.setZoom(zoom);
 		if (safeMode || focusModeSetting == CameraSettings.FocusMode.AUTO) {
 			focusMode = findSettableValue("focus mode",
 					supportedFocusModes,

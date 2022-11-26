@@ -528,7 +528,7 @@ object Utils {
                     code = builder.toString()
                 }
                 ParsedResultType.ISBN -> {
-                    code = create.text
+                    code = create.ISBN
                 }
                 else -> {
                     code = create.text
@@ -630,7 +630,7 @@ object Utils {
                     mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
                 }
                 ParsedResultType.ISBN -> {
-                    mContent.append(create.text)
+                    mContent.append(create.ISBN)
                     mMap[ConstantKey.CONTENT] = mContent.toString()
                     mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
                     mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)

@@ -163,6 +163,7 @@ class ReviewActivity : BaseActivitySlide() {
                 type = Constant.calendar
             }
             ParsedResultType.ISBN -> {
+                code = create?.ISBN
             }
             else -> {
                 code = create?.text
