@@ -129,7 +129,7 @@ fun ScannerFragment.initUI(){
     seekbarZoom.setOnSeekBarChangeListener(object :OnSeekBarChangeListener{
         override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
             Utils.Log(TAG,"onProgressChanged $p1")
-            if (zxing_barcode_scanner.barcodeView.cameraInstance!=null){
+            if (zxing_barcode_scanner.barcodeView.cameraInstance!=null && zxing_barcode_scanner.barcodeView.cameraInstance.isCheckReadyCamera()){
                 zxing_barcode_scanner.barcodeView.cameraInstance.setZoom(p1)
                 zxing_barcode_scanner.barcodeView.cameraInstance.cameraSettings.zoom = p1
             }
@@ -148,11 +148,15 @@ fun ScannerFragment.initUI(){
     })
 
     imgZoomIn.setOnClickListener {
-        seekbarZoom.progress = 100
+        if (zxing_barcode_scanner.barcodeView.cameraInstance!=null && zxing_barcode_scanner.barcodeView.cameraInstance.isCheckReadyCamera()) {
+            seekbarZoom.progress = 100
+        }
     }
 
     imgZoomOut.setOnClickListener {
-        seekbarZoom.progress = 0
+        if (zxing_barcode_scanner.barcodeView.cameraInstance!=null && zxing_barcode_scanner.barcodeView.cameraInstance.isCheckReadyCamera()) {
+            seekbarZoom.progress = 0
+        }
     }
 }
 

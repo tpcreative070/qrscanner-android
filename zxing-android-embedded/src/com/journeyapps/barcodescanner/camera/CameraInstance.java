@@ -287,6 +287,17 @@ public class CameraInstance {
         }
     }
 
+    //Try to release version first after that must solve this project for crack app
+    public boolean isCheckReadyCamera(){
+        if (cameraManager == null){
+            return false;
+        }
+        if (cameraManager.getCamera()==null){
+            return false;
+        }
+        return cameraManager.getCamera().getParameters() != null;
+    }
+
     /**
      *
      * @return the CameraThread used to manage the camera
