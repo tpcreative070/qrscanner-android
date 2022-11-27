@@ -416,7 +416,6 @@ class SettingsFragment : BaseFragment() {
             myPreferenceSaveYourVoicemails?.isVisible = false
 
             myPreferenceCategoryFamilyApps?.isVisible = false
-
         }
 
         fun onGenerateReview(code: String?) {
