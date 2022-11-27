@@ -109,6 +109,31 @@
         !-->
     </style>
 
+    <style name="brandonRegularTextInputLayout" parent="TextAppearance.AppCompat">
+        <!--
+        <item name="android:fontFamily">@font/brandon_regs</item>
+        -->
+        <item name="android:textColor">@color/material_default</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+    </style>
+
+    <style name="brandonRegularTextInputEditText" parent="TextAppearance.AppCompat">
+        <!--
+        <item name="android:fontFamily">@font/brandon_regs</item>
+        -->
+        <item name="android:textColor">@color/colorDark</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="brandonBoldTextInputLayout" parent="TextAppearance.AppCompat">
+        <!--
+        <item name="android:fontFamily">@font/brandon_blds</item>
+        -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorDark</item>
+        <item name="android:textSize">@dimen/medium</item>
+    </style>
+
 
     <style name="brandonRegularTextView" parent="TextAppearance.AppCompat">
         <!--

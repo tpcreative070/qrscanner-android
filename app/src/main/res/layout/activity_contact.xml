@@ -37,403 +37,429 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/bg_location_group"
-            android:padding="5dp">
+            android:layout_height="wrap_content">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none">
-                <LinearLayout
+
+                <RelativeLayout
+                    android:layout_marginBottom="@dimen/margin_20"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:weightSum="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/bg_item_rounded"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingStart="@dimen/margin_10"
-                        android:paddingEnd="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
-                        
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/first_name" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtFirstName"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/last_name" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtLastName"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-                    </LinearLayout>
+                    android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:weightSum="1"
+                        android:id="@+id/llContent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/bg_item_rounded"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingStart="@dimen/margin_10"
-                        android:paddingEnd="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/company" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtCompany"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/job_title" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtJobTitle"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5"
-                        android:background="@drawable/bg_item_rounded"
+                        android:layout_margin="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginEnd="@dimen/margin_10"
+                        android:layout_marginBottom="@dimen/margin_10"
+                        android:background="@drawable/bg_location_group"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingLeft="@dimen/margin_10"
-                        android:paddingRight="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
+                        android:padding="@dimen/margin_5">
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/address" />
+                            android:layout_margin="5dp"
+                            android:background="@drawable/bg_item_rounded"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingEnd="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5"
+                            android:weightSum="1">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/edtAddress"
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/first_name" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtFirstName"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/last_name" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtLastName"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/bg_item_rounded"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingEnd="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5"
+                            android:weightSum="1">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/company" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtCompany"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/job_title" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtJobTitle"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_5"
+                            android:background="@drawable/bg_item_rounded"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingRight="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonRegularTextInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/address" />
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/edtAddress"
+                                style="@style/brandonRegularTextInputEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/bg_item_rounded"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingEnd="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5"
+                            android:weightSum="1">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/zip_code" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtZipcode"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/city" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtCity"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/bg_item_rounded"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingEnd="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5"
+                            android:weightSum="1">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/region" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtRegion"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/brandonRegularTextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/country" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/edtCountry"
+                                    style="@style/brandonRegularTextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_5"
+                            android:background="@drawable/bg_item_rounded"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingRight="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonRegularTextInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/phoneNumber_lowercase" />
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/edtPhone"
+                                style="@style/brandonRegularTextInputEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="phone"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_5"
+                            android:background="@drawable/bg_item_rounded"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingRight="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonRegularTextInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email" />
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/edtEmail"
+                                style="@style/brandonRegularTextInputEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="textEmailAddress"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_5"
+                            android:background="@drawable/bg_item_rounded"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/margin_10"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingRight="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_5">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonRegularTextInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/website" />
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/edtWebite"
+                                style="@style/brandonRegularTextInputEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="textEmailAddress"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rlNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/llContent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="@dimen/margin_15"
+                        android:layout_marginEnd="@dimen/margin_15"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/brandonBoldTextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:text="@string/alternatively" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:singleLine="true" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:weightSum="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/bg_item_rounded"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingStart="@dimen/margin_10"
-                        android:paddingEnd="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/zip_code" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtZipcode"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/city" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtCity"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:weightSum="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/bg_item_rounded"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingStart="@dimen/margin_10"
-                        android:paddingEnd="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/region" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtRegion"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonBoldTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/country" />
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtCountry"
-                                style="@style/brandonRegularTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:singleLine="true" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5"
-                        android:background="@drawable/bg_item_rounded"
-                        android:orientation="vertical"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingLeft="@dimen/margin_10"
-                        android:paddingRight="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/phoneNumber_lowercase" />
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/edtPhone"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:inputType="phone"
-                            android:singleLine="true" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5"
-                        android:background="@drawable/bg_item_rounded"
-                        android:orientation="vertical"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingLeft="@dimen/margin_10"
-                        android:paddingRight="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/email" />
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/edtEmail"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:imeOptions="actionDone"
-                            android:inputType="textEmailAddress"
-                            android:singleLine="true" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5"
-                        android:background="@drawable/bg_item_rounded"
-                        android:orientation="vertical"
-                        android:paddingBottom="@dimen/margin_5"
-                        android:paddingLeft="@dimen/margin_10"
-                        android:paddingRight="@dimen/margin_10"
-                        android:paddingTop="@dimen/margin_5">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/website" />
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/edtWebite"
-                            style="@style/brandonRegularTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:imeOptions="actionDone"
-                            android:inputType="textEmailAddress"
-                            android:singleLine="true" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextView"
-                            android:text="@string/alternatively"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:layout_marginBottom="@dimen/margin_5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:text="@string/open_your_contact_app"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:layout_marginBottom="@dimen/margin_5"
                             android:layout_marginStart="@dimen/margin_10"
+                            android:layout_marginTop="@dimen/margin_2"
                             android:layout_marginEnd="@dimen/margin_10"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:text="@string/open_your_contact_app" />
+
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:text="@string/open_an_existing_contact_or_create_a_new_one"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:layout_marginBottom="@dimen/margin_5"
-                            android:layout_marginStart="@dimen/margin_10"
-                            android:layout_marginEnd="@dimen/margin_10"
+                            style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_10"
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginEnd="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:text="@string/open_an_existing_contact_or_create_a_new_one" />
+
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:text="@string/select_share_from_the_menu"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:layout_marginBottom="@dimen/margin_5"
-                            android:layout_marginStart="@dimen/margin_10"
-                            android:layout_marginEnd="@dimen/margin_10"
+                            style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_10"
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginEnd="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:text="@string/select_share_from_the_menu" />
+
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:text="@string/select_qr_code"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:layout_marginBottom="@dimen/margin_5"
-                            android:layout_marginStart="@dimen/margin_10"
-                            android:layout_marginEnd="@dimen/margin_10"
+                            style="@style/brandonRegularTextView"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_10"
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginEnd="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:text="@string/select_qr_code" />
                     </LinearLayout>
-                </LinearLayout>
+                </RelativeLayout>
             </androidx.core.widget.NestedScrollView>
         </RelativeLayout>
     </RelativeLayout>

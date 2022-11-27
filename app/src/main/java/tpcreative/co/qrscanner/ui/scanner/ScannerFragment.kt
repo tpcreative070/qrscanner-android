@@ -55,7 +55,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
-                Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)
+                Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)\
                 if (activity == null) {
                     return
                 }
@@ -94,6 +94,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                         fullName = Utils.convertStringArrayToString(addressResult.names, ",")
                         email = Utils.convertStringArrayToString(addressResult.emails, ",")
                         phone = Utils.convertStringArrayToString(addressResult.phoneNumbers, ",")
+                        Utils.Log(TAG,"Result address ${Gson().toJson(parsedResult)}")
                     }
                     ParsedResultType.EMAIL_ADDRESS -> {
                         create.createType = ParsedResultType.EMAIL_ADDRESS
@@ -101,6 +102,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                         email = Utils.convertStringArrayToString(emailAddress.tos, ",")
                         subject = if (emailAddress.subject == null) "" else emailAddress.subject
                         message = if (emailAddress.body == null) "" else emailAddress.body
+                        Utils.Log(TAG,"Result address ${Gson().toJson(emailAddress)}")
                     }
                     ParsedResultType.PRODUCT -> {
                         create.createType = ParsedResultType.PRODUCT
