@@ -55,7 +55,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
-                Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)\
+                Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)
                 if (activity == null) {
                     return
                 }
