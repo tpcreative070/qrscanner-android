@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Parcelable
 import android.util.Patterns
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
@@ -23,10 +24,13 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.parcelable
+import tpcreative.co.qrscanner.common.extension.readVCF
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.model.SaveModel
 import java.io.File
 import java.io.FileOutputStream
 
@@ -63,8 +67,6 @@ fun ReviewActivity.initUI(){
     onHandlerIntent()
 }
 
-
-
 /*Share File To QRScanner*/
 private fun ReviewActivity.onHandlerIntent() {
     try {
@@ -78,8 +80,20 @@ private fun ReviewActivity.onHandlerIntent() {
             txtSubject.text = subject
             txtDisplay.text = message
             Utils.Log(TAG,"intent result")
-            viewModel.isSharedIntent = true
-            onSaveQRCode("$message")
+            onSaveFromTextOrCVFToQRCode("$message",null)
+        }
+        else if (Intent.ACTION_SEND == action && Constant.cvfType == intent.type){
+            val fileUri = intent.parcelable<Parcelable>(Intent.EXTRA_STREAM) as Uri?
+            if (fileUri != null) {
+                fileUri.let {
+                    val mSave = Utils.readVCF(it)
+                    txtSubject.text = "vCard"
+                    txtDisplay.text = "MECARD:N:${mSave.fullName};TEL:${mSave.phone};EMAIL:${mSave.email};ADR:${mSave.address};"
+                    onSaveFromTextOrCVFToQRCode("",mSave)
+                }
+            } else {
+                Utils.onDropDownAlert(this, getString(R.string.can_not_support_this_format))
+            }
         }
     } catch (e: Exception) {
         Utils.onDropDownAlert(this, getString(R.string.error_occurred_importing))
@@ -131,17 +145,28 @@ fun ReviewActivity.onPhotoPrint() {
     }
 }
 
-fun ReviewActivity.onSaveQRCode(text : String){
+fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : SaveModel?){
     val history = HistoryModel()
-    if (Patterns.WEB_URL.matcher(text).matches()){
-        code = text
-        history.url = text
-        history.createType = ParsedResultType.URI.name
+    viewModel.isSharedIntent = true
+    if (mSave!=null){
+        code = "MECARD:N:${mSave.fullName};TEL:${mSave.phone};EMAIL:${mSave.email};ADR:${mSave.address};"
+        history.fullName = mSave.fullName
+        history.phone = mSave.phone
+        history.email = mSave.email
+        history.address = mSave.address
+        history.createType = ParsedResultType.ADDRESSBOOK.name
     }else{
-        code = text
-        history.text = text
-        history.createType = ParsedResultType.TEXT.name
+        if (Patterns.WEB_URL.matcher(text).matches()){
+            code = text
+            history.url = text
+            history.createType = ParsedResultType.URI.name
+        }else{
+            code = text
+            history.text = text
+            history.createType = ParsedResultType.TEXT.name
+        }
     }
+
     history.favorite = false
     history.barcodeFormat = BarcodeFormat.QR_CODE.name
     format = BarcodeFormat.QR_CODE.name

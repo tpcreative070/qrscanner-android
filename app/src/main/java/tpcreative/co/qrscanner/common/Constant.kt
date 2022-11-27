@@ -3,6 +3,7 @@ package tpcreative.co.qrscanner.common
 class Constant {
     companion object {
         const val textType = "text/plain"
+        const val cvfType = "text/x-vcard"
         const val email = "Email"
         const val addressBook = "Address book"
         const val barCode = "Barcode"
