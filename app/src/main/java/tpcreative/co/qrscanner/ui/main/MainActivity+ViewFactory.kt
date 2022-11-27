@@ -7,6 +7,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.common.ResponseSingleton
@@ -39,29 +42,12 @@ fun MainActivity.initUI(){
     setupTabIcons()
     ServiceManager.getInstance().onStartService()
     Theme.getInstance()?.getList()
-    viewpager.setOnSwipeOutListener(object : CustomViewPager.OnSwipeOutListener {
-        override fun onSwipeOutAtStart() {
-            Utils.Log(TAG, "Start swipe")
-        }
-
-        override fun onSwipeOutAtEnd() {
-            Utils.Log(TAG, "End swipe")
-        }
-
-        override fun onSwipeMove() {
-            Utils.Log(TAG, "Move swipe")
-        }
-    })
     if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED) {
         onAddPermissionCamera()
     }
     if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView()) {
         QRScannerApplication.getInstance().requestMainView(this)
-    }
-
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
-        QRScannerApplication.getInstance().requestInterstitialAd()
     }
 
     val mCountRating = Utils.onGetCountRating()
@@ -88,7 +74,6 @@ fun MainActivity.initUI(){
                 }
             })
     }
-    showAds()
 }
 
 private fun MainActivity.setupViewModel() {
@@ -96,10 +81,4 @@ private fun MainActivity.setupViewModel() {
             this,
             ViewModelFactory()
     ).get(MainViewModel::class.java)
-}
-
-fun MainActivity.showAds(){
-    viewModel.doShowAds().observe(this, Observer {
-        doShowAds(it)
-    })
 }

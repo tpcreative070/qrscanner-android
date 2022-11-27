@@ -18,7 +18,6 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import java.io.File
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -88,7 +87,7 @@ class ReviewActivity : BaseActivitySlide() {
                 code = create?.productId
                 type = Constant.barCode
                 save = SaveModel()
-                save.text = create?.productId
+                save.textProductIdISNB = create?.productId
                 save.createType = create?.createType?.name
                 save.barcodeFormat = create?.barcodeFormat
             }
@@ -163,12 +162,13 @@ class ReviewActivity : BaseActivitySlide() {
                 type = Constant.calendar
             }
             ParsedResultType.ISBN -> {
+                code = create?.ISBN
             }
             else -> {
                 code = create?.text
                 type = Constant.text
                 save = SaveModel()
-                save.text = create?.text
+                save.textProductIdISNB = create?.text
                 save.createType = create?.createType?.name
             }
         }
@@ -241,15 +241,15 @@ class ReviewActivity : BaseActivitySlide() {
 
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                val mBitmap = if (create?.createType == ParsedResultType.PRODUCT) {
+                val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)) && !viewModel.isSharedIntent) {
                     hints[EncodeHintType.MARGIN] = 5
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
-                        Constant.QRCodeViewWidth,
-                        Constant.QRCodeViewHeight - 150,
+                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
+                        Constant.QRCodeViewWidth + 100,
+                        Constant.QRCodeViewHeight - 100,
                         hints
                     )
                 } else {
@@ -279,14 +279,14 @@ class ReviewActivity : BaseActivitySlide() {
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                bitmap = if (create?.createType == ParsedResultType.PRODUCT) {
+                bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name) && !viewModel.isSharedIntent)  {
                     hints[EncodeHintType.MARGIN] = 15
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: ""),
-                        Constant.QRCodeExportWidth,
+                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
+                        Constant.QRCodeExportWidth + 150,
                         Constant.QRCodeExportHeight - 200,
                         hints
                     )

@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
@@ -29,6 +31,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
+
 
 class MainActivity : BaseActivity(), SingleTonResponseListener {
 
@@ -55,7 +58,10 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     fun onVisitableFragment() {
-        showAds()
+    }
+
+    fun lock(isLock : Boolean){
+        viewpager.setSwipeableDisable(isLock)
     }
 
     fun setupViewPager(viewPager: ViewPager?) {
@@ -66,6 +72,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     fun setupTabIcons() {
         try {
+            tabs.getTabAt(0)?.setIcon(tabIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(1)?.setIcon(tabIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(2)?.setIcon(tabIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(3)?.setIcon(tabIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }

@@ -93,6 +93,8 @@ dependencies {
     implementation project(':switchdatetime')
     /*Zxing*/
     implementation project(':zxing-android-embedded')
+    /*CropView*/
+    implementation project(':simplecropview')
     implementation "commons-validator:commons-validator:$commonsValidator"
     /*Google admod*/
     implementation "com.google.android.gms:play-services-ads:$playServicesAds"

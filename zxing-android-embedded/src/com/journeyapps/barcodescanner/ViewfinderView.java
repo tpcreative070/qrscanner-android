@@ -21,10 +21,12 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
@@ -60,6 +62,10 @@ public class ViewfinderView extends View {
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
+    protected List<ResultPoint> lastPossibleResultPointsTest;
+    protected Rect mFRectFinalPoint;
+    protected List<ResultPoint> mResultPoint;
+    private List<ResultPoint>mTransformedResultPoint;
     protected CameraPreview cameraPreview;
 
     // Cache the framingRect and previewSize, so that we can still draw it after the preview
@@ -73,6 +79,8 @@ public class ViewfinderView extends View {
 
     protected Paint mBorderPaint;
     protected int mBorderLineLength;
+
+
 
     // This constructor is used when the class is built from an XML resource.
     public ViewfinderView(Context context, AttributeSet attrs) {
@@ -102,6 +110,10 @@ public class ViewfinderView extends View {
         scannerAlpha = 0;
         possibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
         lastPossibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
+        lastPossibleResultPointsTest = new ArrayList<>();
+        mResultPoint = new ArrayList<>();
+        mTransformedResultPoint = new ArrayList<>();
+        mFRectFinalPoint = new Rect();
         init();
     }
 
@@ -207,11 +219,46 @@ public class ViewfinderView extends View {
         canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
         canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
         canvas.drawRect(0, frame.bottom + 1, width, height, paint);
-
+        Log.d(TAG,"Rect result "+mResultPoint.toString());
         if (resultBitmap != null) {
             // Draw the opaque result bitmap over the scanning rectangle
-            paint.setAlpha(CURRENT_POINT_OPACITY);
-            canvas.drawBitmap(resultBitmap, null, frame, paint);
+            paint.setAlpha(CURRENT_POINT_OPACITY / 2);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(resultPointColor);
+            int x = 0;
+            int y;
+            if (mResultPoint.size()>2){
+                 y = 2;
+                mFRectFinalPoint.left = Math.round(mResultPoint.get(x).getX()) + framingRect.left;;
+                mFRectFinalPoint.right = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+
+                mFRectFinalPoint.top = Math.round(mResultPoint.get(y).getY()) + framingRect.top;
+                mFRectFinalPoint.bottom = Math.round(mResultPoint.get(x).getY()) + framingRect.top ;
+            }else if(mResultPoint.size()>1 && mTransformedResultPoint.size()>1){
+                 y = 1;
+                mFRectFinalPoint.left = Math.round(mResultPoint.get(x).getX()) + framingRect.left;;
+                mFRectFinalPoint.right = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+
+                mFRectFinalPoint.bottom = Math.round(mTransformedResultPoint.get(y).getY());
+                Log.d(TAG,"Rect result transformedResult => "+mTransformedResultPoint);
+                Log.d(TAG,"Rect result => "+framingRect);
+                Log.d(TAG,"Rect result map => "+mFRectFinalPoint);
+                Log.d(TAG,"Rect result point => "+mResultPoint);
+
+                int mWidthMap = (mFRectFinalPoint.right - mFRectFinalPoint.left)/2;
+                Log.d(TAG,"Rect result mWidthMap => "+mWidthMap);
+                //179
+                int mPointBottomFinal = mFRectFinalPoint.bottom - mWidthMap ;
+                Log.d(TAG,"Rect result mPointBottomFinal => "+mPointBottomFinal);
+                //584 - 179 = 405
+                int mPointTopFinal = mPointBottomFinal -  framingRect.top;
+                Log.d(TAG,"Rect result mPointTopFinal => "+mPointTopFinal);
+                mFRectFinalPoint.top =  mPointTopFinal + framingRect.top;
+                Log.d(TAG,"Rect result mFRectFinalPoint.top => "+mFRectFinalPoint.top);
+            }else{
+                return;
+            }
+            canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
         } else {
             // If wanted, draw a red "laser scanner" line through the middle to show decoding is active
             if (laserVisibility) {
@@ -289,6 +336,16 @@ public class ViewfinderView extends View {
     public void drawResultBitmap(Bitmap result) {
         resultBitmap = result;
         invalidate();
+    }
+
+    public void addResultPoint(List<ResultPoint> ls){
+        mResultPoint.clear();
+        mResultPoint.addAll(ls);
+    }
+
+    public void addTransferResultPoint(List<ResultPoint> ls){
+        mTransformedResultPoint.clear();
+        mTransformedResultPoint.addAll(ls);
     }
 
     /**

@@ -336,6 +336,9 @@
     <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
     <string name="key_already_checkout">key_already_checkout</string>
     <string name="key_is_request_sync">key_is_request_sync</string>
+    <string name="key_is_request_history_reload">key_is_request_history_reload</string>
+    <string name="key_is_request_saver_reload">key_is_request_saver_reload</string>
+    <string name="key_frame_rect">key_frame_rect</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>
@@ -383,5 +386,8 @@
     <string name="notes">Notes</string>
     <string name="barcode_type">Barcode type</string>
     <string name="web_09_nov_21_16">Web 09 Nov 21:16</string>
+    <string name="_1_android_permission_call_phone_share_qrcode_to_your_phone_call">1. android.permission.CALL_PHONE: Share QRCode to your phone call</string>
+    <string name="_2_android_permission_camera_scanner_code">2. android.permission.CAMERA: Scanner code</string>
+    <string name="_3_access_fine_location_access_coarse_location_getting_longitude_and_latitude_for_qrcode_type_of_location">3. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location</string>
 
 </resources>

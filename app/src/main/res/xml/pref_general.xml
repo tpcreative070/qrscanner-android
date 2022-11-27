@@ -75,6 +75,7 @@
             android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/baseline_surround_sound_white_48"
             android:title="@string/key_beep"
+            android:defaultValue="true"
             android:key="@string/key_beep">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 

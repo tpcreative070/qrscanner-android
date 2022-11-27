@@ -14,6 +14,7 @@ public class CameraSettings {
     private boolean continuousFocusEnabled = false;
     private boolean exposureEnabled = false;
     private boolean autoTorchEnabled = false;
+    private int zoom = 0;
     private FocusMode focusMode = FocusMode.AUTO;
 
     public enum FocusMode {
@@ -21,6 +22,14 @@ public class CameraSettings {
         CONTINUOUS,
         INFINITY,
         MACRO
+    }
+
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
+    }
+
+    public int getZoom() {
+        return zoom;
     }
 
     public int getRequestedCameraId() {

@@ -19,6 +19,33 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:id="@+id/zxing_barcode_scanner">
+            <com.isseiaoki.simplecropview.CropImageView
+                android:id="@+id/cropImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/spacing_xlarge"
+                app:scv_only_rl_enabled="true"
+                app:scv_guidelines_enabled="false"
+                app:scv_guide_borderline_touch_down_enabled="true"
+                app:scv_size_icon="@dimen/icon_size_25"
+                app:scv_size_icon_margin="@dimen/margin_12"
+                app:scv_custom_icon_src="@drawable/ic_full"
+                app:scv_custom_icon_tint_color="?attr/colorAccent"
+                app:scv_overlay_area_color="@color/colorOverlay"
+                app:scv_background_color="@color/transparent"
+                app:scv_crop_mode="free"
+                app:scv_frame_color="@color/colorAccent"
+                app:scv_frame_stroke_weight="1dp"
+                app:scv_guide_color="@color/colorAccent"
+                app:scv_guide_show_mode="show_always"
+                app:scv_guide_stroke_weight="1dp"
+                app:scv_handle_color="@color/colorAccent"
+                app:scv_handle_show_mode="show_always"
+                app:scv_handle_size="14dp"
+                app:scv_min_frame_size="50dp"
+                app:scv_overlay_color="@color/transparent"
+                app:scv_touch_padding="8dp"/>
             <RelativeLayout
                 android:layout_alignParentTop="true"
                 android:id="@+id/rlHeader"
@@ -27,7 +54,7 @@
             <RelativeLayout
                 android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="@dimen/margin_50">
                 <ImageView
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
@@ -78,6 +105,47 @@
                     android:layout_height="50dp"
                     android:padding="2dp"/>
             </RelativeLayout>
+                <!-- Seekbar -->
+            <RelativeLayout
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_marginEnd="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_marginBottom="@dimen/margin_5"
+                android:layout_above="@+id/rlContinueScan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_baseline_zoom_out_24"
+                    android:id="@+id/imgZoomOut"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="@dimen/icon_size_30"
+                    android:layout_height="@dimen/icon_size_30"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarZoom"
+                    android:layout_toEndOf="@+id/imgZoomOut"
+                    android:layout_toStartOf="@+id/imgZoomIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_30"/>
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_baseline_zoom_in_24"
+                    android:id="@+id/imgZoomIn"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="@dimen/icon_size_30"
+                    android:layout_height="@dimen/icon_size_30"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlContinueScan"
+                android:layout_marginBottom="@dimen/margin_45"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icon_size_45">
                 <androidx.appcompat.widget.AppCompatButton
                     android:visibility="invisible"
                     android:id="@+id/btnDone"
@@ -85,23 +153,20 @@
                     android:text="@string/done"
                     android:background="@drawable/bg_button_rounded_got_it"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="50dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="@dimen/margin_15"
                     android:layout_centerInParent="true"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"/>
+                    android:layout_height="@dimen/icon_size_45"/>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:visibility="invisible"
                     android:id="@+id/tvCount"
                     android:textColor="@color/white"
                     android:layout_alignParentStart="true"
-                    android:layout_marginBottom="60dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="@dimen/margin_15"
                     android:layout_centerInParent="true"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+            </RelativeLayout>
             </RelativeLayout>
         </com.journeyapps.barcodescanner.DecoratedBarcodeView>
     </RelativeLayout>

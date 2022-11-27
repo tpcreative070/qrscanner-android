@@ -89,7 +89,7 @@ fun ScannerResultActivity.onCheckFavorite(){
 }
 
 fun ScannerResultActivity.enterTakeNote() {
-    val mMessage = "Alert"
+    val mMessage = getString(R.string.add_note)
     val builder: MaterialDialog = MaterialDialog(this)
             .title(text = mMessage)
             .negativeButton(R.string.cancel)

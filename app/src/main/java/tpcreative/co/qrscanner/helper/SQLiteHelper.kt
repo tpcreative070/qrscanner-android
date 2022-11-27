@@ -31,6 +31,7 @@ object SQLiteHelper {
             }
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
+            Utils.setRequestHistoryReload(true)
             getInstance()?.onInsert(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
@@ -75,16 +76,8 @@ object SQLiteHelper {
             Utils.setHistoryDeletedMap(mData)
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
+            Utils.setRequestHistoryReload(true)
             return getInstance()?.onDelete(mData)
-        } catch (e: Exception) {
-            Utils.Log(TAG,"${e.message}")
-        }
-        return false
-    }
-
-    fun onDeleteHistorySpecific(uuId: String?): Boolean? {
-        try {
-            return getInstance()?.onDeleteHistorySpecific(uuId)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
         }
@@ -106,6 +99,7 @@ object SQLiteHelper {
             }
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
+            Utils.setRequestSaverReload(true)
             getInstance()?.onInsert(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
@@ -122,6 +116,7 @@ object SQLiteHelper {
                 Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
                 Utils.setRequestSync(true)
             }
+            Utils.setRequestSaverReload(true)
             getInstance()?.onUpdate(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
@@ -138,6 +133,7 @@ object SQLiteHelper {
                 Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
                 Utils.setRequestSync(true)
             }
+            Utils.setRequestHistoryReload(true)
             getInstance()?.onUpdate(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
@@ -182,6 +178,7 @@ object SQLiteHelper {
             Utils.setSaveDeletedMap(mData)
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
+            Utils.setRequestSaverReload(true)
             return getInstance()?.onDelete(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
@@ -189,16 +186,7 @@ object SQLiteHelper {
         return false
     }
 
-    fun onDeleteSaveSpecific(uuId: String?): Boolean? {
-        try {
-            return getInstance()?.onDeleteSaveSpecific(uuId)
-        } catch (e: Exception) {
-            Utils.Log(TAG,"${e.message}")
-        }
-        return false
-    }
-
-    fun getItemByHistory(contentUnique: String?): HistoryModel? {
+    private fun getItemByHistory(contentUnique: String?): HistoryModel? {
         try {
             val mResult = getInstance()?.getItemByHistory(contentUnique)
             if (mResult != null) {
@@ -222,7 +210,7 @@ object SQLiteHelper {
         return null
     }
 
-    fun getItemBySave(contentUnique: String?): SaveModel? {
+    private fun getItemBySave(contentUnique: String?): SaveModel? {
         try {
             val mResult = getInstance()?.getItemBySave(contentUnique)
             if (mResult != null) {
@@ -258,30 +246,6 @@ object SQLiteHelper {
         return null
     }
 
-    fun hasSaveItem(isFavorite : Boolean) : Boolean {
-        try {
-            val mResult = getInstance()?.getLoadAllSaveFavoriteItems(isFavorite)
-            if (mResult != null && mResult.size>0) {
-                return true
-            }
-        } catch (e: Exception) {
-            Utils.Log(TAG,"${e.message}")
-        }
-        return false
-    }
-
-    fun hasHistoryItem(isFavorite : Boolean) : Boolean {
-        try {
-            val mResult = getInstance()?.getLoadAllHistoryFavoriteItems(isFavorite)
-            if (mResult != null && mResult.size>0) {
-                return true
-            }
-        } catch (e: Exception) {
-            Utils.Log(TAG,"${e.message}")
-        }
-        return false
-    }
-
     fun getSaveFavoriteItemList(isFavorite : Boolean) :  MutableList<SaveModel> {
         try {
             val mValue = getInstance()?.getLoadAllSaveFavoriteItems(isFavorite)
@@ -315,9 +279,4 @@ object SQLiteHelper {
     }
 
 
-
-    fun CleanUpData() {
-        getInstance()?.historyDao()?.deleteAllItems()
-        getInstance()?.saveDao()?.deleteAllItems()
-    }
 }

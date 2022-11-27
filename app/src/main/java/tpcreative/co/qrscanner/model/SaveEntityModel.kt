@@ -95,7 +95,7 @@ class SaveEntityModel {
         endEventMilliseconds = item?.endEventMilliseconds
         fullName = item?.fullName
         address = item?.address
-        text = item?.text
+        text = item?.textProductIdISNB
         ssId = item?.ssId
         hidden = item?.hidden
         password = item?.password

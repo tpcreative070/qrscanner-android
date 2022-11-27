@@ -20,6 +20,9 @@ fun ChangeFileColorActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     initRecycleView(layoutInflater)
     getData()
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
+        QRScannerApplication.getInstance().requestInterstitialAd()
+    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT

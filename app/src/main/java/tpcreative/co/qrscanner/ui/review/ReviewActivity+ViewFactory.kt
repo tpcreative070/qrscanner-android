@@ -78,6 +78,7 @@ private fun ReviewActivity.onHandlerIntent() {
             txtSubject.text = subject
             txtDisplay.text = message
             Utils.Log(TAG,"intent result")
+            viewModel.isSharedIntent = true
             onSaveQRCode("$message")
         }
     } catch (e: Exception) {

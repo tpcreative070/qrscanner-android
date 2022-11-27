@@ -95,7 +95,7 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
         return count
     }
 
-    fun deleteItem() = liveData(Dispatchers.Main) {
+    fun deleteItem() = liveData(Dispatchers.IO) {
         val list = mList
         for (index in list) {
             if (index.isDeleted()) {

@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.activity_result.*
@@ -369,18 +370,20 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 history.text = create?.ISBN
                 history.createType = create?.createType?.name
                 viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, ConstantValue.SEARCH,create?.favorite))
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.SHARE,create?.favorite))
                 onInsertUpdateHistory(history)
                 title = ConstantValue.ISBN
             }
             else -> {
+                //Text query
+                if (BarcodeFormat.QR_CODE ==  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)){
+                    viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.TEXT,create?.favorite))
+                }
                 /*Put item to HashClipboard*/
                 viewModel.hashClipboard[ConstantKey.TEXT] = create?.text
                 history = HistoryModel()
                 history.text = create?.text
                 history.createType = create?.createType?.name
                 viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.SEARCH, R.drawable.baseline_search_white_48, ConstantValue.SEARCH,create?.favorite))
-                viewModel.mListNavigation.add(ItemNavigation(create?.createType, create?.fragmentType, EnumAction.Other, R.drawable.baseline_textsms_white_48, ConstantValue.TEXT,create?.favorite))
                 onInsertUpdateHistory(history)
                 title = ConstantValue.TEXT
             }

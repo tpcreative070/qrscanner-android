@@ -22,7 +22,7 @@ class SaveModel : Serializable {
     var endEventMilliseconds: Long?
     var fullName: String?
     var address: String?
-    var text: String?
+    var textProductIdISNB: String?
     var ssId: String?
     var hidden: Boolean?
     var password: String?
@@ -65,7 +65,7 @@ class SaveModel : Serializable {
         endEventMilliseconds = 0
         fullName = ""
         address = ""
-        text = ""
+        textProductIdISNB = ""
         ssId = ""
         hidden = false
         password = ""
@@ -103,7 +103,7 @@ class SaveModel : Serializable {
         endEventMilliseconds = item?.endEventMilliseconds
         fullName = item?.fullName
         address = item?.address
-        text = item?.text
+        textProductIdISNB = item?.text
         ssId = item?.ssId
         hidden = item?.hidden
         password = item?.password
@@ -139,7 +139,7 @@ class SaveModel : Serializable {
         endEventMilliseconds = item?.endEventMilliseconds
         fullName = item?.fullName
         address = item?.address
-        text = item?.text
+        textProductIdISNB = item?.textProductIdISNB
         ssId = item?.ssId
         hidden = item?.hidden
         password = item?.password
@@ -219,7 +219,7 @@ class SaveModel : Serializable {
         } else if (createType == ParsedResultType.URI.name) {
             mResult = url
         } else {
-            mResult = text
+            mResult = textProductIdISNB
         }
         return  mResult
     }

@@ -34,7 +34,7 @@ public final class BeepManager {
 
     private static final String TAG = BeepManager.class.getSimpleName();
 
-    private static final float BEEP_VOLUME = 0.10f;
+    private static final float BEEP_VOLUME = 5F;
     private static final long VIBRATE_DURATION = 200L;
 
     private final Context context;
@@ -91,9 +91,13 @@ public final class BeepManager {
     }
 
 
-    public MediaPlayer playBeepSound() {
+    public  void playBeepSound() {
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        final AudioManager audioManager   = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        final int initVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        final int maxVolume  = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int volumePercent = (int) (((float) initVolume / maxVolume) * 100);
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -118,14 +122,17 @@ public final class BeepManager {
             } finally {
                 file.close();
             }
-            mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
+            Log.w(TAG, "Volume " + volumePercent);
+            if (volumePercent>BEEP_VOLUME){
+                mediaPlayer.setVolume(volumePercent, volumePercent);
+            }else{
+                mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
+            }
             mediaPlayer.prepare();
             mediaPlayer.start();
-            return mediaPlayer;
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
             mediaPlayer.release();
-            return null;
         }
     }
 }

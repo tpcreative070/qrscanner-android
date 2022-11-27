@@ -4,14 +4,16 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="image_size_custom_60">60dp</dimen>
+    <dimen name="icon_size_15">15dp</dimen>
+    <dimen name="icon_size_20">20dp</dimen>
+    <dimen name="icon_size_22">22dp</dimen>
+    <dimen name="icon_size_25">25dp</dimen>
     <dimen name="icon_size_30">30dp</dimen>
     <dimen name="icon_size_40">40dp</dimen>
     <dimen name="icon_size_45">45dp</dimen>
     <dimen name="icon_size_50">50dp</dimen>
     <dimen name="icon_size_60">60dp</dimen>
-    <dimen name="icon_size_25">25dp</dimen>
-    <dimen name="icon_size_22">22dp</dimen>
-    <dimen name="icon_size_20">18dp</dimen>
+    <dimen name="icon_size_90">90dp</dimen>
     <dimen name="icon_size_100">100dp</dimen>
     <dimen name="icon_size_200">200dp</dimen>
     <dimen name="icon_size_250">250dp</dimen>
@@ -25,6 +27,11 @@
     <dimen name="bar_height">56dp</dimen>
     <dimen name="banner_size_height">55dp</dimen>
     <dimen name="button_height">60dp</dimen>
+    <dimen name="height_50">50dp</dimen>
+    <dimen name="height_40">40dp</dimen>
+    <dimen name="height_30">30dp</dimen>
+    <dimen name="height_20">20dp</dimen>
+    <dimen name="height_10">10dp</dimen>
 
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_15">15sp</dimen>
@@ -63,9 +70,6 @@
     <dimen name="image_size">40dp</dimen>
     <dimen name="image_size_50">50dp</dimen>
     <dimen name="log_size">90dp</dimen>
-    <dimen name="icon_size">20dp</dimen>
-    <dimen name="icon_size_15">15dp</dimen>
-    <dimen name="icon_size_90">90dp</dimen>
 
     <!--Text size -->
     <dimen name="small_12">12sp</dimen>
@@ -83,6 +87,7 @@
 
 
     <dimen name="margin_10">10sp</dimen>
+    <dimen name="margin_12">12sp</dimen>
     <dimen name="margin_15">15sp</dimen>
     <dimen name="margin_20">20sp</dimen>
     <dimen name="margin_25">25sp</dimen>
@@ -91,9 +96,19 @@
     <dimen name="margin_40">40sp</dimen>
     <dimen name="margin_45">45sp</dimen>
     <dimen name="margin_50">50sp</dimen>
+    <dimen name="margin_90">90sp</dimen>
+    <dimen name="margin_7">7sp</dimen>
     <dimen name="margin_5">5sp</dimen>
     <dimen name="margin_4">4sp</dimen>
     <dimen name="margin_3">3sp</dimen>
     <dimen name="margin_2">2sp</dimen>
     <dimen name="margin_1">1sp</dimen>
+
+    <dimen name="text_size_m">20sp</dimen>
+    <dimen name="text_size_s">16sp</dimen>
+    <dimen name="spacing">16dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xlarge">24dp</dimen>
+    <dimen name="spacing_xsmall">4dp</dimen>
 </resources>

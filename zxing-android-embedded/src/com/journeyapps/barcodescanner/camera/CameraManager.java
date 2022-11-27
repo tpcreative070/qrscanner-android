@@ -267,7 +267,7 @@ public final class CameraManager {
             Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
         }
 
-        CameraConfigurationUtils.setFocus(parameters, settings.getFocusMode(), safeMode);
+        CameraConfigurationUtils.setFocus(parameters, settings.getFocusMode(),settings.getZoom(), safeMode);
 
         if (!safeMode) {
             CameraConfigurationUtils.setTorch(parameters, false);
@@ -494,6 +494,10 @@ public final class CameraManager {
                 Log.e(TAG, "Failed to change camera parameters", e);
             }
         }
+    }
+
+    public void setZoom(float value){
+        CameraConfigurationUtils.setZoom(camera.getParameters(),value);
     }
 
     /**

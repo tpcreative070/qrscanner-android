@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_chage_file_color.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.model.*
@@ -28,7 +29,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
 
     override fun onClickItem(position: Int) {
         viewModel.mTheme = dataSource[position]
-        PrefsController.putInt(getString(R.string.key_theme_object), position)
+        Utils.setQRCodeThemePosition(position)
         getData()
         SettingsSingleton.getInstance()?.onUpdated()
     }

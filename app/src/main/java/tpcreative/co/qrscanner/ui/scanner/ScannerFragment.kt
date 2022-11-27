@@ -2,23 +2,26 @@ package tpcreative.co.qrscanner.ui.scanner
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.PorterDuff
+import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.Result
-import com.google.zxing.ResultPoint
+import com.google.zxing.*
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.result.*
+import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.common.detector.WhiteRectangleDetector
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +36,8 @@ import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
-import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
@@ -41,13 +45,14 @@ import java.io.File
 
 class ScannerFragment : BaseFragment(), SingletonScannerListener{
     lateinit var viewModel : ScannerViewModel
-    var beepManager: BeepManager? = null
+    private var beepManager: BeepManager? = null
     val cameraSettings: CameraSettings = CameraSettings()
     var typeCamera = 0
     var isTurnOnFlash = false
     var mAnim: Animation? = null
     var isRunning = false
-    private val callback: BarcodeCallback = object : BarcodeCallback {
+    var mFrameRect: RectF? = null
+    val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
                 Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)
@@ -199,6 +204,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 if (result?.barcodeFormat != null) {
                     create.barcodeFormat = result.barcodeFormat.name
                 }
+                val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(mBitmap);
+                canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
+                zxing_barcode_scanner.viewFinder.addResultPoint(result?.resultPoints?.toMutableList())
+                zxing_barcode_scanner.viewFinder.drawResultBitmap(mBitmap)
+                zxing_barcode_scanner.viewFinder.addTransferResultPoint(result?.transformedResultPoints)
+                Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
+                Utils.Log(TAG, "barcode ==> format ${result?.barcodeFormat?.name}")
                 doNavigation(create)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -207,21 +220,38 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
         fun doNavigation(create: CreateModel?) {
             if (Utils.isMultipleScan()) {
+                if (viewModel.isRequestDone){
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
+                    return
+                }
                 btnDone.visibility = View.VISIBLE
                 tvCount.visibility = View.VISIBLE
                 updateValue(1)
                 viewModel.doSaveItems(create)
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(1000)
-                        zxing_barcode_scanner.resume()
+                        zxing_barcode_scanner.viewFinder.drawViewfinder()
+                        if (!viewModel.isResume){
+                            zxing_barcode_scanner.resume()
+                            viewModel.isResume = true
+                        }
                     }
                 }
             } else {
                 scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
                 if (zxing_barcode_scanner != null) {
-                    zxing_barcode_scanner.pauseAndWait()
+                    if (viewModel.isResume){
+                        zxing_barcode_scanner.pauseAndWait()
+                        viewModel.isResume = false
+                    }
                 }
             }
             beepManager?.playBeepSoundAndVibrate()
@@ -244,6 +274,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         ScannerSingleton.getInstance()?.setListener(this)
         zxing_barcode_scanner.decodeContinuous(callback)
         zxing_barcode_scanner.statusView.visibility = View.GONE
+        zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFrameSize()
         imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
@@ -264,7 +295,11 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         onHandlerIntent()
         if (zxing_barcode_scanner != null) {
             if (!zxing_barcode_scanner.isActivated) {
-                zxing_barcode_scanner.resume()
+                if (!viewModel.isResume){
+                    zxing_barcode_scanner.resume()
+                    viewModel.isResume = true
+                }
+                zxing_barcode_scanner.barcodeView.addStateListener(stateListener)
             }
         }
         onBeepAndVibrate()
@@ -276,12 +311,18 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
         cameraSettings.requestedCameraId = type // front/back/etc
         zxing_barcode_scanner.barcodeView.cameraSettings = cameraSettings
-        zxing_barcode_scanner.resume()
+        if (!viewModel.isResume){
+            zxing_barcode_scanner.resume()
+            viewModel.isResume = true
+        }
     }
 
     fun onAddPermissionGallery() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
         onGetGallery()
     }
@@ -290,28 +331,36 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         if (beepManager == null) {
             return
         }
-        val isBeep = PrefsController.getBoolean(getString(R.string.key_beep), false)
-        val isVibrate = PrefsController.getBoolean(getString(R.string.key_vibrate), false)
-        beepManager?.isBeepEnabled = isBeep
-        beepManager?.isVibrateEnabled = isVibrate
+        beepManager?.isBeepEnabled = Utils.getBeep()
+        beepManager?.isVibrateEnabled = Utils.getVibrate()
     }
 
     override fun setVisible() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.resume()
+            zxing_barcode_scanner.viewFinder.drawViewfinder()
+            if (!viewModel.isResume){
+                zxing_barcode_scanner.resume()
+                viewModel.isResume = true
+            }
         }
     }
 
     override fun setInvisible() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
     }
 
     override fun onStop() {
         super.onStop()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
         Utils.Log(TAG, "onStop")
     }
@@ -331,7 +380,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         Utils.Log(TAG, "onDestroy")
         if (typeCamera != 2) {
             if (zxing_barcode_scanner != null) {
-                zxing_barcode_scanner.pause()
+                if (viewModel.isResume){
+                    zxing_barcode_scanner.pauseAndWait()
+                    viewModel.isResume = false
+                }
             }
         }
     }
@@ -339,7 +391,15 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun onResume() {
         super.onResume()
          if (zxing_barcode_scanner != null && !zxing_barcode_scanner.isActivated) {
-             zxing_barcode_scanner.resume()
+             zxing_barcode_scanner.viewFinder.drawViewfinder()
+             if (!viewModel.isResume){
+                 zxing_barcode_scanner.resume()
+                 viewModel.isResume = true
+             }
+             if (!Utils.isMultipleScan()) {
+                 btnDone.visibility = View.INVISIBLE
+                 tvCount.visibility = View.INVISIBLE
+             }
          }
         Utils.Log(TAG, "onResume")
     }
@@ -529,9 +589,13 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         create.barcodeFormat = result?.barcodeFormat?.name
         beepManager?.playBeepSoundAndVibrate()
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.pauseAndWait()
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
+            }
         }
-        Utils.Log(TAG,"barcode format ${parsedResult.type}")
+        Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
+        Utils.Log(TAG, "barcode ==> format ${result?.barcodeFormat?.name}")
         scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
@@ -548,12 +612,19 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             if (menuVisible) {
                 if (typeCamera != 2) {
                     onBeepAndVibrate()
-                    zxing_barcode_scanner.resume()
+                    if (!viewModel.isResume){
+                        zxing_barcode_scanner.resume()
+                        viewModel.isResume = true
+                    }
                     Utils.Log(TAG, "Fragment visit...resume...")
                 }
             } else {
                 if (typeCamera != 2) {
-                    zxing_barcode_scanner.pause()
+                    if (viewModel.isResume){
+                        //Using pause in able to reduce lag when swipe page
+                        zxing_barcode_scanner.pause()
+                        viewModel.isResume = false
+                    }
                 }
             }
         }

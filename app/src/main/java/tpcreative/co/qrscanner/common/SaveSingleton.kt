@@ -7,7 +7,10 @@ class SaveSingleton {
 
     fun reloadData() {
         if (listener != null) {
-            listener?.reloadData()
+            if (Utils.isRequestSaverReload()){
+                listener?.reloadData()
+                Utils.setRequestSaverReload(false)
+            }
         }
     }
 
