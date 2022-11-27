@@ -10,7 +10,7 @@ import tpcreative.co.qrscanner.model.QRCodeType
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.*
 
-class GenerateActivity : BaseFragment(), GenerateCell.ItemSelectedListener {
+class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
     lateinit var viewModel : GenerateViewModel
     override fun getLayoutId(): Int {
         return 0
@@ -110,9 +110,9 @@ class GenerateActivity : BaseFragment(), GenerateCell.ItemSelectedListener {
     }
 
     companion object {
-        private val TAG = GenerateActivity::class.java.simpleName
-        fun newInstance(index: Int): GenerateActivity {
-            val fragment = GenerateActivity()
+        private val TAG = GenerateFragment::class.java.simpleName
+        fun newInstance(index: Int): GenerateFragment {
+            val fragment = GenerateFragment()
             val b = Bundle()
             b.putInt("index", index)
             fragment.arguments = b

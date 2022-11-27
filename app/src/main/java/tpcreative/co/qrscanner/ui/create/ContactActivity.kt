@@ -35,7 +35,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         } else {
             Utils.Log(TAG, "Data is null")
         }
-        edtFullName.setOnEditorActionListener(this)
+        edtFirstName.setOnEditorActionListener(this)
         edtAddress.setOnEditorActionListener(this)
         edtPhone.setOnEditorActionListener(this)
         edtEmail.setOnEditorActionListener(this)
@@ -68,7 +68,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             val create = CreateModel(save)
-            create.fullName = edtFullName?.text.toString().trim { it <= ' ' }
+            create.fullName = edtFirstName?.text.toString().trim { it <= ' ' }
             create.address = edtAddress?.text.toString()
             create.phone = edtPhone?.text.toString()
             create.email = edtEmail?.text.toString()
@@ -80,22 +80,22 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation?.addValidation(this, R.id.edtFullName, RegexTemplate.NOT_EMPTY, R.string.err_fullName)
+        mAwesomeValidation?.addValidation(this, R.id.edtFirstName, RegexTemplate.NOT_EMPTY, R.string.err_fullName)
         mAwesomeValidation?.addValidation(this, R.id.edtAddress, RegexTemplate.NOT_EMPTY, R.string.err_address)
         mAwesomeValidation?.addValidation(this, R.id.edtPhone, Patterns.PHONE, R.string.err_phone)
         mAwesomeValidation?.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
     }
 
     private fun focusUI() {
-        edtFullName.requestFocus()
+        edtFirstName.requestFocus()
     }
 
     fun onSetData() {
-        edtFullName.setText(save?.fullName)
+        edtFirstName.setText(save?.fullName)
         edtAddress.setText(save?.address)
         edtPhone.setText(save?.phone)
         edtEmail.setText(save?.email)
-        edtFullName.setSelection(edtFullName.text?.length ?: 0)
+        edtFirstName.setSelection(edtFirstName.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 

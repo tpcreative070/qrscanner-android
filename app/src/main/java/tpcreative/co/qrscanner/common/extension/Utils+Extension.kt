@@ -30,7 +30,7 @@ fun Utils.readVCF(uri : Uri) : SaveModel {
         var mAddress : String? =  null
         for (address : Address in vCards.addresses){
             if (address.streetAddressFull!=null){
-                mAddress = vCards
+                mAddress = address.streetAddressFull
             }
         }
 
