@@ -621,7 +621,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             } else {
                 if (typeCamera != 2) {
                     if (viewModel.isResume){
-                        zxing_barcode_scanner.pauseAndWait()
+                        //Using pause in able to reduce lag when swipe page
+                        zxing_barcode_scanner.pause()
                         viewModel.isResume = false
                     }
                 }
