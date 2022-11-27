@@ -28,11 +28,9 @@ fun Utils.readVCF(uri : Uri) : SaveModel {
         }
 
         var mAddress : String? =  null
-        var mParse : String? = null
         for (address : Address in vCards.addresses){
-            //mParse += "$address."
             if (address.streetAddressFull!=null){
-                //mAddress = vCards
+                mAddress = vCards
             }
         }
 
