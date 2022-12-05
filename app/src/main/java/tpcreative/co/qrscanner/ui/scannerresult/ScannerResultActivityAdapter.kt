@@ -23,7 +23,7 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
     }
 
     interface ItemSelectedListener {
-        fun onClickItem(position: Int,action : EnumAction)
+        fun onClickItem(position: Int,contactKey: String,contactValue :String,action : EnumAction)
     }
 
     inner class ItemHolder(itemView: View) : BaseHolder<ItemNavigation>(itemView) {
@@ -31,6 +31,8 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
         override fun bind(data: ItemNavigation, position: Int) {
             super.bind(data, position)
             this.mPosition = position
+            val mContactKey = data.contactKey
+            val mContactValue = data.contactValue
             if (data.enumAction == EnumAction.DO_ADVANCE){
                 itemView.rlBasic.visibility = View.GONE
                 itemView.rlAdvance.visibility = View.VISIBLE
@@ -47,16 +49,16 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
                 itemView.imgAction.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
             }
             itemView.rlHome.setOnClickListener {
-                itemSelectedListener?.onClickItem(mPosition,EnumAction.VIEW_CODE)
+                itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.VIEW_CODE)
             }
             itemView.imgTakeNote.setOnClickListener {
-                itemSelectedListener?.onClickItem(mPosition,EnumAction.TAKE_NOTE)
+                itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.TAKE_NOTE)
             }
             itemView.imgMarkFavorite.setOnClickListener {
-                itemSelectedListener?.onClickItem(mPosition,EnumAction.MARK_FAVORITE)
+                itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.MARK_FAVORITE)
             }
             itemView.rlViewCode.setOnClickListener {
-                itemSelectedListener?.onClickItem(mPosition,EnumAction.VIEW_CODE)
+                itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.VIEW_CODE)
             }
         }
 

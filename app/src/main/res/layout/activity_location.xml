@@ -36,9 +36,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         <RelativeLayout
-            android:layout_margin="20dp"
-            android:padding="5dp"
-            android:background="@drawable/bg_location_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.core.widget.NestedScrollView
@@ -50,7 +47,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="@dimen/margin_10"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:background="@drawable/bg_location_group"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_5">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -64,14 +68,14 @@
                         android:paddingBottom="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
+                            style="@style/brandonRegularTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/latitude" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtLatitude"
-                            style="@style/brandonRegularTextView"
+                            style="@style/brandonRegularTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionNext"
@@ -91,14 +95,14 @@
                         android:paddingBottom="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
+                            style="@style/brandonRegularTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/longitude" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtLongitude"
-                            style="@style/brandonRegularTextView"
+                            style="@style/brandonRegularTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionNext"
@@ -118,14 +122,14 @@
                         android:paddingBottom="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
+                            style="@style/brandonRegularTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/query" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtQuery"
-                            style="@style/brandonRegularTextView"
+                            style="@style/brandonRegularTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionDone"

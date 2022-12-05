@@ -17,5 +17,18 @@ class ConstantValue {
         const val CALENDAR = "Calendar"
         const val ISBN = "ISBN"
         const val ADVANCE = "ADVANCE"
+        const val TELEPHONE = "Telephone"
+        const val WPA = "WPA"
+        const val WEP = "WEP"
+        const val NONE = "None"
+        const val HOME = "HOME"
+        const val WORK = "WORK"
+        const val MOBILE = "MOBILE"
+        const val CELL = "CELL"
+        const val OTHER = "OTHER"
+        const val VCard = "BEGIN:VCARD"
+        const val MeCard = "MECARD:N"
+        const val VCardType = "text/x-vcard"
+
     }
 }

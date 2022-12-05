@@ -13,6 +13,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.print.PrintHelper
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_review.*
@@ -24,11 +25,13 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.onParseVCard
 import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.extension.readVCF
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.HistoryModel
 import tpcreative.co.qrscanner.model.SaveModel
 import java.io.File
@@ -88,8 +91,9 @@ private fun ReviewActivity.onHandlerIntent() {
                 fileUri.let {
                     val mSave = Utils.readVCF(it)
                     txtSubject.text = "vCard"
-                    txtDisplay.text = "MECARD:N:${mSave.fullName};TEL:${mSave.phone};EMAIL:${mSave.email};ADR:${mSave.address};"
+                    txtDisplay.text = mSave?.code
                     onSaveFromTextOrCVFToQRCode("",mSave)
+                    Utils.Log(TAG,"vCard result value ${Gson().toJson(mSave)}")
                 }
             } else {
                 Utils.onDropDownAlert(this, getString(R.string.can_not_support_this_format))
@@ -145,24 +149,27 @@ fun ReviewActivity.onPhotoPrint() {
     }
 }
 
-fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : SaveModel?){
+fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : GeneralModel?){
     val history = HistoryModel()
     viewModel.isSharedIntent = true
     if (mSave!=null){
-        code = "MECARD:N:${mSave.fullName};TEL:${mSave.phone};EMAIL:${mSave.email};ADR:${mSave.address};"
+        code = mSave.code
         history.fullName = mSave.fullName
         history.phone = mSave.phone
         history.email = mSave.email
         history.address = mSave.address
+        history.code = mSave.code
         history.createType = ParsedResultType.ADDRESSBOOK.name
     }else{
         if (Patterns.WEB_URL.matcher(text).matches()){
             code = text
             history.url = text
+            history.code = text
             history.createType = ParsedResultType.URI.name
         }else{
             code = text
-            history.text = text
+            history.textProductIdISNB = text
+            history.code = text
             history.createType = ParsedResultType.TEXT.name
         }
     }
@@ -171,7 +178,7 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : SaveModel?
     history.barcodeFormat = BarcodeFormat.QR_CODE.name
     format = BarcodeFormat.QR_CODE.name
     val time = Utils.getCurrentDateTimeSort()
-    history.createDatetime = time
+    history.createdDatetime = time
     history.updatedDateTime = time
     txtFormat.text = format
     SQLiteHelper.onInsert(history)

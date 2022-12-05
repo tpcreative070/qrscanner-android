@@ -1,14 +1,12 @@
 package tpcreative.co.qrscanner.common
 import android.Manifest
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
+import android.webkit.URLUtil
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
@@ -31,14 +29,17 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.io.*
+import java.net.URLEncoder
+import java.nio.charset.Charset
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.ceil
+import kotlin.math.exp
 import kotlin.math.roundToInt
 
 object Utils {
-    private val TAG = Utils::class.java.simpleName
+    val TAG = Utils::class.java.simpleName
     const val CODE_EXCEPTION = 1111
     const val mStandardSortedDateTime: String = "ddMMYYYYHHmmss"
     const val FORMAT_DISPLAY: String = "EE dd MMM, yyyy HH:mm:ss a"
@@ -323,72 +324,58 @@ object Utils {
             val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
                 ParsedResultType.ADDRESSBOOK -> {
-                    code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";"
+                    code = item.code
                     mResult.name + "-" + code
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
-                    code = "MATMSG:TO:" + item.email + ";SUB:" + item.subject + ";BODY:" + item.message + ";"
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.PRODUCT -> {
-                    code = item.text
+                    code = item.code
                     val barCodeType: String? = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
                 ParsedResultType.URI -> {
-                    code = item.url
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.WIFI -> {
-                    code = "WIFI:S:" + item.ssId + ";T:" + item.networkEncryption + ";P:" + item.password + ";H:" + item.hidden + ";"
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.GEO -> {
-                    code = "geo:" + item.lat + "," + item.lon + "?q=" + item.query + ""
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.TEL -> {
-                    code = "tel:" + item.phone + ""
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.SMS -> {
-                    code = "smsto:" + item.phone + ":" + item.message
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.CALENDAR -> {
-                    val builder = StringBuilder()
-                    builder.append("BEGIN:VEVENT")
-                    builder.append("\n")
-                    builder.append("SUMMARY:" + item.title)
-                    builder.append("\n")
-                    builder.append("DTSTART:" + item.startEvent)
-                    builder.append("\n")
-                    builder.append("DTEND:" + item.endEvent)
-                    builder.append("\n")
-                    builder.append("LOCATION:" + item.location)
-                    builder.append("\n")
-                    builder.append("DESCRIPTION:" + item.description)
-                    builder.append("\n")
-                    builder.append("END:VEVENT")
-                    code = builder.toString()
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.ISBN -> {
-                    code = item.text
+                    code = item.textProductIdISNB
                     val barCodeType = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
                 else -> {
-                    code = item.text
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
@@ -405,72 +392,58 @@ object Utils {
             val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
                 ParsedResultType.ADDRESSBOOK -> {
-                    code = "MECARD:N:" + item.fullName + ";TEL:" + item.phone + ";EMAIL:" + item.email + ";ADR:" + item.address + ";"
+                    code = item.code
                     mResult.name + "-" + code
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
-                    code = "MATMSG:TO:" + item.email + ";SUB:" + item.subject + ";BODY:" + item.message + ";"
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.PRODUCT -> {
-                    code = item.textProductIdISNB
+                    code = item.code
                     val barCodeType: String? = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
                 ParsedResultType.URI -> {
-                    code = item.url
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.WIFI -> {
-                    code = "WIFI:S:" + item.ssId + ";T:" + item.networkEncryption + ";P:" + item.password + ";H:" + item.hidden + ";"
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.GEO -> {
-                    code = "geo:" + item.lat + "," + item.lon + "?q=" + item.query + ""
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.TEL -> {
-                    code = "tel:" + item.phone + ""
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.SMS -> {
-                    code = "smsto:" + item.phone + ":" + item.message
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.CALENDAR -> {
-                    val builder = StringBuilder()
-                    builder.append("BEGIN:VEVENT")
-                    builder.append("\n")
-                    builder.append("SUMMARY:" + item.title)
-                    builder.append("\n")
-                    builder.append("DTSTART:" + item.startEvent)
-                    builder.append("\n")
-                    builder.append("DTEND:" + item.endEvent)
-                    builder.append("\n")
-                    builder.append("LOCATION:" + item.location)
-                    builder.append("\n")
-                    builder.append("DESCRIPTION:" + item.description)
-                    builder.append("\n")
-                    builder.append("END:VEVENT")
-                    code = builder.toString()
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
                 ParsedResultType.ISBN -> {
-                    code = item.textProductIdISNB
+                    code = item.code
                     val barCodeType = item.barcodeFormat
                     mData = mResult.name + "-" + barCodeType + "-" + code
                     mData
                 }
                 else -> {
-                    code = item.textProductIdISNB
+                    code = item.code
                     mData = mResult.name + "-" + code
                     mData
                 }
@@ -479,7 +452,8 @@ object Utils {
         return null
     }
 
-    fun getCode(create: CreateModel?): String? {
+    /*Support old version*/
+    fun getCode(create: GeneralModel?): String? {
         /*Product id must be plus barcode format type*/
         var code : String? = ""
         if (create != null) {
@@ -491,7 +465,7 @@ object Utils {
                     code = "MATMSG:TO:" + create.email + ";SUB:" + create.subject + ";BODY:" + create.message + ";"
                 }
                 ParsedResultType.PRODUCT -> {
-                    code = create.productId
+                    code = create.textProductIdISNB
                 }
                 ParsedResultType.URI -> {
                     code = create.url
@@ -526,10 +500,10 @@ object Utils {
                     code = builder.toString()
                 }
                 ParsedResultType.ISBN -> {
-                    code = create.ISBN
+                    code = create.textProductIdISNB
                 }
                 else -> {
-                    code = create.text
+                    code = create.textProductIdISNB
                 }
             }
             return code
@@ -537,7 +511,7 @@ object Utils {
         return null
     }
 
-    fun getCodeDisplay(create: CreateModel?): HashMap<String,String?>? {
+    fun getCodeDisplay(create: GeneralModel?): HashMap<String,String?>? {
         /*Product id must be plus barcode format type*/
         val mMap = java.util.HashMap<String,String?>()
         val mContent = StringBuilder()
@@ -566,7 +540,7 @@ object Utils {
                     mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
                 }
                 ParsedResultType.PRODUCT -> {
-                    mContent.append(create.productId)
+                    mContent.append(create.textProductIdISNB)
                     mMap[ConstantKey.CONTENT] = mContent.toString()
                     mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
                     mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
@@ -628,13 +602,13 @@ object Utils {
                     mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
                 }
                 ParsedResultType.ISBN -> {
-                    mContent.append(create.ISBN)
+                    mContent.append(create.textProductIdISNB)
                     mMap[ConstantKey.CONTENT] = mContent.toString()
                     mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
                     mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
                 }
                 else -> {
-                    mContent.append(create.text)
+                    mContent.append(create.textProductIdISNB)
                     mMap[ConstantKey.CONTENT] = mContent.toString()
                     mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
                     mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
@@ -1042,7 +1016,7 @@ object Utils {
                 .show()
     }
 
-    fun onSendMail(context: Context,create : CreateModel?){
+    fun onSendMail(context: Context,create : GeneralModel?){
         val to = create?.email
         val subject = create?.subject
         val body = create?.message
@@ -1055,7 +1029,7 @@ object Utils {
         Utils.Log(TAG, "email object ${Gson().toJson(create)}")
     }
 
-    fun onPhoneCall(context: Context,create: CreateModel?) {
+    fun onPhoneCall(context: Context,create: GeneralModel?) {
         Dexter.withContext(context)
             .withPermissions(
                 Manifest.permission.CALL_PHONE)
@@ -1119,6 +1093,75 @@ object Utils {
             return FileProvider.getUriForFile(QRScannerApplication.getInstance(), BuildConfig.APPLICATION_ID + ".provider", file)
         } catch (e: java.lang.Exception) {
             return null;
+        }
+    }
+
+    fun getCodeUri(code : String) : Uri? {
+        val fileFolder = File(QRScannerApplication.getInstance().cacheDir,  Constant.files_folder)
+        try {
+            fileFolder.mkdirs()
+            val file = File(fileFolder, "vcard.vcf")
+            val outputStream = FileOutputStream(file)
+            outputStream.write(code.toByteArray());
+            outputStream.close()
+            outputStream.flush()
+            return FileProvider.getUriForFile(QRScannerApplication.getInstance(), BuildConfig.APPLICATION_ID + ".provider", file)
+        } catch (e: java.lang.Exception) {
+            return null;
+        }
+    }
+
+    fun onOpenWebSites(url: String?,activity: Activity) {
+        var mUrl: String?
+        mUrl = url
+        if (!URLUtil.isHttpUrl(mUrl) && !URLUtil.isHttpsUrl(mUrl)){
+            mUrl = "http://$url"
+        }
+        val i = Intent(Intent.ACTION_VIEW, Uri.parse(mUrl))
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        i.setPackage("com.android.chrome")
+        try {
+            activity.startActivity(i)
+        } catch (e: ActivityNotFoundException) {
+            // Chrome is probably not installed
+            // Try with the default browser
+            try {
+                i.setPackage(null)
+                activity.startActivity(i)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                Log(TAG,"Error message"+ ex.message)
+                onAlertNotify(activity, "Can not open the link")
+            }
+            Log(TAG,"Error message"+ e.message)
+            Log(TAG, e.message)
+            e.printStackTrace()
+        }
+    }
+
+
+    fun onSearch(query: String?,context: Activity) {
+        try {
+            val escapedQuery = URLEncoder.encode(query, "UTF-8")
+            val uri = Uri.parse("https://www.google.com/search?q=$escapedQuery")
+            val i = Intent(Intent.ACTION_VIEW, uri)
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            i.setPackage("com.android.chrome")
+            try {
+                context.startActivity(i)
+            } catch (e: ActivityNotFoundException) {
+                // Chrome is probably not installed
+                // Try with the default browser
+                try {
+                    i.setPackage(null)
+                    context.startActivity(i)
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                    Utils.onAlertNotify(context, "Can not open the link")
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

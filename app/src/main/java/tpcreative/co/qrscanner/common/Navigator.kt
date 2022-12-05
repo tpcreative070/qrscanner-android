@@ -19,7 +19,7 @@ object Navigator {
     const val SCANNER = 1001
     const val REQUEST_CODE_EMAIL = 1007
     const val REQUEST_CODE_EMAIL_ANOTHER_ACCOUNT = 1008
-    fun onMoveToReview(context: Activity?, create: CreateModel?) {
+    fun onMoveToReview(context: Activity?, create: GeneralModel?) {
         val intent = Intent(context, ReviewActivity::class.java)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), create)
@@ -42,7 +42,7 @@ object Navigator {
 //        context?.startActivity(intent)
 //    }
 
-    fun <T> onGenerateView(context: Activity?, save: SaveModel?, clazz: Class<T>) {
+    fun <T> onGenerateView(context: Activity?, save: GeneralModel?, clazz: Class<T>) {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
@@ -58,7 +58,7 @@ object Navigator {
 //        context?.startActivityForResult(intent, SCANNER)
 //    }
 
-    fun <T> onResultView(context: Activity?, save: CreateModel?, clazz: Class<T>) : Intent {
+    fun <T> onResultView(context: Activity?, save: GeneralModel?, clazz: Class<T>) : Intent {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)

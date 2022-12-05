@@ -26,7 +26,7 @@ import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
     lateinit var viewModel: GenerateViewModel
     var mAwesomeValidation: AwesomeValidation? = null
-    private var save: SaveModel? = null
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_text)
@@ -69,8 +69,8 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     private fun onSave(){
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
-            val create = CreateModel(save)
-            create.text = edtText.text.toString().trim { it <= ' ' }
+            val create = GeneralModel(save)
+            create.textProductIdISNB = edtText.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.TEXT
             Navigator.onMoveToReview(this, create)
         } else {
@@ -126,7 +126,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     private fun getIntentData(){

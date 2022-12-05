@@ -8,7 +8,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EmptyModel
 import tpcreative.co.qrscanner.model.HistoryModel
 import java.util.HashMap
@@ -28,7 +28,7 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
         emit(QRScannerApplication.getInstance().getString(R.string.total) + ": " + mCount)
     }
 
-    fun doSaveItems(mCreate: CreateModel?) {
+    fun doSaveItems(mCreate: GeneralModel?) {
         when (mCreate?.createType) {
             ParsedResultType.ADDRESSBOOK -> {
                 /*Put item to HashClipboard*/
@@ -58,9 +58,9 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
             }
             ParsedResultType.PRODUCT -> {
                 /*Put item to HashClipboard*/
-                hashClipboard?.set("productId", mCreate.productId)
+                hashClipboard?.set("productId", mCreate.textProductIdISNB)
                 history = HistoryModel()
-                history?.text = mCreate.productId
+                history?.textProductIdISNB = mCreate.textProductIdISNB
                 history?.createType = mCreate.createType?.name
                 onShowUI(mCreate)
             }
@@ -136,17 +136,17 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
             }
             ParsedResultType.ISBN -> {
                 /*Put item to HashClipboard*/
-                hashClipboard?.set("ISBN", mCreate.ISBN)
+                hashClipboard?.set("ISBN", mCreate.textProductIdISNB)
                 history = HistoryModel()
-                history?.text = mCreate.ISBN
+                history?.textProductIdISNB = mCreate.textProductIdISNB
                 history?.createType = mCreate.createType?.name
                 onShowUI(mCreate)
             }
             else -> {
                 /*Put item to HashClipboard*/
-                hashClipboard?.set("text", mCreate?.text)
+                hashClipboard?.set("text", mCreate?.textProductIdISNB)
                 history = HistoryModel()
-                history?.text = mCreate?.text
+                history?.textProductIdISNB = mCreate?.textProductIdISNB
                 history?.createType = mCreate?.createType?.name
                 onShowUI(mCreate)
             }
@@ -166,12 +166,12 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
         emit(mCount)
     }
 
-    private fun onShowUI(create: CreateModel?) {
+    private fun onShowUI(create: GeneralModel?) {
         /*Adding new columns*/
         history?.barcodeFormat = create?.barcodeFormat
         history?.favorite = create?.favorite
         val time = Utils.getCurrentDateTimeSort()
-        history?.createDatetime = time
+        history?.createdDatetime = time
         history?.updatedDateTime = time
         SQLiteHelper.onInsert(history)
         HistorySingleton.getInstance()?.reloadData()

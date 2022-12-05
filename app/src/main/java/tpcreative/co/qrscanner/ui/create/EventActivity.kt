@@ -30,7 +30,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     private var dateTimeFragment: SwitchDateTimeDialogFragment? = null
     private var isClick = false
     private var isBegin = false
-    private var save: SaveModel? = null
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
@@ -41,7 +41,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         tvBeginTime.setOnClickListener(this)
         tvEndTime.setOnClickListener(this)
         initDateTimePicker()
-        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
+        val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -126,7 +126,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                 Utils.onDropDownAlert(this, "Starting event data time must be greater than current date time")
                 return
             }
-            val create = CreateModel(save)
+            val create = GeneralModel(save)
             create.title = edtTitle.text.toString()
             create.location = edtLocation.text.toString()
             create.description = edtDescription.text.toString()
@@ -356,7 +356,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     companion object {

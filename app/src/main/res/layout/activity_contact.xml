@@ -233,7 +233,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:imeOptions="actionNext"
-                                    android:inputType="text"
+                                    android:inputType="numberDecimal"
                                     android:singleLine="true" />
                             </LinearLayout>
 
@@ -335,7 +335,7 @@
                                 android:text="@string/phoneNumber_lowercase" />
 
                             <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edtPhone"
+                                android:id="@+id/edtPhoneNumber"
                                 style="@style/brandonRegularTextInputEditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -367,9 +367,9 @@
                                 style="@style/brandonRegularTextInputEditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:imeOptions="actionDone"
-                                android:inputType="textEmailAddress"
-                                android:singleLine="true" />
+                                android:imeOptions="actionNext"
+                                android:singleLine="true"
+                                android:inputType="textEmailAddress"/>
                         </LinearLayout>
 
                         <LinearLayout

@@ -23,7 +23,7 @@ import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
-    var save: SaveModel? = null
+    var save: GeneralModel? = null
     var dataAdapter: ArrayAdapter<FormatTypeModel>? = null
     lateinit var viewModel : GenerateViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +60,8 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
-            val create = CreateModel(save)
-            create.productId = edtBarCode.text.toString().trim { it <= ' ' }
+            val create = GeneralModel(save)
+            create.textProductIdISNB = edtBarCode.text.toString().trim { it <= ' ' }
             create.barcodeFormat = viewModel.mType?.name
             if (create.barcodeFormat == BarcodeFormat.EAN_8.name || create.barcodeFormat == BarcodeFormat.EAN_13.name || create.barcodeFormat == BarcodeFormat.UPC_A.name || create.barcodeFormat == BarcodeFormat.UPC_E.name){
                 create.createType = ParsedResultType.PRODUCT
@@ -132,7 +132,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
 
     fun onSetData() {
         edtBarCode.setText(save?.textProductIdISNB)
-        if (save?.createType == ParsedResultType.PRODUCT.name) {
+        if (save?.createType == ParsedResultType.PRODUCT) {
             if (save?.barcodeFormat == BarcodeFormat.EAN_13.name) {
                 viewModel.mType = BarcodeFormat.EAN_13
                 viewModel.mLength = 13

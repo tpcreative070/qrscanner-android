@@ -20,13 +20,13 @@ import tpcreative.co.qrscanner.model.*
 
 class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
-    private var save: SaveModel? = null
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
+        val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -63,7 +63,7 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     private fun onSave(){
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
-            val create = CreateModel(save)
+            val create = GeneralModel(save)
             create.phone = edtTo.text.toString()
             create.message = edtMessage.text.toString()
             create.createType = ParsedResultType.SMS
@@ -123,7 +123,7 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     companion object {

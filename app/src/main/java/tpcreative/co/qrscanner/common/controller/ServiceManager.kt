@@ -414,12 +414,12 @@ class ServiceManager : BaseView<Any?> {
                         for (index in listHistory) {
                             val value = arrayOf(
                                     index.createType,
-                                    index.url,
-                                    if (index.createType.equals(ParsedResultType.TEXT.name, ignoreCase = true)) index.text else "",
-                                    if (index.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) index.text else "",
-                                    if (index.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) index.text else "",
-                                    index.phone,
-                                    index.email,
+                                    index.getUrls(),
+                                    if (index.createType.equals(ParsedResultType.TEXT.name, ignoreCase = true)) index.textProductIdISNB else "",
+                                    if (index.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) index.textProductIdISNB else "",
+                                    if (index.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) index.textProductIdISNB else "",
+                                    index.getPhones(),
+                                    index.getEmails(),
                                     index.subject,
                                     index.message,
                                     if (index.lat == 0.0) "" else index.lat.toString() + "",
@@ -432,12 +432,12 @@ class ServiceManager : BaseView<Any?> {
                                             ?: 0),
                                     if (index.endEvent == "") "" else Utils.getCurrentDatetimeEvent(index.endEventMilliseconds
                                             ?: 0),
-                                    index.fullName,
-                                    index.address,
+                                    index.getNames(),
+                                    index.getAddresses(),
                                     index.ssId,
                                     index.password,
                                     index.networkEncryption,
-                                    index.createDatetime)
+                                    index.createdDatetime)
                             csvWrite.writeNext(value)
                         }
                     }
@@ -472,12 +472,12 @@ class ServiceManager : BaseView<Any?> {
                         for (index in listSaver) {
                             val value = arrayOf(
                                     index.createType,
-                                    index.url,
+                                    index.getUrls(),
                                     if (index.createType.equals(ParsedResultType.TEXT.name, ignoreCase = true)) index.textProductIdISNB else "",
                                     if (index.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) index.textProductIdISNB else "",
                                     if (index.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) index.textProductIdISNB else "",
-                                    index.phone,
-                                    index.email,
+                                    index.getPhones(),
+                                    index.getEmails(),
                                     index.subject,
                                     index.message,
                                     if (index.lat == 0.0) "" else index.lat.toString() + "",
@@ -490,12 +490,12 @@ class ServiceManager : BaseView<Any?> {
                                             ?: 0),
                                     if (index.endEvent == "") "" else Utils.getCurrentDatetimeEvent(index.endEventMilliseconds
                                             ?: 0),
-                                    index.fullName,
-                                    index.address,
+                                    index.getNames(),
+                                    index.getAddresses(),
                                     index.ssId,
                                     index.password,
                                     index.networkEncryption,
-                                    index.createDatetime)
+                                    index.createdDatetime)
                             csvWrite.writeNext(value)
                         }
                     }

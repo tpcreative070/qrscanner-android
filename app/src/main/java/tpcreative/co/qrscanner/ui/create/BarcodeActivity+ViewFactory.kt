@@ -7,6 +7,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
@@ -16,7 +17,7 @@ fun BarcodeActivity.initUI(){
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     doInitView()
-    val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
+    val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
     if (mData != null) {
         save = mData
         onSetData()

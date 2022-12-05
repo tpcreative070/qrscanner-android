@@ -148,7 +148,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     }
 
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
-        val mData = activity?.intent?.serializable(getString(R.string.key_data), SaveModel::class.java)
+        val mData = activity?.intent?.serializable(getString(R.string.key_data), GeneralModel::class.java)
         if (mData != null) {
             emit(mData)
         } else {

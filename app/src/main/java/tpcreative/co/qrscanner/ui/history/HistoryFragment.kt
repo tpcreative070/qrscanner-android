@@ -26,7 +26,7 @@ import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumImplement
 import tpcreative.co.qrscanner.model.HistoryModel
@@ -208,66 +208,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         if (actionMode != null) {
             return
         }
-        val create = CreateModel()
         val history: HistoryModel = viewModel.mList[position]
-        create.id = history.id ?: 0
-        create.favorite = history.favorite ?: false
-        if (history.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            create.address = history.address
-            create.fullName = history.fullName
-            create.email = history.email
-            create.phone = history.phone
-            create.createType = ParsedResultType.ADDRESSBOOK
-        } else if (history.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            create.email = history.email
-            create.subject = history.subject
-            create.message = history.message
-            create.createType = ParsedResultType.EMAIL_ADDRESS
-        } else if (history.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            create.createType = ParsedResultType.PRODUCT
-            create.productId = history.text
-        } else if (history.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            create.url = history.url
-            create.createType = ParsedResultType.URI
-        } else if (history.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            create.hidden = history.hidden ?: false
-            create.ssId = history.ssId
-            create.networkEncryption = history.networkEncryption
-            create.password = history.password
-            create.createType = ParsedResultType.WIFI
-        } else if (history.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            create.lat = history.lat ?:0.0
-            create.lon = history.lon ?:0.0
-            create.query = history.query
-            create.createType = ParsedResultType.GEO
-        } else if (history.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            create.phone = history.phone
-            create.createType = ParsedResultType.TEL
-        } else if (history.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            create.phone = history.phone
-            create.message = history.message
-            create.createType = ParsedResultType.SMS
-        } else if (history.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            create.title = history.title
-            create.description = history.description
-            create.location = history.location
-            create.startEvent = history.startEvent
-            create.endEvent = history.endEvent
-            create.startEventMilliseconds = history.startEventMilliseconds ?:0
-            create.endEventMilliseconds = history.endEventMilliseconds ?:0
-            create.createType = ParsedResultType.CALENDAR
-        } else if (history.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) {
-            create.ISBN = history.text
-            create.createType = ParsedResultType.ISBN
-        } else {
-            create.text = history.text
-            create.createType = ParsedResultType.TEXT
-        }
-        create.barcodeFormat = history.barcodeFormat
-        create.noted = history.noted
-        Utils.Log(TAG,"Format type ${history.barcodeFormat}")
-        create.fragmentType = EnumFragmentType.HISTORY
-        create.enumImplement = EnumImplement.VIEW
+        val create = GeneralModel(history,EnumFragmentType.HISTORY,EnumImplement.VIEW)
         viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 

@@ -18,8 +18,8 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     val TAG = ScannerResultViewModel::class.java
     override val dataList: MutableList<ItemNavigation>
         get() = super.dataList
-    var result: CreateModel?
-    var hashClipboard: HashMap<Any?, String?> = HashMap()
+    var result: GeneralModel?
+    var hashClipboard: HashMap<Any?, String?>? = HashMap()
     var hashClipboardResult: HashMap<Any?, String?>? = HashMap()
     var isFavorite : Boolean = false
     var takeNoted : String = ""
@@ -27,7 +27,7 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     val mListNavigation : MutableList<ItemNavigation> = mutableListOf()
 
     fun getIntent(activity: Activity?)  = liveData(Dispatchers.Main){
-        val data = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),CreateModel::class.java)
+        val data = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),GeneralModel::class.java)
         result = data
         isFavorite = data?.favorite ?: false
         takeNoted = result?.noted.toString()
@@ -143,6 +143,6 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     init {
-        result = CreateModel()
+        result = GeneralModel()
     }
 }

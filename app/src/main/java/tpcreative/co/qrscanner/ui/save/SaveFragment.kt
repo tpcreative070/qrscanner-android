@@ -207,68 +207,70 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         if (actionMode != null) {
             return
         }
-        val create = CreateModel()
-        val save: SaveModel = viewModel.mList[position]
-        create.id = save.id ?: 0
-        create.favorite = save.favorite ?: false
-        if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            create.productId = save.textProductIdISNB
-            create.barcodeFormat = save.barcodeFormat
-            Utils.Log(TAG, "Show..." + save.barcodeFormat)
-            create.createType = ParsedResultType.PRODUCT
-        } else if (save.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            create.address = save.address
-            create.fullName = save.fullName
-            create.email = save.email
-            create.phone = save.phone
-            create.createType = ParsedResultType.ADDRESSBOOK
-        } else if (save.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            create.email = save.email
-            create.subject = save.subject
-            create.message = save.message
-            create.createType = ParsedResultType.EMAIL_ADDRESS
-        } else if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            create.createType = ParsedResultType.PRODUCT
-        } else if (save.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            create.url = save.url
-            create.createType = ParsedResultType.URI
-        } else if (save.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            create.hidden = save.hidden == true
-            create.ssId = save.ssId
-            create.networkEncryption = save.networkEncryption
-            create.password = save.password
-            create.createType = ParsedResultType.WIFI
-        } else if (save.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            create.lat = save.lat ?:0.0
-            create.lon = save.lon ?:0.0
-            create.query = save.query
-            create.createType = ParsedResultType.GEO
-        } else if (save.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            create.phone = save.phone
-            create.createType = ParsedResultType.TEL
-        } else if (save.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            create.phone = save.phone
-            create.message = save.message
-            create.createType = ParsedResultType.SMS
-        } else if (save.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            create.title = save.title
-            create.description = save.description
-            create.location = save.location
-            create.startEvent = save.startEvent
-            create.endEvent = save.endEvent
-            create.startEventMilliseconds = save.startEventMilliseconds ?:0
-            create.endEventMilliseconds = save.endEventMilliseconds ?:0
-            create.createType = ParsedResultType.CALENDAR
-        } else {
-            create.text = save.textProductIdISNB
-            create.createType = ParsedResultType.TEXT
-        }
-        Utils.Log(TAG, "Call intent")
-
-        create.barcodeFormat = save.barcodeFormat
-        create.noted = save.noted
-        create.fragmentType = EnumFragmentType.SAVER
-        create.enumImplement = EnumImplement.VIEW
+//        val create = GeneralModel()
+//        val save: SaveModel = viewModel.mList[position]
+//        create.id = save.id ?: 0
+//        create.favorite = save.favorite ?: false
+//        if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+//            create.textProductIdISNB = save.textProductIdISNB
+//            create.barcodeFormat = save.barcodeFormat
+//            Utils.Log(TAG, "Show..." + save.barcodeFormat)
+//            create.createType = ParsedResultType.PRODUCT
+//        } else if (save.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
+//            create.address = save.address
+//            create.fullName = save.fullName
+//            create.email = save.email
+//            create.phone = save.phone
+//            create.createType = ParsedResultType.ADDRESSBOOK
+//        } else if (save.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
+//            create.email = save.email
+//            create.subject = save.subject
+//            create.message = save.message
+//            create.createType = ParsedResultType.EMAIL_ADDRESS
+//        } else if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+//            create.createType = ParsedResultType.PRODUCT
+//        } else if (save.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
+//            create.url = save.url
+//            create.createType = ParsedResultType.URI
+//        } else if (save.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
+//            create.hidden = save.hidden == true
+//            create.ssId = save.ssId
+//            create.networkEncryption = save.networkEncryption
+//            create.password = save.password
+//            create.createType = ParsedResultType.WIFI
+//        } else if (save.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
+//            create.lat = save.lat ?:0.0
+//            create.lon = save.lon ?:0.0
+//            create.query = save.query
+//            create.createType = ParsedResultType.GEO
+//        } else if (save.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
+//            create.phone = save.phone
+//            create.createType = ParsedResultType.TEL
+//        } else if (save.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
+//            create.phone = save.phone
+//            create.message = save.message
+//            create.createType = ParsedResultType.SMS
+//        } else if (save.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
+//            create.title = save.title
+//            create.description = save.description
+//            create.location = save.location
+//            create.startEvent = save.startEvent
+//            create.endEvent = save.endEvent
+//            create.startEventMilliseconds = save.startEventMilliseconds ?:0
+//            create.endEventMilliseconds = save.endEventMilliseconds ?:0
+//            create.createType = ParsedResultType.CALENDAR
+//        } else {
+//            create.textProductIdISNB = save.textProductIdISNB
+//            create.createType = ParsedResultType.TEXT
+//        }
+//        Utils.Log(TAG, "Call intent")
+//
+//        create.barcodeFormat = save.barcodeFormat
+//        create.noted = save.noted
+//        create.fragmentType = EnumFragmentType.SAVER
+//        create.enumImplement = EnumImplement.VIEW
+        val saver: SaveModel = viewModel.mList[position]
+        val create = GeneralModel(saver,EnumFragmentType.SAVER,EnumImplement.VIEW)
         viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
@@ -280,27 +282,28 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
 
     override fun onClickEdit(position: Int) {
         edit = viewModel.mList[position]
-        if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, BarcodeActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, ContactActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, EmailActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-        } else if (edit?.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, UrlActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, WifiActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, LocationActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, TelephoneActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, MessageActivity::class.java)
-        } else if (edit?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            Navigator.onGenerateView(activity, edit, EventActivity::class.java)
-        } else {
-            Navigator.onGenerateView(activity, edit, TextActivity::class.java)
+        edit?.let {
+            if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), BarcodeActivity::class.java)
+            } else if (edit?.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), ContactActivity::class.java)
+            } else if (edit?.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), EmailActivity::class.java)
+            }else if (edit?.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), UrlActivity::class.java)
+            } else if (edit?.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), WifiActivity::class.java)
+            } else if (edit?.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), LocationActivity::class.java)
+            } else if (edit?.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), TelephoneActivity::class.java)
+            } else if (edit?.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), MessageActivity::class.java)
+            } else if (edit?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), EventActivity::class.java)
+            } else {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), TextActivity::class.java)
+            }
         }
     }
 

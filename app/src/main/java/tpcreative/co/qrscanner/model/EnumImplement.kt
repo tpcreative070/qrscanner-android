@@ -1,5 +1,5 @@
 package tpcreative.co.qrscanner.model
 
 enum class EnumImplement {
-    CREATE, DELETE, EDIT,VIEW
+    CREATE, DELETE, EDIT,VIEW,NONE
 }

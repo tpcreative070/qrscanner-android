@@ -98,5 +98,4 @@ subprojects {
     ext.roomVersion = "2.4.3"
     ext.materialDialogsInput = "3.3.0"
     ext.zxingCore = "3.5.1"
-    ext.ezVcard = "0.11.3"
 }

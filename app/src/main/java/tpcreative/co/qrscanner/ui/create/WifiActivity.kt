@@ -26,8 +26,8 @@ import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerateListener,OnEditorActionListener {
     lateinit var viewModel: GenerateViewModel
     var mAwesomeValidation: AwesomeValidation? = null
-    var typeEncrypt: String? = "WPA"
-    private var save: SaveModel? = null
+    var typeEncrypt: String? = ConstantValue.WPA
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wifi)
@@ -76,7 +76,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
-            val create = CreateModel(save)
+            val create = GeneralModel(save)
             create.ssId = edtSSID.text.toString().trim { it <= ' ' }
             create.password = edtPassword.text.toString()
             create.networkEncryption = typeEncrypt
@@ -99,9 +99,9 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     fun onSetData() {
         edtSSID.setText(save?.ssId)
         edtPassword.setText(save?.password)
-        if (save?.networkEncryption == "WPA") {
+        if (save?.networkEncryption == ConstantValue.WPA) {
             radio0.isChecked = true
-        } else if (save?.networkEncryption == "WEP") {
+        } else if (save?.networkEncryption == ConstantValue.WEP) {
             radio1.isChecked = true
         } else {
             radio2.isChecked = true
@@ -144,22 +144,22 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.radio0 -> {
-                typeEncrypt = "WPA"
+                typeEncrypt = ConstantValue.WPA
                 Utils.Log(TAG, "Selected here: radio 0")
             }
             R.id.radio1 -> {
-                typeEncrypt = "WEP"
+                typeEncrypt = ConstantValue.WEP
                 Utils.Log(TAG, "Selected here: radio 1")
             }
             R.id.radio2 -> {
                 run {
-                    typeEncrypt = "None"
+                    typeEncrypt = ConstantValue.NONE
                     Utils.Log(TAG, "Selected here: radio 2")
                 }
                 run {}

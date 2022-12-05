@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.model
-import okhttp3.internal.notify
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.entities.HistoryEntity
 
@@ -42,75 +41,83 @@ class HistoryEntityModel {
     var uuId: String?
     var noted: String?
 
+    /*10:39 28/11/2022
+     * Using code filed in able to solve address book and email type
+     * Display to view
+    * */
+    var code : String?
+
     constructor(item: HistoryEntity?) {
-        id = item?.id
-        email = item?.email
-        subject = item?.subject
-        message = item?.message
-        phone = item?.phone
-        lat = item?.lat
-        lon = item?.lon
-        query = item?.query
-        title = item?.title
-        location = item?.location
-        description = item?.description
-        startEvent = item?.startEvent
-        endEvent = item?.endEvent
-        startEventMilliseconds = item?.startEventMilliseconds
-        endEventMilliseconds = item?.endEventMilliseconds
-        fullName = item?.fullName
-        address = item?.address
-        text = item?.text
-        ssId = item?.ssId
-        hidden = item?.hidden
-        password = item?.password
-        url = item?.url
-        createType = item?.createType
-        networkEncryption = item?.networkEncryption
-        createDatetime = item?.createDatetime
-        barcodeFormat = item?.barcodeFormat
-        favorite = item?.favorite
-        updatedDateTime = item?.updatedDateTime
-        contentUnique = item?.contentUnique
-        contentUniqueForUpdatedTime = item?.contentUnique + "" + updatedDateTime
-        isSynced = item?.isSynced
-        uuId = item?.uuId
-        noted = item?.noted
+        this.id = item?.id
+        this.email = item?.email
+        this.subject = item?.subject
+        this.message = item?.message
+        this.phone = item?.phone
+        this.lat = item?.lat
+        this.lon = item?.lon
+        this.query = item?.query
+        this.title = item?.title
+        this.location = item?.location
+        this.description = item?.description
+        this.startEvent = item?.startEvent
+        this.endEvent = item?.endEvent
+        this.startEventMilliseconds = item?.startEventMilliseconds
+        this.endEventMilliseconds = item?.endEventMilliseconds
+        this.fullName = item?.fullName
+        this.address = item?.address
+        this.text = item?.text
+        this.ssId = item?.ssId
+        this.hidden = item?.hidden
+        this.password = item?.password
+        this.url = item?.url
+        this.createType = item?.createType
+        this.networkEncryption = item?.networkEncryption
+        this.createDatetime = item?.createDatetime
+        this.barcodeFormat = item?.barcodeFormat
+        this.favorite = item?.favorite
+        this.updatedDateTime = item?.updatedDateTime
+        this.contentUnique = item?.contentUnique
+        this.contentUniqueForUpdatedTime = item?.contentUnique + "" + updatedDateTime
+        this.isSynced = item?.isSynced
+        this.uuId = item?.uuId
+        this.noted = item?.noted
+        this.code = item?.code
     }
 
     constructor(item: HistoryModel?) {
-        id = item?.id
-        email = item?.email
-        subject = item?.subject
-        message = item?.message
-        phone = item?.phone
-        lat = item?.lat
-        lon = item?.lon
-        query = item?.query
-        title = item?.title
-        location = item?.location
-        description = item?.description
-        startEvent = item?.startEvent
-        endEvent = item?.endEvent
-        startEventMilliseconds = item?.startEventMilliseconds
-        endEventMilliseconds = item?.endEventMilliseconds
-        fullName = item?.fullName
-        address = item?.address
-        text = item?.text
-        ssId = item?.ssId
-        hidden = item?.hidden
-        password = item?.password
-        url = item?.url
-        createType = item?.createType
-        networkEncryption = item?.networkEncryption
-        createDatetime = item?.createDatetime
-        barcodeFormat = item?.barcodeFormat
-        favorite = item?.favorite
-        updatedDateTime = item?.updatedDateTime
-        contentUnique = Utils.getCodeContentByHistory(item)
-        contentUniqueForUpdatedTime = contentUnique + "" + updatedDateTime
-        isSynced = item?.isSynced
-        uuId = item?.uuId
-        noted = item?.noted
+        this.id = item?.id
+        this.email = item?.email
+        this.subject = item?.subject
+        this.message = item?.message
+        this.phone = item?.phone
+        this.lat = item?.lat
+        this.lon = item?.lon
+        this.query = item?.query
+        this.title = item?.title
+        this.location = item?.location
+        this.description = item?.description
+        this.startEvent = item?.startEvent
+        this.endEvent = item?.endEvent
+        this.startEventMilliseconds = item?.startEventMilliseconds
+        this.endEventMilliseconds = item?.endEventMilliseconds
+        this.fullName = item?.fullName
+        this.address = item?.address
+        this.text = item?.textProductIdISNB
+        this.ssId = item?.ssId
+        this.hidden = item?.hidden
+        this.password = item?.password
+        this.url = item?.url
+        this.createType = item?.createType
+        this.networkEncryption = item?.networkEncryption
+        this.createDatetime = item?.createdDatetime
+        this.barcodeFormat = item?.barcodeFormat
+        this.favorite = item?.favorite
+        this.updatedDateTime = item?.updatedDateTime
+        this.contentUnique = Utils.getCodeContentByHistory(item)
+        this.contentUniqueForUpdatedTime = contentUnique + "" + updatedDateTime
+        this.isSynced = item?.isSynced
+        this.uuId = item?.uuId
+        this.noted = item?.noted
+        this.code = item?.code
     }
 }

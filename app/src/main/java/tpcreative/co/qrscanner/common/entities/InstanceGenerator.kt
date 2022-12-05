@@ -9,12 +9,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.onCreateVCard
+import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.HistoryEntityModel
-import tpcreative.co.qrscanner.model.SaveEntityModel
+import tpcreative.co.qrscanner.model.*
 import java.util.*
 
-@Database(entities = [HistoryEntity::class, SaveEntity::class], version = 5, exportSchema = false)
+@Database(entities = [HistoryEntity::class, SaveEntity::class], version = 6, exportSchema = false)
 abstract class InstanceGenerator : RoomDatabase() {
     @Ignore
     abstract fun historyDao(): HistoryDao?
@@ -42,6 +43,10 @@ abstract class InstanceGenerator : RoomDatabase() {
                         item.uuId = Utils.getUUId()
                         SQLiteHelper.getInstance()?.onUpdate(item)
                     }
+                    if (item.code.isNullOrEmpty()){
+                        item.code = Utils.onCreateVCard(GeneralModel(HistoryModel(item)))
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
                     mList.add(item)
                 }
             }
@@ -61,6 +66,10 @@ abstract class InstanceGenerator : RoomDatabase() {
                     val item = HistoryEntityModel(index)
                     if (item.uuId == null) {
                         item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    if (item.code.isNullOrEmpty()){
+                        item.code = Utils.onCreateVCard(GeneralModel(HistoryModel(item)))
                         SQLiteHelper.getInstance()?.onUpdate(item)
                     }
                     mList.add(item)
@@ -137,6 +146,10 @@ abstract class InstanceGenerator : RoomDatabase() {
                         item.uuId = Utils.getUUId()
                         SQLiteHelper.getInstance()?.onUpdate(item)
                     }
+                    if (item.code.isNullOrEmpty()){
+                        item.code = Utils.onCreateVCard(GeneralModel(SaveModel(item)))
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
                     mList.add(item)
                 }
             }
@@ -157,6 +170,10 @@ abstract class InstanceGenerator : RoomDatabase() {
                     val item = SaveEntityModel(index)
                     if (item.uuId == null) {
                         item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    if (item.code.isNullOrEmpty()){
+                        item.code = Utils.onCreateVCard(GeneralModel(SaveModel(item)))
                         SQLiteHelper.getInstance()?.onUpdate(item)
                     }
                     mList.add(item)
@@ -240,6 +257,10 @@ abstract class InstanceGenerator : RoomDatabase() {
                         item.uuId = Utils.getUUId()
                         SQLiteHelper.getInstance()?.onUpdate(item)
                     }
+                    if (item.code.isNullOrEmpty()){
+                        item.code = Utils.onCreateVCard(GeneralModel(SaveModel(item)))
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
                     mList.add(item)
                 }
             }
@@ -259,6 +280,10 @@ abstract class InstanceGenerator : RoomDatabase() {
                     val item = HistoryEntityModel(index)
                     if (item.uuId == null) {
                         item.uuId = Utils.getUUId()
+                        SQLiteHelper.getInstance()?.onUpdate(item)
+                    }
+                    if (item.code.isNullOrEmpty()){
+                        item.code = Utils.onCreateVCard(GeneralModel(HistoryModel(item)))
                         SQLiteHelper.getInstance()?.onUpdate(item)
                     }
                     mList.add(item)
@@ -329,12 +354,24 @@ abstract class InstanceGenerator : RoomDatabase() {
             }
         }
 
+        /*10:39 28/11/2022
+          * Using code filed in able to solve address book and email type
+          * Display to view
+        * */
+        private val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE 'save' ADD COLUMN  'code' TEXT")
+                database.execSQL("ALTER TABLE 'history' ADD COLUMN  'code' TEXT")
+            }
+        }
+
         fun getInstance(context: Context?): InstanceGenerator? {
             if (instance == null) {
                 instance = context?.let {
                     Room.databaseBuilder(it,
                             InstanceGenerator::class.java, it.getString(R.string.database_name))
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
+                                MIGRATION_5_6)
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .build()

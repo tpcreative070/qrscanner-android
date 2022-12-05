@@ -21,13 +21,13 @@ import tpcreative.co.qrscanner.model.*
 
 class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     private var mAwesomeValidation: AwesomeValidation? = null
-    private var save: SaveModel? = null
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val mData = intent.serializable(getString(R.string.key_data),SaveModel::class.java)
+        val mData = intent.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -66,7 +66,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
-            val create = CreateModel(save)
+            val create = GeneralModel(save)
             create.email = edtEmail.text.toString().trim { it <= ' ' }
             create.subject = edtSubject.text.toString()
             create.message = edtMessage?.text.toString()
@@ -128,7 +128,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     companion object {

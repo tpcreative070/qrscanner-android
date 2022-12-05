@@ -49,7 +49,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     private var mPermissionDenied = false
     private var locationManager: LocationManager? = null
     private var isRunning = false
-    private var save: SaveModel? = null
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
@@ -58,7 +58,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
-        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
+        val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -141,7 +141,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     private fun onSave(){
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
-            val create = CreateModel(save)
+            val create = GeneralModel(save)
             try {
                 if (lastLon == 0.0 || lastLon == 0.0) {
                     Utils.onDropDownAlert(this, "Please enable GPS in order to get accurate lat and lon")
@@ -223,7 +223,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     override fun onMapReady(p0: GoogleMap) {

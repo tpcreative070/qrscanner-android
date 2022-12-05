@@ -46,68 +46,76 @@ class SaveEntity : Serializable {
     var uuId: String? = ""
     var noted : String? = ""
 
+    /*10:39 28/11/2022
+   * Using code filed in able to solve address book and email type
+   * Display to view
+   * */
+    var code : String? = ""
+
     constructor() {
-        email = ""
-        subject = ""
-        message = ""
-        phone = ""
-        lat = 0.0
-        lon = 0.0
-        query = ""
-        title = ""
-        location = ""
-        description = ""
-        startEvent = ""
-        endEvent = ""
-        startEventMilliseconds = 0
-        endEventMilliseconds = 0
-        fullName = ""
-        address = ""
-        text = ""
-        ssId = ""
-        hidden = false
-        password = ""
-        url = ""
-        createType = ""
-        networkEncryption = ""
-        barcodeFormat = BarcodeFormat.QR_CODE.name
-        favorite = false
-        updatedDateTime = Utils.getCurrentDateTimeSort() ?: ""
-        noted  = ""
+        this.email = ""
+        this.subject = ""
+        this.message = ""
+        this.phone = ""
+        this.lat = 0.0
+        this.lon = 0.0
+        this.query = ""
+        this.title = ""
+        this.location = ""
+        this.description = ""
+        this.startEvent = ""
+        this.endEvent = ""
+        this.startEventMilliseconds = 0
+        this.endEventMilliseconds = 0
+        this.fullName = ""
+        this.address = ""
+        this.text = ""
+        this.ssId = ""
+        this.hidden = false
+        this.password = ""
+        this.url = ""
+        this.createType = ""
+        this.networkEncryption = ""
+        this.barcodeFormat = BarcodeFormat.QR_CODE.name
+        this.favorite = false
+        this.updatedDateTime = Utils.getCurrentDateTimeSort() ?: ""
+        this.noted  = ""
+        this.code = ""
     }
 
     constructor(item: SaveEntityModel?) {
-        id = item?.id ?: 0
-        email = item?.email ?: ""
-        subject = item?.subject ?: ""
-        message = item?.message ?: ""
-        phone = item?.phone ?: ""
-        lat = item?.lat ?: 0.0
-        lon = item?.lon ?: 0.0
-        query = item?.query ?: ""
-        title = item?.title ?: ""
-        location = item?.location ?: ""
-        description = item?.description ?: ""
-        startEvent = item?.startEvent ?: ""
-        endEvent = item?.endEvent ?: ""
-        startEventMilliseconds = item?.startEventMilliseconds ?: 0
-        endEventMilliseconds = item?.endEventMilliseconds ?: 0
-        fullName = item?.fullName ?: ""
-        address = item?.address ?: ""
-        text = item?.text ?: ""
-        ssId = item?.ssId ?: ""
-        hidden = item?.hidden ?: false
-        password = item?.password  ?: ""
-        url = item?.url ?: ""
-        createType = item?.createType ?: ""
-        networkEncryption = item?.networkEncryption ?: ""
-        createDatetime = item?.createDatetime ?: ""
-        barcodeFormat = item?.barcodeFormat ?: ""
-        favorite = item?.favorite ?: false
-        updatedDateTime = item?.updatedDateTime ?: ""
-        contentUnique = item?.contentUnique ?: ""
-        isSynced = item?.isSynced ?: false
-        uuId = item?.uuId ?: ""
-        noted = item?.noted ?: ""
+        this.id = item?.id ?: 0
+        this.email = item?.email ?: ""
+        this.subject = item?.subject ?: ""
+        this.message = item?.message ?: ""
+        this.phone = item?.phone ?: ""
+        this.lat = item?.lat ?: 0.0
+        this.lon = item?.lon ?: 0.0
+        this.query = item?.query ?: ""
+        this.title = item?.title ?: ""
+        this.location = item?.location ?: ""
+        this.description = item?.description ?: ""
+        this.startEvent = item?.startEvent ?: ""
+        this.endEvent = item?.endEvent ?: ""
+        this.startEventMilliseconds = item?.startEventMilliseconds ?: 0
+        this.endEventMilliseconds = item?.endEventMilliseconds ?: 0
+        this.fullName = item?.fullName ?: ""
+        this.address = item?.address ?: ""
+        this.text = item?.text ?: ""
+        this.ssId = item?.ssId ?: ""
+        this.hidden = item?.hidden ?: false
+        this.password = item?.password  ?: ""
+        this.url = item?.url ?: ""
+        this.createType = item?.createType ?: ""
+        this.networkEncryption = item?.networkEncryption ?: ""
+        this.createDatetime = item?.createDatetime ?: ""
+        this.barcodeFormat = item?.barcodeFormat ?: ""
+        this.favorite = item?.favorite ?: false
+        this.updatedDateTime = item?.updatedDateTime ?: ""
+        this.contentUnique = item?.contentUnique ?: ""
+        this.isSynced = item?.isSynced ?: false
+        this.uuId = item?.uuId ?: ""
+        this.noted = item?.noted ?: ""
+        this.code = item?.code
     }
 }

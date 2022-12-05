@@ -19,13 +19,13 @@ import tpcreative.co.qrscanner.model.*
 
 class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
-    private var save: SaveModel? = null
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_url)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
+        val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -62,7 +62,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
-            val create = CreateModel(save)
+            val create = GeneralModel(save)
             create.url = edtUrl.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.URI
             Navigator.onMoveToReview(this, create)
@@ -118,7 +118,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     companion object {
