@@ -827,7 +827,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                 ParsedResultType.EMAIL_ADDRESS -> {
                     mData.createType = ParsedResultType.EMAIL_ADDRESS
                     val emailAddress = parsedResult as EmailAddressParsedResult
-                    mData.email = convertStringArrayToString(emailAddress.tos, ",")
+                    mData.email = emailAddress.tos.firstOrNull()
                     mData.subject =
                         if (emailAddress.subject == null) "" else emailAddress.subject
                     mData.message = if (emailAddress.body == null) "" else emailAddress.body
@@ -879,7 +879,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                 ParsedResultType.SMS -> {
                     mData.createType = ParsedResultType.SMS
                     val smsParsedResult = parsedResult as SMSParsedResult
-                    mData.phone = convertStringArrayToString(smsParsedResult.numbers, ",")
+                    mData.phone = smsParsedResult.numbers?.firstOrNull()
                     mData.message =
                         if (smsParsedResult.body == null) "" else smsParsedResult.body
                 }

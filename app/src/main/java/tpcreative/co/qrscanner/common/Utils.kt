@@ -129,21 +129,6 @@ object Utils {
         return value
     }
 
-    private fun isDelimiter(ch: Char, delimiters: CharArray?): Boolean {
-        return if (delimiters == null) {
-            Character.isWhitespace(ch)
-        } else {
-            val `len$` = delimiters.size
-            for (`i$` in 0 until `len$`) {
-                val delimiter = delimiters[`i$`]
-                if (ch == delimiter) {
-                    return true
-                }
-            }
-            false
-        }
-    }
-
     fun geTimeFileName(): String? {
         val millisecond = System.currentTimeMillis()
         val formatter = SimpleDateFormat(mStandardSortedDateTime)
@@ -168,19 +153,6 @@ object Utils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    fun convertStringArrayToString(strArr: Array<String?>?, delimiter: String?): String? {
-        try {
-            if (strArr == null) {
-                return ""
-            }
-            val sb = StringBuilder()
-            for (str in strArr) sb.append(str).append(delimiter)
-            return sb.substring(0, sb.length - 1)
-        } catch (e: Exception) {
-        }
-        return ""
     }
 
     fun Log(TAG: String?, message: String?) {

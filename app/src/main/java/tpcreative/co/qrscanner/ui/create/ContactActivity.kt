@@ -208,17 +208,6 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
 
     private fun addValidationForEditText() {
         mAwesomeValidation?.addValidation(this, R.id.edtFirstName, RegexTemplate.NOT_EMPTY, R.string.first_name)
-//        mAwesomeValidation?.addValidation(this, R.id.edtLastName, RegexTemplate.NOT_EMPTY, R.string.err_last_name)
-//        mAwesomeValidation?.addValidation(this, R.id.edtCompany, RegexTemplate.NOT_EMPTY, R.string.err_company)
-//        mAwesomeValidation?.addValidation(this, R.id.edtJobTitle, RegexTemplate.NOT_EMPTY, R.string.err_job_title)
-//        mAwesomeValidation?.addValidation(this, R.id.edtAddress, RegexTemplate.NOT_EMPTY, R.string.err_address)
-//        mAwesomeValidation?.addValidation(this, R.id.edtZipcode, RegexTemplate.NOT_EMPTY, R.string.err_zip_code)
-//        mAwesomeValidation?.addValidation(this, R.id.edtCity, RegexTemplate.NOT_EMPTY, R.string.err_city)
-//        mAwesomeValidation?.addValidation(this, R.id.edtRegion,  RegexTemplate.NOT_EMPTY, R.string.err_region)
-//        mAwesomeValidation?.addValidation(this, R.id.edtCountry,  RegexTemplate.NOT_EMPTY, R.string.err_country)
-//        mAwesomeValidation?.addValidation(this, R.id.edtPhone, Patterns.PHONE, R.string.err_country)
-//        mAwesomeValidation?.addValidation(this, R.id.edtEmail, Patterns.EMAIL_ADDRESS, R.string.err_email)
-//        mAwesomeValidation?.addValidation(this, R.id.edtWebite, Patterns.WEB_URL, R.string.err_website)
     }
 
     private fun focusUI() {
@@ -227,13 +216,20 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
 
     fun onSetData() {
         val mMapName = general?.contact?.fullName?.stringToMap()
+        val mSuffixes = general?.contact?.suffixesName
        if (general?.contact?.givenName.isNullOrEmpty()){
            edtFirstName.setText(mMapName?.get(ConstantKey.FIRST_NAME))
-           val mLastName = "${mMapName?.get(ConstantKey.MIDDLE_NAME)} ${mMapName?.get(ConstantKey.LAST_NAME)}"
+           var mLastName = "${mMapName?.get(ConstantKey.MIDDLE_NAME)} ${mMapName?.get(ConstantKey.LAST_NAME)}"
+           if (mSuffixes?.isNotEmpty()==true){
+                mLastName = "${mMapName?.get(ConstantKey.MIDDLE_NAME)} ${mMapName?.get(ConstantKey.LAST_NAME)}, $mSuffixes"
+           }
            edtLastName.setText(mLastName)
        }else{
            edtFirstName.setText(general?.contact?.givenName)
-           val mLastName = "${general?.contact?.middleName} ${general?.contact?.familyName}"
+           var mLastName = "${general?.contact?.middleName} ${general?.contact?.familyName}"
+           if (mSuffixes?.isNotEmpty()==true){
+               mLastName = "${general?.contact?.middleName} ${general?.contact?.familyName}, $mSuffixes"
+           }
            edtLastName.setText(mLastName)
        }
 
