@@ -6,7 +6,9 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
+import android.os.Build
 import android.webkit.URLUtil
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
@@ -452,191 +454,20 @@ object Utils {
         return null
     }
 
-    /*Support old version*/
-    fun getCode(create: GeneralModel?): String? {
-        /*Product id must be plus barcode format type*/
-        var code : String? = ""
-        if (create != null) {
-             when (create.createType) {
-                ParsedResultType.ADDRESSBOOK -> {
-                    code = "MECARD:N:" + create.fullName + ";TEL:" + create.phone + ";EMAIL:" + create.email + ";ADR:" + create.address + ";"
-                }
-                ParsedResultType.EMAIL_ADDRESS -> {
-                    code = "MATMSG:TO:" + create.email + ";SUB:" + create.subject + ";BODY:" + create.message + ";"
-                }
-                ParsedResultType.PRODUCT -> {
-                    code = create.textProductIdISNB
-                }
-                ParsedResultType.URI -> {
-                    code = create.url
-                }
-                ParsedResultType.WIFI -> {
-                    code = "WIFI:S:" + create.ssId + ";T:" + create.password + ";P:" + create.networkEncryption + ";H:" + create.hidden + ";"
-                }
-                ParsedResultType.GEO -> {
-                    code = "geo:" + create.lat + "," + create.lon + "?q=" + create.query + ""
-                }
-                ParsedResultType.TEL -> {
-                    code = "tel:" + create.phone + ""
-                }
-                ParsedResultType.SMS -> {
-                    code = "smsto:" + create.phone + ":" + create.message
-                }
-                ParsedResultType.CALENDAR -> {
-                    val builder = StringBuilder()
-                    builder.append("BEGIN:VEVENT")
-                    builder.append("\n")
-                    builder.append("SUMMARY:" + create.title)
-                    builder.append("\n")
-                    builder.append("DTSTART:" + create.startEvent)
-                    builder.append("\n")
-                    builder.append("DTEND:" + create.endEvent)
-                    builder.append("\n")
-                    builder.append("LOCATION:" + create.location)
-                    builder.append("\n")
-                    builder.append("DESCRIPTION:" + create.description)
-                    builder.append("\n")
-                    builder.append("END:VEVENT")
-                    code = builder.toString()
-                }
-                ParsedResultType.ISBN -> {
-                    code = create.textProductIdISNB
-                }
-                else -> {
-                    code = create.textProductIdISNB
-                }
-            }
-            return code
-        }
-        return null
-    }
-
-    fun getCodeDisplay(create: GeneralModel?): HashMap<String,String?>? {
-        /*Product id must be plus barcode format type*/
-        val mMap = java.util.HashMap<String,String?>()
-        val mContent = StringBuilder()
-        if (create != null) {
-            when (create.createType) {
-                ParsedResultType.ADDRESSBOOK -> {
-                    mContent.append(create.fullName)
-                    mContent.append("\n")
-                    mContent.append(create.phone)
-                    mContent.append("\n")
-                    mContent.append(create.email)
-                    mContent.append("\n")
-                    mContent.append(create.address)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.EMAIL_ADDRESS -> {
-                    mContent.append(create.email)
-                    mContent.append("\n")
-                    mContent.append(create.subject)
-                    mContent.append("\n")
-                    mContent.append(create.message)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.PRODUCT -> {
-                    mContent.append(create.textProductIdISNB)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.URI -> {
-                    mContent.append(create.url)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.WIFI -> {
-                    mContent.append(create.ssId)
-                    mContent.append("\n")
-                    mContent.append(create.password)
-                    mContent.append("\n")
-                    mContent.append(create.networkEncryption)
-                    mContent.append("\n")
-                    mContent.append(create.hidden)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.GEO -> {
-                    mContent.append(create.lat)
-                    mContent.append("\n")
-                    mContent.append(create.lon)
-                    mContent.append("\n")
-                    mContent.append(create.query)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.TEL -> {
-                    mContent.append(create.phone)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.SMS -> {
-                    mContent.append(create.phone)
-                    mContent.append("\n")
-                    mContent.append(create.message)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.CALENDAR -> {
-                    mContent.append(create.title)
-                    mContent.append("\n")
-                    mContent.append(create.startEvent)
-                    mContent.append("\n")
-                    mContent.append(create.endEvent)
-                    mContent.append("\n")
-                    mContent.append(create.location)
-                    mContent.append("\n")
-                    mContent.append(create.description)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                ParsedResultType.ISBN -> {
-                    mContent.append(create.textProductIdISNB)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-                else -> {
-                    mContent.append(create.textProductIdISNB)
-                    mMap[ConstantKey.CONTENT] = mContent.toString()
-                    mMap[ConstantKey.BARCODE_FORMAT] = create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                    mMap[ConstantKey.CREATED_DATETIME] = getCurrentDateDisplay(create.updatedDateTime)
-                }
-            }
-            return mMap
-        }
-        return null
-    }
-
     fun onDropDownAlert(activity: Activity?, content: String?) {
         Alerter.create(activity)
-                .setTitle("Alert")
-                .setText("$content")
-                .setIcon(R.drawable.baseline_warning_white_24)
-                .setBackgroundColorRes(R.color.colorAccent) // or setBackgroundColorInt(Color.CYAN)
-                .show()
-    }
-
-    fun isNotEmptyOrNull(value: String?): Boolean {
-        return !(value == null || value == "" || value == "null")
+            .setTitle("Alert")
+            .setText("$content")
+            .setIcon(R.drawable.baseline_warning_white_24)
+            .setBackgroundColorRes(R.color.colorAccent) // or setBackgroundColorInt(Color.CYAN)
+            .show()
     }
 
     fun filterDuplicationsSaveItems(list: MutableList<SaveModel>): MutableList<SaveModel> {
         val mMap: HashMap<String?, SaveModel?> = HashMap<String?, SaveModel?>()
         val mList: MutableList<SaveModel> = ArrayList<SaveModel>()
         for (index in list) {
-            if (isNotEmptyOrNull(index.contentUnique)) {
+            if (index.contentUnique.isNullOrEmpty()) {
                 val mSave: SaveModel? = mMap[index.contentUnique]
                 if (mSave == null) {
                     mMap[index.contentUnique] = index
@@ -660,7 +491,7 @@ object Utils {
         val mMap: HashMap<String?, HistoryModel?> = HashMap<String?, HistoryModel?>()
         val mList: MutableList<HistoryModel> = ArrayList<HistoryModel>()
         for (index in list) {
-            if (isNotEmptyOrNull(index.contentUnique)) {
+            if (index.contentUnique.isNullOrEmpty()) {
                 val mHistory: HistoryModel? = mMap[index.contentUnique]
                 if (mHistory == null) {
                     mMap[index.contentUnique] = index

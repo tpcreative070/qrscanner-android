@@ -249,16 +249,16 @@ class SaveModel : Serializable {
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
                 //     mParsedVcard?.contact?.addresses?.values?.toList()?.joinToString(",")
                 mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
-                    ?.joinToString(",") { it.getValue()})
+                    ?.joinToString(", ") { it.getValue()})
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
                 mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
-                    ?.joinToString(",") { it.address.orEmpty() })
+                    ?.joinToString(", ") { it.address.orEmpty() })
             }
         }else{
             mStringBuilder.append(this.address)
         }
-        return mStringBuilder.toString().trimEnd()
+        return mStringBuilder.toString()
     }
 
     fun getPhones() : String{
@@ -266,10 +266,10 @@ class SaveModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK.name) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mStringBuilder.append( mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(","))
+                mStringBuilder.append( mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(", "))
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(",")
+                mStringBuilder.append(mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(", "))
             }
         }else{
             mStringBuilder.append(this.phone)
@@ -282,15 +282,15 @@ class SaveModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK.name) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(",")
+                mStringBuilder.append(mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(", "))
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(",")
+                mStringBuilder.append(mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(", "))
             }
         }else{
             mStringBuilder.append(this.email)
         }
-        return mStringBuilder.toString().trimEnd()
+        return mStringBuilder.toString()
     }
 
     fun getUrls() : String{
@@ -298,15 +298,15 @@ class SaveModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK.name) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.urls?.joinToString(",")
+                mStringBuilder.append(mParsedVcard?.contact?.urls?.joinToString(", "))
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.urls?.joinToString(",")
+                mStringBuilder.append(mParsedVcard?.contact?.urls?.joinToString(", "))
             }
         }else{
             mStringBuilder.append(url)
         }
-        return mStringBuilder.toString().trimEnd()
+        return mStringBuilder.toString()
     }
 
     fun getNames() : String{

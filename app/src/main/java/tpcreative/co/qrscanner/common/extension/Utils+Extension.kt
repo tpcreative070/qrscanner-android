@@ -137,21 +137,6 @@ fun getBytesFromInputStream(input: InputStream): ByteArray? {
 }
 
 
-
-//fun <T: Any> Utils.onBarCode(type: EnumImplement, clazz: KClass<T>) : T?{
-//
-//    return when(clazz) {
-//        SaveModel::class -> {
-//
-//            SaveModel() as T
-//        }
-//        HistoryModel::class -> {
-//            HistoryModel() as T
-//        }
-//        else -> null
-//    }
-//}
-
 fun Utils.onParseVCard(code: String?): GeneralModel? {
     var mGeneral: GeneralModel? = null
     Log("readVCF code ", code)
@@ -220,14 +205,14 @@ fun Utils.onParseVCard(code: String?): GeneralModel? {
                 mAddressObject.region = mRegion
                 mAddressObject.postalCode = mPostal
                 mAddressObject.country = mCountry
-                mAddressMap[mAddressType ?:""] = mAddressObject
+                mAddressMap[mAddressType ?:"-$index"] = mAddressObject
             }
             mGeneral.contact?.addresses = mAddressMap
 
             val mPhoneMap: MutableMap<String, String> = mutableMapOf()
             mAddressBook?.phoneNumbers?.forEachIndexed { index, it ->
                 val mPhoneType = mAddressBook.phoneTypes?.get(index)
-                mPhoneMap[mPhoneType?:""] = it
+                mPhoneMap[mPhoneType?:"-$index"] = it
             }
             mGeneral.contact?.phones = mPhoneMap
 
@@ -235,7 +220,7 @@ fun Utils.onParseVCard(code: String?): GeneralModel? {
             val mEmailMap: MutableMap<String, String> = mutableMapOf()
             mAddressBook?.emails?.forEachIndexed { index, it ->
                 val mEmailType = mAddressBook.emailTypes?.get(index)
-                mEmailMap[mEmailType ?:""] = it
+                mEmailMap[mEmailType ?:"-$index"] = it
             }
             mGeneral.contact?.emails = mEmailMap
 
@@ -315,10 +300,6 @@ fun Utils.onParseMeCard(mText: String?): GeneralModel? {
 
     Utils.Log(TAG,"meCard ${Gson().toJson(mGeneral)}")
     return mGeneral
-//    mData.address = convertStringArrayToString(addressResult.addresses, ",")
-//    mData.fullName = convertStringArrayToString(addressResult.names, ",")
-//    mData.email = convertStringArrayToString(addressResult.emails, ",")
-//    mData.phone = convertStringArrayToString(addressResult.phoneNumbers, ",")
 }
 
 
