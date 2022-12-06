@@ -15,24 +15,31 @@ fun String.stringToMap() : Map<String,String>{
     val lastName : String?
     val firstName : String?
     val middleName : String?
+    val suffixName : String?
     if (this.isEmpty()){
         return mMap
     }
 
     val parts  = this.split(" ").toMutableList()
-    firstName = parts.firstOrNull()
+    firstName = parts.firstOrNull()?.replace(",","")
     if (parts.size>0){
         parts.removeAt(0)
     }
-    middleName = parts.firstOrNull()
+    middleName = parts.firstOrNull()?.replace(",","")
     if (parts.size>0){
         parts.removeAt(0)
     }
-    lastName = parts.joinToString(" ")
+
+    lastName = parts.firstOrNull()?.replace(",","")
+    if (parts.size>0){
+        parts.removeAt(0)
+    }
+    suffixName  = parts.firstOrNull()?.replace(",","")
 
     mMap[ConstantKey.MIDDLE_NAME] = middleName ?: ""
     mMap[ConstantKey.FIRST_NAME] = firstName ?: ""
     mMap[ConstantKey.LAST_NAME] = lastName ?: ""
+    mMap[ConstantKey.SUFFIX_NAME] = suffixName ?: ""
     Utils.Log("stringToMap",Gson().toJson(mMap))
     return mMap
 }

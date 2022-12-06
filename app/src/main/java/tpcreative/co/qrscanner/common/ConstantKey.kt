@@ -31,5 +31,6 @@ class ConstantKey {
         const val FIRST_NAME = "first_name"
         const val LAST_NAME = "last_name"
         const val MIDDLE_NAME = "middle_name"
+        const val SUFFIX_NAME = "suffix_name"
     }
 }

@@ -46,7 +46,7 @@ fun Utils.onCreateVCard(mData: GeneralModel): String {
             mSplitName?.get(
                 ConstantKey.MIDDLE_NAME
             ).orEmpty()
-        };;"
+        };;${mSplitName?.get(ConstantKey.SUFFIX_NAME).orEmpty()}"
     )
     mString.append("\n")
     mString.append("FN:${mData.contact?.fullName.orEmpty()}")
@@ -147,12 +147,12 @@ fun Utils.onParseVCard(code: String?): GeneralModel? {
             mGeneral = GeneralModel()
             val mAddressBook = mParsed as AddressBookParsedResult?
             val mContact = ContactModel()
-            val mFullName = mAddressBook?.names?.firstOrNull()?.split(",")
-            val mMap = mFullName?.firstOrNull()?.stringToMap()
+            val mFullName = mAddressBook?.names?.firstOrNull()
+            val mMap = mFullName?.stringToMap()
             val mFirstName: String? = mMap?.get(ConstantKey.FIRST_NAME)
             val mMiddleName: String? = mMap?.get(ConstantKey.MIDDLE_NAME)
             val mLastName: String? = mMap?.get(ConstantKey.LAST_NAME)
-            val mSuffixesName = mAddressBook?.names?.firstOrNull()?.split(",")?.lastOrNull()
+            val mSuffixesName =  mMap?.get(ConstantKey.SUFFIX_NAME)
 
             mContact.givenName = mFirstName
             mContact.middleName = mMiddleName
@@ -254,7 +254,7 @@ fun Utils.onParseMeCard(mText: String?): GeneralModel? {
             val mFirstName: String? = mMap?.get(ConstantKey.FIRST_NAME)
             val mMiddleName: String? = mMap?.get(ConstantKey.MIDDLE_NAME)
             val mLastName: String? = mMap?.get(ConstantKey.LAST_NAME)
-            val mSuffixesName = mAddressBook?.names?.firstOrNull()?.split(",")?.lastOrNull()
+            val mSuffixesName =  mMap?.get(ConstantKey.SUFFIX_NAME)
             mContact.givenName = mFirstName
             mContact.middleName = mMiddleName
             mContact.familyName = mLastName
