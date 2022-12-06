@@ -122,6 +122,7 @@ class GeneralModel : Serializable {
         this.textProductIdISNB = mSave.textProductIdISNB
         this.ssId = mSave.ssId
         this.password = mSave.password
+        this.networkEncryption = mSave.networkEncryption
         this.url = mSave.url
         this.hidden = mSave.hidden ?: false
         this.createType = ParsedResultType.valueOf(mSave.createType ?: ParsedResultType.TEXT.name)
@@ -173,6 +174,7 @@ class GeneralModel : Serializable {
         this.textProductIdISNB = mHistory.textProductIdISNB
         this.ssId = mHistory.ssId
         this.password = mHistory.password
+        this.networkEncryption = mHistory.networkEncryption
         this.url = mHistory.url
         this.hidden = mHistory.hidden ?: false
         this.createType = ParsedResultType.valueOf(mHistory.createType ?: ParsedResultType.TEXT.name)
@@ -226,6 +228,7 @@ class GeneralModel : Serializable {
         this.textProductIdISNB = mHistory.textProductIdISNB
         this.ssId = mHistory.ssId
         this.password = mHistory.password
+        this.networkEncryption = mHistory.networkEncryption
         this.url = mHistory.url
         this.hidden = mHistory.hidden ?: false
         this.createType = ParsedResultType.valueOf(mHistory.createType ?: ParsedResultType.TEXT.name)
@@ -284,6 +287,7 @@ class GeneralModel : Serializable {
         this.textProductIdISNB = mSave.textProductIdISNB
         this.ssId = mSave.ssId
         this.password = mSave.password
+        this.networkEncryption = mSave.networkEncryption
         this.url = mSave.url
         this.hidden = mSave.hidden ?: false
         this.createType = ParsedResultType.valueOf(mSave.createType ?: ParsedResultType.TEXT.name)
@@ -346,6 +350,7 @@ class GeneralModel : Serializable {
         this.textProductIdISNB = save.textProductIdISNB
         this.ssId = save.ssId
         this.password = save.password
+        this.networkEncryption = save.networkEncryption
         this.url = save.url
         this.hidden = save.hidden
         this.createType = save.createType
@@ -380,18 +385,12 @@ class GeneralModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.addresses?.forEach {
-                    if (it.value.getValue().isNotEmpty()){
-                        mStringBuilder.append(it.value.getValue()+", ")
-                    }
-                }
+                mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
+                    ?.joinToString(",") { it.getValue()})
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.addresses?.forEach {
-                    if (it.value.address?.isNotEmpty()==true){
-                        mStringBuilder.append(it.value.address+", ")
-                    }
-                }
+                mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
+                    ?.joinToString(",") { it.address.orEmpty() })
             }
         }else{
             mStringBuilder.append(this.address)
@@ -404,23 +403,15 @@ class GeneralModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.phones?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                mStringBuilder.append( mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(","))
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.phones?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                 mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(",")
             }
         }else{
             mStringBuilder.append(this.phone)
         }
-        return mStringBuilder.toString().trimEnd()
+        return mStringBuilder.toString()
     }
 
     fun getEmails() : String {
@@ -428,18 +419,10 @@ class GeneralModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.emails?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(",")
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.emails?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(",")
             }
         }else{
             mStringBuilder.append(this.email)
@@ -452,18 +435,10 @@ class GeneralModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.urls?.forEach {
-                    if (it.isNotEmpty()){
-                        mStringBuilder.append("$it, ")
-                    }
-                }
+                mParsedVcard?.contact?.urls?.joinToString(",")
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.urls?.forEach {
-                    if (it.isNotEmpty()){
-                        mStringBuilder.append("$it, ")
-                    }
-                }
+                mParsedVcard?.contact?.urls?.joinToString(",")
             }
         }else{
             mStringBuilder.append(url)

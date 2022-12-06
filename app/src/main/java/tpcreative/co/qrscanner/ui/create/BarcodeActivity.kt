@@ -75,8 +75,8 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation?.addValidation(this, R.id.edtText, RegexTemplate.NOT_EMPTY, R.string.err_text)
-        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, RegexTemplate.NOT_EMPTY, R.string.err_text)
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.EAN_13) {
                 if (input.length == 13) {
                     return@SimpleCustomValidation EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(input)
@@ -86,7 +86,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             true
         }, R.string.warning_barcode_length_13)
-        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.EAN_8) {
                 if (input.length == 8) {
                     return@SimpleCustomValidation Utils.checkGTIN(input)
@@ -97,7 +97,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             true
         }, R.string.warning_barcode_length_8)
 
-        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.UPC_E) {
                 if (input.length == 8) {
                     return@SimpleCustomValidation Utils.checkGTIN(input)
@@ -107,7 +107,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             true
         }, R.string.warning_barcode_UPC_E_length_8)
-        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.UPC_A) {
                 if (input.length == 12) {
                     return@SimpleCustomValidation Utils.checkGTIN(input)
@@ -117,7 +117,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             true
         }, R.string.warning_barcode_UPC_A_length_12)
-        mAwesomeValidation?.addValidation(this, R.id.edtText, SimpleCustomValidation { input -> // check if the age is >= 18
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.ITF) {
                 return@SimpleCustomValidation Utils.checkITF(input)
             }

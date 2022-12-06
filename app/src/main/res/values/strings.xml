@@ -82,7 +82,7 @@
     <string name="alternatively">Alternatively:</string>
     <string name="open_your_contact_app">Open your contact app.</string>
     <string name="open_an_existing_contact_or_create_a_new_one">Open an existing contact or create a new one.</string>
-    <string name="select_share_from_the_menu">Select "SHARE" from the menu.</string>
+    <string name="select_share_from_the_menu">Select &quot;SHARE&quot; from the menu.</string>
     <string name="select_qr_code">Select QRScanner.</string>
     <string name="err_latitude">Please check latitude input</string>
     <string name="err_longitude">Please check longitude input</string>
@@ -414,5 +414,8 @@
     <string name="_1_android_permission_call_phone_share_qrcode_to_your_phone_call">1. android.permission.CALL_PHONE: Share QRCode to your phone call</string>
     <string name="_2_android_permission_camera_scanner_code">2. android.permission.CAMERA: Scanner code</string>
     <string name="_3_access_fine_location_access_coarse_location_getting_longitude_and_latitude_for_qrcode_type_of_location">3. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location</string>
+    <string name="https">https://</string>
+    <string name="open_your_browser_app">Open your browser app.</string>
+    <string name="load_the_website">Load the website.</string>
 
 </resources>

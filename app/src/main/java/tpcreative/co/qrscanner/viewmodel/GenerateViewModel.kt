@@ -36,7 +36,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
         mList.add(QRCodeType("6", getString(R.string.telephone), R.drawable.baseline_phone_white_48))
         mList.add(QRCodeType("7", getString(R.string.text), R.drawable.baseline_text_format_white_48))
         mList.add(QRCodeType("8", getString(R.string.wifi), R.drawable.baseline_network_wifi_white_48))
-        mList.add(QRCodeType("9", getString(R.string.url), R.drawable.baseline_language_white_48))
+        mList.add(QRCodeType("9", getString(R.string.website), R.drawable.baseline_language_white_48))
         emit(mList)
     }
 

@@ -247,18 +247,13 @@ class SaveModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK.name) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.addresses?.forEach {
-                    if (it.value.getValue()?.isNotEmpty()==true){
-                        mStringBuilder.append(it.value.getValue()+", ")
-                    }
-                }
+                //     mParsedVcard?.contact?.addresses?.values?.toList()?.joinToString(",")
+                mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
+                    ?.joinToString(",") { it.getValue()})
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.addresses?.forEach {
-                    if (it.value.address?.isNotEmpty()==true){
-                        mStringBuilder.append(it.value.address+", ")
-                    }
-                }
+                mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
+                    ?.joinToString(",") { it.address.orEmpty() })
             }
         }else{
             mStringBuilder.append(this.address)
@@ -271,23 +266,15 @@ class SaveModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK.name) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.phones?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                mStringBuilder.append( mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(","))
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.phones?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(",")
             }
         }else{
             mStringBuilder.append(this.phone)
         }
-        return mStringBuilder.toString().trimEnd()
+        return mStringBuilder.toString()
     }
 
     fun getEmails() : String {
@@ -295,18 +282,10 @@ class SaveModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK.name) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.emails?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(",")
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.emails?.forEach {
-                    if (it.value.isNotEmpty()){
-                        mStringBuilder.append(it.value+", ")
-                    }
-                }
+                mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(",")
             }
         }else{
             mStringBuilder.append(this.email)
@@ -319,18 +298,10 @@ class SaveModel : Serializable {
         if (createType == ParsedResultType.ADDRESSBOOK.name) {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
-                mParsedVcard?.contact?.urls?.forEach {
-                    if (it.isNotEmpty()){
-                        mStringBuilder.append("$it, ")
-                    }
-                }
+                mParsedVcard?.contact?.urls?.joinToString(",")
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
-                mParsedVcard?.contact?.urls?.forEach {
-                    if (it.isNotEmpty()){
-                        mStringBuilder.append("$it, ")
-                    }
-                }
+                mParsedVcard?.contact?.urls?.joinToString(",")
             }
         }else{
             mStringBuilder.append(url)

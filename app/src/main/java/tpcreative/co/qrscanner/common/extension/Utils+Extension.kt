@@ -872,10 +872,10 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     if (Utils.isVcard(mResult.text)){
                         val mVCard = Utils.onParseVCard(mResult.text)
                         Utils.Log(TAG,"Result vcard "+Gson().toJson(mVCard))
-                        mData.contact = mData.contact
+                        mData.contact = mVCard?.contact
                     }else{
                         val mMeCard = Utils.onParseMeCard(mResult.text)
-                        mData.contact = mData.contact
+                        mData.contact = mMeCard?.contact
                         Utils.Log(TAG,"Result mecard "+Gson().toJson(mMeCard))
                     }
                     mData.createType = ParsedResultType.ADDRESSBOOK

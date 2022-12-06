@@ -78,8 +78,68 @@
                             android:layout_height="wrap_content"
                             android:imeOptions="actionDone"
                             android:inputType="textUri"
+                            android:text="@string/https"
                             android:singleLine="true" />
                     </LinearLayout>
+            <LinearLayout
+                android:id="@+id/rlNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llContent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/margin_15"
+                android:layout_marginEnd="@dimen/margin_15"
+                android:layout_marginTop="@dimen/margin_10"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/brandonBoldTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginBottom="@dimen/margin_2"
+                    android:text="@string/alternatively" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/brandonRegularTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_2"
+                    android:text="@string/open_your_browser_app" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/brandonRegularTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_2"
+                    android:text="@string/load_the_website" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/brandonRegularTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_2"
+                    android:text="@string/select_share_from_the_menu" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/brandonRegularTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_2"
+                    android:text="@string/select_qr_code" />
+            </LinearLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </RelativeLayout>
