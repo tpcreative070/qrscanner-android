@@ -35,50 +35,6 @@ fun Utils.readVCF(uri: Uri): GeneralModel? {
 }
 
 fun Utils.onCreateVCard(mData: GeneralModel): String {
-//    BEGIN:VCARD
-//    VERSION:2.1
-//    N:Phong;Tran;Thanh;;Suffix
-//    FN:Tran Thanh Phong, Suffix
-//    TEL;CELL:0979155106
-//    TEL;HOME:0979123123
-//    TEL;WORK:0979147156
-//    EMAIL;HOME:tp@gmail.com
-//    EMAIL;WORK:tp1@gmail.com
-//    EMAIL:abc@gmail.com
-//    ADR;HOME:;;249/18;Tp Vinh Long;Vinh Long State;700000;VL
-//    ADR;WORK:;;Can Tho;Tp Can Tho;Can Tho State;;TC
-//    ADR:;;An Giang;Long Xuyen;Long Xuyen State;7000;
-//    ORG:Tpcreative;Production
-//    TITLE:Mobile
-//    URL:tp.com
-//    URL:tp.net
-//    NOTE:This is note
-//    X-FACEBOOK:face
-//    X-ANDROID-CUSTOM:vnd.android.cursor.item/relation;Child;9;;;;;;;;;;;;;
-//    END:VCARD
-
-//    BEGIN:VCARD
-//    VERSION:2.1
-//    N:Phong;Tran;Thanh;;
-//    FN:Tran Thanh Phong
-//    TEL;CELL:0979155106
-//    TEL;HOME:0979123123
-//    TEL;WORK:0979147156
-//    EMAIL;HOME:tp@gmail.com
-//    EMAIL;WORK:tp1@gmail.com
-//    EMAIL:abc@gmail.com
-//    ADR;HOME:;;249/18;Tp Vinh Long;Vinh Long State;700000;VL
-//    ADR;WORK:;;Can Tho;Tp Can Tho;Can Tho State;;TC
-//    ADR:;;An Giang;Long Xuyen;Long Xuyen State;7000;
-//    ORG:Tpcreative;Production
-//    TITLE:Mobile
-//    URL:tp.com
-//    URL:tp.net
-//    NOTE:This is note
-//    X-FACEBOOK:face
-//    X-ANDROID-CUSTOM:vnd.android.cursor.item/relation;Child;9;;;;;;;;;;;;;
-//    END:VCARD
-
     val mString = StringBuilder()
     val mSplitName = mData.contact?.fullName?.stringToMap()
     mString.append("BEGIN:VCARD")
@@ -96,18 +52,24 @@ fun Utils.onCreateVCard(mData: GeneralModel): String {
     mString.append("FN:${mData.contact?.fullName.orEmpty()}")
     mString.append("\n")
     mData.contact?.phones?.forEach {
-        mString.append("TEL;${it.key}:${it.value}")
-        mString.append("\n")
+        if (it.value.isNotEmpty()){
+            mString.append("TEL;${it.key}:${it.value}")
+            mString.append("\n")
+        }
     }
 
     mData.contact?.emails?.forEach {
-        mString.append("EMAIL;${it.key}:${it.value}")
-        mString.append("\n")
+        if (it.value.isNotEmpty()){
+            mString.append("EMAIL;${it.key}:${it.value}")
+            mString.append("\n")
+        }
     }
 
     mData.contact?.addresses?.forEach {
-        mString.append("ADR;${it.key}:;;${it.value.street.orEmpty()};${it.value.city.orEmpty()};${it.value.region.orEmpty()};${it.value.postalCode.orEmpty()};${it.value.country.orEmpty()}")
-        mString.append("\n")
+        if (it.value.getValue().isNotEmpty() || it.value.address?.isNotEmpty() == true){
+            mString.append("ADR;${it.key}:;;${it.value.street.orEmpty()};${it.value.city.orEmpty()};${it.value.region.orEmpty()};${it.value.postalCode.orEmpty()};${it.value.country.orEmpty()}")
+            mString.append("\n")
+        }
     }
 
     mData.contact?.company?.let {
