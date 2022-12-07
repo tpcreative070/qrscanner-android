@@ -790,12 +790,6 @@ object Utils {
         PrefsController.putInt(QRScannerApplication.Companion.getInstance().getString(R.string.key_position_theme), positionTheme)
     }
 
-    fun getCurrentTheme(): Int {
-        return if (getPositionTheme() == 0) {
-            R.style.LightDialogTheme
-        } else R.style.DarkDialogTheme
-    }
-
     fun getCurrentThemeName(): String? {
         val myResArray: Array<String?> = QRScannerApplication.getInstance().resources.getStringArray(R.array.themeEntryArray)
         return if (getPositionTheme() == 0) {

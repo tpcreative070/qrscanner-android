@@ -13,10 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_saver.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -207,68 +207,6 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         if (actionMode != null) {
             return
         }
-//        val create = GeneralModel()
-//        val save: SaveModel = viewModel.mList[position]
-//        create.id = save.id ?: 0
-//        create.favorite = save.favorite ?: false
-//        if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-//            create.textProductIdISNB = save.textProductIdISNB
-//            create.barcodeFormat = save.barcodeFormat
-//            Utils.Log(TAG, "Show..." + save.barcodeFormat)
-//            create.createType = ParsedResultType.PRODUCT
-//        } else if (save.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-//            create.address = save.address
-//            create.fullName = save.fullName
-//            create.email = save.email
-//            create.phone = save.phone
-//            create.createType = ParsedResultType.ADDRESSBOOK
-//        } else if (save.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-//            create.email = save.email
-//            create.subject = save.subject
-//            create.message = save.message
-//            create.createType = ParsedResultType.EMAIL_ADDRESS
-//        } else if (save.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-//            create.createType = ParsedResultType.PRODUCT
-//        } else if (save.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-//            create.url = save.url
-//            create.createType = ParsedResultType.URI
-//        } else if (save.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-//            create.hidden = save.hidden == true
-//            create.ssId = save.ssId
-//            create.networkEncryption = save.networkEncryption
-//            create.password = save.password
-//            create.createType = ParsedResultType.WIFI
-//        } else if (save.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-//            create.lat = save.lat ?:0.0
-//            create.lon = save.lon ?:0.0
-//            create.query = save.query
-//            create.createType = ParsedResultType.GEO
-//        } else if (save.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-//            create.phone = save.phone
-//            create.createType = ParsedResultType.TEL
-//        } else if (save.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-//            create.phone = save.phone
-//            create.message = save.message
-//            create.createType = ParsedResultType.SMS
-//        } else if (save.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-//            create.title = save.title
-//            create.description = save.description
-//            create.location = save.location
-//            create.startEvent = save.startEvent
-//            create.endEvent = save.endEvent
-//            create.startEventMilliseconds = save.startEventMilliseconds ?:0
-//            create.endEventMilliseconds = save.endEventMilliseconds ?:0
-//            create.createType = ParsedResultType.CALENDAR
-//        } else {
-//            create.textProductIdISNB = save.textProductIdISNB
-//            create.createType = ParsedResultType.TEXT
-//        }
-//        Utils.Log(TAG, "Call intent")
-//
-//        create.barcodeFormat = save.barcodeFormat
-//        create.noted = save.noted
-//        create.fragmentType = EnumFragmentType.SAVER
-//        create.enumImplement = EnumImplement.VIEW
         val saver: SaveModel = viewModel.mList[position]
         val create = GeneralModel(saver,EnumFragmentType.SAVER,EnumImplement.VIEW)
         viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
@@ -368,18 +306,15 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     fun dialogDelete() {
-        val builder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
-        builder.setTitle(getString(R.string.delete))
-        builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
-        builder.setNegativeButton(getString(R.string.no), object : DialogInterface.OnClickListener {
-            override fun onClick(dialogInterface: DialogInterface?, i: Int) {}
-        })
-        builder.setPositiveButton(getString(R.string.yes), object : DialogInterface.OnClickListener {
-            override fun onClick(dialogInterface: DialogInterface?, i: Int) {
+        MaterialDialog(requireContext()).show {
+            title(R.string.delete)
+            message(text = String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
+            positiveButton(R.string.yes){
                 deleteItem()
             }
-        })
-        builder.show()
+            negativeButton (R.string.no){
+            }
+        }
     }
 
     fun updateView() {

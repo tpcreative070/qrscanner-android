@@ -12,10 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
-import com.google.zxing.client.result.ParsedResultType
+import com.afollestad.materialdialogs.MaterialDialog
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,10 +25,7 @@ import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.GeneralModel
-import tpcreative.co.qrscanner.model.EnumFragmentType
-import tpcreative.co.qrscanner.model.EnumImplement
-import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 import java.io.File
@@ -267,14 +263,15 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     fun dialogDelete() {
-        val builder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
-        builder.setTitle(getString(R.string.delete))
-        builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
-        builder.setNegativeButton(getString(R.string.no)) { dialogInterface, i -> }
-        builder.setPositiveButton(getString(R.string.yes)) { dialogInterface, i ->
-            deleteItem()
+        MaterialDialog(requireContext()).show {
+            title(R.string.delete)
+            message(text = kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
+            positiveButton(R.string.yes){
+                deleteItem()
+            }
+            negativeButton (R.string.no){
+            }
         }
-        builder.show()
     }
 
     fun updateView() {

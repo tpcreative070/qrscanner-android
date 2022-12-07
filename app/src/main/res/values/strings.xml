@@ -418,5 +418,6 @@
     <string name="open_your_browser_app">Open your browser app.</string>
     <string name="load_the_website">Load the website.</string>
     <string name="place">Place</string>
+    <string name="turn_on_gps">Please turn on your location or GPS to get exactly position</string>
 
 </resources>

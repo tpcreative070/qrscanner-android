@@ -15,6 +15,7 @@ import android.widget.TextView.OnEditorActionListener
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
+import com.afollestad.materialdialogs.MaterialDialog
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -27,7 +28,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.zxing.client.result.ParsedResultType
-import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.activity_location.*
 import kotlinx.android.synthetic.main.activity_location.toolbar
 import tpcreative.co.qrscanner.R
@@ -75,30 +75,16 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     private fun showGpsWarningDialog() {
-        val dialogBuilder = MaterialDialog.Builder(this, Utils.getCurrentTheme())
-        dialogBuilder.setTitle(getString(R.string.gps_disabled))
-        dialogBuilder.setMessage("Please turn on your location or GPS to get exactly position")
-        dialogBuilder.setPadding(40, 40, 40, 0)
-        dialogBuilder.setMargin(60, 0, 60, 0)
-        dialogBuilder.setPositiveButton(getString(R.string.yes)) { dialogInterface, i ->
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
-        }
-        dialogBuilder.setNegativeButton(getString(R.string.no)) { dialogInterface, i -> }
-        val dialog = dialogBuilder.create()
-        dialogBuilder.setOnShowListener {
-            val positive = dialog.findViewById<Button?>(android.R.id.button1)
-            val negative = dialog.findViewById<Button?>(android.R.id.button2)
-            val title = dialog.findViewById<TextView?>(android.R.id.title)
-            val content = dialog.findViewById<TextView?>(android.R.id.message)
-            if (positive != null && negative != null && title != null) {
-                title.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.black))
-                positive.textSize = 14f
-                negative.textSize = 14f
-                content.textSize = 18f
+        MaterialDialog(this).show {
+            title(R.string.gps_disabled)
+            message(R.string.turn_on_gps)
+            positiveButton(R.string.yes){
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+            }
+            negativeButton (R.string.no){
             }
         }
-        dialog.show()
     }
 
     override fun onMapClick(p0: LatLng) {

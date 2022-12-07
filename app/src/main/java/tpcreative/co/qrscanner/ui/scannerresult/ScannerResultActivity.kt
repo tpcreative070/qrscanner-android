@@ -1,27 +1,19 @@
 package tpcreative.co.qrscanner.ui.scannerresult
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import android.text.InputType
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import com.google.gson.Gson
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.google.zxing.client.result.ParsedResultType
-import de.mrapp.android.dialog.MaterialDialog
-import de.mrapp.android.dialog.adapter.ArrayRecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -340,49 +332,20 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     private fun onCopyDialog() {
         viewModel.hashCopyResult?.clear()
-        val dialogBuilder = MaterialDialog.Builder(this, Utils.getCurrentTheme())
-        dialogBuilder.setTitle(R.string.copy_items)
-        dialogBuilder.setPadding(40, 40, 40, 0)
-        dialogBuilder.setMargin(60, 0, 60, 0)
-        dialogBuilder.setMessage(R.string.choose_which_items_you_want_to_copy)
-        val list: MutableList<String?> = ArrayList()
-        viewModel.hashCopy?.let {
-            for ((_, value) in it) {
-                list.add(value)
-            }
-        }
-        val cs = list.toTypedArray<CharSequence?>()
-        dialogBuilder.setMultiChoiceItems(cs, null
-        ) { dialogInterface, i, b ->
-            if (b) {
-                viewModel.hashCopyResult?.set(i, list[i])
-            } else {
-                viewModel.hashCopyResult?.remove(i)
-            }
-        }
-        dialogBuilder.setPositiveButton(R.string.copy) { dialogInterface, i ->
-            if (viewModel.hashCopyResult != null && (viewModel.hashCopyResult?.size ?: 0) > 0) {
+        com.afollestad.materialdialogs.MaterialDialog(this).show {
+            listItemsMultiChoice(items = viewModel.hashCopy?.values?.toMutableList()?.map { it.orEmpty() }) { _, index, text ->
+                Utils.Log(TAG,"Selected $text")
+                text.forEachIndexed { index, i ->
+                    viewModel.hashCopyResult?.put(index,i.toString())
+                }
                 Utils.copyToClipboard(viewModel.getResult(viewModel.hashCopyResult))
                 Utils.onAlertNotify(this@ScannerResultActivity, getString(R.string.copied_successful))
+            }.positiveButton(R.string.done){
+                Utils.Log(TAG,"Selection is checked")
             }
-        }
-        dialogBuilder.setNegativeButton(R.string.cancel, object : DialogInterface.OnClickListener {
-            override fun onClick(dialogInterface: DialogInterface?, i: Int) {}
-        })
-        val dialog = dialogBuilder.show()
-        dialogBuilder.setOnShowListener {
-            Utils.Log(TAG, "action here")
-            val positive = dialog.findViewById<Button?>(android.R.id.button1)
-            val negative = dialog.findViewById<Button?>(android.R.id.button2)
-            val title: TextView? = dialog.findViewById<TextView?>(android.R.id.title)
-            val content: TextView? = dialog.findViewById<TextView?>(android.R.id.message)
-            if (positive != null && negative != null && title != null && content != null) {
-                title.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.black))
-                content.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.material_gray_700))
-                positive.textSize = 14f
-                negative.textSize = 14f
-                content.textSize = 18f
+            negativeButton (R.string.cancel){
             }
+            title(R.string.choose_which_items_you_want_to_copy)
         }
     }
 
