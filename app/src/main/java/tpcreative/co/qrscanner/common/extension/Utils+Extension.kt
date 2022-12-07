@@ -436,13 +436,19 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
             when (create.createType) {
                 ParsedResultType.ADDRESSBOOK -> {
                     /*Put item to HashClipboard*/
-
                     history.hashClipboard?.set(ConstantKey.FULL_NAME, create.getNames())
                     create.contact?.addresses?.forEach {
-                        history.hashClipboard?.put(
-                            ConstantKey.ADDRESS + it.key,
-                            it.value.getValue()
-                        )
+                        if (it.value.getValue().isEmpty()){
+                            history.hashClipboard?.put(
+                                ConstantKey.ADDRESS + it.key,
+                                it.value.address
+                            )
+                        }else{
+                            history.hashClipboard?.put(
+                                ConstantKey.ADDRESS + it.key,
+                                it.value.getValue()
+                            )
+                        }
                     }
                     create.contact?.phones?.forEach {
                         history.hashClipboard?.put(ConstantKey.PHONE + it.key, it.value)
@@ -453,6 +459,14 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
 
                     create.contact?.urls?.forEach {
                         history.hashClipboard?.put(ConstantKey.URL + it, it)
+                    }
+
+                    if (create.getNote()?.isNotEmpty()==true){
+                        history.hashClipboard?.put(ConstantKey.NOTE + create.getNote(),  create.getNote())
+                    }
+
+                    if (create.getBirthday()?.isNotEmpty()==true){
+                        history.hashClipboard?.put(ConstantKey.BIRTHDAY + create.getBirthday(),  create.getBirthday())
                     }
 
                     create.contact?.phones?.forEach {
@@ -1006,6 +1020,16 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     if (general.getUrls().isNotEmpty()){
                         mContent.append("\n")
                         mContent.append(general.getUrls())
+                    }
+
+                    if (general.getNote()?.isNotEmpty() == true){
+                        mContent.append("\n")
+                        mContent.append(general.getNote())
+                    }
+
+                    if (general.getBirthday()?.isNotEmpty() == true){
+                        mContent.append("\n")
+                        mContent.append(general.getBirthday())
                     }
 
                     mMap[ConstantKey.CONTENT] = mContent.toString()

@@ -460,4 +460,12 @@ class GeneralModel : Serializable {
         }
         return mString.toString()
     }
+
+    fun getNote() : String?{
+        return contact?.note
+    }
+
+    fun getBirthday() : String?{
+        return contact?.birthday
+    }
 }

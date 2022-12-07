@@ -246,9 +246,9 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         create?.let {
             val mMap = Utils.onGeneralParse(it,HashMap::class)
             code = it.code
-            tvContent.text = "${mMap.get(ConstantKey.CONTENT)}"
-            tvBarCodeFormat.text =  "${mMap.get(ConstantKey.BARCODE_FORMAT)}"
-            tvCreatedDatetime.text = "${mMap.get(ConstantKey.CREATED_DATETIME)}"
+            tvContent.text = "${mMap[ConstantKey.CONTENT]}"
+            tvBarCodeFormat.text =  "${mMap[ConstantKey.BARCODE_FORMAT]}"
+            tvCreatedDatetime.text = "${mMap[ConstantKey.CREATED_DATETIME]}"
             val history = Utils.onGeneralParse(it,HistoryModel::class)
             history.code = code
             history.hashClipboard?.let {

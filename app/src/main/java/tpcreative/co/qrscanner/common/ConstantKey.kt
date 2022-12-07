@@ -16,6 +16,8 @@ class ConstantKey {
         const val PASSWORD = "password"
         const val NETWORK_ENCRYPTION = "networkEncryption"
         const val HIDDEN = "hidden"
+        const val NOTE = "note"
+        const val BIRTHDAY = "birthday"
 
         const val TITLE  = "title"
         const val LOCATION = "location"
