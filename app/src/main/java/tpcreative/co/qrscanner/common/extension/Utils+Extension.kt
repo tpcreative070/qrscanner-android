@@ -808,7 +808,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     create.fragmentType,
                     EnumAction.CLIPBOARD,
                     R.drawable.ic_baseline_content_copy_24,
-                    ConstantValue.CLIPBOARD,
+                    ConstantValue.COPY,
                     create.favorite
                 )
             )

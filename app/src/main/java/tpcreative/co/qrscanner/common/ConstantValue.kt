@@ -6,6 +6,7 @@ class ConstantValue {
         const val PHONE_CALL = "Phone call"
         const val EMAIL = "Email"
         const val CLIPBOARD = "Clipboard"
+        const val COPY = "Copy"
         const val SEARCH = "Search"
         const val TEXT = "Text"
         const val SHARE = "Share"
