@@ -228,6 +228,10 @@ fun Utils.onParseVCard(code: String?): GeneralModel? {
             mAddressBook?.urLs?.forEachIndexed { index, it ->
                 mURLList.add(it)
             }
+
+            mGeneral.contact?.note = mAddressBook?.note.orEmpty()
+            mGeneral.contact?.birthday = mAddressBook?.birthday.orEmpty()
+            mGeneral.contact?.nickname = mAddressBook?.nicknames?.firstOrNull()
             mGeneral.contact?.urls = mURLList
             mGeneral.code = code
         }

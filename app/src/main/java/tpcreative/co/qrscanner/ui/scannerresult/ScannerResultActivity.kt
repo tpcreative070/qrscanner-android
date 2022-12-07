@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.zxing.client.result.ParsedResultType
 import de.mrapp.android.dialog.MaterialDialog
+import de.mrapp.android.dialog.adapter.ArrayRecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -351,8 +352,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             }
         }
         val cs = list.toTypedArray<CharSequence?>()
-        Utils.Log(TAG, "Result " + Gson().toJson(list))
-        Utils.Log(TAG, "show size of list " + cs.size)
         dialogBuilder.setMultiChoiceItems(cs, null
         ) { dialogInterface, i, b ->
             if (b) {

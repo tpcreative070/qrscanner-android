@@ -417,5 +417,6 @@
     <string name="https">https://</string>
     <string name="open_your_browser_app">Open your browser app.</string>
     <string name="load_the_website">Load the website.</string>
+    <string name="place">Place</string>
 
 </resources>

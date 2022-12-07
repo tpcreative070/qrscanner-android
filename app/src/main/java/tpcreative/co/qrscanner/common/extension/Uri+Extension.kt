@@ -205,6 +205,23 @@ fun Uri.onParseContact(context: Context) : ContactModel{
                 mContact.urls?.add(urlName)
             }
             mStructuredURL?.close()
+
+            /*Note area*/
+            val mStructuredNote: Cursor? = context.contentResolver.query(
+                dataUri,
+                null,
+                ContactsContract.Contacts.Data.MIMETYPE + "=?", arrayOf(
+                    ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE),
+                null
+            )
+            while (mStructuredNote?.moveToNext() == true) {
+                val noteName = mStructuredNote.getString(mStructuredNote.getColumnIndex(
+                    ContactsContract.CommonDataKinds.Note.NOTE))
+                Utils.Log("onParseContact","Note 2 $noteName")
+                mContact.note = noteName
+            }
+            mStructuredNote?.close()
+
             mCursor.close()
         }
     }
