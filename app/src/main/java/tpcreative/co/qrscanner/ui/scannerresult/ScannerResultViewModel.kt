@@ -19,8 +19,8 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     override val dataList: MutableList<ItemNavigation>
         get() = super.dataList
     var result: GeneralModel?
-    var hashClipboard: HashMap<Any?, String?>? = HashMap()
-    var hashClipboardResult: HashMap<Any?, String?>? = HashMap()
+    var hashCopy: HashMap<Any?, String?>? = HashMap()
+    var hashCopyResult: HashMap<Any?, String?>? = HashMap()
     var isFavorite : Boolean = false
     var takeNoted : String = ""
     protected var stringBuilderClipboard: StringBuilder? = StringBuilder()

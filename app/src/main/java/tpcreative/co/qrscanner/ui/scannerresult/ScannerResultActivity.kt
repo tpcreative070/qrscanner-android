@@ -8,6 +8,8 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import android.text.InputType
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -24,14 +26,13 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
-import tpcreative.co.qrscanner.common.extension.onCreateVCard
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import java.util.*
-import kotlin.collections.HashMap
+
 
 class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.ItemSelectedListener {
     lateinit var viewModel : ScannerResultViewModel
@@ -72,7 +73,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 return true
             }
             R.id.menu_item_copy -> {
-                onClipboardDialog()
+                onCopyDialog()
                 return true
             }
         }
@@ -91,7 +92,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         val result = dataResult
         when (navigation.enumAction) {
             EnumAction.CLIPBOARD -> {
-                onClipboardDialog()
+                onCopyDialog()
             }
             EnumAction.PHONE_CALL ->{
                 Utils.onPhoneCall(this,result)
@@ -252,8 +253,8 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             val history = Utils.onGeneralParse(it,HistoryModel::class)
             history.code = code
             history.hashClipboard?.let {
-                viewModel.hashClipboard?.clear()
-                viewModel.hashClipboard = history.hashClipboard
+                viewModel.hashCopy?.clear()
+                viewModel.hashCopy = history.hashClipboard
             }
             history.navigationList?.let {
                 viewModel.mListNavigation.clear()
@@ -274,7 +275,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         try {
             val autoCopy: Boolean = PrefsController.getBoolean(getString(R.string.key_copy_to_clipboard), false)
             if (autoCopy) {
-                Utils.copyToClipboard(viewModel.getResult(viewModel.hashClipboard))
+                Utils.copyToClipboard(viewModel.getResult(viewModel.hashCopy))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -336,15 +337,15 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         Utils.Log(TAG, "onResume")
     }
 
-    private fun onClipboardDialog() {
-        viewModel.hashClipboardResult?.clear()
+    private fun onCopyDialog() {
+        viewModel.hashCopyResult?.clear()
         val dialogBuilder = MaterialDialog.Builder(this, Utils.getCurrentTheme())
         dialogBuilder.setTitle(R.string.copy_items)
         dialogBuilder.setPadding(40, 40, 40, 0)
         dialogBuilder.setMargin(60, 0, 60, 0)
         dialogBuilder.setMessage(R.string.choose_which_items_you_want_to_copy)
         val list: MutableList<String?> = ArrayList()
-        viewModel.hashClipboard?.let {
+        viewModel.hashCopy?.let {
             for ((_, value) in it) {
                 list.add(value)
             }
@@ -355,14 +356,14 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         dialogBuilder.setMultiChoiceItems(cs, null
         ) { dialogInterface, i, b ->
             if (b) {
-                viewModel.hashClipboardResult?.set(i, list[i])
+                viewModel.hashCopyResult?.set(i, list[i])
             } else {
-                viewModel.hashClipboardResult?.remove(i)
+                viewModel.hashCopyResult?.remove(i)
             }
         }
         dialogBuilder.setPositiveButton(R.string.copy) { dialogInterface, i ->
-            if (viewModel.hashClipboardResult != null && (viewModel.hashClipboardResult?.size ?: 0) > 0) {
-                Utils.copyToClipboard(viewModel.getResult(viewModel.hashClipboardResult))
+            if (viewModel.hashCopyResult != null && (viewModel.hashCopyResult?.size ?: 0) > 0) {
+                Utils.copyToClipboard(viewModel.getResult(viewModel.hashCopyResult))
                 Utils.onAlertNotify(this@ScannerResultActivity, getString(R.string.copied_successful))
             }
         }
