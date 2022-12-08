@@ -54,7 +54,6 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
     private var isProgressing = false
     private var isShareIntent = false
     private var mCreate : GeneralModel? = null
-    private var mResult : Result? = null
     public override fun onCreate(icicle: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(icicle)
@@ -446,6 +445,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                 Utils.Log(TAG,"width ${bitmap.width} height ${bitmap.height}")
                 val reader: Reader = MultiFormatReader()
                 try {
+                    var mResult : Result? = null
                     try {
                         mResult = reader.decode(mBitmap)
                     }catch (e : Exception){
