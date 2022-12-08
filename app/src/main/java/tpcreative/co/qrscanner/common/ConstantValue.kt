@@ -30,6 +30,7 @@ class ConstantValue {
         const val VCard = "BEGIN:VCARD"
         const val MeCard = "MECARD:N"
         const val VCardType = "text/x-vcard"
-
+        const val SEPARATORS_BREAK_LINE = "\n"
+        const val SEPARATORS_COMMA = ", "
     }
 }

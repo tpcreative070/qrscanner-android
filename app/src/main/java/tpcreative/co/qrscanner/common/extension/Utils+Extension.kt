@@ -1032,22 +1032,22 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     if (general.getNames().isNotEmpty()){
                         mContent.append(general.getNames())
                     }
-                    if (general.getPhones().isNotEmpty()){
+                    if (general.getPhones(ConstantValue.SEPARATORS_COMMA).isNotEmpty()){
                         mContent.append("\n")
-                        mContent.append(general.getPhones())
+                        mContent.append(general.getPhones(ConstantValue.SEPARATORS_COMMA))
                     }
-                    if (general.getEmails().isNotEmpty()){
+                    if (general.getEmails(ConstantValue.SEPARATORS_COMMA).isNotEmpty()){
                         mContent.append("\n")
-                        mContent.append(general.getEmails())
+                        mContent.append(general.getEmails(ConstantValue.SEPARATORS_COMMA))
 
                     }
-                    if (general.getAddresses().isNotEmpty()){
+                    if (general.getAddresses(ConstantValue.SEPARATORS_COMMA).isNotEmpty()){
                         mContent.append("\n")
-                        mContent.append(general.getAddresses())
+                        mContent.append(general.getAddresses(ConstantValue.SEPARATORS_COMMA))
                     }
-                    if (general.getUrls().isNotEmpty()){
+                    if (general.getUrls(ConstantValue.SEPARATORS_COMMA).isNotEmpty()){
                         mContent.append("\n")
-                        mContent.append(general.getUrls())
+                        mContent.append(general.getUrls(ConstantValue.SEPARATORS_COMMA))
                     }
 
                     if (general.getNote()?.isNotEmpty() == true){
