@@ -44,10 +44,19 @@ import tpcreative.co.qrscanner.model.GeneralModel
 class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     private var mAwesomeValidation: AwesomeValidation? = null
     private var general: GeneralModel? = null
+    private var phones : MutableMap<String,String>? = null
+    private var addresses : MutableMap<String,AddressModel>? = null
+    private var emails : MutableMap<String,String>? = null
+    private var urls : MutableList<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
         setSupportActionBar(toolbar)
+        phones = mutableMapOf()
+        addresses = mutableMapOf()
+        emails = mutableMapOf()
+        urls = mutableListOf()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
@@ -117,10 +126,8 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         if (result.resultCode == Activity.RESULT_OK) {
             Utils.Log(TAG, "REQUEST_PICK Up ${result.data.toString()}")
             val contactUri: Uri? = result.data?.data
-
             contactUri?.let {
                 val mResult = contactUri.onParseContact(this)
-                general?.contact = mResult
                 Utils.Log(TAG,"Contact ${Gson().toJson(mResult)}")
                 general = GeneralModel()
                 general?.contact = mResult
@@ -155,7 +162,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
             if (create.contact?.addresses?.isNotEmpty() == true){
                 create.contact?.addresses?.firstNotNullOfOrNull {
                     val mAddress = it.value
-                    mAddress.address = edtAddress?.text.toString()
+                    mAddress.street = edtAddress?.text.toString()
                     mAddress.postalCode = edtZipcode?.text.toString()
                     mAddress.city = edtCity.text.toString()
                     mAddress.region = edtRegion.text.toString()

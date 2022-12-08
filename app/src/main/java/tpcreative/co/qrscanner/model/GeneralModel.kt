@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.model
-import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.google.zxing.ResultPoint
@@ -363,9 +362,9 @@ class GeneralModel : Serializable {
         this.isSynced = true && save.isSynced
         this.uuId = save.uuId
         this.code = save.code
-        this.navigationList = mutableListOf()
-        this.hashClipboard = hashMapOf()
-        this.contact = ContactModel()
+        this.navigationList = mGeneral?.navigationList
+        this.hashClipboard = mGeneral?.hashClipboard
+        this.contact = mGeneral?.contact
         this.noted = save.noted
 
         /*Exception*/
@@ -386,7 +385,7 @@ class GeneralModel : Serializable {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
                 mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
-                    ?.joinToString(", ") { it.getValue()})
+                    ?.joinToString(", ") { it.getAddressValue()})
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
                 mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()

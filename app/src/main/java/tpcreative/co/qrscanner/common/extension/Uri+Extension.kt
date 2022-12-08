@@ -97,6 +97,7 @@ fun Uri.onParseContact(context: Context) : ContactModel{
                     ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE),
                 null
             )
+            var index = 0
             while (mStructuredEmail?.moveToNext() == true) {
                 val typeName = mStructuredEmail.getString(mStructuredEmail.getColumnIndex(
                     ContactsContract.CommonDataKinds.Email.TYPE))
@@ -111,11 +112,13 @@ fun Uri.onParseContact(context: Context) : ContactModel{
                 }else if (typeName == "${ContactsContract.CommonDataKinds.Email.TYPE_MOBILE}"){
                     mResultType = ConstantValue.MOBILE
                 }else{
-                    mResultType = ConstantValue.OTHER
+                    mResultType = ConstantValue.OTHER + "-$index"
+                    index+=1
                 }
                 Utils.Log("onParseContact","Email 1 $mResultType Email 2 $addressName")
                 mContact.emails?.set(mResultType, addressName)
             }
+            index = 0
             mStructuredEmail?.close()
 
 
@@ -148,7 +151,8 @@ fun Uri.onParseContact(context: Context) : ContactModel{
                 }else if (typeName == "${ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK}"){
                     mResultType = ConstantValue.WORK
                 }else{
-                    mResultType = ConstantValue.OTHER
+                    mResultType = ConstantValue.OTHER + "-$index"
+                    index+=1
                 }
                 Utils.Log("onParseContact","Postal 1 $mResultType Postal 2 $postalName")
                 val mContactOfAddress = AddressModel()
@@ -160,6 +164,7 @@ fun Uri.onParseContact(context: Context) : ContactModel{
                 mContactOfAddress.country = countryName
                 mContact.addresses?.set(mResultType, mContactOfAddress)
             }
+            index = 0
             mStructuredPostal?.close()
 
             /*Phone area*/
@@ -183,7 +188,8 @@ fun Uri.onParseContact(context: Context) : ContactModel{
                 }else if (typeName == "${ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE}"){
                     mResultType = ConstantValue.CELL
                 }else{
-                    mResultType = ConstantValue.OTHER
+                    mResultType = ConstantValue.OTHER + "-$index"
+                    index+=1
                 }
                 Utils.Log("onParseContact","Phone 1 $mResultType Phone 2 $phoneName")
                 mContact.phones?.set(mResultType, phoneName)

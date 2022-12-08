@@ -4,7 +4,6 @@ import android.net.Uri
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
-import com.google.zxing.ResultPoint
 import com.google.zxing.client.result.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
@@ -53,21 +52,33 @@ fun Utils.onCreateVCard(mData: GeneralModel): String {
     mString.append("\n")
     mData.contact?.phones?.forEach {
         if (it.value.isNotEmpty()){
-            mString.append("TEL;${it.key}:${it.value}")
+            if (it.key == ConstantValue.HOME || it.key == ConstantValue.WORK || it.key == ConstantValue.CELL){
+                mString.append("TEL;TYPE=${it.key}:${it.value}")
+            }else{
+                mString.append("TEL:${it.value}")
+            }
             mString.append("\n")
         }
     }
 
     mData.contact?.emails?.forEach {
         if (it.value.isNotEmpty()){
-            mString.append("EMAIL;${it.key}:${it.value}")
+            if (it.key == ConstantValue.HOME || it.key == ConstantValue.WORK || it.key == ConstantValue.CELL){
+                mString.append("EMAIL;TYPE=${it.key}:${it.value}")
+            }else{
+                mString.append("EMAIL:${it.value}")
+            }
             mString.append("\n")
         }
     }
 
     mData.contact?.addresses?.forEach {
-        if (it.value.getValue().isNotEmpty() || it.value.address?.isNotEmpty() == true){
-            mString.append("ADR;${it.key}:;;${it.value.street.orEmpty()};${it.value.city.orEmpty()};${it.value.region.orEmpty()};${it.value.postalCode.orEmpty()};${it.value.country.orEmpty()}")
+        if (it.value.getAddressValue().isNotEmpty() || it.value.address?.isNotEmpty() == true){
+            if (it.key == ConstantValue.HOME || it.key == ConstantValue.WORK || it.key == ConstantValue.CELL){
+                mString.append("ADR;TYPE=${it.key}:;;${it.value.street.orEmpty()};${it.value.city.orEmpty()};${it.value.region.orEmpty()};${it.value.postalCode.orEmpty()};${it.value.country.orEmpty()}")
+            }else{
+                mString.append("ADR:;;${it.value.street.orEmpty()};${it.value.city.orEmpty()};${it.value.region.orEmpty()};${it.value.postalCode.orEmpty()};${it.value.country.orEmpty()}")
+            }
             mString.append("\n")
         }
     }
@@ -205,14 +216,23 @@ fun Utils.onParseVCard(code: String?): GeneralModel? {
                 mAddressObject.region = mRegion
                 mAddressObject.postalCode = mPostal
                 mAddressObject.country = mCountry
-                mAddressMap[mAddressType ?:"-$index"] = mAddressObject
+
+                if (mAddressType.equals(ConstantValue.HOME) ||  mAddressType.equals(ConstantValue.WORK) ||mAddressType.equals(ConstantValue.CELL)){
+                    mAddressMap["$mAddressType"] = mAddressObject
+                }else{
+                    mAddressMap["$mAddressType-$index"] = mAddressObject
+                }
             }
             mGeneral.contact?.addresses = mAddressMap
 
             val mPhoneMap: MutableMap<String, String> = mutableMapOf()
             mAddressBook?.phoneNumbers?.forEachIndexed { index, it ->
                 val mPhoneType = mAddressBook.phoneTypes?.get(index)
-                mPhoneMap[mPhoneType?:"-$index"] = it
+                if (mPhoneType.equals(ConstantValue.HOME) ||  mPhoneType.equals(ConstantValue.WORK) ||mPhoneType.equals(ConstantValue.CELL)){
+                    mPhoneMap["$mPhoneType"] = it
+                }else{
+                    mPhoneMap["$mPhoneType-$index"] = it
+                }
             }
             mGeneral.contact?.phones = mPhoneMap
 
@@ -220,7 +240,11 @@ fun Utils.onParseVCard(code: String?): GeneralModel? {
             val mEmailMap: MutableMap<String, String> = mutableMapOf()
             mAddressBook?.emails?.forEachIndexed { index, it ->
                 val mEmailType = mAddressBook.emailTypes?.get(index)
-                mEmailMap[mEmailType ?:"-$index"] = it
+                if (mEmailType.equals(ConstantValue.HOME) ||  mEmailType.equals(ConstantValue.WORK) ||mEmailType.equals(ConstantValue.CELL)){
+                    mEmailMap["$mEmailType"] = it
+                }else{
+                    mEmailMap["$mEmailType-$index"] = it
+                }
             }
             mGeneral.contact?.emails = mEmailMap
 
@@ -442,7 +466,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     /*Put item to HashClipboard*/
                     history.hashClipboard?.set(ConstantKey.FULL_NAME, create.getNames())
                     create.contact?.addresses?.forEach {
-                        if (it.value.getValue().isEmpty()){
+                        if (it.value.getAddressValue().isEmpty()){
                             history.hashClipboard?.put(
                                 ConstantKey.ADDRESS + it.key,
                                 it.value.address
@@ -450,7 +474,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                         }else{
                             history.hashClipboard?.put(
                                 ConstantKey.ADDRESS + it.key,
-                                it.value.getValue()
+                                it.value.getAddressValue()
                             )
                         }
                     }

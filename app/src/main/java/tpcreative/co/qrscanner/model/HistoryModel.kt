@@ -259,7 +259,7 @@ class HistoryModel : Serializable {
             if (Utils.isVcard(this.code)){
                 val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
                 mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
-                    ?.joinToString(", ") { it.getValue()})
+                    ?.joinToString(", ") { it.getAddressValue()})
             }else{
                 val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
                 mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()

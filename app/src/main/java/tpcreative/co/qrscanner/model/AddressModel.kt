@@ -10,7 +10,7 @@ class AddressModel : Serializable {
     var postalCode : String? = null
     var country : String? = null
 
-    fun getValue() : String{
+    fun getAddressValue() : String{
         val mStringBuilder = StringBuilder()
         if (street?.isNotEmpty() == true){
             mStringBuilder.append("$street")
