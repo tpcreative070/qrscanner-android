@@ -1190,7 +1190,7 @@ fun Utils.isVcard(code: String?): Boolean {
 }
 
 fun Utils.getDisplay(mGeneral : GeneralModel) : String?{
-    val mResult : String?
+    var mResult : String?
     if (mGeneral.createType == ParsedResultType.EMAIL_ADDRESS) {
         mResult = mGeneral.email
     } else if (mGeneral.createType == ParsedResultType.SMS) {
@@ -1209,6 +1209,11 @@ fun Utils.getDisplay(mGeneral : GeneralModel) : String?{
         mResult = mGeneral.url
     } else {
         mResult = mGeneral.textProductIdISNB
+    }
+    mResult = if ((mResult?.length ?:0)>50){
+        mResult?.substring(0,30)
+    }else{
+        mResult
     }
     return mResult
 }
