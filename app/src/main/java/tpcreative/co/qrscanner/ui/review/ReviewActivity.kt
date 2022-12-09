@@ -16,7 +16,9 @@ import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.GenerateSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.getDisplay
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
+import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -73,6 +75,8 @@ class ReviewActivity : BaseActivitySlide() {
             CoroutineScope(Dispatchers.IO).launch {
                 onGenerateReview(code)
                 onGenerateQRCode(code)
+                onDrawOnBitmap(Utils.getDisplay(it)?:"",Utils.onTranslateCreateType(it
+                    .createType ?: ParsedResultType.TEXT), BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))
             }
         }
     }

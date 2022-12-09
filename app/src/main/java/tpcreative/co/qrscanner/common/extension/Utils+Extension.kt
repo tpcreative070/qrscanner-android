@@ -585,11 +585,11 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.fragmentType,
                             EnumAction.Other,
                             R.drawable.baseline_perm_contact_calendar_white_48,
-                            ConstantValue.ADDRESS_BOOK,
+                            ConstantValue.CONTACT,
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.ADDRESS_BOOK
+                    history.title = ConstantValue.CONTACT
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
                     /*Put item to HashClipboard*/
@@ -1259,5 +1259,39 @@ fun Utils.getDisplay(mGeneral : GeneralModel) : String?{
         mResult
     }
     return mResult
+}
+
+fun Utils.onTranslateCreateType(type : ParsedResultType) : String {
+    when(type){
+
+        ParsedResultType.PRODUCT ->{
+            return ConstantValue.PRODUCT
+        }
+        ParsedResultType.EMAIL_ADDRESS ->{
+            return ConstantValue.EMAIL
+        }
+        ParsedResultType.SMS ->{
+            return ConstantValue.SMS
+        }
+        ParsedResultType.GEO ->{
+            return ConstantValue.LOCATION
+        }
+        ParsedResultType.ADDRESSBOOK ->{
+            return ConstantValue.CONTACT
+        }
+        ParsedResultType.CALENDAR ->{
+            return ConstantValue.CALENDAR
+        }
+        ParsedResultType.TEL ->{
+            return ConstantValue.TELEPHONE
+        }
+        ParsedResultType.WIFI ->{
+            return ConstantValue.WIFI
+        }
+        ParsedResultType.URI ->{
+            return ConstantValue.WEBSITE
+        }
+        else -> {return ConstantValue.TEXT}
+    }
 }
 

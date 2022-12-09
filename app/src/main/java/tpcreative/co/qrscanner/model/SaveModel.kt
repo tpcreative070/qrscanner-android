@@ -5,6 +5,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.isVcard
 import tpcreative.co.qrscanner.common.extension.onParseMeCard
 import tpcreative.co.qrscanner.common.extension.onParseVCard
+import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import java.io.Serializable
 
 class SaveModel : Serializable {
@@ -203,7 +204,7 @@ class SaveModel : Serializable {
     }
 
     fun getCategoryName(): String? {
-        return typeCategories?.getType()
+        return Utils.onTranslateCreateType(ParsedResultType.valueOf("${typeCategories?.getType()}"))
     }
 
     fun getUpdatedTimeToMilliseconds(): Long{

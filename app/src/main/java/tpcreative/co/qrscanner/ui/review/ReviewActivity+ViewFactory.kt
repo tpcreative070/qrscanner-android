@@ -134,9 +134,6 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
         outputStream.close()
         uri = FileProvider.getUriForFile(this@getImageUri, BuildConfig.APPLICATION_ID + ".provider", file)
         mUri = uri
-        create?.let {
-            onDrawOnBitmap(Utils.getDisplay(it)?:"",it.createType?.name?:"", BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))
-        }
     } catch (e: java.lang.Exception) {
         Toast.makeText(this@getImageUri, "" + e.message, Toast.LENGTH_LONG).show()
     }
@@ -189,7 +186,7 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : GeneralMod
     CoroutineScope(Dispatchers.Main).launch {
         onGenerateReview(code)
         onGenerateQRCode(code)
-        onDrawOnBitmap(Utils.getDisplay(GeneralModel(history)) ?:"",history.createType?:"",
+        onDrawOnBitmap(Utils.getDisplay(GeneralModel(history)) ?:"",Utils.onTranslateCreateType(ParsedResultType.valueOf(history.createType?:ParsedResultType.TEXT.name)),
             BarcodeFormat.valueOf(history.barcodeFormat ?: BarcodeFormat.QR_CODE.name))
     }
 }
@@ -210,8 +207,8 @@ fun ReviewActivity.getIntentData(){
     })
 }
 
-fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat){
-    bitmap?.let {data ->
+suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat) = withContext(Dispatchers.IO){
+     bitmap?.let {data ->
         var mBm = data.addPaddingLeftForBitmap(50)
         mBm = mBm?.addPaddingTopForBitmap(80)
         mBm = mBm?.addPaddingRightForBitmap(50)
@@ -221,7 +218,7 @@ fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: Barcode
             val paint = Paint()
             paint.textAlign = Paint.Align.CENTER
             paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
-            paint.color = ContextCompat.getColor(this, R.color.colorAccent) // Text Color
+            paint.color = ContextCompat.getColor(this@onDrawOnBitmap, R.color.colorAccent) // Text Color
             paint.textSize = 50F // Text Size
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
             val mRectF = RectF(0F, 0F, it.width.toFloat(),it.height.toFloat())

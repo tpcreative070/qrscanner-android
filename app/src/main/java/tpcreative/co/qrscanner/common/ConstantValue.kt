@@ -2,7 +2,8 @@ package tpcreative.co.qrscanner.common
 
 class ConstantValue {
     companion object {
-        const val  ADDRESS_BOOK = "Address book"
+        const val CONTACT = "Contact"
+        const val ADDRESS_BOOK = "Address book"
         const val PHONE_CALL = "Phone call"
         const val EMAIL = "Email"
         const val CLIPBOARD = "Clipboard"
