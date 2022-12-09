@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.model
+import com.google.gson.annotations.SerializedName
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import tpcreative.co.qrscanner.common.Utils
@@ -26,6 +27,7 @@ class SaveModel : Serializable {
     var endEventMilliseconds: Long?
     var fullName: String?
     var address: String?
+    @SerializedName("text")
     var textProductIdISNB: String?
     var ssId: String?
     var hidden: Boolean?
