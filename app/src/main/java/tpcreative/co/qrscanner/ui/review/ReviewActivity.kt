@@ -119,7 +119,7 @@ class ReviewActivity : BaseActivitySlide() {
         save.favorite = false
         if (create?.enumImplement == EnumImplement.CREATE) {
             val time = Utils.getCurrentDateTimeSort()
-            save.createdDatetime = time
+            save.createDatetime = time
             save.updatedDateTime = time
             Utils.Log(TAG, "Questing created")
             Utils.Log(TAG,"Questing created ${Gson().toJson(save)}")
@@ -127,7 +127,7 @@ class ReviewActivity : BaseActivitySlide() {
         } else if (create?.enumImplement == EnumImplement.EDIT) {
             val time = Utils.getCurrentDateTimeSort()
             save.updatedDateTime = time
-            save.createdDatetime = create?.createdDateTime
+            save.createDatetime = create?.createdDateTime
             save.id = create?.id
             save.isSynced = create?.isSynced
             save.uuId = create?.uuId

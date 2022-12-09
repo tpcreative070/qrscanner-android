@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.viewmodel
 import androidx.lifecycle.liveData
-import com.google.zxing.client.result.ParsedResultType
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
@@ -57,7 +56,7 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
         history?.barcodeFormat = create?.barcodeFormat
         history?.favorite = create?.favorite
         val time = Utils.getCurrentDateTimeSort()
-        history?.createdDatetime = time
+        history?.createDatetime = time
         history?.updatedDateTime = time
         SQLiteHelper.onInsert(history)
         HistorySingleton.getInstance()?.reloadData()

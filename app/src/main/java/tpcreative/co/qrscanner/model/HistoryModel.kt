@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.model
 import com.google.gson.annotations.SerializedName
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.isVcard
 import tpcreative.co.qrscanner.common.extension.onParseMeCard
@@ -35,7 +36,7 @@ class HistoryModel : Serializable {
     var url: String?
     var createType: String?
     var networkEncryption: String?
-    var createdDatetime: String? = null
+    var createDatetime: String? = null
     var barcodeFormat: String?
     var favorite: Boolean?
     var updatedDateTime: String?
@@ -54,6 +55,10 @@ class HistoryModel : Serializable {
      * Display to view
    * */
     var code : String?
+
+    /*20:39 09/12/2022 Added noted and favorite*/
+    var hiddenDatetime: String?
+
     /*Display on review*/
     var type : String?
 
@@ -94,6 +99,7 @@ class HistoryModel : Serializable {
         this.barcodeFormat = BarcodeFormat.QR_CODE.name
         this.favorite = false
         this.updatedDateTime = Utils.getCurrentDateTimeSort()
+        this.hiddenDatetime = Utils.getCurrentDateTimeSort()
         this.contentUnique = ""
         this.contentUniqueForUpdatedTime = ""
         this.isSynced = false
@@ -131,7 +137,8 @@ class HistoryModel : Serializable {
         this.url = item?.url
         this.createType = item?.createType
         this.networkEncryption = item?.networkEncryption
-        this.createdDatetime = item?.createDatetime
+        this.createDatetime = item?.createDatetime
+        this.hiddenDatetime = item?.hiddenDatetime
         this.barcodeFormat = item?.barcodeFormat
         this.favorite = item?.favorite
         this.updatedDateTime = item?.updatedDateTime
@@ -172,7 +179,8 @@ class HistoryModel : Serializable {
         this.url = item?.url
         this.createType = item?.createType
         this.networkEncryption = item?.networkEncryption
-        this.createdDatetime = item?.createdDatetime
+        this.createDatetime = item?.createDatetime
+        this.hiddenDatetime = item?.hiddenDatetime
         this.barcodeFormat = item?.barcodeFormat
         this.favorite = item?.favorite
         this.updatedDateTime = item?.updatedDateTime
@@ -217,7 +225,11 @@ class HistoryModel : Serializable {
     }
 
     fun getCategoryName(): String? {
-        return Utils.onTranslateCreateType(ParsedResultType.valueOf("${typeCategories?.getType()}"))
+        try {
+           return Utils.onTranslateCreateType(ParsedResultType.valueOf(typeCategories?.getType() ?: ParsedResultType.TEXT.name))
+        }catch (e : Exception){
+           return ConstantValue.FAVORITE
+        }
     }
 
     fun getUpdatedTimeToMilliseconds(): Long{

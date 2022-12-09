@@ -52,6 +52,10 @@ class SaveEntity : Serializable {
    * */
     var code : String? = ""
 
+    /*20:39 09/12/2022 Added noted and favorite*/
+    var hiddenDatetime: String?
+
+
     constructor() {
         this.email = ""
         this.subject = ""
@@ -79,6 +83,7 @@ class SaveEntity : Serializable {
         this.barcodeFormat = BarcodeFormat.QR_CODE.name
         this.favorite = false
         this.updatedDateTime = Utils.getCurrentDateTimeSort() ?: ""
+        this.hiddenDatetime = Utils.getCurrentDateTimeSort()
         this.noted  = ""
         this.code = ""
     }
@@ -109,6 +114,7 @@ class SaveEntity : Serializable {
         this.createType = item?.createType ?: ""
         this.networkEncryption = item?.networkEncryption ?: ""
         this.createDatetime = item?.createDatetime ?: ""
+        this.hiddenDatetime = item?.hiddenDatetime
         this.barcodeFormat = item?.barcodeFormat ?: ""
         this.favorite = item?.favorite ?: false
         this.updatedDateTime = item?.updatedDateTime ?: ""

@@ -712,7 +712,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableInterstitialAd() : Boolean {
-        return  true
+        return  false
     }
 
     fun setRequestClearCacheData(data : Boolean){

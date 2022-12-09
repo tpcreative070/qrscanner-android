@@ -51,6 +51,10 @@ class GeneralModel : Serializable {
      * Display to view
     * */
      var code : String?
+
+    /*20:39 09/12/2022 Added noted and favorite*/
+    var hiddenDatetime: String?
+
     var navigationList : MutableList<ItemNavigation>?
     var hashClipboard: HashMap<Any?, String?>?
     var contact : ContactModel? = null
@@ -89,6 +93,7 @@ class GeneralModel : Serializable {
         this.favorite = false
         this.updatedDateTime = Utils.getCurrentDateTimeSort()
         this.createdDateTime = Utils.getCurrentDateTimeSort()
+        this.hiddenDatetime = Utils.getCurrentDateTimeSort()
         this.enumImplement =  EnumImplement.CREATE
         this.isSynced =  false
         this.uuId = Utils.getUUId()
@@ -128,8 +133,9 @@ class GeneralModel : Serializable {
         this.fragmentType = mFragmentType
         this.barcodeFormat = mSave.barcodeFormat
         this.favorite = mSave.favorite ?: false
-        this.updatedDateTime = Utils.getCurrentDateTimeSort()
-        this.createdDateTime = mSave.createdDatetime
+        this.updatedDateTime = mSave.updatedDateTime
+        this.createdDateTime = mSave.createDatetime
+        this.hiddenDatetime = mSave.hiddenDatetime
         this.enumImplement = mImplement
         this.isSynced = true && mSave.isSynced ?: false
         this.uuId = mSave.uuId
@@ -180,8 +186,9 @@ class GeneralModel : Serializable {
         this.fragmentType = mFragmentType
         this.barcodeFormat = mHistory.barcodeFormat
         this.favorite = mHistory.favorite ?: false
-        this.updatedDateTime = Utils.getCurrentDateTimeSort()
-        this.createdDateTime = mHistory.createdDatetime
+        this.updatedDateTime = mHistory.updatedDateTime
+        this.createdDateTime = mHistory.createDatetime
+        this.hiddenDatetime = mHistory.hiddenDatetime
         this.enumImplement = mImplement
         this.isSynced = true && mHistory.isSynced ?: false
         this.uuId = mHistory.uuId
@@ -234,8 +241,9 @@ class GeneralModel : Serializable {
         this.fragmentType = EnumFragmentType.NONE
         this.barcodeFormat = mHistory.barcodeFormat
         this.favorite = mHistory.favorite ?: false
-        this.updatedDateTime = Utils.getCurrentDateTimeSort()
-        this.createdDateTime = mHistory.createdDatetime
+        this.updatedDateTime = mHistory.updatedDateTime
+        this.createdDateTime = mHistory.createDatetime
+        this.hiddenDatetime = mHistory.hiddenDatetime
         this.enumImplement = EnumImplement.NONE
         this.isSynced = true && mHistory.isSynced ?: false
         this.uuId = mHistory.uuId
@@ -293,8 +301,9 @@ class GeneralModel : Serializable {
         this.fragmentType = EnumFragmentType.NONE
         this.barcodeFormat = mSave.barcodeFormat
         this.favorite = mSave.favorite ?: false
-        this.updatedDateTime = Utils.getCurrentDateTimeSort()
-        this.createdDateTime = mSave.createdDatetime
+        this.updatedDateTime = mSave.updatedDateTime
+        this.createdDateTime = mSave.createDatetime
+        this.hiddenDatetime = mSave.hiddenDatetime
         this.enumImplement = EnumImplement.NONE
         this.isSynced = true && mSave.isSynced ?: false
         this.uuId = mSave.uuId
@@ -356,8 +365,9 @@ class GeneralModel : Serializable {
         this.fragmentType = save.fragmentType
         this.barcodeFormat = save.barcodeFormat
         this.favorite = save.favorite
-        this.updatedDateTime = Utils.getCurrentDateTimeSort()
+        this.updatedDateTime = save.updatedDateTime
         this.createdDateTime = save.createdDateTime
+        this.hiddenDatetime = save.hiddenDatetime
         this.enumImplement = save.enumImplement
         this.isSynced = true && save.isSynced
         this.uuId = save.uuId

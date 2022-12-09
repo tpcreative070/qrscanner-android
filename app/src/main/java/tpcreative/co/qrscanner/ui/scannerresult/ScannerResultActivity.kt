@@ -292,7 +292,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         history.barcodeFormat = create?.barcodeFormat
         history.favorite = create?.favorite
         val time = Utils.getCurrentDateTimeSort()
-        history.createdDatetime = time
+        history.createDatetime = time
         history.updatedDateTime = time
         SQLiteHelper.onInsert(history)
         HistorySingleton.getInstance()?.reloadData()

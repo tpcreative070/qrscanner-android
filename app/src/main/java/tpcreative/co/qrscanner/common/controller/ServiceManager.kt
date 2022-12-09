@@ -437,7 +437,7 @@ class ServiceManager : BaseView<Any?> {
                                     index.ssId,
                                     index.password,
                                     index.networkEncryption,
-                                    index.createdDatetime)
+                                    index.createDatetime)
                             csvWrite.writeNext(value)
                         }
                     }
@@ -495,7 +495,7 @@ class ServiceManager : BaseView<Any?> {
                                     index.ssId,
                                     index.password,
                                     index.networkEncryption,
-                                    index.createdDatetime)
+                                    index.createDatetime)
                             csvWrite.writeNext(value)
                         }
                     }

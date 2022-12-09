@@ -526,8 +526,8 @@ object Utils {
         for (index in mSyncedList) {
             /*Checking item exiting before*/
             val mItem: SaveModel? = mSyncedMap[index.uuId]
-            if (mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) {
-                index.id = mItem.id
+            if ((mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) || checkSaveFavoriteOrNotedUpdateToLocal(index,mItem)) {
+                index.id = mItem?.id
                 mList.add(index)
             }
         }
@@ -541,12 +541,26 @@ object Utils {
         for (index in mSyncedList) {
             /*Checking item exiting before*/
             val mItem: HistoryModel? = mSyncedMap[index.uuId]
-            if (mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) {
-                index.id = mItem.id
+            if ((mItem != null && index.contentUniqueForUpdatedTime != mItem.contentUniqueForUpdatedTime && getMilliseconds(index.updatedDateTime) > getMilliseconds(mItem.updatedDateTime)) || checkHistoryFavoriteOrNotedUpdateToLocal(index,mItem)) {
+                index.id = mItem?.id
                 mList.add(index)
             }
         }
         return mList
+    }
+
+    private fun checkHistoryFavoriteOrNotedUpdateToLocal(mGlobal : HistoryModel?, mLocal : HistoryModel?) : Boolean{
+        if (((mGlobal?.favorite != mLocal?.favorite) || (mGlobal?.noted != mLocal?.noted)) &&  getMilliseconds(mGlobal?.hiddenDatetime) > getMilliseconds(mLocal?.hiddenDatetime)){
+            return true
+        }
+        return false
+    }
+
+    private fun checkSaveFavoriteOrNotedUpdateToLocal(mGlobal : SaveModel?, mLocal : SaveModel?) : Boolean{
+        if (((mGlobal?.favorite != mLocal?.favorite) || (mGlobal?.noted != mLocal?.noted)) && getMilliseconds(mGlobal?.hiddenDatetime) > getMilliseconds(mLocal?.hiddenDatetime)){
+            return true
+        }
+        return false
     }
 
     fun checkHistoryDeleteSyncedLocal(mSyncedList: MutableList<HistoryModel>): MutableList<HistoryModel> {

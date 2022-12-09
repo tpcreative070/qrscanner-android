@@ -189,7 +189,7 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : GeneralMod
     history.barcodeFormat = BarcodeFormat.QR_CODE.name
     format = BarcodeFormat.QR_CODE.name
     val time = Utils.getCurrentDateTimeSort()
-    history.createdDatetime = time
+    history.createDatetime = time
     history.updatedDateTime = time
     txtFormat.text = format
     SQLiteHelper.onInsert(history)

@@ -47,6 +47,9 @@ class HistoryEntityModel {
     * */
     var code : String?
 
+    /*20:39 09/12/2022 Added noted and favorite*/
+    var hiddenDatetime: String?
+
     constructor(item: HistoryEntity?) {
         this.id = item?.id
         this.email = item?.email
@@ -73,6 +76,7 @@ class HistoryEntityModel {
         this.createType = item?.createType
         this.networkEncryption = item?.networkEncryption
         this.createDatetime = item?.createDatetime
+        this.hiddenDatetime = item?.hiddenDatetime
         this.barcodeFormat = item?.barcodeFormat
         this.favorite = item?.favorite
         this.updatedDateTime = item?.updatedDateTime
@@ -109,7 +113,8 @@ class HistoryEntityModel {
         this.url = item?.url
         this.createType = item?.createType
         this.networkEncryption = item?.networkEncryption
-        this.createDatetime = item?.createdDatetime
+        this.createDatetime = item?.createDatetime
+        this.hiddenDatetime = item?.hiddenDatetime
         this.barcodeFormat = item?.barcodeFormat
         this.favorite = item?.favorite
         this.updatedDateTime = item?.updatedDateTime

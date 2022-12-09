@@ -358,10 +358,16 @@ abstract class InstanceGenerator : RoomDatabase() {
           * Using code filed in able to solve address book and email type
           * Display to view
         * */
+        /*20:39 09/12/2022 Added noted and favorite
+        *  hiddenDatetime
+        * */
+
         private val MIGRATION_5_6: Migration = object : Migration(5, 6) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE 'save' ADD COLUMN  'code' TEXT")
                 database.execSQL("ALTER TABLE 'history' ADD COLUMN  'code' TEXT")
+                database.execSQL("ALTER TABLE 'save' ADD COLUMN  'hiddenDatetime' TEXT")
+                database.execSQL("ALTER TABLE 'history' ADD COLUMN  'hiddenDatetime' TEXT")
             }
         }
 
