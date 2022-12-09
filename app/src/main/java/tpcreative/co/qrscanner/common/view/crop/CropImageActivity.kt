@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
+import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.view.crop.Crop.Extra
 import tpcreative.co.qrscanner.common.view.crop.CropImageView.ListenerState
@@ -163,7 +164,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                     create.barcodeFormat = mResult.barcodeFormat.name
                 }
                 mCreate = create
-                tvFormatType.text = parsedResult.type.name
+                tvFormatType.text = Utils.onTranslateCreateType(parsedResult.type)
             }
         } catch (e: Exception) {
             e.printStackTrace()
