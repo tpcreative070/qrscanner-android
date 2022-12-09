@@ -1291,6 +1291,9 @@ fun Utils.onTranslateCreateType(type : ParsedResultType) : String {
         ParsedResultType.URI ->{
             return ConstantValue.WEBSITE
         }
+        ParsedResultType.ISBN ->{
+            return ConstantValue.ISBN
+        }
         else -> {return ConstantValue.TEXT}
     }
 }
