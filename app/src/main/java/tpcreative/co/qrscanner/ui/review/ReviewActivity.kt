@@ -24,7 +24,7 @@ import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
     lateinit var viewModel: ReviewViewModel
-    private var create: GeneralModel? = null
+    var create: GeneralModel? = null
     var bitmap: Bitmap? = null
     var code: String? = null
     var type: String? = null

@@ -51,8 +51,8 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_gravity="center"
                         android:id="@+id/imgResult"
-                        android:layout_width="@dimen/icon_size_250"
-                        android:layout_height="@dimen/icon_size_250"
+                        android:layout_width="@dimen/icon_size_300"
+                        android:layout_height="@dimen/icon_size_300"
                         android:layout_marginTop="@dimen/margin_20"/>
                 </LinearLayout>
                 <LinearLayout

@@ -1189,3 +1189,27 @@ fun Utils.isVcard(code: String?): Boolean {
     return false
 }
 
+fun Utils.getDisplay(mGeneral : GeneralModel) : String?{
+    val mResult : String?
+    if (mGeneral.createType == ParsedResultType.EMAIL_ADDRESS) {
+        mResult = mGeneral.email
+    } else if (mGeneral.createType == ParsedResultType.SMS) {
+        mResult = mGeneral.phone
+    } else if (mGeneral.createType == ParsedResultType.GEO) {
+        mResult = mGeneral.query
+    } else if (mGeneral.createType == ParsedResultType.CALENDAR) {
+        mResult = mGeneral.title
+    } else if (mGeneral.createType == ParsedResultType.ADDRESSBOOK) {
+        mResult = mGeneral.getNames()
+    } else if (mGeneral.createType == ParsedResultType.TEL) {
+        mResult = mGeneral.phone
+    } else if (mGeneral.createType == ParsedResultType.WIFI) {
+        mResult = mGeneral.ssId
+    } else if (mGeneral.createType == ParsedResultType.URI) {
+        mResult = mGeneral.url
+    } else {
+        mResult = mGeneral.textProductIdISNB
+    }
+    return mResult
+}
+

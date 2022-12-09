@@ -1,7 +1,8 @@
 package tpcreative.co.qrscanner.ui.review
+
 import android.content.ClipData
 import android.content.Intent
-import android.graphics.Bitmap
+import android.graphics.*
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
@@ -9,6 +10,7 @@ import android.util.Patterns
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -25,17 +27,15 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.onParseVCard
-import tpcreative.co.qrscanner.common.extension.parcelable
-import tpcreative.co.qrscanner.common.extension.readVCF
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.HistoryModel
-import tpcreative.co.qrscanner.model.SaveModel
 import java.io.File
 import java.io.FileOutputStream
+
 
 fun ReviewActivity.initUI(){
     TAG = this::class.java.simpleName
@@ -129,11 +129,14 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
         imageFolder.mkdirs()
         val file = File(imageFolder, "shared_code_${System.currentTimeMillis()}.png")
         val outputStream = FileOutputStream(file)
-        bitmap?.compress(Bitmap.CompressFormat.PNG, 80, outputStream)
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 40, outputStream)
         outputStream.flush()
         outputStream.close()
         uri = FileProvider.getUriForFile(this@getImageUri, BuildConfig.APPLICATION_ID + ".provider", file)
         mUri = uri
+        create?.let {
+            onDrawOnBitmap(Utils.getDisplay(it)?:"",it.createType?.name?:"", BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))
+        }
     } catch (e: java.lang.Exception) {
         Toast.makeText(this@getImageUri, "" + e.message, Toast.LENGTH_LONG).show()
     }
@@ -186,6 +189,8 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : GeneralMod
     CoroutineScope(Dispatchers.Main).launch {
         onGenerateReview(code)
         onGenerateQRCode(code)
+        onDrawOnBitmap(Utils.getDisplay(GeneralModel(history)) ?:"",history.createType?:"",
+            BarcodeFormat.valueOf(history.barcodeFormat ?: BarcodeFormat.QR_CODE.name))
     }
 }
 
@@ -203,5 +208,33 @@ fun ReviewActivity.getIntentData(){
             onCatch()
         }
     })
+}
+
+fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat){
+    bitmap?.let {data ->
+        var mBm = data.addPaddingLeftForBitmap(50)
+        mBm = mBm?.addPaddingTopForBitmap(80)
+        mBm = mBm?.addPaddingRightForBitmap(50)
+        mBm = mBm?.addPaddingBottomForBitmap(80)
+        mBm?.let {
+            val canvas = Canvas(it)
+            val paint = Paint()
+            paint.textAlign = Paint.Align.CENTER
+            paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
+            paint.color = ContextCompat.getColor(this, R.color.colorAccent) // Text Color
+            paint.textSize = 50F // Text Size
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
+            val mRectF = RectF(0F, 0F, it.width.toFloat(),it.height.toFloat())
+            if (BarcodeFormat.QR_CODE != format && !viewModel.isSharedIntent){
+                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 50 , paint)
+                canvas.drawText(mValue, (canvas.width /2).toFloat(), mRectF.bottom - 22 , paint)
+            }else{
+                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 60 , paint)
+                canvas.drawText(mValue, (canvas.width /2).toFloat(), mRectF.bottom - 42 , paint)
+            }
+            Utils.Log(TAG,"Rect ${mRectF.centerY()} ${mRectF.bottom}")
+            bitmap = it
+        }
+    }
 }
 
