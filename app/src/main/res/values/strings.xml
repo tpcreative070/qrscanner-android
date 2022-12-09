@@ -18,6 +18,9 @@
     <string name="tabs">Tabs</string>
     <string name="view_code">View code</string>
     <string name="scan_photo">Scan photo</string>
+    <string name="search_on_ebay_com">Search on eBay.com</string>
+    <string name="search_on_amazon_com">Search on Amazon.com</string>
+    <string name="search_product_on_the_web">Search product on the web</string>
 
     <string name="tab_1">History</string>
     <string name="tab_2">Create</string>

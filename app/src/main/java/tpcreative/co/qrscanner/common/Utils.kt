@@ -951,6 +951,30 @@ object Utils {
     }
 
 
+    fun onSearchMarketPlace(url : String,context: Activity){
+        try {
+            val uri = Uri.parse(url)
+            val i = Intent(Intent.ACTION_VIEW, uri)
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            i.setPackage("com.android.chrome")
+            try {
+                context.startActivity(i)
+            } catch (e: ActivityNotFoundException) {
+                // Chrome is probably not installed
+                // Try with the default browser
+                try {
+                    i.setPackage(null)
+                    context.startActivity(i)
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                    Utils.onAlertNotify(context, "Can not open the link")
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun onSearch(query: String?,context: Activity) {
         try {
             val escapedQuery = URLEncoder.encode(query, "UTF-8")

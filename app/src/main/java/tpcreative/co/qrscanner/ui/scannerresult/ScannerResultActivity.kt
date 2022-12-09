@@ -101,6 +101,15 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             EnumAction.URL_ADDRESS_BOOK ->{
                 Utils.onOpenWebSites(contactValue,this)
             }
+            EnumAction.SEARCH_WEB ->{
+                Utils.onSearch(contactValue,this)
+            }
+            EnumAction.SEARCH_AMAZON ->{
+                Utils.onSearchMarketPlace("https://www.amazon.com/s?k=$contactValue",this)
+            }
+            EnumAction.SEARCH_EBAY ->{
+                Utils.onSearchMarketPlace("https://www.ebay.com/sch/i.html?_nkw=$contactValue",this)
+            }
             EnumAction.GEO_ADDRESS_BOOK ->{
                 val url = "https://www.google.com/maps/search/?api=1&query=$contactValue"
                 Utils.onShareMap(this,url)

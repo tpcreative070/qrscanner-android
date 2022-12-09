@@ -621,11 +621,36 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                         ItemNavigation(
                             create.createType,
                             ConstantValue.NONE,
-                            ConstantValue.NONE,
+                            create.textProductIdISNB ?:"",
                             create.fragmentType,
-                            EnumAction.SEARCH,
+                            EnumAction.SEARCH_WEB,
                             R.drawable.baseline_search_white_48,
-                            create.textProductIdISNB,
+                            QRScannerApplication.getInstance().getString(R.string.search_product_on_the_web),
+                            create.favorite
+                        )
+                    )
+                    history.navigationList?.add(
+                        ItemNavigation(
+                            create.createType,
+                            ConstantValue.NONE,
+                            create.textProductIdISNB ?:"",
+                            create.fragmentType,
+                            EnumAction.SEARCH_AMAZON,
+                            R.drawable.ic_baseline_manage_search_24,
+                            QRScannerApplication.getInstance().getString(R.string.search_on_amazon_com),
+                            create.favorite
+                        )
+                    )
+
+                    history.navigationList?.add(
+                        ItemNavigation(
+                            create.createType,
+                            ConstantValue.NONE,
+                            create.textProductIdISNB ?:"",
+                            create.fragmentType,
+                            EnumAction.SEARCH_EBAY,
+                            R.drawable.ic_baseline_manage_search_24,
+                            QRScannerApplication.getInstance().getString(R.string.search_on_ebay_com),
                             create.favorite
                         )
                     )
@@ -820,11 +845,37 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                         ItemNavigation(
                             create.createType,
                             ConstantValue.NONE,
-                            ConstantValue.NONE,
+                            create.textProductIdISNB?:"",
                             create.fragmentType,
-                            EnumAction.SEARCH,
+                            EnumAction.SEARCH_WEB,
                             R.drawable.baseline_search_white_48,
-                            ConstantValue.SEARCH,
+                            QRScannerApplication.getInstance().getString(R.string.search_product_on_the_web),
+                            create.favorite
+                        )
+                    )
+
+                    history.navigationList?.add(
+                        ItemNavigation(
+                            create.createType,
+                            ConstantValue.NONE,
+                            create.textProductIdISNB ?:"",
+                            create.fragmentType,
+                            EnumAction.SEARCH_AMAZON,
+                            R.drawable.ic_baseline_manage_search_24,
+                            QRScannerApplication.getInstance().getString(R.string.search_on_amazon_com),
+                            create.favorite
+                        )
+                    )
+
+                    history.navigationList?.add(
+                        ItemNavigation(
+                            create.createType,
+                            ConstantValue.NONE,
+                            create.textProductIdISNB ?:"",
+                            create.fragmentType,
+                            EnumAction.SEARCH_EBAY,
+                            R.drawable.ic_baseline_manage_search_24,
+                            QRScannerApplication.getInstance().getString(R.string.search_on_ebay_com),
                             create.favorite
                         )
                     )
@@ -1292,7 +1343,7 @@ fun Utils.onTranslateCreateType(type : ParsedResultType) : String {
             return ConstantValue.WEBSITE
         }
         ParsedResultType.ISBN ->{
-            return ConstantValue.ISBN
+            return ConstantValue.PRODUCT
         }
         else -> {return ConstantValue.TEXT}
     }
