@@ -541,6 +541,37 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             )
                         )
                     }
+
+                    create.contact?.addresses?.forEach {
+                        if (it.value.getAddressValue().isEmpty()){
+                            history.navigationList?.add(
+                                ItemNavigation(
+                                    create.createType,
+                                    ConstantValue.NONE,
+                                    it.value.address ?:"",
+                                    create.fragmentType,
+                                    EnumAction.GEO_ADDRESS_BOOK,
+                                    R.drawable.ic_baseline_directions_24,
+                                    it.value.address,
+                                    create.favorite
+                                )
+                            )
+                        }else{
+                            history.navigationList?.add(
+                                ItemNavigation(
+                                    create.createType,
+                                    ConstantValue.NONE,
+                                    it.value.getAddressValue(),
+                                    create.fragmentType,
+                                    EnumAction.GEO_ADDRESS_BOOK,
+                                    R.drawable.ic_baseline_directions_24,
+                                    it.value.getAddressValue(),
+                                    create.favorite
+                                )
+                            )
+                        }
+                    }
+
                     history.fullName = create.fullName
                     history.address = create.address
                     history.phone = create.phone
@@ -686,7 +717,19 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.fragmentType,
                             EnumAction.Other,
                             R.drawable.baseline_location_on_white_48,
-                            create.query,
+                            "${create.lat},${create.lon}",
+                            create.favorite
+                        )
+                    )
+                    history.navigationList?.add(
+                        ItemNavigation(
+                            create.createType,
+                            ConstantValue.NONE,
+                            "${create.query}",
+                            create.fragmentType,
+                            EnumAction.GEO_ADDRESS_BOOK,
+                            R.drawable.ic_baseline_directions_24,
+                            "${create.query}",
                             create.favorite
                         )
                     )

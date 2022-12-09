@@ -101,6 +101,10 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             EnumAction.URL_ADDRESS_BOOK ->{
                 Utils.onOpenWebSites(contactValue,this)
             }
+            EnumAction.GEO_ADDRESS_BOOK ->{
+                val url = "https://www.google.com/maps/search/?api=1&query=$contactValue"
+                Utils.onShareMap(this,url)
+            }
             EnumAction.EMAIL ->{
                 Utils.onSendMail(this,result)
             }
@@ -188,7 +192,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     return
                 }
                 ParsedResultType.GEO -> {
-                    val uri = "geo:" + create?.lat + "," + create?.lon + ""
+                    val uri = "https://maps.google.com/?q=${create?.lat},${create?.lon}"
                     Utils.onShareMap(this,uri)
                     return
                 }
