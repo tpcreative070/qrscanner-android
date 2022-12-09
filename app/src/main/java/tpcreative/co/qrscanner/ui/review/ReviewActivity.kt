@@ -32,6 +32,8 @@ class ReviewActivity : BaseActivitySlide() {
     var type: String? = null
     var format: String? = null
     var mUri : Uri? = null
+    var isRequestPrint : Boolean = false
+    var isRequestExportPNG : Boolean = false
     private var save: SaveModel = SaveModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,11 +95,17 @@ class ReviewActivity : BaseActivitySlide() {
                 return true
             }
             R.id.menu_item_png_export -> {
-                mUri?.let { shareToSocial(it) }
+                if (!isRequestExportPNG){
+                    isRequestExportPNG = true
+                    shareToSocial()
+                }
                 return true
             }
             R.id.menu_item_print -> {
-                onPhotoPrint()
+                if (!isRequestPrint){
+                    isRequestPrint = true
+                    onPhotoPrint()
+                }
                 return true
             }
         }

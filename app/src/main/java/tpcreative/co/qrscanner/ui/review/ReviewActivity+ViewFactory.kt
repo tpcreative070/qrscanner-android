@@ -112,14 +112,18 @@ private fun ReviewActivity.setupViewModel() {
     ).get(ReviewViewModel::class.java)
 }
 
-fun ReviewActivity.shareToSocial(value : Uri) {
+fun ReviewActivity.shareToSocial() {
+    if (mUri == null){
+        return
+    }
     val intent = Intent()
     intent.action = Intent.ACTION_SEND
     intent.type = "image/*"
-    intent.putExtra(Intent.EXTRA_STREAM,value)
-    intent.clipData = ClipData.newRawUri("", value);
+    intent.putExtra(Intent.EXTRA_STREAM,mUri)
+    intent.clipData = ClipData.newRawUri("", mUri);
     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
     startActivity(Intent.createChooser(intent, "Share"))
+    isRequestExportPNG = false
 }
 
 suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatchers.IO) {
@@ -134,6 +138,9 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
         outputStream.close()
         uri = FileProvider.getUriForFile(this@getImageUri, BuildConfig.APPLICATION_ID + ".provider", file)
         mUri = uri
+        if (isRequestExportPNG){
+            shareToSocial()
+        }
     } catch (e: java.lang.Exception) {
         Toast.makeText(this@getImageUri, "" + e.message, Toast.LENGTH_LONG).show()
     }
@@ -141,9 +148,13 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
 
 fun ReviewActivity.onPhotoPrint() {
     try {
+        if (bitmap == null){
+            return
+        }
         val photoPrinter = PrintHelper(this)
         photoPrinter.scaleMode = PrintHelper.SCALE_MODE_FIT
         Utils.getCurrentDate()?.let { bitmap?.let { it1 -> photoPrinter.printBitmap(it, it1) } }
+        isRequestPrint = false
     } catch (e: Exception) {
         e.printStackTrace()
     }
@@ -231,6 +242,9 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
             }
             Utils.Log(TAG,"Rect ${mRectF.centerY()} ${mRectF.bottom}")
             bitmap = it
+            if (isRequestPrint){
+                onPhotoPrint()
+            }
         }
     }
 }
