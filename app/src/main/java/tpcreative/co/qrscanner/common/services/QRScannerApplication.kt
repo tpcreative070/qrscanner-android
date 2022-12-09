@@ -543,6 +543,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                     }
 
                     override fun onAdShowedFullScreenContent() {
+                        mInterstitialAd = null
                         Utils.Log(TAG, "Ad showed fullscreen content.")
                         // Called when ad is dismissed.
                     }

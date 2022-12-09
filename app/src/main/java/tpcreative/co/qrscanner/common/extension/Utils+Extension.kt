@@ -353,6 +353,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                         }
                     }
                     save.createType = mData.createType?.name
+                    save.onAddressBook(mData)
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
                     save.code =
@@ -456,7 +457,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     ConstantValue.NONE,
                     create.fragmentType,
                     EnumAction.DO_ADVANCE,
-                    R.drawable.baseline_location_on_white_48,
+                    R.drawable.alerter_ic_face,
                     ConstantValue.ADVANCE,
                     create.favorite
                 )
@@ -571,11 +572,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             )
                         }
                     }
-
-                    history.fullName = create.fullName
-                    history.address = create.address
-                    history.phone = create.phone
-                    history.email = create.email
+                    history.onAddressBook(create)
                     history.createType = create.createType?.name
                     history.navigationList?.add(
                         ItemNavigation(
@@ -907,6 +904,9 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                         Utils.Log(TAG,"Result mecard "+Gson().toJson(mMeCard))
                     }
                     mData.createType = ParsedResultType.ADDRESSBOOK
+                    val mParsed = ResultParser.parseResult(mResult)
+                    val mResultAddressBook = mParsed as AddressBookParsedResult?
+                    mData.onAddressBook(mResultAddressBook)
                     Log(clazz::class.java, "Result address ${Gson().toJson(parsedResult)}")
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
