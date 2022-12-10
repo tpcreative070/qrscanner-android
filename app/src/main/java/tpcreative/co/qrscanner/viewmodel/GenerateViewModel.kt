@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
+import kotlinx.android.synthetic.main.activity_barcode.*
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils

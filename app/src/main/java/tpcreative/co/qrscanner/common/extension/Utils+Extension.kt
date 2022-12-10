@@ -4,7 +4,14 @@ import android.net.Uri
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
+import com.google.zxing.aztec.encoder.Encoder.encode
 import com.google.zxing.client.result.*
+import com.google.zxing.oned.EAN13Writer
+import com.google.zxing.oned.EAN8Writer
+import com.google.zxing.oned.ITFWriter
+import com.google.zxing.oned.UPCAReader
+import com.google.zxing.oned.UPCAWriter
+import com.google.zxing.oned.UPCEWriter
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
@@ -1359,5 +1366,55 @@ fun Utils.onTranslateCreateType(type : ParsedResultType?) : String {
         }
         else -> {return ConstantValue.TEXT}
     }
+}
+
+fun Utils.validBarcode(code :String,barcodeFormat : BarcodeFormat) : Boolean{
+    try {
+        when(barcodeFormat){
+            BarcodeFormat.EAN_8 ->{
+                val mData = EAN8Writer().encode(code)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.EAN_13 ->{
+                val mData = EAN13Writer().encode(code)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.UPC_A->{
+                val mData = UPCAWriter().encode(code,barcodeFormat,200,200)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.UPC_E->{
+                val mData = UPCEWriter().encode(code)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.ITF->{
+                val mData = ITFWriter().encode(code)
+                if (mData!=null){
+                    return true
+                }
+            }
+            else -> {}
+        }
+    }catch (e : Exception){
+        e.printStackTrace()
+        return false
+    }
+    return false
+
+//    val mResult = Result(code, code.toByteArray(), null, barcodeFormat)
+//    val mParsed = ResultParser.parseResult(mResult)
+//    if (mParsed!=null && mResult.text.isNotEmpty()){
+//        Log(TAG,mParsed.displayResult)
+//        return true
+//    }
+//    return false
 }
 

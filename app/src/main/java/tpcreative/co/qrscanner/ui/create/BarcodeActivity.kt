@@ -13,11 +13,13 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.basgeekball.awesomevalidation.utility.custom.SimpleCustomValidation
-import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import com.google.zxing.oned.UPCAReader
 import kotlinx.android.synthetic.main.activity_barcode.*
+import org.apache.commons.validator.Validator
 import org.apache.commons.validator.routines.ISBNValidator
+import org.apache.commons.validator.routines.checkdigit.CheckDigit
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.GenerateSingleton
@@ -25,7 +27,7 @@ import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.SaveSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.common.extension.validBarcode
 import tpcreative.co.qrscanner.model.FormatTypeModel
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
@@ -96,7 +98,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.EAN_13) {
                 if (input.length == 13) {
-                    return@SimpleCustomValidation EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(input)
+                    return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.EAN_13)
                 } else {
                     return@SimpleCustomValidation false
                 }
@@ -106,7 +108,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.EAN_8) {
                 if (input.length == 8) {
-                    return@SimpleCustomValidation Utils.checkGTIN(input)
+                    return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.EAN_8)
                 } else {
                     return@SimpleCustomValidation false
                 }
@@ -117,7 +119,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.UPC_E) {
                 if (input.length == 8) {
-                    return@SimpleCustomValidation Utils.checkGTIN(input)
+                    return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.UPC_E)
                 } else {
                     return@SimpleCustomValidation false
                 }
@@ -127,7 +129,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.UPC_A) {
                 if (input.length == 12) {
-                    return@SimpleCustomValidation Utils.checkGTIN(input)
+                    return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.UPC_A)
                 } else {
                     return@SimpleCustomValidation false
                 }
@@ -136,11 +138,10 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         }, R.string.warning_barcode_UPC_A_length_12)
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.ITF) {
-                return@SimpleCustomValidation Utils.checkITF(input)
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.ITF)
             }
             true
         }, R.string.warning_barcode_ITF)
-
     }
 
     private fun focusUI() {
@@ -243,7 +244,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     fun onSetView() {
@@ -310,7 +311,12 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             viewModel.mType = BarcodeFormat.valueOf(type?.id ?:BarcodeFormat.QR_CODE.name)
             if (viewModel.isText(save?.textProductIdISNB)){
                 edtBarCode.setText(save?.textProductIdISNB)
-                edtBarCode.setSelection(save?.textProductIdISNB?.length ?:0)
+                val mLength = save?.textProductIdISNB?.length?:0
+                if (viewModel.mLength >= mLength){
+                    edtBarCode.setSelection(mLength)
+                }else{
+                    edtBarCode.setSelection(save?.textProductIdISNB?.substring(0,viewModel.mLength)?.length ?:0)
+                }
                 edtBarCode.requestFocus()
             }
         }
