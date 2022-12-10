@@ -17,18 +17,21 @@ fun BarcodeActivity.initUI(){
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     doInitView()
-    val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
-    if (mData != null) {
-        save = mData
-        onSetData()
-    } else {
-        Utils.Log(TAG, "Data is null")
-    }
+    getIntentData()
     btnRandom.setOnClickListener {
         val mValue = Utils.generateRandomDigits(viewModel.mLength - 1).toString() + ""
         val mResult = Utils.generateEAN(mValue)
         edtBarCode.setText(mResult)
     }
+}
+
+private fun BarcodeActivity.getIntentData(){
+    viewModel.getIntent(this).observe(this, Observer {
+        if (it!=null){
+            this.save = it
+            onSetData()
+        }
+    })
 }
 
 fun BarcodeActivity.doInitView(){

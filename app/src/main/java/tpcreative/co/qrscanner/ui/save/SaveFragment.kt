@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
@@ -240,8 +241,19 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
                 Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), MessageActivity::class.java)
             } else if (edit?.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
                 Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), EventActivity::class.java)
-            } else {
-                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), TextActivity::class.java)
+            }
+            else if (edit?.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), BarcodeActivity::class.java)
+            }
+            else if (edit?.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) {
+                Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), BarcodeActivity::class.java)
+            }
+            else {
+                if (edit?.barcodeFormat == BarcodeFormat.QR_CODE.name){
+                    Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), TextActivity::class.java)
+                }else{
+                    Navigator.onGenerateView(activity,GeneralModel(it,EnumFragmentType.SAVER,EnumImplement.EDIT), BarcodeActivity::class.java)
+                }
             }
         }
     }

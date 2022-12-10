@@ -57,12 +57,12 @@ fun Uri.onParseContact(context: Context) : ContactModel{
                 val mFullName = mNameStructure.getString(mNameStructure.getColumnIndex(
                     ContactsContract.CommonDataKinds.StructuredName.FULL_NAME_STYLE))
 
-                mContact.givenName = firstName
-                mContact.middleName = middleName
-                mContact.middleName = middleName
-                mContact.familyName  = lastName
-                mContact.suffixesName = mSuffixesName
-                mContact.fullName = mFullName
+                mContact.givenName = firstName.orEmpty()
+                mContact.middleName = middleName.orEmpty()
+                mContact.middleName = middleName.orEmpty()
+                mContact.familyName  = lastName.orEmpty()
+                mContact.suffixesName = mSuffixesName.orEmpty()
+                mContact.fullName = mFullName.orEmpty()
             }
             mNameStructure?.close()
 
