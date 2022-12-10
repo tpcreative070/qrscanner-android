@@ -125,7 +125,7 @@
                             style="@style/brandonRegularTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/address" />
+                            android:text="@string/place" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtQuery"

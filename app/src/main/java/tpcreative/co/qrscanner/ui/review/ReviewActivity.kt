@@ -34,6 +34,7 @@ class ReviewActivity : BaseActivitySlide() {
     var mUri : Uri? = null
     var isRequestPrint : Boolean = false
     var isRequestExportPNG : Boolean = false
+    var processDrawnDone : Boolean = false
     private var save: SaveModel = SaveModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +78,7 @@ class ReviewActivity : BaseActivitySlide() {
             CoroutineScope(Dispatchers.IO).launch {
                 onGenerateReview(code)
                 onGenerateQRCode(code)
-                onDrawOnBitmap(Utils.getDisplay(it)?:"",Utils.onTranslateCreateType(it
+                onDrawOnBitmap(Utils.getDisplay(GeneralModel(save))?:"",Utils.onTranslateCreateType(it
                     .createType ?: ParsedResultType.TEXT), BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))
             }
         }

@@ -133,7 +133,7 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
         imageFolder.mkdirs()
         val file = File(imageFolder, "shared_code_${System.currentTimeMillis()}.png")
         val outputStream = FileOutputStream(file)
-        bitmap?.compress(Bitmap.CompressFormat.PNG, 40, outputStream)
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 30, outputStream)
         outputStream.flush()
         outputStream.close()
         uri = FileProvider.getUriForFile(this@getImageUri, BuildConfig.APPLICATION_ID + ".provider", file)
@@ -149,6 +149,9 @@ suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatche
 fun ReviewActivity.onPhotoPrint() {
     try {
         if (bitmap == null){
+            return
+        }
+        if (!processDrawnDone){
             return
         }
         val photoPrinter = PrintHelper(this)
@@ -227,6 +230,9 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
         mBm?.let {
             val canvas = Canvas(it)
             val paint = Paint()
+            paint.style = Paint.Style.FILL
+            paint.isAntiAlias = true
+            paint.isLinearText = true
             paint.textAlign = Paint.Align.CENTER
             paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
             paint.color = ContextCompat.getColor(this@onDrawOnBitmap, R.color.colorAccent) // Text Color
@@ -234,14 +240,15 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
             val mRectF = RectF(0F, 0F, it.width.toFloat(),it.height.toFloat())
             if (BarcodeFormat.QR_CODE != format && !viewModel.isSharedIntent){
-                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 50 , paint)
+                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 52 , paint)
                 canvas.drawText(mValue, (canvas.width /2).toFloat(), mRectF.bottom - 22 , paint)
             }else{
-                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 60 , paint)
+                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 70 , paint)
                 canvas.drawText(mValue, (canvas.width /2).toFloat(), mRectF.bottom - 42 , paint)
             }
             Utils.Log(TAG,"Rect ${mRectF.centerY()} ${mRectF.bottom}")
             bitmap = it
+            processDrawnDone = true
             if (isRequestPrint){
                 onPhotoPrint()
             }
