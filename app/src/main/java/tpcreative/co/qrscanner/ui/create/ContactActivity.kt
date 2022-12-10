@@ -154,6 +154,9 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             val create = GeneralModel(general)
+            if (create.contact==null){
+                create.contact = ContactModel()
+            }
             create.contact?.givenName = edtFirstName.text.toString()
             create.contact?.familyName = edtLastName.text.toString()
             create.contact?.fullName =  edtFirstName?.text.toString()+ " "+edtLastName?.text.toString()
@@ -216,7 +219,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     }
 
     private fun addValidationForEditText() {
-        mAwesomeValidation?.addValidation(this, R.id.edtFirstName, RegexTemplate.NOT_EMPTY, R.string.first_name)
+        mAwesomeValidation?.addValidation(this, R.id.edtFirstName, RegexTemplate.NOT_EMPTY, R.string.err_first_name)
     }
 
     private fun focusUI() {
