@@ -20,6 +20,7 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.gson.Gson
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -207,6 +208,7 @@ class ContactActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
             /*Force using VCard*/
             create.code = ""
             create.createType = ParsedResultType.ADDRESSBOOK
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
         } else {
             Utils.Log(TAG, "error")

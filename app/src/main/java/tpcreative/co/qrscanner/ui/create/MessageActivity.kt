@@ -8,6 +8,7 @@ import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_message.*
 import kotlinx.android.synthetic.main.activity_message.toolbar
@@ -67,6 +68,7 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
             create.phone = edtTo.text.toString()
             create.message = edtMessage.text.toString()
             create.createType = ParsedResultType.SMS
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
             Utils.Log(TAG, "Passed")
         } else {

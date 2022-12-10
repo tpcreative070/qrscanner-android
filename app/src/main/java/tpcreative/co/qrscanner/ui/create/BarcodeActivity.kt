@@ -63,7 +63,10 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             val create = GeneralModel(save)
             create.textProductIdISNB = edtBarCode.text.toString().trim { it <= ' ' }
             create.barcodeFormat = viewModel.mType?.name
-            if (create.barcodeFormat == BarcodeFormat.EAN_8.name || create.barcodeFormat == BarcodeFormat.EAN_13.name || create.barcodeFormat == BarcodeFormat.UPC_A.name || create.barcodeFormat == BarcodeFormat.UPC_E.name){
+            if (create.barcodeFormat == BarcodeFormat.EAN_13.name){
+                create.createType = ParsedResultType.ISBN
+            }
+            else if (create.barcodeFormat == BarcodeFormat.EAN_8.name || create.barcodeFormat == BarcodeFormat.UPC_A.name || create.barcodeFormat == BarcodeFormat.UPC_E.name){
                 create.createType = ParsedResultType.PRODUCT
             }else{
                 create.createType = ParsedResultType.TEXT

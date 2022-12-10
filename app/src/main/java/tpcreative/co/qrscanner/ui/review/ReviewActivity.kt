@@ -114,9 +114,6 @@ class ReviewActivity : BaseActivitySlide() {
     }
 
     private fun onSavedData() {
-        if (save.createType !== ParsedResultType.PRODUCT.name) {
-            save.barcodeFormat = BarcodeFormat.QR_CODE.name
-        }
         save.favorite = false
         if (create?.enumImplement == EnumImplement.CREATE) {
             val time = Utils.getCurrentDateTimeSort()

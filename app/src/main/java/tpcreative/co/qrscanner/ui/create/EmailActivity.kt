@@ -8,6 +8,7 @@ import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_email.*
 import kotlinx.android.synthetic.main.activity_email.edtMessage
@@ -71,6 +72,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
             create.subject = edtSubject.text.toString()
             create.message = edtMessage?.text.toString()
             create.createType = ParsedResultType.EMAIL_ADDRESS
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this@EmailActivity, create)
         } else {
             Utils.Log(TAG, "error")

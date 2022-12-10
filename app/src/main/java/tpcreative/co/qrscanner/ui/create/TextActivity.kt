@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_text.*
 import kotlinx.android.synthetic.main.activity_text.llLargeAds
@@ -72,6 +73,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
             val create = GeneralModel(save)
             create.textProductIdISNB = edtText.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.TEXT
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
         } else {
             Utils.Log(TAG, "error")

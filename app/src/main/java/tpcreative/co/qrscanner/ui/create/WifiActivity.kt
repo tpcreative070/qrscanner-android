@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.android.synthetic.main.activity_wifi.llLargeAds
@@ -81,6 +82,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
             create.password = edtPassword.text.toString()
             create.networkEncryption = typeEncrypt
             create.createType = ParsedResultType.WIFI
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
         } else {
             Utils.Log(TAG, "error")

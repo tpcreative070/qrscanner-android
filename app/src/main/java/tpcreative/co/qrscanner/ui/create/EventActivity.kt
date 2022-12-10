@@ -7,6 +7,7 @@ import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener
@@ -135,6 +136,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
             create.startEventMilliseconds = beginDateTimeMilliseconds
             create.endEventMilliseconds = endDateTimeMilliseconds
             create.createType = ParsedResultType.CALENDAR
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
         } else {
             Utils.Log(TAG, "error")

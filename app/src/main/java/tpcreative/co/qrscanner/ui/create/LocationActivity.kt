@@ -27,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_location.*
 import kotlinx.android.synthetic.main.activity_location.toolbar
@@ -136,6 +137,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
                     create.lon = lastLon
                     create.query = edtQuery.text.toString()
                     create.createType = ParsedResultType.GEO
+                    create.barcodeFormat = BarcodeFormat.QR_CODE.name
                     Navigator.onMoveToReview(this, create)
                 }
             } catch (e: Exception) {

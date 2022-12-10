@@ -352,61 +352,69 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             save.code = onCreateMeCard(mData)
                         }
                     }
+                    save.type = onTranslateCreateType(mData.createType)
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                     save.onAddressBook(mData)
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
                     save.code =
                         "MATMSG:TO:" + mData.email + ";SUB:" + mData.subject + ";BODY:" + mData.message + ";"
-                    save.type = Constant.email
+                    save.type = onTranslateCreateType(mData.createType)
                     save.email = mData.email
                     save.subject = mData.subject
                     save.message = mData.message
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                 }
                 ParsedResultType.PRODUCT -> {
                     save.code = mData.textProductIdISNB
-                    save.type = Constant.barCode
+                    save.type = onTranslateCreateType(mData.createType)
                     save.textProductIdISNB = mData.textProductIdISNB
                     save.createType = mData.createType?.name
                     save.barcodeFormat = mData.barcodeFormat
                 }
                 ParsedResultType.URI -> {
                     save.code = mData.url
-                    save.type = Constant.webSite
+                    save.type = onTranslateCreateType(mData.createType)
                     save.url = mData.url
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                 }
                 ParsedResultType.WIFI -> {
                     save.code =
                         "WIFI:S:" + mData.ssId + ";T:" + mData.networkEncryption + ";P:" + mData.password + ";H:" + mData.hidden + ";"
-                    save.type = Constant.wifi
+                    save.type = onTranslateCreateType(mData.createType)
                     save.ssId = mData.ssId
                     save.password = mData.password
                     save.networkEncryption = mData.networkEncryption
                     save.hidden = mData.hidden
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                 }
                 ParsedResultType.GEO -> {
                     save.code = "geo:" + mData.lat + "," + mData.lon + "?q=" + mData.query + ""
-                    save.type = Constant.location
+                    save.type = onTranslateCreateType(mData.createType)
                     save.lat = mData.lat
                     save.lon = mData.lon
                     save.query = mData.query
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                 }
                 ParsedResultType.TEL -> {
                     save.code = "tel:" + mData.phone + ""
-                    save.type = Constant.phoneNumber
+                    save.type = onTranslateCreateType(mData.createType)
                     save.phone = mData.phone
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                 }
                 ParsedResultType.SMS -> {
                     save.code = "smsto:" + mData.phone + ":" + mData.message
-                    save.type = Constant.sms
+                    save.type = onTranslateCreateType(mData.createType)
                     save.phone = mData.phone
                     save.message = mData.message
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                 }
                 ParsedResultType.CALENDAR -> {
                     val builder = StringBuilder()
@@ -431,18 +439,23 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     save.location = mData.location
                     save.description = mData.description
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                     save.code = builder.toString()
-                    save.type = Constant.calendar
+                    save.type = onTranslateCreateType(mData.createType)
                 }
                 ParsedResultType.ISBN -> {
                     save.code = mData.textProductIdISNB
+                    save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
+                    save.type = onTranslateCreateType(mData.createType)
+                    save.textProductIdISNB = mData.textProductIdISNB
                 }
                 else -> {
                     save.code = mData.textProductIdISNB
-                    save.type = Constant.text
-
+                    save.type = onTranslateCreateType(mData.createType)
                     save.textProductIdISNB = mData.textProductIdISNB
                     save.createType = mData.createType?.name
+                    save.barcodeFormat = mData.barcodeFormat
                 }
             }
             save as T
@@ -1312,9 +1325,8 @@ fun Utils.getDisplay(mGeneral : GeneralModel) : String?{
     return mResult
 }
 
-fun Utils.onTranslateCreateType(type : ParsedResultType) : String {
+fun Utils.onTranslateCreateType(type : ParsedResultType?) : String {
     when(type){
-
         ParsedResultType.PRODUCT ->{
             return ConstantValue.PRODUCT
         }

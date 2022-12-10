@@ -10,7 +10,7 @@ fun Bitmap.addPaddingTopForBitmap(paddingTop: Int): Bitmap? {
         val outputBitmap =
             Bitmap.createBitmap(width, height + paddingTop, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(outputBitmap)
-        canvas.drawColor(Color.TRANSPARENT)
+        canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(this, 0F, paddingTop.toFloat(), null)
         return outputBitmap
     }catch (e : Exception){
@@ -23,7 +23,7 @@ fun Bitmap.addPaddingBottomForBitmap(paddingBottom: Int): Bitmap? {
         val outputBitmap =
             Bitmap.createBitmap(width, height + paddingBottom, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(outputBitmap)
-        canvas.drawColor(Color.TRANSPARENT)
+        canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(this, 0F, 0F, null)
         return outputBitmap
     }catch (e : Exception){
@@ -37,7 +37,7 @@ fun Bitmap.addPaddingRightForBitmap(paddingRight: Int): Bitmap? {
         val outputBitmap =
             Bitmap.createBitmap(width + paddingRight, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(outputBitmap)
-        canvas.drawColor(Color.TRANSPARENT)
+        canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(this, 0F, 0F, null)
         outputBitmap
     }catch (e : Exception){
@@ -50,7 +50,7 @@ fun Bitmap.addPaddingLeftForBitmap(paddingLeft: Int): Bitmap? {
         val outputBitmap =
             Bitmap.createBitmap(width + paddingLeft, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(outputBitmap)
-        canvas.drawColor(Color.TRANSPARENT)
+        canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(this, paddingLeft.toFloat(), 0F, null)
         outputBitmap
     }catch (e : Exception){

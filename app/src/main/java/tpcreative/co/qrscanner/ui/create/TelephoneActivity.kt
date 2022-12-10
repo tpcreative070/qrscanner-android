@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_telephone.*
 import kotlinx.android.synthetic.main.activity_telephone.toolbar
@@ -65,6 +66,7 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
             val create = GeneralModel(save)
             create.phone = edtPhone.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.TEL
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
         } else {
             Utils.Log(TAG, "error")

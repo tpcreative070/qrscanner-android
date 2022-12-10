@@ -222,11 +222,19 @@ fun ReviewActivity.getIntentData(){
 }
 
 suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat) = withContext(Dispatchers.IO){
-     bitmap?.let {data ->
-        var mBm = data.addPaddingLeftForBitmap(50)
-        mBm = mBm?.addPaddingTopForBitmap(80)
-        mBm = mBm?.addPaddingRightForBitmap(50)
-        mBm = mBm?.addPaddingBottomForBitmap(80)
+    var mBm: Bitmap?
+    bitmap?.let {data ->
+         if (BarcodeFormat.QR_CODE != format && !viewModel.isSharedIntent){
+             mBm = data.addPaddingLeftForBitmap(50)
+             mBm = mBm?.addPaddingRightForBitmap(50)
+             mBm = mBm?.addPaddingTopForBitmap(80)
+             mBm = mBm?.addPaddingBottomForBitmap(80)
+         }else{
+             mBm = data.addPaddingLeftForBitmap(50)
+             mBm = mBm?.addPaddingTopForBitmap(50)
+             mBm = mBm?.addPaddingRightForBitmap(50)
+             mBm = mBm?.addPaddingBottomForBitmap(50)
+         }
         mBm?.let {
             val canvas = Canvas(it)
             val paint = Paint()
@@ -240,11 +248,11 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
             val mRectF = RectF(0F, 0F, it.width.toFloat(),it.height.toFloat())
             if (BarcodeFormat.QR_CODE != format && !viewModel.isSharedIntent){
-                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 52 , paint)
+                canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 58 , paint)
                 canvas.drawText(mValue, (canvas.width /2).toFloat(), mRectF.bottom - 22 , paint)
             }else{
                 canvas.drawText(mType, (canvas.width /2).toFloat(), mRectF.top + 70 , paint)
-                canvas.drawText(mValue, (canvas.width /2).toFloat(), mRectF.bottom - 42 , paint)
+                canvas.drawText(mValue, (canvas.width /2).toFloat(), mRectF.bottom - 35 , paint)
             }
             Utils.Log(TAG,"Rect ${mRectF.centerY()} ${mRectF.bottom}")
             bitmap = it
