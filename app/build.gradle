@@ -87,8 +87,6 @@ dependencies {
     testImplementation "junit:junit:$junit"
     androidTestImplementation "com.android.support.test:runner:$testRnner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoCore"
-    /*Material Dialog*/
-    implementation "com.github.michael-rapp:android-material-dialog:$androidMaterialDialog"
     /*DateTime picker*/
     implementation project(':switchdatetime')
     /*Zxing*/

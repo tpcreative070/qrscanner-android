@@ -10,6 +10,11 @@
         <item name="android:popupBackground">@color/material_gray_800</item>
     </style>
 
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@color/material_menu</item>
+        <item name="android:textColor">@color/material_menu_text_color</item>
+    </style>
+
     <style name="AppTheme" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -17,6 +22,7 @@
         <item name="android:textColorPrimary">@color/colorDark</item>
         <item name="android:textColorSecondary">@color/material_gray_600</item>
         <item name="android:popupMenuStyle">@style/PopupMenuDark</item>
+        <item name="android:textColor">@color/material_menu</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         /*Preference theme*/
@@ -88,25 +94,29 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
-
-    <style name="LightDialogTheme" parent="@style/MaterialDialog.Light">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="brandonRegularTextInputLayout" parent="TextAppearance.AppCompat">
         <!--
         <item name="android:fontFamily">@font/brandon_regs</item>
-        !-->
-
+        -->
+        <item name="android:textColor">@color/material_default</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
     </style>
 
-    <style name="DarkDialogTheme" parent="@style/MaterialDialog">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
+    <style name="brandonRegularTextInputEditText" parent="TextAppearance.AppCompat">
         <!--
         <item name="android:fontFamily">@font/brandon_regs</item>
-        !-->
+        -->
+        <item name="android:textColor">@color/colorDark</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="brandonBoldTextInputLayout" parent="TextAppearance.AppCompat">
+        <!--
+        <item name="android:fontFamily">@font/brandon_blds</item>
+        -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorDark</item>
+        <item name="android:textSize">@dimen/medium</item>
     </style>
 
 

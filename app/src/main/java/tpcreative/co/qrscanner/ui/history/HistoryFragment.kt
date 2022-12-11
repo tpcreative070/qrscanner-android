@@ -12,10 +12,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import de.mrapp.android.dialog.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,12 +24,10 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.CreateModel
-import tpcreative.co.qrscanner.model.EnumFragmentType
-import tpcreative.co.qrscanner.model.EnumImplement
-import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 import java.io.File
@@ -208,66 +206,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         if (actionMode != null) {
             return
         }
-        val create = CreateModel()
         val history: HistoryModel = viewModel.mList[position]
-        create.id = history.id ?: 0
-        create.favorite = history.favorite ?: false
-        if (history.createType.equals(ParsedResultType.ADDRESSBOOK.name, ignoreCase = true)) {
-            create.address = history.address
-            create.fullName = history.fullName
-            create.email = history.email
-            create.phone = history.phone
-            create.createType = ParsedResultType.ADDRESSBOOK
-        } else if (history.createType.equals(ParsedResultType.EMAIL_ADDRESS.name, ignoreCase = true)) {
-            create.email = history.email
-            create.subject = history.subject
-            create.message = history.message
-            create.createType = ParsedResultType.EMAIL_ADDRESS
-        } else if (history.createType.equals(ParsedResultType.PRODUCT.name, ignoreCase = true)) {
-            create.createType = ParsedResultType.PRODUCT
-            create.productId = history.text
-        } else if (history.createType.equals(ParsedResultType.URI.name, ignoreCase = true)) {
-            create.url = history.url
-            create.createType = ParsedResultType.URI
-        } else if (history.createType.equals(ParsedResultType.WIFI.name, ignoreCase = true)) {
-            create.hidden = history.hidden ?: false
-            create.ssId = history.ssId
-            create.networkEncryption = history.networkEncryption
-            create.password = history.password
-            create.createType = ParsedResultType.WIFI
-        } else if (history.createType.equals(ParsedResultType.GEO.name, ignoreCase = true)) {
-            create.lat = history.lat ?:0.0
-            create.lon = history.lon ?:0.0
-            create.query = history.query
-            create.createType = ParsedResultType.GEO
-        } else if (history.createType.equals(ParsedResultType.TEL.name, ignoreCase = true)) {
-            create.phone = history.phone
-            create.createType = ParsedResultType.TEL
-        } else if (history.createType.equals(ParsedResultType.SMS.name, ignoreCase = true)) {
-            create.phone = history.phone
-            create.message = history.message
-            create.createType = ParsedResultType.SMS
-        } else if (history.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) {
-            create.title = history.title
-            create.description = history.description
-            create.location = history.location
-            create.startEvent = history.startEvent
-            create.endEvent = history.endEvent
-            create.startEventMilliseconds = history.startEventMilliseconds ?:0
-            create.endEventMilliseconds = history.endEventMilliseconds ?:0
-            create.createType = ParsedResultType.CALENDAR
-        } else if (history.createType.equals(ParsedResultType.ISBN.name, ignoreCase = true)) {
-            create.ISBN = history.text
-            create.createType = ParsedResultType.ISBN
-        } else {
-            create.text = history.text
-            create.createType = ParsedResultType.TEXT
-        }
-        create.barcodeFormat = history.barcodeFormat
-        create.noted = history.noted
-        Utils.Log(TAG,"Format type ${history.barcodeFormat}")
-        create.fragmentType = EnumFragmentType.HISTORY
-        create.enumImplement = EnumImplement.VIEW
+        val create = GeneralModel(history,EnumFragmentType.HISTORY,EnumImplement.VIEW)
         viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
@@ -325,14 +265,15 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     fun dialogDelete() {
-        val builder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
-        builder.setTitle(getString(R.string.delete))
-        builder.setMessage(kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
-        builder.setNegativeButton(getString(R.string.no)) { dialogInterface, i -> }
-        builder.setPositiveButton(getString(R.string.yes)) { dialogInterface, i ->
-            deleteItem()
+        MaterialDialog(requireContext()).show {
+            title(R.string.delete)
+            message(text = kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
+            positiveButton(R.string.yes){
+                deleteItem()
+            }
+            negativeButton (R.string.no){
+            }
         }
-        builder.show()
     }
 
     fun updateView() {

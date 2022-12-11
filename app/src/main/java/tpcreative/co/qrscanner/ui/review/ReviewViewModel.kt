@@ -10,21 +10,21 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.ItemNavigation
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
 class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     val TAG = this::class.java.name
-    var create: CreateModel = CreateModel()
+    var create: GeneralModel = GeneralModel()
     var isSharedIntent : Boolean = false
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
         if (action != Intent.ACTION_SEND){
             Utils.Log(TAG,"type $bundle")
-            val data  = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),CreateModel::class.java)
+            val data  = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),GeneralModel::class.java)
             if (data != null) {
                 create = data
                 Utils.Log(TAG,Gson().toJson(create))

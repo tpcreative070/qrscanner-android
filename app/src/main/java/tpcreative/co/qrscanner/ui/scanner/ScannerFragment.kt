@@ -17,11 +17,8 @@ import com.google.gson.Gson
 import com.google.zxing.*
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.result.*
-import com.google.zxing.common.HybridBinarizer
-import com.google.zxing.common.detector.WhiteRectangleDetector
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
@@ -31,13 +28,13 @@ import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
-import tpcreative.co.qrscanner.common.controller.PrefsController
-import tpcreative.co.qrscanner.common.extension.parcelable
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
-import tpcreative.co.qrscanner.model.CreateModel
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
+import tpcreative.co.qrscanner.model.EnumImplement
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
@@ -59,166 +56,30 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 if (activity == null) {
                     return
                 }
-                val parsedResult = ResultParser.parseResult(result?.result)
-                val create = CreateModel()
-                var address: String? = ""
-                var fullName: String? = ""
-                var email: String? = ""
-                var phone: String? = ""
-                var subject = ""
-                var message = ""
-                var url = ""
-                var ssId = ""
-                var networkEncryption = ""
-                var password = ""
-                var lat = 0.0
-                var lon = 0.0
-                var startEventMilliseconds: Long = 0
-                var endEventMilliseconds: Long = 0
-                var query: String? = ""
-                var title = ""
-                var location = ""
-                var description = ""
-                var startEvent: String? = ""
-                var endEvent: String? = ""
-                var text = ""
-                var productId = ""
-                var ISBN = ""
-                var hidden = false
-                Utils.Log(TAG, "Type response " + parsedResult.type)
-                when (parsedResult.type) {
-                    ParsedResultType.ADDRESSBOOK -> {
-                        create.createType = ParsedResultType.ADDRESSBOOK
-                        val addressResult = parsedResult as AddressBookParsedResult
-                        address = Utils.convertStringArrayToString(addressResult.addresses, ",")
-                        fullName = Utils.convertStringArrayToString(addressResult.names, ",")
-                        email = Utils.convertStringArrayToString(addressResult.emails, ",")
-                        phone = Utils.convertStringArrayToString(addressResult.phoneNumbers, ",")
+                result?.result?.let { mResult ->
+                    Utils.Log(TAG,"Text result ${mResult.text}")
+                    val create = Utils.onGeneralParse(mResult,GeneralModel::class)
+                    create.fragmentType = EnumFragmentType.SCANNER
+                    create.enumImplement = EnumImplement.VIEW
+                    create.barcodeFormat = BarcodeFormat.QR_CODE.name
+                    if (mResult.barcodeFormat != null) {
+                        create.barcodeFormat = mResult.barcodeFormat.name
                     }
-                    ParsedResultType.EMAIL_ADDRESS -> {
-                        create.createType = ParsedResultType.EMAIL_ADDRESS
-                        val emailAddress = parsedResult as EmailAddressParsedResult
-                        email = Utils.convertStringArrayToString(emailAddress.tos, ",")
-                        subject = if (emailAddress.subject == null) "" else emailAddress.subject
-                        message = if (emailAddress.body == null) "" else emailAddress.body
-                    }
-                    ParsedResultType.PRODUCT -> {
-                        create.createType = ParsedResultType.PRODUCT
-                        val productResult = parsedResult as ProductParsedResult
-                        productId = if (productResult.productID == null) "" else productResult.productID
-                        Utils.Log(TAG, "Product " + Gson().toJson(productResult))
-                    }
-                    ParsedResultType.URI -> {
-                        create.createType = ParsedResultType.URI
-                        val urlResult = parsedResult as URIParsedResult
-                        url = if (urlResult.uri == null) "" else urlResult.uri
-                    }
-                    ParsedResultType.WIFI -> {
-                        create.createType = ParsedResultType.WIFI
-                        val wifiResult = parsedResult as WifiParsedResult
-                        hidden = wifiResult.isHidden
-                        ssId = if (wifiResult.ssid == null) "" else wifiResult.ssid
-                        networkEncryption = if (wifiResult.networkEncryption == null) "" else wifiResult.networkEncryption
-                        password = if (wifiResult.password == null) "" else wifiResult.password
-                        Utils.Log(TAG, "method : " + wifiResult.networkEncryption + " :" + wifiResult.phase2Method + " :" + wifiResult.password)
-                    }
-                    ParsedResultType.GEO -> {
-                        create.createType = ParsedResultType.GEO
-                        try {
-                            val geoParsedResult = parsedResult as GeoParsedResult
-                            lat = geoParsedResult.latitude
-                            lon = geoParsedResult.longitude
-                            query = geoParsedResult.query
-                            val strNew = query.replace("q=", "")
-                            query = strNew
-                        } catch (e: Exception) {
-                        }
-                    }
-                    ParsedResultType.TEL -> {
-                        create.createType = ParsedResultType.TEL
-                        val telParsedResult = parsedResult as TelParsedResult
-                        phone = telParsedResult.number
-                    }
-                    ParsedResultType.SMS -> {
-                        create.createType = ParsedResultType.SMS
-                        val smsParsedResult = parsedResult as SMSParsedResult
-                        phone = Utils.convertStringArrayToString(smsParsedResult.numbers, ",")
-                        message = if (smsParsedResult.body == null) "" else smsParsedResult.body
-                    }
-                    ParsedResultType.CALENDAR -> {
-                        create.createType = ParsedResultType.CALENDAR
-                        val calendarParsedResult = parsedResult as CalendarParsedResult
-                        val startTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.startTimestamp)
-                        val endTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.endTimestamp)
-                        title = if (calendarParsedResult.summary == null) "" else calendarParsedResult.summary
-                        description = if (calendarParsedResult.description == null) "" else calendarParsedResult.description
-                        location = if (calendarParsedResult.location == null) "" else calendarParsedResult.location
-                        startEvent = startTime
-                        endEvent = endTime
-                        startEventMilliseconds = calendarParsedResult.startTimestamp
-                        endEventMilliseconds = calendarParsedResult.endTimestamp
-                        Utils.Log(TAG, "$startTime : $endTime")
-                    }
-                    ParsedResultType.ISBN -> {
-                        create.createType = ParsedResultType.ISBN
-                        val isbParsedResult = parsedResult as ISBNParsedResult
-                        ISBN = if (isbParsedResult.isbn == null) "" else isbParsedResult.isbn
-                        Utils.Log(TAG, "Result filter " + Gson().toJson(isbParsedResult))
-                    }
-                    else -> try {
-                        Utils.Log(TAG, "Default value")
-                        create.createType = ParsedResultType.TEXT
-                        val textParsedResult = parsedResult as TextParsedResult
-                        text = if (textParsedResult.text == null) "" else textParsedResult.text
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
+                    val canvas = Canvas(mBitmap);
+                    canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
+                    zxing_barcode_scanner.viewFinder.addResultPoint(mResult.resultPoints?.toMutableList())
+                    zxing_barcode_scanner.viewFinder.drawResultBitmap(mBitmap)
+                    zxing_barcode_scanner.viewFinder.addTransferResultPoint(result.transformedResultPoints)
+                    Utils.Log(TAG, "barcode ==> format ${result.barcodeFormat?.name}")
+                    doNavigation(create)
                 }
-                create.address = address
-                create.fullName = fullName
-                create.email = email
-                create.phone = phone
-                create.subject = subject
-                create.message = message
-                create.url = url
-                create.hidden = hidden
-                create.ssId = ssId
-                create.networkEncryption = networkEncryption
-                create.password = password
-                create.lat = lat
-                create.lon = lon
-                create.query = query
-                create.title = title
-                create.location = location
-                create.description = description
-                create.startEvent = startEvent
-                create.endEvent = endEvent
-                create.startEventMilliseconds = startEventMilliseconds
-                create.endEventMilliseconds = endEventMilliseconds
-                create.text = text
-                create.productId = productId
-                create.ISBN = ISBN
-
-                /*Adding new columns*/create.barcodeFormat = BarcodeFormat.QR_CODE.name
-                create.favorite = false
-                if (result?.barcodeFormat != null) {
-                    create.barcodeFormat = result.barcodeFormat.name
-                }
-                val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(mBitmap);
-                canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
-                zxing_barcode_scanner.viewFinder.addResultPoint(result?.resultPoints?.toMutableList())
-                zxing_barcode_scanner.viewFinder.drawResultBitmap(mBitmap)
-                zxing_barcode_scanner.viewFinder.addTransferResultPoint(result?.transformedResultPoints)
-                Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
-                Utils.Log(TAG, "barcode ==> format ${result?.barcodeFormat?.name}")
-                doNavigation(create)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
-        fun doNavigation(create: CreateModel?) {
+        fun doNavigation(create: GeneralModel?) {
             if (Utils.isMultipleScan()) {
                 if (viewModel.isRequestDone){
                     if (viewModel.isResume){
@@ -450,153 +311,27 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         if (activity == null) {
             return
         }
-        val parsedResult = ResultParser.parseResult(result)
-        val create = CreateModel()
-        var address: String? = ""
-        var fullName: String? = ""
-        var email: String? = ""
-        var phone: String? = ""
-        var subject = ""
-        var message = ""
-        var url = ""
-        var ssId = ""
-        var networkEncryption = ""
-        var password = ""
-        var productId = ""
-        var ISBN = ""
-        var lat = 0.0
-        var lon = 0.0
-        var startEventMilliseconds: Long = 0
-        var endEventMilliseconds: Long = 0
-        var query: String? = ""
-        var title = ""
-        var location = ""
-        var description = ""
-        var startEvent: String? = ""
-        var endEvent: String? = ""
-        var text = ""
-        var hidden = false
-        Utils.Log(TAG, "Type " + parsedResult.type.name)
-        when (parsedResult.type) {
-            ParsedResultType.ADDRESSBOOK -> {
-                create.createType = ParsedResultType.ADDRESSBOOK
-                val addressResult = parsedResult as AddressBookParsedResult
-                address = Utils.convertStringArrayToString(addressResult.addresses, ",")
-                fullName = Utils.convertStringArrayToString(addressResult.names, ",")
-                email = Utils.convertStringArrayToString(addressResult.emails, ",")
-                phone = Utils.convertStringArrayToString(addressResult.phoneNumbers, ",")
+        result?.let { mResult ->
+            val parsedResult = ResultParser.parseResult(result)
+            Utils.Log(TAG,"Text result ${mResult.text}")
+            val create = Utils.onGeneralParse(mResult,GeneralModel::class)
+            create.enumImplement = EnumImplement.VIEW
+            create.fragmentType = EnumFragmentType.SCANNER
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
+            if (mResult.barcodeFormat != null) {
+                create.barcodeFormat = result.barcodeFormat.name
             }
-            ParsedResultType.EMAIL_ADDRESS -> {
-                create.createType = ParsedResultType.EMAIL_ADDRESS
-                val emailAddress = parsedResult as EmailAddressParsedResult
-                email = Utils.convertStringArrayToString(emailAddress.tos, ",")
-                subject = if (emailAddress.subject == null) "" else emailAddress.subject
-                message = if (emailAddress.body == null) "" else emailAddress.body
-            }
-            ParsedResultType.PRODUCT -> {
-                create.createType = ParsedResultType.PRODUCT
-                val productResult = parsedResult as ProductParsedResult
-                productId = if (productResult.productID == null) "" else productResult.productID
-            }
-            ParsedResultType.URI -> {
-                create.createType = ParsedResultType.URI
-                val urlResult = parsedResult as URIParsedResult
-                url = if (urlResult.uri == null) "" else urlResult.uri
-            }
-            ParsedResultType.WIFI -> {
-                create.createType = ParsedResultType.WIFI
-                val wifiResult = parsedResult as WifiParsedResult
-                hidden = wifiResult.isHidden
-                ssId = if (wifiResult.ssid == null) "" else wifiResult.ssid
-                networkEncryption = if (wifiResult.networkEncryption == null) "" else wifiResult.networkEncryption
-                password = if (wifiResult.password == null) "" else wifiResult.password
-                Utils.Log(TAG, "method : " + wifiResult.networkEncryption + " :" + wifiResult.phase2Method + " :" + wifiResult.password)
-            }
-            ParsedResultType.GEO -> {
-                create.createType = ParsedResultType.GEO
-                try {
-                    val geoParsedResult = parsedResult as GeoParsedResult
-                    lat = geoParsedResult.latitude
-                    lon = geoParsedResult.longitude
-                    query = geoParsedResult.query
-                    val strNew = query.replace("q=", "")
-                    query = strNew
-                } catch (e: Exception) {
+            beepManager?.playBeepSoundAndVibrate()
+            if (zxing_barcode_scanner != null) {
+                if (viewModel.isResume){
+                    zxing_barcode_scanner.pauseAndWait()
+                    viewModel.isResume = false
                 }
             }
-            ParsedResultType.TEL -> {
-                create.createType = ParsedResultType.TEL
-                val telParsedResult = parsedResult as TelParsedResult
-                phone = telParsedResult.number
-            }
-            ParsedResultType.SMS -> {
-                create.createType = ParsedResultType.SMS
-                val smsParsedResult = parsedResult as SMSParsedResult
-                phone = Utils.convertStringArrayToString(smsParsedResult.numbers, ",")
-                message = if (smsParsedResult.body == null) "" else smsParsedResult.body
-            }
-            ParsedResultType.CALENDAR -> {
-                create.createType = ParsedResultType.CALENDAR
-                val calendarParsedResult = parsedResult as CalendarParsedResult
-                val startTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.startTimestamp)
-                val endTime = Utils.getCurrentDatetimeEvent(calendarParsedResult.endTimestamp)
-                title = if (calendarParsedResult.summary == null) "" else calendarParsedResult.summary
-                description = if (calendarParsedResult.description == null) "" else calendarParsedResult.description
-                location = if (calendarParsedResult.location == null) "" else calendarParsedResult.location
-                startEvent = startTime
-                endEvent = endTime
-                startEventMilliseconds = calendarParsedResult.startTimestamp
-                endEventMilliseconds = calendarParsedResult.endTimestamp
-                Utils.Log(TAG, "$startTime : $endTime")
-            }
-            ParsedResultType.ISBN -> {
-                create.createType = ParsedResultType.ISBN
-                val isbParsedResult = parsedResult as ISBNParsedResult
-                ISBN = if (isbParsedResult.isbn == null) "" else isbParsedResult.isbn
-                Utils.Log(TAG, "Result filter " + Gson().toJson(isbParsedResult))
-            }
-            else -> {
-                create.createType = ParsedResultType.TEXT
-                val textParsedResult = parsedResult as TextParsedResult
-                text = if (textParsedResult.text == null) "" else textParsedResult.text
-            }
+            Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
+            Utils.Log(TAG, "barcode ==> format ${mResult.barcodeFormat?.name}")
+            scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
         }
-        create.address = address
-        create.fullName = fullName
-        create.email = email
-        create.phone = phone
-        create.subject = subject
-        create.message = message
-        create.url = url
-        create.hidden = hidden
-        create.ssId = ssId
-        create.networkEncryption = networkEncryption
-        create.password = password
-        create.lat = lat
-        create.lon = lon
-        create.query = query
-        create.title = title
-        create.location = location
-        create.description = description
-        create.startEvent = startEvent
-        create.endEvent = endEvent
-        create.startEventMilliseconds = startEventMilliseconds
-        create.endEventMilliseconds = endEventMilliseconds
-        create.text = text
-        create.productId = productId
-        create.ISBN = ISBN
-        create.fragmentType = EnumFragmentType.SCANNER
-        create.barcodeFormat = result?.barcodeFormat?.name
-        beepManager?.playBeepSoundAndVibrate()
-        if (zxing_barcode_scanner != null) {
-            if (viewModel.isResume){
-                zxing_barcode_scanner.pauseAndWait()
-                viewModel.isResume = false
-            }
-        }
-        Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
-        Utils.Log(TAG, "barcode ==> format ${result?.barcodeFormat?.name}")
-        scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {

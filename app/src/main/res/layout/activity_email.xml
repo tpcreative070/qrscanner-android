@@ -34,10 +34,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/bg_location_group"
-            android:padding="5dp">
+            android:layout_height="wrap_content">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -47,7 +44,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="@dimen/margin_10"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:background="@drawable/bg_location_group"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_5">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -55,20 +59,17 @@
                         android:layout_margin="5dp"
                         android:background="@drawable/bg_item_rounded"
                         android:orientation="vertical"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="5dp">
+                        android:padding="@dimen/margin_5">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
+                            style="@style/brandonRegularTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/email_address" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtEmail"
-                            style="@style/brandonRegularTextView"
+                            style="@style/brandonRegularTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionNext"
@@ -88,14 +89,14 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
+                            style="@style/brandonRegularTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/subject" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtSubject"
-                            style="@style/brandonRegularTextView"
+                            style="@style/brandonRegularTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionNext"
@@ -111,14 +112,14 @@
                         android:padding="10dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonBoldTextView"
+                            style="@style/brandonRegularTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/message" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/edtMessage"
-                            style="@style/brandonRegularTextView"
+                            style="@style/brandonRegularTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionDone"

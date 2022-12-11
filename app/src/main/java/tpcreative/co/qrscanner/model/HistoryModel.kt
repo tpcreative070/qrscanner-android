@@ -1,7 +1,13 @@
 package tpcreative.co.qrscanner.model
+import com.google.gson.annotations.SerializedName
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.isVcard
+import tpcreative.co.qrscanner.common.extension.onParseMeCard
+import tpcreative.co.qrscanner.common.extension.onParseVCard
+import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import java.io.Serializable
 
 class HistoryModel : Serializable {
@@ -22,7 +28,8 @@ class HistoryModel : Serializable {
     var endEventMilliseconds: Long?
     var fullName: String?
     var address: String?
-    var text: String?
+    @SerializedName("text")
+    var textProductIdISNB: String?
     var ssId: String?
     var hidden: Boolean?
     var password: String?
@@ -43,116 +50,150 @@ class HistoryModel : Serializable {
     var uuId: String?
     var noted: String?
 
+    /*10:39 28/11/2022
+     * Using code filed in able to solve address book and email type
+     * Display to view
+   * */
+    var code : String?
+
+    /*20:39 09/12/2022 Added noted and favorite*/
+    var hiddenDatetime: String?
+
+    /*Display on review*/
+    var type : String?
+
+    var navigationList : MutableList<ItemNavigation>?
+    var hashClipboard: HashMap<Any?, String?>?
+    var isRequestOpenBrowser : Boolean = false
+
     /*Custom fields*/
     var typeCategories: TypeCategories? = null
     private var isChecked = false
     private var isDeleted = false
 
     constructor() {
-        email = ""
-        subject = ""
-        message = ""
-        phone = ""
-        lat = 0.0
-        lon = 0.0
-        startEventMilliseconds = 0
-        endEventMilliseconds = 0
-        query = ""
-        title = ""
-        location = ""
-        description = ""
-        startEvent = ""
-        endEvent = ""
-        fullName = ""
-        address = ""
-        text = ""
-        ssId = ""
-        hidden = false
-        password = ""
-        url = ""
-        createType = ""
-        networkEncryption = ""
-        typeCategories = TypeCategories()
-        barcodeFormat = BarcodeFormat.QR_CODE.name
-        favorite = false
-        updatedDateTime = Utils.getCurrentDateTimeSort()
-        contentUnique = ""
-        contentUniqueForUpdatedTime = ""
-        isSynced = false
-        uuId = Utils.getUUId()
-        noted = ""
+        this.email = ""
+        this.subject = ""
+        this.message = ""
+        this.phone = ""
+        this.lat = 0.0
+        this.lon = 0.0
+        this.startEventMilliseconds = 0
+        this.endEventMilliseconds = 0
+        this.query = ""
+        this.title = ""
+        this.location = ""
+        this.description = ""
+        this.startEvent = ""
+        this.endEvent = ""
+        this.fullName = ""
+        this.address = ""
+        this.textProductIdISNB = ""
+        this.ssId = ""
+        this.hidden = false
+        this.password = ""
+        this.url = ""
+        this.createType = ""
+        this.networkEncryption = ""
+        this.typeCategories = TypeCategories()
+        this.barcodeFormat = BarcodeFormat.QR_CODE.name
+        this.favorite = false
+        this.updatedDateTime = Utils.getCurrentDateTimeSort()
+        this.hiddenDatetime = Utils.getCurrentDateTimeSort()
+        this.contentUnique = ""
+        this.contentUniqueForUpdatedTime = ""
+        this.isSynced = false
+        this.uuId = Utils.getUUId()
+        this.noted = ""
+        this.code = ""
+        this.type = ""
+        this.navigationList = mutableListOf()
+        this.hashClipboard = hashMapOf()
+        this.isRequestOpenBrowser = false
     }
 
     constructor(item: HistoryEntityModel?) {
-        id = item?.id
-        email = item?.email
-        subject = item?.subject
-        message = item?.message
-        phone = item?.phone
-        lat = item?.lat
-        lon = item?.lon
-        query = item?.query
-        title = item?.title
-        location = item?.location
-        description = item?.description
-        startEvent = item?.startEvent
-        endEvent = item?.endEvent
-        startEventMilliseconds = item?.startEventMilliseconds
-        endEventMilliseconds = item?.endEventMilliseconds
-        fullName = item?.fullName
-        address = item?.address
-        text = item?.text
-        ssId = item?.ssId
-        hidden = item?.hidden
-        password = item?.password
-        url = item?.url
-        createType = item?.createType
-        networkEncryption = item?.networkEncryption
-        createDatetime = item?.createDatetime
-        barcodeFormat = item?.barcodeFormat
-        favorite = item?.favorite
-        updatedDateTime = item?.updatedDateTime
-        contentUnique = item?.contentUnique
-        contentUniqueForUpdatedTime = item?.contentUniqueForUpdatedTime
-        isSynced = item?.isSynced
-        uuId = item?.uuId
-        noted = item?.noted
+        this.id = item?.id
+        this.email = item?.email
+        this.subject = item?.subject
+        this.message = item?.message
+        this.phone = item?.phone
+        this.lat = item?.lat
+        this.lon = item?.lon
+        this.query = item?.query
+        this.title = item?.title
+        this.location = item?.location
+        this.description = item?.description
+        this.startEvent = item?.startEvent
+        this.endEvent = item?.endEvent
+        this.startEventMilliseconds = item?.startEventMilliseconds
+        this.endEventMilliseconds = item?.endEventMilliseconds
+        this.fullName = item?.fullName
+        this.address = item?.address
+        this.textProductIdISNB = item?.text
+        this.ssId = item?.ssId
+        this.hidden = item?.hidden
+        this.password = item?.password
+        this.url = item?.url
+        this.createType = item?.createType
+        this.networkEncryption = item?.networkEncryption
+        this.createDatetime = item?.createDatetime
+        this.hiddenDatetime = item?.hiddenDatetime
+        this.barcodeFormat = item?.barcodeFormat
+        this.favorite = item?.favorite
+        this.updatedDateTime = item?.updatedDateTime
+        this.contentUnique = item?.contentUnique
+        this.contentUniqueForUpdatedTime = item?.contentUniqueForUpdatedTime
+        this.isSynced = item?.isSynced
+        this.uuId = item?.uuId
+        this.noted = item?.noted
+        this.code = item?.code
+        this.type = ""
+        this.navigationList = mutableListOf()
+        this.hashClipboard = hashMapOf()
+        this.isRequestOpenBrowser = false
     }
 
     constructor(item: HistoryModel?, isSynced: Boolean) {
-        id = item?.id
-        email = item?.email
-        subject = item?.subject
-        message = item?.message
-        phone = item?.phone
-        lat = item?.lat
-        lon = item?.lon
-        query = item?.query
-        title = item?.title
-        location = item?.location
-        description = item?.description
-        startEvent = item?.startEvent
-        endEvent = item?.endEvent
-        startEventMilliseconds = item?.startEventMilliseconds
-        endEventMilliseconds = item?.endEventMilliseconds
-        fullName = item?.fullName
-        address = item?.address
-        text = item?.text
-        ssId = item?.ssId
-        hidden = item?.hidden
-        password = item?.password
-        url = item?.url
-        createType = item?.createType
-        networkEncryption = item?.networkEncryption
-        createDatetime = item?.createDatetime
-        barcodeFormat = item?.barcodeFormat
-        favorite = item?.favorite
-        updatedDateTime = item?.updatedDateTime
-        contentUnique = item?.contentUnique
-        contentUniqueForUpdatedTime = item?.contentUniqueForUpdatedTime
+        this.id = item?.id
+        this.email = item?.email
+        this.subject = item?.subject
+        this.message = item?.message
+        this.phone = item?.phone
+        this.lat = item?.lat
+        this.lon = item?.lon
+        this.query = item?.query
+        this.title = item?.title
+        this.location = item?.location
+        this.description = item?.description
+        this.startEvent = item?.startEvent
+        this.endEvent = item?.endEvent
+        this.startEventMilliseconds = item?.startEventMilliseconds
+        this.endEventMilliseconds = item?.endEventMilliseconds
+        this.fullName = item?.fullName
+        this.address = item?.address
+        this.textProductIdISNB = item?.textProductIdISNB
+        this.ssId = item?.ssId
+        this.hidden = item?.hidden
+        this.password = item?.password
+        this.url = item?.url
+        this.createType = item?.createType
+        this.networkEncryption = item?.networkEncryption
+        this.createDatetime = item?.createDatetime
+        this.hiddenDatetime = item?.hiddenDatetime
+        this.barcodeFormat = item?.barcodeFormat
+        this.favorite = item?.favorite
+        this.updatedDateTime = item?.updatedDateTime
+        this.contentUnique = item?.contentUnique
+        this.contentUniqueForUpdatedTime = item?.contentUniqueForUpdatedTime
         this.isSynced = isSynced
-        uuId = item?.uuId
-        noted = item?.noted
+        this.uuId = item?.uuId
+        this.noted = item?.noted
+        this.code = item?.code
+        this.type = ""
+        this.navigationList = mutableListOf()
+        this.hashClipboard = hashMapOf()
+        this.isRequestOpenBrowser = false
     }
 
     fun isChecked(): Boolean {
@@ -184,7 +225,11 @@ class HistoryModel : Serializable {
     }
 
     fun getCategoryName(): String? {
-        return typeCategories?.getType()
+        try {
+           return Utils.onTranslateCreateType(ParsedResultType.valueOf(typeCategories?.getType() ?: ParsedResultType.TEXT.name))
+        }catch (e : Exception){
+           return ConstantValue.FAVORITE
+        }
     }
 
     fun getUpdatedTimeToMilliseconds(): Long{
@@ -209,7 +254,7 @@ class HistoryModel : Serializable {
         } else if (createType == ParsedResultType.CALENDAR.name) {
             mResult = title
         } else if (createType == ParsedResultType.ADDRESSBOOK.name) {
-            mResult = fullName
+            mResult = getNames()
         } else if (createType == ParsedResultType.TEL.name) {
             mResult = phone
         } else if (createType == ParsedResultType.WIFI.name) {
@@ -217,9 +262,91 @@ class HistoryModel : Serializable {
         } else if (createType == ParsedResultType.URI.name) {
             mResult = url
         } else {
-            mResult = text
+            mResult = textProductIdISNB
         }
         return  mResult
     }
 
+
+    fun getAddresses(separators : String?) : String{
+        val mStringBuilder : StringBuilder = StringBuilder()
+        if (createType == ParsedResultType.ADDRESSBOOK.name) {
+            if (Utils.isVcard(this.code)){
+                val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
+                mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
+                    ?.joinToString(separators?:", ") { it.getAddressValue()})
+            }else{
+                val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
+                mStringBuilder.append(mParsedVcard?.contact?.addresses?.values?.toList()
+                    ?.joinToString(separators?:", ") { it.address.orEmpty() })
+            }
+
+        }else{
+            mStringBuilder.append(this.address)
+        }
+        return mStringBuilder.toString()
+    }
+
+    fun getPhones(separators : String?) : String{
+        val mStringBuilder : StringBuilder = StringBuilder()
+        if (createType == ParsedResultType.ADDRESSBOOK.name) {
+            if (Utils.isVcard(this.code)){
+                val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
+                mStringBuilder.append( mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(separators?:", "))
+            }else{
+                val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
+                mStringBuilder.append(mParsedVcard?.contact?.phones?.values?.toList()?.joinToString(separators?:", "))
+            }
+        }else{
+            mStringBuilder.append(this.phone)
+        }
+        return mStringBuilder.toString()
+    }
+
+    fun getEmails(separators : String?) : String {
+        val mStringBuilder : StringBuilder = StringBuilder()
+        if (createType == ParsedResultType.ADDRESSBOOK.name) {
+            if (Utils.isVcard(this.code)){
+                val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
+                mStringBuilder.append(mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(separators?:", "))
+            }else{
+                val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
+                mStringBuilder.append(mParsedVcard?.contact?.emails?.values?.toList()?.joinToString(separators?:", "))
+            }
+        }else{
+            mStringBuilder.append(this.email)
+        }
+        return mStringBuilder.toString()
+    }
+
+    fun getUrls(separators : String?) : String{
+        val mStringBuilder : StringBuilder = StringBuilder()
+        if (createType == ParsedResultType.ADDRESSBOOK.name) {
+            if (Utils.isVcard(this.code)){
+                val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
+                mStringBuilder.append(mParsedVcard?.contact?.urls?.joinToString(separators?:", "))
+            }else{
+                val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
+                mStringBuilder.append(mParsedVcard?.contact?.urls?.joinToString(separators?:", "))
+            }
+        }else{
+            mStringBuilder.append(url)
+        }
+        return mStringBuilder.toString()
+    }
+
+    fun getNames() : String{
+        val mString : String? = if (createType == ParsedResultType.ADDRESSBOOK.name) {
+            if (Utils.isVcard(this.code)){
+                val mParsedVcard =  Utils.onParseVCard(this.code ?:"")
+                mParsedVcard?.contact?.fullName
+            }else{
+                val mParsedVcard =  Utils.onParseMeCard(this.code ?:"")
+                mParsedVcard?.contact?.fullName
+            }
+        }else{
+            this.fullName
+        }
+        return mString.toString()
+    }
 }

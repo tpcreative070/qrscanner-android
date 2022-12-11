@@ -27,4 +27,7 @@
     <color name="colorPrimaryDark">#042E2E</color>
     <color name="colorAccent">#986809</color>
     <color name="colorIconHint">#9E9E9E</color>
+    <color name="material_menu">#9E9E9E</color>
+    <color name="material_menu_text_color">#FFFFFF</color>
+    <color name="material_default">#A5A1A1</color>
 </resources>

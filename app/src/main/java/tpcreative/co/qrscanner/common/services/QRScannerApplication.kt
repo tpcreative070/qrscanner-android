@@ -543,6 +543,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                     }
 
                     override fun onAdShowedFullScreenContent() {
+                        mInterstitialAd = null
                         Utils.Log(TAG, "Ad showed fullscreen content.")
                         // Called when ad is dismissed.
                     }
@@ -711,7 +712,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableInterstitialAd() : Boolean {
-        return  true
+        return  false
     }
 
     fun setRequestClearCacheData(data : Boolean){

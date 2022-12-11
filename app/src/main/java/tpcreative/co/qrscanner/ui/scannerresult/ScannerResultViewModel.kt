@@ -18,16 +18,16 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     val TAG = ScannerResultViewModel::class.java
     override val dataList: MutableList<ItemNavigation>
         get() = super.dataList
-    var result: CreateModel?
-    var hashClipboard: HashMap<Any?, String?> = HashMap()
-    var hashClipboardResult: HashMap<Any?, String?>? = HashMap()
+    var result: GeneralModel?
+    var hashCopy: HashMap<Any?, String?>? = HashMap()
+    var hashCopyResult: HashMap<Any?, String?>? = HashMap()
     var isFavorite : Boolean = false
     var takeNoted : String = ""
     protected var stringBuilderClipboard: StringBuilder? = StringBuilder()
     val mListNavigation : MutableList<ItemNavigation> = mutableListOf()
 
     fun getIntent(activity: Activity?)  = liveData(Dispatchers.Main){
-        val data = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),CreateModel::class.java)
+        val data = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),GeneralModel::class.java)
         result = data
         isFavorite = data?.favorite ?: false
         takeNoted = result?.noted.toString()
@@ -61,12 +61,14 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
             EnumFragmentType.HISTORY -> {
                 val mItem = SQLiteHelper.getHistoryItemById(result?.id)
                 mItem?.favorite = !isFavorite
+                mItem?.hiddenDatetime = Utils.getCurrentDateTimeSort()
                 SQLiteHelper.onUpdate(mItem,true)
                 isFavorite = mItem?.favorite ?: false
             }
             EnumFragmentType.SAVER -> {
                 val mItem = SQLiteHelper.getSaveItemById(result?.id)
                 mItem?.favorite = !isFavorite
+                mItem?.hiddenDatetime = Utils.getCurrentDateTimeSort()
                 SQLiteHelper.onUpdate(mItem,true)
                 isFavorite = mItem?.favorite ?: false
             }
@@ -80,11 +82,13 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
             EnumFragmentType.HISTORY -> {
                 val mItem = SQLiteHelper.getHistoryItemById(result?.id)
                 mItem?.noted = takeNoted
+                mItem?.hiddenDatetime = Utils.getCurrentDateTimeSort()
                 SQLiteHelper.onUpdate(mItem,true)
             }
             EnumFragmentType.SAVER -> {
                 val mItem = SQLiteHelper.getSaveItemById(result?.id)
                 mItem?.noted = takeNoted
+                mItem?.hiddenDatetime = Utils.getCurrentDateTimeSort()
                 SQLiteHelper.onUpdate(mItem,true)
             }
             else -> Utils.Log("ScannerResultViewModel", "Nothing")
@@ -143,6 +147,6 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     init {
-        result = CreateModel()
+        result = GeneralModel()
     }
 }

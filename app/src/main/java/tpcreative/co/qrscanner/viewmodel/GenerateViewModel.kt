@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
+import kotlinx.android.synthetic.main.activity_barcode.*
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
@@ -36,7 +37,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
         mList.add(QRCodeType("6", getString(R.string.telephone), R.drawable.baseline_phone_white_48))
         mList.add(QRCodeType("7", getString(R.string.text), R.drawable.baseline_text_format_white_48))
         mList.add(QRCodeType("8", getString(R.string.wifi), R.drawable.baseline_network_wifi_white_48))
-        mList.add(QRCodeType("9", getString(R.string.url), R.drawable.baseline_language_white_48))
+        mList.add(QRCodeType("9", getString(R.string.website), R.drawable.baseline_language_white_48))
         emit(mList)
     }
 
@@ -148,7 +149,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     }
 
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
-        val mData = activity?.intent?.serializable(getString(R.string.key_data), SaveModel::class.java)
+        val mData = activity?.intent?.serializable(getString(R.string.key_data), GeneralModel::class.java)
         if (mData != null) {
             emit(mData)
         } else {

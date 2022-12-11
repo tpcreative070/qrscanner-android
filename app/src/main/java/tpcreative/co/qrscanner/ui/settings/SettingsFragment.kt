@@ -18,10 +18,12 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import co.tpcreative.supersafe.common.controller.EncryptedPreferenceDataStore
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import de.mrapp.android.dialog.MaterialDialog
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -147,55 +149,43 @@ class SettingsFragment : BaseFragment() {
          * Initializes the preference, which allows to change the app's theme.
          */
         private fun askPermission() {
-            val dialogBuilder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
-            dialogBuilder.setTitle(R.string.app_permission)
-            dialogBuilder.setPadding(40, 40, 40, 0)
-            dialogBuilder.setMargin(60, 0, 60, 0)
-            dialogBuilder.setCustomMessage(R.layout.custom_body_permission)
-            dialogBuilder.setPositiveButton(R.string.got_it, null)
-            val dialog = dialogBuilder.create()
-            dialogBuilder.setOnShowListener {
-                val positive = dialog.findViewById<Button?>(android.R.id.button1)
-                val title: TextView = dialog.findViewById<TextView?>(android.R.id.title)
-                if (positive != null && title != null) {
-                    positive.textSize = 14f
+            MaterialDialog(requireContext()).show {
+                title(R.string.app_permission)
+                customView(R.layout.custom_body_permission)
+                positiveButton(R.string.got_it){
+                }
+                negativeButton (R.string.no){
                 }
             }
-            dialog.show()
+
         }
 
         private fun askToDeleteDuplicatesItems(count: Int, listener: ServiceManager.ServiceManagerClickedListener?) {
-            val dialogBuilder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
-            dialogBuilder.setTitle(R.string.alert)
-            dialogBuilder.setPadding(40, 40, 40, 0)
-            dialogBuilder.setMargin(60, 0, 60, 0)
-            dialogBuilder.setMessage(kotlin.String.format(getString(R.string.found_items_duplicates), "" + count))
-            dialogBuilder.setCancelable(false)
-            dialogBuilder.setPositiveButton(R.string.yes) { dialogInterface, i -> listener?.onYes() }
-            dialogBuilder.setNegativeButton(R.string.no) { dialogInterface, i ->
-                mySwitchPreferenceSkipDuplicates?.isChecked = false
-                listener?.onNo()
+            MaterialDialog(requireContext()).show {
+                title(R.string.alert)
+                message(text = kotlin.String.format(getString(R.string.found_items_duplicates), "" + count))
+                positiveButton(R.string.yes){
+                    listener?.onYes()
+                }
+                negativeButton (R.string.no){
+                    mySwitchPreferenceSkipDuplicates?.isChecked = false
+                    listener?.onNo()
+                }
             }
-            val dialog = dialogBuilder.create()
-            dialog.show()
         }
 
         private fun askChooseTheme(listener: ServiceManager.ServiceManagerClickedItemsListener?) {
-            val dialogBuilder = MaterialDialog.Builder(requireContext(), Utils.getCurrentTheme())
-            dialogBuilder.setTitle(R.string.change_theme)
-            dialogBuilder.setPadding(40, 40, 40, 0)
-            dialogBuilder.setMargin(60, 0, 60, 0)
-            dialogBuilder.setSingleChoiceItems(R.array.themeEntryArray, Utils.getPositionTheme(), object : DialogInterface.OnClickListener {
-                override fun onClick(dialogInterface: DialogInterface?, i: Int) {
-                    mPosition = i
+            MaterialDialog(requireContext()).show {
+                title(R.string.change_theme)
+                listItemsSingleChoice(R.array.themeEntryArray, initialSelection = Utils.getPositionTheme()) { dialog, index, text ->
+                    mPosition =index
+                    EnumThemeMode.byPosition(mPosition)?.ordinal?.let { Utils.setPositionTheme(it) }
+                    listener?.onYes()
+                }.positiveButton(R.string.yes){
                 }
-            })
-            dialogBuilder.setPositiveButton(R.string.yes) { _, i ->
-                EnumThemeMode.byPosition(mPosition)?.ordinal?.let { Utils.setPositionTheme(it) }
-                listener?.onYes()
+                negativeButton (R.string.no){
+                }
             }
-            val dialog = dialogBuilder.create()
-            dialog.show()
         }
 
         /**

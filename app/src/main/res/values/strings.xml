@@ -18,6 +18,9 @@
     <string name="tabs">Tabs</string>
     <string name="view_code">View code</string>
     <string name="scan_photo">Scan photo</string>
+    <string name="search_on_ebay_com">Search on eBay.com</string>
+    <string name="search_on_amazon_com">Search on Amazon.com</string>
+    <string name="search_product_on_the_web">Search product on the web</string>
 
     <string name="tab_1">History</string>
     <string name="tab_2">Create</string>
@@ -68,6 +71,22 @@
     <string name="hidden">Hidden</string>
     <string name="phoneNumber">Phone Number</string>
     <string name="share">Share</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="company">Company</string>
+    <string name="job_title">Job title</string>
+    <string name="street_address">Street address</string>
+    <string name="zip_code">Zip code</string>
+    <string name="city">City</string>
+    <string name="region">Region</string>
+    <string name="country">Country</string>
+    <string name="website">Website</string>
+    <string name="phoneNumber_lowercase">Phone number</string>
+    <string name="alternatively">Alternatively:</string>
+    <string name="open_your_contact_app">Open your contact app.</string>
+    <string name="open_an_existing_contact_or_create_a_new_one">Open an existing contact or create a new one.</string>
+    <string name="select_share_from_the_menu">Select &quot;SHARE&quot; from the menu.</string>
+    <string name="select_qr_code">Select QRScanner.</string>
     <string name="err_latitude">Please check latitude input</string>
     <string name="err_longitude">Please check longitude input</string>
     <string name="err_query">Please check query input</string>
@@ -90,12 +109,21 @@
     <string name="err_beginTime">Please check date time format</string>
     <string name="err_endtime">Please check data time format</string>
     <string name="err_fullName">Please check full name input</string>
+    <string name="err_first_name">Please check first name input</string>
+    <string name="err_last_name">Please check last name input</string>
     <string name="err_address">Please check address input</string>
-    <string name="err_phone">Please check phone input</string>
+    <string name="err_phone">Please check phone number input</string>
     <string name="err_text">Please check text input</string>
     <string name="err_ssId">Please check SSID input</string>
     <string name="err_password">Please check password input</string>
     <string name="err_url">Please check url input</string>
+    <string name="err_company">Please check company input</string>
+    <string name="err_job_title">Please check job title</string>
+    <string name="err_zip_code">Please check Zip code</string>
+    <string name="err_city">Please check city input</string>
+    <string name="err_region">Please check region input</string>
+    <string name="err_country">Please check country input</string>
+    <string name="err_website">Please check website input</string>
     <string name="delete">Delete</string>
     <string name="csv">CSV</string>
     <string name="default_count">0</string>
@@ -389,5 +417,10 @@
     <string name="_1_android_permission_call_phone_share_qrcode_to_your_phone_call">1. android.permission.CALL_PHONE: Share QRCode to your phone call</string>
     <string name="_2_android_permission_camera_scanner_code">2. android.permission.CAMERA: Scanner code</string>
     <string name="_3_access_fine_location_access_coarse_location_getting_longitude_and_latitude_for_qrcode_type_of_location">3. ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION : Getting longitude and latitude for QRCode type of location</string>
+    <string name="https">https://</string>
+    <string name="open_your_browser_app">Open your browser app.</string>
+    <string name="load_the_website">Load the website.</string>
+    <string name="place">Place</string>
+    <string name="turn_on_gps">Please turn on your location or GPS to get exactly position</string>
 
 </resources>

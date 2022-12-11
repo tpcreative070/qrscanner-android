@@ -7,6 +7,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
@@ -16,18 +17,21 @@ fun BarcodeActivity.initUI(){
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     doInitView()
-    val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
-    if (mData != null) {
-        save = mData
-        onSetData()
-    } else {
-        Utils.Log(TAG, "Data is null")
-    }
+    getIntentData()
     btnRandom.setOnClickListener {
         val mValue = Utils.generateRandomDigits(viewModel.mLength - 1).toString() + ""
         val mResult = Utils.generateEAN(mValue)
         edtBarCode.setText(mResult)
     }
+}
+
+private fun BarcodeActivity.getIntentData(){
+    viewModel.getIntent(this).observe(this, Observer {
+        if (it!=null){
+            this.save = it
+            onSetData()
+        }
+    })
 }
 
 fun BarcodeActivity.doInitView(){

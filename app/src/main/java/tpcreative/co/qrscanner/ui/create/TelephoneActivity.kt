@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_telephone.*
 import kotlinx.android.synthetic.main.activity_telephone.toolbar
@@ -19,13 +20,13 @@ import tpcreative.co.qrscanner.model.*
 
 class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
-    private var save: SaveModel? = null
+    private var save: GeneralModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_telephone)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val mData = intent?.serializable(getString(R.string.key_data),SaveModel::class.java)
+        val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
             save = mData
             onSetData()
@@ -62,9 +63,10 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
-            val create = CreateModel(save)
+            val create = GeneralModel(save)
             create.phone = edtPhone.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.TEL
+            create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
         } else {
             Utils.Log(TAG, "error")
@@ -118,7 +120,7 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        finish()
+        //finish()
     }
 
     companion object {

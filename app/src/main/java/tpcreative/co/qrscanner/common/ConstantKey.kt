@@ -16,6 +16,8 @@ class ConstantKey {
         const val PASSWORD = "password"
         const val NETWORK_ENCRYPTION = "networkEncryption"
         const val HIDDEN = "hidden"
+        const val NOTE = "note"
+        const val BIRTHDAY = "birthday"
 
         const val TITLE  = "title"
         const val LOCATION = "location"
@@ -28,5 +30,9 @@ class ConstantKey {
         const val CONTENT = "content"
         const val BARCODE_FORMAT = "barcode_format"
         const val CREATED_DATETIME = "created_datetime"
+        const val FIRST_NAME = "first_name"
+        const val LAST_NAME = "last_name"
+        const val MIDDLE_NAME = "middle_name"
+        const val SUFFIX_NAME = "suffix_name"
     }
 }
