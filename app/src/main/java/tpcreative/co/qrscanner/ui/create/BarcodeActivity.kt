@@ -15,12 +15,8 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.basgeekball.awesomevalidation.utility.custom.SimpleCustomValidation
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import com.google.zxing.oned.UPCAReader
 import kotlinx.android.synthetic.main.activity_barcode.*
-import org.apache.commons.validator.Validator
 import org.apache.commons.validator.routines.ISBNValidator
-import org.apache.commons.validator.routines.checkdigit.CheckDigit
-import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.GenerateSingleton
 import tpcreative.co.qrscanner.common.Navigator
