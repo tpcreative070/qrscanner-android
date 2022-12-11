@@ -151,6 +151,13 @@
     <string name="warning_barcode_UPC_E_length_8">The given text is not valid for the format "UPC E"</string>
     <string name="warning_barcode_UPC_A_length_12">The given text is not valid for the format "UPC A"</string>
     <string name="warning_barcode_ITF">The given text is not valid for the format "ITF"</string>
+    <string name="warning_barcode_coda_bar">The given text is not valid for the format "CodaBar"</string>
+    <string name="warning_barcode_data_matrix">The given text is not valid for the format "Data Matrix"</string>
+    <string name="warning_barcode_data_PDF_471">The given text is not valid for the format "PDF 471"</string>
+    <string name="warning_barcode_data_aztec">The given text is not valid for the format "Aztec"</string>
+    <string name="warning_barcode_data_code_128">The given text is not valid for the format "Code 128"</string>
+    <string name="warning_barcode_data_code_39">The given text is not valid for the format "Code 39"</string>
+    <string name="warning_barcode_data_code_93">The given text is not valid for the format "Code 93"</string>
     <string name="random">Generate random digits</string>
     <string name="hint_13">12 digits + 1 checksum digit</string>
     <string name="hint_12">11 digits + 1 checksum digit</string>
