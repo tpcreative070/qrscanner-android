@@ -352,7 +352,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     viewModel.hashCopyResult?.put(index,i.toString())
                 }
                 Utils.copyToClipboard(viewModel.getResult(viewModel.hashCopyResult))
-//                Utils.onAlertNotify(this@ScannerResultActivity, getString(R.string.copied_successful))
             }.positiveButton(R.string.done){
                 Utils.Log(TAG,"Selection is checked")
             }
