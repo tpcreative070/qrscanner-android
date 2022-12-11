@@ -227,60 +227,6 @@ object Utils {
         return m + Random().nextInt(9 * m)
     }
 
-    fun checkSum(code: String?): Int {
-        var `val` = 0
-        for (i in 0 until (code?.length?.minus(1) ?: 0 )) {
-            `val` += (code?.get(i).toString() + "").toInt() * if (i % 2 == 0) 1 else 3
-        }
-        return (10 - `val` % 10) % 10
-    }
-
-    fun checkGTIN(gtin: String?): Boolean {
-        val checkDigitArray = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        val gTinMaths = intArrayOf(3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3)
-        val barcodeArray: Array<String>? = gtin?.split("(?!^)".toRegex())?.toTypedArray()
-        val gTinLength = gtin?.length ?: 0
-        val modifier = 17 - (gTinLength - 1)
-        val gTinCheckDigit = gtin?.substring(gTinLength - 1)?.toInt()
-        var tmpCheckDigit = 0
-        var tmpCheckSum = 0
-        var i = 0
-        var ii = 0
-
-        // Run through and put digits into multiplication table
-        i = 0
-        while (i < gTinLength - 1) {
-            checkDigitArray[modifier + i] = barcodeArray?.get(i)?.toInt() ?: 0 // Add barcode digits to Multiplication Table
-            i++
-        }
-
-        // Calculate "Sum" of barcode digits
-        ii = modifier
-        while (ii < 17) {
-            tmpCheckSum += checkDigitArray[ii] * gTinMaths[ii]
-            ii++
-        }
-
-        // Difference from Rounded-Up-To-Nearest-10 - Fianl Check Digit Calculation
-        tmpCheckDigit = ((ceil((tmpCheckSum.toFloat() / 10.toFloat()).toDouble()) * 10) - tmpCheckSum.toFloat()).toInt()
-
-        // Check if last digit is same as calculated check digit
-        return gTinCheckDigit == tmpCheckDigit
-    }
-
-    fun checkITF(gtin : String?) : Boolean{
-        if (gtin?.length?.rem(2) ?: 0 ==0){
-            return true
-        }
-        return  false
-    }
-
-    fun onLogAds(eventCode: String?): String? {
-        val idAds: String = QRScannerApplication.Companion.getInstance().getString(R.string.admob_app_id)
-        val banner_id: String = QRScannerApplication.Companion.getInstance().getString(R.string.banner_main)
-        return "event-code:" + eventCode + "; id-ads:" + idAds + "; banner-id:" + banner_id + " ;app id: " + BuildConfig.APPLICATION_ID + " ;variant: " + QRScannerApplication.Companion.getInstance().getString(R.string.qrscanner_free_release)
-    }
-
     fun onSetCountRating(count: Int) {
         Log(TAG, "rating.......set$count")
         PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.count_rating), count)
@@ -600,7 +546,7 @@ object Utils {
         return HashMap()
     }
 
-    fun getHistoryDeletedMap(): MutableMap<String?, String> {
+    private fun getHistoryDeletedMap(): MutableMap<String?, String> {
         val mValue: String? = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_history_deleted_list), null)
         if (mValue != null) {
             val mData: MutableMap<String?, String>? = Gson().fromJson<MutableMap<String?, String>>(mValue, object : TypeToken<MutableMap<String?, String>>() {}.type)
@@ -651,7 +597,7 @@ object Utils {
         return mMap
     }
 
-    fun convertHistoryListToMap(list: MutableList<HistoryModel>?): MutableMap<String?, HistoryModel> {
+    private fun convertHistoryListToMap(list: MutableList<HistoryModel>?): MutableMap<String?, HistoryModel> {
         val mMap: MutableMap<String?, HistoryModel> = HashMap<String?, HistoryModel>()
         if (list != null) {
             for (index in list) {
@@ -707,17 +653,6 @@ object Utils {
             e.printStackTrace()
         }
         return file
-    }
-
-    /*Merge list to hash map for upload, download and delete*/
-    fun mergeListToHashMap(mList: MutableList<DriveResponse>?): MutableMap<String?, String>? {
-        val map: MutableMap<String?, String> = HashMap()
-        if (mList != null) {
-            for (index in mList) {
-                map[index.id] = index.id ?: ""
-            }
-        }
-        return map
     }
 
     fun setLastTimeSynced(value: String?) {
@@ -901,21 +836,6 @@ object Utils {
             outputStream.flush()
             outputStream.close()
             bitmap?.recycle()
-            return FileProvider.getUriForFile(QRScannerApplication.getInstance(), BuildConfig.APPLICATION_ID + ".provider", file)
-        } catch (e: java.lang.Exception) {
-            return null;
-        }
-    }
-
-    fun getCodeUri(code : String) : Uri? {
-        val fileFolder = File(QRScannerApplication.getInstance().cacheDir,  Constant.files_folder)
-        try {
-            fileFolder.mkdirs()
-            val file = File(fileFolder, "vcard.vcf")
-            val outputStream = FileOutputStream(file)
-            outputStream.write(code.toByteArray());
-            outputStream.close()
-            outputStream.flush()
             return FileProvider.getUriForFile(QRScannerApplication.getInstance(), BuildConfig.APPLICATION_ID + ".provider", file)
         } catch (e: java.lang.Exception) {
             return null;
