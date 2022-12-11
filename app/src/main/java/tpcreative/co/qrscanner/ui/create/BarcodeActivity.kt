@@ -94,6 +94,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     private fun addValidationForEditText() {
+
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, RegexTemplate.NOT_EMPTY, R.string.err_text)
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.EAN_13) {
@@ -105,6 +106,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             true
         }, R.string.warning_barcode_length_13)
+
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.EAN_8) {
                 if (input.length == 8) {
@@ -126,6 +128,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             true
         }, R.string.warning_barcode_UPC_E_length_8)
+
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.UPC_A) {
                 if (input.length == 12) {
@@ -136,12 +139,62 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
             }
             true
         }, R.string.warning_barcode_UPC_A_length_12)
+
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.ITF) {
                 return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.ITF)
             }
             true
         }, R.string.warning_barcode_ITF)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.CODABAR) {
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODABAR)
+            }
+            true
+        }, R.string.warning_barcode_coda_bar)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.DATA_MATRIX) {
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.DATA_MATRIX)
+            }
+            true
+        }, R.string.warning_barcode_data_matrix)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.PDF_417) {
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.PDF_417)
+            }
+            true
+        }, R.string.warning_barcode_data_PDF_471)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.AZTEC) {
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.AZTEC)
+            }
+            true
+        }, R.string.warning_barcode_data_aztec)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.CODE_128) {
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_128)
+            }
+            true
+        }, R.string.warning_barcode_data_code_128)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.CODE_39) {
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_39)
+            }
+            true
+        }, R.string.warning_barcode_data_code_39)
+
+        mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
+            if (viewModel.mType == BarcodeFormat.CODE_93) {
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_93)
+            }
+            true
+        }, R.string.warning_barcode_data_code_93)
     }
 
     private fun focusUI() {

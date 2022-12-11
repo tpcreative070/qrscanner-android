@@ -4,14 +4,12 @@ import android.net.Uri
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
+import com.google.zxing.aztec.AztecWriter
 import com.google.zxing.aztec.encoder.Encoder.encode
 import com.google.zxing.client.result.*
-import com.google.zxing.oned.EAN13Writer
-import com.google.zxing.oned.EAN8Writer
-import com.google.zxing.oned.ITFWriter
-import com.google.zxing.oned.UPCAReader
-import com.google.zxing.oned.UPCAWriter
-import com.google.zxing.oned.UPCEWriter
+import com.google.zxing.datamatrix.DataMatrixWriter
+import com.google.zxing.oned.*
+import com.google.zxing.pdf417.PDF417Writer
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
@@ -1397,6 +1395,49 @@ fun Utils.validBarcode(code :String,barcodeFormat : BarcodeFormat) : Boolean{
             }
             BarcodeFormat.ITF->{
                 val mData = ITFWriter().encode(code)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.CODABAR ->{
+                val mData = CodaBarWriter().encode(code)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.DATA_MATRIX ->{
+                val mData = DataMatrixWriter().encode(code,barcodeFormat,200,200)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.PDF_417 ->{
+                val mData = PDF417Writer().encode(code,barcodeFormat,200,200)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.AZTEC ->{
+                val mData = AztecWriter().encode(code,barcodeFormat,200,200)
+                if (mData!=null){
+                    return true
+                }
+            }
+
+            BarcodeFormat.CODE_128 ->{
+                val mData = Code128Writer().encode(code,barcodeFormat,200,200)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.CODE_39 ->{
+                val mData = Code39Writer().encode(code,barcodeFormat,200,200)
+                if (mData!=null){
+                    return true
+                }
+            }
+            BarcodeFormat.CODE_93 ->{
+                val mData = Code93Writer().encode(code,barcodeFormat,200,200)
                 if (mData!=null){
                     return true
                 }
