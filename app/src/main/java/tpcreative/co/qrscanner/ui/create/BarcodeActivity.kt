@@ -31,7 +31,7 @@ import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     var save: GeneralModel? = null
-    var dataAdapter: ArrayAdapter<FormatTypeModel>? = null
+    var dataAdapter: CustomDropDownAdapter? = null
     lateinit var viewModel : GenerateViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -309,9 +309,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
 
     // add items into spinner dynamically
     private fun addItemsOnSpinner() {
-        dataAdapter = ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, viewModel.mBarcodeFormat)
-        dataAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dataAdapter = CustomDropDownAdapter(this, viewModel.mBarcodeFormat)
         spinner.adapter = dataAdapter
     }
 

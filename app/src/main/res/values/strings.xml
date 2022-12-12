@@ -429,5 +429,5 @@
     <string name="load_the_website">Load the website.</string>
     <string name="place">Place</string>
     <string name="turn_on_gps">Please turn on your location or GPS to get exactly position</string>
-
+    <string name="barcodes_and_other_2d_code">Barcodes and other 2D codes</string>
 </resources>

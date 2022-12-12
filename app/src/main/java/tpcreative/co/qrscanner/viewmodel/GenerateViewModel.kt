@@ -1,20 +1,16 @@
 package tpcreative.co.qrscanner.viewmodel
 import android.app.Activity
-import android.content.Intent
-import android.os.Build
-import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.liveData
-import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
-import kotlinx.android.synthetic.main.activity_barcode.*
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.getString
+import tpcreative.co.qrscanner.common.extension.onBarCodeId
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
@@ -28,7 +24,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     val TAG = this::class.java.simpleName
     fun getDataList() = liveData(Dispatchers.Main) {
         mList.clear()
-        mList.add(QRCodeType("0", getString(R.string.barcode), R.drawable.ic_barcode))
+        mList.add(QRCodeType("0", getString(R.string.barcodes_and_other_2d_code), R.drawable.ic_barcode_96))
         mList.add(QRCodeType("1", getString(R.string.email), R.drawable.baseline_email_white_48))
         mList.add(QRCodeType("2", getString(R.string.message), R.drawable.baseline_textsms_white_48))
         mList.add(QRCodeType("3", getString(R.string.location), R.drawable.baseline_location_on_white_48))
@@ -42,18 +38,18 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     }
 
     fun getBarcodeFormat() = liveData(Dispatchers.Main) {
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_8.name, "EAN 8"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_13.name, "EAN 13"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_A.name, "UPC A"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_E.name, "UPC E"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODABAR.name, "CodaBar"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.DATA_MATRIX.name, "Data Matrix"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.PDF_417.name, "PDF 417"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.AZTEC.name, "Aztec"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_128.name, "Code 128"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_39.name, "Code 39"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_93.name, "Code 93"))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.ITF.name, "ITF"))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_8.name, "EAN 8",Utils.onBarCodeId(BarcodeFormat.EAN_8.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_13.name, "EAN 13",Utils.onBarCodeId(BarcodeFormat.EAN_13.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_A.name, "UPC A",Utils.onBarCodeId(BarcodeFormat.UPC_A.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_E.name, "UPC E",Utils.onBarCodeId(BarcodeFormat.UPC_E.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_128.name, "Code 128",Utils.onBarCodeId(BarcodeFormat.CODE_128.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_39.name, "Code 39",Utils.onBarCodeId(BarcodeFormat.CODE_39.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_93.name, "Code 93",Utils.onBarCodeId(BarcodeFormat.CODE_93.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.ITF.name, "ITF",Utils.onBarCodeId(BarcodeFormat.ITF.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODABAR.name, "CodaBar",Utils.onBarCodeId(BarcodeFormat.CODABAR.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.DATA_MATRIX.name, "Data Matrix",Utils.onBarCodeId(BarcodeFormat.DATA_MATRIX.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.PDF_417.name, "PDF 417",Utils.onBarCodeId(BarcodeFormat.PDF_417.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.AZTEC.name, "Aztec",Utils.onBarCodeId(BarcodeFormat.AZTEC.name)))
         emit(mBarcodeFormat)
     }
 

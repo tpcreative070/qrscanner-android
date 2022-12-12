@@ -203,7 +203,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_barcode"
+                        android:src="@drawable/ic_barcode_new"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 
