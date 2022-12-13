@@ -11,6 +11,7 @@ import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest
 import tpcreative.co.qrscanner.common.api.requester.DriveService
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
 import tpcreative.co.qrscanner.common.extension.getString
+import tpcreative.co.qrscanner.common.extension.onSupportOldVersion
 import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.download.ProgressResponseBody
@@ -209,6 +210,7 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
         try {
             val mDataValue: SyncDataModel? = Gson().fromJson<SyncDataModel?>(mValue, object : TypeToken<SyncDataModel?>() {}.type)
             if (mDataValue != null) {
+                mDataValue.saveList.map { it.onSupportOldVersion() }
                 Utils.Log(TAG, "List value " + Gson().toJson(mDataValue))
 //                listener.onSuccessful("Downloaded successfully", EnumStatus.DOWNLOADED_SUCCESSFULLY)
 //                listener.onShowObjects(mDataValue)

@@ -82,7 +82,7 @@
                                 android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    style="@style/brandonRegularTextInputLayout"
+                                    style="@style/brandonRegularTextHintInputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/first_name" />
@@ -139,7 +139,7 @@
                                 android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    style="@style/brandonRegularTextInputLayout"
+                                    style="@style/brandonRegularTextHintInputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/company" />
@@ -161,7 +161,7 @@
                                 android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    style="@style/brandonRegularTextInputLayout"
+                                    style="@style/brandonRegularTextHintInputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/job_title" />
@@ -189,7 +189,7 @@
                             android:paddingBottom="@dimen/margin_5">
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonRegularTextInputLayout"
+                                style="@style/brandonRegularTextHintInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/address" />
@@ -222,7 +222,7 @@
                                 android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    style="@style/brandonRegularTextInputLayout"
+                                    style="@style/brandonRegularTextHintInputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/zip_code" />
@@ -244,7 +244,7 @@
                                 android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    style="@style/brandonRegularTextInputLayout"
+                                    style="@style/brandonRegularTextHintInputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/city" />
@@ -279,7 +279,7 @@
                                 android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    style="@style/brandonRegularTextInputLayout"
+                                    style="@style/brandonRegularTextHintInputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/region" />
@@ -301,7 +301,7 @@
                                 android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    style="@style/brandonRegularTextInputLayout"
+                                    style="@style/brandonRegularTextHintInputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/country" />
@@ -329,7 +329,7 @@
                             android:paddingBottom="@dimen/margin_5">
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonRegularTextInputLayout"
+                                style="@style/brandonRegularTextHintInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/phoneNumber_lowercase" />
@@ -357,7 +357,7 @@
                             android:paddingBottom="@dimen/margin_5">
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonRegularTextInputLayout"
+                                style="@style/brandonRegularTextHintInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/email" />
@@ -384,7 +384,7 @@
                             android:paddingBottom="@dimen/margin_5">
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/brandonRegularTextInputLayout"
+                                style="@style/brandonRegularTextHintInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/website" />

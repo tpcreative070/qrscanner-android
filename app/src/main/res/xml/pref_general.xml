@@ -8,7 +8,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_opacity_white_48"
+            android:icon="@drawable/ic_theme"
             android:title="@string/key_dark_mode"
             android:key="@string/key_dark_mode"
             android:summary="@string/key_dark_mode_detail">
@@ -18,7 +18,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_palette_white_48"
+            android:icon="@drawable/ic_colors"
             android:title="@string/key_color_code"
             android:key="@string/key_color_code"
             android:summary="@string/key_color_code_detail">
@@ -28,7 +28,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_more_white_48"
+            android:icon="@drawable/ic_refresh"
             android:title="@string/key_multiple_scan"
             android:key="@string/key_multiple_scan"
             android:defaultValue="false"
@@ -39,7 +39,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_content_copy_white_24"
+            android:icon="@drawable/ic_duplicated"
             android:title="@string/key_skip_duplicates"
             android:key="@string/key_skip_duplicates"
             android:defaultValue="false"
@@ -50,7 +50,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="true"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_backup_white_24"
+            android:icon="@drawable/ic_cloud"
             android:title="@string/key_backup_data"
             android:key="@string/key_backup_data"
             android:defaultValue="false"
@@ -64,7 +64,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_vibration_white_48"
+            android:icon="@drawable/ic_vibrate"
             android:title="@string/key_vibrate"
             android:key="@string/key_vibrate">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
@@ -73,7 +73,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_surround_sound_white_48"
+            android:icon="@drawable/ic_sound"
             android:title="@string/key_beep"
             android:defaultValue="true"
             android:key="@string/key_beep">
@@ -84,7 +84,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_filter_none_white_48"
+            android:icon="@drawable/ic_copy"
             android:title="@string/key_copy_to_clipboard"
             android:key="@string/key_copy_to_clipboard"
             android:defaultValue="false"
@@ -96,7 +96,7 @@
             app:allowDividerBelow="true"
             android:defaultValue="false"
             android:layout="@layout/custom_preferences_item"
-            android:icon="@drawable/baseline_language_white_48"
+            android:icon="@drawable/ic_network"
             android:title="@string/key_auto_navigate_to_browser"
             android:summary="@string/key_auto_navigate_to_browser_detail"
             android:key="@string/key_auto_navigate_to_browser">
@@ -133,7 +133,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_playlist_add_check_white_48"
+            android:icon="@drawable/ic_list"
             android:title="@string/app_permission"
             android:key="@string/key_app_permissions"/>
 
@@ -141,7 +141,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_beenhere_white_48"
+            android:icon="@drawable/ic_protect"
             android:title="@string/privacy_policy"
             android:key="@string/key_privacy_policy">
             <intent
@@ -154,7 +154,7 @@
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
             android:title="@string/give_rate"
-            android:icon="@drawable/baseline_star_rate_white_48"
+            android:icon="@drawable/ic_stars"
             android:key="@string/key_rate">
         </tpcreative.co.qrscanner.common.preference.MyPreference>
 
@@ -162,13 +162,13 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_share_white_48"
+            android:icon="@drawable/ic_share"
             android:title="@string/share"
             android:key="@string/key_share"/>
 
         <tpcreative.co.qrscanner.common.preference.MyPreference
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_help_white_48"
+            android:icon="@drawable/ic_help"
             android:title="@string/help"
             android:key="@string/key_help"/>
 
@@ -176,7 +176,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_live_help_white_48"
+            android:icon="@drawable/ic_report"
             android:title="@string/support"
             android:summary="@string/support_detail"
             android:key="@string/key_support"/>
@@ -185,7 +185,7 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"
             android:layout="@layout/custom_preferences_item_small"
-            android:icon="@drawable/baseline_label_white_48"
+            android:icon="@drawable/ic_version"
             android:key="@string/key_version"
             android:summary=""
             android:title="@string/version"/>

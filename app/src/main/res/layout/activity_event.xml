@@ -67,7 +67,7 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/title" />
@@ -95,7 +95,7 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/location" />
@@ -121,7 +121,7 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/description" />
@@ -149,7 +149,7 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/beginTime" />
@@ -160,7 +160,7 @@
                             android:paddingBottom="10dp"
                             android:textSize="16sp"
                             android:id="@+id/tvBeginTime"
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
@@ -178,7 +178,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp">
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/endTime" />
@@ -189,7 +189,7 @@
                             android:paddingBottom="10dp"
                             android:textSize="16sp"
                             android:id="@+id/tvEndTime"
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>

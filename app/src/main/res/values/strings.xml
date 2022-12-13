@@ -174,6 +174,7 @@
     <string name="key_version">version</string>
     <string name="key_refresh">refresh</string>
     <string name="key_support">support</string>
+    <string name="key_last_time_synced_completely">key_last_time_synced_completely</string>
     <string name="support">Support</string>
     <string name="support_detail">Report issues</string>
     <string name="app_permission">App permissions</string>
@@ -336,10 +337,11 @@
     <string name="alert">Alert</string>
     <string name="found_items_duplicates">Found %1$s items. Do you want to delete it?</string>
     <string name="key_is_premium">key_is_premium</string>
-    <string name="grant_permissions_to_google_drive">The app need some specific permissions to backup data to your Google drive, Do not worry about sensitive data in your Google drive. QRScanner app only generate own space to backup data. It does not affect to your data existing.</string>
-    <string name="current_email">Signed in with email is: %1$s Please keep it to continue signing in to another devices</string>
+    <string name="grant_permissions_to_google_drive">The app needs some specific permissions to backup data to your Google drive, Do not worry about sensitive data in your Google drive. QRScanner app only generates its own space to back up data. It does not affect your data existing</string>
+    <string name="current_email">Signed in with email is: %1$s Please keep it to continue signing in to other devices</string>
     <string name="synced_data"><![CDATA[<b>Save synced: <font color=#e19704>%1$s</font></b><br\>]]> <![CDATA[<b>History synced: <font color=#e19704>%2$s</font></b>]]></string>
-    <string name="syncing_data">Syncing data…</string>
+    <string name="synced_data_last_time_updated"><![CDATA[<b>Last time updated: <font color=#757575>%1$s</font>]]></string>
+    <string name="syncing_data">Syncing data…</string>212121
     <string name="enable_sync_data">Enable sync data</string>
     <string name="switch_account">Switch account</string>
     <string name="selected">selected</string>
@@ -358,7 +360,7 @@
     <string name="key_copy_to_clipboard">Copy to clipboard</string>
     <string name="key_copy_to_clipboard_detail">Content of code will be saved automatically to clipboard</string>
     <string name="key_auto_navigate_to_browser">Open websites automatically</string>
-    <string name="key_auto_navigate_to_browser_detail">URI format: Auto navigate to Web Browser</string>
+    <string name="key_auto_navigate_to_browser_detail">URI format: Auto navigate to the Web Browser</string>
     <string name="database_name">db-qr-scanner</string>
     <string name="key_waiting_for_show_ads">waiting_for_show_ads</string>
     <string name="key_multiple_scan">Continuous scanning</string>
@@ -429,5 +431,8 @@
     <string name="load_the_website">Load the website.</string>
     <string name="place">Place</string>
     <string name="turn_on_gps">Please turn on your location or GPS to get exactly position</string>
-
+    <string name="barcodes_and_other_2d_code">Barcodes and other 2D codes</string>
+    <string name="export">Export</string>
+    <string name="distance_14_0_m">Distance: 14.0 m</string>
+    <string name="_2_40_35_pm_8_24_16_pm">2:40:35 PM - 8:24:16 PM</string>
 </resources>

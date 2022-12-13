@@ -97,15 +97,17 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
 
     fun deleteItem() = liveData(Dispatchers.IO) {
         val list = mList
-        for (index in list) {
-            if (index.isDeleted()) {
-                if (index.isChecked()) {
-                    SQLiteHelper.onDelete(index)
+        list.let {
+            for (index in it) {
+                if (index.isDeleted()) {
+                    if (index.isChecked()) {
+                        SQLiteHelper.onDelete(index)
+                    }
                 }
             }
+            getListGroup()
+            emit(true)
         }
-        getListGroup()
-        emit(true)
     }
 
     init {

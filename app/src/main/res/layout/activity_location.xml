@@ -68,7 +68,7 @@
                         android:paddingBottom="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/latitude" />
@@ -95,7 +95,7 @@
                         android:paddingBottom="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/longitude" />
@@ -122,7 +122,7 @@
                         android:paddingBottom="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/place" />

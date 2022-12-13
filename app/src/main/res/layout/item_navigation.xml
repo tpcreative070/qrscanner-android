@@ -22,11 +22,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
                 android:id="@+id/imgAction"
-                android:layout_width="@dimen/icon_size_30"
-                android:layout_height="@dimen/icon_size_30"/>
+                android:layout_width="@dimen/icon_size_27"
+                android:layout_height="@dimen/icon_size_27"/>
             <androidx.appcompat.widget.AppCompatTextView
-                android:textColor="@color/material_gray_600"
-                style="@style/brandonRegularTextView"
+                style="@style/brandonRegularSmallTextInputLayout"
                 android:paddingStart="10dp"
                 android:layout_marginStart="@dimen/icon_size_30"
                 android:id="@+id/tvTitle"
@@ -45,28 +44,29 @@
             android:layout_marginTop="@dimen/margin_15"
             android:layout_marginBottom="@dimen/margin_15">
             <RelativeLayout
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
                 android:id="@+id/rlViewCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgTypeQRCode"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/icon_size_27"
+                    android:layout_height="@dimen/icon_size_27"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
                     android:tint="@color/colorAccent"
-                    app:srcCompat="@drawable/ic_baseline_qr_code_24" />
+                    app:srcCompat="@drawable/ic_qrcode" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtViewCode"
-                    style="@style/brandonRegularTextView"
+                    style="@style/brandonRegularSmallTextInputLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginStart="@dimen/margin_10"
                     android:layout_toEndOf="@+id/imgTypeQRCode"
-                    android:text="@string/view_code"
-                    android:textColor="@color/material_gray_600" />
+                    android:text="@string/view_code"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -74,17 +74,19 @@
                 android:layout_marginStart="20dp"
                 android:layout_toEndOf="@+id/rlViewCode">
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:padding="@dimen/margin_7"
                     android:id="@+id/imgTakeNote"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/icon_size_40"
+                    android:layout_height="@dimen/icon_size_40"
                     android:layout_marginStart="20dp"
                     android:layout_toStartOf="@+id/imgMarkFavorite"
                     android:tint="@color/colorAccent"
-                    app:srcCompat="@drawable/ic_baseline_edit_note_24" />
+                    app:srcCompat="@drawable/ic_note" />
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:padding="@dimen/margin_7"
                     android:id="@+id/imgMarkFavorite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/icon_size_40"
+                    android:layout_height="@dimen/icon_size_40"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:layout_marginStart="20dp"

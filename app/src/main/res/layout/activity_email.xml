@@ -62,7 +62,7 @@
                         android:padding="@dimen/margin_5">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/email_address" />
@@ -89,7 +89,7 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/subject" />
@@ -112,7 +112,7 @@
                         android:padding="10dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/message" />

@@ -9,6 +9,8 @@ import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
 import kotlinx.android.synthetic.main.item_navigation.view.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.onBarCodeId
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.ItemNavigation
 
@@ -36,6 +38,7 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
             if (data.enumAction == EnumAction.DO_ADVANCE){
                 itemView.rlBasic.visibility = View.GONE
                 itemView.rlAdvance.visibility = View.VISIBLE
+                itemView.imgTypeQRCode.setImageDrawable(Utils.onBarCodeId(data.barcodeFormat))
                 if (data.isFavorite == true){
                     itemView.imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_favorite_24))
                 }else{

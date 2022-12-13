@@ -8,6 +8,7 @@
     <dimen name="icon_size_20">20dp</dimen>
     <dimen name="icon_size_22">22dp</dimen>
     <dimen name="icon_size_25">25dp</dimen>
+    <dimen name="icon_size_27">27dp</dimen>
     <dimen name="icon_size_30">30dp</dimen>
     <dimen name="icon_size_40">40dp</dimen>
     <dimen name="icon_size_45">45dp</dimen>
@@ -86,8 +87,22 @@
     <dimen name="banner_rectangle_review_height">265dp</dimen>
 
 
+
+
+    <dimen name="margin_1">1sp</dimen>
+    <dimen name="margin_2">2sp</dimen>
+    <dimen name="margin_3">3sp</dimen>
+    <dimen name="margin_4">4sp</dimen>
+    <dimen name="margin_5">5sp</dimen>
+    <dimen name="margin_6">6sp</dimen>
+    <dimen name="margin_7">7sp</dimen>
+    <dimen name="margin_8">8sp</dimen>
+    <dimen name="margin_9">9sp</dimen>
     <dimen name="margin_10">10sp</dimen>
+    <dimen name="margin_11">11sp</dimen>
     <dimen name="margin_12">12sp</dimen>
+    <dimen name="margin_13">13sp</dimen>
+    <dimen name="margin_14">14sp</dimen>
     <dimen name="margin_15">15sp</dimen>
     <dimen name="margin_20">20sp</dimen>
     <dimen name="margin_25">25sp</dimen>
@@ -97,12 +112,7 @@
     <dimen name="margin_45">45sp</dimen>
     <dimen name="margin_50">50sp</dimen>
     <dimen name="margin_90">90sp</dimen>
-    <dimen name="margin_7">7sp</dimen>
-    <dimen name="margin_5">5sp</dimen>
-    <dimen name="margin_4">4sp</dimen>
-    <dimen name="margin_3">3sp</dimen>
-    <dimen name="margin_2">2sp</dimen>
-    <dimen name="margin_1">1sp</dimen>
+
 
     <dimen name="text_size_m">20sp</dimen>
     <dimen name="text_size_s">16sp</dimen>

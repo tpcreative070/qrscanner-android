@@ -9,6 +9,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.BackupSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.extension.onDisplayLatTimeSyncedCompletely
 import tpcreative.co.qrscanner.common.network.NetworkUtil
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -33,6 +34,7 @@ fun BackupActivity.initUI(){
             tvUsedSpace?.visibility = View.VISIBLE
             val mTextSynced = String.format(getString(R.string.synced_data), mSaveSyncedList.size.toString() + "", mHistorySyncedList.size.toString() + "")
             tvUsedSpace?.text = HtmlCompat.fromHtml(mTextSynced, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            tvLastTimeSynced?.text = HtmlCompat.fromHtml(Utils.onDisplayLatTimeSyncedCompletely(), HtmlCompat.FROM_HTML_MODE_LEGACY)
             requestSyncData()
         }
     }

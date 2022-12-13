@@ -41,7 +41,8 @@
     <color name="inbox_accent">#db4437</color>
 
     <!-- Material Color Palette -->
-    <color name="material_default">#757575</color>
+    <color name="material_hint_default">#757575</color>
+    <color name="material_default">#474646</color>
     <color name="material_gray_050">#FAFAFA</color>
     <color name="material_gray_100">#F5F5F5</color>
     <color name="material_gray_200">#EEEEEE</color>

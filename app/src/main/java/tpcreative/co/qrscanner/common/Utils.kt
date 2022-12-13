@@ -376,7 +376,7 @@ object Utils {
         Alerter.create(activity)
             .setTitle("Alert")
             .setText("$content")
-            .setIcon(R.drawable.baseline_warning_white_24)
+            .setIcon(R.drawable.ic_warning)
             .setBackgroundColorRes(R.color.colorAccent) // or setBackgroundColorInt(Color.CYAN)
             .show()
     }
@@ -496,14 +496,14 @@ object Utils {
     }
 
     private fun checkHistoryFavoriteOrNotedUpdateToLocal(mGlobal : HistoryModel?, mLocal : HistoryModel?) : Boolean{
-        if (((mGlobal?.favorite != mLocal?.favorite) || (mGlobal?.noted != mLocal?.noted)) &&  getMilliseconds(mGlobal?.hiddenDatetime) > getMilliseconds(mLocal?.hiddenDatetime)){
+        if (((mGlobal?.favorite != mLocal?.favorite) || (mGlobal?.noted != mLocal?.noted)) && (mGlobal?.hiddenDatetime?.isNotEmpty()==true && getMilliseconds(mGlobal.hiddenDatetime) > getMilliseconds(mLocal?.hiddenDatetime))){
             return true
         }
         return false
     }
 
     private fun checkSaveFavoriteOrNotedUpdateToLocal(mGlobal : SaveModel?, mLocal : SaveModel?) : Boolean{
-        if (((mGlobal?.favorite != mLocal?.favorite) || (mGlobal?.noted != mLocal?.noted)) && getMilliseconds(mGlobal?.hiddenDatetime) > getMilliseconds(mLocal?.hiddenDatetime)){
+        if (((mGlobal?.favorite != mLocal?.favorite) || (mGlobal?.noted != mLocal?.noted)) && (mGlobal?.hiddenDatetime?.isNotEmpty()==true && getMilliseconds(mGlobal.hiddenDatetime) > getMilliseconds(mLocal?.hiddenDatetime))){
             return true
         }
         return false
