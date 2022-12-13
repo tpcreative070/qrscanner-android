@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.BackupSingleton.BackupSingletonListener
 import tpcreative.co.qrscanner.common.activity.BaseGoogleApi
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.extension.onDisplayLatTimeSyncedCompletely
 import tpcreative.co.qrscanner.common.services.QRScannerService.ServiceManagerSyncDataListener
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 
@@ -153,6 +154,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
             tvUsedSpace?.visibility = View.VISIBLE
             val mTextSynced = String.format(getString(R.string.synced_data), mSaveSyncedList.size.toString() + "", mHistorySyncedList.size.toString() + "")
             tvUsedSpace?.text = HtmlCompat.fromHtml(mTextSynced, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            tvLastTimeSynced?.text = HtmlCompat.fromHtml(Utils.onDisplayLatTimeSyncedCompletely(), HtmlCompat.FROM_HTML_MODE_LEGACY)
             btnEnable.isEnabled = true
             btnEnable.setTextColor(ContextCompat.getColor(this@BackupActivity, R.color.white))
         }

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.pro.ProVersionActivity">
+    android:layout_height="match_parent">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -126,7 +125,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/baseline_palette_white_48"
+                        android:src="@drawable/ic_colors"
                         android:layout_width="@dimen/icon_size_30"
                         android:layout_height="@dimen/icon_size_30"/>
 
@@ -153,7 +152,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/baseline_more_white_48"
+                        android:src="@drawable/ic_continue"
                         android:layout_width="@dimen/icon_size_25"
                         android:layout_height="@dimen/icon_size_25"/>
 
@@ -178,7 +177,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/baseline_content_copy_white_24"
+                        android:src="@drawable/ic_duplicated"
                         android:layout_width="@dimen/icon_size_25"
                         android:layout_height="@dimen/icon_size_25"/>
 
@@ -203,7 +202,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_barcode_new"
+                        android:src="@drawable/ic_barcode"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 
@@ -228,7 +227,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/baseline_opacity_white_48"
+                        android:src="@drawable/ic_theme"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 
@@ -253,7 +252,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_drive_cloud"
+                        android:src="@drawable/ic_cloud"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 

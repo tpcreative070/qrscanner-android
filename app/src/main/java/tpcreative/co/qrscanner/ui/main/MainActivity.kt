@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
@@ -41,11 +39,11 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     var receiver: QRScannerReceiver? = null
 
     private val tabIcons: IntArray = intArrayOf(
-            R.drawable.baseline_history_white_48,
-            R.drawable.baseline_add_box_white_48,
-            R.drawable.ic_scanner,
-            R.drawable.baseline_save_alt_white_48,
-            R.drawable.baseline_settings_white_48)
+            R.drawable.ic_history,
+            R.drawable.ic_add,
+            R.drawable.ic_scanner_v4,
+            R.drawable.ic_saver,
+            R.drawable.ic_settings)
 
     fun getToolbar(): Toolbar? {
         return toolbar
@@ -101,11 +99,11 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         val mResult = ContextCompat.getDrawable(this, tabIcons.get(position))
         return mResult
                 ?: when (position) {
-                    0 -> ContextCompat.getDrawable(this, R.drawable.baseline_history_white_48)
-                    1 -> ContextCompat.getDrawable(this, R.drawable.baseline_add_box_white_48)
-                    3 -> ContextCompat.getDrawable(this, R.drawable.baseline_save_alt_white_48)
-                    4 -> ContextCompat.getDrawable(this, R.drawable.baseline_settings_white_48)
-                    else -> ContextCompat.getDrawable(this, R.drawable.ic_scanner)
+                    0 -> ContextCompat.getDrawable(this, R.drawable.ic_history)
+                    1 -> ContextCompat.getDrawable(this, R.drawable.ic_add)
+                    3 -> ContextCompat.getDrawable(this, R.drawable.ic_saver)
+                    4 -> ContextCompat.getDrawable(this, R.drawable.ic_settings)
+                    else -> ContextCompat.getDrawable(this, R.drawable.ic_scanner_v4)
                 }
     }
 

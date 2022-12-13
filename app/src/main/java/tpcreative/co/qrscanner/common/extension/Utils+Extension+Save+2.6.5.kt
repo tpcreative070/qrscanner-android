@@ -14,3 +14,8 @@ fun SaveModel.onAddressBook(mGeneral : GeneralModel){
     this.email = mGeneral.contact?.emails?.values?.firstOrNull()
     this.phone = mGeneral.contact?.phones?.values?.firstOrNull()
 }
+fun SaveModel.onSupportOldVersion(){
+    if (this.textProductIdISNB.isNullOrEmpty() && this.text?.isNotEmpty() == true){
+        this.textProductIdISNB = this.text
+    }
+}

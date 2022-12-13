@@ -70,7 +70,7 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/to" />
@@ -97,7 +97,7 @@
                         android:paddingTop="5dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/brandonRegularTextInputLayout"
+                            style="@style/brandonRegularTextHintInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/message" />

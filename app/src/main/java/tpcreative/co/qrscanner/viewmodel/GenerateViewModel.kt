@@ -24,22 +24,22 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     val TAG = this::class.java.simpleName
     fun getDataList() = liveData(Dispatchers.Main) {
         mList.clear()
-        mList.add(QRCodeType("0", getString(R.string.barcodes_and_other_2d_code), R.drawable.ic_barcode_96))
-        mList.add(QRCodeType("1", getString(R.string.email), R.drawable.baseline_email_white_48))
-        mList.add(QRCodeType("2", getString(R.string.message), R.drawable.baseline_textsms_white_48))
-        mList.add(QRCodeType("3", getString(R.string.location), R.drawable.baseline_location_on_white_48))
-        mList.add(QRCodeType("4", getString(R.string.event), R.drawable.baseline_event_white_48))
-        mList.add(QRCodeType("5", getString(R.string.contact), R.drawable.baseline_perm_contact_calendar_white_48))
-        mList.add(QRCodeType("6", getString(R.string.telephone), R.drawable.baseline_phone_white_48))
-        mList.add(QRCodeType("7", getString(R.string.text), R.drawable.baseline_text_format_white_48))
-        mList.add(QRCodeType("8", getString(R.string.wifi), R.drawable.baseline_network_wifi_white_48))
-        mList.add(QRCodeType("9", getString(R.string.website), R.drawable.baseline_language_white_48))
+        mList.add(QRCodeType("0", getString(R.string.barcodes_and_other_2d_code), R.drawable.ic_barcode))
+        mList.add(QRCodeType("1", getString(R.string.email), R.drawable.ic_email))
+        mList.add(QRCodeType("2", getString(R.string.message), R.drawable.ic_message))
+        mList.add(QRCodeType("3", getString(R.string.location), R.drawable.ic_location))
+        mList.add(QRCodeType("4", getString(R.string.event), R.drawable.ic_calender))
+        mList.add(QRCodeType("5", getString(R.string.contact), R.drawable.ic_contact))
+        mList.add(QRCodeType("6", getString(R.string.telephone), R.drawable.ic_phone))
+        mList.add(QRCodeType("7", getString(R.string.text), R.drawable.ic_text))
+        mList.add(QRCodeType("8", getString(R.string.wifi), R.drawable.ic_wifi))
+        mList.add(QRCodeType("9", getString(R.string.website), R.drawable.ic_network))
         emit(mList)
     }
 
     fun getBarcodeFormat() = liveData(Dispatchers.Main) {
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_8.name, "EAN 8",Utils.onBarCodeId(BarcodeFormat.EAN_8.name)))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_13.name, "EAN 13",Utils.onBarCodeId(BarcodeFormat.EAN_13.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.EAN_13.name,  "EAN 13",Utils.onBarCodeId(BarcodeFormat.EAN_13.name)))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_A.name, "UPC A",Utils.onBarCodeId(BarcodeFormat.UPC_A.name)))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.UPC_E.name, "UPC E",Utils.onBarCodeId(BarcodeFormat.UPC_E.name)))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_128.name, "Code 128",Utils.onBarCodeId(BarcodeFormat.CODE_128.name)))

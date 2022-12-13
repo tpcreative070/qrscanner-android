@@ -18,6 +18,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.api.requester.DriveService
 import tpcreative.co.qrscanner.common.api.requester.UserService
+import tpcreative.co.qrscanner.common.extension.setDisplayLatTimeSyncedCompletely
 import tpcreative.co.qrscanner.common.presenter.BaseView
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerService
@@ -221,6 +222,7 @@ class ServiceManager : BaseView<Any?> {
             }
         }
         isSyncingData = false
+        Utils.setDisplayLatTimeSyncedCompletely()
         Utils.Log(TAG, "Already synced completely")
     }
 

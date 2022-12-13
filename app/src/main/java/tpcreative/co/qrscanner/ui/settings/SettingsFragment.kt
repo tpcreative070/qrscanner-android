@@ -329,7 +329,7 @@ class SettingsFragment : BaseFragment() {
             myPreferenceTheme?.setListener(object : MyPreference.MyPreferenceListener {
                 override fun onUpdatePreference() {
                     myPreferenceTheme?.getTvChoose()?.visibility = View.VISIBLE
-                    myPreferenceTheme?.getImgPremium()?.visibility = View.VISIBLE
+                    myPreferenceTheme?.getImgPremium()?.visibility = View.INVISIBLE
                     myPreferenceTheme?.getTvChoose()?.text = Utils.getCurrentThemeName()
                 }
             })
@@ -339,7 +339,7 @@ class SettingsFragment : BaseFragment() {
             myPreferenceFileColor?.onPreferenceChangeListener = createChangeListener()
             myPreferenceFileColor?.setListener(object : MyPreference.MyPreferenceListener {
                 override fun onUpdatePreference() {
-                    myPreferenceFileColor?.getImgPremium()?.visibility = View.VISIBLE
+                    myPreferenceFileColor?.getImgPremium()?.visibility = View.INVISIBLE
                     onGenerateReview("123")
                 }
             })
@@ -349,7 +349,7 @@ class SettingsFragment : BaseFragment() {
             myPreferenceMultipleScan?.onPreferenceChangeListener = createChangeListener()
             myPreferenceMultipleScan?.setListener(object : MySwitchPreference.MySwitchPreferenceListener {
                 override fun onUpdatePreference() {
-                    myPreferenceMultipleScan?.getImgPremium()?.visibility = View.VISIBLE
+                    myPreferenceMultipleScan?.getImgPremium()?.visibility = View.INVISIBLE
                 }
             })
 
@@ -358,7 +358,7 @@ class SettingsFragment : BaseFragment() {
             mySwitchPreferenceSkipDuplicates?.onPreferenceChangeListener = createChangeListener()
             mySwitchPreferenceSkipDuplicates?.setListener(object : MySwitchPreference.MySwitchPreferenceListener {
                 override fun onUpdatePreference() {
-                    mySwitchPreferenceSkipDuplicates?.getImgPremium()?.visibility = View.VISIBLE
+                    mySwitchPreferenceSkipDuplicates?.getImgPremium()?.visibility = View.INVISIBLE
                 }
             })
 
@@ -367,7 +367,7 @@ class SettingsFragment : BaseFragment() {
             mySwitchPreferenceBackupData?.onPreferenceChangeListener = createChangeListener()
             mySwitchPreferenceBackupData?.setListener(object : MySwitchPreference.MySwitchPreferenceListener {
                 override fun onUpdatePreference() {
-                    mySwitchPreferenceBackupData?.getImgPremium()?.visibility = View.VISIBLE
+                    mySwitchPreferenceBackupData?.getImgPremium()?.visibility = View.INVISIBLE
                 }
             })
 

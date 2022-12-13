@@ -13,14 +13,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_10">
-            <ImageView android:layout_width="@dimen/icon_size_25"
-                android:layout_height="@dimen/icon_size_25"
+            <ImageView android:layout_width="@dimen/icon_size_27"
+                android:layout_height="@dimen/icon_size_27"
                 android:id="@+id/imgIcon"
                 android:contentDescription="@string/app_name"/>
             <TextView android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_5"
-                android:layout_marginEnd="@dimen/margin_5"
+                android:layout_marginStart="@dimen/margin_15"
+                android:layout_marginEnd="@dimen/margin_15"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/text"/>
         </LinearLayout>

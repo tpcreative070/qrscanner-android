@@ -476,7 +476,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     create.barcodeFormat,
                     create.fragmentType,
                     EnumAction.DO_ADVANCE,
-                    R.drawable.alerter_ic_face,
+                    R.drawable.ic_note,
                     ConstantValue.ADVANCE,
                     create.favorite
                 )
@@ -526,7 +526,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                                 create.barcodeFormat,
                                 create.fragmentType,
                                 EnumAction.PHONE_ADDRESS_BOOK,
-                                R.drawable.baseline_phone_white_48,
+                                R.drawable.ic_phone,
                                 it.value,
                                 create.favorite
                             )
@@ -542,7 +542,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                                 create.barcodeFormat,
                                 create.fragmentType,
                                 EnumAction.EMAIL_ADDRESS_BOOK,
-                                R.drawable.baseline_email_white_48,
+                                R.drawable.ic_email,
                                 it.value,
                                 create.favorite
                             )
@@ -558,7 +558,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                                 create.barcodeFormat,
                                 create.fragmentType,
                                 EnumAction.URL_ADDRESS_BOOK,
-                                R.drawable.baseline_language_white_48,
+                                R.drawable.ic_network,
                                 it,
                                 create.favorite
                             )
@@ -575,7 +575,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                                     create.barcodeFormat,
                                     create.fragmentType,
                                     EnumAction.GEO_ADDRESS_BOOK,
-                                    R.drawable.ic_baseline_directions_24,
+                                    R.drawable.ic_direction,
                                     it.value.address,
                                     create.favorite
                                 )
@@ -589,7 +589,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                                     create.barcodeFormat,
                                     create.fragmentType,
                                     EnumAction.GEO_ADDRESS_BOOK,
-                                    R.drawable.ic_baseline_directions_24,
+                                    R.drawable.ic_direction,
                                     it.value.getAddressValue(),
                                     create.favorite
                                 )
@@ -606,7 +606,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_perm_contact_calendar_white_48,
+                            R.drawable.ic_contact,
                             ConstantValue.CONTACT,
                             create.favorite
                         )
@@ -630,7 +630,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_email_white_48,
+                            R.drawable.ic_email,
                             create.email,
                             create.favorite
                         )
@@ -651,7 +651,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH_WEB,
-                            R.drawable.baseline_search_white_48,
+                            R.drawable.ic_search,
                             QRScannerApplication.getInstance().getString(R.string.search_product_on_the_web),
                             create.favorite
                         )
@@ -664,7 +664,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH_AMAZON,
-                            R.drawable.ic_baseline_manage_search_24,
+                            R.drawable.ic_search_ecommerce,
                             QRScannerApplication.getInstance().getString(R.string.search_on_amazon_com),
                             create.favorite
                         )
@@ -678,7 +678,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH_EBAY,
-                            R.drawable.ic_baseline_manage_search_24,
+                            R.drawable.ic_search_ecommerce,
                             QRScannerApplication.getInstance().getString(R.string.search_on_ebay_com),
                             create.favorite
                         )
@@ -698,7 +698,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH,
-                            R.drawable.baseline_search_white_48,
+                            R.drawable.ic_search,
                             create.url,
                             create.favorite
                         )
@@ -711,7 +711,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_language_white_48,
+                            R.drawable.ic_network,
                             create.url,
                             create.favorite
                         )
@@ -747,7 +747,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_network_wifi_white_48,
+                            R.drawable.ic_wifi,
                             create.ssId,
                             create.favorite
                         )
@@ -771,7 +771,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_location_on_white_48,
+                            R.drawable.ic_location,
                             "${create.lat},${create.lon}",
                             create.favorite
                         )
@@ -784,7 +784,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.GEO_ADDRESS_BOOK,
-                            R.drawable.ic_baseline_directions_24,
+                            R.drawable.ic_direction,
                             "${create.query}",
                             create.favorite
                         )
@@ -804,7 +804,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_phone_white_48,
+                            R.drawable.ic_phone,
                             create.phone,
                             create.favorite
                         )
@@ -826,7 +826,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_textsms_white_48,
+                            R.drawable.ic_message,
                             create.phone,
                             create.favorite
                         )
@@ -866,7 +866,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.Other,
-                            R.drawable.baseline_event_white_48,
+                            R.drawable.ic_calender,
                             ConstantValue.CALENDAR,
                             create.favorite
                         )
@@ -886,7 +886,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH_WEB,
-                            R.drawable.baseline_search_white_48,
+                            R.drawable.ic_search,
                             QRScannerApplication.getInstance().getString(R.string.search_product_on_the_web),
                             create.favorite
                         )
@@ -900,7 +900,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH_AMAZON,
-                            R.drawable.ic_baseline_manage_search_24,
+                            R.drawable.ic_search_ecommerce,
                             QRScannerApplication.getInstance().getString(R.string.search_on_amazon_com),
                             create.favorite
                         )
@@ -914,7 +914,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH_EBAY,
-                            R.drawable.ic_baseline_manage_search_24,
+                            R.drawable.ic_search_ecommerce,
                             QRScannerApplication.getInstance().getString(R.string.search_on_ebay_com),
                             create.favorite
                         )
@@ -935,7 +935,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                                 create.barcodeFormat,
                                 create.fragmentType,
                                 EnumAction.Other,
-                                R.drawable.baseline_textsms_white_48,
+                                R.drawable.ic_message,
                                 ConstantValue.TEXT,
                                 create.favorite
                             )
@@ -953,7 +953,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.barcodeFormat,
                             create.fragmentType,
                             EnumAction.SEARCH,
-                            R.drawable.baseline_search_white_48,
+                            R.drawable.ic_search,
                             ConstantValue.SEARCH,
                             create.favorite
                         )
@@ -969,7 +969,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     create.barcodeFormat,
                     create.fragmentType,
                     EnumAction.CLIPBOARD,
-                    R.drawable.ic_baseline_content_copy_24,
+                    R.drawable.ic_copy,
                     ConstantValue.COPY,
                     create.favorite
                 )
@@ -1479,54 +1479,72 @@ fun Utils.validBarcode(code :String,barcodeFormat : BarcodeFormat) : Boolean{
 fun Utils.onBarCodeId(format: String?) : Drawable?{
     var mDraw : Drawable? = null
     if (format.isNullOrEmpty()){
-        mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_baseline_qr_code_24)
+        mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
     }else{
         val mFormat = BarcodeFormat.valueOf(format)
         when(mFormat){
             BarcodeFormat.QR_CODE ->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_baseline_qr_code_24)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
             }
             BarcodeFormat.DATA_MATRIX->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_baseline_qr_code_24)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
             }
             BarcodeFormat.PDF_417->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_baseline_qr_code_24)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
             }
             BarcodeFormat.AZTEC->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_baseline_qr_code_24)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
             }
             BarcodeFormat.EAN_13->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.EAN_8->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.UPC_E->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.UPC_A->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.CODE_128->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.CODE_39->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.CODE_93->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.CODABAR->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.ITF->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             else -> {
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode_96)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
         }
     }
     return mDraw
+}
+
+fun Utils.setDisplayLatTimeSyncedCompletely(){
+    PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_last_time_synced_completely),
+        getCurrentDateTimeSort()
+    )
+}
+
+private fun Utils.getDisplayLatTimeSyncedCompletely() : String?{
+    return PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_last_time_synced_completely),
+        getCurrentDateTimeSort()
+    )
+}
+
+fun Utils.onDisplayLatTimeSyncedCompletely(): String{
+    return String.format(QRScannerApplication.getInstance().getString(R.string.synced_data_last_time_updated),
+        getCurrentDateDisplay(getDisplayLatTimeSyncedCompletely())
+    )
 }
 

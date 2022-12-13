@@ -30,6 +30,11 @@ class SaveModel : Serializable {
     var address: String?
     @SerializedName("text")
     var textProductIdISNB: String?
+    /*Only using to get data from json
+    * Will be removed several next months
+    * */
+    @SerializedName("textProductIdISNB")
+    var text: String? = null
     var ssId: String?
     var hidden: Boolean?
     var password: String?

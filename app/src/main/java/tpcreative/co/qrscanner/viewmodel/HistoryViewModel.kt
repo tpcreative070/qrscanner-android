@@ -100,18 +100,20 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
     }
 
     fun deleteItem() = liveData(Dispatchers.IO) {
-        for (index in mList) {
-            Utils.Log(TAG,"deleteItem 0")
-            if (index.isDeleted()) {
-                Utils.Log(TAG,"deleteItem 1")
-                if (index.isChecked()) {
-                    Utils.Log(TAG,"deleteItem 2")
-                    SQLiteHelper.onDelete(index)
+        mList.let {
+            for (index in it) {
+                Utils.Log(TAG,"deleteItem 0")
+                if (index.isDeleted()) {
+                    Utils.Log(TAG,"deleteItem 1")
+                    if (index.isChecked()) {
+                        Utils.Log(TAG,"deleteItem 2")
+                        SQLiteHelper.onDelete(index)
+                    }
                 }
             }
+            getListGroup()
+            emit(true)
         }
-        getListGroup()
-        emit(true)
     }
 
     fun isBarCode(type : String?) : Boolean{
