@@ -1,27 +1,36 @@
 package tpcreative.co.qrscanner.ui.review
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.gson.Gson
 import com.google.zxing.*
 import com.google.zxing.client.result.ParsedResultType
+import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_review.*
+import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.GenerateSingleton
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.getDisplay
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -89,6 +98,39 @@ class ReviewActivity : BaseActivitySlide() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    val cropForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_CROP")
+            handleCrop(result.resultCode, result.data)
+        }else if (result.resultCode == RESULT_CANCELED){
+            finish()
+        }
+    }
+
+    private fun handleCrop(resultCode: Int, result: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val mData: String? = Crop.getOutputString(result)
+            val mResult = Gson().fromJson(mData, Result::class.java)
+            mResult?.let { onFilterResult(it) }
+            Utils.Log(TAG, "Result of cropped " + Gson().toJson(mResult))
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Utils.onAlertNotify(this,"${Crop.getError(result)?.message}")
+        }
+    }
+
+    private fun onFilterResult(result: Result?) {
+        result?.let { mResult ->
+            val parsedResult = ResultParser.parseResult(result)
+            Utils.Log(TAG,"Text result ${mResult.text}")
+            val create = Utils.onGeneralParse(mResult,GeneralModel::class)
+            create.barcodeFormat = result.barcodeFormat.name
+            onSaveFromTextOrCVFToQRCode(EnumAction.VIEW_CROP,"","",create)
+            Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
+            Utils.Log(TAG, "barcode ==> format ${mResult.barcodeFormat?.name}")
+        }
+    }
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -149,7 +191,7 @@ class ReviewActivity : BaseActivitySlide() {
 
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)) && !viewModel.isSharedIntent) {
+                val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
                     hints[EncodeHintType.MARGIN] = 5
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
@@ -187,7 +229,7 @@ class ReviewActivity : BaseActivitySlide() {
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name) && !viewModel.isSharedIntent)  {
+                bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))  {
                     hints[EncodeHintType.MARGIN] = 15
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,

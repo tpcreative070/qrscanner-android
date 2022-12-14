@@ -25,6 +25,7 @@
                 android:layout_width="@dimen/icon_size_27"
                 android:layout_height="@dimen/icon_size_27"/>
             <androidx.appcompat.widget.AppCompatTextView
+                android:maxLines="2"
                 style="@style/brandonRegularSmallTextInputLayout"
                 android:paddingStart="@dimen/margin_10"
                 android:layout_marginStart="@dimen/icon_size_30"
@@ -59,6 +60,7 @@
                     app:srcCompat="@drawable/ic_qrcode" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:maxLines="2"
                     android:id="@+id/txtViewCode"
                     style="@style/brandonRegularSmallTextInputLayout"
                     android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.review
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.*
@@ -10,8 +11,11 @@ import android.util.Patterns
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.print.PrintHelper
@@ -27,13 +31,14 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantValue
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.GeneralModel
-import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.model.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -81,29 +86,37 @@ private fun ReviewActivity.onHandlerIntent() {
         if (Intent.ACTION_SEND == action && Constant.textType == intent.type) {
             val message : String? = intent.getStringExtra(Intent.EXTRA_TEXT);
             val subject : String? = intent.getStringExtra(Intent.EXTRA_SUBJECT)
-            txtSubject.text = subject
-            txtDisplay.text = message
             Utils.Log(TAG,"intent result")
-            onSaveFromTextOrCVFToQRCode("$message",null)
+            onSaveFromTextOrCVFToQRCode(EnumAction.VIEW_CODE,"$message",subject,null)
         }
         else if (Intent.ACTION_SEND == action && Constant.cvfType == intent.type){
             val fileUri = intent.parcelable<Parcelable>(Intent.EXTRA_STREAM) as Uri?
             if (fileUri != null) {
                 fileUri.let {
                     val mSave = Utils.readVCF(it)
-                    txtSubject.text = ConstantValue.CONTACT
-                    txtDisplay.text = mSave?.code
-                    onSaveFromTextOrCVFToQRCode("",mSave)
+                    onSaveFromTextOrCVFToQRCode(EnumAction.VIEW_FILE,mSave?.code,ConstantValue.CONTACT,mSave)
                     Utils.Log(TAG,"vCard result value ${Gson().toJson(mSave)}")
                 }
             } else {
                 Utils.onDropDownAlert(this, getString(R.string.can_not_support_this_format))
+            }
+        }else {
+            if ( Intent.ACTION_SEND == action){
+                val fileUri = intent.parcelable<Parcelable>(Intent.EXTRA_STREAM) as Uri?
+                fileUri?.let {
+                   beginCrop(it)
+                }
             }
         }
     } catch (e: Exception) {
         Utils.onDropDownAlert(this, getString(R.string.error_occurred_importing))
         e.printStackTrace()
     }
+}
+
+private fun ReviewActivity.beginCrop(source: Uri?) {
+    val destination = Uri.fromFile(File(cacheDir, "cropped"))
+    cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start((this)))
 }
 
 private fun ReviewActivity.setupViewModel() {
@@ -164,38 +177,90 @@ fun ReviewActivity.onPhotoPrint() {
     }
 }
 
-fun ReviewActivity.onSaveFromTextOrCVFToQRCode(text : String, mSave : GeneralModel?){
-    val history = HistoryModel()
-    viewModel.isSharedIntent = true
-    if (mSave!=null){
-        code = mSave.code
-        history.fullName = mSave.fullName
-        history.phone = mSave.phone
-        history.email = mSave.email
-        history.address = mSave.address
-        history.code = mSave.code
-        history.createType = ParsedResultType.ADDRESSBOOK.name
-    }else{
-        if (Patterns.WEB_URL.matcher(text).matches()){
-            code = text
-            history.url = text
-            history.code = text
-            history.createType = ParsedResultType.URI.name
-        }else{
-            code = text
-            history.textProductIdISNB = text
-            history.code = text
-            history.createType = ParsedResultType.TEXT.name
+fun ReviewActivity.onSaveFromTextOrCVFToQRCode(enumAction: EnumAction,text : String?,subject : String?, mSave : GeneralModel?){
+    var history = HistoryModel()
+    when(enumAction){
+        EnumAction.VIEW_FILE -> {
+            /*
+            * For generate qrcode
+            * */
+            create = GeneralModel()
+            create?.enumImplement = EnumImplement.VIEW
+            create?.barcodeFormat = BarcodeFormat.QR_CODE.name
+            create?.createType = ParsedResultType.ADDRESSBOOK
+            /*for generate history*/
+            if (mSave != null) {
+                code = mSave.code
+                history.fullName = mSave.fullName
+                history.phone = mSave.phone
+                history.email = mSave.email
+                history.address = mSave.address
+                history.code = mSave.code
+                history.createType = ParsedResultType.ADDRESSBOOK.name
+            }
+            history.barcodeFormat = BarcodeFormat.QR_CODE.name
+            /*For display*/
+            format = BarcodeFormat.QR_CODE.name
+            txtSubject.text = subject
+            txtDisplay.text = text
+            txtFormat.text = format
         }
+        EnumAction.VIEW_CODE -> {
+            /*
+          * For generate qrcode
+          * */
+            create = GeneralModel()
+            create?.enumImplement = EnumImplement.VIEW
+            create?.barcodeFormat = BarcodeFormat.QR_CODE.name
+            code = text
+            /*For generate history*/
+            if (Patterns.WEB_URL.matcher(text).matches()) {
+                create?.createType = ParsedResultType.URI
+                history.url = text
+                history.code = text
+                history.createType = ParsedResultType.URI.name
+            } else {
+                create?.createType = ParsedResultType.TEXT
+                history.textProductIdISNB = text
+                history.code = text
+                history.createType = ParsedResultType.TEXT.name
+            }
+            history.barcodeFormat = BarcodeFormat.QR_CODE.name
+            /*For display*/
+            format = BarcodeFormat.QR_CODE.name
+            txtSubject.text = subject
+            txtDisplay.text = text
+            txtFormat.text = format
+        }
+        EnumAction.VIEW_CROP ->{
+            mSave?.let {
+                /*
+                * For generate history
+                *
+                * */
+                create = GeneralModel()
+                create?.enumImplement = EnumImplement.VIEW
+                create?.barcodeFormat = mSave.barcodeFormat
+                create?.createType = mSave.createType
+                code = mSave.code
+                /*For generate history*/
+                history = Utils.onGeneralParse(mSave,HistoryModel::class)
+                history.code = mSave.code
+                history.barcodeFormat = mSave.barcodeFormat
+                /*For display*/
+                format =  mSave.barcodeFormat
+                txtSubject.text = history.type
+                txtDisplay.text = history.code
+                txtFormat.text = format
+            }
+        }
+        else -> {}
     }
 
     history.favorite = false
-    history.barcodeFormat = BarcodeFormat.QR_CODE.name
-    format = BarcodeFormat.QR_CODE.name
     val time = Utils.getCurrentDateTimeSort()
     history.createDatetime = time
     history.updatedDateTime = time
-    txtFormat.text = format
     SQLiteHelper.onInsert(history)
     viewModel.updateId(history.uuId)
     CoroutineScope(Dispatchers.Main).launch {
