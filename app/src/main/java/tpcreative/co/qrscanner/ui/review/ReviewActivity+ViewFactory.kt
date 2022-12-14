@@ -26,6 +26,7 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -90,7 +91,7 @@ private fun ReviewActivity.onHandlerIntent() {
             if (fileUri != null) {
                 fileUri.let {
                     val mSave = Utils.readVCF(it)
-                    txtSubject.text = "vCard"
+                    txtSubject.text = ConstantValue.CONTACT
                     txtDisplay.text = mSave?.code
                     onSaveFromTextOrCVFToQRCode("",mSave)
                     Utils.Log(TAG,"vCard result value ${Gson().toJson(mSave)}")
