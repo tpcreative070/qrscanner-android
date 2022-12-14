@@ -154,10 +154,7 @@ class SettingsFragment : BaseFragment() {
                 customView(R.layout.custom_body_permission)
                 positiveButton(R.string.got_it){
                 }
-                negativeButton (R.string.no){
-                }
             }
-
         }
 
         private fun askToDeleteDuplicatesItems(count: Int, listener: ServiceManager.ServiceManagerClickedListener?) {
