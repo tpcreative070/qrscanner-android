@@ -6,14 +6,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
-import android.os.Build
+import android.view.View
 import android.webkit.URLUtil
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import com.journeyapps.barcodescanner.Size
 import com.karumi.dexter.Dexter
@@ -25,19 +23,15 @@ import com.snatik.storage.Storage
 import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.api.response.DriveResponse
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.io.*
 import java.net.URLEncoder
-import java.nio.charset.Charset
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.ceil
-import kotlin.math.exp
 import kotlin.math.roundToInt
 
 object Utils {
@@ -687,21 +681,30 @@ object Utils {
        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_saver_reload), true)
     }
 
-    fun setFrameRect(mRect : RectF){
-        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect),Gson().toJson(mRect))
+    fun setFrameRectPortrait(mRect : RectF){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),Gson().toJson(mRect))
     }
 
-    private fun getFrameRect() : RectF?{
-        val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect),null)
+    private fun getFrameRectPortrait() : RectF?{
+        val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),null)
+        return Gson().fromJson(json, RectF::class.java)
+    }
+
+    fun setFrameRectLandscape(mRect : RectF){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),Gson().toJson(mRect))
+    }
+
+    private fun getFrameRectLandscape() : RectF?{
+        val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),null)
         return Gson().fromJson(json, RectF::class.java)
     }
 
     fun getBeep():Boolean{
-        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_beep), true)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_beep), false)
     }
 
     fun getVibrate() : Boolean{
-        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_vibrate), false)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_vibrate), true)
     }
 
     fun setQRCodeThemePosition(position : Int){
@@ -713,8 +716,18 @@ object Utils {
     }
 
 
-    fun getFrameSize() : Size? {
-        val mRect = getFrameRect()
+    fun getFramePortraitSize() : Size? {
+        val mRect = getFrameRectPortrait()
+        mRect?.let { node ->
+            val mWidth = node.right - node.left
+            val mHeight = node.bottom - node.top
+            return Size(mWidth.toInt(),mHeight.toInt())
+        }
+        return null
+    }
+
+    fun getFrameLandscapeSize() : Size? {
+        val mRect = getFrameRectLandscape()
         mRect?.let { node ->
             val mWidth = node.right - node.left
             val mHeight = node.bottom - node.top

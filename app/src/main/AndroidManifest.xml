@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="LockedOrientationActivity"
     package="tpcreative.co.qrscanner">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -43,7 +42,7 @@
         <activity
             android:name=".ui.splashscreen.SplashScreenActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -55,7 +54,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="unspecified">
         </activity>
         <activity
             android:name=".ui.review.ReviewActivity"

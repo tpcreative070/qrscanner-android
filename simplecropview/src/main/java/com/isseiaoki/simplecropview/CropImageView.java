@@ -88,6 +88,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
   private Paint mPaintDebug;
   private RectF mFrameRect;
   private RectF mInitialFrameRect;
+  private RectF mInitialFrameRectByRespectScaleView;
   private RectF mImageRect;
   private PointF mCenter = new PointF();
   private float mLastX, mLastY;
@@ -645,7 +646,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
     setScale(calcScale(viewW, viewH, mAngle));
     setMatrix();
     mImageRect = calcImageRect(new RectF(0f, 0f, mImgWidth, mImgHeight), mMatrix);
-
+    if (mInitialFrameRectByRespectScaleView!=null){
+      mImageRect = mInitialFrameRectByRespectScaleView;
+    }
     if (mInitialFrameRect != null) {
       mFrameRect = applyInitialFrameRect(mInitialFrameRect);
     } else {
@@ -1628,7 +1631,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
    * @param sourceUri Image Uri
    * @param callback Callback
    *
-   * @see #loadAsync(Uri, boolean, RectF, LoadCallback)
+   * @see #loadAsync(Uri, boolean, RectF,RectF, LoadCallback)
    */
   public void startLoad(final Uri sourceUri,final LoadCallback callback) {
     loadAsync(sourceUri, callback);
@@ -1643,7 +1646,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
    * @see #loadAsync(Uri, LoadCallback)
    */
   public void loadAsync(final Uri sourceUri, final LoadCallback callback) {
-    loadAsync(sourceUri, false, null, callback);
+    loadAsync(sourceUri, false, null,null, callback);
   }
 
   /**
@@ -1655,7 +1658,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
    * @see #load(Uri)
    */
   public void loadAsync(final Uri sourceUri, final boolean useThumbnail,
-                        final RectF initialFrameRect, final LoadCallback callback) {
+                        final RectF initialFrameRect,final RectF initialFrameRectByRespectScaleView, final LoadCallback callback) {
 
     mExecutor.submit(new Runnable() {
       @Override public void run() {
@@ -1664,6 +1667,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
           mSourceUri = sourceUri;
           mInitialFrameRect = initialFrameRect;
+          mInitialFrameRectByRespectScaleView = initialFrameRectByRespectScaleView;
 
           if (useThumbnail) {
             applyThumbnail(sourceUri);
@@ -1780,6 +1784,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
           mAngle = newAngle % 360;
           mScale = newScale;
           mInitialFrameRect = null;
+          mInitialFrameRectByRespectScaleView = null;
           setupLayout(mViewWidth, mViewHeight);
           mIsRotating = false;
         }
@@ -2048,7 +2053,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
   /**
    * Get frame position relative to the source bitmap.
    * @see #load(Uri)
-   * @see #loadAsync(Uri, boolean, RectF, LoadCallback)
+   * @see #loadAsync(Uri, boolean, RectF,RectF, LoadCallback)
    *
    * @return getCroppedBitmap area boundaries.
    */

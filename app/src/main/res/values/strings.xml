@@ -375,7 +375,8 @@
     <string name="key_is_request_sync">key_is_request_sync</string>
     <string name="key_is_request_history_reload">key_is_request_history_reload</string>
     <string name="key_is_request_saver_reload">key_is_request_saver_reload</string>
-    <string name="key_frame_rect">key_frame_rect</string>
+    <string name="key_frame_rect_portrait">key_frame_rect</string>
+    <string name="key_frame_rect_landscape">key_frame_rect_landscape</string>
 
     <!--CSV-->
     <string name="CSV_FormatType">FormatType</string>
@@ -435,4 +436,5 @@
     <string name="export">Export</string>
     <string name="distance_14_0_m">Distance: 14.0 m</string>
     <string name="_2_40_35_pm_8_24_16_pm">2:40:35 PM - 8:24:16 PM</string>
+    <string name="todo">TODO</string>
 </resources>

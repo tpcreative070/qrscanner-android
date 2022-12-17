@@ -19,6 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:id="@+id/zxing_barcode_scanner">
+            <View
+                android:id="@+id/viewCrop"
+                android:layout_marginEnd="@dimen/margin_60"
+                android:layout_marginStart="@dimen/margin_60"
+                android:layout_marginTop="@dimen/margin_60"
+                android:layout_marginBottom="@dimen/margin_150"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
             <com.isseiaoki.simplecropview.CropImageView
                 android:id="@+id/cropImageView"
                 android:layout_width="match_parent"
@@ -52,21 +60,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             <RelativeLayout
+                android:id="@+id/rlTop"
                 android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_50">
-                <ImageView
-                    android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
-                    android:id="@+id/switch_camera"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="5dp"
-                    app:srcCompat="@drawable/ic_switch_camera"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:padding="2dp"/>
                 <ImageView
                     android:id="@+id/switch_flashlight"
                     android:layout_marginBottom="10dp"
@@ -74,14 +71,27 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_centerInParent="true"
-                    android:layout_toEndOf="@+id/switch_camera"
+                    android:layout_alignParentStart="true"
                     app:srcCompat="@drawable/ic_baseline_flash_off_24"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
 
                 <ImageView
+                    android:id="@+id/imgGallery"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_gallery"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="2dp"/>
+
+                <ImageView
                     android:layout_toStartOf="@+id/imgGallery"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:id="@+id/imgCreate"
                     android:layout_marginStart="10dp"
@@ -92,23 +102,12 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="2dp"/>
-                <ImageView
-                    android:id="@+id/imgGallery"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_centerInParent="true"
-                    android:layout_alignParentEnd="true"
-                    app:srcCompat="@drawable/ic_gallery"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:padding="2dp"/>
             </RelativeLayout>
                 <!-- Seekbar -->
             <RelativeLayout
-                android:layout_marginStart="@dimen/margin_10"
-                android:layout_marginEnd="@dimen/margin_10"
+                android:id="@+id/rlBottom"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
                 android:layout_marginTop="@dimen/margin_5"
                 android:layout_marginBottom="@dimen/margin_5"
                 android:layout_above="@+id/rlContinueScan"
@@ -116,12 +115,13 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    app:srcCompat="@drawable/ic_baseline_zoom_out_24"
+                    android:padding="@dimen/margin_1"
                     android:id="@+id/imgZoomOut"
-                    android:layout_centerInParent="true"
+                    android:layout_width="@dimen/icon_size_30"
+                    android:layout_height="@dimen/icon_size_30"
                     android:layout_alignParentStart="true"
-                    android:layout_width="@dimen/icon_size_27"
-                    android:layout_height="@dimen/icon_size_27"/>
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_baseline_zoom_out_24" />
 
                 <SeekBar
                     android:id="@+id/seekbarZoom"
@@ -131,12 +131,13 @@
                     android:layout_height="@dimen/height_30"/>
 
                 <ImageView
+                    android:padding="@dimen/margin_1"
                     app:srcCompat="@drawable/ic_baseline_zoom_in_24"
                     android:id="@+id/imgZoomIn"
                     android:layout_centerInParent="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_width="@dimen/icon_size_27"
-                    android:layout_height="@dimen/icon_size_27"/>
+                    android:layout_width="@dimen/icon_size_30"
+                    android:layout_height="@dimen/icon_size_30"/>
 
             </RelativeLayout>
 

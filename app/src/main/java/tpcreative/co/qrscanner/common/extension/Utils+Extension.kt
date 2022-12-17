@@ -1347,8 +1347,8 @@ fun Utils.getDisplay(mGeneral : GeneralModel) : String?{
     } else {
         mResult = mGeneral.textProductIdISNB
     }
-    mResult = if ((mResult?.length ?:0)>50){
-        mResult?.substring(0,30)
+    mResult = if ((mResult?.length ?:0)>30){
+        mResult?.substring(0,30)+"..."
     }else{
         mResult
     }

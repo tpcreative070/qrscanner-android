@@ -9,36 +9,25 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 abstract class BaseFragment : Fragment() {
-    var isLoaded = false
-    var isDead = false
-    private val lock = ReentrantLock()
-    private val condition = lock.newCondition()
     protected abstract fun getLayoutId(): Int
     protected abstract fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View?
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        isDead = false
         val viewResponse = getLayoutId(inflater, container)
         return if (viewResponse != null) {
             //work()
             viewResponse
         } else {
             val view: View = inflater.inflate(getLayoutId(), container, false)
-            //work()
             view
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lock.withLock {
-            isLoaded = true
-            condition.signalAll()
-        }
         work()
         super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {
-        isDead = true
         super.onDestroyView()
         hide()
     }
@@ -46,7 +35,6 @@ abstract class BaseFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         remove()
-        isLoaded = false
     }
 
     protected fun remove() {}

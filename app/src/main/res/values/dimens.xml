@@ -14,6 +14,8 @@
     <dimen name="icon_size_45">45dp</dimen>
     <dimen name="icon_size_50">50dp</dimen>
     <dimen name="icon_size_60">60dp</dimen>
+    <dimen name="icon_size_70">60dp</dimen>
+    <dimen name="icon_size_80">60dp</dimen>
     <dimen name="icon_size_90">90dp</dimen>
     <dimen name="icon_size_100">100dp</dimen>
     <dimen name="icon_size_200">200dp</dimen>
@@ -111,7 +113,15 @@
     <dimen name="margin_40">40sp</dimen>
     <dimen name="margin_45">45sp</dimen>
     <dimen name="margin_50">50sp</dimen>
+    <dimen name="margin_60">60sp</dimen>
+    <dimen name="margin_70">70sp</dimen>
+    <dimen name="margin_80">80sp</dimen>
     <dimen name="margin_90">90sp</dimen>
+    <dimen name="margin_100">100sp</dimen>
+    <dimen name="margin_110">110sp</dimen>
+    <dimen name="margin_120">120sp</dimen>
+    <dimen name="margin_130">130sp</dimen>
+    <dimen name="margin_150">150sp</dimen>
 
 
     <dimen name="text_size_m">20sp</dimen>

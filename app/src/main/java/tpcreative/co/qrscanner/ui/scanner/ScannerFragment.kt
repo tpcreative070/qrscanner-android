@@ -14,11 +14,14 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
-import com.google.zxing.*
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.Result
+import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
-import com.google.zxing.client.result.*
+import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.CoroutineScope
@@ -28,13 +31,15 @@ import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
-import tpcreative.co.qrscanner.common.extension.*
+import tpcreative.co.qrscanner.common.extension.isLandscape
+import tpcreative.co.qrscanner.common.extension.onGeneralParse
+import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
-import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumImplement
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
@@ -43,7 +48,7 @@ import java.io.File
 class ScannerFragment : BaseFragment(), SingletonScannerListener{
     lateinit var viewModel : ScannerViewModel
     private var beepManager: BeepManager? = null
-    val cameraSettings: CameraSettings = CameraSettings()
+    private val cameraSettings: CameraSettings = CameraSettings()
     var typeCamera = 0
     var isTurnOnFlash = false
     var mAnim: Animation? = null
@@ -135,10 +140,15 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         ScannerSingleton.getInstance()?.setListener(this)
         zxing_barcode_scanner.decodeContinuous(callback)
         zxing_barcode_scanner.statusView.visibility = View.GONE
-        zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFrameSize()
+        zxing_barcode_scanner.barcodeView.marginFraction = 0.2
+        Utils.Log(TAG,"view ${viewCrop.left}")
+        if (isLandscape()){
+            zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFrameLandscapeSize()
+        }else{
+            zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFramePortraitSize()
+        }
         imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-        switch_camera.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         typeCamera = if (Utils.checkCameraBack(context)) {
             cameraSettings.requestedCameraId = Constant.CAMERA_FACING_BACK
@@ -164,18 +174,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             }
         }
         onBeepAndVibrate()
-    }
-
-    fun switchCamera(type: Int) {
-        if (typeCamera == 2) {
-            return
-        }
-        cameraSettings.requestedCameraId = type // front/back/etc
-        zxing_barcode_scanner.barcodeView.cameraSettings = cameraSettings
-        if (!viewModel.isResume){
-            zxing_barcode_scanner.resume()
-            viewModel.isResume = true
-        }
     }
 
     fun onAddPermissionGallery() {

@@ -13,14 +13,11 @@ import com.isseiaoki.simplecropview.callback.MoveUpCallback
 import com.journeyapps.barcodescanner.CameraPreview
 import com.journeyapps.barcodescanner.Size
 import kotlinx.android.synthetic.main.fragment_scanner.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.isLandscape
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
@@ -28,29 +25,6 @@ import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 
 fun ScannerFragment.initUI(){
     setupViewModel()
-    switch_camera.setOnClickListener {view ->
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim?.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                if (viewModel.isResume){
-                    zxing_barcode_scanner.pauseAndWait()
-                    viewModel.isResume = false
-                }
-                if (cameraSettings.requestedCameraId == 0) {
-                    switchCamera(Constant.CAMERA_FACING_FRONT)
-                } else {
-                    switchCamera(Constant.CAMERA_FACING_BACK)
-                }
-            }
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
-    }
-
     switch_flashlight.setOnClickListener { view ->
         mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
         mAnim?.setAnimationListener(object : Animation.AnimationListener {
@@ -184,10 +158,23 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
     val mBitmap = Bitmap.createBitmap(rectBitMap.width(), rectBitMap.height(), Bitmap.Config.ARGB_8888)
     mBitmap.eraseColor(Color.TRANSPARENT)
     val mUri = Utils.getImageUri(mBitmap)
+    var mRequestRectFocus = requestRectFocus
     // load image
+    var mRespect : RectF? =  null
+    if (isLandscape()){
+        mRespect = RectF(viewCrop.left.toFloat(),viewCrop.top.toFloat(),viewCrop.right.toFloat(),viewCrop.bottom.toFloat())
+        if (Utils.getFrameLandscapeSize()==null){
+            Utils.setFrameRectLandscape(mRespect)
+            mRequestRectFocus = mRespect
+            zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFrameLandscapeSize()
+            zxing_barcode_scanner.pause()
+            zxing_barcode_scanner.resume()
+        }
+    }
     cropImageView.setDebugAdvance(true)
     cropImageView?.load(mUri)
-        ?.initialFrameRect(requestRectFocus)
+        ?.initialFrameRect(mRequestRectFocus)
+        ?.initialFrameRectByRespectScaleView(mRespect)
         ?.useThumbnail(true)
         ?.execute(mLoadCallback)
     cropImageView?.moveUp()
@@ -202,12 +189,15 @@ private val ScannerFragment.mMoveUpCallback: MoveUpCallback
                     viewModel.isResume = false
                 }
                 zxing_barcode_scanner.barcodeView.framingRectSize = Size(width,height)
-                Utils.setFrameRect(rectF)
-                Utils.Log(TAG,"onSuccess")
+                if (isLandscape()){
+                    Utils.setFrameRectLandscape(rectF)
+                }else{
+                    Utils.setFrameRectPortrait(rectF)
+                }
+                Utils.Log(TAG,"onSuccess ${rectF.toString()}")
             }
             override fun onError(e: Throwable) {}
              override fun onDown() {
-                 //zxing_barcode_scanner.pause()
                  Utils.Log(TAG,"onDown")
                  zxing_barcode_scanner.barcodeView.stopDecoding()
             }
@@ -225,7 +215,8 @@ private val ScannerFragment.mMoveUpCallback: MoveUpCallback
 // Callbacks ///////////////////////////////////////////////////////////////////////////////////
 private val ScannerFragment.mLoadCallback: LoadCallback
     get() = object : LoadCallback {
-        override fun onSuccess() {}
+        override fun onSuccess() {
+        }
         override fun onError(e: Throwable) {}
     }
 
@@ -234,19 +225,14 @@ val ScannerFragment.stateListener: CameraPreview.StateListener
         override fun previewSized() {}
         override fun previewStarted() {
             if (mFrameRect==null){
-                Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.framingRect}")
-                Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.containerKeepSize}")
                 val mRect = Rect(zxing_barcode_scanner.barcodeView.defaultFramingRect)
-                Utils.Log(TAG,"rect $mRect")
-                Utils.Log(TAG,"rect ${zxing_barcode_scanner.barcodeView.containerKeepSize}")
                 mFrameRect = RectF(zxing_barcode_scanner.barcodeView.framingRect.left.toFloat(),
                     zxing_barcode_scanner.barcodeView.framingRect.top.toFloat(),
                     zxing_barcode_scanner.barcodeView.framingRect.right.toFloat(),
                     zxing_barcode_scanner.barcodeView.framingRect.bottom.toFloat()
                 )
-                Utils.Log(TAG,"rect ${mFrameRect}")
                 initCropView(mFrameRect,mRect)
-                if ( zxing_barcode_scanner.barcodeView.cameraInstance!=null){
+                if (zxing_barcode_scanner.barcodeView.cameraInstance!=null){
                     seekbarZoom.max =  zxing_barcode_scanner.barcodeView.cameraInstance.maxZoom()
                 }
             }

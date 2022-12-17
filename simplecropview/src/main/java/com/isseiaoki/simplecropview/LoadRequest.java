@@ -10,6 +10,7 @@ public class LoadRequest {
 
   private float initialFrameScale;
   private RectF initialFrameRect;
+  private RectF initialFrameRectByRespectScaleView;
   private boolean useThumbnail;
   private CropImageView cropImageView;
   private Uri sourceUri;
@@ -29,6 +30,11 @@ public class LoadRequest {
     return this;
   }
 
+  public LoadRequest initialFrameRectByRespectScaleView(RectF initialFrameRectByRespectScaleView){
+    this.initialFrameRectByRespectScaleView = initialFrameRectByRespectScaleView;
+    return this;
+  }
+
   public LoadRequest useThumbnail(boolean useThumbnail) {
     this.useThumbnail = useThumbnail;
     return this;
@@ -38,6 +44,6 @@ public class LoadRequest {
     if (initialFrameRect == null) {
       cropImageView.setInitialFrameScale(initialFrameScale);
     }
-    cropImageView.loadAsync(sourceUri, useThumbnail, initialFrameRect, callback);
+    cropImageView.loadAsync(sourceUri, useThumbnail, initialFrameRect,initialFrameRectByRespectScaleView, callback);
   }
 }
