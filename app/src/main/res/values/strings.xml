@@ -369,6 +369,7 @@
     <string name="key_skip_duplicates_detail">Skip and remove duplicates QRCode or Barcode</string>
     <string name="key_backup_data">Backup data to Cloud</string>
     <string name="key_content">Content</string>
+    <string name="key_do_not_ask_again">key_do_not_ask_again</string>
 
     <string name="key_backup_data_detail">All QRCodes and BarCodes will be synced to Cloud.</string>
     <string name="key_already_checkout">key_already_checkout</string>
@@ -435,4 +436,7 @@
     <string name="export">Export</string>
     <string name="distance_14_0_m">Distance: 14.0 m</string>
     <string name="_2_40_35_pm_8_24_16_pm">2:40:35 PM - 8:24:16 PM</string>
+    <string name="please_confirm_the_system_notification">Please confirm the system notification at the top of screen to connect to the WI-Fi.</string>
+    <string name="do_not_show_this_dialog_again">Do not show this dialog again.</string>
+    <string name="ok">Ok</string>
 </resources>

@@ -1,9 +1,11 @@
 package tpcreative.co.qrscanner.ui.scannerresult
+import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
@@ -12,15 +14,24 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.google.zxing.client.result.ParsedResultType
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.extension.connectWifi
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.crop.Log
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
@@ -197,7 +208,26 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     return
                 }
                 ParsedResultType.WIFI -> {
-                    startActivity(Intent(WifiManager.ACTION_PICK_WIFI_NETWORK))
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        if (Utils.getDoNoAskAgain()){
+                            Utils.connectWifi(this@ScannerResultActivity ,create?.ssId ?:"",create?.password ?:"")
+                            Utils.Log(TAG,"connection")
+                        }else{
+                            MaterialDialog(this@ScannerResultActivity).show {
+                                message(text = getString(R.string.please_confirm_the_system_notification))
+                                Utils.setDoNoAskAgain(true)
+                                checkBoxPrompt (R.string.do_not_show_this_dialog_again, isCheckedDefault = true) { checked ->
+                                    Utils.setDoNoAskAgain(checked)
+                                }
+                                positiveButton(R.string.ok) {
+                                    Utils.connectWifi(this@ScannerResultActivity ,create?.ssId ?:"",create?.password ?:"")
+                                    Utils.Log(TAG,"connection")
+                                }
+                            }
+                        }
+                    }else{
+                        startActivity(Intent(WifiManager.ACTION_PICK_WIFI_NETWORK))
+                    }
                     return
                 }
                 ParsedResultType.GEO -> {
