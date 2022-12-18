@@ -1,14 +1,13 @@
 package tpcreative.co.qrscanner.ui.scanner
 
+import android.R.attr.rotation
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,13 +20,11 @@ import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
+import com.journeyapps.barcodescanner.camera.DisplayConfiguration
 import kotlinx.android.synthetic.main.fragment_scanner.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope.coroutineContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
@@ -39,10 +36,12 @@ import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumImplement
+import tpcreative.co.qrscanner.model.EnumRotation
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
+import kotlin.coroutines.CoroutineContext
 
 
 class ScannerFragment : BaseFragment(), SingletonScannerListener{
@@ -54,6 +53,8 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     var mAnim: Animation? = null
     var isRunning = false
     var mFrameRect: RectF? = null
+    private var mRotation  : Int = 0
+    private var orientationEventListener: OrientationEventListener? = null
     val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             try {
@@ -174,6 +175,56 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             }
         }
         onBeepAndVibrate()
+
+        val handleClickEventsDebounced = debounce<Unit>(800, coroutineContext) {
+            Utils.Log(TAG,"orientation value $mRotation")
+            //zxing_barcode_scanner.barcodeView?.cameraInstance?.displayConfiguration = DisplayConfiguration(mRotation)
+        }
+
+        var enumRotation : EnumRotation = EnumRotation.PORTRAIT
+        orientationEventListener =
+            object : OrientationEventListener(activity) {
+                override fun onOrientationChanged(orientation: Int) {
+                    if (orientation in 0..90 && enumRotation != EnumRotation.PORTRAIT){
+                        mRotation = 0
+                        enumRotation = EnumRotation.PORTRAIT
+                        Utils.Log(TAG, "orientation... ${enumRotation.name}  = $orientation")
+                        handleClickEventsDebounced(Unit)
+                    }else if (orientation in 90..180  && enumRotation != EnumRotation.LANDSCAPE){
+                        mRotation = 90
+                        enumRotation = EnumRotation.LANDSCAPE
+                        Utils.Log(TAG, "orientation... ${enumRotation.name} = $orientation")
+                        handleClickEventsDebounced(Unit)
+                    }else if (orientation in 180..270  && enumRotation != EnumRotation.REVERSE_PORTRAIT){
+                        mRotation = 180
+                        enumRotation = EnumRotation.REVERSE_PORTRAIT
+                        Utils.Log(TAG, "orientation... ${enumRotation.name} = $orientation")
+                        handleClickEventsDebounced(Unit)
+                    } else if (orientation in 270..360  && enumRotation != EnumRotation.REVERSE_LANDSCAPE){
+                        mRotation = 270
+                        enumRotation = EnumRotation.REVERSE_LANDSCAPE
+                        Utils.Log(TAG, "orientation... ${enumRotation.name} = $orientation")
+                        handleClickEventsDebounced(Unit)
+                    }else{
+                        //Utils.Log(TAG, "orientation nothing")
+                    }
+                }
+            }
+        orientationEventListener?.enable()
+    }
+
+    private fun <T> debounce(delayMs: Long = 500L,
+                             coroutineContext: CoroutineContext,
+                             f: (T) -> Unit): (T) -> Unit {
+        var debounceJob: Job? = null
+        return { param: T ->
+            if (debounceJob?.isCompleted != false) {
+                debounceJob = CoroutineScope(coroutineContext).launch {
+                    delay(delayMs)
+                    f(param)
+                }
+            }
+        }
     }
 
     fun onAddPermissionGallery() {
@@ -221,6 +272,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 viewModel.isResume = false
             }
         }
+        orientationEventListener?.disable()
         Utils.Log(TAG, "onStop")
     }
 
@@ -232,6 +284,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
         ResponseSingleton.getInstance()?.onResumeAds()
         Utils.Log(TAG, "onStart")
+        orientationEventListener?.enable()
     }
 
     override fun onDestroy() {
