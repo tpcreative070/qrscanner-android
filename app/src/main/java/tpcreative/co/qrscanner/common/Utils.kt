@@ -665,6 +665,14 @@ object Utils {
         PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_sync), value)
     }
 
+    fun setDoNoAskAgain(value: Boolean) {
+        return PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_do_not_ask_again), value)
+    }
+
+    fun getDoNoAskAgain() : Boolean {
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_do_not_ask_again), false)
+    }
+
     fun setRequestHistoryReload(value: Boolean){
         PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_history_reload), value)
     }

@@ -1,7 +1,20 @@
 package tpcreative.co.qrscanner.common.extension
 
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Context.WIFI_SERVICE
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.drawable.Drawable
-import android.net.Uri
+import android.net.*
+import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiManager
+import android.net.wifi.WifiNetworkSpecifier
+import android.net.wifi.WifiNetworkSuggestion
+import android.net.wifi.hotspot2.PasspointConfiguration
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -12,6 +25,7 @@ import com.google.zxing.datamatrix.DataMatrixWriter
 import com.google.zxing.oned.*
 import com.google.zxing.pdf417.PDF417Writer
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant.Companion.wifi
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
@@ -1546,5 +1560,34 @@ fun Utils.onDisplayLatTimeSyncedCompletely(): String{
     return String.format(QRScannerApplication.getInstance().getString(R.string.synced_data_last_time_updated),
         getCurrentDateDisplay(getDisplayLatTimeSyncedCompletely())
     )
+}
+
+
+@RequiresApi(Build.VERSION_CODES.Q)
+fun Utils.connectWifi(activity: Activity, id:String, password: String) {
+    val suggestion = WifiNetworkSuggestion.Builder()
+        .setSsid(id)
+        .setWpa2Passphrase(password)
+        .setIsAppInteractionRequired(true) // Optional (Needs location permission)
+        .build();
+    val suggestionsList = listOf(suggestion);
+    val wifiManager =
+        activity.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager;
+    val status = wifiManager.addNetworkSuggestions(suggestionsList);
+    if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+        // do error handling here
+        Log(TAG, "error connection")
+    }
+    // Optional (Wait for post connection broadcast to one of your suggestions)
+//    val intentFilter = IntentFilter(WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION);
+//    val broadcastReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context, intent: Intent) {
+//            if (!intent.action.equals(WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION)) {
+//                return;
+//            }
+//            // do post connect processing here
+//        }
+//    };
+//    activity.registerReceiver(broadcastReceiver, intentFilter);
 }
 
