@@ -1565,18 +1565,22 @@ fun Utils.onDisplayLatTimeSyncedCompletely(): String{
 
 @RequiresApi(Build.VERSION_CODES.Q)
 fun Utils.connectWifi(activity: Activity, id:String, password: String) {
-    val suggestion = WifiNetworkSuggestion.Builder()
-        .setSsid(id)
-        .setWpa2Passphrase(password)
-        .setIsAppInteractionRequired(true) // Optional (Needs location permission)
-        .build();
-    val suggestionsList = listOf(suggestion);
-    val wifiManager =
-        activity.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager;
-    val status = wifiManager.addNetworkSuggestions(suggestionsList);
-    if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
-        // do error handling here
-        Log(TAG, "error connection")
+    try {
+        val suggestion = WifiNetworkSuggestion.Builder()
+            .setSsid(id)
+            .setWpa2Passphrase(password)
+            .setIsAppInteractionRequired(true) // Optional (Needs location permission)
+            .build();
+        val suggestionsList = listOf(suggestion);
+        val wifiManager =
+            activity.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager;
+        val status = wifiManager.addNetworkSuggestions(suggestionsList);
+        if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+            // do error handling here
+            Log(TAG, "error connection")
+        }
+    }catch (e : Exception){
+        e.printStackTrace()
     }
     // Optional (Wait for post connection broadcast to one of your suggestions)
 //    val intentFilter = IntentFilter(WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION);
