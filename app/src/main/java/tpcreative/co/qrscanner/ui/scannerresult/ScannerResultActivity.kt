@@ -29,6 +29,7 @@ import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.extension.connectWifi
+import tpcreative.co.qrscanner.common.extension.connectWifiOnOldVersion
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Log
@@ -208,25 +209,32 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     return
                 }
                 ParsedResultType.WIFI -> {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        if (Utils.getDoNoAskAgain()){
+                    if (Utils.getDoNoAskAgain()){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
                             Utils.connectWifi(this@ScannerResultActivity ,create?.ssId ?:"",create?.password ?:"")
-                            Utils.Log(TAG,"connection")
+                            Utils.Log(TAG,"connection on new apis")
                         }else{
-                            MaterialDialog(this@ScannerResultActivity).show {
-                                message(text = getString(R.string.please_confirm_the_system_notification))
-                                Utils.setDoNoAskAgain(true)
-                                checkBoxPrompt (R.string.do_not_show_this_dialog_again, isCheckedDefault = true) { checked ->
-                                    Utils.setDoNoAskAgain(checked)
-                                }
-                                positiveButton(R.string.ok) {
-                                    Utils.connectWifi(this@ScannerResultActivity ,create?.ssId ?:"",create?.password ?:"")
-                                    Utils.Log(TAG,"connection")
-                                }
-                            }
+                            Utils.connectWifiOnOldVersion(this,create?.ssId?:"",create?.password?:"")
+                            Utils.Log(TAG,"connection on old apis")
                         }
                     }else{
-                        startActivity(Intent(WifiManager.ACTION_PICK_WIFI_NETWORK))
+                        MaterialDialog(this@ScannerResultActivity).show {
+                            message(text = getString(R.string.please_confirm_the_system_notification))
+                            Utils.setDoNoAskAgain(true)
+                            checkBoxPrompt (R.string.do_not_show_this_dialog_again, isCheckedDefault = true) { checked ->
+                                Utils.setDoNoAskAgain(checked)
+                            }
+                            positiveButton(R.string.ok) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                                    Utils.connectWifi(this@ScannerResultActivity ,create?.ssId ?:"",create?.password ?:"")
+                                    Utils.Log(TAG,"connection on new apis")
+                                }else{
+                                    Utils.connectWifiOnOldVersion(this@ScannerResultActivity,create?.ssId?:"",create?.password?:"")
+                                    Utils.Log(TAG,"connection on old apis")
+                                }
+                                Utils.Log(TAG,"connection")
+                            }
+                        }
                     }
                     return
                 }
