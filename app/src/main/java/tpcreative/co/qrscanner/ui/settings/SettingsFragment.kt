@@ -152,8 +152,7 @@ class SettingsFragment : BaseFragment() {
             MaterialDialog(requireContext()).show {
                 title(R.string.app_permission)
                 customView(R.layout.custom_body_permission)
-                positiveButton(R.string.got_it){
-                }
+                positiveButton(R.string.ok)
             }
         }
 

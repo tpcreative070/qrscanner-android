@@ -67,6 +67,7 @@
             android:icon="@drawable/ic_vibrate"
             android:defaultValue="true"
             android:title="@string/key_vibrate"
+            android:defaultValue="true"
             android:key="@string/key_vibrate">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 

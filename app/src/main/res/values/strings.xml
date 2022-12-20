@@ -440,6 +440,6 @@
     <string name="todo">TODO</string>
     <string name="please_confirm_the_system_notification">Please confirm the system notification at the top of screen to connect to the WI-Fi.</string>
     <string name="do_not_show_this_dialog_again">Do not show this dialog again.</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="err_the_password_contains_unsupported_characters">The password contains unsupported characters.</string>
 </resources>
