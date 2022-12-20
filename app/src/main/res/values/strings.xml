@@ -438,6 +438,6 @@
     <string name="_2_40_35_pm_8_24_16_pm">2:40:35 PM - 8:24:16 PM</string>
     <string name="please_confirm_the_system_notification">Please confirm the system notification at the top of screen to connect to the WI-Fi.</string>
     <string name="do_not_show_this_dialog_again">Do not show this dialog again.</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="err_the_password_contains_unsupported_characters">The password contains unsupported characters.</string>
 </resources>

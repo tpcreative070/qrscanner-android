@@ -66,6 +66,7 @@
             android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/ic_vibrate"
             android:title="@string/key_vibrate"
+            android:defaultValue="true"
             android:key="@string/key_vibrate">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 
@@ -75,7 +76,7 @@
             android:layout="@layout/custom_preferences_item_small"
             android:icon="@drawable/ic_sound"
             android:title="@string/key_beep"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/key_beep">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 
