@@ -705,11 +705,11 @@ object Utils {
     }
 
     fun getBeep():Boolean{
-        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_beep), true)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_beep), false)
     }
 
     fun getVibrate() : Boolean{
-        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_vibrate), false)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_vibrate), true)
     }
 
     fun setQRCodeThemePosition(position : Int){

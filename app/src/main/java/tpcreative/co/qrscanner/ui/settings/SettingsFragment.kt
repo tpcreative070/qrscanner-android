@@ -152,12 +152,8 @@ class SettingsFragment : BaseFragment() {
             MaterialDialog(requireContext()).show {
                 title(R.string.app_permission)
                 customView(R.layout.custom_body_permission)
-                positiveButton(R.string.got_it){
-                }
-                negativeButton (R.string.no){
-                }
+                positiveButton(R.string.ok)
             }
-
         }
 
         private fun askToDeleteDuplicatesItems(count: Int, listener: ServiceManager.ServiceManagerClickedListener?) {
