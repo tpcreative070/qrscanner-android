@@ -23,6 +23,7 @@ import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
+import java.util.regex.Pattern
 
 class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerateListener,OnEditorActionListener {
     lateinit var viewModel: GenerateViewModel
@@ -92,6 +93,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     private fun addValidationForEditText() {
         mAwesomeValidation?.addValidation(this, R.id.edtSSID, RegexTemplate.NOT_EMPTY, R.string.err_ssId)
         mAwesomeValidation?.addValidation(this, R.id.edtPassword, RegexTemplate.NOT_EMPTY, R.string.err_password)
+        mAwesomeValidation?.addValidation(this, R.id.edtPassword, Pattern.compile("\\p{ASCII}*$"), R.string.err_the_password_contains_unsupported_characters)
     }
 
     private fun focusUI() {
