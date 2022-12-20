@@ -1,18 +1,13 @@
 package tpcreative.co.qrscanner.common.extension
 
 import android.app.Activity
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.WIFI_SERVICE
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.drawable.Drawable
 import android.net.*
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
-import android.net.wifi.WifiNetworkSpecifier
 import android.net.wifi.WifiNetworkSuggestion
-import android.net.wifi.hotspot2.PasspointConfiguration
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -25,7 +20,6 @@ import com.google.zxing.datamatrix.DataMatrixWriter
 import com.google.zxing.oned.*
 import com.google.zxing.pdf417.PDF417Writer
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Constant.Companion.wifi
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
@@ -36,6 +30,7 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import kotlin.reflect.KClass
+
 
 fun Utils.readVCF(uri: Uri): GeneralModel? {
     var mGeneral: GeneralModel? = null
@@ -1593,5 +1588,25 @@ fun Utils.connectWifi(activity: Activity, id:String, password: String) {
 //        }
 //    };
 //    activity.registerReceiver(broadcastReceiver, intentFilter);
+}
+
+
+fun Utils.connectWifiOnOldVersion(context: Context,ssId : String,key: String){
+    val wifiConfig = WifiConfiguration()
+    wifiConfig.SSID = String.format("\"%s\"", ssId)
+    wifiConfig.preSharedKey = String.format("\"%s\"", key)
+    val wifiManager = context.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager?
+    wifiManager?.isWifiEnabled = true
+    val netId = wifiManager?.addNetwork(wifiConfig)
+    wifiManager?.disconnect()
+    netId?.let {
+        wifiManager.enableNetwork(it, true)
+        val isConnectionSuccessful = wifiManager.reconnect()
+        if (isConnectionSuccessful) {
+            Log(TAG,"connection successful")
+        } else {
+            Log(TAG,"invalid credential")
+        }
+    }
 }
 
