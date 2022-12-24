@@ -289,7 +289,7 @@ class SettingsFragment : BaseFragment() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             /*Version**/mVersionApp = findPreference(getString(R.string.key_version)) as MyPreference?
-            mVersionApp?.summary = java.lang.String.format("V: %s", BuildConfig.VERSION_NAME)
+            mVersionApp?.summary = java.lang.String.format("%s", BuildConfig.VERSION_NAME)
             mVersionApp?.onPreferenceChangeListener = createChangeListener()
             mVersionApp?.onPreferenceClickListener = createActionPreferenceClickListener()
 
