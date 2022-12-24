@@ -427,7 +427,7 @@ class ServiceManager : BaseView<Any?> {
                                     if (index.lat == 0.0) "" else index.lat.toString() + "",
                                     if (index.lon == 0.0) "" else index.lon.toString() + "",
                                     index.query,
-                                    index.title,
+                                    if (index.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) index.title else "",
                                     index.location,
                                     index.description,
                                     if (index.startEvent == "") "" else Utils.getCurrentDatetimeEvent(index.startEventMilliseconds
@@ -485,7 +485,7 @@ class ServiceManager : BaseView<Any?> {
                                     if (index.lat == 0.0) "" else index.lat.toString() + "",
                                     if (index.lon == 0.0) "" else index.lon.toString() + "",
                                     index.query,
-                                    index.title,
+                                    if (index.createType.equals(ParsedResultType.CALENDAR.name, ignoreCase = true)) index.title else "",
                                     index.location,
                                     index.description,
                                     if (index.startEvent == "") "" else Utils.getCurrentDatetimeEvent(index.startEventMilliseconds

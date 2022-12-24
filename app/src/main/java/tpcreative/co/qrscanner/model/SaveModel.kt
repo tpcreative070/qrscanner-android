@@ -68,6 +68,8 @@ class SaveModel : Serializable {
 
     /*Display on review*/
     var type : String?
+    /*Display on review*/
+    var titleDisplay : String? = null
 
     /*Custom fields*/
     var typeCategories: TypeCategories? = null

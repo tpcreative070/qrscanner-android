@@ -313,7 +313,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 Utils.onOpenWebSites(create?.url,this)
             }
             onInsertUpdateHistory(history)
-            title = history.title
+            title = history.titleDisplay
             onReloadData()
             onCheckFavorite()
             onCopy()

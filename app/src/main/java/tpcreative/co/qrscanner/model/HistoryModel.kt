@@ -63,6 +63,8 @@ class HistoryModel : Serializable {
 
     /*Display on review*/
     var type : String?
+    /*Display on review*/
+    var titleDisplay : String? = null
 
     var navigationList : MutableList<ItemNavigation>?
     var hashClipboard: HashMap<Any?, String?>?

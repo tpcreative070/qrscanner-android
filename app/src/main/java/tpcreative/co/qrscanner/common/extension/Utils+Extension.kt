@@ -624,7 +624,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = QRScannerApplication.getInstance().getString(R.string.contact)
+                    history.titleDisplay = QRScannerApplication.getInstance().getString(R.string.contact)
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
                     /*Put item to HashClipboard*/
@@ -648,7 +648,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.EMAIL
+                    history.titleDisplay = ConstantValue.EMAIL
                 }
                 ParsedResultType.PRODUCT -> {
                     /*Put item to HashClipboard*/
@@ -696,7 +696,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = QRScannerApplication.getInstance().getString(R.string.product_id)
+                    history.titleDisplay = QRScannerApplication.getInstance().getString(R.string.product_id)
                 }
                 ParsedResultType.URI -> {
                     /*Put item to HashClipboard*/
@@ -729,7 +729,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.WEBSITE
+                    history.titleDisplay = ConstantValue.WEBSITE
                     history.isRequestOpenBrowser = PrefsController.getBoolean(
                         QRScannerApplication.getInstance()
                             .getString(R.string.key_auto_navigate_to_browser), false
@@ -765,7 +765,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.WIFI
+                    history.titleDisplay = ConstantValue.WIFI
                 }
                 ParsedResultType.GEO -> {
                     /*Put item to HashClipboard*/
@@ -802,7 +802,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = QRScannerApplication.getInstance().getString(R.string.location)
+                    history.titleDisplay = QRScannerApplication.getInstance().getString(R.string.location)
                 }
                 ParsedResultType.TEL -> {
                     /*Put item to HashClipboard*/
@@ -822,7 +822,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = QRScannerApplication.getInstance().getString(R.string.telephone)
+                    history.titleDisplay = QRScannerApplication.getInstance().getString(R.string.telephone)
                 }
                 ParsedResultType.SMS -> {
                     /*Put item to HashClipboard*/
@@ -844,7 +844,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = QRScannerApplication.getInstance().getString(R.string.message)
+                    history.titleDisplay = QRScannerApplication.getInstance().getString(R.string.message)
                 }
                 ParsedResultType.CALENDAR -> {
                     /*Put item to HashClipboard*/
@@ -884,7 +884,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = QRScannerApplication.getInstance().getString(R.string.event)
+                    history.titleDisplay = QRScannerApplication.getInstance().getString(R.string.event)
                 }
                 ParsedResultType.ISBN -> {
                     /*Put item to HashClipboard*/
@@ -932,7 +932,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.ISBN
+                    history.titleDisplay = ConstantValue.ISBN
                 }
                 else -> {
                     /*Put item to HashClipboard*/
@@ -952,7 +952,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = QRScannerApplication.getInstance().getString(R.string.text)
+                    history.titleDisplay = QRScannerApplication.getInstance().getString(R.string.text)
                 }
             }
             history.navigationList?.add(
