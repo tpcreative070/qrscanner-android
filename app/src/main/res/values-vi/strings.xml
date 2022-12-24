@@ -2,7 +2,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Quét mã QR</string>
-    <string name="scan_barcode">Quyét mã Barcode</string>
+    <string name="scan_barcode">Quét mã Barcode</string>
     <string name="scan_barcode_with_request_code">Quét mã vạch với mã yêu cầu tùy chỉnh</string>
     <string name="any_orientation">1D bất kỳ hướng nào</string>
     <string name="scan_from_fragment">Quét từ đoạn</string>
@@ -31,7 +31,7 @@
     <string name="history">Lịch sử</string>
     <string name="save">Lưu</string>
     <string name="settings">Cài đặt</string>
-    <string name="barcode">Barcode</string>
+    <string name="barcode">Mã vạch</string>
     <string name="email">Email</string>
     <string name="message">Tin nhắn</string>
     <string name="location">Vị trí</string>
@@ -52,7 +52,7 @@
     <string name="to">Đến</string>
     <string name="subject">Đối tượng</string>
     <string name="Premium">Nâng cao</string>
-    <string name="err_to">Vui lòng kiểm tra đầu vao số điện thoại</string>
+    <string name="err_to">Vui lòng kiểm tra đầu vào số điện thoại</string>
     <string name="review">Xem lại</string>
     <string name="fullName">Họ và tên</string>
     <string name="address">Địa chỉ</string>
@@ -156,7 +156,7 @@
     <string name="hint_digits">Chữ số</string>
     <string name="hint_characters">Văn bản không có ký tự đặc biệt</string>
     <string name="hint_uppercase_characters">Văn bản viết hoa không có ký tự đặc biệt</string>
-    <string name="generate_barcode">Tạo Barcode</string>
+    <string name="generate_barcode">Tạo mã vạch</string>
     <string name="support">Hỗ trợ</string>
     <string name="support_detail">Báo cáo lỗi</string>
     <string name="app_permission">Danh sách quyền truy cập</string>
@@ -165,7 +165,7 @@
     <string name="enter_take_note">Nhập một ghi chú</string>
     <string name="version">Phiên bản QRScanner</string>
     <string name="premium_version">Phiên bản nâng cao</string>
-    <string name="summary">Phiên bản Premium sẽ được loại bỏ quảng cáo</string>
+    <string name="summary">Phiên bản nâng cao sẽ được loại bỏ quảng cáo</string>
     <string name="query_input">Đầu vào truy vấn</string>
     <string name="done">Xong</string>
     <string name="total">Tổng</string>
@@ -174,7 +174,7 @@
     <string name="trash_recovery_detail">Lấy tệp tin xoá trở lại.</string>
     <string name="no_advertisement">Không quảng cáo</string>
     <string name="get_rid_of_those_ugly_ads">Loại bỏ những quảng cáo xấu xí!</string>
-    <string name="what_if_i_do_not_want_premium">Nếu tôi không muốn Premium thì sao</string>
+    <string name="what_if_i_do_not_want_premium">Nếu tôi không muốn gói nâng cao thì sao</string>
     <string name="what_if_i_do_not_want_premium_detail">Tốt rồi. Khi phí bảo hiểm của bạn hết hạn, Bạn có thể chuyển sang Cơ bản</string>
     <string name="what_is_basic">Cơ bản là gì?</string>
     <string name="what_is_basic_detail">Đây là phiên bản miễn phí của SuperSafe. Nó vẫn bảo vệ các tệp quan trọng của bạn và bạn vẫn có thể tải tệp lên Google Drive 50 tệp mỗi tháng. Tất cả đều nằm sau màn hình khóa và cung cấp cho bạn các tính năng bảo mật tốt</string>
