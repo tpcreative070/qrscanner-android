@@ -118,9 +118,9 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
                 uploadTempFile = File.createTempFile("backup", ".json")
                 val file = Utils.writeToJson(SyncDataModel(true).toJson(), uploadTempFile)
                 val list: MutableList<String?> = mutableListOf()
-                list.add(getString(R.string.key_appDataFolder))
+                list.add(getString(R.string.id_appDataFolder))
                 content[getString(R.string.key_name)] = "backup.json"
-                content[getString(R.string.key_parents)] = list
+                content[getString(R.string.id_parents)] = list
                 val mResult = driveService.uploadFile(content,mProgressUploading,file)
                 when(mResult.status){
                     Status.SUCCESS ->{
@@ -148,7 +148,7 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
     suspend fun getListFiles() : Resource<MutableList<DriveResponse>>{
         return withContext(Dispatchers.IO){
             try {
-                val mResult = driveService.getItemList(QRScannerApplication.getInstance().getString(R.string.key_appDataFolder))
+                val mResult = driveService.getItemList(QRScannerApplication.getInstance().getString(R.string.id_appDataFolder))
                 when(mResult.status){
                     Status.SUCCESS -> {
                         Utils.Log(TAG,"Result ${mResult.data?.toJson()}")

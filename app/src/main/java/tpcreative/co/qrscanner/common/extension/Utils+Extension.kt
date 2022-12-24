@@ -11,6 +11,9 @@ import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -19,6 +22,7 @@ import com.google.zxing.client.result.*
 import com.google.zxing.datamatrix.DataMatrixWriter
 import com.google.zxing.oned.*
 import com.google.zxing.pdf417.PDF417Writer
+import kotlinx.android.synthetic.main.custom_spinner_item.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.ConstantValue
@@ -616,11 +620,11 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.fragmentType,
                             EnumAction.Other,
                             R.drawable.ic_contact,
-                            ConstantValue.CONTACT,
+                            QRScannerApplication.getInstance().getString(R.string.contact),
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.CONTACT
+                    history.title = QRScannerApplication.getInstance().getString(R.string.contact)
                 }
                 ParsedResultType.EMAIL_ADDRESS -> {
                     /*Put item to HashClipboard*/
@@ -692,7 +696,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.PRODUCT
+                    history.title = QRScannerApplication.getInstance().getString(R.string.product_id)
                 }
                 ParsedResultType.URI -> {
                     /*Put item to HashClipboard*/
@@ -798,7 +802,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.LOCATION
+                    history.title = QRScannerApplication.getInstance().getString(R.string.location)
                 }
                 ParsedResultType.TEL -> {
                     /*Put item to HashClipboard*/
@@ -818,7 +822,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.TELEPHONE
+                    history.title = QRScannerApplication.getInstance().getString(R.string.telephone)
                 }
                 ParsedResultType.SMS -> {
                     /*Put item to HashClipboard*/
@@ -840,7 +844,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.SMS
+                    history.title = QRScannerApplication.getInstance().getString(R.string.message)
                 }
                 ParsedResultType.CALENDAR -> {
                     /*Put item to HashClipboard*/
@@ -876,11 +880,11 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.fragmentType,
                             EnumAction.Other,
                             R.drawable.ic_calender,
-                            ConstantValue.CALENDAR,
+                            QRScannerApplication.getInstance().getString(R.string.event),
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.CALENDAR
+                    history.title = QRScannerApplication.getInstance().getString(R.string.event)
                 }
                 ParsedResultType.ISBN -> {
                     /*Put item to HashClipboard*/
@@ -931,25 +935,6 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     history.title = ConstantValue.ISBN
                 }
                 else -> {
-                    //Text query
-                    if (BarcodeFormat.QR_CODE == BarcodeFormat.valueOf(
-                            create.barcodeFormat ?: BarcodeFormat.QR_CODE.name
-                        )
-                    ) {
-                        history.navigationList?.add(
-                            ItemNavigation(
-                                create.createType,
-                                ConstantValue.NONE,
-                                ConstantValue.NONE,
-                                create.barcodeFormat,
-                                create.fragmentType,
-                                EnumAction.Other,
-                                R.drawable.ic_message,
-                                ConstantValue.TEXT,
-                                create.favorite
-                            )
-                        )
-                    }
                     /*Put item to HashClipboard*/
                     history.hashClipboard?.set(ConstantKey.TEXT, create.textProductIdISNB)
                     history.textProductIdISNB = create.textProductIdISNB
@@ -963,11 +948,11 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                             create.fragmentType,
                             EnumAction.SEARCH,
                             R.drawable.ic_search,
-                            ConstantValue.SEARCH,
+                            QRScannerApplication.getInstance().getString(R.string.search),
                             create.favorite
                         )
                     )
-                    history.title = ConstantValue.TEXT
+                    history.title = QRScannerApplication.getInstance().getString(R.string.text)
                 }
             }
             history.navigationList?.add(
@@ -979,7 +964,7 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     create.fragmentType,
                     EnumAction.CLIPBOARD,
                     R.drawable.ic_copy,
-                    ConstantValue.COPY,
+                    QRScannerApplication.getInstance().getString(R.string.copy),
                     create.favorite
                 )
             )
@@ -1367,36 +1352,36 @@ fun Utils.getDisplay(mGeneral : GeneralModel) : String?{
 fun Utils.onTranslateCreateType(type : ParsedResultType?) : String {
     when(type){
         ParsedResultType.PRODUCT ->{
-            return ConstantValue.PRODUCT
+            return QRScannerApplication.getInstance().getString(R.string.product_id)
         }
         ParsedResultType.EMAIL_ADDRESS ->{
-            return ConstantValue.EMAIL
+            return QRScannerApplication.getInstance().getString(R.string.email)
         }
         ParsedResultType.SMS ->{
-            return ConstantValue.SMS
+            return QRScannerApplication.getInstance().getString(R.string.message)
         }
         ParsedResultType.GEO ->{
-            return ConstantValue.LOCATION
+            return QRScannerApplication.getInstance().getString(R.string.location)
         }
         ParsedResultType.ADDRESSBOOK ->{
-            return ConstantValue.CONTACT
+            return QRScannerApplication.getInstance().getString(R.string.contact)
         }
         ParsedResultType.CALENDAR ->{
-            return ConstantValue.CALENDAR
+            return QRScannerApplication.getInstance().getString(R.string.calendar)
         }
         ParsedResultType.TEL ->{
-            return ConstantValue.TELEPHONE
+            return QRScannerApplication.getInstance().getString(R.string.telephone)
         }
         ParsedResultType.WIFI ->{
-            return ConstantValue.WIFI
+            return QRScannerApplication.getInstance().getString(R.string.wifi)
         }
         ParsedResultType.URI ->{
-            return ConstantValue.WEBSITE
+            return QRScannerApplication.getInstance().getString(R.string.website)
         }
         ParsedResultType.ISBN ->{
             return ConstantValue.ISBN
         }
-        else -> {return ConstantValue.TEXT}
+        else -> {return QRScannerApplication.getInstance().getString(R.string.text)}
     }
 }
 
@@ -1606,6 +1591,21 @@ fun Utils.connectWifiOnOldVersion(context: Context,ssId : String,key: String){
             Log(TAG,"connection successful")
         } else {
             Log(TAG,"invalid credential")
+        }
+    }
+}
+
+fun Utils.checkingWifiEnable(context: Context) : Boolean{
+    val wifiManager = context.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager?
+    return wifiManager?.isWifiEnabled ?: false
+}
+
+fun Utils.alert(context: Context,mTitle : String?= null, mMessage: String, callback : ()->Unit?){
+    MaterialDialog(context).show {
+        message(text = mMessage)
+        title( text = mTitle ?: "")
+        positiveButton(res = R.string.ok){
+            callback.invoke()
         }
     }
 }

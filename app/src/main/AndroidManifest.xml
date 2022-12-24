@@ -105,7 +105,7 @@
             android:label="@string/help" />
         <activity
             android:name=".ui.filecolor.ChangeFileColorActivity"
-            android:label="@string/key_color_code" /> <!-- <activity android:name=".ui.pro.ProVersionActivity" /> -->
+            android:label="@string/color_code" /> <!-- <activity android:name=".ui.pro.ProVersionActivity" /> -->
         <activity
             android:name=".ui.create.EmailActivity"
             android:label="@string/email" />

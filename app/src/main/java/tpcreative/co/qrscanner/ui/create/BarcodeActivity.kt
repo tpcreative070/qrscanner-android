@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.create
 import android.os.Bundle
+import android.util.Patterns
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -23,10 +24,12 @@ import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.SaveSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.isSpecialCharacters
 import tpcreative.co.qrscanner.common.extension.validBarcode
 import tpcreative.co.qrscanner.model.FormatTypeModel
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
+import java.util.regex.Pattern
 
 class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
@@ -152,42 +155,42 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
 
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.DATA_MATRIX) {
-                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.DATA_MATRIX)
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.DATA_MATRIX) && !input.isSpecialCharacters()
             }
             true
         }, R.string.warning_barcode_data_matrix)
 
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.PDF_417) {
-                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.PDF_417)
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.PDF_417) && !input.isSpecialCharacters()
             }
             true
         }, R.string.warning_barcode_data_PDF_471)
 
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.AZTEC) {
-                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.AZTEC)
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.AZTEC) && !input.isSpecialCharacters()
             }
             true
         }, R.string.warning_barcode_data_aztec)
 
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.CODE_128) {
-                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_128)
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_128) && !input.isSpecialCharacters()
             }
             true
         }, R.string.warning_barcode_data_code_128)
 
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.CODE_39) {
-                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_39)
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_39) && !input.isSpecialCharacters()
             }
             true
         }, R.string.warning_barcode_data_code_39)
 
         mAwesomeValidation?.addValidation(this, R.id.edtBarCode, SimpleCustomValidation { input -> // check if the age is >= 18
             if (viewModel.mType == BarcodeFormat.CODE_93) {
-                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_93)
+                return@SimpleCustomValidation Utils.validBarcode(input,BarcodeFormat.CODE_93) && !input.isSpecialCharacters()
             }
             true
         }, R.string.warning_barcode_data_code_93)

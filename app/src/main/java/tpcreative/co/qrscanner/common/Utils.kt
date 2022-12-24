@@ -129,32 +129,6 @@ object Utils {
         return value
     }
 
-    fun geTimeFileName(): String? {
-        val millisecond = System.currentTimeMillis()
-        val formatter = SimpleDateFormat(mStandardSortedDateTime)
-        return formatter.format(Date(millisecond))
-    }
-
-    fun saveImage(finalBitmap: Bitmap?, enumAction: EnumAction?, type: String?, code: String?, listenner: UtilsListener?) {
-        val root: String? = QRScannerApplication.getInstance().getPathFolder()
-        val myDir = File(root)
-        myDir.mkdirs()
-        var fname = "Image_" + type + "_" + geTimeFileName() + ".png"
-        fname = fname.replace("/", "")
-        fname = fname.replace(":", "")
-        val file = File(myDir, fname)
-        try {
-            Log(TAG, "path :" + file.absolutePath)
-            val out = FileOutputStream(file)
-            finalBitmap?.compress(Bitmap.CompressFormat.PNG, 90, out)
-            out.flush()
-            out.close()
-            listenner?.onSaved(file.absolutePath, enumAction)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     fun Log(TAG: String?, message: String?) {
         if (BuildConfig.DEBUG) {
             android.util.Log.d(TAG, message ?:"")
@@ -229,11 +203,11 @@ object Utils {
 
     fun onSetCountRating(count: Int) {
         Log(TAG, "rating.......set$count")
-        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.count_rating), count)
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_count_rating), count)
     }
 
     fun onGetCountRating(): Int {
-        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.count_rating), 0)
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_count_rating), 0)
     }
 
     fun getCodeContentByHistory(item: HistoryModel?): String? {
@@ -822,7 +796,7 @@ object Utils {
         intent.action = Intent.ACTION_SEND
         intent.type="text/plain"
         intent.putExtra(Intent.EXTRA_TEXT,value)
-        context.startActivity(Intent.createChooser(intent, ConstantValue.SHARE))
+        context.startActivity(Intent.createChooser(intent, QRScannerApplication.getInstance().getString(R.string.share)))
     }
 
     fun onShareMap(context: Context,uri : String){

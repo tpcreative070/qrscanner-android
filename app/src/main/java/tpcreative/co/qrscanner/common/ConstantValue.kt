@@ -1,5 +1,8 @@
 package tpcreative.co.qrscanner.common
 
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
+
 class ConstantValue {
     companion object {
         const val FAVORITE = "Favorite"
