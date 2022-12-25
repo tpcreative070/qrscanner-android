@@ -94,7 +94,7 @@ private fun ReviewActivity.onHandlerIntent() {
             if (fileUri != null) {
                 fileUri.let {
                     val mSave = Utils.readVCF(it)
-                    onSaveFromTextOrCVFToQRCode(EnumAction.VIEW_FILE,mSave?.code,ConstantValue.CONTACT,mSave)
+                    onSaveFromTextOrCVFToQRCode(EnumAction.VIEW_FILE,mSave?.code,getString(R.string.contact),mSave)
                     Utils.Log(TAG,"vCard result value ${Gson().toJson(mSave)}")
                 }
             } else {

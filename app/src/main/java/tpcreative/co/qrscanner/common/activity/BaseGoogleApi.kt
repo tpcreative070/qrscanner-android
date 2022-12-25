@@ -3,6 +3,7 @@ import android.accounts.Account
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import co.tpcreative.supersafe.common.network.Status
 import com.google.android.gms.auth.GoogleAuthException
@@ -39,7 +40,9 @@ abstract class BaseGoogleApi : BaseActivitySlide() {
         val account = Account(email, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE)
         mGoogleSignInClient = QRScannerApplication.getInstance().getGoogleSignInOptions(account)?.let { GoogleSignIn.getClient(this, it) }
         val intent = mGoogleSignInClient?.signInIntent
-        resultLauncher.launch(intent)
+        intent?.let {
+            resultLauncher.launch(it)
+        }
     }
 
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

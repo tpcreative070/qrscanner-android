@@ -2,6 +2,8 @@ package tpcreative.co.qrscanner.viewmodel
 import android.app.Activity
 import android.text.InputFilter
 import android.text.InputType
+import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.liveData
@@ -106,7 +108,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
                 editText?.filters = filterArray
                 editText?.isSingleLine = true
                 editText?.imeOptions = EditorInfo.IME_ACTION_DONE
-                editText?.inputType = InputType.TYPE_CLASS_TEXT
+                editText?.inputType = TYPE_TEXT_FLAG_CAP_CHARACTERS
                 mLength = 50
             }
             BarcodeFormat.CODE_93 ->{
@@ -116,7 +118,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
                 editText?.filters = filterArray
                 editText?.isSingleLine = true
                 editText?.imeOptions = EditorInfo.IME_ACTION_DONE
-                editText?.inputType = InputType.TYPE_CLASS_TEXT
+                editText?.inputType = TYPE_TEXT_FLAG_CAP_CHARACTERS
                 mLength = 50
             }
             else -> {

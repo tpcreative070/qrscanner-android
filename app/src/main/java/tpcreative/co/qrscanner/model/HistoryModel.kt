@@ -2,12 +2,14 @@ package tpcreative.co.qrscanner.model
 import com.google.gson.annotations.SerializedName
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.isVcard
 import tpcreative.co.qrscanner.common.extension.onParseMeCard
 import tpcreative.co.qrscanner.common.extension.onParseVCard
 import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import java.io.Serializable
 
 class HistoryModel : Serializable {
@@ -61,6 +63,8 @@ class HistoryModel : Serializable {
 
     /*Display on review*/
     var type : String?
+    /*Display on review*/
+    var titleDisplay : String? = null
 
     var navigationList : MutableList<ItemNavigation>?
     var hashClipboard: HashMap<Any?, String?>?
@@ -228,7 +232,7 @@ class HistoryModel : Serializable {
         try {
            return Utils.onTranslateCreateType(ParsedResultType.valueOf(typeCategories?.getType() ?: ParsedResultType.TEXT.name))
         }catch (e : Exception){
-           return ConstantValue.FAVORITE
+           return QRScannerApplication.getInstance().getString(R.string.favorite)
         }
     }
 

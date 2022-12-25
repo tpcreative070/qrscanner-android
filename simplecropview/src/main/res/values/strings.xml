@@ -1,2 +1,17 @@
 <resources>
+    <string name="scanner_workload">Scanner workload:</string>
+    <string name="ideal_for">Ideal for</string>
+    <string name="barcodes">barcodes.</string>
+    <string name="zoom_is_adjusted">Zoom is adjusted with the slider bottom.</string>
+    <string name="do_not_hold_the_device">Don\'t hold the device too close to the code.</string>
+    <string name="workload">workload</string>
+    <string name="workload_too_long">workload too long</string>
+    <string name="too_long">too long</string>
+    <string name="workload_rectangle">workload rectangle</string>
+    <string name="rectangle">rectangle</string>
+    <string name="workload_tiny">workload tiny</string>
+    <string name="small_sized">small-sized</string>
+    <string name="medium_sized">medium-sized</string>
+    <string name="workload_medium">workload medium</string>
+    <string name="complex_large">complex, large</string>
 </resources>
