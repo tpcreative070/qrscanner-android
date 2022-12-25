@@ -123,7 +123,9 @@
     <string name="key_save_your_voicemails">key_save_your_voicemails</string>
     <string name="key_save_your_voicemails_detail">key_save_your_voicemails_detail</string>
     <string name="key_request_sign_out_google_drive">key_request_sign_out_google_drive</string>
-    <string name="key_app_permissions">app_permissions</string>
+    <string name="key_app_permissions">key_app_permissions</string>
+    <string name="key_frame_rect_portrait">key_frame_rect_portrait</string>
+    <string name="key_frame_rect_landscape">key_frame_rect_landscape</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
