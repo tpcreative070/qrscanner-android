@@ -43,8 +43,7 @@ import kotlin.math.roundToInt
 object Utils {
     val TAG = Utils::class.java.simpleName
     const val CODE_EXCEPTION = 1111
-    const val mStandardSortedDateTime: String = "ddMMYYYYHHmmss"
-    const val FORMAT_DISPLAY: String = "EE dd MMM, yyyy HH:mm:ss a"
+    const val FORMAT_DISPLAY: String = "dd/MM/yyyy HH:mm:ss a"
 
     fun getUUId(): String? {
         return try {
@@ -66,7 +65,7 @@ object Utils {
         return dateFormat.format(date)
     }
 
-    fun getCurrentDateTime(): String? {
+    private fun getCurrentDateTime(): String? {
         val date = Date()
         val dateFormat = SimpleDateFormat("EE dd MMM, yyyy HH:mm:ss a", Locale.getDefault())
         return dateFormat.format(date)
@@ -509,7 +508,7 @@ object Utils {
         return mListResult
     }
 
-    fun getSaveDeletedMap(): MutableMap<String?, String?> {
+    private fun getSaveDeletedMap(): MutableMap<String?, String?> {
         val mValue: String? = PrefsController.getString(QRScannerApplication.Companion.getInstance().getString(R.string.key_save_deleted_list), null)
         if (mValue != null) {
             val mData: MutableMap<String?, String?>? = Gson().fromJson(mValue, object : TypeToken<MutableMap<String?, String?>?>() {}.type)
@@ -563,7 +562,7 @@ object Utils {
         }
     }
 
-    fun convertSaveListToMap(list: MutableList<SaveModel>): MutableMap<String?, SaveModel> {
+    private fun convertSaveListToMap(list: MutableList<SaveModel>): MutableMap<String?, SaveModel> {
         val mMap: MutableMap<String?, SaveModel> = HashMap<String?, SaveModel>()
         for (index in list) {
             mMap[index.uuId] = index
