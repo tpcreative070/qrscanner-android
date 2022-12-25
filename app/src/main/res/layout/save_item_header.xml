@@ -16,7 +16,7 @@
             style="@style/brandonBoldTextView"
             android:id="@+id/tvHeader"
             android:textSize="17sp"
-            android:text="Header"
+            android:text="@string/header"
             android:textColor="?attr/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

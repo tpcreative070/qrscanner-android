@@ -28,15 +28,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_toEndOf="@+id/imgIcon"
-            android:text="Hello" />
+            android:layout_toEndOf="@+id/imgIcon"/>
         <androidx.appcompat.widget.AppCompatImageView
             android:visibility="invisible"
             android:id="@+id/imgDefault"
             android:tint="?attr/colorAccent"
             android:layout_width="@dimen/icon_size_27"
             android:layout_height="@dimen/icon_size_27"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:src="@drawable/baseline_add_box_white_48"/>
     </RelativeLayout>

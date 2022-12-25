@@ -1,7 +1,9 @@
 package tpcreative.co.qrscanner.ui.main
 import android.view.ViewGroup
 import androidx.fragment.app.*
+import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.ui.create.GenerateFragment
 import tpcreative.co.qrscanner.ui.history.HistoryFragment
 import tpcreative.co.qrscanner.ui.save.SaveFragment
@@ -65,11 +67,11 @@ class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVI
     init {
         fragments.clear()
         arrayList.clear()
-        arrayList.add("History")
-        arrayList.add("Create")
-        arrayList.add("Scanner")
-        arrayList.add("Save")
-        arrayList.add("Settings")
+        arrayList.add(QRScannerApplication.getInstance().getString(R.string.history))
+        arrayList.add(QRScannerApplication.getInstance().getString(R.string.create))
+        arrayList.add(QRScannerApplication.getInstance().getString(R.string.scanner))
+        arrayList.add(QRScannerApplication.getInstance().getString(R.string.save))
+        arrayList.add(QRScannerApplication.getInstance().getString(R.string.settings))
         fragments.add(HistoryFragment.newInstance(0))
         fragments.add(GenerateFragment.newInstance(1))
         fragments.add(ScannerFragment.newInstance(2))

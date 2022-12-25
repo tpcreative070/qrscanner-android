@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scanner_workload">Khối lượng công việc của máy quét:</string>
+    <string name="ideal_for">Lý tưởng cho</string>
+    <string name="barcodes">mã vạch.</string>
+    <string name="zoom_is_adjusted">Thu phóng quét mã bằng thanh trượt phía dưới.</string>
+    <string name="do_not_hold_the_device">Không giữ thiết bị quá gần mã.</string>
+    <string name="workload">khối lượng công việc</string>
+    <string name="workload_too_long">khối lượng công việc quá dài</string>
+    <string name="too_long">quá dài</string>
+    <string name="workload_rectangle">khối lượng công việc hình chữ nhật</string>
+    <string name="rectangle">hình chữ nhật</string>
+    <string name="workload_tiny">khối lượng công việc nhỏ</string>
+    <string name="small_sized">kích thước nhỏ</string>
+    <string name="medium_sized">kích thước trung bình</string>
+    <string name="workload_medium">khối lượng công việc trung bình</string>
+    <string name="complex_large">phức tạp và lớn</string>
+</resources>

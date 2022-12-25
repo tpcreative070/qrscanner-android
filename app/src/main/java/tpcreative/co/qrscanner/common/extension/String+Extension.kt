@@ -6,6 +6,8 @@ import android.view.WindowManager
 import com.google.gson.Gson
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 fun String.stringToMap() : Map<String,String>{
@@ -46,4 +48,10 @@ fun String.stringToMap() : Map<String,String>{
     mMap[ConstantKey.SUFFIX_NAME] = suffixName ?: ""
     Utils.Log("stringToMap",Gson().toJson(mMap))
     return mMap
+}
+
+fun String.isSpecialCharacters() : Boolean{
+    val p: Pattern = Pattern.compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE)
+    val m: Matcher = p.matcher(this)
+    return m.find()
 }

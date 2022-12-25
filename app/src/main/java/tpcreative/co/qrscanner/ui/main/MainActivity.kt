@@ -168,6 +168,8 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     override fun onResume() {
         super.onResume()
+        HistorySingleton.getInstance()?.reloadData()
+        SaveSingleton.getInstance()?.reloadData()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (receiver == null) {
                 onInitReceiver()

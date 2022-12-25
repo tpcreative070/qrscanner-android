@@ -483,46 +483,46 @@ import java.util.concurrent.atomic.AtomicBoolean;
       final Map<Integer,String> mMap = calculateQRCode();
 
       builder = new StringBuilder();
-      builder.append("Scanner workload: ");
+      builder.append(getContext().getString(R.string.scanner_workload)+" ");
       y += textHeight;
       mPaintDebug.setColor(WHITE);
       canvas.drawText(builder.toString(), x, y, mPaintDebug);
 
       builder = new StringBuilder();
       builder.append(mMap.get(0));
-      x += mPaintDebug.measureText("Scanner workload: ");
+      x += mPaintDebug.measureText(getContext().getString(R.string.scanner_workload)+" ");
       mPaintDebug.setColor(Color.GREEN);
       canvas.drawText(builder.toString(), x, y, mPaintDebug);
       x = keepX;
 
       builder = new StringBuilder();
-      builder.append("Ideal for ");
+      builder.append(getContext().getString(R.string.ideal_for)+" ");
       y += textHeight;
       mPaintDebug.setColor(WHITE);
       canvas.drawText(builder.toString(), x, y, mPaintDebug);
 
       builder = new StringBuilder();
       builder.append(mMap.get(1));
-      x += mPaintDebug.measureText("Ideal for ");
+      x += mPaintDebug.measureText(getContext().getString(R.string.ideal_for)+" ");
       mPaintDebug.setColor(Color.YELLOW);
       canvas.drawText(builder.toString(), x, y, mPaintDebug);
 
       builder = new StringBuilder();
-      builder.append(" barcodes.");
+      builder.append(" "+getContext().getString(R.string.barcodes));
       x += mPaintDebug.measureText(mMap.get(1));
       mPaintDebug.setColor(Color.WHITE);
       canvas.drawText(builder.toString(), x, y, mPaintDebug);
       x = keepX;
 
       builder = new StringBuilder();
-      builder.append("Zoom is adjusted with the slider bottom.");
+      builder.append(getContext().getString(R.string.zoom_is_adjusted));
       y += textHeight;
       mPaintDebug.setColor(WHITE);
       canvas.drawText(builder.toString(), x, y, mPaintDebug);
 
 
       builder = new StringBuilder();
-      builder.append("Don't hold the device too close to the code.");
+      builder.append(getContext().getString(R.string.do_not_hold_the_device));
       y += textHeight;
       mPaintDebug.setColor(WHITE);
       canvas.drawText(builder.toString(), x, y, mPaintDebug);
@@ -1507,33 +1507,33 @@ import java.util.concurrent.atomic.AtomicBoolean;
     String mValue = "";
     if ((mTinyWidth && mTinyWidthAndResult) || (mTinyHeight && mTinyHeightAndResult)){
       Log.d(TAG,"workload too long "+mResult);
-      mValue = "too long";
+      mValue = getContext().getString(R.string.too_long);
     }else if (mResult > 70 && (mTinyWidth || mTinyHeight)){
       Log.d(TAG,"too long. "+mResult);
-      mValue = "too long";
+      mValue = getContext().getString(R.string.too_long);
     }
     else if (mResult > 60 && (mTinyWidth || mTinyHeight)){
       Log.d(TAG,"workload rectangle "+mResult);
-      mValue = "rectangle";
+      mValue = getContext().getString(R.string.rectangle);
     }
     else if (mResult < 60 && (mTinyWidth || mTinyHeight)){
       Log.d(TAG,"workload tiny "+mResult);
-      mValue = "small-sized";
+      mValue = getContext().getString(R.string.small_sized);
     }
     else if (mResult < 70){
       Log.d(TAG,"workload tiny "+mResult);
-      mValue = "small-sized";
+      mValue = getContext().getString(R.string.small_sized);
     }
     else if ((getFrameW() > 300 && getFrameH() > 300) && mResult < 150){
       Log.d(TAG,"workload medium "+mResult);
-      mValue = "medium-sized";
+      mValue = getContext().getString(R.string.small_sized);
     }else if ((getFrameW() > 350 && getFrameH() > 350) && mResult > 150){
       Log.d(TAG,"workload complex, large"+mResult);
-      mValue = "complex, large";
+      mValue =getContext().getString(R.string.complex_large);
     }
     else{
       Log.d(TAG,"workload medium "+mResult);
-      mValue = "medium-sized";
+      mValue = getContext().getString(R.string.medium_sized);
     }
     mMap.put(0,mResult+"%");
     mMap.put(1,mValue);

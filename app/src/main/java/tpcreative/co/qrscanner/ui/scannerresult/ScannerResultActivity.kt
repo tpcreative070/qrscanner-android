@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,9 +29,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
-import tpcreative.co.qrscanner.common.extension.connectWifi
-import tpcreative.co.qrscanner.common.extension.connectWifiOnOldVersion
-import tpcreative.co.qrscanner.common.extension.onGeneralParse
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Log
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -209,6 +208,12 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     return
                 }
                 ParsedResultType.WIFI -> {
+                    if (!Utils.checkingWifiEnable(this)){
+                        Utils.alert(this,getString(R.string.alert),getString(R.string.please_enable_wifi)){
+                            startActivity( Intent(Settings.ACTION_WIFI_SETTINGS));
+                        }
+                        return
+                    }
                     if (Utils.getDoNoAskAgain()){
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
                             Utils.connectWifi(this@ScannerResultActivity ,create?.ssId ?:"",create?.password ?:"")
@@ -308,7 +313,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 Utils.onOpenWebSites(create?.url,this)
             }
             onInsertUpdateHistory(history)
-            title = history.title
+            title = history.titleDisplay
             onReloadData()
             onCheckFavorite()
             onCopy()
@@ -383,7 +388,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     private fun onCopyDialog() {
         viewModel.hashCopyResult?.clear()
-        com.afollestad.materialdialogs.MaterialDialog(this).show {
+        MaterialDialog(this).show {
             listItemsMultiChoice(items = viewModel.hashCopy?.values?.toMutableList()?.map { it.orEmpty() }) { _, index, text ->
                 Utils.Log(TAG,"Selected $text")
                 text.forEachIndexed { index, i ->
