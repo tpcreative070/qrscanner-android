@@ -5,14 +5,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
         android:name=".common.services.QRScannerApplication"
@@ -25,7 +25,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup">
-
+        <activity
+            android:name=".ui.guides.GuidesActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".ui.backup.BackupActivity"
             android:label="@string/backup_title" />
@@ -55,18 +61,18 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="unspecified">
-        </activity>
+            android:screenOrientation="unspecified"></activity>
         <activity
             android:name=".ui.review.ReviewActivity"
-            android:label="@string/review"
-            android:exported="true">
-            <intent-filter
-                android:label="@string/view_code">
+            android:exported="true"
+            android:label="@string/review">
+            <intent-filter android:label="@string/view_code">
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="text/x-vcard"/>
+
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="text/x-vcard" />
             </intent-filter>
         </activity>
 
@@ -136,12 +142,14 @@
             android:name=".ui.create.BarcodeActivity"
             android:label="@string/barcode" />
         <activity android:name=".ui.scannerresult.ScannerResultActivity" />
-        <activity android:name=".common.view.crop.CropImageActivity"
+        <activity
+            android:name=".common.view.crop.CropImageActivity"
             android:exported="true">
-            <intent-filter
-                android:label="@string/scan_photo">
+            <intent-filter android:label="@string/scan_photo">
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
