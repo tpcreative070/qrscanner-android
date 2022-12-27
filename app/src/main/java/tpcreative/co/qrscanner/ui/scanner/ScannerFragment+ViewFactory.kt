@@ -103,14 +103,14 @@ fun ScannerFragment.initUI(){
     seekbarZoom.setOnSeekBarChangeListener(object :OnSeekBarChangeListener{
         override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
             Utils.Log(TAG,"onProgressChanged $p1")
-            if (zxing_barcode_scanner.barcodeView.cameraInstance!=null && zxing_barcode_scanner.barcodeView.cameraInstance.isCheckReadyCamera()){
-                zxing_barcode_scanner.barcodeView.cameraInstance.setZoom(p1)
-                zxing_barcode_scanner.barcodeView.cameraInstance.cameraSettings.zoom = p1
+            if (zxing_barcode_scanner?.barcodeView?.cameraInstance!=null && zxing_barcode_scanner?.barcodeView?.cameraInstance?.isCheckReadyCamera() == true){
+                zxing_barcode_scanner?.barcodeView?.cameraInstance?.setZoom(p1)
+                zxing_barcode_scanner?.barcodeView?.cameraInstance?.cameraSettings?.zoom = p1
             }
         }
 
         override fun onStartTrackingTouch(p0: SeekBar?) {
-            zxing_barcode_scanner.barcodeView.stopDecoding()
+            zxing_barcode_scanner?.barcodeView?.stopDecoding()
             QRScannerApplication.getInstance().getActivity()?.lock(true)
         }
 
@@ -122,13 +122,13 @@ fun ScannerFragment.initUI(){
     })
 
     imgZoomIn.setOnClickListener {
-        if (zxing_barcode_scanner.barcodeView.cameraInstance!=null && zxing_barcode_scanner.barcodeView.cameraInstance.isCheckReadyCamera()) {
+        if (zxing_barcode_scanner?.barcodeView?.cameraInstance!=null && zxing_barcode_scanner?.barcodeView?.cameraInstance?.isCheckReadyCamera() == true) {
             seekbarZoom.progress = 100
         }
     }
 
     imgZoomOut.setOnClickListener {
-        if (zxing_barcode_scanner.barcodeView.cameraInstance!=null && zxing_barcode_scanner.barcodeView.cameraInstance.isCheckReadyCamera()) {
+        if (zxing_barcode_scanner?.barcodeView?.cameraInstance!=null && zxing_barcode_scanner?.barcodeView?.cameraInstance?.isCheckReadyCamera() == true) {
             seekbarZoom.progress = 0
         }
     }
@@ -166,7 +166,7 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
         if (Utils.getFrameLandscapeSize()==null){
             Utils.setFrameRectLandscape(mRespect)
             mRequestRectFocus = mRespect
-            zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFrameLandscapeSize()
+            zxing_barcode_scanner?.barcodeView?.framingRectSize = Utils.getFrameLandscapeSize()
             zxing_barcode_scanner.pause()
             zxing_barcode_scanner.resume()
         }
@@ -185,10 +185,10 @@ private val ScannerFragment.mMoveUpCallback: MoveUpCallback
     get() = object : MoveUpCallback {
             override fun onSuccess(width: Int, height: Int,rectF: RectF) {
                 if (viewModel.isResume){
-                    zxing_barcode_scanner.pauseAndWait()
+                    zxing_barcode_scanner?.pauseAndWait()
                     viewModel.isResume = false
                 }
-                zxing_barcode_scanner.barcodeView.framingRectSize = Size(width,height)
+                zxing_barcode_scanner?.barcodeView?.framingRectSize = Size(width,height)
                 if (isLandscape()){
                     Utils.setFrameRectLandscape(rectF)
                 }else{
@@ -199,11 +199,11 @@ private val ScannerFragment.mMoveUpCallback: MoveUpCallback
             override fun onError(e: Throwable) {}
              override fun onDown() {
                  Utils.Log(TAG,"onDown")
-                 zxing_barcode_scanner.barcodeView.stopDecoding()
+                 zxing_barcode_scanner?.barcodeView?.stopDecoding()
             }
 
             override fun onRelease() {
-                zxing_barcode_scanner.decodeContinuous(callback)
+                zxing_barcode_scanner?.decodeContinuous(callback)
                 if (!viewModel.isResume){
                     zxing_barcode_scanner.resume()
                     viewModel.isResume = true
@@ -232,8 +232,8 @@ val ScannerFragment.stateListener: CameraPreview.StateListener
                     zxing_barcode_scanner.barcodeView.framingRect.bottom.toFloat()
                 )
                 initCropView(mFrameRect,mRect)
-                if (zxing_barcode_scanner.barcodeView.cameraInstance!=null){
-                    seekbarZoom.max =  zxing_barcode_scanner.barcodeView.cameraInstance.maxZoom()
+                if (zxing_barcode_scanner?.barcodeView?.cameraInstance!=null){
+                    seekbarZoom.max =  zxing_barcode_scanner?.barcodeView?.cameraInstance?.maxZoom() ?:0
                 }
             }
         }

@@ -462,4 +462,5 @@
     <string name="please_enable_wifi">Please turn on the WI-FI</string>
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
+    <string name="todo">todo</string>
 </resources>

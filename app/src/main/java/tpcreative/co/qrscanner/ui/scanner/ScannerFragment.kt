@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.ui.scanner
 
-import android.R.attr.rotation
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
@@ -21,7 +20,6 @@ import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
-import com.journeyapps.barcodescanner.camera.DisplayConfiguration
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.GlobalScope.coroutineContext
@@ -74,9 +72,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
                     val canvas = Canvas(mBitmap);
                     canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
-                    zxing_barcode_scanner.viewFinder.addResultPoint(mResult.resultPoints?.toMutableList())
-                    zxing_barcode_scanner.viewFinder.drawResultBitmap(mBitmap)
-                    zxing_barcode_scanner.viewFinder.addTransferResultPoint(result.transformedResultPoints)
+                    zxing_barcode_scanner?.viewFinder?.addResultPoint(mResult.resultPoints?.toMutableList())
+                    zxing_barcode_scanner?.viewFinder?.drawResultBitmap(mBitmap,zxing_barcode_scanner?.barcodeView?.cameraInstance?.displayConfiguration?.realtimeRotation ?:0)
+                    zxing_barcode_scanner?.viewFinder?.addTransferResultPoint(result.transformedResultPoints)
                     Utils.Log(TAG, "barcode ==> format ${result.barcodeFormat?.name}")
                     doNavigation(create)
                 }
@@ -89,7 +87,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             if (Utils.isMultipleScan()) {
                 if (viewModel.isRequestDone){
                     if (viewModel.isResume){
-                        zxing_barcode_scanner.pauseAndWait()
+                        zxing_barcode_scanner?.pauseAndWait()
                         viewModel.isResume = false
                     }
                     return
@@ -100,14 +98,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 viewModel.doSaveItems(create)
                 if (zxing_barcode_scanner != null) {
                     if (viewModel.isResume){
-                        zxing_barcode_scanner.pauseAndWait()
+                        zxing_barcode_scanner?.pauseAndWait()
                         viewModel.isResume = false
                     }
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(1000)
-                        zxing_barcode_scanner.viewFinder.drawViewfinder()
+                        zxing_barcode_scanner?.viewFinder?.drawViewfinder()
                         if (!viewModel.isResume){
-                            zxing_barcode_scanner.resume()
+                            zxing_barcode_scanner?.resume()
                             viewModel.isResume = true
                         }
                     }
@@ -116,7 +114,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
                 if (zxing_barcode_scanner != null) {
                     if (viewModel.isResume){
-                        zxing_barcode_scanner.pauseAndWait()
+                        zxing_barcode_scanner?.pauseAndWait()
                         viewModel.isResume = false
                     }
                 }
@@ -139,14 +137,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         super.work()
         initUI()
         ScannerSingleton.getInstance()?.setListener(this)
-        zxing_barcode_scanner.decodeContinuous(callback)
-        zxing_barcode_scanner.statusView.visibility = View.GONE
-        zxing_barcode_scanner.barcodeView.marginFraction = 0.2
+        zxing_barcode_scanner?.decodeContinuous(callback)
+        zxing_barcode_scanner?.statusView?.visibility = View.GONE
+        zxing_barcode_scanner?.barcodeView?.marginFraction = 0.2
         Utils.Log(TAG,"view ${viewCrop.left}")
         if (isLandscape()){
-            zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFrameLandscapeSize()
+            zxing_barcode_scanner?.barcodeView?.framingRectSize = Utils.getFrameLandscapeSize()
         }else{
-            zxing_barcode_scanner.barcodeView.framingRectSize = Utils.getFramePortraitSize()
+            zxing_barcode_scanner?.barcodeView?.framingRectSize = Utils.getFramePortraitSize()
         }
         imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
@@ -162,23 +160,23 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 2
             }
         }
-        zxing_barcode_scanner.barcodeView.cameraSettings = cameraSettings
+        zxing_barcode_scanner?.barcodeView?.cameraSettings = cameraSettings
         beepManager = BeepManager(activity)
         onHandlerIntent()
         if (zxing_barcode_scanner != null) {
             if (!zxing_barcode_scanner.isActivated) {
                 if (!viewModel.isResume){
-                    zxing_barcode_scanner.resume()
+                    zxing_barcode_scanner?.resume()
                     viewModel.isResume = true
                 }
-                zxing_barcode_scanner.barcodeView.addStateListener(stateListener)
+                zxing_barcode_scanner?.barcodeView?.addStateListener(stateListener)
             }
         }
         onBeepAndVibrate()
 
-        val handleClickEventsDebounced = debounce<Unit>(800, coroutineContext) {
-            Utils.Log(TAG,"orientation value $mRotation")
-            //zxing_barcode_scanner.barcodeView?.cameraInstance?.displayConfiguration = DisplayConfiguration(mRotation)
+        val handleClickEventsDebounced = debounce<Unit>(600, coroutineContext) {
+            Utils.Log(TAG,"Rotation $mRotation")
+            zxing_barcode_scanner?.barcodeView?.cameraInstance?.displayConfiguration?.realtimeRotation = mRotation
         }
 
         var enumRotation : EnumRotation = EnumRotation.PORTRAIT
@@ -230,7 +228,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     fun onAddPermissionGallery() {
         if (zxing_barcode_scanner != null) {
             if (viewModel.isResume){
-                zxing_barcode_scanner.pauseAndWait()
+                zxing_barcode_scanner?.pauseAndWait()
                 viewModel.isResume = false
             }
         }
@@ -247,9 +245,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     override fun setVisible() {
         if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner.viewFinder.drawViewfinder()
+            zxing_barcode_scanner?.viewFinder?.drawViewfinder()
             if (!viewModel.isResume){
-                zxing_barcode_scanner.resume()
+                zxing_barcode_scanner?.resume()
                 viewModel.isResume = true
             }
         }
@@ -258,7 +256,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun setInvisible() {
         if (zxing_barcode_scanner != null) {
             if (viewModel.isResume){
-                zxing_barcode_scanner.pauseAndWait()
+                zxing_barcode_scanner?.pauseAndWait()
                 viewModel.isResume = false
             }
         }
@@ -268,7 +266,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         super.onStop()
         if (zxing_barcode_scanner != null) {
             if (viewModel.isResume){
-                zxing_barcode_scanner.pauseAndWait()
+                zxing_barcode_scanner?.pauseAndWait()
                 viewModel.isResume = false
             }
         }
@@ -293,7 +291,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         if (typeCamera != 2) {
             if (zxing_barcode_scanner != null) {
                 if (viewModel.isResume){
-                    zxing_barcode_scanner.pauseAndWait()
+                    zxing_barcode_scanner?.pauseAndWait()
                     viewModel.isResume = false
                 }
             }
@@ -303,9 +301,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun onResume() {
         super.onResume()
          if (zxing_barcode_scanner != null && !zxing_barcode_scanner.isActivated) {
-             zxing_barcode_scanner.viewFinder.drawViewfinder()
+             zxing_barcode_scanner?.viewFinder?.drawViewfinder()
              if (!viewModel.isResume){
-                 zxing_barcode_scanner.resume()
+                 zxing_barcode_scanner?.resume()
                  viewModel.isResume = true
              }
              if (!Utils.isMultipleScan()) {
@@ -375,7 +373,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             beepManager?.playBeepSoundAndVibrate()
             if (zxing_barcode_scanner != null) {
                 if (viewModel.isResume){
-                    zxing_barcode_scanner.pauseAndWait()
+                    zxing_barcode_scanner?.pauseAndWait()
                     viewModel.isResume = false
                 }
             }
@@ -408,7 +406,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 if (typeCamera != 2) {
                     if (viewModel.isResume){
                         //Using pause in able to reduce lag when swipe page
-                        zxing_barcode_scanner.pause()
+                        zxing_barcode_scanner?.pause()
                         viewModel.isResume = false
                     }
                 }

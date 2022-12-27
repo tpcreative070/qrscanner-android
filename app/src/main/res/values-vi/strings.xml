@@ -335,4 +335,5 @@
     <string name="please_enable_wifi">Vui lòng bật Wifi</string>
     <string name="search">Tìm kiếm</string>
     <string name="favorite">Yêu thích</string>
+    <string name="todo">todo</string>
 </resources>
