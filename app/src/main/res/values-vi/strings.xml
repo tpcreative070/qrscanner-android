@@ -336,4 +336,7 @@
     <string name="search">Tìm kiếm</string>
     <string name="favorite">Yêu thích</string>
     <string name="todo">todo</string>
+    <string name="guides">Hướng dẫn</string>
+    <string name="scan_qr_code_and_barcode">Quét mã QR và mã vạch</string>
+    <string name="avoid_scan">Đọc mục trợ giúp của ứng dụng để tránh những sai lầm phổ biến khi quét mã vạch.</string>
 </resources>

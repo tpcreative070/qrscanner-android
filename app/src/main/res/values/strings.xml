@@ -463,4 +463,7 @@
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="todo">todo</string>
+    <string name="guides">Guides</string>
+    <string name="scan_qr_code_and_barcode">Scan QR Code and Barcodes</string>
+    <string name="avoid_scan">Read the apps help to avoid common mistakes when scanning barcodes.</string>
 </resources>

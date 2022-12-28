@@ -1,37 +1,27 @@
 package tpcreative.co.qrscanner.ui.splashscreen
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.snatik.storage.Storage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivity
 import tpcreative.co.qrscanner.common.controller.PrefsController
-import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 class SplashScreenActivity : BaseActivity() {
-    private var storage: Storage? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
-        storage = Storage(this)
-        if (ContextCompat.checkSelfPermission(QRScannerApplication.Companion.getInstance(), Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_DENIED) {
-            onAddPermissionCamera()
-        } else {
-            Navigator.onMoveMainTab(this@SplashScreenActivity)
-        }
+        Navigator.onGuides(this)
+//        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+//            == PackageManager.PERMISSION_DENIED) {
+//            onAddPermissionCamera()
+//        } else {
+//            Navigator.onMoveMainTab(this@SplashScreenActivity)
+//        }
     }
 
     private fun onAddPermissionCamera() {
@@ -43,11 +33,10 @@ class SplashScreenActivity : BaseActivity() {
                         if (report?.areAllPermissionsGranted() == true) {
                             Utils.Log(TAG, "Permission is ready")
                             val isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh), false)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isRefresh) {
+                            if (!isRefresh) {
                                 ScannerSingleton.getInstance()?.setVisible()
                                 PrefsController.putBoolean(getString(R.string.key_refresh), true)
                             }
-                            storage?.createDirectory(QRScannerApplication.getInstance().getPathFolder())
                             Navigator.onMoveMainTab(this@SplashScreenActivity)
                             // Do something here
                         } else {

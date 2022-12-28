@@ -19,7 +19,6 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.snatik.storage.Storage
 import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
@@ -572,11 +571,6 @@ object Utils {
             }
         }
         return mMap
-    }
-
-    fun logPath(): String {
-        val storage: Storage = QRScannerApplication.getInstance().getStorage()
-        return storage.externalStorageDirectory + "/logsData.txt"
     }
 
     fun setAuthor(author: Author?) {

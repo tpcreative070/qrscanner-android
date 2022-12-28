@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.guides.GuidesActivity"
+    tools:ignore="MissingDefaultResource">
+    <RelativeLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgDisplay"
+            app:srcCompat="@drawable/ic_milks"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/icon_size_150"
+            android:layout_height="@dimen/icon_size_150"
+            app:tint="@color/white"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:gravity="center"
+            android:textColor="@color/white"
+            style="@style/brandonRegularTextHintInputLayout"
+            android:layout_below="@+id/imgDisplay"
+            android:text="@string/scan_qr_code_and_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

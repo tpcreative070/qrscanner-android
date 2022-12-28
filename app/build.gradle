@@ -75,8 +75,6 @@ dependencies {
     implementation project(':simplerecyclerview')
     /*Validation input*/
     implementation "com.basgeekball:awesome-validation:$awesomeValidation"
-    /*Storage*/
-    implementation "com.snatik:storage:$storageLib"
     /*Google map*/
     implementation "com.google.android.gms:play-services-maps:$playServicesMaps"
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -135,6 +133,7 @@ dependencies {
     implementation "com.google.android.ads:mediation-test-suite:$mediationTestSuite"
     implementation "com.afollestad.material-dialogs:input:$materialDialogsInput"
     implementation "com.afollestad.material-dialogs:core:$materialDialogsInput"
+    implementation "com.github.AppIntro:AppIntro:$appIntro"
 }
 
 apply plugin: 'com.google.gms.google-services'

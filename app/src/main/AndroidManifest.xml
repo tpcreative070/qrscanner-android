@@ -27,10 +27,11 @@
         tools:replace="allowBackup">
         <activity
             android:name=".ui.guides.GuidesActivity"
+            android:label="@string/guides"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />
+                android:value=""/>
         </activity>
         <activity
             android:name=".ui.backup.BackupActivity"
@@ -61,7 +62,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="unspecified"></activity>
+            android:screenOrientation="unspecified"/>
         <activity
             android:name=".ui.review.ReviewActivity"
             android:exported="true"

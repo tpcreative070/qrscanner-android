@@ -18,7 +18,6 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -35,7 +34,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     lateinit var viewModel : MainViewModel
     var adapter: MainViewPagerAdapter? = null
-    var storage: Storage? = null
     var receiver: QRScannerReceiver? = null
 
     private val tabIcons: IntArray = intArrayOf(
@@ -123,8 +121,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
                         if (report?.areAllPermissionsGranted() == true) {
                             Utils.Log(TAG, "Permission is ready")
                             ScannerSingleton.getInstance()?.setVisible()
-                            storage?.createDirectory(QRScannerApplication.getInstance().getPathFolder())
-                            // Do something here
                         } else {
                             Utils.Log(TAG, "Permission is denied")
                             finish()

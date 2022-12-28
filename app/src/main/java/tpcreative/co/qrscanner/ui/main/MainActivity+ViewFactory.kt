@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
@@ -31,7 +30,6 @@ fun MainActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(false)
     supportActionBar?.hide()
     ResponseSingleton.getInstance()?.setListener(this)
-    storage = Storage(applicationContext)
     setupViewPager(viewpager)
     tabs.setupWithViewPager(viewpager)
     viewpager.currentItem = 2
