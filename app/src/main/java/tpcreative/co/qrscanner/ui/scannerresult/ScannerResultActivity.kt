@@ -177,15 +177,15 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                     create?.let {
                         val intentContact = Intent()
                         intentContact.action = ContactsContract.Intents.SHOW_OR_CREATE_CONTACT
-                        intentContact.data = Uri.fromParts("tel", create?.contact?.phones?.values?.firstOrNull(), null)
+                        intentContact.data = Uri.fromParts("tel", create?.contact?.phones?.values?.firstOrNull() ?: "111", null)
                         intentContact.putExtra(ContactsContract.Intents.Insert.NAME, create?.contact?.fullName)
                         intentContact.putExtra(ContactsContract.Intents.Insert.JOB_TITLE, create?.contact?.jobTitle)
                         intentContact.putExtra(ContactsContract.Intents.Insert.COMPANY, create?.contact?.company)
                         intentContact.putExtra(ContactsContract.Intents.Insert.NOTES, create?.contact?.note)
                         intentContact.putExtra(ContactsContract.Intents.Insert.POSTAL, create?.contact?.addresses?.values?.firstOrNull()?.postalCode)
-                        intentContact.putExtra(ContactsContract.Intents.Insert.PHONE, create?.contact?.phones?.values?.firstOrNull())
+                        intentContact.putExtra(ContactsContract.Intents.Insert.PHONE, create?.contact?.phones?.values?.firstOrNull().orEmpty())
                             .putExtra(ContactsContract.Intents.Insert.PHONE_TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
-                        intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL, create?.contact?.emails?.values?.firstOrNull())
+                        intentContact.putExtra(ContactsContract.Intents.Insert.EMAIL, create?.contact?.emails?.values?.firstOrNull().orEmpty())
                             .putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK)
                         startActivity(intentContact)
                     }

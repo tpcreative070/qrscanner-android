@@ -53,7 +53,7 @@ class RefreshTokenSingleton private constructor() {
                     QRScannerApplication.getInstance(), QRScannerApplication.getInstance().getRequiredScopesString())
             credential.selectedAccount = accounts
             try {
-                val value = credential.token
+                val value = credential?.token
                 if (value != null) {
                     val mAuthor: Author? = Author.getInstance()?.getAuthorInfo()
                     if (mAuthor != null) {
