@@ -273,10 +273,15 @@ public class CameraInstance {
     }
 
     public int maxZoom(){
-        if (cameraManager!=null && cameraManager.getCamera()!=null && cameraManager.getCamera().getParameters()!=null){
-            return cameraManager.getCamera().getParameters().getMaxZoom();
+        try {
+            if (cameraManager!=null && cameraManager.getCamera()!=null && cameraManager.getCamera().getParameters()!=null){
+                return cameraManager.getCamera().getParameters().getMaxZoom();
+            }
+            return 30;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 30;
         }
-        return 30;
     }
 
     public void setZoom(int value){

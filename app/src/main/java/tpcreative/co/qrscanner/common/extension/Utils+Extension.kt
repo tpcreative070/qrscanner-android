@@ -1663,6 +1663,35 @@ fun Utils.onFormatBarcodeDisplay(barcodeFormat: BarcodeFormat, enumAction: EnumA
     return  ""
 }
 
+
+fun Utils.onFormatBarcodeDisplay(enumAction: EnumAction) : String{
+    return when(enumAction){
+        EnumAction.DEGREE_0 ->{
+            R.string.orientation_0.toText()
+        }
+        EnumAction.DEGREE_90 ->{
+            R.string.orientation_90.toText()
+        }
+        EnumAction.OTHER_ORIENTATION ->{
+            R.string.other_orientation.toText()
+        }
+        EnumAction.SHADOW ->{
+            R.string.light_or_shadow.toText()
+        }
+        EnumAction.TOO_CLOSE_BLURRY ->{
+            R.string.too_close_blurry.toText()
+        }
+        EnumAction.LED_WHEN_DARK->{
+            R.string.led_when_dark.toText()
+        }
+        EnumAction.LOW_CONTRAST->{
+            R.string.low_contrast.toText()
+        }
+        else -> {
+            ""
+        }
+    }
+}
 fun Utils.calculateNoOfColumns(
     context: Context,
     columnWidthDp: Float
@@ -1670,5 +1699,9 @@ fun Utils.calculateNoOfColumns(
     val displayMetrics = context.resources.displayMetrics
     val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
     return (screenWidthDp / columnWidthDp + 0.5).toInt()
+}
+
+fun Utils.getString() : Context{
+    return QRScannerApplication.getInstance()
 }
 

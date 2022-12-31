@@ -164,6 +164,6 @@ class SupportedCodeViewModel : BaseViewModel<EmptyModel>() {
     }
 
     companion object {
-        private val TAG = ChangeFileColorViewModel::class.java.simpleName
+        private val TAG = SupportedCodeViewModel::class.java.simpleName
     }
 }

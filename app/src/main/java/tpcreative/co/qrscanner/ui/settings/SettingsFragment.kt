@@ -1,17 +1,16 @@
 package tpcreative.co.qrscanner.ui.settings
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -21,9 +20,6 @@ import co.tpcreative.supersafe.common.controller.EncryptedPreferenceDataStore
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -39,7 +35,6 @@ import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.HistoryModel
 import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.model.Theme
-import java.util.*
 
 class SettingsFragment : BaseFragment() {
     private var mStateSaved = false
@@ -133,7 +128,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         override fun onUpdated() {
-            onGenerateReview("123")
+            onUpdateQRCode()
         }
 
         override fun onSyncDataRequest() {
@@ -336,7 +331,7 @@ class SettingsFragment : BaseFragment() {
             myPreferenceFileColor?.setListener(object : MyPreference.MyPreferenceListener {
                 override fun onUpdatePreference() {
                     myPreferenceFileColor?.getImgPremium()?.visibility = View.INVISIBLE
-                    onGenerateReview("123")
+                    onUpdateQRCode()
                 }
             })
 
@@ -404,25 +399,14 @@ class SettingsFragment : BaseFragment() {
             myPreferenceCategoryFamilyApps?.isVisible = false
         }
 
-        fun onGenerateReview(code: String?) {
-            try {
-                if (myPreferenceFileColor == null) {
-                    if (myPreferenceFileColor?.getImageView() == null) {
-                        return
-                    }
-                    return
-                }
-                val barcodeEncoder = BarcodeEncoder()
-                val hints: MutableMap<EncodeHintType?, Any?> = EnumMap<EncodeHintType, Any>(EncodeHintType::class.java)
-                hints[EncodeHintType.MARGIN] = 2
-                val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-                bitmap = barcodeEncoder.encodeBitmap(context, theme?.getPrimaryDarkColor()!!, code, BarcodeFormat.QR_CODE, Constant.QRCodeViewWidth,Constant.QRCodeViewHeight, hints)
-                myPreferenceFileColor?.getImageView()?.setImageBitmap(bitmap)
-                myPreferenceFileColor?.getImageView()?.visibility = View.VISIBLE
-                Utils.Log(TAG, "onGenerateReview")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        fun onUpdateQRCode() {
+            val theme: Theme? = Theme.getInstance()?.getThemeInfo()
+            R.color.transparent
+            myPreferenceFileColor?.getImageView()?.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_qrcode_display))
+            myPreferenceFileColor?.getImageView()?.alpha = 1F
+            myPreferenceFileColor?.getImageView()?.visibility = View.VISIBLE
+            theme?.getPrimaryDarkColor()
+                ?.let { myPreferenceFileColor?.getImageView()?.setColorFilter(ContextCompat.getColor(requireContext(),it), PorterDuff.Mode.SRC_ATOP) }
         }
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

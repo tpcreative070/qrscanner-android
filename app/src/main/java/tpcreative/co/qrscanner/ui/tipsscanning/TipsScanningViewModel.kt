@@ -3,49 +3,75 @@ package tpcreative.co.qrscanner.ui.tipsscanning
 import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.model.EmptyModel
-import tpcreative.co.qrscanner.model.EnumAction
-import tpcreative.co.qrscanner.model.HelpModel
-import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
+import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
 class TipsScanningViewModel : BaseViewModel<EmptyModel>() {
-    var mList: MutableList<HelpModel> = mutableListOf()
+    var mList: MutableList<TipsScanningModel> = mutableListOf()
+
     fun getData()  = liveData(Dispatchers.Main){
         mList.clear()
         mList.add(
-            HelpModel(
+            TipsScanningModel(
+                EnumAction.DEGREE_0,
+                R.drawable.ic_ean_8_show_number,
                 R.drawable.baseline_check_white_48,
-                R.color.colorAccent,
-                EnumAction.SUPPORTED_CODES,
-                QRScannerApplication.getInstance().getString(R.string.supported_codes))
+                R.color.material_green_a700)
         )
         mList.add(
-            HelpModel(
-                R.drawable.ic_tips,
-                R.color.colorAccent,
-                EnumAction.TIPS_SCANNING,
-                QRScannerApplication.getInstance().getString(R.string.tips_for_scanning))
+            TipsScanningModel(
+                EnumAction.DEGREE_90,
+                R.drawable.ic_ean_8_show_number,
+                R.drawable.baseline_check_white_48,
+                R.color.material_green_a700)
         )
         mList.add(
-            HelpModel(
-                R.drawable.ic_youtube,
-                R.color.colorAccent,
-                EnumAction.GUIDES_VIDEO,
-                QRScannerApplication.getInstance().getString(R.string.guides_video))
+            TipsScanningModel(
+                EnumAction.DEGREE_270,
+                R.drawable.ic_ean_8_show_number,
+                R.drawable.baseline_check_white_48,
+                R.color.material_green_a700)
         )
         mList.add(
-            HelpModel(
-                R.drawable.ic_email,
-                R.color.grey_light,
-                EnumAction.SEND_US_AN_EMAIL,
-                QRScannerApplication.getInstance().getString(R.string.send_us_an_email))
+            TipsScanningModel(
+                EnumAction.OTHER_ORIENTATION,
+                R.drawable.ic_ean_8_show_number,
+                R.drawable.ic_close,
+                R.color.red_dark)
+        )
+        mList.add(
+            TipsScanningModel(
+                EnumAction.SHADOW,
+                R.drawable.ic_ean_8_show_number,
+                R.drawable.baseline_check_white_48,
+                R.color.material_green_a700)
+        )
+        mList.add(
+            TipsScanningModel(
+                EnumAction.TOO_CLOSE_BLURRY,
+                R.drawable.ic_ean_8_show_number,
+                R.drawable.baseline_check_white_48,
+                R.color.material_green_a700)
+        )
+        mList.add(
+            TipsScanningModel(
+                EnumAction.LED_WHEN_DARK,
+                R.drawable.ic_ean_8_show_number,
+                R.drawable.baseline_check_white_48,
+                R.color.material_green_a700)
+        )
+
+        mList.add(
+            TipsScanningModel(
+                EnumAction.LOW_CONTRAST,
+                R.drawable.ic_ean_8_show_number,
+                R.drawable.baseline_check_white_48,
+                R.color.material_green_a700)
         )
         emit(mList)
     }
 
     companion object {
-        private val TAG = ChangeFileColorViewModel::class.java.simpleName
+        private val TAG = TipsScanningViewModel::class.java.simpleName
     }
 }

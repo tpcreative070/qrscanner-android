@@ -704,6 +704,9 @@
     <color name="multiple_image_select_buttonText">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="colorIconHint">#4E4B4B</color>
+    <color name="colorItem">#F5F5F5</color>
+    <color name="colorSupportedCode">#FFFFFF</color>
+    <color name="colorBGSupportedCode">#EEEEEE</color>
 
 
     /*Crop image*/

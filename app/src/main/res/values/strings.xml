@@ -472,4 +472,12 @@
     <string name="help_feedback">Help &amp; Feedback</string>
     <string name="guides_video">Guides video with the tips for scanning</string>
     <string name="send_us_an_email">Send us an email</string>
+    <string name="orientation_0">Orientation 0</string>
+    <string name="orientation_90">Orientation 90</string>
+    <string name="orientation_270">Orientation 270</string>
+    <string name="other_orientation">Other orientation</string>
+    <string name="light_or_shadow">Light or shadow</string>
+    <string name="too_close_blurry">Too close/blurry</string>
+    <string name="led_when_dark">LED when DARK</string>
+    <string name="low_contrast">Low contrast</string>
 </resources>

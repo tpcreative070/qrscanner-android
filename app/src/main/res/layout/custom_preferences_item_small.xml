@@ -69,28 +69,30 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgCover"
                 android:layout_centerInParent="true"
-                android:layout_width="@dimen/image_size_custom_60"
-                android:layout_height="@dimen/image_size_custom_60"/>
+                android:layout_width="@dimen/icon_size_60"
+                android:layout_height="@dimen/icon_size_60"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgSuperSafe"
                 android:layout_centerInParent="true"
-                android:layout_width="@dimen/image_size_custom_60"
-                android:layout_height="@dimen/image_size_custom_60"/>
+                android:layout_width="@dimen/icon_size_60"
+                android:layout_height="@dimen/icon_size_60"/>
 
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_centerInParent="true"
                 android:visibility="invisible"
                 android:id="@android:id/checkbox"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/icon_size_70"
                 android:layout_height="wrap_content">
             </androidx.appcompat.widget.SwitchCompat>
             <androidx.appcompat.widget.AppCompatTextView
+                android:paddingEnd="@dimen/margin_15"
+                android:gravity="end"
                 android:id="@+id/tvChoose"
                 android:visibility="invisible"
                 android:text="@string/key_dark_mode"
                 android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/icon_size_70"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
     </LinearLayout>
