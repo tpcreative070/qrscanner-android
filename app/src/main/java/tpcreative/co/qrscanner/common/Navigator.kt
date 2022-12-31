@@ -9,7 +9,7 @@ import tpcreative.co.qrscanner.common.view.Bungee
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.backup.BackupActivity
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity
-import tpcreative.co.qrscanner.ui.guides.GuidesActivity
+import tpcreative.co.qrscanner.ui.intro.IntroActivity
 import tpcreative.co.qrscanner.ui.help.HelpActivity
 import tpcreative.co.qrscanner.ui.main.MainActivity
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
@@ -86,8 +86,13 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-    fun onGuides(context: Context?){
-        val intent = Intent(context,GuidesActivity::class.java)
+    fun onIntro(context: Context?){
+        val intent = Intent(context,IntroActivity::class.java)
+        context?.startActivity(intent)
+    }
+
+    fun <T> onIntent(context: Context?, clazz: Class<T>){
+        val intent = Intent(context, clazz)
         context?.startActivity(intent)
     }
 }

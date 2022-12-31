@@ -1,8 +1,12 @@
 package tpcreative.co.qrscanner.common.network.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
+import tpcreative.co.qrscanner.ui.help.HelpViewModel
 import tpcreative.co.qrscanner.ui.review.ReviewViewModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultViewModel
+import tpcreative.co.qrscanner.ui.supportedcode.SupportedCodeViewModel
+import tpcreative.co.qrscanner.ui.tipsscanning.TipsScanningViewModel
 import tpcreative.co.qrscanner.viewmodel.*
 import java.lang.IllegalArgumentException
 
@@ -34,6 +38,15 @@ class ViewModelFactory() : ViewModelProvider.Factory{
         }
         else if (modelClass.isAssignableFrom(GenerateViewModel::class.java)){
             return GenerateViewModel() as T
+        }
+        else if (modelClass.isAssignableFrom(HelpViewModel::class.java)){
+            return HelpViewModel() as T
+        }
+        else if (modelClass.isAssignableFrom(SupportedCodeViewModel::class.java)){
+            return SupportedCodeViewModel() as T
+        }
+        else if (modelClass.isAssignableFrom(TipsScanningViewModel::class.java)){
+            return TipsScanningViewModel() as T
         }
         throw IllegalArgumentException("Unknown class name")
     }

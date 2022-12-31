@@ -1,10 +1,11 @@
-package tpcreative.co.qrscanner.viewmodel
+package tpcreative.co.qrscanner.ui.filecolor
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.model.EmptyModel
 import tpcreative.co.qrscanner.model.Theme
+import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
 class ChangeFileColorViewModel : BaseViewModel<EmptyModel>() {
     var mList: MutableList<Theme> = mutableListOf()

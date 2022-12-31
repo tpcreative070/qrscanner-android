@@ -101,4 +101,5 @@ subprojects {
     ext.materialDialogsInput = "3.3.0"
     ext.zxingCore = "3.5.1"
     ext.appIntro  = "6.2.0"
+    ext.playReview = "2.0.1"
 }

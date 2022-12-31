@@ -26,12 +26,28 @@
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup">
         <activity
-            android:name=".ui.guides.GuidesActivity"
-            android:label="@string/guides"
+            android:name=".ui.supportedcode.SupportedCodeActivity"
+            android:label="@string/supported_codes"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.tipsscanning.TipsScanningActivity"
+            android:label="@string/tips_for_scanning"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.intro.IntroActivity"
+            android:exported="false"
+            android:label="@string/guides">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
         <activity
             android:name=".ui.backup.BackupActivity"
@@ -62,7 +78,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="unspecified"/>
+            android:screenOrientation="unspecified" />
         <activity
             android:name=".ui.review.ReviewActivity"
             android:exported="true"
@@ -108,7 +124,7 @@
 
         <activity
             android:name=".ui.help.HelpActivity"
-            android:label="@string/help" />
+            android:label="@string/help_feedback" />
         <activity
             android:name=".ui.filecolor.ChangeFileColorActivity"
             android:label="@string/color_code" /> <!-- <activity android:name=".ui.pro.ProVersionActivity" /> -->

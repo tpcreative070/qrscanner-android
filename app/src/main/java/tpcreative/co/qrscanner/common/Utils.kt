@@ -202,6 +202,14 @@ object Utils {
         return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_count_rating), 0)
     }
 
+    fun onIntro(intro: Boolean) {
+        PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_intro), intro)
+    }
+
+    fun onIsIntro(): Boolean {
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_intro), false)
+    }
+
     fun getCodeContentByHistory(item: HistoryModel?): String? {
         /*Product id must be plus barcode format type*/
         var code : String? = ""

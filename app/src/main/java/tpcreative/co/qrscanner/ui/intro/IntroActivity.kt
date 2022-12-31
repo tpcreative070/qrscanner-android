@@ -1,32 +1,29 @@
-package tpcreative.co.qrscanner.ui.guides
+package tpcreative.co.qrscanner.ui.intro
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Navigator
+import tpcreative.co.qrscanner.common.Utils
 
-class GuidesActivity  : AppIntro2() {
+class IntroActivity  : AppIntro2() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        addSlide(AppIntroCustomLayoutFragment.newInstance(R.layout.activity_guides_1))
-        addSlide(AppIntroCustomLayoutFragment.newInstance(R.layout.activity_guides_2))
-
-//        showStatusBar(false)
-//        setStatusBarColorRes(R.color.colorPrimary)
-//        setNavBarColorRes(R.color.colorPrimary)
-//        setProgressIndicator()
-//        setTransformer(AppIntroPageTransformerType.Parallax())
+        addSlide(AppIntroCustomLayoutFragment.newInstance(R.layout.activity_intro_1))
+        addSlide(AppIntroCustomLayoutFragment.newInstance(R.layout.activity_intro_2))
+        Utils.onIntro(true)
     }
 
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
         // Decide what to do when the user clicks on "Skip"
-        finish()
+        Navigator.onMoveMainTab(this)
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
         // Decide what to do when the user clicks on "Done"
-        finish()
+        Navigator.onMoveMainTab(this)
     }
 }

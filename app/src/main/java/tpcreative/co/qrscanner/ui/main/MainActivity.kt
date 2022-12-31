@@ -10,9 +10,9 @@ import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.tasks.Task
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.tasks.Task
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -204,8 +204,8 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             if (task?.isSuccessful == true) {
                 // We can get the ReviewInfo object
                 val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener { tasks: Task<Void?>? -> }
+                val flow = reviewInfo?.let { manager.launchReviewFlow(this, it) }
+                flow?.addOnCompleteListener { tasks: Task<Void?>? -> }
             }
         }
     }

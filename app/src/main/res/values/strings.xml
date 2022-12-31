@@ -126,6 +126,7 @@
     <string name="key_app_permissions">key_app_permissions</string>
     <string name="key_frame_rect_portrait">key_frame_rect_portrait</string>
     <string name="key_frame_rect_landscape">key_frame_rect_landscape</string>
+    <string name="key_intro">key_intro</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -466,4 +467,9 @@
     <string name="guides">Guides</string>
     <string name="scan_qr_code_and_barcode">Scan QR Code and Barcodes</string>
     <string name="avoid_scan">Read the apps help to avoid common mistakes when scanning barcodes.</string>
+    <string name="supported_codes">Supported codes</string>
+    <string name="tips_for_scanning">Tips for scanning</string>
+    <string name="help_feedback">Help &amp; Feedback</string>
+    <string name="guides_video">Guides video with the tips for scanning</string>
+    <string name="send_us_an_email">Send us an email</string>
 </resources>

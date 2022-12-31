@@ -1610,3 +1610,52 @@ fun Utils.alert(context: Context,mTitle : String?= null, mMessage: String, callb
     }
 }
 
+fun Utils.onFormatBarcodeDisplay(barcodeFormat: BarcodeFormat) : String{
+    when(barcodeFormat){
+        BarcodeFormat.QR_CODE ->{
+            return "QR"
+        }
+        BarcodeFormat.EAN_13 ->{
+            return "EAN-13"
+        }
+        BarcodeFormat.EAN_8 ->{
+            return "EAN-8"
+        }
+        BarcodeFormat.ITF ->{
+            return "ITF"
+        }
+        BarcodeFormat.UPC_A ->{
+            return "UPC-A"
+        }
+        BarcodeFormat.UPC_E ->{
+            return "UPC-E"
+        }
+        BarcodeFormat.CODABAR ->{
+            return "Codabar"
+        }
+        BarcodeFormat.CODE_39 ->{
+            return "CODE-39"
+        }
+        BarcodeFormat.CODE_93 ->{
+            return "CODE-93"
+        }
+        BarcodeFormat.CODE_128 ->{
+            return "CODE-122"
+        }
+        BarcodeFormat.RSS_14 ->{
+            return "RSS-14"
+        }
+        BarcodeFormat.AZTEC ->{
+            return "AZTEC"
+        }
+        BarcodeFormat.DATA_MATRIX ->{
+            return "Data Matrix"
+        }
+        BarcodeFormat.PDF_417 ->{
+            return "PDF-417"
+        }
+        else -> {}
+    }
+    return  ""
+}
+

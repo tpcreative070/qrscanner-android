@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_chage_file_color.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
-import tpcreative.co.qrscanner.viewmodel.ChangeFileColorViewModel
 
 fun ChangeFileColorActivity.initUI(){
     setupViewModel()

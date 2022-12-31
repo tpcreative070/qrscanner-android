@@ -281,9 +281,13 @@ public class CameraInstance {
 
     public void setZoom(int value){
         if (cameraManager!=null && isCheckReadyCamera()){
-            Camera.Parameters parameters = cameraManager.getCamera().getParameters();
-            parameters.setZoom(value);
-            cameraManager.getCamera().setParameters(parameters);
+            try {
+                Camera.Parameters parameters = cameraManager.getCamera().getParameters();
+                parameters.setZoom(value);
+                cameraManager.getCamera().setParameters(parameters);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

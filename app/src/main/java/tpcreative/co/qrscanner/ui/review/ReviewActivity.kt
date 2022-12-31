@@ -193,13 +193,24 @@ class ReviewActivity : BaseActivitySlide() {
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
                 val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
                     hints[EncodeHintType.MARGIN] = 5
+                    var mFormatCode = BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
+                    if(mFormatCode == BarcodeFormat.RSS_14){
+                        mFormatCode = BarcodeFormat.CODABAR
+                    }
+                    var mWidth = Constant.QRCodeViewWidth + 100
+                    var mHeight = Constant.QRCodeViewHeight - 100
+                    if (mFormatCode== BarcodeFormat.AZTEC || mFormatCode == BarcodeFormat.DATA_MATRIX){
+                        mWidth = Constant.QRCodeViewWidth
+                        mHeight = Constant.QRCodeViewHeight
+                        hints[EncodeHintType.MARGIN] = 2
+                    }
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
-                        Constant.QRCodeViewWidth + 100,
-                        Constant.QRCodeViewHeight - 100,
+                        mFormatCode,
+                        mWidth,
+                        mHeight,
                         hints
                     )
                 } else {
@@ -231,13 +242,24 @@ class ReviewActivity : BaseActivitySlide() {
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
                 bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))  {
                     hints[EncodeHintType.MARGIN] = 15
+                    var mFormatCode =  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
+                    if(mFormatCode == BarcodeFormat.RSS_14){
+                        mFormatCode = BarcodeFormat.CODABAR
+                    }
+                    var mWidth = Constant.QRCodeExportWidth + 150
+                    var mHeight = Constant.QRCodeExportHeight - 200
+                    if (mFormatCode== BarcodeFormat.AZTEC || mFormatCode == BarcodeFormat.DATA_MATRIX){
+                        mWidth = Constant.QRCodeViewWidth
+                        mHeight = Constant.QRCodeViewHeight
+                        hints[EncodeHintType.MARGIN] = 2
+                    }
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
-                        Constant.QRCodeExportWidth + 150,
-                        Constant.QRCodeExportHeight - 200,
+                        mFormatCode,
+                        mWidth,
+                        mHeight,
                         hints
                     )
                 } else {

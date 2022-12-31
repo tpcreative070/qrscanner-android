@@ -20,6 +20,8 @@ class Constant {
         const val QRCodeExportHeight = 800
         const val QRCodeViewWidth = 250
         const val QRCodeViewHeight = 250
+        const val QRCodeThumbnailWidth = 120
+        const val QRCodeThumbnailHeight = 120
         const val images_folder = "images"
         const val files_folder = "files"
     }

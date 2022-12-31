@@ -1,6 +1,9 @@
 package tpcreative.co.qrscanner.ui.splashscreen
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -10,18 +13,23 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivity
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
+
 
 class SplashScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
-        Navigator.onGuides(this)
-//        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
-//            == PackageManager.PERMISSION_DENIED) {
-//            onAddPermissionCamera()
-//        } else {
-//            Navigator.onMoveMainTab(this@SplashScreenActivity)
-//        }
+        if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_DENIED) {
+            onAddPermissionCamera()
+        } else {
+            if (Utils.onIsIntro()){
+                Navigator.onMoveMainTab(this@SplashScreenActivity)
+            }else{
+                Navigator.onIntro(this)
+            }
+        }
     }
 
     private fun onAddPermissionCamera() {
@@ -37,7 +45,11 @@ class SplashScreenActivity : BaseActivity() {
                                 ScannerSingleton.getInstance()?.setVisible()
                                 PrefsController.putBoolean(getString(R.string.key_refresh), true)
                             }
-                            Navigator.onMoveMainTab(this@SplashScreenActivity)
+                            if (Utils.onIsIntro()){
+                                Navigator.onMoveMainTab(this@SplashScreenActivity)
+                            }else{
+                                Navigator.onIntro(this@SplashScreenActivity)
+                            }
                             // Do something here
                         } else {
                             finish()
