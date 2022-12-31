@@ -33,7 +33,8 @@
             android:layout_below="@+id/tvBarTitle"
             android:layout_width="@dimen/icon_size_110"
             android:scaleType="fitXY"
-            android:layout_height="@dimen/icon_size_60"/>
+            android:layout_height="@dimen/icon_size_60"
+            app:tint="@color/white" />
         <RelativeLayout
             android:layout_marginEnd="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_10"

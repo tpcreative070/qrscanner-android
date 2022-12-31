@@ -33,7 +33,7 @@
     <color name="material_default">#A5A1A1</color>
     <color name="material_hint_default">#A5A1A1</color>
     <color name="colorItem">#302F2F</color>
-    <color name="colorSupportedCode">#686767</color>
+    <color name="colorSupportedCode">#212121</color>
     <color name="colorBGSupportedCode">#000000</color>
     <color name="material_green_a700">#16713C</color>
     <color name="red_dark">#8A1B1B</color>
