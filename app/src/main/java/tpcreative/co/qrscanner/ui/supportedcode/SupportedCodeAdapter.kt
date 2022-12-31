@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.supportedcode
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.supported_qr_code_items.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.margin
 import tpcreative.co.qrscanner.common.extension.onFormatBarcodeDisplay
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.SupportedCodeModel

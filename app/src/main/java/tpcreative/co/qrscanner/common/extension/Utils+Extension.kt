@@ -11,9 +11,7 @@ import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -1663,5 +1661,14 @@ fun Utils.onFormatBarcodeDisplay(barcodeFormat: BarcodeFormat, enumAction: EnumA
         else -> {}
     }
     return  ""
+}
+
+fun Utils.calculateNoOfColumns(
+    context: Context,
+    columnWidthDp: Float
+): Int { // For example columnWidthdp=180
+    val displayMetrics = context.resources.displayMetrics
+    val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+    return (screenWidthDp / columnWidthDp + 0.5).toInt()
 }
 

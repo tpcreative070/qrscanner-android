@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_suported_code.*
+import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 
@@ -27,14 +29,9 @@ fun SupportedCodeActivity.getData(){
 
 fun SupportedCodeActivity.initRecycleView(layoutInflater: LayoutInflater) {
     adapter = SupportedCodeAdapter(layoutInflater, applicationContext, this)
-    var mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 2)
-    val orientation = resources.configuration.orientation
-    if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-        recyclerView.addItemDecoration(GridSpacingItemDecoration(2, 40, true))
-    } else {
-        mLayoutManager = GridLayoutManager(applicationContext, 4)
-        recyclerView.addItemDecoration(GridSpacingItemDecoration(4, 40, true))
-    }
+    val mNoOfColumns = Utils.calculateNoOfColumns(this,170F)
+    val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, mNoOfColumns)
+    recyclerView.addItemDecoration(GridSpacingItemDecoration(mNoOfColumns, 40, true))
     recyclerView.layoutManager = mLayoutManager
     recyclerView.itemAnimator = DefaultItemAnimator()
     recyclerView.adapter = adapter

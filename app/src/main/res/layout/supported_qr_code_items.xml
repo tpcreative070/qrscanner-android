@@ -7,7 +7,6 @@
     <RelativeLayout
         android:id="@+id/rlCode"
         android:background="@drawable/bg_button_rounded_shadow"
-        android:layout_margin="@dimen/margin_10"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,14 +24,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <ImageView
-            android:layout_marginTop="@dimen/margin_5"
-            android:layout_marginBottom="@dimen/margin_20"
-            android:id="@+id/imgCode"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/tvTitle"
-            android:layout_width="@dimen/icon_size_75"
-            android:layout_height="@dimen/icon_size_75"/>
+            <ImageView
+                android:id="@+id/imgCode"
+                android:layout_width="@dimen/icon_size_75"
+                android:layout_height="@dimen/icon_size_75"
+                android:layout_below="@+id/tvTitle"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_marginBottom="@dimen/margin_20" />
 
             <RelativeLayout
                 android:layout_marginEnd="@dimen/margin_10"
