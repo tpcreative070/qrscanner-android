@@ -49,8 +49,8 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODE_93.name, "Code 93",Utils.onBarCodeId(BarcodeFormat.CODE_93.name)))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.ITF.name, "ITF",Utils.onBarCodeId(BarcodeFormat.ITF.name)))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.CODABAR.name, "CodaBar",Utils.onBarCodeId(BarcodeFormat.CODABAR.name)))
-        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.DATA_MATRIX.name, "Data Matrix",Utils.onBarCodeId(BarcodeFormat.DATA_MATRIX.name)))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.PDF_417.name, "PDF 417",Utils.onBarCodeId(BarcodeFormat.PDF_417.name)))
+        mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.DATA_MATRIX.name, "Data Matrix",Utils.onBarCodeId(BarcodeFormat.DATA_MATRIX.name)))
         mBarcodeFormat.add(FormatTypeModel(BarcodeFormat.AZTEC.name, "Aztec",Utils.onBarCodeId(BarcodeFormat.AZTEC.name)))
         emit(mBarcodeFormat)
     }

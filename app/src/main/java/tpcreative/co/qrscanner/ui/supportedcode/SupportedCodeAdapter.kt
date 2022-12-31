@@ -19,6 +19,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.onFormatBarcodeDisplay
+import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.SupportedCodeModel
 import tpcreative.co.qrscanner.model.Theme
 import java.util.*
@@ -60,7 +61,7 @@ class SupportedCodeAdapter (inflater: LayoutInflater, private val context: Conte
 
         override fun bind(data: SupportedCodeModel, position: Int) {
             super.bind(data, position)
-            tvTitle.text = Utils.onFormatBarcodeDisplay(data.barcodeFormat)
+            tvTitle.text = Utils.onFormatBarcodeDisplay(data.barcodeFormat,data.enumAction)
             imgCodeStatus.setImageDrawable(ContextCompat.getDrawable(context,data.iconStatus))
             imgCircleCodeStatus.setImageResource(data.tintColor)
             imgCode.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
@@ -77,7 +78,7 @@ class SupportedCodeAdapter (inflater: LayoutInflater, private val context: Conte
         private val imgCircleCodeStatus: ImageView = itemView.imgCircleBarCodeStatus
         override fun bind(data: SupportedCodeModel, position: Int) {
             super.bind(data, position)
-            tvTitle.text = Utils.onFormatBarcodeDisplay(data.barcodeFormat)
+            tvTitle.text = Utils.onFormatBarcodeDisplay(data.barcodeFormat, data.enumAction)
             imgCodeStatus.setImageDrawable(ContextCompat.getDrawable(context,data.iconStatus))
             imgCircleCodeStatus.setImageResource(data.tintColor)
             imgCode.setImageDrawable(ContextCompat.getDrawable(context,data.icon))

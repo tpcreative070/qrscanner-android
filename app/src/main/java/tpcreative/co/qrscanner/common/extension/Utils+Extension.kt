@@ -1484,7 +1484,7 @@ fun Utils.onBarCodeId(format: String?) : Drawable?{
                 mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
             }
             BarcodeFormat.PDF_417->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.AZTEC->{
                 mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
@@ -1610,7 +1610,13 @@ fun Utils.alert(context: Context,mTitle : String?= null, mMessage: String, callb
     }
 }
 
-fun Utils.onFormatBarcodeDisplay(barcodeFormat: BarcodeFormat) : String{
+fun Utils.onFormatBarcodeDisplay(barcodeFormat: BarcodeFormat, enumAction: EnumAction) : String{
+    if (enumAction == EnumAction.EAN_5){
+        return "EAN-5"
+    }
+    if (enumAction == EnumAction.CODE_25){
+        return "Code 25"
+    }
     when(barcodeFormat){
         BarcodeFormat.QR_CODE ->{
             return "QR"

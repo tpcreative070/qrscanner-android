@@ -44,8 +44,6 @@
             android:layout_height="@dimen/icon_size_40">
             <tpcreative.co.qrscanner.common.view.CircleImageView
                 android:layout_centerInParent="true"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="1dp"
                 android:id="@+id/imgCircleBarCodeStatus"
                 android:layout_width="@dimen/icon_size_40"
                 android:layout_height="@dimen/icon_size_40"/>

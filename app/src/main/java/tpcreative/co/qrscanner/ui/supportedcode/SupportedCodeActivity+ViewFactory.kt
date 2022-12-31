@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.supportedcode
 
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,9 +27,15 @@ fun SupportedCodeActivity.getData(){
 
 fun SupportedCodeActivity.initRecycleView(layoutInflater: LayoutInflater) {
     adapter = SupportedCodeAdapter(layoutInflater, applicationContext, this)
-    val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 2)
+    var mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 2)
+    val orientation = resources.configuration.orientation
+    if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(2, 40, true))
+    } else {
+        mLayoutManager = GridLayoutManager(applicationContext, 4)
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(4, 40, true))
+    }
     recyclerView.layoutManager = mLayoutManager
-    recyclerView.addItemDecoration(GridSpacingItemDecoration(2, 40, true))
     recyclerView.itemAnimator = DefaultItemAnimator()
     recyclerView.adapter = adapter
 }

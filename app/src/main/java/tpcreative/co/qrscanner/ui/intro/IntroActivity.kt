@@ -19,11 +19,13 @@ class IntroActivity  : AppIntro2() {
         super.onSkipPressed(currentFragment)
         // Decide what to do when the user clicks on "Skip"
         Navigator.onMoveMainTab(this)
+        finish()
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
         // Decide what to do when the user clicks on "Done"
         Navigator.onMoveMainTab(this)
+        finish()
     }
 }

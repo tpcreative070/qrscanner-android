@@ -28,6 +28,7 @@ class SplashScreenActivity : BaseActivity() {
                 Navigator.onMoveMainTab(this@SplashScreenActivity)
             }else{
                 Navigator.onIntro(this)
+                finish()
             }
         }
     }
@@ -49,6 +50,7 @@ class SplashScreenActivity : BaseActivity() {
                                 Navigator.onMoveMainTab(this@SplashScreenActivity)
                             }else{
                                 Navigator.onIntro(this@SplashScreenActivity)
+                                finish()
                             }
                             // Do something here
                         } else {
