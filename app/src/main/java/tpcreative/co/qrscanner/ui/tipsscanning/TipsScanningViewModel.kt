@@ -44,14 +44,14 @@ class TipsScanningViewModel : BaseViewModel<EmptyModel>() {
                 EnumAction.SHADOW,
                 R.drawable.ic_ean_8_show_number,
                 R.drawable.baseline_check_white_48,
-                R.color.material_green_a700)
+                R.color.red_dark)
         )
         mList.add(
             TipsScanningModel(
                 EnumAction.TOO_CLOSE_BLURRY,
                 R.drawable.ic_ean_8_show_number,
                 R.drawable.baseline_check_white_48,
-                R.color.material_green_a700)
+                R.color.red_dark)
         )
         mList.add(
             TipsScanningModel(
@@ -66,7 +66,7 @@ class TipsScanningViewModel : BaseViewModel<EmptyModel>() {
                 EnumAction.LOW_CONTRAST,
                 R.drawable.ic_ean_8_show_number,
                 R.drawable.baseline_check_white_48,
-                R.color.material_green_a700)
+                R.color.red_dark)
         )
         emit(mList)
     }

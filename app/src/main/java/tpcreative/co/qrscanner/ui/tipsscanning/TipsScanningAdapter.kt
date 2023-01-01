@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.tips_scanning_items.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.onFormatBarcodeDisplay
+import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.TipsScanningModel
 
 class TipsScanningAdapter (inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?) : BaseAdapter<TipsScanningModel, BaseHolder<TipsScanningModel>>(inflater) {
@@ -37,6 +38,18 @@ class TipsScanningAdapter (inflater: LayoutInflater, private val context: Contex
         override fun bind(data: TipsScanningModel, position: Int) {
             super.bind(data, position)
             tvTitle.text = Utils.onFormatBarcodeDisplay(data.enumAction)
+            when(data.enumAction){
+                EnumAction.DEGREE_0 ->{
+                    imgCode.rotation = 0F
+                }
+                EnumAction.DEGREE_90 ->{
+                    imgCode.rotation = 90F
+                }
+                EnumAction.DEGREE_270 ->{
+                    imgCode.rotation = 270F
+                }
+                else -> {}
+            }
             imgCodeStatus.setImageDrawable(ContextCompat.getDrawable(context,data.iconStatus))
             imgCircleCodeStatus.setImageResource(data.tintColor)
             imgCode.setImageDrawable(ContextCompat.getDrawable(context,data.icon))

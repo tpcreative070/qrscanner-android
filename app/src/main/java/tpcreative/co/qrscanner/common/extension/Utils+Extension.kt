@@ -1672,6 +1672,9 @@ fun Utils.onFormatBarcodeDisplay(enumAction: EnumAction) : String{
         EnumAction.DEGREE_90 ->{
             R.string.orientation_90.toText()
         }
+        EnumAction.DEGREE_270 ->{
+            R.string.orientation_270.toText()
+        }
         EnumAction.OTHER_ORIENTATION ->{
             R.string.other_orientation.toText()
         }
