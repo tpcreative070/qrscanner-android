@@ -704,7 +704,7 @@
     <color name="multiple_image_select_buttonText">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="color_icon_hint">#4E4B4B</color>
-    <color name="color_item">#E4E0E0</color>
+    <color name="color_item">#ECEFF1</color>
     <color name="color_supported_code">#FFFFFF</color>
     <color name="color_bg_supported_code">#EEEEEE</color>
     <color name="color_bg_tips_scanning">#000000</color>

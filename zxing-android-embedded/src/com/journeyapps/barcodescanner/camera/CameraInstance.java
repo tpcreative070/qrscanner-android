@@ -298,13 +298,18 @@ public class CameraInstance {
 
     //Try to release version first after that must solve this project for crack app
     public boolean isCheckReadyCamera(){
-        if (cameraManager == null){
+        try {
+            if (cameraManager == null){
+                return false;
+            }
+            if (cameraManager.getCamera()==null){
+                return false;
+            }
+            return cameraManager.getCamera().getParameters() != null;
+        }catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-        if (cameraManager.getCamera()==null){
-            return false;
-        }
-        return cameraManager.getCamera().getParameters() != null;
     }
 
     /**

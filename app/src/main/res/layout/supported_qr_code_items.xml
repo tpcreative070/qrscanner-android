@@ -30,13 +30,13 @@
                 android:layout_height="@dimen/icon_size_75"
                 android:layout_below="@+id/tvTitle"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/margin_5"
-                android:layout_marginBottom="@dimen/margin_20" />
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_25" />
 
             <RelativeLayout
                 android:layout_marginEnd="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
-                android:layout_marginTop="@dimen/margin_80"
+                android:layout_marginTop="@dimen/margin_90"
                 android:layout_alignParentEnd="true"
                 android:layout_width="@dimen/icon_size_40"
                 android:layout_height="@dimen/icon_size_40">

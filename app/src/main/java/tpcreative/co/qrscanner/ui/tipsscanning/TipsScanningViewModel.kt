@@ -21,21 +21,21 @@ class TipsScanningViewModel : BaseViewModel<EmptyModel>() {
         mList.add(
             TipsScanningModel(
                 EnumAction.DEGREE_90,
-                R.drawable.ic_ean_8_show_number,
+                R.drawable.ic_ean_8_show_number_90_degree,
                 R.drawable.baseline_check_white_48,
                 R.color.material_green_a700)
         )
         mList.add(
             TipsScanningModel(
                 EnumAction.DEGREE_270,
-                R.drawable.ic_ean_8_show_number,
+                R.drawable.ic_ean_8_show_number_270_degree,
                 R.drawable.baseline_check_white_48,
                 R.color.material_green_a700)
         )
         mList.add(
             TipsScanningModel(
                 EnumAction.OTHER_ORIENTATION,
-                R.drawable.ic_ean_8_show_number,
+                R.drawable.ic_ean_8_show_number_90_degree,
                 R.drawable.ic_close,
                 R.color.red_dark)
         )

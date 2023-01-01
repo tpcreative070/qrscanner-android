@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/rlBarcode"
+        android:id="@+id/rlPortraitCode"
         android:background="@drawable/bg_button_rounded_shadow"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
@@ -21,36 +21,36 @@
             android:layout_marginTop="@dimen/margin_10"
             android:layout_marginStart="@dimen/margin_10"
             android:layout_marginEnd="@dimen/margin_10"
-            android:id="@+id/tvBarTitle"
+            android:id="@+id/tvPortraitTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <ImageView
             android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginBottom="@dimen/margin_40"
-            android:id="@+id/imgBarCode"
+            android:layout_marginBottom="@dimen/margin_15"
+            android:id="@+id/imgPortraitCode"
             android:layout_centerInParent="true"
-            android:layout_below="@+id/tvBarTitle"
-            android:layout_width="@dimen/icon_size_110"
+            android:layout_below="@+id/tvPortraitTitle"
+            android:layout_width="@dimen/icon_size_60"
             android:scaleType="fitXY"
-            android:layout_height="@dimen/icon_size_60"
+            android:layout_height="@dimen/icon_size_85"
             app:tint="@color/color_bg_tips_scanning" />
         <RelativeLayout
             android:layout_marginEnd="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_90"
+            android:layout_marginTop="@dimen/margin_80"
             android:layout_alignParentEnd="true"
             android:layout_width="@dimen/icon_size_40"
             android:layout_height="@dimen/icon_size_40">
             <tpcreative.co.qrscanner.common.view.CircleImageView
                 android:layout_centerInParent="true"
-                android:id="@+id/imgCircleBarCodeStatus"
+                android:id="@+id/imgCirclePortraitCodeStatus"
                 android:layout_width="@dimen/icon_size_40"
                 android:layout_height="@dimen/icon_size_40"/>
             <ImageView
                 android:layout_margin="@dimen/margin_10"
                 android:layout_centerInParent="true"
-                android:id="@+id/imgBarCodeStatus"
+                android:id="@+id/imgPortraitCodeStatus"
                 android:layout_width="@dimen/icon_size_20"
                 android:layout_height="@dimen/icon_size_20"
                 app:tint="@color/white" />
