@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class SimpleRecyclerView extends RecyclerView
@@ -392,7 +393,7 @@ public class SimpleRecyclerView extends RecyclerView
       }
     };
     spanSizeLookup.setSpanIndexCacheEnabled(true);
-    ((GridLayoutManager) getLayoutManager()).setSpanSizeLookup(spanSizeLookup);
+    ((GridLayoutManager) Objects.requireNonNull(getLayoutManager())).setSpanSizeLookup(spanSizeLookup);
   }
 
   private void setGridSpanCount(int spanCount) {
@@ -482,7 +483,7 @@ public class SimpleRecyclerView extends RecyclerView
   }
 
   private void setLinearSpacingInternal(int spacing, boolean includeEdge) {
-    int orientation = ((LinearLayoutManager) getLayoutManager()).getOrientation();
+    int orientation = ((LinearLayoutManager) Objects.requireNonNull(getLayoutManager())).getOrientation();
     addItemDecoration(LinearSpacingItemDecoration.newBuilder().spacing(spacing).orientation(orientation).includeEdge(includeEdge).build());
   }
 
@@ -812,7 +813,7 @@ public class SimpleRecyclerView extends RecyclerView
     }
 
     SimpleLinearSmoothScroller scroller = new SimpleLinearSmoothScroller(getContext(), skipSpacing);
-    if (getLayoutManager().canScrollVertically()) {
+    if (Objects.requireNonNull(getLayoutManager()).canScrollVertically()) {
       scroller.setVerticalScrollPosition(scrollPosition);
     } else if (getLayoutManager().canScrollHorizontally()) {
       scroller.setHorizontalScrollPosition(scrollPosition);

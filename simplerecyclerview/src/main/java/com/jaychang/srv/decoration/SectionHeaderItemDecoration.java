@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jaychang.srv.SimpleRecyclerView;
 
+import java.util.Objects;
+
 @SuppressWarnings("unchecked")
 public class SectionHeaderItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -20,7 +22,7 @@ public class SectionHeaderItemDecoration extends RecyclerView.ItemDecoration {
   private boolean isClipToPadding;
   private Class clazz;
 
-  public SectionHeaderItemDecoration(Class clazz, SectionHeaderProvider provider) {
+  public SectionHeaderItemDecoration(Class<?> clazz, SectionHeaderProvider<?> provider) {
     this.clazz = clazz;
     this.provider = provider;
   }
@@ -134,7 +136,7 @@ public class SectionHeaderItemDecoration extends RecyclerView.ItemDecoration {
 
     // if android:isClipToPadding="false", first header can be scroll up till reaching top.
     if (!isClipToPadding && position == 0) {
-      top = firstHeaderTop > 0 ? firstHeaderTop : 0;
+      top = Math.max(firstHeaderTop, 0);
       bottom = top + sectionHeight;
     }
 
@@ -189,7 +191,8 @@ public class SectionHeaderItemDecoration extends RecyclerView.ItemDecoration {
       aClass = aClass.getSuperclass();
     }
 
-    return clazz.getCanonicalName().equals(aClass.getCanonicalName());
+    assert aClass != null;
+    return Objects.equals(clazz.getCanonicalName(), aClass.getCanonicalName());
   }
 
   private Object getItem(int position) {

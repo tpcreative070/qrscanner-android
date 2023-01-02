@@ -15,3 +15,44 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#-keep,allowobfuscation,allowshrinking class com.jaychang.srv.Utils
+#-keepattributes Signature
+-keep class java.lang.reflect.** { *; }
+-keep class java.lang.reflect.** {   static public public private *; }
+-keep class com.jaychang.srv.Utils { *; }
+
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-keep class kotlin.reflect.jvm.internal.** { *; }
+
+# Uncomment this to preserve the line number information for
+# debugging stack traces.
+#-keepattributes SourceFile,LineNumberTable
+
+# If you keep the line number information, uncomment this to
+# hide the original source file name.
+#-renamesourcefileattribute SourceFile
+
+# Glide
+#-keep public class * implements com.bumptech.glide.module.GlideModule
+#-keep public class * extends com.bumptech.glide.module.AppGlideModule
+
+#-keepclassmembers public final class com.jaychang.srv.Utils {
+#    public *;
+#    static public *;
+#}
+#
+#-keepclassmembers public class com.jaychang.srv.SimpleRecyclerView {
+#    public *;
+#    static public *;
+#}
+#
+#-keepclassmembers class com.jaychang.srv.* {
+#    <fields>;
+#    <init>();
+#    <methods>;
+#}
+
+#-keepclasseswithmembers class com.jaychang.srv.** {*;}
+#-keepclasseswithmembernames class com.jaychang.srv.** {*;}
