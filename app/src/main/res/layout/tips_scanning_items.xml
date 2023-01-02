@@ -35,6 +35,57 @@
             android:scaleType="fitXY"
             android:layout_height="@dimen/icon_size_60"
             app:tint="@color/color_bg_tips_scanning" />
+        <ImageView
+            app:srcCompat="@drawable/ic_shadow"
+            android:visibility="invisible"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_40"
+            android:id="@+id/imgBarcodeShadow"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/tvBarTitle"
+            android:layout_width="@dimen/icon_size_110"
+            android:scaleType="fitXY"
+            android:layout_height="@dimen/icon_size_60"/>
+        <ImageView
+            android:background="@color/material_gray_900"
+            android:alpha="0.9"
+            android:visibility="invisible"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_40"
+            android:id="@+id/imgBarcodeLedWhenDark"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/tvBarTitle"
+            android:layout_width="@dimen/icon_size_110"
+            android:scaleType="fitXY"
+            android:layout_height="@dimen/icon_size_60"/>
+        <ImageView
+            android:background="@color/white"
+            android:alpha="0.7"
+            android:visibility="invisible"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_40"
+            android:id="@+id/imgBarcodoLowContrast"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/tvBarTitle"
+            android:layout_width="@dimen/icon_size_110"
+            android:scaleType="fitXY"
+            android:layout_height="@dimen/icon_size_60"/>
+        <RelativeLayout
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_40"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/tvBarTitle"
+            android:layout_width="@dimen/icon_size_110"
+            android:layout_height="@dimen/icon_size_60">
+            <ImageView
+                app:srcCompat="@drawable/ic_tips"
+                android:visibility="invisible"
+                android:id="@+id/imgBarcodeLed"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/icon_size_30"
+                android:layout_height="@dimen/icon_size_30"/>
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_marginEnd="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_10"

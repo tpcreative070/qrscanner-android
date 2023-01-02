@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.tipsscanning
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -16,6 +17,9 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.onFormatBarcodeDisplay
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.TipsScanningModel
+import kotlin.math.max
+import kotlin.math.min
+
 const val VIEW_TYPE_PORTRAIT = 1
 const val VIEW_TYPE_LANDSCAPE = 2
 class TipsScanningAdapter (inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?) : BaseAdapter<TipsScanningModel, BaseHolder<TipsScanningModel>>(inflater) {
@@ -47,6 +51,10 @@ class TipsScanningAdapter (inflater: LayoutInflater, private val context: Contex
         private val tvTitle : AppCompatTextView = itemView.tvBarTitle
         private val imgCode: ImageView = itemView.imgBarCode
         private val imgCodeStatus : ImageView = itemView.imgBarCodeStatus
+        private val imgShadow : ImageView = itemView.imgBarcodeShadow
+        private val imgLedWhenDark : ImageView = itemView.imgBarcodeLedWhenDark
+        private val imgLed: ImageView = itemView.imgBarcodeLed
+        private val imgLowContrast : ImageView = itemView.imgBarcodoLowContrast
         private val imgCircleCodeStatus: ImageView = itemView.imgCircleBarCodeStatus
         override fun bind(data: TipsScanningModel, position: Int) {
             super.bind(data, position)
@@ -54,6 +62,23 @@ class TipsScanningAdapter (inflater: LayoutInflater, private val context: Contex
             imgCodeStatus.setImageDrawable(ContextCompat.getDrawable(context,data.iconStatus))
             imgCircleCodeStatus.setImageResource(data.tintColor)
             imgCode.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
+            when(data.enumAction){
+                EnumAction.SHADOW  ->{
+                    imgShadow.visibility = View.VISIBLE
+                }
+                EnumAction.TOO_CLOSE_BLURRY ->{
+                    imgCode.scaleX = 1.2F
+                    imgCode.scaleY = 1.2F
+                }
+                EnumAction.LED_WHEN_DARK ->{
+                    imgLedWhenDark.visibility = View.VISIBLE
+                    imgLed.visibility = View.VISIBLE
+                }
+                EnumAction.LOW_CONTRAST ->{
+                    imgLowContrast.visibility = View.VISIBLE
+                }
+                else -> {}
+            }
             itemView.rlBarcode.setOnClickListener {
                 itemSelectedListener?.onClickItem(position)
             }
