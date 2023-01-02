@@ -406,7 +406,13 @@ class SettingsFragment : BaseFragment() {
             myPreferenceFileColor?.getImageView()?.alpha = 1F
             myPreferenceFileColor?.getImageView()?.visibility = View.VISIBLE
             theme?.getPrimaryDarkColor()
-                ?.let { myPreferenceFileColor?.getImageView()?.setColorFilter(ContextCompat.getColor(requireContext(),it), PorterDuff.Mode.SRC_ATOP) }
+                ?.let {
+                    if (theme.getId() == 0 && Utils.getPositionTheme() ==1){
+                        myPreferenceFileColor?.getImageView()?.setColorFilter(ContextCompat.getColor(requireContext(),R.color.white), PorterDuff.Mode.SRC_ATOP)
+                    }else{
+                        myPreferenceFileColor?.getImageView()?.setColorFilter(ContextCompat.getColor(requireContext(),it), PorterDuff.Mode.SRC_ATOP)
+                    }
+                }
         }
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
