@@ -36,13 +36,13 @@ fun ScannerFragment.initUI(){
                 if (isTurnOnFlash) {
                     zxing_barcode_scanner.setTorchOff()
                     isTurnOnFlash = false
-                    switch_flashlight.setImageDrawable(ContextCompat.getDrawable(QRScannerApplication.getInstance(), R.drawable.baseline_flash_off_white_48))
                     switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+                    tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
                 } else {
                     zxing_barcode_scanner.setTorchOn()
                     isTurnOnFlash = true
-                    switch_flashlight.setImageDrawable(ContextCompat.getDrawable(QRScannerApplication.getInstance(), R.drawable.baseline_flash_on_white_48))
                     switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
+                    tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
                 }
             }
 
