@@ -23,6 +23,8 @@ import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.extension.getString
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -913,6 +915,23 @@ object Utils {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun onSentEmail(context: Context){
+        try {
+            val emailIntent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("mailto:care@tpcreative.me")
+                putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
+            }
+            context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
+        }catch (e: Exception){
+            e.printStackTrace()
+            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:care@tpcreative.me")
+                putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
+            }
+            context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
         }
     }
 

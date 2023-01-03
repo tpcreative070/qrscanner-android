@@ -14,6 +14,5 @@ class TipsScanningActivity : BaseActivitySlide() , TipsScanningAdapter.ItemSelec
     }
 
     override fun onClickItem(position: Int) {
-
     }
 }

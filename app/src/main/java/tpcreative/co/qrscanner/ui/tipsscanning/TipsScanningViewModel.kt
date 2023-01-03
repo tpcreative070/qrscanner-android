@@ -49,7 +49,7 @@ class TipsScanningViewModel : BaseViewModel<EmptyModel>() {
         mList.add(
             TipsScanningModel(
                 EnumAction.TOO_CLOSE_BLURRY,
-                R.drawable.barcode_ean8_blurry,
+                R.drawable.barcode_ean8_blurry_new,
                 R.drawable.baseline_check_white_48,
                 R.color.red_dark)
         )

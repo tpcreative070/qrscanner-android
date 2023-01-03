@@ -84,6 +84,13 @@
                 android:layout_centerInParent="true"
                 android:layout_width="@dimen/icon_size_30"
                 android:layout_height="@dimen/icon_size_30"/>
+<!--            <ImageView-->
+<!--                android:visibility="invisible"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                app:srcCompat="@drawable/barcode_ean8_blurry_new"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"/>-->
         </RelativeLayout>
 
         <RelativeLayout

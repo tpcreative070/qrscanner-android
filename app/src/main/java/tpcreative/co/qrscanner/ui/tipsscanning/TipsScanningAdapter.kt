@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.tips_scanning_items.view.*
 import kotlinx.android.synthetic.main.tips_scanning_items_portrait.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.margin
 import tpcreative.co.qrscanner.common.extension.onFormatBarcodeDisplay
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.TipsScanningModel
@@ -67,8 +68,7 @@ class TipsScanningAdapter (inflater: LayoutInflater, private val context: Contex
                     imgShadow.visibility = View.VISIBLE
                 }
                 EnumAction.TOO_CLOSE_BLURRY ->{
-                    imgCode.scaleX = 1.2F
-                    imgCode.scaleY = 1.2F
+                   imgCode.scaleType = ImageView.ScaleType.CENTER_CROP
                 }
                 EnumAction.LED_WHEN_DARK ->{
                     imgLedWhenDark.visibility = View.VISIBLE

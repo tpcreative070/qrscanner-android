@@ -36,6 +36,9 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
             EnumAction.TIPS_SCANNING ->{
                 Navigator.onIntent(this,TipsScanningActivity::class.java)
             }
+            EnumAction.SEND_US_AN_EMAIL ->{
+                onAlertSendEmail()
+            }
             else -> {}
         }
     }

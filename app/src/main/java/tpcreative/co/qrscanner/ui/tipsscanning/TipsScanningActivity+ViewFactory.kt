@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.ui.tipsscanning
+import android.text.InputType
 import android.view.LayoutInflater
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider

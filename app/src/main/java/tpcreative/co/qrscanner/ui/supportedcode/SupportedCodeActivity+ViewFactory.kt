@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.ui.supportedcode
 
-import android.content.res.Configuration
 import android.view.LayoutInflater
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider

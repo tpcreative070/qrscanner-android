@@ -480,4 +480,6 @@
     <string name="too_close_blurry">Too close/blurry</string>
     <string name="led_when_dark">LED when DARK</string>
     <string name="low_contrast">Low contrast</string>
+    <string name="please_write_your_email_in_english">Please write your email in English</string>
+    <string name="attachment_photo">If possible. Please include photos of the barcodes or screenshots.</string>
 </resources>
