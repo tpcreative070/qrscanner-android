@@ -27,6 +27,7 @@
                 android:layout_height="@dimen/icon_size_70"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/brandonRegularSmallTextInputLayout"
                 android:layout_marginTop="@dimen/margin_5"
                 android:layout_marginBottom="@dimen/margin_12"
                 android:gravity="center"

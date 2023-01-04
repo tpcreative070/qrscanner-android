@@ -168,7 +168,7 @@
     <string name="summary">Phiên bản nâng cao sẽ được loại bỏ quảng cáo</string>
     <string name="query_input">Đầu vào truy vấn</string>
     <string name="done">Xong</string>
-    <string name="total">Tổng</string>
+    <string name="total">Tổng: %1$s</string>
     <string name="never_lost_files">Không bao giờ mất tập tin</string>
     <string name="trash_recovery">Phục hồi thùng rác</string>
     <string name="trash_recovery_detail">Lấy tệp tin xoá trở lại.</string>

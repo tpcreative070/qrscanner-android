@@ -81,11 +81,11 @@
                         android:layout_height="@dimen/icon_size_30"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/margin_2"
+                        android:layout_marginTop="@dimen/margin_4"
                         app:srcCompat="@drawable/ic_tips" />
                 <TextView
                     android:layout_marginTop="@dimen/margin_2"
-                    android:layout_marginBottom="@dimen/margin_2"
+                    android:layout_marginBottom="@dimen/margin_4"
                     android:id="@+id/tvLight"
                     android:textColor="@color/white"
                     android:text="@string/light"
@@ -111,12 +111,12 @@
                         android:layout_height="@dimen/icon_size_30"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/margin_2"
+                        android:layout_marginTop="@dimen/margin_4"
                         app:srcCompat="@drawable/ic_gallery" />
 
                 <TextView
                     android:layout_marginTop="@dimen/margin_2"
-                    android:layout_marginBottom="@dimen/margin_2"
+                    android:layout_marginBottom="@dimen/margin_4"
                     android:id="@+id/tvScan"
                     android:textColor="@color/white"
                     android:text="@string/scan"
@@ -136,6 +136,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:layout_marginTop="@dimen/margin_4"
                         android:id="@+id/imgCreate"
                         android:layout_width="@dimen/icon_size_30"
                         android:layout_height="@dimen/icon_size_30"
@@ -145,7 +146,7 @@
 
                 <TextView
                     android:layout_marginTop="@dimen/margin_2"
-                    android:layout_marginBottom="@dimen/margin_2"
+                    android:layout_marginBottom="@dimen/margin_4"
                     android:layout_alignParentEnd="true"
                     android:textColor="@color/white"
                     android:text="@string/help"

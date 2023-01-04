@@ -698,6 +698,21 @@ object Utils {
         return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_theme_object), 0)
     }
 
+    fun setLight(isLight : Boolean){
+        PrefsController.putBoolean(R.string.key_is_light.toText(), isLight)
+    }
+
+    fun isLight() : Boolean{
+        return PrefsController.getBoolean(R.string.key_is_light.toText(),false)
+    }
+
+    fun setCountContinueScan(count : Int){
+        PrefsController.putInt(R.string.key_count_continue_scan.toText(), count)
+    }
+
+    fun getCountContinueScan() : Int{
+        return PrefsController.getInt(R.string.key_count_continue_scan.toText(),0)
+    }
 
     fun getFramePortraitSize() : Size? {
         val mRect = getFrameRectPortrait()

@@ -11,6 +11,7 @@ class SplashScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
+        Utils.setCountContinueScan(0)
         val isRefresh = PrefsController.getBoolean(getString(R.string.key_refresh), false)
         if (!isRefresh) {
             PrefsController.putBoolean(getString(R.string.key_refresh), true)

@@ -38,6 +38,7 @@
             </RelativeLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/brandonRegularSmallTextInputLayout"
                 android:layout_marginStart="@dimen/margin_5"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/rlRight"

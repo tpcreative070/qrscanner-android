@@ -127,6 +127,8 @@
     <string name="key_frame_rect_portrait">key_frame_rect_portrait</string>
     <string name="key_frame_rect_landscape">key_frame_rect_landscape</string>
     <string name="key_intro">key_intro</string>
+    <string name="key_is_light">key_is_light</string>
+    <string name="key_count_continue_scan">key_count_continue_scan</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -296,7 +298,7 @@
     <string name="summary">The Premium version will be removed advertising</string>
     <string name="query_input">Input a query</string>
     <string name="done">Done</string>
-    <string name="total">Total</string>
+    <string name="total">Total: %1$s</string>
     <string name="never_lost_files">Never lost files</string>
     <string name="trash_recovery">Trash recovery</string>
     <string name="trash_recovery_detail">Get deleted items back.</string>

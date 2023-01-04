@@ -25,7 +25,8 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
 
     fun updateValue(mValue: Int) = liveData(Dispatchers.Main){
         mCount += mValue
-        emit(QRScannerApplication.getInstance().getString(R.string.total) + ": " + mCount)
+        Utils.setCountContinueScan(mCount)
+        emit(mCount)
     }
 
     fun doSaveItems(mCreate: GeneralModel?) {

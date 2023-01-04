@@ -29,6 +29,7 @@ import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
 import tpcreative.co.qrscanner.common.extension.isLandscape
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.extension.parcelable
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
@@ -47,8 +48,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     private var beepManager: BeepManager? = null
     private val cameraSettings: CameraSettings = CameraSettings()
     var typeCamera = 0
-    var isTurnOnFlash = false
-    var mAnim: Animation? = null
     var isRunning = false
     var mFrameRect: RectF? = null
     private var mRotation  : Int = 0
@@ -155,7 +154,15 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
         imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
         imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-        switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+        if (Utils.isLight()) {
+            zxing_barcode_scanner.setTorchOn()
+            switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
+            tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
+        } else {
+            zxing_barcode_scanner.setTorchOff()
+            switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+            tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+        }
         typeCamera = if (Utils.checkCameraBack(context)) {
             cameraSettings.requestedCameraId = Constant.CAMERA_FACING_BACK
             0

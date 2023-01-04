@@ -23,6 +23,7 @@ import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.isLandscape
 import tpcreative.co.qrscanner.common.extension.openAppSystemSettings
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
@@ -31,16 +32,16 @@ import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 fun ScannerFragment.initUI(){
     setupViewModel()
     rl_light.setOnClickListener { view ->
-        if (isTurnOnFlash) {
+        if (Utils.isLight()) {
             zxing_barcode_scanner.setTorchOff()
-            isTurnOnFlash = false
             switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
             tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            Utils.setLight(false)
         } else {
             zxing_barcode_scanner.setTorchOn()
-            isTurnOnFlash = true
             switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
             tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
+            Utils.setLight(true)
         }
     }
 
@@ -111,6 +112,16 @@ fun ScannerFragment.initUI(){
     rlGallery.setOnClickListener {
         onAddPermissionGallery()
     }
+    requestCountContinueScan()
+}
+
+private fun ScannerFragment.requestCountContinueScan(){
+    val mCount = Utils.getCountContinueScan()
+    if (mCount > 0){
+        btnDone.visibility = View.VISIBLE
+        tvCount.visibility = View.VISIBLE
+        tvCount.text = String.format(R.string.total.toText(),mCount)
+    }
 }
 
 private fun ScannerFragment.setupViewModel() {
@@ -122,7 +133,7 @@ private fun ScannerFragment.setupViewModel() {
 
 fun ScannerFragment.updateValue(mValue : Int) {
     viewModel.updateValue(mValue).observe(this, Observer {
-        tvCount.text = it
+        tvCount.text = String.format(R.string.total.toText(),it)
     })
 }
 
@@ -130,6 +141,7 @@ fun ScannerFragment.doRefreshView() {
     viewModel.doRefreshView().observe(this, Observer {
         btnDone.visibility = View.INVISIBLE
         tvCount.visibility = View.INVISIBLE
+        Utils.setCountContinueScan(0)
     })
 }
 
