@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
+import android.util.TypedValue
 import android.webkit.URLUtil
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -32,6 +33,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
+
 
 object Utils {
     val TAG = Utils::class.java.simpleName
@@ -955,6 +957,26 @@ object Utils {
             return true
         }
         return false
+    }
+
+    fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
+    }
+
+    fun spToPx(sp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            sp,
+            context.resources.displayMetrics
+        ).toInt()
+    }
+
+    fun dpToSp(dp: Float, context: Context): Int {
+        return (dpToPx(dp, context) / context.resources.displayMetrics.scaledDensity).toInt()
     }
 
     interface UtilsListener {

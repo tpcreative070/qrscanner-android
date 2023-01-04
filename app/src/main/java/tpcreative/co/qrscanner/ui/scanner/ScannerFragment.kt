@@ -19,6 +19,7 @@ import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.Size
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.*
@@ -148,7 +149,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         zxing_barcode_scanner?.barcodeView?.marginFraction = 0.2
         Utils.Log(TAG,"view ${viewCrop.left}")
         if (isLandscape()){
-            zxing_barcode_scanner?.barcodeView?.framingRectSize = Utils.getFrameLandscapeSize()
+            var mSize: Size? = Utils.getFrameLandscapeSize()
+            if (mSize==null){
+                val width: Int = (requireContext().resources?.displayMetrics?.widthPixels ?:0) - (Utils.spToPx(80F,requireContext())*2)
+                val height: Int = (requireContext().resources?.displayMetrics?.heightPixels ?:0) - (Utils.spToPx(100F,requireContext())*2)
+                mSize = Size(width,height)
+                Utils.Log(TAG,"viewCrop - with: $width height: $height")
+            }
+            zxing_barcode_scanner?.barcodeView?.framingRectSize = mSize
         }else{
             zxing_barcode_scanner?.barcodeView?.framingRectSize = Utils.getFramePortraitSize()
         }
