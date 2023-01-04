@@ -1,8 +1,7 @@
 package tpcreative.co.qrscanner.ui.scanner
+import android.Manifest
 import android.graphics.*
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
@@ -12,12 +11,18 @@ import com.isseiaoki.simplecropview.callback.LoadCallback
 import com.isseiaoki.simplecropview.callback.MoveUpCallback
 import com.journeyapps.barcodescanner.CameraPreview
 import com.journeyapps.barcodescanner.Size
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.isLandscape
+import tpcreative.co.qrscanner.common.extension.openAppSystemSettings
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
@@ -26,66 +31,32 @@ import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 fun ScannerFragment.initUI(){
     setupViewModel()
     switch_flashlight.setOnClickListener { view ->
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim?.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                if (isTurnOnFlash) {
-                    zxing_barcode_scanner.setTorchOff()
-                    isTurnOnFlash = false
-                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-                    tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
-                } else {
-                    zxing_barcode_scanner.setTorchOn()
-                    isTurnOnFlash = true
-                    switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
-                    tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
-                }
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
+        if (isTurnOnFlash) {
+            zxing_barcode_scanner.setTorchOff()
+            isTurnOnFlash = false
+            switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+            tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+        } else {
+            zxing_barcode_scanner.setTorchOn()
+            isTurnOnFlash = true
+            switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
+            tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
+        }
     }
 
     imgCreate.setOnClickListener { view ->
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim?.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
+        if (zxing_barcode_scanner != null) {
+            if (viewModel.isResume){
+                zxing_barcode_scanner.pauseAndWait()
+                viewModel.isResume = false
             }
-            override fun onAnimationEnd(animation: Animation?) {
-                if (zxing_barcode_scanner != null) {
-                    if (viewModel.isResume){
-                        zxing_barcode_scanner.pauseAndWait()
-                        viewModel.isResume = false
-                    }
-                }
-                Navigator.onMoveToHelp(context)
-            }
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
+        }
+        Navigator.onMoveToHelp(context)
         zxing_barcode_scanner.statusView.visibility = View.GONE
     }
 
     imgGallery.setOnClickListener { view ->
-        mAnim = AnimationUtils.loadAnimation(context, R.anim.anomation_click_item)
-        mAnim?.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                Utils.Log(TAG, "start")
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                onAddPermissionGallery()
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-        view.startAnimation(mAnim)
+        onAddPermissionGallery()
     }
 
     btnDone.setOnClickListener {
@@ -131,6 +102,14 @@ fun ScannerFragment.initUI(){
         if (zxing_barcode_scanner?.barcodeView?.cameraInstance!=null && zxing_barcode_scanner?.barcodeView?.cameraInstance?.isCheckReadyCamera() == true) {
             seekbarZoom.progress = 0
         }
+    }
+
+    rlPermission.setOnClickListener {
+        onAddPermissionCamera()
+    }
+
+    rlGallery.setOnClickListener {
+        onAddPermissionGallery()
     }
 }
 
@@ -249,3 +228,35 @@ val ScannerFragment.stateListener: CameraPreview.StateListener
             Utils.Log(TAG,"camera close")
         }
     }
+
+fun ScannerFragment.onAddPermissionCamera() {
+    Dexter.withContext(requireContext())
+        .withPermissions(
+            Manifest.permission.CAMERA)
+        .withListener(object : MultiplePermissionsListener {
+            override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                if (report?.areAllPermissionsGranted() == true) {
+                    zxing_barcode_scanner?.resume()
+                }
+                if (report?.isAnyPermissionPermanentlyDenied==true){
+                    requireContext().openAppSystemSettings()
+                    viewModel.isRequestSettings = true
+                }
+                checkVisit()
+            }
+            override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
+                token?.continuePermissionRequest()
+            }
+        })
+        .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
+}
+
+fun ScannerFragment.checkVisit(){
+    if (Utils.checkCameraPermission()){
+        rlPermission.visibility = View.INVISIBLE
+        rlScanner.visibility = View.VISIBLE
+    }else{
+        rlPermission.visibility = View.VISIBLE
+        rlScanner.visibility = View.INVISIBLE
+    }
+}

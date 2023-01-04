@@ -145,7 +145,6 @@ public class CameraPreview extends ViewGroup {
 
     private boolean torchOn = false;
 
-    @TargetApi(14)
     private TextureView.SurfaceTextureListener surfaceTextureListener() {
         // Cannot initialize automatically, since we may be API < 14
         return new TextureView.SurfaceTextureListener() {

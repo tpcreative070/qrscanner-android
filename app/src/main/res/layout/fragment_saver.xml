@@ -81,10 +81,10 @@
             android:visibility="invisible"
             android:id="@+id/tvNotFoundItems"
             style="@style/brandonBoldTextView"
-            android:textSize="@dimen/medium"
+            android:textSize="@dimen/medium_16"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/no_items_found"
+            android:text="@string/create_qr_codes_will_be_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </RelativeLayout>

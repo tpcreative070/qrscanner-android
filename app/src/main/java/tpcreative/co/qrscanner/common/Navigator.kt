@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.common.view.Bungee
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.backup.BackupActivity
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity
@@ -13,7 +12,6 @@ import tpcreative.co.qrscanner.ui.intro.IntroActivity
 import tpcreative.co.qrscanner.ui.help.HelpActivity
 import tpcreative.co.qrscanner.ui.main.MainActivity
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
-import tpcreative.co.qrscanner.ui.seeyousoon.SeeYouSoonActivity
 
 object Navigator {
     const val CREATE = 1000
@@ -70,14 +68,6 @@ object Navigator {
     fun onMoveMainTab(context: AppCompatActivity?) {
         val intent = Intent(context, MainActivity::class.java)
         context?.startActivity(intent)
-        Bungee.fade(context)
-        context?.finish()
-    }
-
-    fun onMoveSeeYouSoon(context: AppCompatActivity?) {
-        val intent = Intent(context, SeeYouSoonActivity::class.java)
-        context?.startActivity(intent)
-        Bungee.fade(context)
         context?.finish()
     }
 

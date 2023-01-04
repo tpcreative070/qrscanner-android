@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <RelativeLayout
+        android:id="@+id/rlScanner"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -193,5 +194,74 @@
             </RelativeLayout>
             </RelativeLayout>
         </com.journeyapps.barcodescanner.DecoratedBarcodeView>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rlPermission"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_margin="@dimen/margin_20"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:background="@color/colorPrimary"
+            android:id="@+id/rlScanPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_margin="@dimen/margin_10"
+                app:srcCompat="@drawable/ic_camera"
+                android:id="@+id/imgScanner_permission"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/icon_size_50"
+                android:layout_height="@dimen/icon_size_50"/>
+
+            <TextView
+                style="@style/brandonRegularTextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_toEndOf="@+id/imgScanner_permission"
+                android:text="@string/scan_using_the_camera"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rlGallery"
+                android:background="@color/material_gray_400"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_margin="@dimen/margin_10"
+                    android:id="@+id/imgGalleryPermission"
+                    android:layout_width="@dimen/icon_size_50"
+                    android:layout_height="@dimen/icon_size_50"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_gallery" />
+
+                <TextView
+                    style="@style/brandonRegularTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_toEndOf="@+id/imgGalleryPermission"
+                    android:text="@string/scan_gallery" />
+            </RelativeLayout>
+        </LinearLayout>
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

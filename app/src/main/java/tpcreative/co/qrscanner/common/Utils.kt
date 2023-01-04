@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
-import android.view.View
 import android.webkit.URLUtil
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -23,7 +22,6 @@ import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.controller.PrefsController
-import tpcreative.co.qrscanner.common.extension.getString
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -933,6 +931,15 @@ object Utils {
             }
             context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
         }
+    }
+
+
+    fun checkCameraPermission(): Boolean {
+       if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+        == PackageManager.PERMISSION_GRANTED){
+            return true
+        }
+        return false
     }
 
     interface UtilsListener {

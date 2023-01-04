@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.ui.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -121,7 +120,6 @@ class SettingsFragment : BaseFragment() {
         private var myPreferenceSuperSafe: MyPreference? = null
         private var myPreferenceSaveYourVoicemails: MyPreference? = null
         private var myPreferenceCategoryFamilyApps: MyPreferenceCategory? = null
-        private var bitmap: Bitmap? = null
         override fun onResume() {
             super.onResume()
             SettingsSingleton.getInstance()?.setListener(this)
@@ -244,10 +242,7 @@ class SettingsFragment : BaseFragment() {
                         }
                     } else if (preference.getKey() == getString(R.string.key_support)) {
                         try {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "care@tpcreative.me"))
-                            intent.putExtra(Intent.EXTRA_SUBJECT, "QRScanner App Support")
-                            intent.putExtra(Intent.EXTRA_TEXT, "")
-                            startActivity(intent)
+                            onAlertSendEmail()
                         } catch (e: ActivityNotFoundException) {
                             //TODO smth
                         }
@@ -279,6 +274,20 @@ class SettingsFragment : BaseFragment() {
                 }
                 true
             }
+        }
+
+        private fun onAlertSendEmail() {
+            val mMessage = getString(R.string.please_write_your_email_in_english)
+            val builder: MaterialDialog = MaterialDialog(requireContext())
+                .title(text = mMessage)
+                .message(res = R.string.attachment_photo)
+                .negativeButton(R.string.cancel)
+                .cancelable(true)
+                .cancelOnTouchOutside(false)
+                .positiveButton(R.string.ok){
+                    Utils.onSentEmail(requireContext())
+                }
+            builder.show()
         }
 
         override fun onCreate(savedInstanceState: Bundle?) {

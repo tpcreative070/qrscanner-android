@@ -35,10 +35,6 @@ fun MainActivity.initUI(){
     setupTabIcons()
     ServiceManager.getInstance().onStartService()
     Theme.getInstance()?.getList()
-    if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_DENIED) {
-        onAddPermissionCamera()
-    }
     if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView()) {
         QRScannerApplication.getInstance().requestMainView(this)
     }

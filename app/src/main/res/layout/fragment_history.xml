@@ -82,10 +82,10 @@
             android:visibility="invisible"
             android:id="@+id/tvNotFoundItems"
             style="@style/brandonBoldTextView"
-            android:textSize="@dimen/medium"
+            android:textSize="@dimen/medium_16"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/no_items_found"
+            android:text="@string/history_scans_will_be_display_here"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </RelativeLayout>

@@ -136,6 +136,13 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun work() {
         super.work()
         initUI()
+        if (!Utils.checkCameraPermission()){
+            rlScanner?.visibility = View.INVISIBLE
+            rlPermission?.visibility = View.VISIBLE
+        }else{
+            rlScanner?.visibility = View.VISIBLE
+            rlPermission?.visibility = View.INVISIBLE
+        }
         ScannerSingleton.getInstance()?.setListener(this)
         zxing_barcode_scanner?.decodeContinuous(callback)
         zxing_barcode_scanner?.statusView?.visibility = View.GONE
@@ -283,6 +290,10 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         ResponseSingleton.getInstance()?.onResumeAds()
         Utils.Log(TAG, "onStart")
         orientationEventListener?.enable()
+        if (viewModel.isRequestSettings){
+            checkVisit()
+            viewModel.isRequestSettings = false
+        }
     }
 
     override fun onDestroy() {

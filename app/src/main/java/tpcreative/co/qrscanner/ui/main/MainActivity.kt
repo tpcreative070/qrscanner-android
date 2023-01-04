@@ -112,35 +112,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
     }
 
-    fun onAddPermissionCamera() {
-        Dexter.withContext(this)
-                .withPermissions(
-                        Manifest.permission.CAMERA)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            Utils.Log(TAG, "Permission is ready")
-                            ScannerSingleton.getInstance()?.setVisible()
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                            finish()
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                            finish()
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
-    }
-
     override fun showScannerPosition() {}
     override fun showCreatePosition() {}
     override fun showAlertLatestVersion() {

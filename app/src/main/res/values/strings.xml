@@ -483,4 +483,8 @@
     <string name="please_write_your_email_in_english">Please write your email in English</string>
     <string name="attachment_photo">If possible. Please include photos of the barcodes or screenshots.</string>
     <string name="light">Light</string>
+    <string name="scan_using_the_camera">SCAN USING THE CAMERA</string>
+    <string name="scan_gallery">SCAN GALLERY</string>
+    <string name="create_qr_codes_will_be_display">Create QR Codes or Barcodes will be displayed here.</string>
+    <string name="history_scans_will_be_display_here">History scans will be displayed here.</string>
 </resources>
