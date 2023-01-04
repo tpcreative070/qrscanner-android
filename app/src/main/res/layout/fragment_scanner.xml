@@ -162,7 +162,7 @@
                 android:layout_marginStart="@dimen/margin_25"
                 android:layout_marginEnd="@dimen/margin_25"
                 android:layout_marginTop="@dimen/margin_5"
-                android:layout_marginBottom="@dimen/margin_5"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:layout_above="@+id/rlContinueScan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -196,7 +196,7 @@
 
             <RelativeLayout
                 android:id="@+id/rlContinueScan"
-                android:layout_marginBottom="@dimen/margin_45"
+                android:layout_marginBottom="@dimen/margin_35"
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/icon_size_45">

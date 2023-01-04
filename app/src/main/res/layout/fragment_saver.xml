@@ -78,6 +78,7 @@
             app:srv_showDivider="false"
             app:srv_showLastDivider="false" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_margin="@dimen/margin_20"
             android:visibility="invisible"
             android:id="@+id/tvNotFoundItems"
             style="@style/brandonBoldTextView"
