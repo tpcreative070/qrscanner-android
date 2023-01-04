@@ -708,6 +708,7 @@
     <color name="color_supported_code">#FFFFFF</color>
     <color name="color_bg_supported_code">#EEEEEE</color>
     <color name="color_bg_tips_scanning">#000000</color>
+    <color name="color_accent">#79FAA702</color>
 
 
     /*Crop image*/

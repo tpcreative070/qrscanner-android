@@ -30,7 +30,7 @@ import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 
 fun ScannerFragment.initUI(){
     setupViewModel()
-    switch_flashlight.setOnClickListener { view ->
+    rl_light.setOnClickListener { view ->
         if (isTurnOnFlash) {
             zxing_barcode_scanner.setTorchOff()
             isTurnOnFlash = false
@@ -44,7 +44,7 @@ fun ScannerFragment.initUI(){
         }
     }
 
-    imgCreate.setOnClickListener { view ->
+    rl_help.setOnClickListener { view ->
         if (zxing_barcode_scanner != null) {
             if (viewModel.isResume){
                 zxing_barcode_scanner.pauseAndWait()
@@ -55,7 +55,7 @@ fun ScannerFragment.initUI(){
         zxing_barcode_scanner.statusView.visibility = View.GONE
     }
 
-    imgGallery.setOnClickListener { view ->
+    rl_gallery.setOnClickListener { view ->
         onAddPermissionGallery()
     }
 

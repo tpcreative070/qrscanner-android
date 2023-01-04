@@ -25,8 +25,8 @@
             android:id="@+id/zxing_barcode_scanner">
             <View
                 android:id="@+id/viewCrop"
-                android:layout_marginEnd="@dimen/margin_70"
-                android:layout_marginStart="@dimen/margin_70"
+                android:layout_marginEnd="@dimen/margin_80"
+                android:layout_marginStart="@dimen/margin_80"
                 android:layout_marginTop="@dimen/margin_60"
                 android:layout_marginBottom="@dimen/margin_60"
                 android:layout_width="match_parent"
@@ -65,34 +65,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <RelativeLayout
-                    android:layout_margin="@dimen/margin_5"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginRight="@dimen/margin_5"
                     android:id="@+id/rlLeft"
                     android:layout_alignParentStart="true"
                     android:layout_width="@dimen/icon_size_70"
                     android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/switch_flashlight"
-                        android:layout_width="@dimen/icon_size_50"
-                        android:layout_height="@dimen/icon_size_50"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/margin_20"
-                        android:contentDescription="@string/todo"
-                        android:padding="@dimen/margin_10"
-                        app:srcCompat="@drawable/ic_tips" />
-
-                    <TextView
-                        android:id="@+id/tvLight"
-                        android:textColor="@color/white"
-                        android:text="@string/light"
-                        android:gravity="center"
-                        android:layout_below="@+id/switch_flashlight"
+                    <RelativeLayout
+                        android:id="@+id/rl_light"
+                        android:foreground="@drawable/item_effect"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginTop="@dimen/margin_10"
                         android:layout_width="@dimen/icon_size_70"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/switch_flashlight"
+                            android:layout_width="@dimen/icon_size_30"
+                            android:layout_height="@dimen/icon_size_30"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            app:srcCompat="@drawable/ic_tips" />
+                        <TextView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:id="@+id/tvLight"
+                            android:textColor="@color/white"
+                            android:text="@string/light"
+                            android:gravity="center"
+                            android:layout_below="@+id/switch_flashlight"
+                            android:layout_width="@dimen/icon_size_70"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
 
                     <RelativeLayout
-                        android:layout_below="@+id/switch_flashlight"
+                        android:layout_below="@+id/rl_light"
                         android:id="@+id/rlContinueScan"
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
@@ -123,51 +134,78 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_margin="@dimen/margin_5"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginRight="@dimen/margin_5"
                     android:layout_alignParentEnd="true"
                     android:id="@+id/rlRight"
                     android:layout_width="@dimen/icon_size_70"
                     android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/imgGallery"
-                        android:layout_width="@dimen/icon_size_50"
-                        android:layout_height="@dimen/icon_size_50"
+                    <RelativeLayout
+                        android:layout_marginTop="@dimen/margin_10"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/margin_20"
-                        android:contentDescription="@string/todo"
-                        android:padding="@dimen/margin_10"
-                        app:srcCompat="@drawable/ic_gallery" />
-
-                    <TextView
-                        android:id="@+id/tvScan"
-                        android:textColor="@color/white"
-                        android:text="@string/scan"
-                        android:gravity="center"
-                        android:layout_below="@+id/imgGallery"
+                        android:id="@+id/rl_gallery"
+                        android:foreground="@drawable/item_effect"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:layout_width="@dimen/icon_size_70"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/imgCreate"
-                        android:layout_width="@dimen/icon_size_50"
-                        android:layout_height="@dimen/icon_size_50"
-                        android:layout_below="@+id/tvScan"
-                        android:layout_centerInParent="true"
+
+                        <ImageView
+                            android:id="@+id/imgGallery"
+                            android:layout_width="@dimen/icon_size_30"
+                            android:layout_height="@dimen/icon_size_30"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/margin_2"
+                            app:srcCompat="@drawable/ic_gallery" />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:id="@+id/tvScan"
+                            android:textColor="@color/white"
+                            android:text="@string/scan"
+                            android:gravity="center"
+                            android:layout_below="@+id/imgGallery"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_marginTop="@dimen/margin_10"
-                        android:contentDescription="@string/todo"
-                        android:padding="@dimen/margin_10"
-                        app:srcCompat="@drawable/ic_help" />
-
-                    <TextView
+                        android:layout_below="@+id/rl_gallery"
                         android:layout_alignParentEnd="true"
-                        android:textColor="@color/white"
-                        android:text="@string/help"
-                        android:gravity="center"
-                        android:layout_below="@+id/imgCreate"
+                        android:id="@+id/rl_help"
+                        android:foreground="@drawable/item_effect"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:layout_width="@dimen/icon_size_70"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imgCreate"
+                            android:layout_width="@dimen/icon_size_30"
+                            android:layout_height="@dimen/icon_size_30"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            app:srcCompat="@drawable/ic_help" />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:layout_alignParentEnd="true"
+                            android:textColor="@color/white"
+                            android:text="@string/help"
+                            android:gravity="center"
+                            android:layout_below="@+id/imgCreate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
                 </RelativeLayout>
                 <!-- Seekbar -->
                 <RelativeLayout

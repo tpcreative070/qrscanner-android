@@ -76,9 +76,10 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-    fun onIntro(context: Context?){
+    fun onIntro(context: Activity?){
         val intent = Intent(context,IntroActivity::class.java)
         context?.startActivity(intent)
+        context?.finish()
     }
 
     fun <T> onIntent(context: Context?, clazz: Class<T>){
