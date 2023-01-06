@@ -81,7 +81,7 @@
                                 android:paddingBottom="@dimen/margin_2"/>
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                android:textSize="@dimen/text_size_16"
+                                android:textSize="@dimen/text_size_15"
                                 android:id="@+id/tvBarCodeFormat"
                                 android:text="@string/barcode"
                                 style="@style/brandonRegularTextView"
@@ -92,7 +92,7 @@
                                 android:textColor="@color/material_gray_600" />
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                android:textSize="@dimen/text_size_16"
+                                android:textSize="@dimen/text_size_15"
                                 android:id="@+id/tvCreatedDatetime"
                                 android:text="@string/web_09_nov_21_16"
                                 style="@style/brandonRegularTextView"
