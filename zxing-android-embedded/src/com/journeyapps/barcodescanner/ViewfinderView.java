@@ -222,71 +222,74 @@ public class ViewfinderView extends View {
         canvas.drawRect(0, frame.bottom + 1, width, height, paint);
         Log.d(TAG,"Rect result "+mResultPoint.toString());
         if (resultBitmap != null) {
-            // Draw the opaque result bitmap over the scanning rectangle
-            paint.setAlpha(CURRENT_POINT_OPACITY / 2);
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(resultPointColor);
-            int x = 0;
-            int y;
-            if (mResultPoint.size()>2){
-                 y = 2;
-                int mPoint1 = Math.round(mResultPoint.get(x).getX()) + framingRect.left;
-                int mPoint2 = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
-                if (mPoint1>mPoint2){
-                    mFRectFinalPoint.left = mPoint2;
-                    mFRectFinalPoint.right = mPoint1;
-                }else{
-                    mFRectFinalPoint.left = mPoint1;
-                    mFRectFinalPoint.right = mPoint2;
-                }
+            try {
+                // Draw the opaque result bitmap over the scanning rectangle
+                paint.setAlpha(CURRENT_POINT_OPACITY / 2);
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(resultPointColor);
+                int x = 0;
+                int y;
+                if (mResultPoint.size() > 2) {
+                    y = 2;
+                    int mPoint1 = Math.round(mResultPoint.get(x).getX()) + framingRect.left;
+                    int mPoint2 = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+                    if (mPoint1 > mPoint2) {
+                        mFRectFinalPoint.left = mPoint2;
+                        mFRectFinalPoint.right = mPoint1;
+                    } else {
+                        mFRectFinalPoint.left = mPoint1;
+                        mFRectFinalPoint.right = mPoint2;
+                    }
 
-                int mPoint3 = Math.round(mResultPoint.get(y).getY()) + framingRect.top;
-                int mPoint4 = Math.round(mResultPoint.get(x).getY()) + framingRect.top ;
-                if (mPoint3>mPoint4){
-                    mFRectFinalPoint.top = mPoint4;
-                    mFRectFinalPoint.bottom = mPoint3;
-                }else{
-                    mFRectFinalPoint.top = mPoint3;
-                    mFRectFinalPoint.bottom = mPoint4;
-                }
-            }else if(mResultPoint.size()>1 && mTransformedResultPoint.size()>1){
-                 y = 1;
-                int mPoint1 = Math.round(mResultPoint.get(x).getX()) + framingRect.left;
-                int mPoint2 = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
-                if (mPoint1>mPoint2){
-                    mFRectFinalPoint.left = mPoint2;
-                    mFRectFinalPoint.right = mPoint1;
-                }else{
-                    mFRectFinalPoint.left = mPoint1;
-                    mFRectFinalPoint.right = mPoint2;
-                }
+                    int mPoint3 = Math.round(mResultPoint.get(y).getY()) + framingRect.top;
+                    int mPoint4 = Math.round(mResultPoint.get(x).getY()) + framingRect.top;
+                    if (mPoint3 > mPoint4) {
+                        mFRectFinalPoint.top = mPoint4;
+                        mFRectFinalPoint.bottom = mPoint3;
+                    } else {
+                        mFRectFinalPoint.top = mPoint3;
+                        mFRectFinalPoint.bottom = mPoint4;
+                    }
+                } else if (mResultPoint.size() > 1 && mTransformedResultPoint.size() > 1) {
+                    y = 1;
+                    int mPoint1 = Math.round(mResultPoint.get(x).getX()) + framingRect.left;
+                    int mPoint2 = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+                    if (mPoint1 > mPoint2) {
+                        mFRectFinalPoint.left = mPoint2;
+                        mFRectFinalPoint.right = mPoint1;
+                    } else {
+                        mFRectFinalPoint.left = mPoint1;
+                        mFRectFinalPoint.right = mPoint2;
+                    }
 
-                int mPoint4 = Math.round(mTransformedResultPoint.get(y).getY());
-                int mWidthMap = (mFRectFinalPoint.right - mFRectFinalPoint.left)/2;
-                int mPointBottomFinal = mPoint4 - mWidthMap ;
-                int mPointTopFinal = mPointBottomFinal -  framingRect.top;
-                int mPoint3 =  mPointTopFinal + framingRect.top;
+                    int mPoint4 = Math.round(mTransformedResultPoint.get(y).getY());
+                    int mWidthMap = (mFRectFinalPoint.right - mFRectFinalPoint.left) / 2;
+                    int mPointBottomFinal = mPoint4 - mWidthMap;
+                    int mPointTopFinal = mPointBottomFinal - framingRect.top;
+                    int mPoint3 = mPointTopFinal + framingRect.top;
 
-                if (mPoint3>mPoint4){
-                    mFRectFinalPoint.top = mPoint4;
-                    mFRectFinalPoint.bottom = mPoint3;
-                }else{
-                    mFRectFinalPoint.top = mPoint3;
-                    mFRectFinalPoint.bottom = mPoint4;
+                    if (mPoint3 > mPoint4) {
+                        mFRectFinalPoint.top = mPoint4;
+                        mFRectFinalPoint.bottom = mPoint3;
+                    } else {
+                        mFRectFinalPoint.top = mPoint3;
+                        mFRectFinalPoint.bottom = mPoint4;
+                    }
+                } else {
+                    return;
                 }
-            }else{
-                return;
-            }
-            Log.d(TAG,"mResultPoint rect "+framingRect);
-            Log.d(TAG,"mResultPoint "+mResultPoint);
-            Log.d(TAG,"mResultPoint final "+mFRectFinalPoint);
-            if (realtimeRotation !=0 && android.provider.Settings.System.getInt(getContext().getContentResolver(),
-                    Settings.System.ACCELEROMETER_ROTATION, 0) == 0){
-                canvas.rotate(realtimeRotation,mFRectFinalPoint.centerX(),mFRectFinalPoint.centerY());
-                canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
-            }
-            else{
-                canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
+                Log.d(TAG, "mResultPoint rect " + framingRect);
+                Log.d(TAG, "mResultPoint " + mResultPoint);
+                Log.d(TAG, "mResultPoint final " + mFRectFinalPoint);
+                if (realtimeRotation != 0 && android.provider.Settings.System.getInt(getContext().getContentResolver(),
+                        Settings.System.ACCELEROMETER_ROTATION, 0) == 0) {
+                    canvas.rotate(realtimeRotation, mFRectFinalPoint.centerX(), mFRectFinalPoint.centerY());
+                    canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
+                } else {
+                    canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         } else {
             // If wanted, draw a red "laser scanner" line through the middle to show decoding is active
