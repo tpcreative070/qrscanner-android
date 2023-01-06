@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.save
 import android.app.Activity
+import android.app.Dialog
 import android.content.ClipData
 import android.content.Context
 import android.content.DialogInterface
@@ -41,6 +42,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     var misDeleted = false
     var isSelectedAll = false
     var actionMode: ActionMode? = null
+    var dialog : Dialog? = null
     lateinit var viewModel : SaveViewModel
     val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -129,6 +131,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         super.work()
         SaveSingleton.getInstance()?.setListener(this)
         initUI()
+        dialog = ProgressDialog.progressDialog(requireContext())
     }
 
     fun addRecyclerHeaders() {
@@ -324,6 +327,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             message(text = String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
             positiveButton(R.string.yes){
                 deleteItem()
+                dialog?.show()
             }
             negativeButton (R.string.no){
             }

@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.history
 import android.app.Activity
+import android.app.Dialog
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -38,6 +39,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     var misDeleted = false
     var isSelectedAll = false
     var actionMode: ActionMode? = null
+    var dialog : Dialog? = null
     val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
@@ -122,6 +124,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     override fun work() {
         super.work()
         initUI()
+        dialog = ProgressDialog.progressDialog(requireContext())
     }
 
     override fun isDeleted(): Boolean {
@@ -270,6 +273,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             message(text = kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
             positiveButton(R.string.yes){
                 deleteItem()
+                dialog?.show()
             }
             negativeButton (R.string.no){
             }

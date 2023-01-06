@@ -34,6 +34,7 @@ fun HistoryFragment.deleteItem(){
             actionMode?.finish()
         }
         updateView()
+        dialog?.dismiss()
     })
 }
 
