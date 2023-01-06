@@ -120,6 +120,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
                         ActivityCompat.requestPermissions(this, arrayOf<String?>(Manifest.permission.ACCESS_FINE_LOCATION), 1)
                     } else {
                         if (mMap?.isMyLocationEnabled != true) mMap?.isMyLocationEnabled = true
+                        mMap?.clear()
                         var myLocation = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                         if (myLocation == null) {
                             val criteria = Criteria()
