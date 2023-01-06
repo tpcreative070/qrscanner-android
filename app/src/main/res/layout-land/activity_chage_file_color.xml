@@ -49,21 +49,21 @@
                 <RelativeLayout
                     android:layout_weight="0.5"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
                     android:layout_height="match_parent">
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imgResult"
                         android:layout_width="@dimen/icon_size_200"
                         android:layout_height="@dimen/icon_size_200"
                         android:layout_centerInParent="true"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_weight="0.5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
                 </RelativeLayout>
             </LinearLayout>
     </RelativeLayout>
