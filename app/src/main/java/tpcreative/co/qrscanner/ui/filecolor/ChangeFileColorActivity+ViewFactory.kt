@@ -50,17 +50,10 @@ fun ChangeFileColorActivity.getData(){
 }
 
 fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
-//    adapter = ChangeFileColorAdapter(layoutInflater, applicationContext, this)
-//    val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 4)
-//    recyclerView.layoutManager = mLayoutManager
-//    recyclerView.addItemDecoration(GridSpacingItemDecoration(4, 4, true))
-//    recyclerView.itemAnimator = DefaultItemAnimator()
-//    recyclerView.adapter = adapter
-
     adapter = ChangeFileColorAdapter(layoutInflater, applicationContext, this)
     var mNoOfColumns = Utils.calculateNoOfColumns(this,100F)
     if (mNoOfColumns>=5){
-        mNoOfColumns = 5
+        mNoOfColumns = 4
     }
     val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, mNoOfColumns)
     recyclerView.addItemDecoration(GridSpacingItemDecoration(mNoOfColumns, 20, true))
