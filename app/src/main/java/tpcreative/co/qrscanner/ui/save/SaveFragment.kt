@@ -28,6 +28,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -43,6 +44,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     var isSelectedAll = false
     var actionMode: ActionMode? = null
     var dialog : Dialog? = null
+    var dialogExport : Dialog? = null
     lateinit var viewModel : SaveViewModel
     val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -131,7 +133,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         super.work()
         SaveSingleton.getInstance()?.setListener(this)
         initUI()
-        dialog = ProgressDialog.progressDialog(requireContext())
+        dialog = ProgressDialog.progressDialog(requireContext(),R.string.waiting_for_delete.toText())
+        dialogExport = ProgressDialog.progressDialog(requireContext(),R.string.waiting_for_export.toText())
     }
 
     fun addRecyclerHeaders() {
@@ -302,14 +305,17 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
                     val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file)
                     shareToSocial(uri)
                 }
+                dialogExport?.dismiss()
             }else -> {
             Utils.Log(TAG,"")
+            dialogExport?.dismiss()
         }
         }
     }
 
     fun onAddPermissionSave() {
         exportData()
+        dialogExport?.show()
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {

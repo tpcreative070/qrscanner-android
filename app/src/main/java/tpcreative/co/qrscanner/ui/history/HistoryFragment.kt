@@ -26,6 +26,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -40,6 +41,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     var isSelectedAll = false
     var actionMode: ActionMode? = null
     var dialog : Dialog? = null
+    var dialogExport : Dialog? = null
     val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
@@ -124,7 +126,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     override fun work() {
         super.work()
         initUI()
-        dialog = ProgressDialog.progressDialog(requireContext())
+        dialog = ProgressDialog.progressDialog(requireContext(),R.string.waiting_for_delete.toText())
+        dialogExport = ProgressDialog.progressDialog(requireContext(),R.string.waiting_for_export.toText())
     }
 
     override fun isDeleted(): Boolean {
@@ -252,9 +255,11 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
                     val uri: Uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file)
                     shareToSocial(uri)
                 }
+                dialogExport?.dismiss()
             }else -> {
-                Utils.Log(TAG,"")
-            }
+            Utils.Log(TAG,"")
+            dialogExport?.dismiss()
+        }
         }
     }
 

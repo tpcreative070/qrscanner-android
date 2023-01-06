@@ -69,5 +69,6 @@ private fun HistoryFragment.onActionView() {
 
 private fun HistoryFragment.onAddPermissionSave() {
     exportData()
+    dialogExport?.show()
 }
 
