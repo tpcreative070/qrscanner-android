@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.scanner
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
@@ -136,7 +137,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun work() {
         super.work()
         initUI()
-        if (!Utils.checkCameraPermission()){
+        if (!Utils.checkPermission(Manifest.permission.CAMERA)){
             rlScanner?.visibility = View.INVISIBLE
             rlPermission?.visibility = View.VISIBLE
         }else{

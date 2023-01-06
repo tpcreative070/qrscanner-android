@@ -489,4 +489,6 @@
     <string name="scan_gallery">SCAN GALLERY</string>
     <string name="create_qr_codes_will_be_display">Create QR Codes or Barcodes will be displayed here.</string>
     <string name="history_scans_will_be_display_here">History scans will be displayed here.</string>
+    <string name="scanning_using_the_camera_will_require_permission_to_access_the_camera">Scanning using the camera will require permission to access the camera.</string>
+    <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location</string>
 </resources>

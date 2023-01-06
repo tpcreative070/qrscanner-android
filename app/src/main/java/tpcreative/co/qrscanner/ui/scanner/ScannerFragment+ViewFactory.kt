@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.scanner
 import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.view.View
 import android.widget.SeekBar
@@ -7,6 +8,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.isseiaoki.simplecropview.callback.LoadCallback
 import com.isseiaoki.simplecropview.callback.MoveUpCallback
 import com.journeyapps.barcodescanner.CameraPreview
@@ -26,6 +29,7 @@ import tpcreative.co.qrscanner.common.extension.openAppSystemSettings
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 
 
@@ -105,7 +109,7 @@ fun ScannerFragment.initUI(){
         }
     }
 
-    rlPermission.setOnClickListener {
+    rlScanPermission.setOnClickListener {
         onAddPermissionCamera()
     }
 
@@ -250,9 +254,11 @@ fun ScannerFragment.onAddPermissionCamera() {
                 if (report?.areAllPermissionsGranted() == true) {
                     zxing_barcode_scanner?.resume()
                 }
-                if (report?.isAnyPermissionPermanentlyDenied==true){
-                    requireContext().openAppSystemSettings()
-                    viewModel.isRequestSettings = true
+                if (report?.isAnyPermissionPermanentlyDenied ==true && viewModel.isAnyPermissionPermanentlyDenied){
+                    onAlert()
+                }
+                if (report?.isAnyPermissionPermanentlyDenied == true){
+                    viewModel.isAnyPermissionPermanentlyDenied = true
                 }
                 checkVisit()
             }
@@ -263,8 +269,19 @@ fun ScannerFragment.onAddPermissionCamera() {
         .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
 }
 
+fun ScannerFragment.onAlert(){
+    MaterialDialog(requireContext()).show {
+       message(res = R.string.scanning_using_the_camera_will_require_permission_to_access_the_camera)
+        positiveButton(res = R.string.settings){
+            requireContext().openAppSystemSettings()
+            viewModel.isRequestSettings = true
+        }
+        negativeButton(R.string.cancel)
+    }
+}
+
 fun ScannerFragment.checkVisit(){
-    if (Utils.checkCameraPermission()){
+    if (Utils.checkPermission(Manifest.permission.CAMERA)){
         rlPermission.visibility = View.INVISIBLE
         rlScanner.visibility = View.VISIBLE
     }else{

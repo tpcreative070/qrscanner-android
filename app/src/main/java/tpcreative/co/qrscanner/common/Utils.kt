@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.net.Uri
 import android.util.TypedValue
 import android.webkit.URLUtil
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
@@ -951,15 +952,15 @@ object Utils {
     }
 
 
-    fun checkCameraPermission(): Boolean {
-       if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
+    fun checkPermission(permission:String): Boolean {
+       if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(),permission )
         == PackageManager.PERMISSION_GRANTED){
             return true
         }
         return false
     }
 
-    fun dpToPx(dp: Float, context: Context): Int {
+    private fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             dp,

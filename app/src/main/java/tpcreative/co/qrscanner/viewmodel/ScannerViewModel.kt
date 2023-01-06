@@ -21,6 +21,7 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
     var isResume : Boolean = false
     var isRequestDone : Boolean = false
     var isRequestSettings : Boolean = false
+    var isAnyPermissionPermanentlyDenied : Boolean = false
 
 
     fun updateValue(mValue: Int) = liveData(Dispatchers.Main){
