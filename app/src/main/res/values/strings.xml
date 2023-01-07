@@ -475,7 +475,7 @@
     <string name="supported_codes">Supported codes</string>
     <string name="tips_for_scanning">Tips for scanning</string>
     <string name="help_feedback">Help &amp; Feedback</string>
-    <string name="guides_video">Guides video with the tips for scanning</string>
+    <string name="guides_video">Guides video with tips for scanning</string>
     <string name="send_us_an_email">Send us an email</string>
     <string name="orientation_0">Orientation 0</string>
     <string name="orientation_90">Orientation 90</string>
@@ -493,7 +493,7 @@
     <string name="create_qr_codes_will_be_display">Create QR Codes or Barcodes will be displayed here.</string>
     <string name="history_scans_will_be_display_here">History scans will be displayed here.</string>
     <string name="scanning_using_the_camera_will_require_permission_to_access_the_camera">Scanning using the camera will require permission to access the camera.</string>
-    <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location</string>
+    <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location.</string>
     <string name="waiting_for_delete">Waiting for delete</string>
     <string name="waiting_for_export">Waiting for export</string>
 </resources>
