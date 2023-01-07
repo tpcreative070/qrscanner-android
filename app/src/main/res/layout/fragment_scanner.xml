@@ -177,11 +177,13 @@
                     app:srcCompat="@drawable/ic_baseline_zoom_out_24" />
 
                 <SeekBar
+                    android:layout_marginStart="@dimen/margin_2"
+                    android:layout_marginEnd="@dimen/margin_2"
                     android:id="@+id/seekbarZoom"
                     android:layout_toEndOf="@+id/imgZoomOut"
                     android:layout_toStartOf="@+id/imgZoomIn"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/height_30"/>
+                    android:layout_height="@dimen/height_40"/>
 
                 <ImageView
                     android:padding="@dimen/margin_1"

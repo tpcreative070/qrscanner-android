@@ -218,7 +218,7 @@
                     android:layout_marginBottom="@dimen/margin_5"
                     android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/icon_size_60">
+                    android:layout_height="@dimen/icon_size_50">
 
                     <ImageView
                         android:padding="@dimen/margin_1"
@@ -231,9 +231,11 @@
                         android:contentDescription="@string/todo" />
 
                     <SeekBar
+                        android:layout_marginStart="@dimen/margin_2"
+                        android:layout_marginEnd="@dimen/margin_2"
                         android:id="@+id/seekbarZoom"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/height_30"
+                        android:layout_height="@dimen/height_40"
                         android:layout_centerInParent="true"
                         android:layout_toStartOf="@+id/imgZoomIn"
                         android:layout_toEndOf="@+id/imgZoomOut" />
