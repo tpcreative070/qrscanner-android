@@ -138,6 +138,7 @@ fun ReviewActivity.shareToSocial() {
     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
     startActivity(Intent.createChooser(intent, "Share"))
     isRequestExportPNG = false
+    dialog?.dismiss()
 }
 
 suspend fun ReviewActivity.getImageUri(bitmap : Bitmap?) = withContext(Dispatchers.IO) {
@@ -172,6 +173,7 @@ fun ReviewActivity.onPhotoPrint() {
         photoPrinter.scaleMode = PrintHelper.SCALE_MODE_FIT
         Utils.getCurrentDate()?.let { bitmap?.let { it1 -> photoPrinter.printBitmap(it, it1) } }
         isRequestPrint = false
+        dialog?.dismiss()
     } catch (e: Exception) {
         e.printStackTrace()
     }
