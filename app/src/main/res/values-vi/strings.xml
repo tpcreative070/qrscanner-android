@@ -215,6 +215,8 @@
     <string name="auto_navigate_to_browser_detail">Định dạng URI: Tự động điều hướng đến Trình duyệt web</string>
     <string name="multiple_scan">Tiếp tục quét</string>
     <string name="multiple_scan_detail">Chỉ thêm các lần quét vào lịch sử</string>
+    <string name="scan_auto_complete">Quét tự động</string>
+    <string name="scan_auto_complete_detail">Tự động hoàn thành với quét ảnh trong thư viện</string>
     <string name="skip_duplicates">Bỏ qua trùng lặp</string>
     <string name="skip_duplicates_detail">Bỏ qua và loại bỏ các bản sao của Mã QR hoặc Mã vạch</string>
     <string name="backup_data">Sao lưu dữ liệu lên Cloud</string>

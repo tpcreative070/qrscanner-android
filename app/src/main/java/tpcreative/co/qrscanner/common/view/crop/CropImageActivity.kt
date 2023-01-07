@@ -55,6 +55,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
     private var isProgressing = false
     private var isShareIntent = false
     private var mCreate : GeneralModel? = null
+    private var isAutoComplete : Boolean = true
     public override fun onCreate(icicle: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(icicle)
@@ -84,7 +85,6 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                     }
                 })
         }
-        //onHandlerIntent()
     }
 
     private fun setupViews() {
@@ -102,10 +102,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
             finish()
         }
        btn_done.setOnClickListener {
-           if (isShareIntent){
-               onDoNavigation()
-           }
-           finish()
+           onCompleteCrop()
        }
     }
 
@@ -165,6 +162,10 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                 }
                 mCreate = create
                 tvFormatType.text = Utils.onTranslateCreateType(parsedResult.type)
+                /*Auto detect and navigation*/
+                if (isAutoComplete && Utils.isAutoComplete()){
+                    onCompleteCrop()
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -199,8 +200,24 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
                 setResultException(e)
             } finally {
                 CropUtil.closeSilently(mInputStream)
+                autoDecode()
             }
         }
+    }
+
+    private fun autoDecode(){
+        try {
+            onRenderCode(rotateBitmap?.getBitmap())
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun onCompleteCrop(){
+        if (isShareIntent){
+            onDoNavigation()
+        }
+        finish()
     }
 
     @Throws(IOException::class)
@@ -273,7 +290,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
             val height = rotateBitmap?.getHeight() ?:0
             val imageRect = Rect(0, 0, width, height)
             // Make the default size about 4/5 of the width or height
-            var cropWidth = width.coerceAtMost(height) * 4 / 5
+            var cropWidth = width.coerceAtMost(height) * 4.7 / 5
             var cropHeight = cropWidth
             if (aspectX != 0 && aspectY != 0) {
                 if (aspectX > aspectY) {
@@ -284,7 +301,9 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
             }
             val x = (width - cropWidth) / 2
             val y = (height - cropHeight) / 2
-            var cropRect = RectF(x.toFloat(), y.toFloat(), x + cropWidth.toFloat(), y + cropHeight.toFloat())
+            var cropRect = RectF(x.toFloat(), y.toFloat(), (x + cropWidth.toFloat()).toFloat(),
+                (y + cropHeight.toFloat()).toFloat()
+            )
             if (width>height){
                  //Detect is barcode
                  cropRect = RectF(1f, 1f, width.toFloat() - 1, height.toFloat() - 1)
@@ -397,12 +416,16 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
     override fun onRequestCropImage() {
         Utils.Log(TAG, "onRequestCropImage")
         handleCropping()
+        isAutoComplete = false
     }
 
     private fun handleCropping() {
+        Utils.Log(TAG,"handleCropping")
         if (cropView == null || isSaving) {
+            Utils.Log(TAG,"cropView is null")
             return
         }
+        Utils.Log(TAG,"handleCropping")
         isSaving = true
         isProgressing = true
         val croppedImage: Bitmap?
@@ -434,6 +457,7 @@ internal class CropImageActivity : MonitoredActivity(), ListenerState {
     private fun onRenderCode(bitmap: Bitmap?) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
+                Utils.Log(TAG,"onRenderCode")
                 if (bitmap == null) {
                     isSaving = false
                     isProgressing = false
