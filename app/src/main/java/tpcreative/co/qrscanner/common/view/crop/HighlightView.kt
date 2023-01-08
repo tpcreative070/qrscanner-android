@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.*
 import androidx.core.content.ContextCompat
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.extension.avoidNAN
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -318,8 +319,8 @@ internal class HighlightView(  // View displaying image
         val r = RectF((cropRect?.left ?:0F), (cropRect?.top ?:0F),
                 (cropRect?.right ?:0F), (cropRect?.bottom ?:0F))
         matrix?.mapRect(r)
-        return Rect(r.left.roundToInt(), r.top.roundToInt(),
-                r.right.roundToInt(), r.bottom.roundToInt())
+        return Rect(r.left.avoidNAN().roundToInt(), r.top.avoidNAN().roundToInt(),
+                r.right.avoidNAN().roundToInt(), r.bottom.avoidNAN().roundToInt())
     }
 
     fun invalidate() {
