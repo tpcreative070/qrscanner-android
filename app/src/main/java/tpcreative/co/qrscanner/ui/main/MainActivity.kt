@@ -53,9 +53,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         initUI()
     }
 
-    fun onVisitableFragment() {
-    }
-
     fun lock(isLock : Boolean){
         viewpager.setSwipeableDisable(isLock)
     }

@@ -412,13 +412,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
-        if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
-            Utils.Log(TAG, "isVisible")
-        } else {
-            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
-            Utils.Log(TAG, "isInVisible")
-        }
         if (zxing_barcode_scanner != null) {
             if (menuVisible) {
                 if (typeCamera != 2) {
@@ -426,6 +419,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                     if (!viewModel.isResume){
                         zxing_barcode_scanner.resume()
                         viewModel.isResume = true
+                        Utils.Log(TAG, "Request scanner resume...")
                     }
                     Utils.Log(TAG, "Fragment visit...resume...")
                 }
@@ -435,6 +429,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                         //Using pause in able to reduce lag when swipe page
                         zxing_barcode_scanner?.pause()
                         viewModel.isResume = false
+                        Utils.Log(TAG, "Request scanner pause...")
                     }
                 }
             }

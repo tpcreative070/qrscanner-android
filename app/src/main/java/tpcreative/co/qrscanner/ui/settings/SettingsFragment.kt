@@ -73,10 +73,8 @@ class SettingsFragment : BaseFragment() {
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isVisible")
         } else {
-            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
             Utils.Log(TAG, "isInVisible")
             HistorySingleton.getInstance()?.reloadData()
             SaveSingleton.getInstance()?.reloadData()

@@ -27,12 +27,6 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
-        if (menuVisible) {
-            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
-        } else {
-            QRScannerApplication.getInstance().getActivity()?.onVisitableFragment()
-            Utils.Log(TAG, "isInVisible")
-        }
     }
 
     override fun getContext(): Context? {
