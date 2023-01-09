@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.main
-import android.Manifest
 import android.content.IntentFilter
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -13,11 +12,6 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.tasks.Task
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
