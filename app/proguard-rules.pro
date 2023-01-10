@@ -49,6 +49,7 @@
 -keep class tpcreative.co.qrscanner.model.** { *; }
 -keep class tpcreative.co.qrscanner.viewmodel.** { *; }
 -keep class tpcreative.co.qrscanner.common.api.** { *; }
+-keep class co.tpcreative.flagkit.* { *; }
 
 -keepclasseswithmembers class com.jaychang.srv.** {*;}
 -keepclasseswithmembernames class com.jaychang.srv.** {*;}

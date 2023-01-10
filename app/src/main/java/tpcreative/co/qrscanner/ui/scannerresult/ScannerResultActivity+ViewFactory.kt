@@ -193,7 +193,7 @@ suspend fun ScannerResultActivity.onDecode(bitmap : Bitmap) =
                 }
             }
             if (mResult != null) {
-                val mCountryCode = mResult.resultMetadata.get(ResultMetadataType.POSSIBLE_COUNTRY)
+                val mCountryCode = mResult.resultMetadata[ResultMetadataType.POSSIBLE_COUNTRY]
                 mCountryCode?.let {
                     if (it == "US/CA"){
                         val drawable = FlagKit.getDrawable(this@onDecode, "us")
