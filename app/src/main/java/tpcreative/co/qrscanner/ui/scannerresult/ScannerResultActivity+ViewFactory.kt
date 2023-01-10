@@ -196,23 +196,23 @@ suspend fun ScannerResultActivity.onDecode(bitmap : Bitmap) =
                 val mCountryCode = mResult.resultMetadata.get(ResultMetadataType.POSSIBLE_COUNTRY)
                 mCountryCode?.let {
                     if (it == "US/CA"){
-                        var resourceId = FlagKit.getResId(this@onDecode,"US")
-                        var l = Locale("", "US")
+                        val drawable = FlagKit.getDrawable(this@onDecode, "us")
+                        val l = Locale("", "us")
 
-                        imgFlag.setImageResource(resourceId)
+                        imgFlag.setImageDrawable(drawable)
                         tvFlag.text = String.format(getString(R.string.country_display1),l.displayCountry)
 
-                        resourceId = FlagKit.getResId(this@onDecode,"CA")
-                        l = Locale("", "CA")
+                        val drawable1 = FlagKit.getDrawable(this@onDecode, "ca")
+                        val l1 = Locale("", "ca")
 
-                        imgFlag1.setImageResource(resourceId)
-                        tvFlag1.text = String.format(getString(R.string.country_display),l.displayCountry)
+                        imgFlag1.setImageDrawable(drawable1)
+                        tvFlag1.text = String.format(getString(R.string.country_display),l1.displayCountry)
                         imgFlag1.visibility = View.VISIBLE
                         tvFlag1.visibility = View.VISIBLE
                     }else{
-                        val resourceId = FlagKit.getResId(this@onDecode,it.toString())
-                        val l = Locale("", it.toString())
-                        imgFlag.setImageResource(resourceId)
+                        val drawable = FlagKit.getDrawable(this@onDecode, it.toString().lowercase())
+                        val l = Locale("", it.toString().lowercase())
+                        imgFlag.setImageDrawable(drawable)
                         tvFlag.text = String.format(getString(R.string.country_display),l.displayCountry)
                     }
                     imgFlag.visibility = View.VISIBLE
