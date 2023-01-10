@@ -80,16 +80,56 @@
                                 android:paddingTop="@dimen/margin_2"
                                 android:paddingBottom="@dimen/margin_2"/>
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:textSize="@dimen/text_size_15"
-                                android:id="@+id/tvBarCodeFormat"
-                                android:text="@string/barcode"
-                                style="@style/brandonRegularTextView"
+                            <LinearLayout
+                                android:layout_marginTop="@dimen/margin_2"
+                                android:layout_marginBottom="@dimen/margin_2"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingTop="@dimen/margin_2"
-                                android:paddingBottom="@dimen/margin_2"
-                                android:textColor="@color/material_gray_600" />
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:visibility="gone"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/bg"
+                                    android:id="@+id/imgFlag"
+                                    android:layout_width="@dimen/icon_size_15"
+                                    android:layout_height="@dimen/icon_size_15"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:visibility="gone"
+                                    android:layout_marginStart="@dimen/margin_3"
+                                    android:layout_marginEnd="@dimen/margin_3"
+                                    android:layout_gravity="center"
+                                    android:id="@+id/tvFlag"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                                <ImageView
+                                    android:visibility="gone"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/bg"
+                                    android:id="@+id/imgFlag1"
+                                    android:layout_width="@dimen/icon_size_15"
+                                    android:layout_height="@dimen/icon_size_15"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:visibility="gone"
+                                    android:layout_marginStart="@dimen/margin_3"
+                                    android:layout_marginEnd="@dimen/margin_3"
+                                    android:layout_gravity="center"
+                                    android:id="@+id/tvFlag1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_gravity="center"
+                                    android:textSize="@dimen/text_size_15"
+                                    android:id="@+id/tvBarCodeFormat"
+                                    android:text="@string/barcode"
+                                    style="@style/brandonRegularTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/material_gray_600" />
+                            </LinearLayout>
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:textSize="@dimen/text_size_15"

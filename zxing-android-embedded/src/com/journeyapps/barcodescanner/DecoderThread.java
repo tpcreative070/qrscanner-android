@@ -1,7 +1,9 @@
 package com.journeyapps.barcodescanner;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -152,22 +154,20 @@ public class DecoderThread {
         Result rawResult = null;
         sourceData.setCropRect(cropRect);
         LuminanceSource source = createSource(sourceData);
-
+        int degree = 0;
         if (source != null) {
             rawResult = decoder.decode(source);
             if (rawResult==null){
                 /*In the case block screen*/
-                Log.d(TAG,"Rotation result "+cameraInstance.getDisplayConfiguration().realtimeRotation);
-                if (cameraInstance!=null && cameraInstance.getDisplayConfiguration()!=null && +cameraInstance.getDisplayConfiguration().realtimeRotation!=0){
-                    Log.d(TAG,"Rotation result "+cameraInstance.getDisplayConfiguration().realtimeRotation);
-                    Bitmap bMap = rotateBitmap(sourceData.getBitmap(),cameraInstance.getDisplayConfiguration().realtimeRotation);
-                    int[] intArray = new int[bMap.getWidth()*bMap.getHeight()];
-                    bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
-                    LuminanceSource source_ = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
-                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source_));
-                    rawResult = decoder.decode(bitmap);
-                    bMap.recycle();
-                }
+                Log.d(TAG,"RECT result "+sourceData.getCropRect().toString());
+                degree = 90;
+                Bitmap bMap = rotateBitmap(sourceData.getBitmap(),degree);
+                int[] intArray = new int[bMap.getWidth()*bMap.getHeight()];
+                bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
+                LuminanceSource source_ = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source_));
+                rawResult = decoder.decode(bitmap);
+                bMap.recycle();
             }
         }
         if (rawResult != null) {
@@ -175,7 +175,7 @@ public class DecoderThread {
             long end = System.currentTimeMillis();
             Log.d(TAG, "Found barcode in " + (end - start) + " ms");
             if (resultHandler != null) {
-                BarcodeResult barcodeResult = new BarcodeResult(rawResult, sourceData);
+                BarcodeResult barcodeResult = new BarcodeResult(rawResult, sourceData,degree);
                 Message message = Message.obtain(resultHandler, R.id.zxing_decode_succeeded, barcodeResult);
                 Bundle bundle = new Bundle();
                 message.setData(bundle);

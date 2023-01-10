@@ -14,7 +14,6 @@ public class DisplayConfiguration {
 
     private Size viewfinderSize;
     private int rotation;
-    public int realtimeRotation = 0;
     private boolean center = false;
     private PreviewScalingStrategy previewScalingStrategy = new FitCenterStrategy();
 

@@ -28,12 +28,18 @@ public class BarcodeResult {
 
     protected Result mResult;
     protected SourceData sourceData;
+    protected int degree = 0;
 
     private final int mScaleFactor = 2;
 
-    public BarcodeResult(Result result, SourceData sourceData) {
+    public BarcodeResult(Result result, SourceData sourceData,int degree) {
         this.mResult = result;
         this.sourceData = sourceData;
+        this.degree = degree;
+    }
+
+    public int getDegree() {
+        return degree;
     }
 
     private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, int scaleFactor) {

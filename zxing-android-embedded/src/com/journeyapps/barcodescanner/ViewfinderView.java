@@ -21,12 +21,9 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -64,7 +61,8 @@ public class ViewfinderView extends View {
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
-    protected int realtimeRotation  = 0;
+    protected boolean mIsBarCode = false;
+    protected int mDegree = 0;
     protected Rect mFRectFinalPoint;
     protected List<ResultPoint> mResultPoint;
     private final List<ResultPoint>mTransformedResultPoint;
@@ -281,11 +279,11 @@ public class ViewfinderView extends View {
                 Log.d(TAG, "mResultPoint rect " + framingRect);
                 Log.d(TAG, "mResultPoint " + mResultPoint);
                 Log.d(TAG, "mResultPoint final " + mFRectFinalPoint);
-                if (realtimeRotation != 0 && android.provider.Settings.System.getInt(getContext().getContentResolver(),
-                        Settings.System.ACCELEROMETER_ROTATION, 0) == 0) {
-                    canvas.rotate(realtimeRotation, mFRectFinalPoint.centerX(), mFRectFinalPoint.centerY());
+                if (mIsBarCode){
+                    canvas.rotate(mDegree, mFRectFinalPoint.centerX() , mFRectFinalPoint.centerY());
                     canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
-                } else {
+                }
+                else {
                     canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
                 }
             }catch (Exception e){
@@ -365,9 +363,10 @@ public class ViewfinderView extends View {
      *
      * @param result An image of the result.
      */
-    public void drawResultBitmap(Bitmap result,int realtimeRotation) {
+    public void drawResultBitmap(Bitmap result,boolean isBarcode,int degree) {
         this.resultBitmap = result;
-        this.realtimeRotation = realtimeRotation;
+        this.mIsBarCode = isBarcode;
+        this.mDegree = degree;
         invalidate();
     }
 

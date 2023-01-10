@@ -118,6 +118,8 @@ dependencies {
     implementation project(':zxing-android-embedded')
     /*CropView*/
     implementation project(':simplecropview')
+    /*Flagkit*/
+    implementation project(':flagkit')
     implementation "commons-validator:commons-validator:$commonsValidator"
     /*Google admod*/
     implementation "com.google.android.gms:play-services-ads:$playServicesAds"

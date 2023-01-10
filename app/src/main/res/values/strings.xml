@@ -496,4 +496,7 @@
     <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location.</string>
     <string name="waiting_for_delete">Waiting for delete</string>
     <string name="waiting_for_export">Waiting for export</string>
+    <string name="country_display"> %1$s, </string>
+    <string name="country_display1"> %1$s / </string>
+
 </resources>
