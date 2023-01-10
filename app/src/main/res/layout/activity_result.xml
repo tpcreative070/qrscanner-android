@@ -96,8 +96,8 @@
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:visibility="gone"
-                                    android:layout_marginStart="@dimen/margin_3"
-                                    android:layout_marginEnd="@dimen/margin_3"
+                                    android:layout_marginStart="@dimen/margin_5"
+                                    android:layout_marginEnd="@dimen/margin_5"
                                     android:layout_gravity="center"
                                     android:id="@+id/tvFlag"
                                     android:layout_width="wrap_content"
@@ -113,8 +113,8 @@
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:visibility="gone"
-                                    android:layout_marginStart="@dimen/margin_3"
-                                    android:layout_marginEnd="@dimen/margin_3"
+                                    android:layout_marginStart="@dimen/margin_5"
+                                    android:layout_marginEnd="@dimen/margin_5"
                                     android:layout_gravity="center"
                                     android:id="@+id/tvFlag1"
                                     android:layout_width="wrap_content"
