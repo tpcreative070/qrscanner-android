@@ -273,29 +273,43 @@ public class CameraInstance {
     }
 
     public int maxZoom(){
-        if (cameraManager!=null){
-            return cameraManager.getCamera().getParameters().getMaxZoom();
+        try {
+            if (cameraManager!=null && cameraManager.getCamera()!=null && cameraManager.getCamera().getParameters()!=null){
+                return cameraManager.getCamera().getParameters().getMaxZoom();
+            }
+            return 30;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 30;
         }
-        return 30;
     }
 
     public void setZoom(int value){
-        if (cameraManager!=null){
-            Camera.Parameters parameters = cameraManager.getCamera().getParameters();
-            parameters.setZoom(value);
-            cameraManager.getCamera().setParameters(parameters);
+        if (cameraManager!=null && isCheckReadyCamera()){
+            try {
+                Camera.Parameters parameters = cameraManager.getCamera().getParameters();
+                parameters.setZoom(value);
+                cameraManager.getCamera().setParameters(parameters);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
     //Try to release version first after that must solve this project for crack app
     public boolean isCheckReadyCamera(){
-        if (cameraManager == null){
+        try {
+            if (cameraManager == null){
+                return false;
+            }
+            if (cameraManager.getCamera()==null){
+                return false;
+            }
+            return cameraManager.getCamera().getParameters() != null;
+        }catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-        if (cameraManager.getCamera()==null){
-            return false;
-        }
-        return cameraManager.getCamera().getParameters() != null;
     }
 
     /**

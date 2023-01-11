@@ -29,7 +29,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <RelativeLayout
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
@@ -39,108 +38,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/brandonBoldTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/scan_code_via_Camera"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/medium_x" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="20dp"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/brandonRegularTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/barcode_guide" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_margin="20dp"
-                        android:src="@drawable/scan_example" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/brandonRegularTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/barcode_2d_guide" />
-                </LinearLayout>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/brandonBoldTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/scan_code_via_Gallery"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/medium_x"/>
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/brandonRegularTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/choose_files"/>
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:paddingRight="20dp"
-                        android:paddingLeft="20dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/step_1"
-                        android:layout_width="400dp"
-                        android:layout_height="400dp" />
-                </LinearLayout>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/brandonRegularTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/choose_qrscanner_app"/>
-
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:paddingRight="20dp"
-                        android:paddingLeft="20dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/step_2"
-                        android:layout_width="400dp"
-                        android:layout_height="400dp" />
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+            android:layout_height="match_parent"/>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

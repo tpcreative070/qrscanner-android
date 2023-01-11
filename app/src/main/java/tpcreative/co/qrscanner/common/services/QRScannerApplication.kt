@@ -21,7 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.snatik.storage.Storage
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R
@@ -38,7 +37,6 @@ import java.util.*
 
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
     private var pathFolder: String? = null
-    private lateinit var storage: Storage
     private var isLive = false
     private var activity: MainActivity? = null
     private var adMainView: AdView? = null
@@ -78,9 +76,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             MobileAds.initialize(this) { }
         }
         ServiceManager.getInstance().setContext(this)
-        storage = Storage(applicationContext)
-        pathFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/QRScanner/"
-        storage.createDirectory(pathFolder)
         val firstRunning: Boolean = PrefsController.getBoolean(getString(R.string.key_not_first_running), false)
         if (!firstRunning) {
             PrefsController.putBoolean(getString(R.string.key_not_first_running), true)
@@ -184,10 +179,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun getPackageId(): String {
         return BuildConfig.APPLICATION_ID
-    }
-
-    fun getStorage(): Storage {
-        return storage
     }
 
     fun requestMainView(context: Context){

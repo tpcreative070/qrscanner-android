@@ -23,20 +23,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
+                android:foreground="@drawable/item_effect"
                 android:id="@+id/rlCSV"
-                android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@+id/rlSelect"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/icon_size_37">
                 <ImageView
+                    android:layout_marginStart="@dimen/margin_5"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
                     android:padding="@dimen/margin_1"
                     app:tint="?attr/colorAccent"
                     android:id="@+id/imgCSV"
                     app:srcCompat="@drawable/ic_export"
                     android:layout_width="@dimen/icon_size_27"
-                    android:layout_height="@dimen/icon_size_27"/>
+                    android:layout_height="@dimen/icon_size_27"
+                    android:contentDescription="@string/todo" />
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_marginStart="10dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_5"
                     android:layout_toEndOf="@+id/imgCSV"
                     android:text="@string/export"
                     android:layout_width="wrap_content"
@@ -44,18 +50,25 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:foreground="@drawable/item_effect"
                 android:id="@+id/rlSelect"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/icon_size_37">
                 <ImageView
+                    android:layout_marginStart="@dimen/margin_5"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
                     app:tint="?attr/colorAccent"
                     android:id="@+id/imgSelect"
                     app:srcCompat="@drawable/ic_select_all"
                     android:layout_width="@dimen/icon_size_27"
-                    android:layout_height="@dimen/icon_size_27"/>
+                    android:layout_height="@dimen/icon_size_27"
+                    android:contentDescription="@string/todo" />
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_marginStart="10dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="@dimen/margin_5"
+                    android:layout_marginStart="@dimen/margin_10"
                     android:layout_toEndOf="@+id/imgSelect"
                     android:text="@string/select"
                     android:layout_width="wrap_content"
@@ -70,21 +83,22 @@
             android:layout_height="match_parent"
             app:srv_dividerColor="@null"
             app:srv_dividerOrientation="both"
-            app:srv_dividerPaddingBottom="5dp"
-            app:srv_dividerPaddingLeft="5dp"
-            app:srv_dividerPaddingRight="5dp"
-            app:srv_dividerPaddingTop="5dp"
+            app:srv_dividerPaddingBottom="@dimen/margin_5"
+            app:srv_dividerPaddingLeft="@dimen/margin_5"
+            app:srv_dividerPaddingRight="@dimen/margin_5"
+            app:srv_dividerPaddingTop="@dimen/margin_5"
             app:srv_layoutMode="linearVertical"
             app:srv_showDivider="false"
             app:srv_showLastDivider="false" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_margin="@dimen/margin_15"
             android:visibility="invisible"
             android:id="@+id/tvNotFoundItems"
             style="@style/brandonBoldTextView"
-            android:textSize="@dimen/medium"
+            android:textSize="@dimen/medium_16"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/no_items_found"
+            android:text="@string/create_qr_codes_will_be_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </RelativeLayout>

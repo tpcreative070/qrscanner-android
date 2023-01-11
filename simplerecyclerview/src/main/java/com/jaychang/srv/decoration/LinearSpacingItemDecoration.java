@@ -4,6 +4,8 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Objects;
+
 public class LinearSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
   private int spacing;
@@ -25,7 +27,7 @@ public class LinearSpacingItemDecoration extends RecyclerView.ItemDecoration {
                              RecyclerView parent, RecyclerView.State state) {
     int position = parent.getChildAdapterPosition(view);
     boolean isFirstCell = position == 0;
-    boolean isLastCell = position == parent.getAdapter().getItemCount() - 1;
+    boolean isLastCell = position == Objects.requireNonNull(parent.getAdapter()).getItemCount() - 1;
 
     if (isFirstCell) {
       if (isVertical) {

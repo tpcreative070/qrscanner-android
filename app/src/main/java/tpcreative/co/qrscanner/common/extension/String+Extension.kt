@@ -1,10 +1,14 @@
 package tpcreative.co.qrscanner.common.extension
 
+import android.content.Context
+import android.view.Surface
+import android.view.WindowManager
 import com.google.gson.Gson
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
 
 fun String.stringToMap() : Map<String,String>{
     val mMap = HashMap<String,String>()

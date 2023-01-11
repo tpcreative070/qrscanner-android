@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.review
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -18,14 +19,12 @@ import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.GenerateSingleton
-import tpcreative.co.qrscanner.common.Navigator
-import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.getDisplay
 import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -45,10 +44,12 @@ class ReviewActivity : BaseActivitySlide() {
     var isRequestExportPNG : Boolean = false
     var processDrawnDone : Boolean = false
     private var save: SaveModel = SaveModel()
+    var dialog : Dialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
         initUI()
+        dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
     }
 
     fun onCatch() {
@@ -140,6 +141,7 @@ class ReviewActivity : BaseActivitySlide() {
             R.id.menu_item_png_export -> {
                 if (!isRequestExportPNG){
                     isRequestExportPNG = true
+                    dialog?.show()
                     shareToSocial()
                 }
                 return true
@@ -147,6 +149,7 @@ class ReviewActivity : BaseActivitySlide() {
             R.id.menu_item_print -> {
                 if (!isRequestPrint){
                     isRequestPrint = true
+                    dialog?.show()
                     onPhotoPrint()
                 }
                 return true
@@ -193,13 +196,24 @@ class ReviewActivity : BaseActivitySlide() {
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
                 val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
                     hints[EncodeHintType.MARGIN] = 5
+                    var mFormatCode = BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
+                    if(mFormatCode == BarcodeFormat.RSS_14){
+                        mFormatCode = BarcodeFormat.CODABAR
+                    }
+                    var mWidth = Constant.QRCodeViewWidth + 100
+                    var mHeight = Constant.QRCodeViewHeight - 100
+                    if (mFormatCode== BarcodeFormat.AZTEC || mFormatCode == BarcodeFormat.DATA_MATRIX){
+                        mWidth = Constant.QRCodeViewWidth
+                        mHeight = Constant.QRCodeViewHeight
+                        hints[EncodeHintType.MARGIN] = 2
+                    }
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
-                        Constant.QRCodeViewWidth + 100,
-                        Constant.QRCodeViewHeight - 100,
+                        mFormatCode,
+                        mWidth,
+                        mHeight,
                         hints
                     )
                 } else {
@@ -231,13 +245,24 @@ class ReviewActivity : BaseActivitySlide() {
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
                 bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))  {
                     hints[EncodeHintType.MARGIN] = 15
+                    var mFormatCode =  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
+                    if(mFormatCode == BarcodeFormat.RSS_14){
+                        mFormatCode = BarcodeFormat.CODABAR
+                    }
+                    var mWidth = Constant.QRCodeExportWidth + 150
+                    var mHeight = Constant.QRCodeExportHeight - 200
+                    if (mFormatCode== BarcodeFormat.AZTEC || mFormatCode == BarcodeFormat.DATA_MATRIX){
+                        mWidth = Constant.QRCodeViewWidth
+                        mHeight = Constant.QRCodeViewHeight
+                        hints[EncodeHintType.MARGIN] = 2
+                    }
                     barcodeEncoder.encodeBitmap(
                         this@ReviewActivity,
                         theme?.getPrimaryDarkColor() ?: 0,
                         code,
-                        BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name),
-                        Constant.QRCodeExportWidth + 150,
-                        Constant.QRCodeExportHeight - 200,
+                        mFormatCode,
+                        mWidth,
+                        mHeight,
                         hints
                     )
                 } else {

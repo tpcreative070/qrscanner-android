@@ -83,7 +83,7 @@ internal class CropImageView : ImageViewTouchBase {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> for (hv in highlightViews) {
                 val edge = hv.getHit(event.x, event.y)
-                if (edge != HighlightView.Companion.GROW_NONE) {
+                if (edge != HighlightView.GROW_NONE) {
                     motionEdge = edge
                     motionHighlightView = hv
                     lastX = event.x

@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_chage_file_color.*
+import kotlinx.android.synthetic.main.activity_chage_file_color.recyclerView
+import kotlinx.android.synthetic.main.activity_chage_file_color.toolbar
+import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
-import tpcreative.co.qrscanner.viewmodel.ChangeFileColorViewModel
 
 fun ChangeFileColorActivity.initUI(){
     setupViewModel()
@@ -49,9 +51,13 @@ fun ChangeFileColorActivity.getData(){
 
 fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
     adapter = ChangeFileColorAdapter(layoutInflater, applicationContext, this)
-    val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 4)
+    var mNoOfColumns = Utils.calculateNoOfColumns(this,100F)
+    if (mNoOfColumns>=5){
+        mNoOfColumns = 4
+    }
+    val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, mNoOfColumns)
+    recyclerView.addItemDecoration(GridSpacingItemDecoration(mNoOfColumns, 20, true))
     recyclerView.layoutManager = mLayoutManager
-    recyclerView.addItemDecoration(GridSpacingItemDecoration(4, 4, true))
     recyclerView.itemAnimator = DefaultItemAnimator()
     recyclerView.adapter = adapter
 }

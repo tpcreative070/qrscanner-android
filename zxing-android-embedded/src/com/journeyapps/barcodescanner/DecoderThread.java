@@ -1,5 +1,9 @@
 package com.journeyapps.barcodescanner;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,10 +11,13 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
+import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.PreviewCallback;
 
@@ -136,22 +143,39 @@ public class DecoderThread {
         }
     }
 
+    private Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, false);
+    }
+
     private void decode(SourceData sourceData) {
         long start = System.currentTimeMillis();
         Result rawResult = null;
         sourceData.setCropRect(cropRect);
         LuminanceSource source = createSource(sourceData);
-
+        int degree = 0;
         if (source != null) {
             rawResult = decoder.decode(source);
+            if (rawResult==null){
+                /*In the case block screen*/
+                Log.d(TAG,"RECT result "+sourceData.getCropRect().toString());
+                degree = 90;
+                Bitmap bMap = rotateBitmap(sourceData.getBitmap(),degree);
+                int[] intArray = new int[bMap.getWidth()*bMap.getHeight()];
+                bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
+                LuminanceSource source_ = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source_));
+                rawResult = decoder.decode(bitmap);
+                bMap.recycle();
+            }
         }
-
         if (rawResult != null) {
             // Don't log the barcode contents for security.
             long end = System.currentTimeMillis();
             Log.d(TAG, "Found barcode in " + (end - start) + " ms");
             if (resultHandler != null) {
-                BarcodeResult barcodeResult = new BarcodeResult(rawResult, sourceData);
+                BarcodeResult barcodeResult = new BarcodeResult(rawResult, sourceData,degree);
                 Message message = Message.obtain(resultHandler, R.id.zxing_decode_succeeded, barcodeResult);
                 Bundle bundle = new Bundle();
                 message.setData(bundle);

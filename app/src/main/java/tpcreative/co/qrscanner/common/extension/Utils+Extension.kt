@@ -11,9 +11,7 @@ import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -1484,7 +1482,7 @@ fun Utils.onBarCodeId(format: String?) : Drawable?{
                 mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
             }
             BarcodeFormat.PDF_417->{
-                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
+                mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_barcode)
             }
             BarcodeFormat.AZTEC->{
                 mDraw =  ContextCompat.getDrawable(QRScannerApplication.getInstance(),R.drawable.ic_qrcode)
@@ -1608,5 +1606,105 @@ fun Utils.alert(context: Context,mTitle : String?= null, mMessage: String, callb
             callback.invoke()
         }
     }
+}
+
+fun Utils.onFormatBarcodeDisplay(barcodeFormat: BarcodeFormat, enumAction: EnumAction) : String{
+    if (enumAction == EnumAction.EAN_5){
+        return "EAN-5"
+    }
+    if (enumAction == EnumAction.CODE_25){
+        return "Code 25"
+    }
+    when(barcodeFormat){
+        BarcodeFormat.QR_CODE ->{
+            return "QR"
+        }
+        BarcodeFormat.EAN_13 ->{
+            return "EAN-13"
+        }
+        BarcodeFormat.EAN_8 ->{
+            return "EAN-8"
+        }
+        BarcodeFormat.ITF ->{
+            return "ITF"
+        }
+        BarcodeFormat.UPC_A ->{
+            return "UPC-A"
+        }
+        BarcodeFormat.UPC_E ->{
+            return "UPC-E"
+        }
+        BarcodeFormat.CODABAR ->{
+            return "Codabar"
+        }
+        BarcodeFormat.CODE_39 ->{
+            return "CODE-39"
+        }
+        BarcodeFormat.CODE_93 ->{
+            return "CODE-93"
+        }
+        BarcodeFormat.CODE_128 ->{
+            return "CODE-122"
+        }
+        BarcodeFormat.RSS_14 ->{
+            return "RSS-14"
+        }
+        BarcodeFormat.AZTEC ->{
+            return "AZTEC"
+        }
+        BarcodeFormat.DATA_MATRIX ->{
+            return "Data Matrix"
+        }
+        BarcodeFormat.PDF_417 ->{
+            return "PDF-417"
+        }
+        else -> {}
+    }
+    return  ""
+}
+
+
+fun Utils.onFormatBarcodeDisplay(enumAction: EnumAction) : String{
+    return when(enumAction){
+        EnumAction.DEGREE_0 ->{
+            R.string.orientation_0.toText()
+        }
+        EnumAction.DEGREE_90 ->{
+            R.string.orientation_90.toText()
+        }
+        EnumAction.DEGREE_270 ->{
+            R.string.orientation_270.toText()
+        }
+        EnumAction.OTHER_ORIENTATION ->{
+            R.string.other_orientation.toText()
+        }
+        EnumAction.SHADOW ->{
+            R.string.light_or_shadow.toText()
+        }
+        EnumAction.TOO_CLOSE_BLURRY ->{
+            R.string.too_close_blurry.toText()
+        }
+        EnumAction.LED_WHEN_DARK->{
+            R.string.led_when_dark.toText()
+        }
+        EnumAction.LOW_CONTRAST->{
+            R.string.low_contrast.toText()
+        }
+        else -> {
+            ""
+        }
+    }
+}
+fun Utils.calculateNoOfColumns(
+    context: Context,
+    columnWidthDp: Float
+): Int { // For example columnWidthdp=180
+    val displayMetrics = context.resources.displayMetrics
+    val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+    return (screenWidthDp / columnWidthDp + 0.5).toInt()
+}
+
+fun Utils.getString() : Context{
+    return QRScannerApplication.getInstance()
 }
 

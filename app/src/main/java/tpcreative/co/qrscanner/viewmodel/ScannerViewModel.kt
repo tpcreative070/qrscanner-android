@@ -20,11 +20,14 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
     var history: HistoryModel? = HistoryModel()
     var isResume : Boolean = false
     var isRequestDone : Boolean = false
+    var isRequestSettings : Boolean = false
+    var isAnyPermissionPermanentlyDenied : Boolean = false
 
 
     fun updateValue(mValue: Int) = liveData(Dispatchers.Main){
         mCount += mValue
-        emit(QRScannerApplication.getInstance().getString(R.string.total) + ": " + mCount)
+        Utils.setCountContinueScan(mCount)
+        emit(mCount)
     }
 
     fun doSaveItems(mCreate: GeneralModel?) {

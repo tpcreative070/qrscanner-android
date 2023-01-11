@@ -4,6 +4,8 @@ import android.view.View;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Objects;
+
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
   private boolean includeEdge;
@@ -33,11 +35,12 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
       gridLayoutManager = (GridLayoutManager) parent.getLayoutManager();
     }
 
+    assert gridLayoutManager != null;
     int spanCount = gridLayoutManager.getSpanCount();
     int position = parent.getChildAdapterPosition(view);
     int spanSize = gridLayoutManager.getSpanSizeLookup().getSpanSize(position);
     int column = gridLayoutManager.getSpanSizeLookup().getSpanIndex(position, spanCount);
-    int totalChildCount = parent.getAdapter().getItemCount();
+    int totalChildCount = Objects.requireNonNull(parent.getAdapter()).getItemCount();
     boolean isLastRow = spanSize == 1 ?
       position + spanCount - column > totalChildCount - 1 :
       position - column / spanSize > totalChildCount - 1;

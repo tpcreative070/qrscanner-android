@@ -71,9 +71,7 @@ class CircleImageView : AppCompatImageView {
         mCircleBackgroundPaint.style = Paint.Style.FILL
         mCircleBackgroundPaint.isAntiAlias = true
         mCircleBackgroundPaint.color = mCircleBackgroundColor
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            outlineProvider = OutlineProvider()
-        }
+        outlineProvider = OutlineProvider()
     }
 
     override fun setScaleType(scaleType: ScaleType?) {
@@ -316,7 +314,7 @@ class CircleImageView : AppCompatImageView {
     }
 
     private fun updateDimensions() {
-        calculateBounds()?.let { mBorderRect.set(it) }
+        calculateBounds().let { mBorderRect.set(it) }
         mBorderRadius = ((mBorderRect.height() - mBorderWidth) / 2.0f).coerceAtMost((mBorderRect.width() - mBorderWidth) / 2.0f)
         mDrawableRect.set(mBorderRect)
         if (!mBorderOverlay && mBorderWidth > 0) {
@@ -370,7 +368,6 @@ class CircleImageView : AppCompatImageView {
         } else Math.pow((x - mBorderRect.centerX()).toDouble(), 2.0) + Math.pow((y - mBorderRect.centerY()).toDouble(), 2.0) <= Math.pow(mBorderRadius.toDouble(), 2.0)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private inner class OutlineProvider : ViewOutlineProvider() {
         override fun getOutline(view: View?, outline: Outline?) {
             if (mDisableCircularTransformation) {

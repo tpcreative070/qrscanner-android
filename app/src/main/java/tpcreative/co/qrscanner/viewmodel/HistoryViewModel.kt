@@ -115,9 +115,4 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
             emit(true)
         }
     }
-
-    fun isBarCode(type : String?) : Boolean{
-        return !type.isNullOrEmpty()
-    }
-
 }

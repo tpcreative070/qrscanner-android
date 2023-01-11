@@ -6,7 +6,6 @@ import android.net.ConnectivityManager
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
-import com.snatik.storage.Storage
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.presenter.BaseView
@@ -17,12 +16,10 @@ import java.io.File
 
 class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.ConnectivityReceiverListener {
     private val mBinder: IBinder = LocalBinder() // Binder given to clients
-    protected var mStorage: Storage? = null
     private var androidReceiver: QRScannerReceiver? = null
     override fun onCreate() {
         super.onCreate()
         Utils.Log(TAG, "onCreate")
-        mStorage = Storage(this)
         onInitReceiver()
         QRScannerApplication.getInstance().setConnectivityListener(this)
         QRScannerApplication.getInstance().setRequestClearCacheData(false)

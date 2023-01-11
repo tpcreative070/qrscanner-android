@@ -31,6 +31,7 @@ import com.jaychang.srv.SimpleAdapter;
 import com.jaychang.srv.SimpleRecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
   public static final int HORIZONTAL = LinearLayout.HORIZONTAL;
@@ -145,7 +146,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         continue;
       }
 
-      parent.getLayoutManager().getDecoratedBoundsWithMargins(child, mBounds);
+      Objects.requireNonNull(parent.getLayoutManager()).getDecoratedBoundsWithMargins(child, mBounds);
       final int right = mBounds.right;
       final int left = right - mDivider.getIntrinsicWidth();
       final int bottom = child.getBottom();
@@ -200,7 +201,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
   private boolean isLastColumn(RecyclerView parent, View view) {
     int position = parent.getChildAdapterPosition(view);
-    int totalChildCount = parent.getAdapter().getItemCount();
+    int totalChildCount = Objects.requireNonNull(parent.getAdapter()).getItemCount();
 
     boolean isLastColumn = false;
     if (isGridMode(parent)) {
@@ -217,7 +218,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
   private boolean isLastRow(RecyclerView parent, View view) {
     int position = parent.getChildAdapterPosition(view);
-    int totalChildCount = parent.getAdapter().getItemCount();
+    int totalChildCount = Objects.requireNonNull(parent.getAdapter()).getItemCount();
 
     boolean isLastRow = false;
     if (isGridMode(parent)) {
@@ -230,7 +231,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         isLastRow = position + spanCount - column > totalChildCount - 1;
       } else {
         int maxColumns = totalChildCount - position + column;
-        int columns = spanCount / spanSize > maxColumns ? maxColumns : spanCount / spanSize;
+        int columns = Math.min(spanCount / spanSize, maxColumns);
         isLastRow = position + columns - column > totalChildCount - 1;
       }
     } else if (isLinearMode(parent)) {

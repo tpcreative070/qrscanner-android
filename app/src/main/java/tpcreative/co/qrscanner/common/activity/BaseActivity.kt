@@ -6,13 +6,11 @@ import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import com.snatik.storage.Storage
 
 open class BaseActivity : AppCompatActivity() {
     var TAG : String = this::class.java.simpleName
     protected var actionBar: ActionBar? = null
     var onStartCount = 0
-    private var storage: Storage? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         actionBar = supportActionBar
@@ -20,7 +18,6 @@ open class BaseActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        storage = Storage(this)
     }
 
     override fun setContentView(@LayoutRes layoutResID: Int) {

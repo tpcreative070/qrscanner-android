@@ -21,7 +21,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -62,10 +61,11 @@ public class ViewfinderView extends View {
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
-    protected List<ResultPoint> lastPossibleResultPointsTest;
+    protected boolean mIsBarCode = false;
+    protected int mDegree = 0;
     protected Rect mFRectFinalPoint;
     protected List<ResultPoint> mResultPoint;
-    private List<ResultPoint>mTransformedResultPoint;
+    private final List<ResultPoint>mTransformedResultPoint;
     protected CameraPreview cameraPreview;
 
     // Cache the framingRect and previewSize, so that we can still draw it after the preview
@@ -110,7 +110,6 @@ public class ViewfinderView extends View {
         scannerAlpha = 0;
         possibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
         lastPossibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
-        lastPossibleResultPointsTest = new ArrayList<>();
         mResultPoint = new ArrayList<>();
         mTransformedResultPoint = new ArrayList<>();
         mFRectFinalPoint = new Rect();
@@ -221,44 +220,75 @@ public class ViewfinderView extends View {
         canvas.drawRect(0, frame.bottom + 1, width, height, paint);
         Log.d(TAG,"Rect result "+mResultPoint.toString());
         if (resultBitmap != null) {
-            // Draw the opaque result bitmap over the scanning rectangle
-            paint.setAlpha(CURRENT_POINT_OPACITY / 2);
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(resultPointColor);
-            int x = 0;
-            int y;
-            if (mResultPoint.size()>2){
-                 y = 2;
-                mFRectFinalPoint.left = Math.round(mResultPoint.get(x).getX()) + framingRect.left;;
-                mFRectFinalPoint.right = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+            try {
+                // Draw the opaque result bitmap over the scanning rectangle
+                paint.setAlpha(CURRENT_POINT_OPACITY / 2);
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(resultPointColor);
+                int x = 0;
+                int y;
+                if (mResultPoint.size() > 2) {
+                    y = 2;
+                    int mPoint1 = Math.round(mResultPoint.get(x).getX()) + framingRect.left;
+                    int mPoint2 = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+                    if (mPoint1 > mPoint2) {
+                        mFRectFinalPoint.left = mPoint2;
+                        mFRectFinalPoint.right = mPoint1;
+                    } else {
+                        mFRectFinalPoint.left = mPoint1;
+                        mFRectFinalPoint.right = mPoint2;
+                    }
 
-                mFRectFinalPoint.top = Math.round(mResultPoint.get(y).getY()) + framingRect.top;
-                mFRectFinalPoint.bottom = Math.round(mResultPoint.get(x).getY()) + framingRect.top ;
-            }else if(mResultPoint.size()>1 && mTransformedResultPoint.size()>1){
-                 y = 1;
-                mFRectFinalPoint.left = Math.round(mResultPoint.get(x).getX()) + framingRect.left;;
-                mFRectFinalPoint.right = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+                    int mPoint3 = Math.round(mResultPoint.get(y).getY()) + framingRect.top;
+                    int mPoint4 = Math.round(mResultPoint.get(x).getY()) + framingRect.top;
+                    if (mPoint3 > mPoint4) {
+                        mFRectFinalPoint.top = mPoint4;
+                        mFRectFinalPoint.bottom = mPoint3;
+                    } else {
+                        mFRectFinalPoint.top = mPoint3;
+                        mFRectFinalPoint.bottom = mPoint4;
+                    }
+                } else if (mResultPoint.size() > 1 && mTransformedResultPoint.size() > 1) {
+                    y = 1;
+                    int mPoint1 = Math.round(mResultPoint.get(x).getX()) + framingRect.left;
+                    int mPoint2 = Math.round(mResultPoint.get(y).getX()) + framingRect.left;
+                    if (mPoint1 > mPoint2) {
+                        mFRectFinalPoint.left = mPoint2;
+                        mFRectFinalPoint.right = mPoint1;
+                    } else {
+                        mFRectFinalPoint.left = mPoint1;
+                        mFRectFinalPoint.right = mPoint2;
+                    }
 
-                mFRectFinalPoint.bottom = Math.round(mTransformedResultPoint.get(y).getY());
-                Log.d(TAG,"Rect result transformedResult => "+mTransformedResultPoint);
-                Log.d(TAG,"Rect result => "+framingRect);
-                Log.d(TAG,"Rect result map => "+mFRectFinalPoint);
-                Log.d(TAG,"Rect result point => "+mResultPoint);
+                    int mPoint4 = Math.round(mTransformedResultPoint.get(y).getY());
+                    int mWidthMap = (mFRectFinalPoint.right - mFRectFinalPoint.left) / 2;
+                    int mPointBottomFinal = mPoint4 - mWidthMap;
+                    int mPointTopFinal = mPointBottomFinal - framingRect.top;
+                    int mPoint3 = mPointTopFinal + framingRect.top;
 
-                int mWidthMap = (mFRectFinalPoint.right - mFRectFinalPoint.left)/2;
-                Log.d(TAG,"Rect result mWidthMap => "+mWidthMap);
-                //179
-                int mPointBottomFinal = mFRectFinalPoint.bottom - mWidthMap ;
-                Log.d(TAG,"Rect result mPointBottomFinal => "+mPointBottomFinal);
-                //584 - 179 = 405
-                int mPointTopFinal = mPointBottomFinal -  framingRect.top;
-                Log.d(TAG,"Rect result mPointTopFinal => "+mPointTopFinal);
-                mFRectFinalPoint.top =  mPointTopFinal + framingRect.top;
-                Log.d(TAG,"Rect result mFRectFinalPoint.top => "+mFRectFinalPoint.top);
-            }else{
-                return;
+                    if (mPoint3 > mPoint4) {
+                        mFRectFinalPoint.top = mPoint4;
+                        mFRectFinalPoint.bottom = mPoint3;
+                    } else {
+                        mFRectFinalPoint.top = mPoint3;
+                        mFRectFinalPoint.bottom = mPoint4;
+                    }
+                } else {
+                    return;
+                }
+                Log.d(TAG, "mResultPoint rect " + framingRect);
+                Log.d(TAG, "mResultPoint " + mResultPoint);
+                Log.d(TAG, "mResultPoint final " + mFRectFinalPoint);
+                if (mIsBarCode){
+                    canvas.rotate(mDegree, mFRectFinalPoint.centerX() , mFRectFinalPoint.centerY());
+                    canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
+                }
+                else {
+                    canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            canvas.drawBitmap(resultBitmap, null, mFRectFinalPoint, paint);
         } else {
             // If wanted, draw a red "laser scanner" line through the middle to show decoding is active
             if (laserVisibility) {
@@ -333,8 +363,10 @@ public class ViewfinderView extends View {
      *
      * @param result An image of the result.
      */
-    public void drawResultBitmap(Bitmap result) {
-        resultBitmap = result;
+    public void drawResultBitmap(Bitmap result,boolean isBarcode,int degree) {
+        this.resultBitmap = result;
+        this.mIsBarCode = isBarcode;
+        this.mDegree = degree;
         invalidate();
     }
 

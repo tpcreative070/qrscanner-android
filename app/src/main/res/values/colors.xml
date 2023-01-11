@@ -41,6 +41,7 @@
     <color name="inbox_accent">#db4437</color>
 
     <!-- Material Color Palette -->
+    <color name="material_round_input_layout">#EEEEEE</color>
     <color name="material_hint_default">#757575</color>
     <color name="material_default">#474646</color>
     <color name="material_gray_050">#FAFAFA</color>
@@ -702,7 +703,12 @@
     <color name="multiple_image_select_imageSelectBackground">#000000</color>
     <color name="multiple_image_select_buttonText">#FFFFFF</color>
     <color name="transparent">#00000000</color>
-    <color name="colorIconHint">#4E4B4B</color>
+    <color name="color_icon_hint">#4E4B4B</color>
+    <color name="color_item">#ECEFF1</color>
+    <color name="color_supported_code">#FFFFFF</color>
+    <color name="color_bg_supported_code">#EEEEEE</color>
+    <color name="color_bg_tips_scanning">#000000</color>
+    <color name="color_accent">#79FAA702</color>
 
 
     /*Crop image*/

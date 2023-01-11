@@ -17,7 +17,7 @@ open class BaseActivitySlide : AppCompatActivity() {
         actionBar = supportActionBar
         onStartCount = 1
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 

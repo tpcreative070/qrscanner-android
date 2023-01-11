@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -25,6 +26,10 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_result.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
@@ -317,6 +322,17 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             onReloadData()
             onCheckFavorite()
             onCopy()
+            onHandleBarCode()
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun onHandleBarCode(){
+        val mData = BarcodeFormat.valueOf(viewModel.result?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
+        if (mData != BarcodeFormat.QR_CODE && mData != BarcodeFormat.DATA_MATRIX   && mData != BarcodeFormat.AZTEC){
+            GlobalScope.launch(Dispatchers.IO) {
+                onGenerateReview(viewModel.result?.code ?:"",mData)
+            }
         }
     }
 

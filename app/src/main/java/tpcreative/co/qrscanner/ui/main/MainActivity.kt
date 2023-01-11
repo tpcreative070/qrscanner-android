@@ -1,5 +1,4 @@
 package tpcreative.co.qrscanner.ui.main
-import android.Manifest
 import android.content.IntentFilter
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -10,15 +9,9 @@ import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.tasks.Task
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.tasks.Task
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -35,7 +28,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     lateinit var viewModel : MainViewModel
     var adapter: MainViewPagerAdapter? = null
-    var storage: Storage? = null
     var receiver: QRScannerReceiver? = null
 
     private val tabIcons: IntArray = intArrayOf(
@@ -53,9 +45,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUI()
-    }
-
-    fun onVisitableFragment() {
     }
 
     fun lock(isLock : Boolean){
@@ -112,37 +101,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             receiver = QRScannerReceiver()
             registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
         }
-    }
-
-    fun onAddPermissionCamera() {
-        Dexter.withContext(this)
-                .withPermissions(
-                        Manifest.permission.CAMERA)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        if (report?.areAllPermissionsGranted() == true) {
-                            Utils.Log(TAG, "Permission is ready")
-                            ScannerSingleton.getInstance()?.setVisible()
-                            storage?.createDirectory(QRScannerApplication.getInstance().getPathFolder())
-                            // Do something here
-                        } else {
-                            Utils.Log(TAG, "Permission is denied")
-                            finish()
-                        }
-                        // check for permanent denial of any permission
-                        if (report?.isAnyPermissionPermanentlyDenied == true) {
-                            /*Miss add permission in manifest*/
-                            Utils.Log(TAG, "request permission is failed")
-                            finish()
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest?>?, token: PermissionToken?) {
-                        /* ... */
-                        token?.continuePermissionRequest()
-                    }
-                })
-                .withErrorListener { Utils.Log(TAG, "error ask permission") }.onSameThread().check()
     }
 
     override fun showScannerPosition() {}
@@ -208,8 +166,8 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             if (task?.isSuccessful == true) {
                 // We can get the ReviewInfo object
                 val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener { tasks: Task<Void?>? -> }
+                val flow = reviewInfo?.let { manager.launchReviewFlow(this, it) }
+                flow?.addOnCompleteListener { tasks: Task<Void?>? -> }
             }
         }
     }

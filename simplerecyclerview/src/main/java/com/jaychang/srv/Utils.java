@@ -7,6 +7,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class Utils {
 
@@ -34,8 +35,8 @@ public final class Utils {
   static List<Integer> toIntList(String sequence) {
     char[] chars = sequence.toCharArray();
     List<Integer> result = new ArrayList<>(chars.length);
-    for (int i = 0; i < chars.length; i++) {
-      result.add(Integer.parseInt(chars[i] + ""));
+    for (char aChar : chars) {
+      result.add(Integer.parseInt(aChar + ""));
     }
     return result;
   }
@@ -43,8 +44,8 @@ public final class Utils {
   static List<Integer> toIntList(int first, int... rest) {
     List<Integer> result = new ArrayList<>();
     result.add(first);
-    for (int i = 0; i < rest.length; i++) {
-      result.add(rest[i]);
+    for (int j : rest) {
+      result.add(j);
     }
     return result;
   }
@@ -59,9 +60,9 @@ public final class Utils {
       recyclerView.computeVerticalScrollRange() > recyclerView.getHeight();
   }
 
-  public static Class getTypeArgumentClass(Class clazz) {
-    Type type = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0];
-    return (Class) type;
+  public static Class<?> getTypeArgumentClass(Class<?> clazz) {
+    Type type = ((ParameterizedType) Objects.requireNonNull(clazz.getGenericSuperclass())).getActualTypeArguments()[0];
+    return (Class<?>) type;
   }
 
 }

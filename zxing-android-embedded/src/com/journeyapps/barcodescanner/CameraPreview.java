@@ -116,10 +116,6 @@ public class CameraPreview extends ViewGroup {
     // Size of this container, non-null after layout is performed
     private Size containerSize;
 
-    private Size containerKeepSize;
-
-    private Rect rectKeep;
-
     // Size of the preview resolution
     private Size previewSize;
 
@@ -149,7 +145,6 @@ public class CameraPreview extends ViewGroup {
 
     private boolean torchOn = false;
 
-    @TargetApi(14)
     private TextureView.SurfaceTextureListener surfaceTextureListener() {
         // Cannot initialize automatically, since we may be API < 14
         return new TextureView.SurfaceTextureListener() {
@@ -397,7 +392,7 @@ public class CameraPreview extends ViewGroup {
                 frameInPreview.right * previewWidth / surfaceRect.width(),
                 frameInPreview.bottom * previewHeight / surfaceRect.height());
 
-        if (previewFramingRect == null || previewFramingRect.width() <= 0 || previewFramingRect.height() <= 0) {
+        if (previewFramingRect.width() <= 0 || previewFramingRect.height() <= 0) {
             previewFramingRect = null;
             framingRect = null;
             Log.w(TAG, "Preview frame is too small");
@@ -432,8 +427,6 @@ public class CameraPreview extends ViewGroup {
 
     private void containerSized(Size containerSize) {
         this.containerSize = containerSize;
-        this.containerKeepSize = containerSize;
-        this.rectKeep  = new Rect(50,300,containerKeepSize.width-50,containerKeepSize.height-300);
         if (cameraInstance != null) {
             if (cameraInstance.getDisplayConfiguration() == null) {
                 displayConfiguration = new DisplayConfiguration(getDisplayRotation(), containerSize);
@@ -599,14 +592,6 @@ public class CameraPreview extends ViewGroup {
 
     public Size getPreviewSize() {
         return previewSize;
-    }
-
-    public Size getContainerKeepSize(){
-        return containerKeepSize;
-    }
-
-    public Rect getRectKeep() {
-        return rectKeep;
     }
 
     /**

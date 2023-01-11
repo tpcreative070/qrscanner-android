@@ -35,22 +35,21 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.openAppSystemSettings
 import tpcreative.co.qrscanner.common.extension.serializable
-import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
 
 class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, OnMyLocationClickListener, OnMapReadyCallback, OnRequestPermissionsResultCallback, OnMapClickListener, LocationListener, SingletonGenerateListener,OnEditorActionListener {
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var mAwesomeValidation: AwesomeValidation? = null
-    var currentLon = 0.0
-    var currentLat = 0.0
     var lastLat = 0.0
     var lastLon = 0.0
     private var mPermissionDenied = false
     private var locationManager: LocationManager? = null
     private var isRunning = false
     private var save: GeneralModel? = null
+    private var isEdit : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
@@ -62,14 +61,12 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
             save = mData
+            isEdit = true
             onSetData()
         } else {
             Utils.Log(TAG, "Data is null")
         }
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        if (locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) != true) {
-            showGpsWarningDialog()
-        }
         edtLatitude.setOnEditorActionListener(this)
         edtLongitude.setOnEditorActionListener(this)
         edtQuery.setOnEditorActionListener(this)
@@ -77,18 +74,18 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
 
     private fun showGpsWarningDialog() {
         MaterialDialog(this).show {
-            title(R.string.gps_disabled)
             message(R.string.turn_on_gps)
             positiveButton(R.string.yes){
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
-            negativeButton (R.string.no){
+            negativeButton (R.string.cancel){
             }
         }
     }
 
     override fun onMapClick(p0: LatLng) {
+        Utils.Log(TAG,"onMapClick")
         Utils.Log(TAG, "lat : " + p0.latitude + " - lon :" + p0.longitude)
         mMap?.clear()
         mMap?.addMarker(MarkerOptions()
@@ -100,10 +97,12 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         lastLon = p0.longitude
         edtLatitude.setText("$lastLat")
         edtLongitude.setText("$lastLon")
+        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+        isEdit = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_select, menu)
+        menuInflater.inflate(R.menu.menu_location, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -111,6 +110,37 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         when (item.itemId) {
             R.id.menu_item_select -> {
                 onSave()
+                return true
+            }
+            R.id.menu_item_gps ->{
+                if (locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) != true) {
+                    showGpsWarningDialog()
+                }else{
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, arrayOf<String?>(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                    } else {
+                        if (mMap?.isMyLocationEnabled != true) mMap?.isMyLocationEnabled = true
+                        mMap?.clear()
+                        var myLocation = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                        if (myLocation == null) {
+                            val criteria = Criteria()
+                            criteria.accuracy = Criteria.ACCURACY_COARSE
+                            val provider = locationManager?.getBestProvider(criteria, true)
+                            myLocation = locationManager?.getLastKnownLocation(provider ?: "")
+                        }
+                        if (myLocation != null) {
+                            val userLocation = LatLng(myLocation.latitude, myLocation.longitude)
+                            mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f), 1500, null)
+                            if (!isEdit){
+                                lastLat = myLocation.latitude
+                                lastLon = myLocation.longitude
+                                edtLatitude.setText("$lastLat")
+                                edtLongitude.setText("$lastLon")
+                                edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+                            }
+                        }
+                    }
+                }
                 return true
             }
         }
@@ -130,16 +160,12 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         if (mAwesomeValidation?.validate() == true) {
             val create = GeneralModel(save)
             try {
-                if (lastLon == 0.0 || lastLon == 0.0) {
-                    Utils.onDropDownAlert(this, "Please enable GPS in order to get accurate lat and lon")
-                } else {
-                    create.lat = lastLat
-                    create.lon = lastLon
-                    create.query = edtQuery.text.toString()
-                    create.createType = ParsedResultType.GEO
-                    create.barcodeFormat = BarcodeFormat.QR_CODE.name
-                    Navigator.onMoveToReview(this, create)
-                }
+                create.lat = lastLat
+                create.lon = lastLon
+                create.query = edtQuery.text.toString()
+                create.createType = ParsedResultType.GEO
+                create.barcodeFormat = BarcodeFormat.QR_CODE.name
+                Navigator.onMoveToReview(this, create)
             } catch (e: Exception) {
                 Utils.Log(TAG, "error :" + e.message)
             }
@@ -161,6 +187,8 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     fun onSetData() {
         edtLatitude.setText("${save?.lat}")
         edtLongitude.setText("${save?.lon}")
+        lastLat = save?.lat ?:0.0
+        lastLon = save?.lon ?:0.0
         edtQuery.setText(save?.query)
         edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
         hideSoftKeyBoard()
@@ -178,8 +206,6 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     public override fun onResume() {
         super.onResume()
         Utils.Log(TAG, "onResume")
-        currentLat = 0.0
-        currentLon = 0.0
         isRunning = false
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Utils.Log(TAG, "Permission is request")
@@ -236,11 +262,14 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
                 }
                 if (myLocation != null) {
                     val userLocation = LatLng(myLocation.latitude, myLocation.longitude)
-                    lastLat = myLocation.latitude
-                    lastLon = myLocation.longitude
                     mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f), 1500, null)
-                    edtLatitude.setText("$lastLat")
-                    edtLongitude.setText("$lastLon")
+                    if (!isEdit){
+                        lastLat = myLocation.latitude
+                        lastLon = myLocation.longitude
+                        edtLatitude.setText("$lastLat")
+                        edtLongitude.setText("$lastLon")
+                        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -267,10 +296,14 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     override fun onLocationChanged(location: Location) {
         if (!isRunning) {
             try {
-                lastLat = location.latitude
-                lastLon = location.longitude
-                edtLatitude.setText("$lastLat")
-                edtLongitude.setText("$lastLon")
+                Utils.Log(TAG,"onLocationChanged")
+                if (!isEdit){
+                    lastLat = location.latitude
+                    lastLon = location.longitude
+                    edtLatitude.setText("$lastLat")
+                    edtLongitude.setText("$lastLon")
+                    edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+                }
                 if (location.hasAccuracy()) {
                     isRunning = true
                 }
@@ -290,15 +323,19 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mMap?.clear()
         enableMyLocation()
         isRunning = false
+        isEdit = false
         return false
     }
 
     override fun onMyLocationClick(location: Location) {
+        Utils.Log(TAG,"onMyLocationClick")
         mMap?.clear()
         lastLat = location.latitude
         lastLon = location.longitude
         edtLatitude.setText("$lastLat")
         edtLongitude.setText("$lastLon")
+        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+        isEdit = false
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
@@ -313,8 +350,23 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
             locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
             enableMyLocation()
         } else {
-            // Display the missing permission error dialog when the fragments resume.
-            mPermissionDenied = true
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                if (mPermissionDenied){
+                    onAlert()
+                }
+                mPermissionDenied = true
+            }
+        }
+    }
+
+    private fun onAlert(){
+        MaterialDialog(this).show {
+            message(res = R.string.using_the_current_location_as_geo)
+            positiveButton(res = R.string.settings){
+                openAppSystemSettings()
+            }
+            negativeButton(R.string.cancel)
         }
     }
 

@@ -60,9 +60,6 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
             itemView.imgMarkFavorite.setOnClickListener {
                 itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.MARK_FAVORITE)
             }
-            itemView.rlViewCode.setOnClickListener {
-                itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.VIEW_CODE)
-            }
         }
 
     }

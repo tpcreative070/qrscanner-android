@@ -1,6 +1,6 @@
 package tpcreative.co.qrscanner.common.api.requester
 import co.tpcreative.supersafe.common.network.Resource
-import co.tpcreative.supersafe.common.network.ResponseHandler
+import tpcreative.co.qrscanner.common.network.ResponseHandler
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

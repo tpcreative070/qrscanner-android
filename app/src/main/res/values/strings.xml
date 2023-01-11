@@ -78,6 +78,7 @@
     <string name="database_name">db-qr-scanner</string>
     <string name="key_waiting_for_show_ads">waiting_for_show_ads</string>
     <string name="key_multiple_scan">key_multiple_scan</string>
+    <string name="key_scan_auto_complete">key_scan_auto_complete</string>
     <string name="key_multiple_scan_detail">key_multiple_scan_detail</string>
     <string name="key_skip_duplicates">key_skip_duplicates</string>
     <string name="key_skip_duplicates_detail">key_skip_duplicates_detail</string>
@@ -126,6 +127,9 @@
     <string name="key_app_permissions">key_app_permissions</string>
     <string name="key_frame_rect_portrait">key_frame_rect_portrait</string>
     <string name="key_frame_rect_landscape">key_frame_rect_landscape</string>
+    <string name="key_intro">key_intro</string>
+    <string name="key_is_light">key_is_light</string>
+    <string name="key_count_continue_scan">key_count_continue_scan</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -264,6 +268,8 @@
     <string name="alert_start_event">Starting event data time must be greater than current date time</string>
     <string name="can_not_support_this_format">Can not support this file format</string>
     <string name="info">Information</string>
+    <string name="country_display"> %1$s, </string>
+    <string name="country_display1"> %1$s / </string>
     <string name="warning_barcode_length_13">The given text is not valid for the format "EAN 13"</string>
     <string name="warning_barcode_length_8">The given text is not valid for the format "EAN 8"</string>
     <string name="warning_barcode_UPC_E_length_8">The given text is not valid for the format "UPC E"</string>
@@ -295,7 +301,7 @@
     <string name="summary">The Premium version will be removed advertising</string>
     <string name="query_input">Input a query</string>
     <string name="done">Done</string>
-    <string name="total">Total</string>
+    <string name="total">Total: %1$s</string>
     <string name="never_lost_files">Never lost files</string>
     <string name="trash_recovery">Trash recovery</string>
     <string name="trash_recovery_detail">Get deleted items back.</string>
@@ -342,6 +348,8 @@
     <string name="auto_navigate_to_browser_detail">URI format: Auto navigate to the Web Browser</string>
     <string name="multiple_scan">Continuous scanning</string>
     <string name="multiple_scan_detail">Add scans to history only</string>
+    <string name="scan_auto_complete">Auto scan complete</string>
+    <string name="scan_auto_complete_detail">Auto scan complete with photo scan</string>
     <string name="skip_duplicates">Skip duplicates</string>
     <string name="skip_duplicates_detail">Skip and remove duplicates of QR Code or Barcode</string>
     <string name="backup_data">Backup data to Cloud</string>
@@ -462,4 +470,32 @@
     <string name="please_enable_wifi">Please turn on the WI-FI</string>
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
+    <string name="todo">todo</string>
+    <string name="guides">Guides</string>
+    <string name="scan_qr_code_and_barcode">Scan QR Code and Barcodes</string>
+    <string name="avoid_scan">Read the apps help to avoid common mistakes when scanning barcodes.</string>
+    <string name="supported_codes">Supported codes</string>
+    <string name="tips_for_scanning">Tips for scanning</string>
+    <string name="help_feedback">Help &amp; Feedback</string>
+    <string name="guides_video">Guides video with tips for scanning</string>
+    <string name="send_us_an_email">Send us an email</string>
+    <string name="orientation_0">Orientation 0</string>
+    <string name="orientation_90">Orientation 90</string>
+    <string name="orientation_270">Orientation 270</string>
+    <string name="other_orientation">Other orientation</string>
+    <string name="light_or_shadow">Light or shadow</string>
+    <string name="too_close_blurry">Too close/blurry</string>
+    <string name="led_when_dark">LED when DARK</string>
+    <string name="low_contrast">Low contrast</string>
+    <string name="please_write_your_email_in_english">Please write your email in English</string>
+    <string name="attachment_photo">If possible. Please include photos of the barcodes or screenshots.</string>
+    <string name="light">Light</string>
+    <string name="scan_using_the_camera">SCAN USING THE CAMERA</string>
+    <string name="scan_gallery">SCAN GALLERY</string>
+    <string name="create_qr_codes_will_be_display">Create QR Codes or Barcodes will be displayed here.</string>
+    <string name="history_scans_will_be_display_here">History scans will be displayed here.</string>
+    <string name="scanning_using_the_camera_will_require_permission_to_access_the_camera">Scanning using the camera will require permission to access the camera.</string>
+    <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location.</string>
+    <string name="waiting_for_delete">Waiting for delete</string>
+    <string name="waiting_for_export">Waiting for export</string>
 </resources>

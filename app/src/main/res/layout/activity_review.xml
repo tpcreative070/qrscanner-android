@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content">
                     <androidx.appcompat.widget.AppCompatTextView
                         android:textStyle="bold"
-                        android:textSize="@dimen/text_size_18"
+                        android:textSize="@dimen/text_size_17"
                         style="@style/brandonRedBoldTextView"
                         android:id="@+id/txtSubject"
                         android:layout_width="match_parent"

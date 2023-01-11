@@ -11,9 +11,7 @@ import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.viewmodel.ChangeFileColorViewModel
 import java.util.*
 
 class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.ItemSelectedListener {

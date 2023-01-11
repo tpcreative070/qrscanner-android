@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingDefaultResource">
+    <FrameLayout
+        android:id="@+id/flContainer_review"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <RelativeLayout
+        android:id="@+id/rlScanner"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/zxing_barcode_scanner">
+            <View
+                android:id="@+id/viewCrop"
+                android:layout_marginEnd="@dimen/margin_80"
+                android:layout_marginStart="@dimen/margin_80"
+                android:layout_marginTop="@dimen/margin_60"
+                android:layout_marginBottom="@dimen/margin_60"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <com.isseiaoki.simplecropview.CropImageView
+                android:contentDescription="@string/todo"
+                android:id="@+id/cropImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/spacing_xlarge"
+                app:scv_only_rl_enabled="true"
+                app:scv_guidelines_enabled="false"
+                app:scv_guide_borderline_touch_down_enabled="true"
+                app:scv_size_icon="@dimen/icon_size_25"
+                app:scv_size_icon_margin="@dimen/margin_12"
+                app:scv_custom_icon_src="@drawable/ic_full"
+                app:scv_custom_icon_tint_color="?attr/colorAccent"
+                app:scv_overlay_area_color="@color/colorOverlay"
+                app:scv_background_color="@color/transparent"
+                app:scv_crop_mode="free"
+                app:scv_frame_color="@color/colorAccent"
+                app:scv_frame_stroke_weight="1dp"
+                app:scv_guide_color="@color/colorAccent"
+                app:scv_guide_show_mode="show_always"
+                app:scv_guide_stroke_weight="1dp"
+                app:scv_handle_color="@color/colorAccent"
+                app:scv_handle_show_mode="show_always"
+                app:scv_handle_size="14dp"
+                app:scv_min_frame_size="50dp"
+                app:scv_overlay_color="@color/transparent"
+                app:scv_touch_padding="8dp"/>
+            <RelativeLayout
+                android:layout_alignParentTop="true"
+                android:id="@+id/rlHeader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:id="@+id/rlLeft"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="@dimen/icon_size_70"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_light"
+                        android:foreground="@drawable/item_effect"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_width="@dimen/icon_size_70"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_4"
+                            android:id="@+id/switch_flashlight"
+                            android:layout_width="@dimen/icon_size_30"
+                            android:layout_height="@dimen/icon_size_30"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            app:srcCompat="@drawable/ic_tips" />
+                        <TextView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginBottom="@dimen/margin_4"
+                            android:id="@+id/tvLight"
+                            android:textColor="@color/white"
+                            android:text="@string/light"
+                            android:gravity="center"
+                            android:layout_below="@+id/switch_flashlight"
+                            android:layout_width="@dimen/icon_size_70"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_below="@+id/rl_light"
+                        android:id="@+id/rlContinueScan"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_alignParentTop="true"
+                            android:visibility="invisible"
+                            android:id="@+id/tvCount"
+                            android:textColor="@color/white"
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_below="@+id/tvCount"
+                            android:visibility="invisible"
+                            android:id="@+id/btnDone"
+                            android:textColor="@color/white"
+                            android:text="@string/done"
+                            android:background="@drawable/bg_button_rounded_got_it"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/icon_size_45"/>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/rlRight"
+                    android:layout_width="@dimen/icon_size_70"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/rl_gallery"
+                        android:foreground="@drawable/item_effect"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_width="@dimen/icon_size_70"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imgGallery"
+                            android:layout_width="@dimen/icon_size_30"
+                            android:layout_height="@dimen/icon_size_30"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/margin_4"
+                            app:srcCompat="@drawable/ic_gallery"/>
+
+                        <TextView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginBottom="@dimen/margin_4"
+                            android:id="@+id/tvScan"
+                            android:textColor="@color/white"
+                            android:text="@string/scan"
+                            android:gravity="center"
+                            android:layout_below="@+id/imgGallery"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_below="@+id/rl_gallery"
+                        android:layout_alignParentEnd="true"
+                        android:id="@+id/rl_help"
+                        android:foreground="@drawable/item_effect"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_width="@dimen/icon_size_70"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_4"
+                            android:id="@+id/imgCreate"
+                            android:layout_width="@dimen/icon_size_30"
+                            android:layout_height="@dimen/icon_size_30"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            app:srcCompat="@drawable/ic_help" />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginBottom="@dimen/margin_4"
+                            android:layout_alignParentEnd="true"
+                            android:textColor="@color/white"
+                            android:text="@string/help"
+                            android:gravity="center"
+                            android:layout_below="@+id/imgCreate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+                <!-- Seekbar -->
+                <RelativeLayout
+                    android:layout_toEndOf="@+id/rlLeft"
+                    android:layout_toStartOf="@+id/rlRight"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:layout_marginBottom="@dimen/margin_5"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icon_size_50">
+
+                    <ImageView
+                        android:padding="@dimen/margin_1"
+                        android:id="@+id/imgZoomOut"
+                        android:layout_width="@dimen/icon_size_30"
+                        android:layout_height="@dimen/icon_size_30"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        app:srcCompat="@drawable/ic_baseline_zoom_out_24"
+                        android:contentDescription="@string/todo" />
+
+                    <SeekBar
+                        android:layout_marginStart="@dimen/margin_2"
+                        android:layout_marginEnd="@dimen/margin_2"
+                        android:id="@+id/seekbarZoom"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_40"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/imgZoomIn"
+                        android:layout_toEndOf="@+id/imgZoomOut" />
+
+                    <ImageView
+                        android:padding="@dimen/margin_1"
+                        app:srcCompat="@drawable/ic_baseline_zoom_in_24"
+                        android:id="@+id/imgZoomIn"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="@dimen/icon_size_30"
+                        android:layout_height="@dimen/icon_size_30"
+                        android:contentDescription="@string/todo" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </com.journeyapps.barcodescanner.DecoratedBarcodeView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlPermission"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_marginEnd="@dimen/margin_50"
+            android:layout_marginStart="@dimen/margin_50"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_marginEnd="@dimen/margin_10"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:id="@+id/rlScanPermission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_margin="@dimen/margin_10"
+                    app:srcCompat="@drawable/ic_camera"
+                    android:id="@+id/imgScanner_permission"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_width="@dimen/icon_size_50"
+                    android:layout_height="@dimen/icon_size_50"/>
+
+                <TextView
+                    style="@style/brandonRegularTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_toEndOf="@+id/imgScanner_permission"
+                    android:text="@string/scan_using_the_camera"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_weight="1"
+                android:id="@+id/rlGallery"
+                android:background="@color/material_gray_400"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_margin="@dimen/margin_10"
+                    android:id="@+id/imgGalleryPermission"
+                    android:layout_width="@dimen/icon_size_50"
+                    android:layout_height="@dimen/icon_size_50"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_gallery" />
+
+                <TextView
+                    style="@style/brandonRegularTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_toEndOf="@+id/imgGalleryPermission"
+                    android:text="@string/scan_gallery" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

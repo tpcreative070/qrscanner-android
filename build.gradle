@@ -6,13 +6,16 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
         classpath 'com.google.gms:google-services:4.3.14'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.guardsquare:proguard-gradle:7.1.0'
     }
+
 
     subprojects {
         project.configurations.all {
@@ -42,8 +45,8 @@ task clean(type: Delete) {
 }
 
 subprojects {
-    ext.appVersionCode = 279
-    ext.appVersionName = "2.7.9"
+    ext.appVersionCode = 281
+    ext.appVersionName = "2.8.1"
     ext.appMinSdkVersion = 23
     ext.appSupportVersion = "1.5.1"
     ext.appRetrofit = "2.9.0"
@@ -98,4 +101,6 @@ subprojects {
     ext.roomVersion = "2.4.3"
     ext.materialDialogsInput = "3.3.0"
     ext.zxingCore = "3.5.1"
+    ext.appIntro  = "6.2.0"
+    ext.playReview = "2.0.1"
 }

@@ -60,6 +60,7 @@ fun SaveFragment.deleteItem() {
             actionMode?.finish()
         }
         updateView()
+        dialog?.dismiss()
     })
 }
 

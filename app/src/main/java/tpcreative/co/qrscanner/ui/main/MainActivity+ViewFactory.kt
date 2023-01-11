@@ -5,19 +5,13 @@ import android.os.Build
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
-import com.snatik.storage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.common.view.CustomViewPager
 import tpcreative.co.qrscanner.model.Theme
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
@@ -31,7 +25,6 @@ fun MainActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(false)
     supportActionBar?.hide()
     ResponseSingleton.getInstance()?.setListener(this)
-    storage = Storage(applicationContext)
     setupViewPager(viewpager)
     tabs.setupWithViewPager(viewpager)
     viewpager.currentItem = 2
@@ -42,10 +35,6 @@ fun MainActivity.initUI(){
     setupTabIcons()
     ServiceManager.getInstance().onStartService()
     Theme.getInstance()?.getList()
-    if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(), Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_DENIED) {
-        onAddPermissionCamera()
-    }
     if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView()) {
         QRScannerApplication.getInstance().requestMainView(this)
     }

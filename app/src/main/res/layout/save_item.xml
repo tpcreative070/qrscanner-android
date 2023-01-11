@@ -6,7 +6,7 @@
         android:id="@+id/lItem"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:background="@drawable/bg_history_rounded"
+        android:background="@drawable/bg_general_ripple"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
@@ -23,20 +23,20 @@
             android:layout_height="wrap_content">
             <androidx.appcompat.widget.AppCompatTextView
                 android:textColor="@color/colorDark"
-                style="@style/brandonRegularTextView"
-                android:id="@+id/tvDate"
-                android:text="@string/_2_40_35_pm_8_24_16_pm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:maxLines="1"
-                android:textColor="@color/material_gray_600"
+                android:maxLines="2"
                 style="@style/brandonRegularTextView"
                 android:id="@+id/tvContent"
                 android:text="@string/distance_14_0_m"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="@color/material_gray_600"
+                style="@style/brandonRegularTextView"
+                android:id="@+id/tvDate"
+                android:text="@string/_2_40_35_pm_8_24_16_pm"
+                android:textSize="@dimen/text_size_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <RelativeLayout

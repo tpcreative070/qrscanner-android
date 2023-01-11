@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.common
+
 import android.Manifest
 import android.app.Activity
 import android.content.*
@@ -6,14 +7,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
-import android.os.Build
+import android.util.TypedValue
 import android.webkit.URLUtil
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import com.journeyapps.barcodescanner.Size
 import com.karumi.dexter.Dexter
@@ -21,24 +20,21 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.snatik.storage.Storage
 import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.api.response.DriveResponse
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.io.*
 import java.net.URLEncoder
-import java.nio.charset.Charset
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.ceil
-import kotlin.math.exp
 import kotlin.math.roundToInt
+
 
 object Utils {
     val TAG = Utils::class.java.simpleName
@@ -207,6 +203,14 @@ object Utils {
 
     fun onGetCountRating(): Int {
         return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_count_rating), 0)
+    }
+
+    fun onIntro(intro: Boolean) {
+        PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_intro), intro)
+    }
+
+    fun onIsIntro(): Boolean {
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_intro), false)
     }
 
     fun getCodeContentByHistory(item: HistoryModel?): String? {
@@ -580,11 +584,6 @@ object Utils {
         return mMap
     }
 
-    fun logPath(): String {
-        val storage: Storage = QRScannerApplication.getInstance().getStorage()
-        return storage.externalStorageDirectory + "/logsData.txt"
-    }
-
     fun setAuthor(author: Author?) {
         PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_author), Gson().toJson(author))
     }
@@ -668,12 +667,21 @@ object Utils {
        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_is_request_saver_reload), true)
     }
 
-    fun setFrameRect(mRect : RectF){
-        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect),Gson().toJson(mRect))
+    fun setFrameRectPortrait(mRect : RectF){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),Gson().toJson(mRect))
     }
 
-    private fun getFrameRect() : RectF?{
-        val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect),null)
+    private fun getFrameRectPortrait() : RectF?{
+        val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),null)
+        return Gson().fromJson(json, RectF::class.java)
+    }
+
+    fun setFrameRectLandscape(mRect : RectF){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),Gson().toJson(mRect))
+    }
+
+    private fun getFrameRectLandscape() : RectF?{
+        val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),null)
         return Gson().fromJson(json, RectF::class.java)
     }
 
@@ -685,6 +693,10 @@ object Utils {
         return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_vibrate), true)
     }
 
+    fun isAutoComplete() : Boolean{
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_scan_auto_complete), true)
+    }
+
     fun setQRCodeThemePosition(position : Int){
         PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_theme_object), position)
     }
@@ -693,9 +705,34 @@ object Utils {
         return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_theme_object), 0)
     }
 
+    fun setLight(isLight : Boolean){
+        PrefsController.putBoolean(R.string.key_is_light.toText(), isLight)
+    }
 
-    fun getFrameSize() : Size? {
-        val mRect = getFrameRect()
+    fun isLight() : Boolean{
+        return PrefsController.getBoolean(R.string.key_is_light.toText(),false)
+    }
+
+    fun setCountContinueScan(count : Int){
+        PrefsController.putInt(R.string.key_count_continue_scan.toText(), count)
+    }
+
+    fun getCountContinueScan() : Int{
+        return PrefsController.getInt(R.string.key_count_continue_scan.toText(),0)
+    }
+
+    fun getFramePortraitSize() : Size? {
+        val mRect = getFrameRectPortrait()
+        mRect?.let { node ->
+            val mWidth = node.right - node.left
+            val mHeight = node.bottom - node.top
+            return Size(mWidth.toInt(),mHeight.toInt())
+        }
+        return null
+    }
+
+    fun getFrameLandscapeSize() : Size? {
+        val mRect = getFrameRectLandscape()
         mRect?.let { node ->
             val mWidth = node.right - node.left
             val mHeight = node.bottom - node.top
@@ -898,6 +935,65 @@ object Utils {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun onSentEmail(context: Context){
+        try {
+            val emailIntent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("mailto:care@tpcreative.me")
+                putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
+            }
+            context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
+        }catch (e: Exception){
+            e.printStackTrace()
+            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:care@tpcreative.me")
+                putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
+            }
+            context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
+        }
+    }
+
+
+    fun checkPermission(permission:String): Boolean {
+       if (ContextCompat.checkSelfPermission(QRScannerApplication.getInstance(),permission )
+        == PackageManager.PERMISSION_GRANTED){
+            return true
+        }
+        return false
+    }
+
+    private fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
+    }
+
+    fun spToPx(sp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            sp,
+            context.resources.displayMetrics
+        ).toInt()
+    }
+
+    fun dpToSp(dp: Float, context: Context): Int {
+        return (dpToPx(dp, context) / context.resources.displayMetrics.scaledDensity).toInt()
+    }
+
+    fun watchYoutubeVideo(context: Context, id: String) {
+        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://www.youtube.com/watch?v=$id")
+        )
+        try {
+            context.startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            context.startActivity(webIntent)
         }
     }
 
