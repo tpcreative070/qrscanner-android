@@ -1,4 +1,5 @@
 package tpcreative.co.qrscanner.common
+
 import android.Manifest
 import android.app.Activity
 import android.content.*
@@ -8,7 +9,6 @@ import android.graphics.RectF
 import android.net.Uri
 import android.util.TypedValue
 import android.webkit.URLUtil
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
@@ -982,6 +982,19 @@ object Utils {
 
     fun dpToSp(dp: Float, context: Context): Int {
         return (dpToPx(dp, context) / context.resources.displayMetrics.scaledDensity).toInt()
+    }
+
+    fun watchYoutubeVideo(context: Context, id: String) {
+        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://www.youtube.com/watch?v=$id")
+        )
+        try {
+            context.startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            context.startActivity(webIntent)
+        }
     }
 
     interface UtilsListener {

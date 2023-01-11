@@ -268,6 +268,8 @@
     <string name="alert_start_event">Starting event data time must be greater than current date time</string>
     <string name="can_not_support_this_format">Can not support this file format</string>
     <string name="info">Information</string>
+    <string name="country_display"> %1$s, </string>
+    <string name="country_display1"> %1$s / </string>
     <string name="warning_barcode_length_13">The given text is not valid for the format "EAN 13"</string>
     <string name="warning_barcode_length_8">The given text is not valid for the format "EAN 8"</string>
     <string name="warning_barcode_UPC_E_length_8">The given text is not valid for the format "UPC E"</string>
@@ -496,7 +498,4 @@
     <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location.</string>
     <string name="waiting_for_delete">Waiting for delete</string>
     <string name="waiting_for_export">Waiting for export</string>
-    <string name="country_display"> %1$s, </string>
-    <string name="country_display1"> %1$s / </string>
-
 </resources>

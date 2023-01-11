@@ -2,8 +2,10 @@ package tpcreative.co.qrscanner.ui.help
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_help.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ScannerSingleton
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.ui.supportedcode.SupportedCodeActivity
@@ -38,6 +40,9 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
             }
             EnumAction.SEND_US_AN_EMAIL ->{
                 onAlertSendEmail()
+            }
+            EnumAction.GUIDES_VIDEO ->{
+                Utils.watchYoutubeVideo(this,Constant.youtube_id)
             }
             else -> {}
         }
