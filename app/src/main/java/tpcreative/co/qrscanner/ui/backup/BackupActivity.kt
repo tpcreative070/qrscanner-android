@@ -9,7 +9,6 @@ import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.activity_backup.*
 import kotlinx.android.synthetic.main.activity_backup.llSmallAds
 import kotlinx.android.synthetic.main.activity_backup.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_chage_file_color.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.BackupSingleton.BackupSingletonListener
@@ -19,7 +18,6 @@ import tpcreative.co.qrscanner.common.extension.onDisplayLatTimeSyncedCompletely
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerService.ServiceManagerSyncDataListener
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 
 class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     lateinit var viewModel : BackupViewModel
