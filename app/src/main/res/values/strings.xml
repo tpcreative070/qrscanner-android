@@ -9,6 +9,9 @@
     <string name="banner_review_large">ca-app-pub-7019113255489690/4871980970</string>
     <string name="banner_create_large">ca-app-pub-7019113255489690/6876764573</string>
     <string name="banner_create_small">ca-app-pub-7019113255489690/8264215478</string>
+    <string name="banner_backup_small">ca-app-pub-7019113255489690/4960402818</string>
+    <string name="banner_change_color_small">ca-app-pub-7019113255489690/6899088878</string>
+    <string name="banner_help_feedback_small">ca-app-pub-7019113255489690/9525252211</string>
     <string name="interstitial_anywhere">ca-app-pub-7019113255489690/7266352245</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>

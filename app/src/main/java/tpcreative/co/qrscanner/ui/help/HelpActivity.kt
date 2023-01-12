@@ -1,12 +1,15 @@
 package tpcreative.co.qrscanner.ui.help
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_help.*
+import android.view.View
+import kotlinx.android.synthetic.main.activity_help.llSmallAds
+import kotlinx.android.synthetic.main.activity_help.rlAdsRoot
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ScannerSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.ui.supportedcode.SupportedCodeActivity
 import tpcreative.co.qrscanner.ui.tipsscanning.TipsScanningActivity
@@ -27,6 +30,15 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
+    }
+
+    /*show ads*/
+    fun doShowAds(isShow: Boolean) {
+        if (isShow) {
+            QRScannerApplication.getInstance().loadHelpFeedbackSmallView(llSmallAds)
+        } else {
+            rlAdsRoot.visibility = View.GONE
+        }
     }
 
     override fun onClickItem(position: Int) {

@@ -15,6 +15,8 @@ import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
+import tpcreative.co.qrscanner.ui.help.HelpActivity
+import tpcreative.co.qrscanner.ui.help.initUI
 
 fun ChangeFileColorActivity.initUI(){
     setupViewModel()
@@ -40,6 +42,16 @@ fun ChangeFileColorActivity.initUI(){
                 }
             })
     }
+    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()) {
+        QRScannerApplication.getInstance().requestChangeColorSmallView(this)
+    }
+    checkingShowAds()
+}
+
+fun ChangeFileColorActivity.checkingShowAds(){
+    viewModel.doShowAds().observe(this, Observer {
+        doShowAds(it)
+    })
 }
 
 fun ChangeFileColorActivity.getData(){

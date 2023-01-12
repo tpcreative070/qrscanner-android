@@ -7,16 +7,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.activity_backup.*
+import kotlinx.android.synthetic.main.activity_backup.llSmallAds
+import kotlinx.android.synthetic.main.activity_backup.rlAdsRoot
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.BackupSingleton.BackupSingletonListener
 import tpcreative.co.qrscanner.common.activity.BaseGoogleApi
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.onDisplayLatTimeSyncedCompletely
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerService.ServiceManagerSyncDataListener
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 
 class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
+    lateinit var viewModel : BackupViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
@@ -81,6 +85,15 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
             }
             else -> {
             }
+        }
+    }
+
+    /*show ads*/
+    fun doShowAds(isShow: Boolean) {
+        if (isShow) {
+            QRScannerApplication.getInstance().loadBackupSmallView(llSmallAds)
+        } else {
+            rlAdsRoot.visibility = View.GONE
         }
     }
 

@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -46,6 +45,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var adReviewLargeView : AdView? = null
     private var adCreateSmallView : AdView? = null
     private var adCreateLargeView : AdView? = null
+    private var adHelpFeedbackSmallView : AdView? = null
+    private var adChangeColorSmallView : AdView? = null
+    private var adBackupSmallView : AdView? = null
     private var mInterstitialAd: InterstitialAd? = null
     private var isMainView = true
     private var isResultSmallView = true
@@ -54,6 +56,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var isReviewLargeView = true
     private var isCreateSmallView = true
     private var isCreateLargeView = true
+    private var isHelpFeedbackSmallView = true
+    private var isChangeColorSmallView = true
+    private var isBackupSmallView = true
     private var requestClearCacheData = false
     private var options: GoogleSignInOptions.Builder? = null
     private var requiredScopes: MutableSet<Scope>? = null
@@ -357,6 +362,141 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adReviewSmallView?.loadAd(adRequest)
     }
 
+    fun requestHelpFeedbackSmallView(context: Context){
+        Utils.Log(TAG, "requestReviewSmallView ads...")
+        adHelpFeedbackSmallView = AdView(context)
+        adHelpFeedbackSmallView?.setAdSize(AdSize.BANNER)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_help_feedback_small)
+            }
+        } else {
+            adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adHelpFeedbackSmallView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isHelpFeedbackSmallView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isHelpFeedbackSmallView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adHelpFeedbackSmallView?.loadAd(adRequest)
+    }
+
+
+    fun requestChangeColorSmallView(context: Context){
+        Utils.Log(TAG, "requestReviewSmallView ads...")
+        adChangeColorSmallView = AdView(context)
+        adChangeColorSmallView?.setAdSize(AdSize.BANNER)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adChangeColorSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adChangeColorSmallView?.adUnitId = getString(R.string.banner_change_color_small)
+            }
+        } else {
+            adChangeColorSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adChangeColorSmallView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isChangeColorSmallView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isChangeColorSmallView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adChangeColorSmallView?.loadAd(adRequest)
+    }
+
+
+    fun requestBackupSmallView(context: Context){
+        Utils.Log(TAG, "requestReviewSmallView ads...")
+        adBackupSmallView = AdView(context)
+        adBackupSmallView?.setAdSize(AdSize.BANNER)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adBackupSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adBackupSmallView?.adUnitId = getString(R.string.banner_backup_small)
+            }
+        } else {
+            adBackupSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adBackupSmallView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isBackupSmallView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isBackupSmallView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adBackupSmallView?.loadAd(adRequest)
+    }
+
+
     fun requestReviewLargeView(context: Context){
         Utils.Log(TAG, "requestReviewLargeView ads...")
         adReviewLargeView = AdView(context)
@@ -628,6 +768,54 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         layAd?.addView(adCreateLargeView)
     }
 
+    fun loadHelpFeedbackSmallView(layAd: LinearLayout?) {
+        if (adHelpFeedbackSmallView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adHelpFeedbackSmallView?.parent != null) {
+            val tempVg: ViewGroup = adHelpFeedbackSmallView?.parent as ViewGroup
+            tempVg.removeView(adHelpFeedbackSmallView)
+        }
+        layAd?.addView(adHelpFeedbackSmallView)
+    }
+
+    fun loadChangeColorSmallView(layAd: LinearLayout?) {
+        if (adChangeColorSmallView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adChangeColorSmallView?.parent != null) {
+            val tempVg: ViewGroup = adChangeColorSmallView?.parent as ViewGroup
+            tempVg.removeView(adChangeColorSmallView)
+        }
+        layAd?.addView(adChangeColorSmallView)
+    }
+
+    fun loadBackupSmallView(layAd: LinearLayout?) {
+        if (adBackupSmallView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adBackupSmallView?.parent != null) {
+            val tempVg: ViewGroup = adBackupSmallView?.parent as ViewGroup
+            tempVg.removeView(adBackupSmallView)
+        }
+        layAd?.addView(adBackupSmallView)
+    }
+
+    fun isHelpFeedbackSmallView(): Boolean {
+        return isHelpFeedbackSmallView
+    }
+
+    fun isChangeColorSmallView(): Boolean {
+        return isChangeColorSmallView
+    }
+
+    fun isBackupSmallView(): Boolean {
+        return isBackupSmallView
+    }
+
     fun isMainView(): Boolean {
         return isMainView
     }
@@ -671,6 +859,18 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isLiveAds() : Boolean{
+        return true
+    }
+
+    fun isEnableHelpFeedbackSmallView() : Boolean {
+        return true
+    }
+
+    fun isEnableChangeColorSmallView() : Boolean {
+        return true
+    }
+
+    fun isEnableBackupSmallView() : Boolean {
         return true
     }
 

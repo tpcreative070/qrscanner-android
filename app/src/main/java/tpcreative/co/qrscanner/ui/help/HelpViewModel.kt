@@ -24,6 +24,14 @@ class HelpViewModel : BaseViewModel<EmptyModel>() {
         emit(mList)
     }
 
+    fun doShowAds() = liveData(Dispatchers.Main) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
+            emit(true)
+        } else {
+            emit(false)
+        }
+    }
+
     companion object {
         private val TAG = ChangeFileColorViewModel::class.java.simpleName
     }
