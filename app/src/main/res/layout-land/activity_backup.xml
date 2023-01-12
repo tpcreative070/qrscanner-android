@@ -30,8 +30,16 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:layout_above="@+id/rlAdsRoot"
         android:weightSum="1"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -121,4 +129,20 @@
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:id="@+id/rlAdsRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/llSmallAds"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/banner_height"
+                android:gravity="center"
+                android:orientation="vertical"/>
+        </RelativeLayout>
+    </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

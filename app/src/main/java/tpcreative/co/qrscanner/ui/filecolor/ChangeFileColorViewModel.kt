@@ -3,6 +3,7 @@ import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EmptyModel
 import tpcreative.co.qrscanner.model.Theme
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
@@ -21,6 +22,14 @@ class ChangeFileColorViewModel : BaseViewModel<EmptyModel>() {
         Utils.Log(TAG, "Value :" + Gson().toJson(mList))
         //view.onSuccessful("Successful", EnumStatus.SHOW_DATA)
         emit(mList)
+    }
+
+    fun doShowAds() = liveData(Dispatchers.Main) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
+            emit(true)
+        } else {
+            emit(false)
+        }
     }
 
     companion object {

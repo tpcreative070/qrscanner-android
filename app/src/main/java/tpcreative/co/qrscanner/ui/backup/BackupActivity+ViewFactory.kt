@@ -4,6 +4,8 @@ import android.view.View
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.text.HtmlCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_backup.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.BackupSingleton
@@ -11,12 +13,15 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.onDisplayLatTimeSyncedCompletely
 import tpcreative.co.qrscanner.common.network.NetworkUtil
+import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.ui.filecolor.*
 
 fun BackupActivity.initUI(){
     TAG = this::class.java.simpleName
     setSupportActionBar(toolbar)
+    setupViewModel()
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     BackupSingleton.getInstance()?.setListener(this)
     val email = Utils.getDriveEmail()
@@ -45,6 +50,11 @@ fun BackupActivity.initUI(){
     if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
+
+    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView()) {
+        QRScannerApplication.getInstance().requestBackupSmallView(this)
+    }
+    checkingShowAds()
 
     btnEnable.setOnClickListener {
         if (NetworkUtil.pingIpAddress(this)) {
@@ -85,4 +95,17 @@ fun BackupActivity.showAds(){
     }else{
         QRScannerApplication.getInstance().loadInterstitialAd(this)
     }
+}
+
+fun BackupActivity.checkingShowAds(){
+    viewModel.doShowAds().observe(this, Observer {
+        doShowAds(it)
+    })
+}
+
+private fun BackupActivity.setupViewModel() {
+    viewModel = ViewModelProvider(
+        this,
+        ViewModelFactory()
+    ).get(BackupViewModel::class.java)
 }

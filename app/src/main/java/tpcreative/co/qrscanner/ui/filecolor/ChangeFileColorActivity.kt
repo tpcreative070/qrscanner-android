@@ -6,11 +6,15 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_chage_file_color.*
+import kotlinx.android.synthetic.main.activity_chage_file_color.llSmallAds
+import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_help.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
 import java.util.*
 
@@ -48,6 +52,15 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    /*show ads*/
+    fun doShowAds(isShow: Boolean) {
+        if (isShow) {
+            QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds)
+        } else {
+            rlAdsRoot.visibility = View.GONE
+        }
     }
 
     fun onGenerateReview(code: String?) {
