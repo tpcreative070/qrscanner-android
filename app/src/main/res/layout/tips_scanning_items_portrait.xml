@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/icon_size_140">
 
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/brandonRegularSmallTextInputLayout"
@@ -39,7 +39,7 @@
         <RelativeLayout
             android:layout_marginEnd="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_80"
+            android:layout_marginTop="@dimen/margin_90"
             android:layout_alignParentEnd="true"
             android:layout_width="@dimen/icon_size_40"
             android:layout_height="@dimen/icon_size_40">

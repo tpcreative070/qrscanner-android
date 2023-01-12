@@ -23,7 +23,7 @@
 
     <item
         android:id="@+id/menu_item_add_to_favorites"
-        android:icon="@drawable/ic_baseline_favorite_24"
+        android:icon="@drawable/ic_baseline_favorite_white_24"
         app:showAsAction="ifRoom"
         android:title="@string/add_favorite"
         android:orderInCategory="100"/>
