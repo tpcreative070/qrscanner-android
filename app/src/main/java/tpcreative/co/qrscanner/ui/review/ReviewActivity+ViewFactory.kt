@@ -39,6 +39,8 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity
+import tpcreative.co.qrscanner.ui.filecolor.showAds
 import java.io.File
 import java.io.FileOutputStream
 
@@ -56,20 +58,23 @@ fun ReviewActivity.initUI(){
     if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView()) {
         QRScannerApplication.getInstance().requestReviewLargeView(this)
     }
+    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd()) {
+        QRScannerApplication.getInstance().requestInterstitialViewCodeAd()
+    }
     checkingShowAds()
     /*Press back button*/
     if (Build.VERSION.SDK_INT >= 33) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT
         ) {
-            finish()
+            showAds()
         }
     } else {
         onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    finish()
+                    showAds()
                 }
             })
     }
@@ -329,6 +334,15 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
                 onPhotoPrint()
             }
         }
+    }
+}
+
+fun ReviewActivity.showAds(){
+    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd()){
+        // Back is pressed... Finishing the activity
+        finish()
+    }else{
+        QRScannerApplication.getInstance().loadInterstitialViewCodeAd(this)
     }
 }
 

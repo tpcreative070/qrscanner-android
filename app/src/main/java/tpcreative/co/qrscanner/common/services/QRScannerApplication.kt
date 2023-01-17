@@ -49,6 +49,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var adChangeColorSmallView : AdView? = null
     private var adBackupSmallView : AdView? = null
     private var mInterstitialAd: InterstitialAd? = null
+    private var mInterstitialViewCodeAd: InterstitialAd? = null
+    private var isRequestInterstitialAd : Boolean = true
+    private var isRequestInterstitialViewCodeAd: Boolean = true
     private var isMainView = true
     private var isResultSmallView = true
     private var isResultLargeView = true
@@ -646,10 +649,12 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         InterstitialAd.load(this,id, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 mInterstitialAd = null
+                isRequestInterstitialAd = true
                 Utils.Log(TAG, "Interstitial was failed")
             }
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 mInterstitialAd = interstitialAd
+                isRequestInterstitialAd = false
                 Utils.Log(TAG, "Interstitial was loaded")
             }
         })
@@ -664,6 +669,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                         // Don't forget to set the ad reference to null so you
                         // don't show the ad a second time.
                         mInterstitialAd = null
+                        isRequestInterstitialAd = true
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
@@ -671,15 +677,88 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                         // Don't forget to set the ad reference to null so you
                         // don't show the ad a second time.
                         mInterstitialAd = null
+                        isRequestInterstitialAd = true
                     }
 
                     override fun onAdShowedFullScreenContent() {
                         mInterstitialAd = null
+                        isRequestInterstitialAd = true
                         Utils.Log(TAG, "Ad showed fullscreen content.")
                         // Called when ad is dismissed.
                     }
+
+                    override fun onAdClicked() {
+                        mInterstitialAd = null
+                        isRequestInterstitialAd = true
+                    }
                 }
             mInterstitialAd?.show(context)
+            isRequestInterstitialAd = true
+        }
+    }
+
+    fun requestInterstitialViewCodeAd(){
+        Utils.Log(TAG, "Interstitial requesting...")
+        val adRequest = AdRequest.Builder().build()
+        var id = ""
+        id = if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                getString(R.string.interstitial_test)
+            } else {
+                getString(R.string.interstitial_view_code)
+            }
+        } else {
+            getString(R.string.interstitial_test)
+        }
+        InterstitialAd.load(this,id, adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mInterstitialViewCodeAd = null
+                isRequestInterstitialViewCodeAd = true
+                Utils.Log(TAG, "Interstitial was failed")
+            }
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                mInterstitialViewCodeAd = interstitialAd
+                isRequestInterstitialViewCodeAd = false
+                Utils.Log(TAG, "Interstitial was loaded")
+            }
+        })
+    }
+
+    fun loadInterstitialViewCodeAd(context: AppCompatActivity){
+        if (mInterstitialViewCodeAd != null) {
+            mInterstitialViewCodeAd?.fullScreenContentCallback =
+                object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        Utils.Log(TAG, "Ad was dismissed.")
+                        // Don't forget to set the ad reference to null so you
+                        // don't show the ad a second time.
+                        mInterstitialViewCodeAd = null
+                        isRequestInterstitialViewCodeAd = true
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                        Utils.Log(TAG, "Ad failed to show.")
+                        // Don't forget to set the ad reference to null so you
+                        // don't show the ad a second time.
+                        mInterstitialViewCodeAd = null
+                        isRequestInterstitialViewCodeAd = true
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        mInterstitialViewCodeAd = null
+                        isRequestInterstitialViewCodeAd = true
+                        Utils.Log(TAG, "Ad showed fullscreen content.")
+                        // Called when ad is dismissed.
+                    }
+
+                    override fun onAdClicked() {
+                        mInterstitialViewCodeAd = null
+                        isRequestInterstitialViewCodeAd = true
+                    }
+                }
+            mInterstitialViewCodeAd?.show(context)
+            isRequestInterstitialViewCodeAd = true
         }
     }
 
@@ -845,10 +924,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isRequestInterstitialAd() : Boolean {
-        if (mInterstitialAd!=null){
-            return false
-        }
-        return true
+        return isRequestInterstitialAd
+    }
+
+    fun isRequestInterstitialViewCodeAd() : Boolean {
+        return isRequestInterstitialViewCodeAd
     }
 
     fun isLiveMigration(): Boolean {
@@ -903,7 +983,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isEnableInterstitialAd() : Boolean {
-        return  false
+        return  true
+    }
+
+    fun isEnableInterstitialViewCodeAd() : Boolean {
+        return  true
     }
 
     fun setRequestClearCacheData(data : Boolean){

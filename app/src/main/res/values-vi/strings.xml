@@ -155,7 +155,7 @@
     <string name="hint_8">7 chữ số + 1 chữ số tổng kiểm tra</string>
     <string name="hint_digits">Chữ số</string>
     <string name="hint_characters">Văn bản không có ký tự đặc biệt</string>
-    <string name="hint_uppercase_characters">Văn bản viết hoa không có ký tự đặc biệt</string>
+    <string name="hint_uppercase_characters">Văn bản viết hoa và không có ký tự đặc biệt</string>
     <string name="generate_barcode">Tạo mã vạch</string>
     <string name="support">Hỗ trợ</string>
     <string name="support_detail">Báo cáo lỗi</string>
@@ -163,7 +163,7 @@
     <string name="update_app">Cập nhật ứng dụng</string>
     <string name="update">Cập nhật</string>
     <string name="enter_take_note">Nhập một ghi chú</string>
-    <string name="version">Phiên bản QRScanner</string>
+    <string name="version">Phiên bản</string>
     <string name="premium_version">Phiên bản nâng cao</string>
     <string name="summary">Phiên bản nâng cao sẽ được loại bỏ quảng cáo</string>
     <string name="query_input">Đầu vào truy vấn</string>
@@ -173,19 +173,7 @@
     <string name="trash_recovery">Phục hồi thùng rác</string>
     <string name="trash_recovery_detail">Lấy tệp tin xoá trở lại.</string>
     <string name="no_advertisement">Không quảng cáo</string>
-    <string name="get_rid_of_those_ugly_ads">Loại bỏ những quảng cáo xấu xí!</string>
-    <string name="what_if_i_do_not_want_premium">Nếu tôi không muốn gói nâng cao thì sao</string>
-    <string name="what_if_i_do_not_want_premium_detail">Tốt rồi. Khi phí bảo hiểm của bạn hết hạn, Bạn có thể chuyển sang Cơ bản</string>
-    <string name="what_is_basic">Cơ bản là gì?</string>
-    <string name="what_is_basic_detail">Đây là phiên bản miễn phí của SuperSafe. Nó vẫn bảo vệ các tệp quan trọng của bạn và bạn vẫn có thể tải tệp lên Google Drive 50 tệp mỗi tháng. Tất cả đều nằm sau màn hình khóa và cung cấp cho bạn các tính năng bảo mật tốt</string>
-    <string name="choose_your_plans">Lên kế hoạch</string>
-    <string name="monthly">Hàng tháng</string>
-    <string name="per_month">6 tháng</string>
-    <string name="per_year">1 năm</string>
-    <string name="most_popular">PHỔ BIẾN NHẤT</string>
-    <string name="yearly">Hàng năm</string>
     <string name="tv_life_time">Mãi mãi</string>
-    <string name="your_complimentary_premium_remaining">Bạn còn lại %1$s ngày sử dụng Premium miễn phí. Nâng cấp ngay để tiếp tục sử dụng Premium mà không bị gián đoạn.</string>
     <string name="barcode_guide">Máy quét mã vạch sử dụng máy ảnh trên điện thoại của bạn để đọc mã vạch và tra cứu thông tin sản phẩm như giá cả và đánh giá, v.v.</string>
     <string name="barcode_2d_guide">QRScanner cũng đọc mã vạch 2D như Ma trận dữ liệu quảng cáo Mã QR. Chúng có thể chứa các liên kết đến số trang web và địa chỉ email, v.v.</string>
     <string name="choose_an_account">Vui lòng chọn %1$s để liên kết với Google Drive</string>

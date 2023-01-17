@@ -135,7 +135,7 @@ class ReviewActivity : BaseActivitySlide() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                showAds()
                 return true
             }
             R.id.menu_item_png_export -> {

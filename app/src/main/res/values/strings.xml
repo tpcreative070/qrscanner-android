@@ -13,6 +13,7 @@
     <string name="banner_change_color_small">ca-app-pub-7019113255489690/6899088878</string>
     <string name="banner_help_feedback_small">ca-app-pub-7019113255489690/9525252211</string>
     <string name="interstitial_anywhere">ca-app-pub-7019113255489690/7266352245</string>
+    <string name="interstitial_view_code">ca-app-pub-7019113255489690/9683924499</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="url_google">https://www.googleapis.com/</string>
@@ -299,7 +300,7 @@
     <string name="update_app">Update app</string>
     <string name="update">Update</string>
     <string name="enter_take_note">Enter a note</string>
-    <string name="version">QRScanner version</string>
+    <string name="version">Version</string>
     <string name="premium_version">Premium version</string>
     <string name="summary">The Premium version will be removed advertising</string>
     <string name="query_input">Input a query</string>
@@ -309,19 +310,7 @@
     <string name="trash_recovery">Trash recovery</string>
     <string name="trash_recovery_detail">Get deleted items back.</string>
     <string name="no_advertisement">No advertisements</string>
-    <string name="get_rid_of_those_ugly_ads">Get rid of those ugly ads!</string>
-    <string name="what_if_i_do_not_want_premium">What if I don\'t want Premium</string>
-    <string name="what_if_i_do_not_want_premium_detail">That\'s fine. When your Premium expires, You can switch to Basic</string>
-    <string name="what_is_basic">What\'s basic?</string>
-    <string name="what_is_basic_detail">It\'s the free version of SuperSafe. It still protects your important files and you still can upload files to Google Drive 50 files per month. All of them are behind a lock screen and give you good privacy features</string>
-    <string name="choose_your_plans">Choose your plans</string>
-    <string name="monthly">Monthly</string>
-    <string name="per_month">6 Months</string>
-    <string name="per_year">1 Year</string>
-    <string name="most_popular">MOST POPULAR</string>
-    <string name="yearly">Yearly</string>
     <string name="tv_life_time">Lifetime</string>
-    <string name="your_complimentary_premium_remaining">You have %1$s more days of complimentary Premium remaining. Upgrade now to keep using Premium without interruption.</string>
     <string name="barcode_guide">Barcode Scanner uses the camera on your phone to read barcodes and look up product information such as prices and reviews etc…</string>
     <string name="barcode_2d_guide">QRScanner also reads 2D barcode such as QR Codes ad Data Matrix. These can contain links to web numbers and email addresses, and more.</string>
     <string name="choose_an_account">Please select %1$s to link to Google Drive</string>
