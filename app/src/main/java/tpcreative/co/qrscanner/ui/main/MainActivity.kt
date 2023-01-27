@@ -17,6 +17,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ResponseSingleton.SingleTonResponseListener
 import tpcreative.co.qrscanner.common.activity.BaseActivity
+import tpcreative.co.qrscanner.common.controller.PremiumManager
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
@@ -144,6 +145,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     override fun onStop() {
         super.onStop()
         Utils.Log(TAG, "onStop")
+        PremiumManager.getInstance().onStop()
     }
 
     override fun onDestroy() {

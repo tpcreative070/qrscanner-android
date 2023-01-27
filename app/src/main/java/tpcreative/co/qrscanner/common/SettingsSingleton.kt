@@ -24,10 +24,17 @@ class SettingsSingleton {
         }
     }
 
+    fun onUpdatedPremiumVersion(){
+        if (listener != null){
+            listener?.onUpdatedPremiumVersion()
+        }
+    }
+
     interface SingletonSettingsListener {
         fun onUpdated()
         fun onUpdatedSharePreferences(value: Boolean)
         fun onSyncDataRequest()
+        fun onUpdatedPremiumVersion()
     }
 
     companion object {

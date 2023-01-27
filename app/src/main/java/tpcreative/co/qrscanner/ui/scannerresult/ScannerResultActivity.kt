@@ -427,8 +427,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         if (isShow) {
             QRScannerApplication.getInstance().loadResultSmallView(llSmallAds)
             QRScannerApplication.getInstance().loadResultLargeView(llLargeAds)
-        } else {
-            rlAdsRoot.visibility = View.GONE
         }
     }
 

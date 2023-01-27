@@ -17,13 +17,16 @@ import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_result.*
+import kotlinx.android.synthetic.main.activity_result.imgRemove
+import kotlinx.android.synthetic.main.activity_result.recyclerView
+import kotlinx.android.synthetic.main.activity_result.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_result.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_result.scrollView
 import kotlinx.android.synthetic.main.activity_result.toolbar
-import kotlinx.android.synthetic.main.crop_activity_crop.*
-import kotlinx.android.synthetic.main.crop_layout_done_cancel.*
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -40,11 +43,18 @@ fun ScannerResultActivity.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
-    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView()) {
+    if(Utils.isPremium()){
+        rlAdsRoot.visibility = View.GONE
+        rlBannerLarger.visibility = View.GONE
+    }
+    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestResultSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView()) {
+    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestResultLargeView(this)
+    }
+    imgRemove.setOnClickListener {
+        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
 }

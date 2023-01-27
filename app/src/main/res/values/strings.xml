@@ -10,8 +10,11 @@
     <string name="banner_create_large">ca-app-pub-7019113255489690/6876764573</string>
     <string name="banner_create_small">ca-app-pub-7019113255489690/8264215478</string>
     <string name="banner_backup_small">ca-app-pub-7019113255489690/4960402818</string>
+    <string name="banner_backup_large">ca-app-pub-7019113255489690/5194332376</string>
     <string name="banner_change_color_small">ca-app-pub-7019113255489690/6899088878</string>
+    <string name="banner_change_color_large">ca-app-pub-7019113255489690/7712684508</string>
     <string name="banner_help_feedback_small">ca-app-pub-7019113255489690/9525252211</string>
+    <string name="banner_help_feedback_large">ca-app-pub-7019113255489690/2657752656</string>
     <string name="interstitial_anywhere">ca-app-pub-7019113255489690/7266352245</string>
     <string name="interstitial_view_code">ca-app-pub-7019113255489690/9683924499</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
@@ -32,7 +35,7 @@
     <string name="qrscanner_free_develop">tpcreative.co.qrscanner.free.develop</string>
     <string name="qrscanner_free_release">tpcreative.co.qrscanner.free.release</string>
     <string name="one_years">tpcreative.co.qrscanner.free.release.one.year</string>
-    <string name="lifetime">tpcreative.co.qrscanner.free.release.lifetime</string>
+    <string name="lifetime">tpcreative.co.qrscanner.free.release.lifetime.v1</string>
     <string name="qrscanner_pro_release">tpcreative.co.qrscanner</string>
     <string name="supersafe_live">co.tpcreative.supersafe</string>
     <string name="save_your_voicemails_live">co.tpcreative.saveyourvoicemails</string>
@@ -57,6 +60,7 @@
     <string name="key_vibrate">key_vibrate</string>
     <string name="key_beep">key_beep</string>
     <string name="key_dark_mode">key_dark_mode</string>
+    <string name="key_pro_version">key_pro_version</string>
     <string name="key_dark_mode_detail">key_dark_mode_detail</string>
     <string name="key_theme_title">key_theme_title</string>
     <string name="key_color_code">key_color_code</string>

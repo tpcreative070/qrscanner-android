@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.help
 
 import android.view.LayoutInflater
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,9 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import co.tpcreative.supersafe.common.adapter.DividerItemDecoration
 import co.tpcreative.supersafe.common.adapter.clearDecorations
 import com.afollestad.materialdialogs.MaterialDialog
-import kotlinx.android.synthetic.main.activity_help.recyclerView
+import kotlinx.android.synthetic.main.activity_help.*
+import kotlinx.android.synthetic.main.activity_help.imgRemove
+import kotlinx.android.synthetic.main.activity_help.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_help.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_help.toolbar
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -19,10 +24,20 @@ fun HelpActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    if(Utils.isPremium()){
+        rlAdsRoot.visibility = View.GONE
+        rlBannerLarger.visibility = View.GONE
+    }
     initRecycleView(layoutInflater)
     getData()
-    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView()) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestHelpFeedbackSmallView(this)
+    }
+    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isPremium()) {
+        QRScannerApplication.getInstance().requestHelpFeedbackLargeView(this)
+    }
+    imgRemove.setOnClickListener {
+        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
 }

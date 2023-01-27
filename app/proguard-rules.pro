@@ -53,3 +53,4 @@
 
 -keepclasseswithmembers class com.jaychang.srv.** {*;}
 -keepclasseswithmembernames class com.jaychang.srv.** {*;}
+-keep class com.android.vending.billing.**

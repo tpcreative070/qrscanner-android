@@ -1,8 +1,7 @@
 package tpcreative.co.qrscanner.ui.help
 import android.os.Bundle
 import android.view.View
-import kotlinx.android.synthetic.main.activity_help.llSmallAds
-import kotlinx.android.synthetic.main.activity_help.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_help.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
@@ -36,8 +35,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadHelpFeedbackSmallView(llSmallAds)
-        } else {
-            rlAdsRoot.visibility = View.GONE
+            QRScannerApplication.getInstance().loadHelpFeedbackLargeView(llLargeAds)
         }
     }
 

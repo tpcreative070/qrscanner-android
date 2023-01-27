@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
         android:name=".common.services.QRScannerApplication"
@@ -127,7 +128,8 @@
             android:label="@string/help_feedback" />
         <activity
             android:name=".ui.filecolor.ChangeFileColorActivity"
-            android:label="@string/color_code" /> <!-- <activity android:name=".ui.pro.ProVersionActivity" /> -->
+            android:label="@string/color_code" />
+        <activity android:name=".ui.pro.ProVersionActivity" android:label="@string/pro_version" />
         <activity
             android:name=".ui.create.EmailActivity"
             android:label="@string/email" />

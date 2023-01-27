@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.gson.Gson
@@ -16,7 +17,8 @@ import com.google.zxing.client.result.ParsedResultType
 import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_review.*
-import kotlinx.android.synthetic.main.fragment_scanner.*
+import kotlinx.android.synthetic.main.activity_review.llLargeAds
+import kotlinx.android.synthetic.main.activity_review.llSmallAds
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -29,7 +31,6 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {

@@ -765,11 +765,15 @@ object Utils {
     }
 
     fun isAlreadyCheckout(): Boolean {
-        return PrefsController.getBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_already_checkout), false)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_already_checkout), false)
     }
 
     fun setCheckoutValue(value: Boolean) {
-        PrefsController.putBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_already_checkout), value)
+        PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_already_checkout), value)
+    }
+
+    fun isPremium() : Boolean{
+        return isAlreadyCheckout()
     }
 
     fun onAlertNotify(activity: Activity, message: String) {

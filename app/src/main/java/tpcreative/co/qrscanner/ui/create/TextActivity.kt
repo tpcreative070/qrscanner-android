@@ -12,8 +12,11 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_text.*
+import kotlinx.android.synthetic.main.activity_text.imgRemove
 import kotlinx.android.synthetic.main.activity_text.llLargeAds
 import kotlinx.android.synthetic.main.activity_text.llSmallAds
+import kotlinx.android.synthetic.main.activity_text.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_text.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_text.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -22,6 +25,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.backup.initUI
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
@@ -33,13 +37,20 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         setContentView(R.layout.activity_text)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if(Utils.isPremium()){
+            rlAdsRoot.visibility = View.GONE
+            rlBannerLarger.visibility = View.GONE
+        }
         setupViewModel()
         getIntentData()
-        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView()) {
+        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isPremium()) {
             QRScannerApplication.getInstance().requestCreateSmallView(this)
         }
-        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView()) {
+        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isPremium()) {
             QRScannerApplication.getInstance().requestCreateLargeView(this)
+        }
+        imgRemove.setOnClickListener {
+            Navigator.onMoveProVersion(this)
         }
         checkingShowAds()
         edtText.setOnEditorActionListener(this)

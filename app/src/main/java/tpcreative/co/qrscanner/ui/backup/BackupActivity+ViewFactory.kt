@@ -7,8 +7,14 @@ import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_backup.*
+import kotlinx.android.synthetic.main.activity_backup.imgRemove
+import kotlinx.android.synthetic.main.activity_backup.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_backup.rlBannerLarger
+import kotlinx.android.synthetic.main.activity_backup.toolbar
+import kotlinx.android.synthetic.main.activity_wifi.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.BackupSingleton
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.onDisplayLatTimeSyncedCompletely
@@ -20,9 +26,13 @@ import tpcreative.co.qrscanner.ui.filecolor.*
 
 fun BackupActivity.initUI(){
     TAG = this::class.java.simpleName
-    setSupportActionBar(toolbar)
     setupViewModel()
+    setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    if(Utils.isPremium()){
+        rlAdsRoot.visibility = View.GONE
+        rlBannerLarger.visibility = View.GONE
+    }
     BackupSingleton.getInstance()?.setListener(this)
     val email = Utils.getDriveEmail()
     if (email != null) {
@@ -47,12 +57,16 @@ fun BackupActivity.initUI(){
         onShowConnectionAlert()
     }
 
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
 
-    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView()) {
+    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestBackupSmallView(this)
+    }
+
+    if (QRScannerApplication.getInstance().isBackupLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupLargeView() && !Utils.isPremium()) {
+        QRScannerApplication.getInstance().requestBackupLargeView(this)
     }
     checkingShowAds()
 
@@ -86,10 +100,14 @@ fun BackupActivity.initUI(){
                 }
             })
     }
+
+    imgRemove.setOnClickListener {
+        Navigator.onMoveProVersion(this)
+    }
 }
 
 fun BackupActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isPremium()){
         // Back is pressed... Finishing the activity
         finish()
     }else{

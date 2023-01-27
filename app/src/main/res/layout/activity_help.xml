@@ -38,11 +38,69 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.core.widget.NestedScrollView
+            android:layout_above="@+id/rlAdsRoot"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/rlAdsRoot"/>
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <RelativeLayout
+                    android:id="@+id/rlBannerLarger"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:id="@+id/viewUnderline"
+                        android:background="@color/grey_lighter"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <RelativeLayout
+                        android:layout_below="@+id/viewUnderline"
+                        android:id="@+id/rlAdvertising"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginStart="@dimen/margin_50"
+                            android:layout_toStartOf="@+id/imgRemove"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/margin_5"
+                            style="@style/brandonRegularTextView"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14"
+                            android:text="@string/advertising"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <ImageView
+                            android:layout_margin="@dimen/margin_4"
+                            android:background="@color/material_hint_ads"
+                            android:padding="@dimen/margin_5"
+                            app:srcCompat="@drawable/ic_close"
+                            android:layout_alignParentEnd="true"
+                            android:id="@+id/imgRemove"
+                            android:layout_width="@dimen/icon_size_25"
+                            android:layout_height="@dimen/icon_size_25"/>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_below="@+id/rlAdvertising"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/llLargeAds"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/banner_rectangle_review_height"
+                        android:gravity="center"
+                        android:orientation="vertical"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
         <RelativeLayout
             android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary"
@@ -50,8 +108,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/margin_2"
+                android:layout_marginBottom="@dimen/margin_2"
                 android:id="@+id/llSmallAds"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/banner_height"

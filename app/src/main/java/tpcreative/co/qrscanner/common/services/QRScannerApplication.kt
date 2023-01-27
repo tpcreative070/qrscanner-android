@@ -46,8 +46,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var adCreateSmallView : AdView? = null
     private var adCreateLargeView : AdView? = null
     private var adHelpFeedbackSmallView : AdView? = null
+    private var adHelpFeedbackLargeView : AdView? = null
     private var adChangeColorSmallView : AdView? = null
+    private var adChangeColorLargeView : AdView? = null
     private var adBackupSmallView : AdView? = null
+    private var adBackupLargeView : AdView? = null
     private var mInterstitialAd: InterstitialAd? = null
     private var mInterstitialViewCodeAd: InterstitialAd? = null
     private var isRequestInterstitialAd : Boolean = true
@@ -60,8 +63,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var isCreateSmallView = true
     private var isCreateLargeView = true
     private var isHelpFeedbackSmallView = true
+    private var isHelpFeedbackLargeView = true
     private var isChangeColorSmallView = true
+    private var isChangeColorLargeView = true
     private var isBackupSmallView = true
+    private var isBackupLargeView = true
     private var requestClearCacheData = false
     private var options: GoogleSignInOptions.Builder? = null
     private var requiredScopes: MutableSet<Scope>? = null
@@ -409,6 +415,50 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adHelpFeedbackSmallView?.loadAd(adRequest)
     }
 
+    fun requestHelpFeedbackLargeView(context: Context){
+        Utils.Log(TAG, "requestReviewSmallView ads...")
+        adHelpFeedbackLargeView = AdView(context)
+        adHelpFeedbackLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adHelpFeedbackLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adHelpFeedbackLargeView?.adUnitId = getString(R.string.banner_help_feedback_large)
+            }
+        } else {
+            adHelpFeedbackLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adHelpFeedbackLargeView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isHelpFeedbackLargeView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isHelpFeedbackLargeView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adHelpFeedbackLargeView?.loadAd(adRequest)
+    }
+
 
     fun requestChangeColorSmallView(context: Context){
         Utils.Log(TAG, "requestReviewSmallView ads...")
@@ -452,6 +502,50 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             }
         }
         adChangeColorSmallView?.loadAd(adRequest)
+    }
+
+    fun requestChangeColorLargeView(context: Context){
+        Utils.Log(TAG, "requestReviewSmallView ads...")
+        adChangeColorLargeView = AdView(context)
+        adChangeColorLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adChangeColorLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adChangeColorLargeView?.adUnitId = getString(R.string.banner_change_color_large)
+            }
+        } else {
+            adChangeColorLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adChangeColorLargeView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isChangeColorLargeView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isChangeColorLargeView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adChangeColorLargeView?.loadAd(adRequest)
     }
 
 
@@ -498,6 +592,51 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         }
         adBackupSmallView?.loadAd(adRequest)
     }
+
+    fun requestBackupLargeView(context: Context){
+        Utils.Log(TAG, "requestReviewSmallView ads...")
+        adBackupLargeView = AdView(context)
+        adBackupLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        if (Utils.isFreeRelease()) {
+            if (Utils.isDebug()) {
+                Utils.Log(TAG, "show ads isDebug...")
+                adBackupLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+            } else {
+                adBackupLargeView?.adUnitId = getString(R.string.banner_backup_large)
+            }
+        } else {
+            adBackupLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        }
+        val adRequest = AdRequest.Builder().build()
+        adBackupLargeView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isBackupLargeView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isBackupLargeView = true
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adBackupLargeView?.loadAd(adRequest)
+    }
+
 
 
     fun requestReviewLargeView(context: Context){
@@ -859,6 +998,18 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         layAd?.addView(adHelpFeedbackSmallView)
     }
 
+    fun loadHelpFeedbackLargeView(layAd: LinearLayout?) {
+        if (adHelpFeedbackLargeView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adHelpFeedbackLargeView?.parent != null) {
+            val tempVg: ViewGroup = adHelpFeedbackLargeView?.parent as ViewGroup
+            tempVg.removeView(adHelpFeedbackLargeView)
+        }
+        layAd?.addView(adHelpFeedbackLargeView)
+    }
+
     fun loadChangeColorSmallView(layAd: LinearLayout?) {
         if (adChangeColorSmallView == null) {
             Utils.Log(TAG, "ads null")
@@ -869,6 +1020,18 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             tempVg.removeView(adChangeColorSmallView)
         }
         layAd?.addView(adChangeColorSmallView)
+    }
+
+    fun loadChangeColorLargeView(layAd: LinearLayout?) {
+        if (adChangeColorLargeView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adChangeColorLargeView?.parent != null) {
+            val tempVg: ViewGroup = adChangeColorLargeView?.parent as ViewGroup
+            tempVg.removeView(adChangeColorLargeView)
+        }
+        layAd?.addView(adChangeColorLargeView)
     }
 
     fun loadBackupSmallView(layAd: LinearLayout?) {
@@ -883,16 +1046,41 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         layAd?.addView(adBackupSmallView)
     }
 
+    fun loadBackupLargeView(layAd: LinearLayout?) {
+        if (adBackupLargeView == null) {
+            Utils.Log(TAG, "ads null")
+            return
+        }
+        if (adBackupLargeView?.parent != null) {
+            val tempVg: ViewGroup = adBackupLargeView?.parent as ViewGroup
+            tempVg.removeView(adBackupLargeView)
+        }
+        layAd?.addView(adBackupLargeView)
+    }
+
     fun isHelpFeedbackSmallView(): Boolean {
         return isHelpFeedbackSmallView
     }
+
+    fun isHelpFeedbackLargeView(): Boolean {
+        return isHelpFeedbackLargeView
+    }
+
 
     fun isChangeColorSmallView(): Boolean {
         return isChangeColorSmallView
     }
 
+    fun isChangeColorLargeView(): Boolean {
+        return isChangeColorLargeView
+    }
+
     fun isBackupSmallView(): Boolean {
         return isBackupSmallView
+    }
+
+    fun isBackupLargeView(): Boolean {
+        return isBackupLargeView
     }
 
     fun isMainView(): Boolean {
@@ -946,11 +1134,23 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return true
     }
 
+    fun isEnableHelpFeedbackLargeView() : Boolean {
+        return true
+    }
+
     fun isEnableChangeColorSmallView() : Boolean {
         return true
     }
 
+    fun isEnableChangeColorLargeView() : Boolean {
+        return true
+    }
+
     fun isEnableBackupSmallView() : Boolean {
+        return true
+    }
+
+    fun isEnableBackupLargeView() : Boolean {
         return true
     }
 

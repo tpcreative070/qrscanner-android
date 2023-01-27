@@ -11,6 +11,7 @@
     <dimen name="icon_size_25">25dp</dimen>
     <dimen name="icon_size_27">27dp</dimen>
     <dimen name="icon_size_30">30dp</dimen>
+    <dimen name="icon_size_33">33dp</dimen>
     <dimen name="icon_size_35">35dp</dimen>
     <dimen name="icon_size_37">37dp</dimen>
     <dimen name="icon_size_36">36dp</dimen>
@@ -95,6 +96,7 @@
     <dimen name="small">14sp</dimen>
     <dimen name="medium">18sp</dimen>
     <dimen name="medium_16">16sp</dimen>
+    <dimen name="medium_18">18sp</dimen>
     <dimen name="medium_x">20sp</dimen>
     <dimen name="large">22sp</dimen>
     <dimen name="width">100dp</dimen>
