@@ -50,7 +50,7 @@
             android:icon="@drawable/ic_auto_complete"
             android:title="@string/scan_auto_complete"
             android:key="@string/key_scan_auto_complete"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:summary="@string/scan_auto_complete_detail">
         </tpcreative.co.qrscanner.common.preference.MySwitchPreference>
 

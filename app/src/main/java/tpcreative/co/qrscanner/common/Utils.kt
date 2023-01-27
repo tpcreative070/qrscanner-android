@@ -694,7 +694,7 @@ object Utils {
     }
 
     fun isAutoComplete() : Boolean{
-        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_scan_auto_complete), true)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_scan_auto_complete), false)
     }
 
     fun setQRCodeThemePosition(position : Int){
