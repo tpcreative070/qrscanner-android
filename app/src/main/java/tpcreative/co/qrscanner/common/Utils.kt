@@ -164,11 +164,19 @@ object Utils {
     }
 
     fun isMultipleScan(): Boolean {
-        return PrefsController.getBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_multiple_scan), false)
+        return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_multiple_scan), false)
+    }
+
+    fun setMultipleScan(isValue: Boolean) {
+        return PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_multiple_scan), isValue)
     }
 
     fun isSkipDuplicates(): Boolean {
         return PrefsController.getBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_skip_duplicates), false)
+    }
+
+    fun setSkipDuplicates(isValue : Boolean) {
+        return PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_skip_duplicates), isValue)
     }
 
     fun generateEAN(barcode: String?): String? {
@@ -697,6 +705,10 @@ object Utils {
         return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_scan_auto_complete), false)
     }
 
+    fun setAutoComplete(isValue: Boolean) {
+        return PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_scan_auto_complete), isValue)
+    }
+
     fun setQRCodeThemePosition(position : Int){
         PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_theme_object), position)
     }
@@ -750,11 +762,11 @@ object Utils {
     }
 
     fun getPositionTheme(): Int {
-        return PrefsController.getInt(QRScannerApplication.Companion.getInstance().getString(R.string.key_position_theme), 0)
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_position_theme), 0)
     }
 
     fun setPositionTheme(positionTheme: Int) {
-        PrefsController.putInt(QRScannerApplication.Companion.getInstance().getString(R.string.key_position_theme), positionTheme)
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_position_theme), positionTheme)
     }
 
     fun getCurrentThemeName(): String? {

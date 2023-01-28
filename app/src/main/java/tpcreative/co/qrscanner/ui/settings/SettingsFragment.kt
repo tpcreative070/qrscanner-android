@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -323,7 +324,9 @@ class SettingsFragment : BaseFragment() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            /*Version**/mVersionApp = findPreference(getString(R.string.key_version)) as MyPreference?
+            onCheckFreeVersion()
+            /*Version**/
+            mVersionApp = findPreference(getString(R.string.key_version)) as MyPreference?
             mVersionApp?.summary = java.lang.String.format("%s", BuildConfig.VERSION_NAME)
             mVersionApp?.onPreferenceChangeListener = createChangeListener()
             mVersionApp?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -476,6 +479,22 @@ class SettingsFragment : BaseFragment() {
 
         private fun onUpdateVisitOnPremium(){
             mPreferenceProVersion?.isVisible = !Utils.isPremium()
+        }
+
+        private fun onCheckFreeVersion(){
+            if (!Utils.isPremium()){
+                Utils.setMultipleScan(false)
+                Utils.setSkipDuplicates(false)
+                Utils.setAutoComplete(false)
+                when (context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        Utils.setPositionTheme(0)
+                        ThemeHelper.applyTheme(EnumThemeMode.LIGHT)
+                    }
+                    Configuration.UI_MODE_NIGHT_NO -> {}
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {}
+                }
+            }
         }
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
