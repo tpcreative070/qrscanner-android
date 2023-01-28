@@ -8,18 +8,20 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.gson.Gson
-import com.google.zxing.*
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.Result
 import com.google.zxing.client.result.ParsedResultType
 import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_review.*
-import kotlinx.android.synthetic.main.activity_review.llLargeAds
-import kotlinx.android.synthetic.main.activity_review.llSmallAds
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
@@ -46,11 +48,24 @@ class ReviewActivity : BaseActivitySlide() {
     var processDrawnDone : Boolean = false
     private var save: SaveModel = SaveModel()
     var dialog : Dialog? = null
+    var isAlreadySaved  = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(ConstantKey.key_saved, isAlreadySaved)
+        Utils.Log(TAG,"State saved")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        isAlreadySaved = savedInstanceState.getBoolean(ConstantKey.key_saved)
+        Utils.Log(TAG,"State restore")
     }
 
     fun onCatch() {
@@ -161,14 +176,16 @@ class ReviewActivity : BaseActivitySlide() {
 
     private fun onSavedData() {
         save.favorite = false
-        if (create?.enumImplement == EnumImplement.CREATE) {
+        /*Detect rotation the screen*/
+        if (create?.enumImplement == EnumImplement.CREATE && !isAlreadySaved) {
             val time = Utils.getCurrentDateTimeSort()
             save.createDatetime = time
             save.updatedDateTime = time
             Utils.Log(TAG, "Questing created")
             Utils.Log(TAG,"Questing created ${Gson().toJson(save)}")
             SQLiteHelper.onInsert(save)
-        } else if (create?.enumImplement == EnumImplement.EDIT) {
+            isAlreadySaved = true
+        } else if (create?.enumImplement == EnumImplement.EDIT && !isAlreadySaved) {
             val time = Utils.getCurrentDateTimeSort()
             save.updatedDateTime = time
             save.createDatetime = create?.createdDateTime
@@ -180,6 +197,7 @@ class ReviewActivity : BaseActivitySlide() {
             Utils.Log(TAG, "Questing updated")
             Utils.Log(TAG,"Questing updated ${Gson().toJson(save)}")
             SQLiteHelper.onUpdate(save, true)
+            isAlreadySaved = true
         } else if (create?.enumImplement == EnumImplement.VIEW) {
             Utils.Log(TAG, "Questing view")
         }

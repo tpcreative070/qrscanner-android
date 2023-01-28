@@ -102,7 +102,7 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
         Utils.Log(TAG, "Bill ready...")
         bp?.getPurchaseListingDetailsAsync(getString(R.string.lifetime),object  : BillingProcessor.ISkuDetailsResponseListener{
             override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
-                val mPrice = products?.get(0)?.priceText
+                val mPrice = products?.firstOrNull()?.priceText
                 tvPrice.text = mPrice
             }
             override fun onSkuDetailsError(error: String?) {

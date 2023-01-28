@@ -778,7 +778,7 @@ object Utils {
 
     fun onAlertNotify(activity: Activity, message: String) {
         Alerter.create(activity)
-                .setTitle("Alert")
+                .setTitle(QRScannerApplication.getInstance().getString(R.string.alert))
                 .setBackgroundColorInt(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setText(message)
                 .show()
