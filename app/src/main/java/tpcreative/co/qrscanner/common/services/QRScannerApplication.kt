@@ -1207,8 +1207,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         isCreateSmallView = true
         isCreateLargeView = true
         isHelpFeedbackSmallView = true
+        isHelpFeedbackLargeView = true
         isChangeColorSmallView = true
+        isChangeColorLargeView = true
         isBackupSmallView = true
+        isBackupLargeView = true
     }
     companion object {
         @Volatile
