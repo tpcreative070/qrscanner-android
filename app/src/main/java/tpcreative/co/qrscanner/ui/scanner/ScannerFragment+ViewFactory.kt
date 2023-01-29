@@ -282,10 +282,10 @@ fun ScannerFragment.onAlert(){
 
 fun ScannerFragment.checkVisit(){
     if (Utils.checkPermission(Manifest.permission.CAMERA)){
-        rlPermission.visibility = View.INVISIBLE
-        rlScanner.visibility = View.VISIBLE
+        rlPermission?.visibility = View.INVISIBLE
+        rlScanner?.visibility = View.VISIBLE
     }else{
-        rlPermission.visibility = View.VISIBLE
-        rlScanner.visibility = View.INVISIBLE
+        rlPermission?.visibility = View.VISIBLE
+        rlScanner?.visibility = View.INVISIBLE
     }
 }

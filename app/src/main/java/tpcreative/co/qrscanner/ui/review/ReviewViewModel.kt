@@ -34,7 +34,7 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds()) {
+        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isPremium()) {
             emit(true)
         } else {
             emit(false)

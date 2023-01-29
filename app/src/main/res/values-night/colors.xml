@@ -32,6 +32,7 @@
     <color name="material_menu_text_color">#FFFFFF</color>
     <color name="material_default">#A5A1A1</color>
     <color name="material_hint_default">#A5A1A1</color>
+    <color name="material_hint_ads">#A5A1A1</color>
     <color name="color_item">#302F2F</color>
     <color name="color_supported_code">#212121</color>
     <color name="color_bg_supported_code">#000000</color>

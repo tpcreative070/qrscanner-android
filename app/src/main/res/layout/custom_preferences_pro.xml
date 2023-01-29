@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="@dimen/margin_10"
+        android:paddingBottom="@dimen/margin_10"
+        android:layout_marginStart="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@android:id/icon"
+                android:layout_width="@dimen/icon_size_35"
+                android:layout_height="@dimen/icon_size_35"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_crown_5"
+                android:tint="?attr/colorAccent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_15"
+            android:layout_marginEnd="@dimen/margin_7"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginBottom="@dimen/margin_2"
+            android:layout_weight="1">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textStyle="bold"
+                style="@style/brandonRegularTextView"
+                android:textSize="@dimen/medium_18"
+                android:id="@android:id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal" />
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/brandonRegularTextView"
+                android:textSize="@dimen/small"
+                android:id="@android:id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@android:id/title"
+                android:layout_alignStart="@android:id/title"
+                android:textColor="?android:attr/textColorSecondary"
+                android:maxLines="3"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <tpcreative.co.qrscanner.common.view.CircleImageView
+                app:srcCompat="?attr/colorAccent"
+                android:layout_margin="5dp"
+                android:layout_centerInParent="true"
+                android:id="@+id/imgStandardCircle"
+                android:layout_width="@dimen/icon_size_40"
+                android:layout_height="@dimen/icon_size_40"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                app:tint="@color/white"
+                android:padding="@dimen/margin_2"
+                android:id="@+id/imgNext"
+                app:srcCompat="@drawable/ic_next"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/icon_size_40"
+                android:layout_height="@dimen/icon_size_40"/>
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

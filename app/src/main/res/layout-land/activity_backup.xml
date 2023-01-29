@@ -38,97 +38,155 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-    <LinearLayout
-        android:layout_above="@+id/rlAdsRoot"
-        android:weightSum="1"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <androidx.core.widget.NestedScrollView
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
+            android:layout_above="@+id/rlAdsRoot"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <RelativeLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/imgLogo"
-                    android:layout_width="@dimen/icon_size_150"
-                    android:layout_height="@dimen/icon_size_150"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerInParent="true"
-                    app:srcCompat="@drawable/ic_drive_cloud"
-                    app:tint="@color/colorPrimary" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_marginBottom="@dimen/margin_30"
-                    style="@style/brandonRegularTextInputLayout"
-                    android:id="@+id/tvAlert"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:text="@string/grant_permissions_to_google_drive"
-                    android:layout_below="@+id/imgLogo"
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:weightSum="1"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
+                    android:layout_height="match_parent">
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_weight="0.5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <RelativeLayout
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imgLogo"
+                                android:layout_width="@dimen/icon_size_150"
+                                android:layout_height="@dimen/icon_size_150"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerInParent="true"
+                                app:srcCompat="@drawable/ic_drive_cloud"
+                                app:tint="@color/colorPrimary" />
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_marginBottom="@dimen/margin_30"
+                                style="@style/brandonRegularTextInputLayout"
+                                android:id="@+id/tvAlert"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:text="@string/grant_permissions_to_google_drive"
+                                android:layout_below="@+id/imgLogo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </RelativeLayout>
+                    </androidx.core.widget.NestedScrollView>
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_weight="0.5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <RelativeLayout
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent">
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonRegularTextView"
+                                android:visibility="gone"
+                                android:id="@+id/tvEmail"
+                                android:layout_marginTop="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonRegularTextView"
+                                android:textColor="@color/colorPrimary"
+                                android:visibility="invisible"
+                                android:id="@+id/tvUsedSpace"
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_below="@+id/tvEmail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/brandonRegularTextView"
+                                android:id="@+id/tvLastTimeSynced"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_below="@+id/tvUsedSpace"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_marginBottom="@dimen/icon_size_40"
+                                android:id="@+id/btnEnable"
+                                style="@style/brandonRegularTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvLastTimeSynced"
+                                android:layout_centerInParent="true"
+                                android:layout_marginTop="@dimen/margin_30"
+                                android:background="@drawable/bg_button"
+                                android:paddingLeft="@dimen/margin_20"
+                                android:paddingRight="@dimen/margin_20"
+                                android:text="@string/enable_sync_data"
+                                android:textColor="@color/white" />
+                        </RelativeLayout>
+                    </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/rlBannerLarger"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:id="@+id/viewUnderline"
+                        android:background="@color/grey_lighter"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <RelativeLayout
+                        android:layout_below="@+id/viewUnderline"
+                        android:id="@+id/rlAdvertising"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginStart="@dimen/margin_50"
+                            android:layout_toStartOf="@+id/imgRemove"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/margin_5"
+                            style="@style/brandonRegularTextView"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14"
+                            android:text="@string/advertising"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <ImageView
+                            android:layout_margin="@dimen/margin_4"
+                            android:background="@color/material_hint_ads"
+                            android:padding="@dimen/margin_5"
+                            app:srcCompat="@drawable/ic_close"
+                            android:layout_alignParentEnd="true"
+                            android:id="@+id/imgRemove"
+                            android:layout_width="@dimen/icon_size_25"
+                            android:layout_height="@dimen/icon_size_25"/>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_below="@+id/rlAdvertising"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/llLargeAds"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/banner_rectangle_review_height"
+                        android:gravity="center"
+                        android:orientation="vertical"/>
+                </RelativeLayout>
+            </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
-            <RelativeLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/brandonRegularTextView"
-                    android:visibility="gone"
-                    android:id="@+id/tvEmail"
-                    android:layout_marginTop="@dimen/margin_20"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/brandonRegularTextView"
-                    android:textColor="@color/colorPrimary"
-                    android:visibility="invisible"
-                    android:id="@+id/tvUsedSpace"
-                    android:layout_marginTop="@dimen/margin_10"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:layout_below="@+id/tvEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/brandonRegularTextView"
-                    android:id="@+id/tvLastTimeSynced"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:layout_below="@+id/tvUsedSpace"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_marginBottom="@dimen/icon_size_40"
-                    android:id="@+id/btnEnable"
-                    style="@style/brandonRegularTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvLastTimeSynced"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="@dimen/margin_30"
-                    android:background="@drawable/bg_button"
-                    android:paddingLeft="@dimen/margin_20"
-                    android:paddingRight="@dimen/margin_20"
-                    android:text="@string/enable_sync_data"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-        </androidx.core.widget.NestedScrollView>
-    </LinearLayout>
         <RelativeLayout
             android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary"

@@ -88,135 +88,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
-                    android:visibility="gone"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:tint="?attr/colorAccent"
-                        android:src="@drawable/baseline_invert_colors_white_48"
-                        android:layout_width="@dimen/icon_size_30"
-                        android:layout_height="@dimen/icon_size_30"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:textSize="@dimen/medium_16"
-                        style="@style/brandonRegularTextView"
-                        android:text="@string/smart_export_csv"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_colors"
-                        android:layout_width="@dimen/icon_size_30"
-                        android:layout_height="@dimen/icon_size_30"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:textSize="@dimen/medium_16"
-                        style="@style/brandonRegularTextView"
-                        android:text="@string/key_color_code_detail"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_continue"
-                        android:layout_width="@dimen/icon_size_25"
-                        android:layout_height="@dimen/icon_size_25"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:textSize="@dimen/medium_16"
-                        style="@style/brandonRegularTextView"
-                        android:text="@string/key_multiple_scan"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_duplicated"
-                        android:layout_width="@dimen/icon_size_25"
-                        android:layout_height="@dimen/icon_size_25"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:textSize="@dimen/medium_16"
-                        style="@style/brandonRegularTextView"
-                        android:text="@string/key_skip_duplicates_detail"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="23dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_barcode"
-                        android:layout_width="@dimen/icon_size_22"
-                        android:layout_height="@dimen/icon_size_25"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:textSize="@dimen/medium_16"
-                        style="@style/brandonRegularTextView"
-                        android:text="@string/generate_barcode"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="20dp"
@@ -244,6 +115,56 @@
                 <LinearLayout
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:tint="?attr/colorAccent"
+                        android:src="@drawable/ic_refresh"
+                        android:layout_width="@dimen/icon_size_25"
+                        android:layout_height="@dimen/icon_size_25"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textSize="@dimen/medium_16"
+                        style="@style/brandonRegularTextView"
+                        android:text="@string/multiple_scan"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:tint="?attr/colorAccent"
+                        android:src="@drawable/ic_duplicated"
+                        android:layout_width="@dimen/icon_size_25"
+                        android:layout_height="@dimen/icon_size_25"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textSize="@dimen/medium_16"
+                        style="@style/brandonRegularTextView"
+                        android:text="@string/skip_duplicates_detail"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginStart="23dp"
                     android:orientation="horizontal"
@@ -252,14 +173,14 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:tint="?attr/colorAccent"
-                        android:src="@drawable/ic_cloud"
+                        android:src="@drawable/ic_auto_complete"
                         android:layout_width="@dimen/icon_size_22"
                         android:layout_height="@dimen/icon_size_25"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/medium_16"
                         style="@style/brandonRegularTextView"
-                        android:text="@string/backup_title"
+                        android:text="@string/scan_auto_complete_detail"
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
@@ -281,6 +202,7 @@
                         android:id="@+id/btnUpgradeNow"
                         android:text="@string/upgrade_to_pro_version"
                         android:background="@drawable/bg_button"
+                        android:foreground="@drawable/item_effect"
                         android:src="@drawable/baseline_mood_white_48"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/button_height"/>

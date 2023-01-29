@@ -328,12 +328,14 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun onHandleBarCode(){
-        val mData = BarcodeFormat.valueOf(viewModel.result?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
-        if (mData != BarcodeFormat.QR_CODE && mData != BarcodeFormat.DATA_MATRIX   && mData != BarcodeFormat.AZTEC){
-            GlobalScope.launch(Dispatchers.IO) {
-                onGenerateReview(viewModel.result?.code ?:"",mData)
-            }
-        }
+       if(viewModel.result?.barcodeFormat?.isNotEmpty() == true){
+           val mData = BarcodeFormat.valueOf(viewModel.result?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
+           if (mData != BarcodeFormat.QR_CODE && mData != BarcodeFormat.DATA_MATRIX   && mData != BarcodeFormat.AZTEC){
+               GlobalScope.launch(Dispatchers.IO) {
+                   onGenerateReview(viewModel.result?.code ?:"",mData)
+               }
+           }
+       }
     }
 
     private fun onCopy(){
@@ -425,8 +427,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         if (isShow) {
             QRScannerApplication.getInstance().loadResultSmallView(llSmallAds)
             QRScannerApplication.getInstance().loadResultLargeView(llLargeAds)
-        } else {
-            rlAdsRoot.visibility = View.GONE
         }
     }
 

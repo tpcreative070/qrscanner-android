@@ -165,6 +165,7 @@ dependencies {
     implementation "com.afollestad.material-dialogs:input:$materialDialogsInput"
     implementation "com.afollestad.material-dialogs:core:$materialDialogsInput"
     implementation "com.github.AppIntro:AppIntro:$appIntro"
+    implementation "com.anjlab.android.iab.v3:library:$billingInApp"
 }
 
 apply plugin: 'com.google.gms.google-services'

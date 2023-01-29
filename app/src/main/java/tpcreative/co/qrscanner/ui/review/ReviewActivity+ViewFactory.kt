@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.ui.review
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.*
@@ -8,14 +7,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.print.PrintHelper
@@ -23,6 +20,8 @@ import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_review.*
+import kotlinx.android.synthetic.main.activity_review.imgRemove
+import kotlinx.android.synthetic.main.activity_review.toolbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +29,6 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
@@ -50,11 +48,21 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     scrollView.smoothScrollTo(0, 0)
     getIntentData()
-    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView()) {
+    if(Utils.isPremium()){
+        rlAdsRoot.visibility = View.GONE
+        rlBannerLarger.visibility = View.GONE
+    }
+    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestReviewSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView()) {
+    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestReviewLargeView(this)
+    }
+    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd() && !Utils.isPremium()) {
+        QRScannerApplication.getInstance().requestInterstitialViewCodeAd()
+    }
+    imgRemove.setOnClickListener {
+        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
     /*Press back button*/
@@ -62,14 +70,14 @@ fun ReviewActivity.initUI(){
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT
         ) {
-            finish()
+            showAds()
         }
     } else {
         onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    finish()
+                    showAds()
                 }
             })
     }
@@ -329,6 +337,15 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
                 onPhotoPrint()
             }
         }
+    }
+}
+
+fun ReviewActivity.showAds(){
+    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() || Utils.isPremium()){
+        // Back is pressed... Finishing the activity
+        finish()
+    }else{
+        QRScannerApplication.getInstance().loadInterstitialViewCodeAd(this)
     }
 }
 

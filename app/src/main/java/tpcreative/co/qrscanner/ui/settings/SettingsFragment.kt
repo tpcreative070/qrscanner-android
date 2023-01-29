@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -14,6 +15,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
+import androidx.preference.Preference.OnPreferenceChangeListener
 import androidx.preference.PreferenceFragmentCompat
 import co.tpcreative.supersafe.common.controller.EncryptedPreferenceDataStore
 import com.afollestad.materialdialogs.MaterialDialog
@@ -26,6 +28,7 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.instantiate
 import tpcreative.co.qrscanner.common.preference.MyPreference
 import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory
+import tpcreative.co.qrscanner.common.preference.MyPreferenceProVersion
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -104,6 +107,7 @@ class SettingsFragment : BaseFragment() {
     class SettingsFragmentPreference : PreferenceFragmentCompat(), SettingsSingleton.SingletonSettingsListener {
         var mPosition = Utils.getPositionTheme()
         private var mVersionApp: MyPreference? = null
+        private var mPreferenceProVersion: MyPreferenceProVersion? = null
         private var myPreferenceShare: MyPreference? = null
         private var myPreferencePermissions: MyPreference? = null
         private var myPreferenceRate: MyPreference? = null
@@ -111,6 +115,7 @@ class SettingsFragment : BaseFragment() {
         private var myPreferenceHelp: MyPreference? = null
         private var mySwitchPreferenceVibrate: MySwitchPreference? = null
         private var mySwitchPreferenceBackupData: MySwitchPreference? = null
+        private var mySwitchPreferenceAutoScanComplete: MySwitchPreference? = null
         private var myPreferenceTheme: MyPreference? = null
         private var myPreferenceFileColor: MyPreference? = null
         private var myPreferenceMultipleScan: MySwitchPreference? = null
@@ -125,6 +130,10 @@ class SettingsFragment : BaseFragment() {
 
         override fun onUpdated() {
             onUpdateQRCode()
+        }
+
+        override fun onUpdatedPremiumVersion() {
+            onUpdateVisitOnPremium()
         }
 
         override fun onSyncDataRequest() {
@@ -182,33 +191,51 @@ class SettingsFragment : BaseFragment() {
          * @return The listener, which has been created, as an instance of the type [ ]
          */
         private fun createChangeListener(): Preference.OnPreferenceChangeListener {
-            return Preference.OnPreferenceChangeListener { preference: Preference?, newValue: Any? ->
+             return Preference.OnPreferenceChangeListener { preference: Preference?, newValue: Any? ->
                 if (preference is MySwitchPreference) {
-                    if (preference.getKey() == getString(R.string.key_skip_duplicates)) {
-                        val mResult = newValue as Boolean
-                        if (mResult) {
-                            val mSaveList: MutableList<SaveModel> = Utils.filterDuplicationsSaveItems(SQLiteHelper.getSaveList())
-                            Utils.Log(TAG, "need to be deleted at save " + mSaveList.size)
-                            val mHistoryList: MutableList<HistoryModel> = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getHistoryList())
-                            Utils.Log(TAG, "need to be deleted at history " + mHistoryList.size)
-                            val mCount = mSaveList.size + mHistoryList.size
-                            if (mCount > 0) {
-                                askToDeleteDuplicatesItems(mCount, object : ServiceManager.ServiceManagerClickedListener {
-                                    override fun onYes() {
-                                        for (index in mSaveList) {
-                                            SQLiteHelper.onDelete(index)
-                                        }
-                                        for (index in mHistoryList) {
-                                            SQLiteHelper.onDelete(index)
-                                        }
-                                    }
-
-                                    override fun onNo() {}
-                                })
-                            }
+                    if (preference.key == getString(R.string.key_multiple_scan)){
+                        if (!Utils.isPremium()){
+                            Navigator.onMoveProVersion(requireContext())
+                            return@OnPreferenceChangeListener false
                         }
-                        Utils.Log(TAG, "CLicked $newValue")
-                    } else if (preference.getKey() == getString(R.string.key_backup_data)) {
+                    }
+                    else if (preference.getKey() == getString(R.string.key_skip_duplicates)) {
+                        if(Utils.isPremium()){
+                            val mResult = newValue as Boolean
+                            if (mResult) {
+                                val mSaveList: MutableList<SaveModel> = Utils.filterDuplicationsSaveItems(SQLiteHelper.getSaveList())
+                                Utils.Log(TAG, "need to be deleted at save " + mSaveList.size)
+                                val mHistoryList: MutableList<HistoryModel> = Utils.filterDuplicationsHistoryItems(SQLiteHelper.getHistoryList())
+                                Utils.Log(TAG, "need to be deleted at history " + mHistoryList.size)
+                                val mCount = mSaveList.size + mHistoryList.size
+                                if (mCount > 0) {
+                                    askToDeleteDuplicatesItems(mCount, object : ServiceManager.ServiceManagerClickedListener {
+                                        override fun onYes() {
+                                            for (index in mSaveList) {
+                                                SQLiteHelper.onDelete(index)
+                                            }
+                                            for (index in mHistoryList) {
+                                                SQLiteHelper.onDelete(index)
+                                            }
+                                        }
+
+                                        override fun onNo() {}
+                                    })
+                                }
+                            }
+                            Utils.Log(TAG, "CLicked $newValue")
+                        }else{
+                            Navigator.onMoveProVersion(requireContext())
+                            return@OnPreferenceChangeListener false
+                        }
+                    }
+                    else if (preference.key == getString(R.string.key_scan_auto_complete)){
+                        if (!Utils.isPremium()){
+                            Navigator.onMoveProVersion(requireContext())
+                            return@OnPreferenceChangeListener false
+                        }
+                    }
+                    else if (preference.getKey() == getString(R.string.key_backup_data)) {
                         val mResult = newValue as Boolean
                         if (mResult) {
                             Navigator.onBackupData(context)
@@ -250,11 +277,7 @@ class SettingsFragment : BaseFragment() {
                     } else if (preference.getKey() == getString(R.string.key_color_code)) {
                         Navigator.onMoveToChangeFileColor(activity)
                     } else if (preference.getKey() == getString(R.string.key_rate)) {
-                        if (BuildConfig.APPLICATION_ID.equals(getString(R.string.qrscanner_pro_release))) {
-                            onRateProApp()
-                        } else {
-                            onRateApp()
-                        }
+                        onRateApp()
                     } else if (preference.getKey() == getString(R.string.key_supersafe)) {
                         onSuperSafe()
                     }
@@ -262,12 +285,23 @@ class SettingsFragment : BaseFragment() {
                         onSaveYourVoicemails()
                     }
                     else if (preference.getKey() == getString(R.string.key_dark_mode)) {
-                        askChooseTheme(object : ServiceManager.ServiceManagerClickedItemsListener {
-                            override fun onYes() {
-                                EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
-                                Utils.Log(TAG, "Clicked say yes")
-                            }
-                        })
+                        if (Utils.isPremium()) {
+                            askChooseTheme(object :
+                                ServiceManager.ServiceManagerClickedItemsListener {
+                                override fun onYes() {
+                                    EnumThemeMode.byPosition(Utils.getPositionTheme())
+                                        ?.let { ThemeHelper.applyTheme(it) }
+                                    Utils.Log(TAG, "Clicked say yes")
+                                }
+                            })
+                        }else{
+                            Navigator.onMoveProVersion(requireContext())
+                        }
+                    }
+                }
+                else if (preference is MyPreferenceProVersion){
+                    if (preference.key == getString(R.string.key_pro_version)){
+                        Navigator.onMoveProVersion(requireContext())
                     }
                 }
                 true
@@ -290,7 +324,9 @@ class SettingsFragment : BaseFragment() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            /*Version**/mVersionApp = findPreference(getString(R.string.key_version)) as MyPreference?
+            onCheckFreeVersion()
+            /*Version**/
+            mVersionApp = findPreference(getString(R.string.key_version)) as MyPreference?
             mVersionApp?.summary = java.lang.String.format("%s", BuildConfig.VERSION_NAME)
             mVersionApp?.onPreferenceChangeListener = createChangeListener()
             mVersionApp?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -327,7 +363,7 @@ class SettingsFragment : BaseFragment() {
             myPreferenceTheme?.setListener(object : MyPreference.MyPreferenceListener {
                 override fun onUpdatePreference() {
                     myPreferenceTheme?.getTvChoose()?.visibility = View.VISIBLE
-                    myPreferenceTheme?.getImgPremium()?.visibility = View.INVISIBLE
+                    myPreferenceTheme?.getImgPremium()?.visibility = View.VISIBLE
                     myPreferenceTheme?.getTvChoose()?.text = Utils.getCurrentThemeName()
                 }
             })
@@ -347,7 +383,7 @@ class SettingsFragment : BaseFragment() {
             myPreferenceMultipleScan?.onPreferenceChangeListener = createChangeListener()
             myPreferenceMultipleScan?.setListener(object : MySwitchPreference.MySwitchPreferenceListener {
                 override fun onUpdatePreference() {
-                    myPreferenceMultipleScan?.getImgPremium()?.visibility = View.INVISIBLE
+                    myPreferenceMultipleScan?.getImgPremium()?.visibility =  View.VISIBLE
                 }
             })
 
@@ -356,7 +392,7 @@ class SettingsFragment : BaseFragment() {
             mySwitchPreferenceSkipDuplicates?.onPreferenceChangeListener = createChangeListener()
             mySwitchPreferenceSkipDuplicates?.setListener(object : MySwitchPreference.MySwitchPreferenceListener {
                 override fun onUpdatePreference() {
-                    mySwitchPreferenceSkipDuplicates?.getImgPremium()?.visibility = View.INVISIBLE
+                    mySwitchPreferenceSkipDuplicates?.getImgPremium()?.visibility =  View.VISIBLE
                 }
             })
 
@@ -368,6 +404,25 @@ class SettingsFragment : BaseFragment() {
                     mySwitchPreferenceBackupData?.getImgPremium()?.visibility = View.INVISIBLE
                 }
             })
+
+            /*Auto Scan complete*/
+            mySwitchPreferenceAutoScanComplete = findPreference(getString(R.string.key_scan_auto_complete)) as MySwitchPreference?
+            mySwitchPreferenceAutoScanComplete?.onPreferenceClickListener = createActionPreferenceClickListener()
+            mySwitchPreferenceAutoScanComplete?.onPreferenceChangeListener = createChangeListener()
+            mySwitchPreferenceAutoScanComplete?.setListener(object : MySwitchPreference.MySwitchPreferenceListener {
+                override fun onUpdatePreference() {
+                    mySwitchPreferenceAutoScanComplete?.getImgPremium()?.visibility = View.VISIBLE
+                }
+            })
+
+            /*Pro version*/
+            mPreferenceProVersion = findPreference(getString(R.string.key_pro_version)) as MyPreferenceProVersion?
+            mPreferenceProVersion?.onPreferenceClickListener = createActionPreferenceClickListener()
+            mPreferenceProVersion?.onPreferenceChangeListener = createChangeListener()
+
+            if (Utils.isPremium()){
+                mPreferenceProVersion?.isVisible = false
+            }
 
             myPreferenceCategoryFamilyApps = findPreference(getString(R.string.key_family_apps)) as MyPreferenceCategory?
             myPreferenceCategoryFamilyApps?.onPreferenceClickListener = createActionPreferenceClickListener()
@@ -422,6 +477,26 @@ class SettingsFragment : BaseFragment() {
                 }
         }
 
+        private fun onUpdateVisitOnPremium(){
+            mPreferenceProVersion?.isVisible = !Utils.isPremium()
+        }
+
+        private fun onCheckFreeVersion(){
+            if (!Utils.isPremium()){
+                Utils.setMultipleScan(false)
+                Utils.setSkipDuplicates(false)
+                Utils.setAutoComplete(false)
+                when (context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        Utils.setPositionTheme(0)
+                        ThemeHelper.applyTheme(EnumThemeMode.LIGHT)
+                    }
+                    Configuration.UI_MODE_NIGHT_NO -> {}
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {}
+                }
+            }
+        }
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             if (QRScannerApplication.getInstance().isLiveMigration()){
                 preferenceManager.preferenceDataStore = EncryptedPreferenceDataStore.getInstance(requireContext())
@@ -474,22 +549,6 @@ class SettingsFragment : BaseFragment() {
             } catch (e: ActivityNotFoundException) {
                 startActivity(Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_free_release))))
-            }
-        }
-
-        private fun onRateProApp() {
-            val uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_pro_release))
-            val goToMarket = Intent(Intent.ACTION_VIEW, uri)
-            // To count with Play market backstack, After pressing back button,
-            // to taken back to our application, we need to add following flags to intent.
-            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
-                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-            try {
-                startActivity(goToMarket)
-            } catch (e: ActivityNotFoundException) {
-                startActivity(Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_pro_release))))
             }
         }
     }

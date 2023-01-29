@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.filecolor
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
@@ -8,25 +9,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_chage_file_color.imgRemove
 import kotlinx.android.synthetic.main.activity_chage_file_color.recyclerView
+import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_chage_file_color.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_chage_file_color.toolbar
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
-import tpcreative.co.qrscanner.ui.help.HelpActivity
-import tpcreative.co.qrscanner.ui.help.initUI
 
 fun ChangeFileColorActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    if(Utils.isPremium()){
+        rlAdsRoot.visibility = View.GONE
+        rlBannerLarger.visibility = View.GONE
+    }
     initRecycleView(layoutInflater)
     getData()
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
-        QRScannerApplication.getInstance().requestInterstitialAd()
-    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT
@@ -42,8 +46,19 @@ fun ChangeFileColorActivity.initUI(){
                 }
             })
     }
-    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()) {
+
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()  && !Utils.isPremium()) {
+        QRScannerApplication.getInstance().requestInterstitialAd()
+    }
+    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestChangeColorSmallView(this)
+    }
+
+    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isPremium()) {
+        QRScannerApplication.getInstance().requestChangeColorLargeView(this)
+    }
+    imgRemove.setOnClickListener {
+        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
 }
@@ -75,7 +90,7 @@ fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
 }
 
 fun ChangeFileColorActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isPremium()){
         // Back is pressed... Finishing the activity
         finish()
     }else{

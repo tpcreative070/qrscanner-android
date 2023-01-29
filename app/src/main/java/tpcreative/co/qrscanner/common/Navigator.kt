@@ -11,6 +11,7 @@ import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorActivity
 import tpcreative.co.qrscanner.ui.intro.IntroActivity
 import tpcreative.co.qrscanner.ui.help.HelpActivity
 import tpcreative.co.qrscanner.ui.main.MainActivity
+import tpcreative.co.qrscanner.ui.pro.ProVersionActivity
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
 
 object Navigator {
@@ -36,10 +37,10 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-//    fun onMoveProVersion(context: Context?) {
-//        val intent = Intent(context, ProVersionActivity::class.java)
-//        context?.startActivity(intent)
-//    }
+    fun onMoveProVersion(context: Context?) {
+        val intent = Intent(context, ProVersionActivity::class.java)
+        context?.startActivity(intent)
+    }
 
     fun <T> onGenerateView(context: Activity?, save: GeneralModel?, clazz: Class<T>) {
         val intent = Intent(context, clazz)

@@ -92,6 +92,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadBackupSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadBackupLargeView(llLargeAds)
         } else {
             rlAdsRoot.visibility = View.GONE
         }

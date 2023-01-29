@@ -57,8 +57,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds)
-        } else {
-            rlAdsRoot.visibility = View.GONE
+            QRScannerApplication.getInstance().loadChangeColorLargeView(llLargeAds)
         }
     }
 
