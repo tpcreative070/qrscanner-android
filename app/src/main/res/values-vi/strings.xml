@@ -353,4 +353,6 @@
     <string name="using_the_current_location_as_geo">Sử dụng GPS để xác định vị trí hiện tại làm tọa độ GEO khi có quyền truy cập vào vị trí hiện tại trên Google Map.</string>
     <string name="waiting_for_delete">Đang xử lý xoá</string>
     <string name="waiting_for_export">Đang xử lý xuất tập tin</string>
+    <string name="delete_entire_history">Xoá toàn bộ lịch sử?</string>
+    <string name="delete_entire_save">Xoá toàn bộ tạo mới?</string>
 </resources>

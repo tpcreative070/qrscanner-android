@@ -110,6 +110,23 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
         }
     }
 
+    fun deleteEntireItem() = liveData(Dispatchers.IO) {
+        val list = SQLiteHelper.getSaveList()
+        if (list.size>0){
+            for (index in list) {
+                Utils.Log(TAG,"deleteItem 0")
+                SQLiteHelper.onDelete(index)
+            }
+        }
+        getListGroup()
+        emit(true)
+    }
+
+    fun count() : Int{
+        val list = SQLiteHelper.getSaveList()
+        return list.size
+    }
+
     init {
         mLatestValue = SaveModel()
     }

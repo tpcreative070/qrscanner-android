@@ -3,7 +3,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +19,10 @@ import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
 import kotlinx.android.synthetic.main.fragment_saver.*
+import kotlinx.android.synthetic.main.fragment_saver.recyclerView
+import kotlinx.android.synthetic.main.fragment_saver.rlCSV
+import kotlinx.android.synthetic.main.fragment_saver.rlDelete
+import kotlinx.android.synthetic.main.fragment_saver.tvNotFoundItems
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +30,6 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
-import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -46,13 +48,15 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     var dialog : Dialog? = null
     var dialogExport : Dialog? = null
     lateinit var viewModel : SaveViewModel
-    val callback: ActionMode.Callback = object : ActionMode.Callback {
+    private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
             menuInflater?.inflate(R.menu.menu_select_all, menu)
             actionMode = mode
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
+            rlDelete.visibility = View.INVISIBLE
+            rlCSV.visibility = View.INVISIBLE
             return true
         }
 
@@ -96,7 +100,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
                     }
                     Utils.Log(TAG, "start")
                     if (viewModel.getCheckedCount() > 0) {
-                        dialogDelete()
+                        dialog?.show()
+                        deleteItem()
                     }
                     return true
                 }
@@ -107,6 +112,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         override fun onDestroyActionMode(mode: ActionMode?) {
             actionMode = null
             isSelectedAll = false
+            rlDelete.visibility = View.VISIBLE
+            rlCSV.visibility = View.VISIBLE
             val list: MutableList<SaveModel> = viewModel.getListGroup()
             viewModel.mList.clear()
             for (index in list) {
@@ -172,6 +179,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             tvNotFoundItems.visibility = View.VISIBLE
         }
         recyclerView.addCells(cells)
+        tvCount.text = "${viewModel.count()}"
     }
 
     override fun isDeleted(): Boolean {
@@ -327,13 +335,13 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         }
     }
 
-    fun dialogDelete() {
+    fun dialogEntireDelete() {
         MaterialDialog(requireContext()).show {
             title(R.string.delete)
-            message(text = String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
+            message(text = getString(R.string.delete_entire_save))
             positiveButton(R.string.yes){
-                deleteItem()
                 dialog?.show()
+                deleteEntireItem()
             }
             negativeButton (R.string.no){
             }

@@ -115,4 +115,21 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
             emit(true)
         }
     }
+
+    fun deleteEntireItem() = liveData(Dispatchers.IO) {
+        val list = SQLiteHelper.getHistoryList()
+        if (list.size>0){
+            for (index in list) {
+                Utils.Log(TAG,"deleteItem 0")
+                SQLiteHelper.onDelete(index)
+            }
+        }
+        getListGroup()
+        emit(true)
+    }
+
+    fun count() : Int{
+        val list = SQLiteHelper.getHistoryList()
+        return list.size
+    }
 }

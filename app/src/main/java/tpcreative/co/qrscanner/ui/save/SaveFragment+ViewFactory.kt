@@ -3,7 +3,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_saver.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
-import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.viewmodel.SaveViewModel
@@ -23,24 +22,20 @@ private fun SaveFragment.setupViewModel() {
     ).get(SaveViewModel::class.java)
 }
 
+fun SaveFragment.deleteEntireItem(){
+    viewModel.deleteEntireItem().observe(this, Observer {
+        updateView()
+        dialog?.dismiss()
+    })
+}
+
 private fun SaveFragment.onActionView() {
-    rlSelect.setOnClickListener {
+    rlDelete.setOnClickListener {
         val listSave: MutableList<SaveModel> = SQLiteHelper.getSaveList()
-        if (actionMode == null) {
-            actionMode = QRScannerApplication.getInstance().getActivity()?.getToolbar()?.startActionMode(callback)
-        }
         if (listSave.size == 0) {
             return@setOnClickListener
         }
-        val list: MutableList<SaveModel> = viewModel.getListGroup()
-        viewModel.mList.clear()
-        for (index in list) {
-            index.setDeleted(true)
-            viewModel.mList.add(index)
-        }
-        recyclerView.removeAllCells()
-        bindData()
-        misDeleted = true
+        dialogEntireDelete()
     }
 
     rlCSV.setOnClickListener {
