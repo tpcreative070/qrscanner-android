@@ -42,7 +42,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     var actionMode: ActionMode? = null
     var dialog : Dialog? = null
     var dialogExport : Dialog? = null
-    val callback: ActionMode.Callback = object : ActionMode.Callback {
+    private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
             menuInflater?.inflate(R.menu.menu_select_all, menu)

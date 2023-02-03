@@ -57,7 +57,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
                         Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
                         Utils.setRequestSync(true)
                         requestSyncData()
-                        Utils.Log(TAG, "isSyncingData 92 " + ServiceManager.Companion.getInstance().isSyncingData())
+                        Utils.Log(TAG, "isSyncingData 92 " + ServiceManager.getInstance().isSyncingData())
                         signOut(object : ServiceManagerSyncDataListener {
                             override fun onCompleted() {
                                 signIn(accountName)

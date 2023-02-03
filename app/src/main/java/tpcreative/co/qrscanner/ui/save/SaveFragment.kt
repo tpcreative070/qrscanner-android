@@ -48,7 +48,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     var dialog : Dialog? = null
     var dialogExport : Dialog? = null
     lateinit var viewModel : SaveViewModel
-    val callback: ActionMode.Callback = object : ActionMode.Callback {
+    private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
             menuInflater?.inflate(R.menu.menu_select_all, menu)
