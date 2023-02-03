@@ -85,7 +85,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
-        if (isLiveAds()) {
+        if (isLiveAds() && !Utils.isPremium()) {
             Utils.Log(TAG, "Start ads")
             MobileAds.initialize(this) { }
         }

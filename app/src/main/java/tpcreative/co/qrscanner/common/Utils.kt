@@ -24,6 +24,7 @@ import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.extension.getString
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -785,6 +786,9 @@ object Utils {
     }
 
     fun isPremium() : Boolean{
+        if (BuildConfig.APPLICATION_ID == R.string.qrscanner_pro_release.toText()){
+            return true
+        }
         return isAlreadyCheckout()
     }
 
