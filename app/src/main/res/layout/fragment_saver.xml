@@ -22,12 +22,19 @@
             android:id="@+id/rlActionTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCount"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <RelativeLayout
                 android:foreground="@drawable/item_effect"
                 android:id="@+id/rlCSV"
-                android:layout_toStartOf="@+id/rlSelect"
+                android:layout_toStartOf="@+id/rlDelete"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/icon_size_37">
+                android:layout_height="@dimen/icon_size_35">
                 <ImageView
                     android:layout_marginStart="@dimen/margin_5"
                     android:layout_alignParentStart="true"
@@ -51,17 +58,17 @@
 
             <RelativeLayout
                 android:foreground="@drawable/item_effect"
-                android:id="@+id/rlSelect"
+                android:id="@+id/rlDelete"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/icon_size_37">
+                android:layout_height="@dimen/icon_size_35">
                 <ImageView
                     android:layout_marginStart="@dimen/margin_5"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
                     app:tint="?attr/colorAccent"
                     android:id="@+id/imgSelect"
-                    app:srcCompat="@drawable/ic_select_all"
+                    app:srcCompat="@drawable/ic_delete"
                     android:layout_width="@dimen/icon_size_27"
                     android:layout_height="@dimen/icon_size_27"
                     android:contentDescription="@string/todo" />
@@ -70,7 +77,7 @@
                     android:layout_marginEnd="@dimen/margin_5"
                     android:layout_marginStart="@dimen/margin_10"
                     android:layout_toEndOf="@+id/imgSelect"
-                    android:text="@string/select"
+                    android:text="@string/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>

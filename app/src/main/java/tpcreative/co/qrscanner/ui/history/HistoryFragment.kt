@@ -49,6 +49,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             actionMode = mode
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
+            rlDelete.visibility = View.INVISIBLE
+            rlCSV.visibility = View.INVISIBLE
             return true
         }
 
@@ -90,7 +92,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
                     }
                     Utils.Log(TAG, "start")
                     if (viewModel.getCheckedCount() > 0) {
-                        dialogDelete()
+                        dialog?.show()
+                        deleteItem()
                     }
                     return true
                 }
@@ -101,6 +104,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         override fun onDestroyActionMode(mode: ActionMode?) {
             actionMode = null
             isSelectedAll = false
+            rlDelete.visibility = View.VISIBLE
+            rlCSV.visibility = View.VISIBLE
             val list: MutableList<HistoryModel> = viewModel.getListGroup()
             viewModel.mList.clear()
             for (index in list) {
@@ -170,6 +175,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             tvNotFoundItems.visibility = View.VISIBLE
         }
         recyclerView.addCells(cells)
+        tvCount.text = "${viewModel.count()}"
     }
 
     override fun getContext(): Context? {
@@ -272,13 +278,13 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         }
     }
 
-    fun dialogDelete() {
+    fun dialogEntireDelete() {
         MaterialDialog(requireContext()).show {
             title(R.string.delete)
-            message(text = kotlin.String.format(getString(R.string.dialog_delete), viewModel.getCheckedCount().toString() + ""))
+            message(text = getString(R.string.delete_entire_history))
             positiveButton(R.string.yes){
-                deleteItem()
                 dialog?.show()
+                deleteEntireItem()
             }
             negativeButton (R.string.no){
             }
