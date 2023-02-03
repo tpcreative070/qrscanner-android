@@ -537,7 +537,11 @@ class SettingsFragment : BaseFragment() {
         }
 
         private fun onRateApp() {
-            val uri = Uri.parse("market://details?id=" + getString(R.string.qrscanner_free_release))
+            var id : String? = getString(R.string.qrscanner_free_release)
+            if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_pro_release)){
+                id = getString(R.string.qrscanner_pro_release)
+            }
+            val uri = Uri.parse("market://details?id=$id")
             val goToMarket = Intent(Intent.ACTION_VIEW, uri)
             // To count with Play market backstack, After pressing back button,
             // to taken back to our application, we need to add following flags to intent.
@@ -548,7 +552,7 @@ class SettingsFragment : BaseFragment() {
                 startActivity(goToMarket)
             } catch (e: ActivityNotFoundException) {
                 startActivity(Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + getString(R.string.qrscanner_free_release))))
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + id)))
             }
         }
     }
