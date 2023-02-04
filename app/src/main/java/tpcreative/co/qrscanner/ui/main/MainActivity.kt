@@ -9,9 +9,6 @@ import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
-import com.google.android.gms.tasks.Task
-import com.google.android.play.core.review.ReviewInfo
-import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -156,22 +153,8 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
                 unregisterReceiver(receiver)
             }
         }
-        Utils.onSetCountRating(Utils.onGetCountRating() + 1)
         ServiceManager.getInstance().onPreparingSyncData(true)
         QRScannerApplication.getInstance().refreshAds()
-    }
-
-    fun showEncourage() {
-        val manager = ReviewManagerFactory.create(this)
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { task: Task<ReviewInfo?>? ->
-            if (task?.isSuccessful == true) {
-                // We can get the ReviewInfo object
-                val reviewInfo = task.result
-                val flow = reviewInfo?.let { manager.launchReviewFlow(this, it) }
-                flow?.addOnCompleteListener { tasks: Task<Void?>? -> }
-            }
-        }
     }
 
     fun doShowAds(value: Boolean) {

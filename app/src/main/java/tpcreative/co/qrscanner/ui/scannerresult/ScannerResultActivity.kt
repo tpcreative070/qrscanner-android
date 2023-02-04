@@ -1,10 +1,8 @@
 package tpcreative.co.qrscanner.ui.scannerresult
-import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -12,19 +10,16 @@ import android.provider.ContactsContract
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
+import com.google.android.gms.tasks.Task
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +31,6 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.common.view.crop.Log
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
@@ -314,15 +308,35 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
                 viewModel.mListNavigation.clear()
                 viewModel.mListNavigation.addAll(it)
             }
-            if (history.isRequestOpenBrowser) {
-                Utils.onOpenWebSites(create?.url,this)
-            }
             onInsertUpdateHistory(history)
             title = history.titleDisplay
             onReloadData()
             onCheckFavorite()
             onCopy()
             onHandleBarCode()
+            callRateApp()
+        }
+    }
+
+    private fun callRateApp(){
+        val mCountRating = Utils.onGetCountRating()
+        if (mCountRating > 3) {
+            showEncourage()
+            Utils.Log(TAG, "rating.......")
+            Utils.onSetCountRating(0)
+        }
+    }
+
+    private fun showEncourage() {
+        val manager = ReviewManagerFactory.create(this)
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task: Task<ReviewInfo?>? ->
+            if (task?.isSuccessful == true) {
+                // We can get the ReviewInfo object
+                val reviewInfo = task.result
+                val flow = reviewInfo?.let { manager.launchReviewFlow(this, it) }
+                flow?.addOnCompleteListener { tasks: Task<Void?>? -> }
+            }
         }
     }
 
@@ -354,6 +368,9 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             if (create?.fragmentType != EnumFragmentType.SCANNER) {
                 return
             }
+        }
+        if (history.isRequestOpenBrowser) {
+            Utils.onOpenWebSites(create?.url,this)
         }
         Utils.Log(TAG, "Create :" + (create != null))
         Utils.Log(TAG, "fragmentType :" + create?.fragmentType)
@@ -396,6 +413,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             }
             else -> Utils.Log(TAG, "Nothing")
         }
+        Utils.onSetCountRating(Utils.onGetCountRating() + 1)
     }
 
     override fun onResume() {

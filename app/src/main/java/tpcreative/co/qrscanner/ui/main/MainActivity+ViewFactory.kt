@@ -1,10 +1,7 @@
 package tpcreative.co.qrscanner.ui.main
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.common.ResponseSingleton
@@ -39,13 +36,6 @@ fun MainActivity.initUI(){
     Theme.getInstance()?.getList()
     if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView() && !Utils.isPremium()) {
         QRScannerApplication.getInstance().requestMainView(this)
-    }
-
-    val mCountRating = Utils.onGetCountRating()
-    if (mCountRating > 3) {
-        showEncourage()
-        Utils.Log(TAG, "rating.......")
-        Utils.onSetCountRating(0)
     }
 
     if (Build.VERSION.SDK_INT >= 33) {
