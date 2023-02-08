@@ -164,7 +164,11 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     override fun onScannerDone() {
         Utils.Log(TAG, "onScannerDone")
         if (viewpager != null) {
-            viewpager.currentItem = 0
+            if (Utils.isInnovation()){
+                viewpager.currentItem = 2
+            }else{
+                viewpager.currentItem = 0
+            }
         }
     }
 
