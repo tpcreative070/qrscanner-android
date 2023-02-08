@@ -23,14 +23,26 @@ fun MainActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(false)
     supportActionBar?.hide()
     ResponseSingleton.getInstance()?.setListener(this)
-    setupViewPager(viewpager)
-    tabs.setupWithViewPager(viewpager)
-    viewpager.currentItem = 2
-    for (i in 0 until tabs.tabCount) {
-        val tab = tabs.getTabAt(i)
-        tab?.customView = getTabView(i)
+    /*Doing for innovation only show 4 tabs*/
+    if (Utils.isInnovation()){
+        setupInnovationViewPager(viewpager)
+        tabs.setupWithViewPager(viewpager)
+        viewpager.currentItem = 0
+        for (i in 0 until tabs.tabCount) {
+            val tab = tabs.getTabAt(i)
+            tab?.customView = getInnovationTabView(i)
+        }
+        setupInnovationTabIcons()
+    }else{
+        setupViewPager(viewpager)
+        tabs.setupWithViewPager(viewpager)
+        viewpager.currentItem = 2
+        for (i in 0 until tabs.tabCount) {
+            val tab = tabs.getTabAt(i)
+            tab?.customView = getTabView(i)
+        }
+        setupTabIcons()
     }
-    setupTabIcons()
     ServiceManager.getInstance().onStartService()
     PremiumManager.getInstance().onStartInAppPurchase()
     Theme.getInstance()?.getList()

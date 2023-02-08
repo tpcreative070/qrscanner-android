@@ -262,7 +262,11 @@ class SettingsFragment : BaseFragment() {
                     } else if (preference.getKey() == getString(R.string.key_share)) {
                         if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_pro_release)) {
                             shareToSocial(getString(R.string.scanner_app_pro))
-                        } else {
+                        }
+                        else if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_free_innovation)){
+                            shareToSocial(getString(R.string.qrscanner_free_innovation))
+                        }
+                        else {
                             shareToSocial(getString(R.string.scanner_app))
                         }
                     } else if (preference.getKey() == getString(R.string.key_support)) {
@@ -540,6 +544,9 @@ class SettingsFragment : BaseFragment() {
             var id : String? = getString(R.string.qrscanner_free_release)
             if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_pro_release)){
                 id = getString(R.string.qrscanner_pro_release)
+            }
+            if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_free_innovation)){
+                id = getString(R.string.qrscanner_free_innovation)
             }
             val uri = Uri.parse("market://details?id=$id")
             val goToMarket = Intent(Intent.ACTION_VIEW, uri)

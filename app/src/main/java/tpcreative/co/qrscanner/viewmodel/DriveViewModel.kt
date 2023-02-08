@@ -10,7 +10,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest
 import tpcreative.co.qrscanner.common.api.requester.DriveService
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
-import tpcreative.co.qrscanner.common.extension.getString
+import tpcreative.co.qrscanner.common.extension.getContext
 import tpcreative.co.qrscanner.common.extension.onSupportOldVersion
 import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -118,9 +118,9 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
                 uploadTempFile = File.createTempFile("backup", ".json")
                 val file = Utils.writeToJson(SyncDataModel(true).toJson(), uploadTempFile)
                 val list: MutableList<String?> = mutableListOf()
-                list.add(getString(R.string.id_appDataFolder))
-                content[getString(R.string.key_name)] = "backup.json"
-                content[getString(R.string.id_parents)] = list
+                list.add(getContext(R.string.id_appDataFolder))
+                content[getContext(R.string.key_name)] = "backup.json"
+                content[getContext(R.string.id_parents)] = list
                 val mResult = driveService.uploadFile(content,mProgressUploading,file)
                 when(mResult.status){
                     Status.SUCCESS ->{

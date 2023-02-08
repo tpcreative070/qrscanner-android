@@ -26,6 +26,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     lateinit var viewModel : MainViewModel
     var adapter: MainViewPagerAdapter? = null
+    var adapterInnovation: MainInnovationViewPagerAdapter? = null
     var receiver: QRScannerReceiver? = null
 
     private val tabIcons: IntArray = intArrayOf(
@@ -34,6 +35,12 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             R.drawable.ic_scanner_v4,
             R.drawable.ic_saver,
             R.drawable.ic_settings)
+
+    private val tabInnovationIcons: IntArray = intArrayOf(
+        R.drawable.ic_scanner_v4,
+        R.drawable.ic_add,
+        R.drawable.ic_history,
+        R.drawable.ic_settings)
 
     fun getToolbar(): Toolbar? {
         return toolbar
@@ -55,6 +62,12 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         viewPager?.adapter = adapter
     }
 
+    fun setupInnovationViewPager(viewPager: ViewPager?) {
+        viewPager?.offscreenPageLimit = 4
+        adapterInnovation = MainInnovationViewPagerAdapter(supportFragmentManager)
+        viewPager?.adapter = adapterInnovation
+    }
+
     fun setupTabIcons() {
         try {
             tabs.getTabAt(0)?.setIcon(tabIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
@@ -62,6 +75,17 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             tabs.getTabAt(2)?.setIcon(tabIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(3)?.setIcon(tabIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
             tabs.getTabAt(4)?.setIcon(tabIcons[4])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+        } catch (e: Exception) {
+            e.message
+        }
+    }
+
+    fun setupInnovationTabIcons() {
+        try {
+            tabs.getTabAt(0)?.setIcon(tabInnovationIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            tabs.getTabAt(1)?.setIcon(tabInnovationIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            tabs.getTabAt(2)?.setIcon(tabInnovationIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            tabs.getTabAt(3)?.setIcon(tabInnovationIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
         } catch (e: Exception) {
             e.message
         }
@@ -82,16 +106,42 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         return view
     }
 
+    fun getInnovationTabView(position: Int): View? {
+        val view = LayoutInflater.from(QRScannerApplication.getInstance()).inflate(R.layout.custom_tab_items, null)
+        val imageView: AppCompatImageView = view.findViewById(R.id.imageView)
+        val textView: AppCompatTextView = view.findViewById(R.id.textView)
+        try {
+            textView.text = adapterInnovation?.getPageTitle(position)
+            imageView.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP)
+            imageView.setImageDrawable(getInnovationRes(position))
+            return view
+        } catch (e: Exception) {
+            imageView.setImageResource(0)
+        }
+        return view
+    }
+
     private fun getRes(position: Int): Drawable? {
         val mResult = ContextCompat.getDrawable(this, tabIcons.get(position))
         return mResult
                 ?: when (position) {
                     0 -> ContextCompat.getDrawable(this, R.drawable.ic_history)
                     1 -> ContextCompat.getDrawable(this, R.drawable.ic_add)
+                    2-> ContextCompat.getDrawable(this, R.drawable.ic_scanner_v4)
                     3 -> ContextCompat.getDrawable(this, R.drawable.ic_saver)
-                    4 -> ContextCompat.getDrawable(this, R.drawable.ic_settings)
-                    else -> ContextCompat.getDrawable(this, R.drawable.ic_scanner_v4)
+                    else -> ContextCompat.getDrawable(this, R.drawable.ic_settings)
                 }
+    }
+
+    private fun getInnovationRes(position: Int): Drawable? {
+        val mResult = ContextCompat.getDrawable(this, tabInnovationIcons.get(position))
+        return mResult
+            ?: when (position) {
+                0 -> ContextCompat.getDrawable(this, R.drawable.ic_scanner_v4)
+                1 -> ContextCompat.getDrawable(this, R.drawable.ic_add)
+                2 -> ContextCompat.getDrawable(this, R.drawable.ic_history)
+                else -> ContextCompat.getDrawable(this, R.drawable.ic_settings)
+            }
     }
 
     private fun onInitReceiver() {

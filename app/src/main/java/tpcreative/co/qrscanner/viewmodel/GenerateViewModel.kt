@@ -2,7 +2,6 @@ package tpcreative.co.qrscanner.viewmodel
 import android.app.Activity
 import android.text.InputFilter
 import android.text.InputType
-import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -11,7 +10,7 @@ import com.google.zxing.BarcodeFormat
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.getString
+import tpcreative.co.qrscanner.common.extension.getContext
 import tpcreative.co.qrscanner.common.extension.onBarCodeId
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -26,16 +25,16 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     val TAG = this::class.java.simpleName
     fun getDataList() = liveData(Dispatchers.Main) {
         mList.clear()
-        mList.add(QRCodeType("0", getString(R.string.barcodes_and_other_2d_code), R.drawable.ic_barcode))
-        mList.add(QRCodeType("1", getString(R.string.email), R.drawable.ic_email))
-        mList.add(QRCodeType("2", getString(R.string.message), R.drawable.ic_message))
-        mList.add(QRCodeType("3", getString(R.string.location), R.drawable.ic_location))
-        mList.add(QRCodeType("4", getString(R.string.event), R.drawable.ic_calender))
-        mList.add(QRCodeType("5", getString(R.string.contact), R.drawable.ic_contact))
-        mList.add(QRCodeType("6", getString(R.string.telephone), R.drawable.ic_phone))
-        mList.add(QRCodeType("7", getString(R.string.text), R.drawable.ic_text))
-        mList.add(QRCodeType("8", getString(R.string.wifi), R.drawable.ic_wifi))
-        mList.add(QRCodeType("9", getString(R.string.website), R.drawable.ic_network))
+        mList.add(QRCodeType("0", getContext(R.string.barcodes_and_other_2d_code), R.drawable.ic_barcode))
+        mList.add(QRCodeType("1", getContext(R.string.email), R.drawable.ic_email))
+        mList.add(QRCodeType("2", getContext(R.string.message), R.drawable.ic_message))
+        mList.add(QRCodeType("3", getContext(R.string.location), R.drawable.ic_location))
+        mList.add(QRCodeType("4", getContext(R.string.event), R.drawable.ic_calender))
+        mList.add(QRCodeType("5", getContext(R.string.contact), R.drawable.ic_contact))
+        mList.add(QRCodeType("6", getContext(R.string.telephone), R.drawable.ic_phone))
+        mList.add(QRCodeType("7", getContext(R.string.text), R.drawable.ic_text))
+        mList.add(QRCodeType("8", getContext(R.string.wifi), R.drawable.ic_wifi))
+        mList.add(QRCodeType("9", getContext(R.string.website), R.drawable.ic_network))
         emit(mList)
     }
 
@@ -147,7 +146,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     }
 
     fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
-        val mData = activity?.intent?.serializable(getString(R.string.key_data), GeneralModel::class.java)
+        val mData = activity?.intent?.serializable(getContext(R.string.key_data), GeneralModel::class.java)
         if (mData != null) {
             emit(mData)
         } else {

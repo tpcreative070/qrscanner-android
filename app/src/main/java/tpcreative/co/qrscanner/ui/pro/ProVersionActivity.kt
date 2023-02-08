@@ -9,7 +9,6 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_pro_version.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
-import tpcreative.co.qrscanner.common.GenerateSingleton
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
@@ -23,7 +22,11 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         btnUpgradeNow.setOnClickListener(this)
         title = getString(R.string.pro_version)
-        bp = BillingProcessor(this, ConstantKey.GooglePlayPublicKey, this)
+        if (Utils.isInnovation()){
+            bp = BillingProcessor(this, ConstantKey.GooglePlayInnovationPublicKey, this)
+        }else{
+            bp = BillingProcessor(this, ConstantKey.GooglePlayPublicKey, this)
+        }
         bp?.initialize()
     }
 
@@ -48,9 +51,9 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
     private fun onUpgradeNow() {
         if (BillingProcessor.isIabServiceAvailable(this)) {
             Utils.Log(TAG, "purchase new")
-            if (bp?.isPurchased(getString(R.string.lifetime)) == true) {
+            if (bp?.isPurchased(Utils.getInAppId()) == true) {
                 Utils.Log(TAG, "Already charged")
-                bp?.consumePurchaseAsync(getString(R.string.lifetime),object : BillingProcessor.IPurchasesResponseListener{
+                bp?.consumePurchaseAsync(Utils.getInAppId(),object : BillingProcessor.IPurchasesResponseListener{
                     override fun onPurchasesSuccess() {
                     }
                     override fun onPurchasesError() {
@@ -63,7 +66,7 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
                     }
                 })
             } else {
-                bp?.purchase(this, getString(R.string.lifetime))
+                bp?.purchase(this, Utils.getInAppId())
             }
         }
     }
@@ -100,7 +103,7 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
 
     override fun onBillingInitialized() {
         Utils.Log(TAG, "Bill ready...")
-        bp?.getPurchaseListingDetailsAsync(getString(R.string.lifetime),object  : BillingProcessor.ISkuDetailsResponseListener{
+        bp?.getPurchaseListingDetailsAsync(Utils.getInAppId(),object  : BillingProcessor.ISkuDetailsResponseListener{
             override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
                 val mPrice = products?.firstOrNull()?.priceText
                 tvPrice.text = mPrice

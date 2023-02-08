@@ -200,6 +200,49 @@ class HistoryModel : Serializable {
         this.isRequestOpenBrowser = false
     }
 
+    /*Doing for innovation*/
+    constructor(item : SaveModel){
+        this.id = item.id
+        this.email = item.email
+        this.subject = item.subject
+        this.message = item.message
+        this.phone = item.phone
+        this.lat = item.lat
+        this.lon = item.lon
+        this.query = item.query
+        this.title = item.title
+        this.location = item.location
+        this.description = item.description
+        this.startEvent = item.startEvent
+        this.endEvent = item.endEvent
+        this.startEventMilliseconds = item.startEventMilliseconds
+        this.endEventMilliseconds = item.endEventMilliseconds
+        this.fullName = item.fullName
+        this.address = item.address
+        this.textProductIdISNB = item.textProductIdISNB
+        this.ssId = item.ssId
+        this.hidden = item.hidden
+        this.password = item.password
+        this.url = item.url
+        this.createType = item.createType
+        this.networkEncryption = item.networkEncryption
+        this.createDatetime = item.createDatetime
+        this.hiddenDatetime = item.hiddenDatetime
+        this.barcodeFormat = item.barcodeFormat
+        this.favorite = item.favorite
+        this.updatedDateTime = item.updatedDateTime
+        this.contentUnique = item.contentUnique
+        this.contentUniqueForUpdatedTime = item.contentUniqueForUpdatedTime
+        this.isSynced = item.isSynced
+        this.uuId = item.uuId
+        this.noted = item.noted
+        this.code = item.code
+        this.type = item.type
+        this.navigationList = mutableListOf()
+        this.hashClipboard = hashMapOf()
+        this.isRequestOpenBrowser = false
+    }
+
     fun isChecked(): Boolean {
         return isChecked
     }

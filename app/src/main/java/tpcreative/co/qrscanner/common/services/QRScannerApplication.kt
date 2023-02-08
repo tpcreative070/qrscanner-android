@@ -199,15 +199,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "show ads...")
          adMainView = AdView(context)
         adMainView?.setAdSize(AdSize.BANNER)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adMainView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adMainView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adMainView?.adUnitId = getString(R.string.innovation_banner_main)
+            }else{
                 adMainView?.adUnitId = getString(R.string.banner_main)
             }
-        } else {
-            adMainView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adMainView?.adListener = object : AdListener() {
@@ -243,15 +243,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestResultSmallView ads...")
         adResultSmallView = AdView(context)
         adResultSmallView?.setAdSize(AdSize.BANNER)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adResultSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adResultSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adResultSmallView?.adUnitId = getString(R.string.innovation_banner_result_small)
+            }else{
                 adResultSmallView?.adUnitId = getString(R.string.banner_result_small)
             }
-        } else {
-            adResultSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adResultSmallView?.adListener = object : AdListener() {
@@ -287,15 +287,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestResultLargeView ads...")
         adResultLargeView = AdView(context)
         adResultLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adResultLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adResultLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adResultLargeView?.adUnitId = getString(R.string.innovation_banner_result_large)
+            }else{
                 adResultLargeView?.adUnitId = getString(R.string.banner_result_large)
             }
-        } else {
-            adResultLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adResultLargeView?.adListener = object : AdListener() {
@@ -331,15 +331,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adReviewSmallView = AdView(context)
         adReviewSmallView?.setAdSize(AdSize.BANNER)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adReviewSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adReviewSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adReviewSmallView?.adUnitId = getString(R.string.innovation_banner_review_small)
+            }else{
                 adReviewSmallView?.adUnitId = getString(R.string.banner_review_small)
             }
-        } else {
-            adReviewSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adReviewSmallView?.adListener = object : AdListener() {
@@ -375,15 +375,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adHelpFeedbackSmallView = AdView(context)
         adHelpFeedbackSmallView?.setAdSize(AdSize.BANNER)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adHelpFeedbackSmallView?.adUnitId = getString(R.string.innovation_banner_help_feedback_small)
+            }else{
                 adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_help_feedback_small)
             }
-        } else {
-            adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adHelpFeedbackSmallView?.adListener = object : AdListener() {
@@ -419,15 +419,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adHelpFeedbackLargeView = AdView(context)
         adHelpFeedbackLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adHelpFeedbackLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adHelpFeedbackLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adHelpFeedbackLargeView?.adUnitId = getString(R.string.innovation_banner_help_feedback_large)
+            }else{
                 adHelpFeedbackLargeView?.adUnitId = getString(R.string.banner_help_feedback_large)
             }
-        } else {
-            adHelpFeedbackLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adHelpFeedbackLargeView?.adListener = object : AdListener() {
@@ -464,15 +464,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adChangeColorSmallView = AdView(context)
         adChangeColorSmallView?.setAdSize(AdSize.BANNER)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adChangeColorSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adChangeColorSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adChangeColorSmallView?.adUnitId = getString(R.string.innovation_banner_change_color_small)
+            }else{
                 adChangeColorSmallView?.adUnitId = getString(R.string.banner_change_color_small)
             }
-        } else {
-            adChangeColorSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adChangeColorSmallView?.adListener = object : AdListener() {
@@ -508,15 +508,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adChangeColorLargeView = AdView(context)
         adChangeColorLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adChangeColorLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adChangeColorLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adChangeColorLargeView?.adUnitId = getString(R.string.innovation_banner_change_color_large)
+            }else{
                 adChangeColorLargeView?.adUnitId = getString(R.string.banner_change_color_large)
             }
-        } else {
-            adChangeColorLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adChangeColorLargeView?.adListener = object : AdListener() {
@@ -553,15 +553,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adBackupSmallView = AdView(context)
         adBackupSmallView?.setAdSize(AdSize.BANNER)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adBackupSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adBackupSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adBackupSmallView?.adUnitId = getString(R.string.innovation_banner_backup_small)
+            }else{
                 adBackupSmallView?.adUnitId = getString(R.string.banner_backup_small)
             }
-        } else {
-            adBackupSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adBackupSmallView?.adListener = object : AdListener() {
@@ -597,15 +597,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adBackupLargeView = AdView(context)
         adBackupLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adBackupLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adBackupLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adBackupLargeView?.adUnitId = getString(R.string.innovation_banner_backup_large)
+            }else{
                 adBackupLargeView?.adUnitId = getString(R.string.banner_backup_large)
             }
-        } else {
-            adBackupLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adBackupLargeView?.adListener = object : AdListener() {
@@ -643,15 +643,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestReviewLargeView ads...")
         adReviewLargeView = AdView(context)
         adReviewLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adReviewLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adReviewLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adReviewLargeView?.adUnitId = getString(R.string.innovation_banner_review_large)
+            }else{
                 adReviewLargeView?.adUnitId = getString(R.string.banner_review_large)
             }
-        } else {
-            adReviewLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adReviewLargeView?.adListener = object : AdListener() {
@@ -687,15 +687,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestCreateSmallView ads...")
         adCreateSmallView = AdView(context)
         adCreateSmallView?.setAdSize(AdSize.BANNER)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adCreateSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adCreateSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adCreateSmallView?.adUnitId = getString(R.string.innovation_banner_create_small)
+            }else{
                 adCreateSmallView?.adUnitId = getString(R.string.banner_create_small)
             }
-        } else {
-            adCreateSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adCreateSmallView?.adListener = object : AdListener() {
@@ -731,15 +731,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "requestCreateLargeView ads...")
         adCreateLargeView = AdView(context)
         adCreateLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                adCreateLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
-            } else {
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adCreateLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adCreateLargeView?.adUnitId = getString(R.string.innovation_banner_create_large)
+            }else{
                 adCreateLargeView?.adUnitId = getString(R.string.banner_create_large)
             }
-        } else {
-            adCreateLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
         }
         val adRequest = AdRequest.Builder().build()
         adCreateLargeView?.adListener = object : AdListener() {
@@ -775,15 +775,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "Interstitial requesting...")
         val adRequest = AdRequest.Builder().build()
         var id = ""
-        id = if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                getString(R.string.interstitial_test)
-            } else {
+        id = if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            getString(R.string.interstitial_test)
+        } else {
+            if (Utils.isInnovation()){
+                getString(R.string.innovation_interstitial_anywhere)
+            }else{
                 getString(R.string.interstitial_anywhere)
             }
-        } else {
-            getString(R.string.interstitial_test)
         }
         InterstitialAd.load(this,id, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -840,15 +840,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         Utils.Log(TAG, "Interstitial requesting...")
         val adRequest = AdRequest.Builder().build()
         var id = ""
-        id = if (Utils.isFreeRelease()) {
-            if (Utils.isDebug()) {
-                Utils.Log(TAG, "show ads isDebug...")
-                getString(R.string.interstitial_test)
-            } else {
+        id = if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            getString(R.string.interstitial_test)
+        } else {
+            if (Utils.isInnovation()){
+                getString(R.string.innovation_interstitial_view_code)
+            }else{
                 getString(R.string.interstitial_view_code)
             }
-        } else {
-            getString(R.string.interstitial_test)
         }
         InterstitialAd.load(this,id, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
