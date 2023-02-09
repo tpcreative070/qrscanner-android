@@ -7,8 +7,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical">
@@ -20,8 +20,8 @@
                 android:layout_centerInParent="true"
                 android:src="@color/grey_light"
                 android:id="@android:id/icon"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="@dimen/icon_size_23"
+                android:layout_height="@dimen/icon_size_23"
                 android:layout_gravity="center"/>
         </RelativeLayout>
 

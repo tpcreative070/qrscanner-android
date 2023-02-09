@@ -21,7 +21,7 @@ class MyPreferenceCategory @JvmOverloads constructor(
     override fun onBindViewHolder(view: PreferenceViewHolder?) {
         super.onBindViewHolder(view)
         val titleView = view?.findViewById(android.R.id.title) as TextView
-        titleView.setTextColor(ContextCompat.getColor(QRScannerApplication.Companion.getInstance(), R.color.colorPrimary))
+        titleView.setTextColor(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorPrimary))
         titleView.isAllCaps = true
         titleView.textSize = 17f
     }

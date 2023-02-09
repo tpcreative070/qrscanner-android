@@ -61,7 +61,7 @@
             android:layout_height="wrap_content">
             <tpcreative.co.qrscanner.common.view.CircleImageView
                 app:srcCompat="?attr/colorAccent"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/margin_5"
                 android:layout_centerInParent="true"
                 android:id="@+id/imgStandardCircle"
                 android:layout_width="@dimen/icon_size_40"
