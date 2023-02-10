@@ -37,6 +37,10 @@ android {
         freerelease {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+
+        freeinnovation {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
     }
 
     // This is bad practice - we should fix the warnings instead.

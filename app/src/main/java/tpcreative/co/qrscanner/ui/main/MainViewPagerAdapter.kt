@@ -28,22 +28,18 @@ class MainViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm,BEHAVI
             if (currentFragment is HistoryFragment) {
                 Utils.Log(TAG, "history")
                 currentFragment?.onResume()
-                fragments[3].onPause()
             } else if (currentFragment is GenerateFragment) {
                 Utils.Log(TAG, "generate")
                 currentFragment?.onResume()
-                fragments[3].onPause()
             } else if (currentFragment is ScannerFragment) {
                 Utils.Log(TAG, "scanner")
                 currentFragment?.onResume()
-                fragments[3].onPause()
             } else if (currentFragment is SaveFragment) {
                 Utils.Log(TAG, "reader")
                 currentFragment?.onResume()
             } else if (currentFragment is SettingsFragment) {
                 Utils.Log(TAG, "settings")
                 currentFragment?.onResume()
-                fragments[3].onPause()
             }
         }
         super.setPrimaryItem(container, position, mObject)

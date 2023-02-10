@@ -9,7 +9,6 @@ import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
-import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.afollestad.materialdialogs.MaterialDialog
@@ -1705,6 +1704,6 @@ fun Utils.calculateNoOfColumns(
     return (screenWidthDp / columnWidthDp + 0.5).toInt()
 }
 
-fun Utils.getString() : Context{
+fun Utils.getContext() : Context{
     return QRScannerApplication.getInstance()
 }

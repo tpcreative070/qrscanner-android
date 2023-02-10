@@ -183,7 +183,12 @@ class ReviewActivity : BaseActivitySlide() {
             save.updatedDateTime = time
             Utils.Log(TAG, "Questing created")
             Utils.Log(TAG,"Questing created ${Gson().toJson(save)}")
-            SQLiteHelper.onInsert(save)
+            /*Doing for innovation save into history*/
+            if(Utils.isInnovation()){
+                SQLiteHelper.onInsert(HistoryModel(save))
+            }else{
+                SQLiteHelper.onInsert(save)
+            }
             isAlreadySaved = true
         } else if (create?.enumImplement == EnumImplement.EDIT && !isAlreadySaved) {
             val time = Utils.getCurrentDateTimeSort()
@@ -269,7 +274,7 @@ class ReviewActivity : BaseActivitySlide() {
                         mFormatCode = BarcodeFormat.CODABAR
                     }
                     var mWidth = Constant.QRCodeExportWidth + 150
-                    var mHeight = Constant.QRCodeExportHeight - 200
+                    var mHeight = Constant.QRCodeExportHeight - 300
                     if (mFormatCode== BarcodeFormat.AZTEC || mFormatCode == BarcodeFormat.DATA_MATRIX){
                         mWidth = Constant.QRCodeViewWidth
                         mHeight = Constant.QRCodeViewHeight

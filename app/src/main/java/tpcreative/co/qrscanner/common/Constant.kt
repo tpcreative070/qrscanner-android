@@ -21,6 +21,7 @@ class Constant {
         const val QRCodeViewWidth = 250
         const val QRCodeViewHeight = 250
         const val images_folder = "images"
+        const val countLimitHistorySave = 3
         const val files_folder = "files"
         const val youtube_id = "eNhq6s1kmhw"
     }

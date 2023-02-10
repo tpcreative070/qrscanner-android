@@ -19,7 +19,11 @@ class PremiumManager : BillingProcessor.IBillingHandler {
     private var bp: BillingProcessor? = null
 
     fun onStartInAppPurchase() {
-        bp = BillingProcessor(QRScannerApplication.getInstance(), ConstantKey.GooglePlayPublicKey, this)
+        if (Utils.isInnovation()){
+            bp = BillingProcessor(QRScannerApplication.getInstance(), ConstantKey.GooglePlayInnovationPublicKey, this)
+        }else{
+            bp = BillingProcessor(QRScannerApplication.getInstance(), ConstantKey.GooglePlayPublicKey, this)
+        }
         bp?.initialize()
     }
 
@@ -38,8 +42,8 @@ class PremiumManager : BillingProcessor.IBillingHandler {
     override fun onBillingError(errorCode: Int, error: Throwable?) {}
 
     override fun onBillingInitialized() {
-        if (bp?.isPurchased(QRScannerApplication.getInstance().getString(R.string.lifetime)) == true) {
-            val details = bp?.getPurchaseInfo(QRScannerApplication.getInstance().getString(R.string.lifetime))
+        if (bp?.isPurchased(Utils.getInAppId()) == true) {
+            val details = bp?.getPurchaseInfo(Utils.getInAppId())
             /*Testing...*/
 //            bp?.consumePurchaseAsync(QRScannerApplication.getInstance().getString(R.string.lifetime),object :IPurchasesResponseListener{
 //                override fun onPurchasesSuccess() {

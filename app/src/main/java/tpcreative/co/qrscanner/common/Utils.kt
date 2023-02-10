@@ -24,7 +24,7 @@ import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.controller.PrefsController
-import tpcreative.co.qrscanner.common.extension.getString
+import tpcreative.co.qrscanner.common.extension.getContext
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -1014,6 +1014,21 @@ object Utils {
             context.startActivity(appIntent)
         } catch (ex: ActivityNotFoundException) {
             context.startActivity(webIntent)
+        }
+    }
+
+    fun isInnovation(): Boolean{
+        if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
+            return true
+        }
+        return false
+    }
+
+    fun getInAppId() : String{
+        return if (isInnovation()){
+            getContext().getString(R.string.innovation_lifetime)
+        }else{
+            getContext().getString(R.string.lifetime)
         }
     }
 

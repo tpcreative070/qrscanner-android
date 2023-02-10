@@ -47,7 +47,11 @@ fun BackupActivity.initUI(){
             val mSaveSyncedList = SQLiteHelper.getSaveList(true)
             val mHistorySyncedList = SQLiteHelper.getHistoryList(true)
             tvUsedSpace?.visibility = View.VISIBLE
-            val mTextSynced = String.format(getString(R.string.synced_data), mSaveSyncedList.size.toString() + "", mHistorySyncedList.size.toString() + "")
+            val mTextSynced: String = if (Utils.isInnovation()){
+                String.format(getString(R.string.synced_innovation_data), mHistorySyncedList.size.toString() + "")
+            }else{
+                String.format(getString(R.string.synced_data), mSaveSyncedList.size.toString() + "", mHistorySyncedList.size.toString() + "")
+            }
             tvUsedSpace?.text = HtmlCompat.fromHtml(mTextSynced, HtmlCompat.FROM_HTML_MODE_LEGACY)
             tvLastTimeSynced?.text = HtmlCompat.fromHtml(Utils.onDisplayLatTimeSyncedCompletely(), HtmlCompat.FROM_HTML_MODE_LEGACY)
             requestSyncData()

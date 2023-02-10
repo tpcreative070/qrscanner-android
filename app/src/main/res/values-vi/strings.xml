@@ -255,6 +255,7 @@
     <string name="grant_permissions_to_google_drive">Ứng dụng cần một số quyền cụ thể để sao lưu dữ liệu vào ổ Google Drive của bạn, đừng lo lắng về dữ liệu nhạy cảm trong Google Drive của bạn. Ứng dụng QRScanner chỉ tạo không gian riêng để sao lưu dữ liệu. Nó không ảnh hưởng đến dữ liệu của bạn hiện có</string>
     <string name="current_email">Đã đăng nhập bằng email là: %1$s Vui lòng giữ nó để tiếp tục đăng nhập vào các thiết bị khác</string>
     <string name="synced_data"><![CDATA[<b>Lưu đồng bộ: <font color=#e19704>%1$s</font></b><br\>]]> <![CDATA[<b>Lịch sử đồng bộ: <font color=#e19704>%2$s</font></b>]]></string>
+    <string name="synced_innovation_data"><![CDATA[<b>Lịch sử đồng bộ: <font color=#e19704>%1$s</font></b>]]></string>
     <string name="synced_data_last_time_updated"><![CDATA[<b>Cập nhật lần cuối: <font color=#757575>%1$s</font>]]></string>
     <string name="syncing_data">Đang đồng bộ dữ liệu…</string>212121
     <string name="enable_sync_data">Bật dữ liệu đồng bộ hóa</string>
