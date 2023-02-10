@@ -274,7 +274,7 @@ class ReviewActivity : BaseActivitySlide() {
                         mFormatCode = BarcodeFormat.CODABAR
                     }
                     var mWidth = Constant.QRCodeExportWidth + 150
-                    var mHeight = Constant.QRCodeExportHeight - 200
+                    var mHeight = Constant.QRCodeExportHeight - 300
                     if (mFormatCode== BarcodeFormat.AZTEC || mFormatCode == BarcodeFormat.DATA_MATRIX){
                         mWidth = Constant.QRCodeViewWidth
                         mHeight = Constant.QRCodeViewHeight

@@ -32,6 +32,8 @@ object SQLiteHelper {
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
             Utils.setRequestHistoryReload(true)
+            Utils.onSetCountRating(Utils.onGetCountRating() + 1)
+            ResponseSingleton.getInstance()?.onResponseScannerCompleted()
             getInstance()?.onInsert(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
@@ -100,6 +102,8 @@ object SQLiteHelper {
             Utils.setLastTimeSynced(Utils.getCurrentDateTimeSort())
             Utils.setRequestSync(true)
             Utils.setRequestSaverReload(true)
+            Utils.onSetCountRating(Utils.onGetCountRating() + 1)
+            ResponseSingleton.getInstance()?.onResponseCreateCompleted()
             getInstance()?.onInsert(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
@@ -117,6 +121,7 @@ object SQLiteHelper {
                 Utils.setRequestSync(true)
             }
             Utils.setRequestSaverReload(true)
+            Utils.onSetCountRating(Utils.onGetCountRating() + 1)
             getInstance()?.onUpdate(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")

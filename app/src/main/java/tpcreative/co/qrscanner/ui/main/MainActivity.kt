@@ -9,6 +9,9 @@ import android.view.*
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.tasks.Task
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -16,6 +19,7 @@ import tpcreative.co.qrscanner.common.ResponseSingleton.SingleTonResponseListene
 import tpcreative.co.qrscanner.common.activity.BaseActivity
 import tpcreative.co.qrscanner.common.controller.PremiumManager
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
@@ -28,6 +32,8 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     var adapter: MainViewPagerAdapter? = null
     var adapterInnovation: MainInnovationViewPagerAdapter? = null
     var receiver: QRScannerReceiver? = null
+    private var isScanner : Boolean = false
+    private var isCreate : Boolean = false
 
     private val tabIcons: IntArray = intArrayOf(
             R.drawable.ic_history,
@@ -50,6 +56,31 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUI()
+    }
+
+    private fun callRateApp(){
+        val mCountRating = Utils.onGetCountRating()
+        Utils.Log(TAG,"Count $mCountRating")
+        if (mCountRating >= Constant.countLimitHistorySave && isScanner || isCreate) {
+            showEncourage()
+            Utils.Log(TAG, "rating.......")
+            Utils.onSetCountRating(0)
+        }
+    }
+
+    private fun showEncourage() {
+        val manager = ReviewManagerFactory.create(this)
+        val request = manager.requestReviewFlow()
+        Utils.Log(TAG,"Review info of request")
+        request.addOnCompleteListener { task: Task<ReviewInfo?>? ->
+            if (task?.isSuccessful == true) {
+                // We can get the ReviewInfo object
+                val reviewInfo = task.result
+                val flow = reviewInfo?.let { manager.launchReviewFlow(this, it) }
+                flow?.addOnCompleteListener { tasks: Task<Void?>? -> }
+            }
+            Utils.Log(TAG,"Review info ${task?.toJson()}")
+        }
     }
 
     fun lock(isLock : Boolean){
@@ -172,6 +203,16 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         }
     }
 
+    override fun onScannerCompleted() {
+        isScanner = true
+        Utils.Log(TAG,"onScannerCompleted")
+    }
+
+    override fun onCreateCompleted() {
+        isCreate = true
+        Utils.Log(TAG,"onCreateCompleted")
+    }
+
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
         Utils.Log(TAG, "Network changed :$isConnected")
     }
@@ -186,6 +227,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         Utils.Log(TAG, "onResume")
+        callRateApp()
     }
 
     override fun onPause() {

@@ -42,6 +42,19 @@ class ResponseSingleton {
         }
     }
 
+    fun onResponseScannerCompleted() {
+        if (listener != null) {
+            listener?.onScannerCompleted()
+        }
+    }
+
+    fun onResponseCreateCompleted() {
+        if (listener != null) {
+            listener?.onCreateCompleted()
+        }
+    }
+
+
     interface SingleTonResponseListener {
         fun showScannerPosition()
         fun showCreatePosition()
@@ -49,6 +62,8 @@ class ResponseSingleton {
         fun onNetworkConnectionChanged(isConnected: Boolean)
         fun onResumeAds()
         fun onScannerDone()
+        fun onScannerCompleted()
+        fun onCreateCompleted()
     }
 
     companion object {

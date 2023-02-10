@@ -80,8 +80,6 @@ class Theme : Serializable {
                 val mList: MutableList<Theme> = ArrayList(ThemeUtil.getThemeList())
                 PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list), Gson().toJson(mList))
                 PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), BuildConfig.VERSION_CODE)
-                PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_we_are_a_team_positive), false)
-                Utils.onSetCountRating(0)
                 Utils.Log(TAG, "New install this version")
                 mList
             }
