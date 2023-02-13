@@ -3,6 +3,7 @@ package tpcreative.co.qrscanner.common.extension
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
 
 fun Bitmap.addPaddingTopForBitmap(paddingTop: Int): Bitmap? {
@@ -56,4 +57,9 @@ fun Bitmap.addPaddingLeftForBitmap(paddingLeft: Int): Bitmap? {
     }catch (e : Exception){
         null
     }
+}
+
+fun Bitmap.rotate(degrees: Float): Bitmap {
+    val matrix = Matrix().apply { postRotate(degrees) }
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }

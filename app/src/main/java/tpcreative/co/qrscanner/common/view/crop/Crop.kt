@@ -2,9 +2,8 @@ package tpcreative.co.qrscanner.common.view.crop
 import android.content.*
 import android.net.Uri
 import android.provider.MediaStore
-import android.widget.Toast
-import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.ui.cropimage.CropImageActivity
 
 /**
  * Builder for crop Intents and utils for handling result

@@ -311,6 +311,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             onCheckFavorite()
             onCopy()
             onHandleBarCode()
+            Utils.Log(Constant.LOG_TAKE_TIME,"End")
         }
     }
 

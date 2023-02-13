@@ -104,4 +104,6 @@ subprojects {
     ext.appIntro  = "6.2.0"
     ext.playReview = "2.0.1"
     ext.billingInApp = "2.0.3"
+    ext.compressor = "3.0.1"
+    ext.lifecycle = "2.5.1"
 }

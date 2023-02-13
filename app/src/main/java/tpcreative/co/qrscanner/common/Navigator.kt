@@ -50,19 +50,12 @@ object Navigator {
         context?.startActivity(intent)
     }
 
-//    fun <T> onResultView(context: Activity?, save: CreateModel?, clazz: Class<T>){
-//        val intent = Intent(context, clazz)
-//        val bundle = Bundle()
-//        bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
-//        intent.putExtras(bundle)
-//        context?.startActivityForResult(intent, SCANNER)
-//    }
-
     fun <T> onResultView(context: Activity?, save: GeneralModel?, clazz: Class<T>) : Intent {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(QRScannerApplication.Companion.getInstance().getString(R.string.key_data), save)
         intent.putExtras(bundle)
+        Utils.Log(Constant.LOG_TAKE_TIME,"Start")
         return  intent
     }
 
