@@ -824,6 +824,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                         isRequestInterstitialAd = true
                         Utils.Log(TAG, "Ad showed fullscreen content.")
                         // Called when ad is dismissed.
+                        context.finish()
                     }
 
                     override fun onAdClicked() {
@@ -889,6 +890,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                         isRequestInterstitialViewCodeAd = true
                         Utils.Log(TAG, "Ad showed fullscreen content.")
                         // Called when ad is dismissed.
+                        context.finish()
                     }
 
                     override fun onAdClicked() {
