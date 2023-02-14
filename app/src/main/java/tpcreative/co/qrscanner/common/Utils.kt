@@ -206,7 +206,7 @@ object Utils {
     }
 
     fun onSetCountRating(count: Int) {
-        Log(TAG, "rating.......set$count")
+        Log(TAG, "rating.......set $count")
         PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_count_rating), count)
     }
 

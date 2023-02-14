@@ -343,7 +343,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
     mCropMode = CropMode.SQUARE;
     try {
       drawable = ta.getDrawable(R.styleable.scv_CropImageView_scv_img_src);
-      mCustomIcon = ((BitmapDrawable)ta.getDrawable(R.styleable.scv_CropImageView_scv_custom_icon_src)).getBitmap();
+      if (ta.getDrawable(R.styleable.scv_CropImageView_scv_custom_icon_src) !=null){
+        mCustomIcon = ((BitmapDrawable)ta.getDrawable(R.styleable.scv_CropImageView_scv_custom_icon_src)).getBitmap();
+      }
       mCustomIconTintColor = ta.getColor(R.styleable.scv_CropImageView_scv_custom_icon_tint_color, TRANSLUCENT_WHITE);
       mOverlayAreaColor = ta.getColor(R.styleable.scv_CropImageView_scv_overlay_area_color, TRANSLUCENT_WHITE);
       mIsOnlyRB = ta.getBoolean(R.styleable.scv_CropImageView_scv_only_rl_enabled, true);
@@ -576,11 +578,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
     mPaintFrame.setAntiAlias(true);
     mPaintFrame.setFilterBitmap(true);
     mPaintFrame.setStyle(Paint.Style.STROKE);
-    if (mIsTouchDown && mIsGuideBorderlineTouchDown && mTouchArea == TouchArea.RIGHT_BOTTOM){
-      mPaintFrame.setColor(mOverlayAreaColor);
-      mPaintFrame.setStyle(Paint.Style.FILL);
+    if (mIsOnlyRB){
+      if (mIsTouchDown && mIsGuideBorderlineTouchDown && mTouchArea == TouchArea.RIGHT_BOTTOM){
+        mPaintFrame.setColor(mOverlayAreaColor);
+        mPaintFrame.setStyle(Paint.Style.FILL);
+      }else{
+        mPaintFrame.setColor(Color.TRANSPARENT);
+      }
     }else{
-      mPaintFrame.setColor(Color.TRANSPARENT);
+      if (mIsTouchDown && mIsGuideBorderlineTouchDown){
+        mPaintFrame.setColor(mOverlayAreaColor);
+        mPaintFrame.setStyle(Paint.Style.FILL);
+      }else{
+        mPaintFrame.setColor(Color.TRANSPARENT);
+      }
     }
     mPaintFrame.setStrokeWidth(mFrameStrokeWeight);
     canvas.drawRect(mFrameRect, mPaintFrame);
@@ -750,8 +761,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
         onCancel();
         return true;
       case MotionEvent.ACTION_UP:
-        getParent().requestDisallowInterceptTouchEvent(false);
-        onUp(event);
+        if (mIsOnlyRB){
+          if (mTouchArea == TouchArea.RIGHT_BOTTOM) {
+            getParent().requestDisallowInterceptTouchEvent(false);
+            onUp(event);
+          }
+        }else{
+          getParent().requestDisallowInterceptTouchEvent(false);
+          onUp(event);
+        }
         return true;
     }
     return false;
@@ -781,7 +799,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
         }
         break;
       case RIGHT_TOP:
-        if (mIsOnlyRB){
+        if (!mIsOnlyRB){
           moveHandleRT(diffX, diffY);
         }
         break;

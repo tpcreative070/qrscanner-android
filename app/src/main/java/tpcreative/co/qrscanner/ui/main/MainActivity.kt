@@ -79,7 +79,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
                 val flow = reviewInfo?.let { manager.launchReviewFlow(this, it) }
                 flow?.addOnCompleteListener { tasks: Task<Void?>? -> }
             }
-            Utils.Log(TAG,"Review info ${task?.toJson()}")
+            //Utils.Log(TAG,"Review info ${task?.toJson()}")
         }
     }
 

@@ -224,7 +224,6 @@
     <string name="tap_here_to_discover_how_to_scan_description">Những mẹo này sẽ giúp bạn sử dụng ứng dụng này hiệu quả hơn.</string>
     <string name="warning_fake_checkout">Xin lỗi vì sự bất tiện. Có vẻ như đơn đặt hàng FAKE. Vui lòng liên hệ với chúng tôi qua care@tpcreative.co</string>
     <string name="cancel">Huỷ</string>
-    <string name="progressing">Đang xử lý…</string>
     <string name="importing">Đang thêm…</string>
     <string name="no_items_found">Không tìm thấy</string>
     <string name="scan_code_via_Camera">Quét mã vạch và mã QR qua Camera.</string>
@@ -356,4 +355,5 @@
     <string name="waiting_for_export">Đang xử lý xuất tập tin</string>
     <string name="delete_entire_history">Xoá toàn bộ lịch sử?</string>
     <string name="delete_entire_save">Xoá toàn bộ tạo mới?</string>
+    <string name="processing">Đang xử lý…</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:background="@color/windowBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -8,12 +9,6 @@
     <include
         android:id="@+id/done_cancel_bar"
         layout="@layout/crop_layout_done_cancel" />
-    <tpcreative.co.qrscanner.common.view.crop.CropImageView
-        android:id="@+id/crop_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/crop__texture"
-        android:layout_below="@id/done_cancel_bar" />
 
     <androidx.appcompat.widget.AppCompatTextView
         style="@style/brandonRegularTextView"
@@ -36,4 +31,27 @@
         android:id="@+id/tvFormatType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <com.isseiaoki.simplecropview.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/spacing_xlarge"
+        app:scv_background_color="@color/windowBackground"
+        app:scv_crop_mode="free"
+        app:scv_only_rl_enabled="false"
+        app:scv_frame_color="@color/colorAccent"
+        app:scv_frame_stroke_weight="1dp"
+        app:scv_guide_color="@color/colorAccent"
+        app:scv_guide_show_mode="show_always"
+        app:scv_guide_stroke_weight="1dp"
+        app:scv_handle_color="@color/colorAccent"
+        app:scv_handle_show_mode="show_always"
+        app:scv_handle_size="14dp"
+        app:scv_min_frame_size="50dp"
+        app:scv_overlay_color="@color/overlay"
+        app:scv_overlay_area_color="@color/colorOverlay"
+        app:scv_touch_padding="8dp"
+        android:background="@drawable/crop__texture"
+        android:layout_below="@id/tvFormatType"/>
 </RelativeLayout>

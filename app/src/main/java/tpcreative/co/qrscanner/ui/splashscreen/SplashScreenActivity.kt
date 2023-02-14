@@ -16,7 +16,6 @@ class SplashScreenActivity : BaseActivity() {
         if (!isRefresh) {
             PrefsController.putBoolean(getString(R.string.key_refresh), true)
         }
-
         if (Utils.onIsIntro()){
             Navigator.onMoveMainTab(this@SplashScreenActivity)
         }else{
