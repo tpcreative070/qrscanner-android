@@ -48,7 +48,7 @@ class CropImageActivity : BaseActivitySlide(){
     private var dialogProcessing : Dialog? = null
     private var actualImage: File? = null
     private var compressedImage: File? = null
-    private lateinit var mFileDestination : File
+    private var mFileDestination : File = File("")
     public override fun onCreate(icicle: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(icicle)
@@ -218,15 +218,16 @@ class CropImageActivity : BaseActivitySlide(){
         setResult(RESULT_OK, Intent().putExtra(Crop.REQUEST_DATA, Gson().toJson(encode)))
     }
 
-    private fun onRenderCode(bitmap: Bitmap?) {
+    private fun onRenderCode(bm: Bitmap?) {
+        var bitmap = bm
         try {
             Utils.Log(TAG,"onRenderCode")
             bitmap?.let {
-                val intArray = IntArray(bitmap.width * bitmap.height)
-                bitmap.getPixels(intArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
-                val source: LuminanceSource = RGBLuminanceSource(bitmap.width, bitmap.height, intArray)
-                val mBitmap = BinaryBitmap(HybridBinarizer(source))
-                Utils.Log(TAG,"width ${bitmap.width} height ${bitmap.height}")
+                var intArray = IntArray(it.width * it.height)
+                it.getPixels(intArray, 0, it.width, 0, 0, it.width, it.height)
+                var source: LuminanceSource = RGBLuminanceSource(it.width, it.height, intArray)
+                var mBitmap = BinaryBitmap(HybridBinarizer(source))
+                Utils.Log(TAG,"width ${it.width} height ${it.height}")
                 val reader: Reader = MultiFormatReader()
                 try {
                     var mResult : Result? = null
@@ -234,11 +235,29 @@ class CropImageActivity : BaseActivitySlide(){
                         mResult = reader.decode(mBitmap)
                     }catch (e : Exception){
                         e.printStackTrace()
+                        Utils.Log(TAG,"Reader again...1")
                         try {
                             mResult = reader.decode(mBitmap,addHint())
                         }catch (e: Exception){
                             e.printStackTrace()
+                            Utils.Log(TAG,"Reader again...2")
                         }
+                    }
+                    try {
+                        if (mResult==null){
+                            bitmap = it.rotate(90F)
+                            Utils.Log(TAG,"Reader again")
+                            bitmap?.let { bitmapResult ->
+                                intArray = IntArray(bitmapResult.width * bitmapResult.height)
+                                bitmapResult.getPixels(intArray, 0, bitmapResult.width, 0, 0, bitmapResult.width, bitmapResult.height)
+                                source = RGBLuminanceSource(bitmapResult.width, bitmapResult.height, intArray)
+                                mBitmap = BinaryBitmap(HybridBinarizer(source))
+                                mResult = reader.decode(mBitmap)
+                                Utils.Log(TAG,"Reader again...")
+                            }
+                        }
+                    }catch (e: Exception){
+                        e.printStackTrace()
                     }
                     if (mResult != null) {
                         btn_done.isEnabled = true
@@ -270,6 +289,7 @@ class CropImageActivity : BaseActivitySlide(){
         }
         finally {
             dismissProgress()
+            bitmap?.recycle()
         }
     }
 
@@ -294,7 +314,7 @@ class CropImageActivity : BaseActivitySlide(){
     private val mCropCallback: CropCallback = object : CropCallback {
         override fun onSuccess(cropped: Bitmap) {
              Utils.Log(TAG,"Crop success ${cropped.width} ${cropped.height}")
-            onRenderCode(cropped)
+             onRenderCode(cropped)
         }
         override fun onError(e: Throwable) {
             Utils.Log(TAG,"Crop error")
