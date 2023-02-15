@@ -306,7 +306,11 @@ class CropImageActivity : BaseActivitySlide(){
     // Callbacks ///////////////////////////////////////////////////////////////////////////////////
     private val mLoadCallback: LoadCallback = object : LoadCallback {
         override fun onSuccess() {
-            cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
+            try {
+                cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
         }
         override fun onError(e: Throwable) {}
     }
@@ -329,8 +333,12 @@ class CropImageActivity : BaseActivitySlide(){
             override fun onDown() {
             }
             override fun onRelease() {
-                showProgress()
-                cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
+                try {
+                    showProgress()
+                    cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
             }
         }
     private fun showLoading() {

@@ -2692,7 +2692,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
       out.writeInt(inputImageHeight);
       out.writeInt(outputImageWidth);
       out.writeInt(outputImageHeight);
-      customIcon.writeToParcel(out, 0);
+      if (customIcon!=null){
+        customIcon.writeToParcel(out, 0);
+      }
       out.writeInt(isOnlyRB ? 1: 0);
       out.writeInt(sizeIcon);
       out.writeInt(isGuidelines ? 1: 0);
