@@ -30,6 +30,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.*
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.FileUtil
 import tpcreative.co.qrscanner.model.GeneralModel
@@ -96,9 +97,9 @@ class CropImageActivity : BaseActivitySlide(){
                     setCompressedImage()
                 }
             }else{
-                showError(getString(R.string.no_items_found))
+                showError(getString(R.string.error_occurred_importing))
             }
-        } ?: showError(getString(R.string.no_items_found))
+        } ?: showError(getString(R.string.error_occurred_importing))
     }
 
     private fun showError(errorMessage: String) {
@@ -199,10 +200,14 @@ class CropImageActivity : BaseActivitySlide(){
     }
 
     private fun loadInput(sourceUri : Uri?) {
-        sourceUri?.let {
-            actualImage = FileUtil().from(this,it)
-            actualImage?.let {
-                customCompressImage(it)
+        sourceUri?.let {uri->
+            actualImage = FileUtil().from(this,uri)
+            if (actualImage?.exists() == true){
+                actualImage?.let {
+                    customCompressImage(it)
+                }
+            }else{
+                showError(getString(R.string.error_occurred_importing))
             }
         }
     }
@@ -218,6 +223,9 @@ class CropImageActivity : BaseActivitySlide(){
     override fun onDestroy() {
         super.onDestroy()
         mFileDestination.deleteOnExit()
+        actualImage?.deleteOnExit()
+        compressedImage?.deleteOnExit()
+        QRScannerApplication.getInstance().setRequestClearCacheData(true)
     }
 
     private fun setResultEncode(encode: Result?) {

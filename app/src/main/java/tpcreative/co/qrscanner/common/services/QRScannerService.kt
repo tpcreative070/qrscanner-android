@@ -42,6 +42,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
         super.onDestroy()
         if (QRScannerApplication.getInstance().isRequestClearCacheData()){
             this.cacheDir.deleteRecursively()
+            this.cacheDir.mkdirs()
         }
         Utils.Log(TAG, "onDestroy")
         if (androidReceiver != null) {

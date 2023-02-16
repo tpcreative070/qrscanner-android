@@ -5,26 +5,29 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
+import tpcreative.co.qrscanner.common.Utils
 import java.io.*
 
 
 class FileUtil {
     private val EOF = -1
     private val DEFAULT_BUFFER_SIZE = 1024 * 4
-
+    private val TAG = this::class.simpleName
     @Throws(IOException::class)
     fun from(context: Context, uri: Uri): File? {
         val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
         val fileName = getFileName(context, uri)
         val splitName = splitFileName(fileName)
-        var tempFile: File = File.createTempFile(splitName[0], splitName[1])
-        tempFile = rename(tempFile, fileName)
-        tempFile.deleteOnExit()
+        var tempFile: File? = null
         var out: FileOutputStream? = null
         try {
+        tempFile = File.createTempFile(splitName[0], splitName[1])
+        tempFile = rename(tempFile, fileName)
+        tempFile.deleteOnExit()
             out = FileOutputStream(tempFile)
-        } catch (e: FileNotFoundException) {
+        } catch (e: Exception) {
             e.printStackTrace()
+            context.cacheDir.mkdirs()
         }
         if (inputStream != null) {
             if (out != null) {
@@ -50,8 +53,8 @@ class FileUtil {
     @SuppressLint("Range")
     private fun getFileName(context: Context, uri: Uri): String {
         var result: String? = null
-        if (uri.getScheme().equals("content")) {
-            val cursor: Cursor? = context.getContentResolver().query(uri, null, null, null, null)
+        if (uri.scheme.equals("content")) {
+            val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
             try {
                 if (cursor != null && cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
@@ -75,13 +78,13 @@ class FileUtil {
     }
 
     private fun rename(file: File, newName: String): File {
-        val newFile = File(file.getParent(), newName)
-        if (!newFile.equals(file)) {
+        val newFile = File(file.parent, newName)
+        if (newFile != file) {
             if (newFile.exists() && newFile.delete()) {
-                android.util.Log.e("FileUtil", "Delete old $newName file")
+                Utils.Log(TAG, "Delete old $newName file")
             }
             if (file.renameTo(newFile)) {
-                android.util.Log.e("FileUtil", "Rename file to $newName")
+                Utils.Log(TAG, "Rename file to $newName")
             }
         }
         return newFile
