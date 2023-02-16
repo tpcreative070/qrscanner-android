@@ -77,22 +77,26 @@ class CropImageActivity : BaseActivitySlide(){
         }
     }
 
-    private fun customCompressImage() {
+    private fun customCompressImage(images : File?) {
         showLoading()
         val imageFolder = File(cacheDir, Constant.images_folder)
         imageFolder.mkdirs()
         mFileDestination = File(imageFolder, "qrcode_processing.png")
-        actualImage?.let { imageFile ->
-            lifecycleScope.launch {
-                // Full custom
-                compressedImage = Compressor.compress(this@CropImageActivity, imageFile) {
-                    resolution(600, 600)
-                    quality(60)
-                    format(Bitmap.CompressFormat.JPEG)
-                    size(2_097_152) // 2
-                    destination(mFileDestination)
+        images?.let { imageFile ->
+            if (imageFile.exists()){
+                lifecycleScope.launch {
+                    // Full custom
+                    compressedImage = Compressor.compress(this@CropImageActivity, imageFile) {
+                        resolution(600, 800)
+                        quality(60)
+                        format(Bitmap.CompressFormat.JPEG)
+                        size(2_097_152) // 2
+                        destination(mFileDestination)
+                    }
+                    setCompressedImage()
                 }
-                setCompressedImage()
+            }else{
+                showError(getString(R.string.no_items_found))
             }
         } ?: showError(getString(R.string.no_items_found))
     }
@@ -197,7 +201,9 @@ class CropImageActivity : BaseActivitySlide(){
     private fun loadInput(sourceUri : Uri?) {
         sourceUri?.let {
             actualImage = FileUtil().from(this,it)
-            customCompressImage()
+            actualImage?.let {
+                customCompressImage(it)
+            }
         }
     }
 
