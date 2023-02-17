@@ -7,6 +7,7 @@ import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
 import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.ImageFileFilter
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.presenter.BaseView
 import tpcreative.co.qrscanner.common.presenter.PresenterService

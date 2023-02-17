@@ -41,6 +41,7 @@ object Utils {
     val TAG = Utils::class.java.simpleName
     const val CODE_EXCEPTION = 1111
     const val FORMAT_DISPLAY: String = "dd/MM/yyyy HH:mm:ss a"
+    const val THREE_HOURS = 10800000
 
     fun getUUId(): String? {
         return try {
@@ -220,6 +221,14 @@ object Utils {
 
     fun onIsIntro(): Boolean {
         return PrefsController.getBoolean(QRScannerApplication.getInstance().getString(R.string.key_intro), false)
+    }
+
+    fun getKeepAdsRefreshLatestTime() : Long {
+        return PrefsController.getLong(QRScannerApplication.getInstance().getString(R.string.key_keep_ads_refresh_latest_time), System.currentTimeMillis())
+    }
+
+    fun setKeepAdsRefreshLatestTime(value : Long) {
+        PrefsController.putLong(QRScannerApplication.getInstance().getString(R.string.key_keep_ads_refresh_latest_time), value)
     }
 
     fun getCodeContentByHistory(item: HistoryModel?): String? {
