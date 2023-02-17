@@ -1201,20 +1201,30 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun refreshAds(){
-        isMainView = true
-        isResultSmallView = true
-        isResultLargeView = true
-        isReviewSmallView = true
-        isReviewLargeView = true
-        isCreateSmallView = true
-        isCreateLargeView = true
-        isHelpFeedbackSmallView = true
-        isHelpFeedbackLargeView = true
-        isChangeColorSmallView = true
-        isChangeColorLargeView = true
-        isBackupSmallView = true
-        isBackupLargeView = true
+        /*Condition to refresh ads is past 3 hours*/
+        var mLatestTime = Utils.getKeepAdsRefreshLatestTime()
+        val mCurrentTime = System.currentTimeMillis()
+        mLatestTime += Utils.THREE_HOURS
+        if (mCurrentTime>mLatestTime){
+            isMainView = true
+            isResultSmallView = true
+            isResultLargeView = true
+            isReviewSmallView = true
+            isReviewLargeView = true
+            isCreateSmallView = true
+            isCreateLargeView = true
+            isHelpFeedbackSmallView = true
+            isHelpFeedbackLargeView = true
+            isChangeColorSmallView = true
+            isChangeColorLargeView = true
+            isBackupSmallView = true
+            isBackupLargeView = true
+            Utils.setKeepAdsRefreshLatestTime(mCurrentTime)
+        }else{
+            Utils.Log(TAG,"Waiting for refresh ads")
+        }
     }
+
     companion object {
         @Volatile
         private var mInstance: QRScannerApplication? = null

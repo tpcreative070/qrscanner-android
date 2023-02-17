@@ -17,22 +17,22 @@
     <string name="innovation_interstitial_anywhere">ca-app-pub-5989759740740692/2943957998</string>
     <string name="innovation_interstitial_view_code">ca-app-pub-5989759740740692/3130842014</string>
 
-    <string name="admob_app_id">ca-app-pub-5989759740740692~7748089356</string>
-    <string name="banner_main">ca-app-pub-5989759740740692/8387022212</string>
-    <string name="banner_result_small">ca-app-pub-5989759740740692/5114277021</string>
-    <string name="banner_result_large">ca-app-pub-5989759740740692/7660279810</string>
-    <string name="banner_review_small">ca-app-pub-5989759740740692/5896606152</string>
-    <string name="banner_review_large">ca-app-pub-5989759740740692/1957361144</string>
-    <string name="banner_create_large">ca-app-pub-5989759740740692/2296541994</string>
-    <string name="banner_create_small">ca-app-pub-5989759740740692/1657978247</string>
-    <string name="banner_backup_small">ca-app-pub-5989759740740692/5705034467</string>
-    <string name="banner_backup_large">ca-app-pub-5989759740740692/5560999589</string>
-    <string name="banner_change_color_small">ca-app-pub-5989759740740692/1765789456</string>
-    <string name="banner_change_color_large">ca-app-pub-5989759740740692/5821402776</string>
-    <string name="banner_help_feedback_small">ca-app-pub-5989759740740692/7468977625</string>
-    <string name="banner_help_feedback_large">ca-app-pub-5989759740740692/6155895959</string>
-    <string name="interstitial_anywhere">ca-app-pub-5989759740740692/9900248582</string>
-    <string name="interstitial_view_code">ca-app-pub-5989759740740692/4056346223</string>
+    <string name="admob_app_id">ca-app-pub-2543755073933813~6181770513</string>
+    <string name="banner_main">ca-app-pub-2543755073933813/4317206269</string>
+    <string name="banner_result_small">ca-app-pub-2543755073933813/6377211631</string>
+    <string name="banner_result_large">ca-app-pub-2543755073933813/1615290801</string>
+    <string name="banner_review_small">ca-app-pub-2543755073933813/1919091874</string>
+    <string name="banner_review_large">ca-app-pub-2543755073933813/9606010209</string>
+    <string name="banner_create_large">ca-app-pub-2543755073933813/8292928531</string>
+    <string name="banner_create_small">ca-app-pub-2543755073933813/8125407575</string>
+    <string name="banner_backup_small">ca-app-pub-2543755073933813/9330678035</string>
+    <string name="banner_backup_large">ca-app-pub-2543755073933813/4205795124</string>
+    <string name="banner_change_color_small">ca-app-pub-2543755073933813/2672952108</string>
+    <string name="banner_change_color_large">ca-app-pub-2543755073933813/3040601850</string>
+    <string name="banner_help_feedback_small">ca-app-pub-2543755073933813/3751048299</string>
+    <string name="banner_help_feedback_large">ca-app-pub-2543755073933813/1727520188</string>
+    <string name="interstitial_anywhere">ca-app-pub-2543755073933813/5391433021</string>
+    <string name="interstitial_view_code">ca-app-pub-2543755073933813/8855217079</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="url_google">https://www.googleapis.com/</string>
@@ -156,6 +156,7 @@
     <string name="key_intro">key_intro</string>
     <string name="key_is_light">key_is_light</string>
     <string name="key_count_continue_scan">key_count_continue_scan</string>
+    <string name="key_keep_ads_refresh_latest_time">key_keep_ads_refresh_latest_time</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -515,4 +516,5 @@
     <string name="delete_entire_history">Delete entire history?</string>
     <string name="delete_entire_save">Delete entire save?</string>
     <string name="processing">Processing</string>
+    <string name="scan_image">Scan image</string>
 </resources>

@@ -222,9 +222,9 @@ class CropImageActivity : BaseActivitySlide(){
 
     override fun onDestroy() {
         super.onDestroy()
-        mFileDestination.deleteOnExit()
-        actualImage?.deleteOnExit()
-        compressedImage?.deleteOnExit()
+        mFileDestination.delete()
+        actualImage?.delete()
+        compressedImage?.delete()
         QRScannerApplication.getInstance().setRequestClearCacheData(true)
     }
 
