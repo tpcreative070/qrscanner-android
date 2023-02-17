@@ -516,4 +516,5 @@
     <string name="delete_entire_history">Delete entire history?</string>
     <string name="delete_entire_save">Delete entire save?</string>
     <string name="processing">Processing</string>
+    <string name="scan_image">Scan image</string>
 </resources>
