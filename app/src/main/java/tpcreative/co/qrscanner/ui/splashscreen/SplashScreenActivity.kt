@@ -5,6 +5,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivity
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : BaseActivity() {
@@ -21,6 +22,7 @@ class SplashScreenActivity : BaseActivity() {
         }else{
             Navigator.onIntro(this)
         }
+        QRScannerApplication.getInstance().refreshAds()
     }
     companion object {
         private val TAG = SplashScreenActivity::class.java.simpleName

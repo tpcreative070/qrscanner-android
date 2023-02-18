@@ -1,9 +1,11 @@
 package tpcreative.co.qrscanner.ui.main
 import android.os.Build
+import android.view.View
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
 import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.PremiumManager
@@ -46,7 +48,10 @@ fun MainActivity.initUI(){
     ServiceManager.getInstance().onStartService()
     PremiumManager.getInstance().onStartInAppPurchase()
     Theme.getInstance()?.getList()
-    if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView() && !Utils.isPremium()) {
+    if(Utils.isHiddenAds()){
+        rlAdsRoot.visibility = View.GONE
+    }
+    if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestMainView(this)
     }
 
