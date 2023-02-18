@@ -25,7 +25,7 @@ import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.*
 import kotlinx.android.synthetic.main.crop_activity_crop.*
 import kotlinx.android.synthetic.main.crop_layout_done_cancel.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
@@ -46,7 +46,6 @@ class CropImageActivity : BaseActivitySlide(){
     private var mCreate : GeneralModel? = null
     private var isAutoComplete : Boolean = true
     private var dialog : Dialog? = null
-    private var dialogProcessing : Dialog? = null
     private var actualImage: File? = null
     private var compressedImage: File? = null
     private var mFileDestination : File = File("")
@@ -54,7 +53,6 @@ class CropImageActivity : BaseActivitySlide(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(icicle)
         dialog = ProgressDialog.progressDialog(this,R.string.loading.toText())
-        dialogProcessing = ProgressDialog.progressDialog(this,R.string.processing.toText())
         setupViews()
         onHandlerIntent()
         btn_done.isEnabled = false
@@ -232,8 +230,9 @@ class CropImageActivity : BaseActivitySlide(){
         setResult(RESULT_OK, Intent().putExtra(Crop.REQUEST_DATA, Gson().toJson(encode)))
     }
 
-    private fun onRenderCode(bm: Bitmap?) {
+    private suspend fun onRenderCode(bm: Bitmap?) {
         var bitmap = bm
+        Utils.Log(TAG,"Requesting....")
         try {
             Utils.Log(TAG,"onRenderCode")
             bitmap?.let {
@@ -274,35 +273,44 @@ class CropImageActivity : BaseActivitySlide(){
                         e.printStackTrace()
                     }
                     if (mResult != null) {
-                        btn_done.isEnabled = true
-                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
-                        setResultEncode(mResult)
-                        onParseData(mResult)
+                        lifecycleScope.launch(Dispatchers.Main){
+                            btn_done.isEnabled = true
+                            btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
+                            setResultEncode(mResult)
+                            onParseData(mResult)
+                        }
                     } else {
-                        btn_done.isEnabled = false
-                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
-                        tvFormatType.text = ""
+                        lifecycleScope.launch(Dispatchers.Main){
+                            btn_done.isEnabled = false
+                            btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                            tvFormatType.text = ""
+                        }
                     }
                 } catch (e: NotFoundException) {
                     e.printStackTrace()
                     Utils.Log(TAG, "Do not recognize qrcode type ${e.message}")
-                    btn_done.isEnabled = false
-                    btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                    lifecycleScope.launch(Dispatchers.Main){
+                        btn_done.isEnabled = false
+                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                    }
                 } catch (e: ChecksumException) {
                     e.printStackTrace()
                     Utils.Log(TAG, "Do not recognize qrcode type ChecksumException")
-                    btn_done.isEnabled = false
-                    btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                    lifecycleScope.launch(Dispatchers.Main){
+                        btn_done.isEnabled = false
+                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                    }
                 }
             }
         } catch (e: FormatException) {
             e.printStackTrace()
             Utils.Log(TAG, "Do not recognize qrcode type FormatException")
-            btn_done.isEnabled = false
-            btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+            lifecycleScope.launch(Dispatchers.Main){
+                btn_done.isEnabled = false
+                btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+            }
         }
         finally {
-            dismissProgress()
             bitmap?.recycle()
         }
     }
@@ -332,7 +340,9 @@ class CropImageActivity : BaseActivitySlide(){
     private val mCropCallback: CropCallback = object : CropCallback {
         override fun onSuccess(cropped: Bitmap) {
              Utils.Log(TAG,"Crop success ${cropped.width} ${cropped.height}")
-             onRenderCode(cropped)
+            lifecycleScope.launch(Dispatchers.IO) {
+                onRenderCode(cropped)
+            }
         }
         override fun onError(e: Throwable) {
             Utils.Log(TAG,"Crop error")
@@ -348,7 +358,6 @@ class CropImageActivity : BaseActivitySlide(){
             }
             override fun onRelease() {
                 try {
-                    showProgress()
                     cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
                 }catch (e: Exception){
                     e.printStackTrace()
@@ -361,13 +370,5 @@ class CropImageActivity : BaseActivitySlide(){
 
     private fun dismissLoading() {
         dialog?.dismiss()
-    }
-
-    private fun showProgress() {
-        dialogProcessing?.show()
-    }
-
-    private fun dismissProgress() {
-        dialogProcessing?.dismiss()
     }
 }

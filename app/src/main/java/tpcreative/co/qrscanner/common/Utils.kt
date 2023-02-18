@@ -801,6 +801,16 @@ object Utils {
         return isAlreadyCheckout()
     }
 
+    fun isHiddenAds() : Boolean{
+        return if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
+            (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium())
+        } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
+            (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium())
+        } else{
+            isPremium()
+        }
+    }
+
     fun onAlertNotify(activity: Activity, message: String) {
         Alerter.create(activity)
                 .setTitle(QRScannerApplication.getInstance().getString(R.string.alert))

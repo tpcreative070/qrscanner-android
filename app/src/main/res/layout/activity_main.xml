@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/llAds"
+        android:layout_above="@+id/rlAdsRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.google.android.material.appbar.AppBarLayout
@@ -36,23 +36,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    <LinearLayout
+    <RelativeLayout
         android:visibility="gone"
-        android:layout_centerVertical="true"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:gravity="center_vertical"
-        android:id="@+id/llAds"
         android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:id="@+id/rlAdsRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:orientation="vertical"
-            android:gravity="center_vertical|center"
-            android:id="@+id/llAdsSub"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginBottom="@dimen/margin_2"
+            android:id="@+id/llSmallAds"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/banner_height"/>
-    </LinearLayout>
+            android:layout_height="@dimen/banner_height"
+            android:gravity="center"
+            android:orientation="vertical"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -24,16 +24,16 @@ fun HelpActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isPremium()){
+    if(Utils.isHiddenAds()){
         rlAdsRoot.visibility = View.GONE
         rlBannerLarger.visibility = View.GONE
     }
     initRecycleView(layoutInflater)
     getData()
-    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestHelpFeedbackSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestHelpFeedbackLargeView(this)
     }
     imgRemove.setOnClickListener {

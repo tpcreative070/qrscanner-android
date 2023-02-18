@@ -25,7 +25,7 @@ fun ChangeFileColorActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isPremium()){
+    if(Utils.isHiddenAds()){
         rlAdsRoot.visibility = View.GONE
         rlBannerLarger.visibility = View.GONE
     }
@@ -47,14 +47,14 @@ fun ChangeFileColorActivity.initUI(){
             })
     }
 
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()  && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()  && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
-    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestChangeColorSmallView(this)
     }
 
-    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestChangeColorLargeView(this)
     }
     imgRemove.setOnClickListener {
@@ -90,7 +90,7 @@ fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
 }
 
 fun ChangeFileColorActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isPremium()){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isHiddenAds()){
         // Back is pressed... Finishing the activity
         finish()
     }else{

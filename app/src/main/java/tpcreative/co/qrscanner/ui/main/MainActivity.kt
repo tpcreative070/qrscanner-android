@@ -13,6 +13,8 @@ import com.google.android.gms.tasks.Task
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.llSmallAds
+import kotlinx.android.synthetic.main.activity_main.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ResponseSingleton.SingleTonResponseListener
@@ -250,15 +252,14 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
             }
         }
         ServiceManager.getInstance().onPreparingSyncData(true)
-        QRScannerApplication.getInstance().refreshAds()
     }
 
     fun doShowAds(value: Boolean) {
         if (value) {
-            QRScannerApplication.getInstance().loadMainView(llAdsSub)
+            QRScannerApplication.getInstance().loadMainView(llSmallAds)
         } else {
             Utils.Log(TAG, "loading ads...3")
-            llAdsSub.visibility = View.GONE
+            llSmallAds.visibility = View.GONE
         }
     }
 

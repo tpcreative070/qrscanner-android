@@ -37,16 +37,16 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         setContentView(R.layout.activity_text)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if(Utils.isPremium()){
+        if(Utils.isHiddenAds()){
             rlAdsRoot.visibility = View.GONE
             rlBannerLarger.visibility = View.GONE
         }
         setupViewModel()
         getIntentData()
-        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isPremium()) {
+        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isHiddenAds()) {
             QRScannerApplication.getInstance().requestCreateSmallView(this)
         }
-        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isPremium()) {
+        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds()) {
             QRScannerApplication.getInstance().requestCreateLargeView(this)
         }
         imgRemove.setOnClickListener {

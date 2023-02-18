@@ -85,7 +85,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
-        if (isLiveAds() && !Utils.isPremium()) {
+        if (!Utils.isHiddenAds()) {
             Utils.Log(TAG, "Start ads")
             MobileAds.initialize(this) { }
         }
@@ -1198,6 +1198,14 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun isRequestClearCacheData() : Boolean{
         return requestClearCacheData
+    }
+
+    fun isHiddenFreeReleaseAds() : Boolean{
+        return false
+    }
+
+    fun isHiddenFreeInnovationAds(): Boolean {
+        return true
     }
 
     fun refreshAds(){

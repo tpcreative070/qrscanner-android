@@ -29,7 +29,7 @@ fun BackupActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isPremium()){
+    if(Utils.isHiddenAds()){
         rlAdsRoot.visibility = View.GONE
         rlBannerLarger.visibility = View.GONE
     }
@@ -61,15 +61,15 @@ fun BackupActivity.initUI(){
         onShowConnectionAlert()
     }
 
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd() && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
 
-    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView() && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestBackupSmallView(this)
     }
 
-    if (QRScannerApplication.getInstance().isBackupLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupLargeView() && !Utils.isPremium()) {
+    if (QRScannerApplication.getInstance().isBackupLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupLargeView() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestBackupLargeView(this)
     }
     checkingShowAds()
@@ -111,7 +111,7 @@ fun BackupActivity.initUI(){
 }
 
 fun BackupActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isPremium()){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isHiddenAds()){
         // Back is pressed... Finishing the activity
         finish()
     }else{
