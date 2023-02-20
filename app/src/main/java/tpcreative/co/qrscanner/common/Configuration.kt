@@ -29,9 +29,9 @@ class Configuration {
 
         const val enableMainView = false
 
-        const val enableInterstitialAd = true
+        const val enableInterstitialAd = false
 
-        const val enableInterstitialViewCodeAd = true
+        const val enableInterstitialViewCodeAd = false
 
         const val hiddenFreeReleaseAds = false
 
