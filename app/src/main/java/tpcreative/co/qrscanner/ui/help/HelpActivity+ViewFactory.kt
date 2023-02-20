@@ -10,12 +10,10 @@ import co.tpcreative.supersafe.common.adapter.DividerItemDecoration
 import co.tpcreative.supersafe.common.adapter.clearDecorations
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.activity_help.*
-import kotlinx.android.synthetic.main.activity_help.imgRemove
 import kotlinx.android.synthetic.main.activity_help.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_help.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_help.toolbar
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -35,9 +33,6 @@ fun HelpActivity.initUI(){
     }
     if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestHelpFeedbackLargeView(this)
-    }
-    imgRemove.setOnClickListener {
-        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
 }

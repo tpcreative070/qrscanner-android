@@ -23,6 +23,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Configuration
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.RetrofitBuilder
 import tpcreative.co.qrscanner.common.api.RootAPI
@@ -1129,67 +1131,75 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun isLiveAds() : Boolean{
-        return true
+        return Configuration.liveAds
     }
 
     fun isEnableHelpFeedbackSmallView() : Boolean {
-        return true
+        return Configuration.enableHelpFeedbackSmallView
     }
 
     fun isEnableHelpFeedbackLargeView() : Boolean {
-        return true
+        return Configuration.enableHelpFeedbackLargeView
     }
 
     fun isEnableChangeColorSmallView() : Boolean {
-        return true
+        return Configuration.enableChangeColorSmallView
     }
 
     fun isEnableChangeColorLargeView() : Boolean {
-        return true
+        return Configuration.enableChangeColorLargeView
     }
 
     fun isEnableBackupSmallView() : Boolean {
-        return true
+        return Configuration.enableBackupSmallView
     }
 
     fun isEnableBackupLargeView() : Boolean {
-        return true
+        return Configuration.enableBackupLargeView
     }
 
     fun isEnableResultSmallView() : Boolean {
-        return true
+        return Configuration.enableResultSmallView
     }
 
     fun isEnableResultLargeView() : Boolean {
-        return true
+        return Configuration.enableResultLargeView
     }
 
     fun isEnableReviewSmallView() : Boolean {
-        return true
+        return Configuration.enableReviewSmallView
     }
 
     fun isEnableReviewLargeView() : Boolean {
-        return true
+        return Configuration.enableReviewLargeView
     }
 
     fun isEnableCreateSmallView() : Boolean {
-        return  true
+        return  Configuration.enableCreateSmallView
     }
 
     fun isEnableCreateLargeView() : Boolean {
-        return  true
+        return  Configuration.enableCreateLargeView
     }
 
     fun isEnableMainView() : Boolean {
-        return  false
+        return  Configuration.enableMainView
     }
 
     fun isEnableInterstitialAd() : Boolean {
-        return  true
+        return  Configuration.enableInterstitialAd
     }
 
     fun isEnableInterstitialViewCodeAd() : Boolean {
-        return  true
+        return  Configuration.enableInterstitialViewCodeAd
+    }
+
+    fun isHiddenFreeReleaseAds() : Boolean{
+        return Configuration.hiddenFreeReleaseAds
+    }
+
+    fun isHiddenFreeInnovationAds(): Boolean {
+        return Configuration.hiddenFreeInnovationAds
     }
 
     fun setRequestClearCacheData(data : Boolean){
@@ -1200,19 +1210,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return requestClearCacheData
     }
 
-    fun isHiddenFreeReleaseAds() : Boolean{
-        return false
-    }
-
-    fun isHiddenFreeInnovationAds(): Boolean {
-        return true
-    }
-
     fun refreshAds(){
         /*Condition to refresh ads is past 3 hours*/
         var mLatestTime = Utils.getKeepAdsRefreshLatestTime()
         val mCurrentTime = System.currentTimeMillis()
-        mLatestTime += Utils.THREE_HOURS
+        mLatestTime += Utils.TEN_MINUTES
         if (mCurrentTime>mLatestTime){
             isMainView = true
             isResultSmallView = true
@@ -1228,8 +1230,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             isBackupSmallView = true
             isBackupLargeView = true
             Utils.setKeepAdsRefreshLatestTime(mCurrentTime)
+            Utils.Log(TAG,"Force refresh ads")
         }else{
-            Utils.Log(TAG,"Waiting for refresh ads")
+            Utils.Log(TAG,"Waiting for refresh ads $mLatestTime - $mCurrentTime")
         }
     }
 

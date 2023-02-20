@@ -9,12 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_chage_file_color.imgRemove
 import kotlinx.android.synthetic.main.activity_chage_file_color.recyclerView
 import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_chage_file_color.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_chage_file_color.toolbar
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -56,9 +54,6 @@ fun ChangeFileColorActivity.initUI(){
 
     if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestChangeColorLargeView(this)
-    }
-    imgRemove.setOnClickListener {
-        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
 }

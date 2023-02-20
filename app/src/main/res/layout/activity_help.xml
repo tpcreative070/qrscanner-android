@@ -66,9 +66,8 @@
                         android:layout_height="wrap_content">
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_marginStart="@dimen/margin_50"
-                            android:layout_toStartOf="@+id/imgRemove"
                             android:layout_centerInParent="true"
-                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_marginTop="@dimen/margin_15"
                             style="@style/brandonRegularTextView"
                             android:gravity="center"
                             android:textStyle="bold"
@@ -76,15 +75,6 @@
                             android:text="@string/advertising"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
-                        <ImageView
-                            android:layout_margin="@dimen/margin_4"
-                            android:background="@color/material_hint_ads"
-                            android:padding="@dimen/margin_5"
-                            app:srcCompat="@drawable/ic_close"
-                            android:layout_alignParentEnd="true"
-                            android:id="@+id/imgRemove"
-                            android:layout_width="@dimen/icon_size_25"
-                            android:layout_height="@dimen/icon_size_25"/>
                     </RelativeLayout>
 
                     <LinearLayout
