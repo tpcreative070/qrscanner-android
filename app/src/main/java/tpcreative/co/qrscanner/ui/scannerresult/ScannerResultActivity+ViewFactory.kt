@@ -17,7 +17,6 @@ import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_result.*
-import kotlinx.android.synthetic.main.activity_result.imgRemove
 import kotlinx.android.synthetic.main.activity_result.recyclerView
 import kotlinx.android.synthetic.main.activity_result.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_result.rlBannerLarger
@@ -52,9 +51,6 @@ fun ScannerResultActivity.initUI(){
     }
     if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestResultLargeView(this)
-    }
-    imgRemove.setOnClickListener {
-        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
 }

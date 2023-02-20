@@ -7,7 +7,6 @@ import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_backup.*
-import kotlinx.android.synthetic.main.activity_backup.imgRemove
 import kotlinx.android.synthetic.main.activity_backup.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_backup.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_backup.toolbar
@@ -103,10 +102,6 @@ fun BackupActivity.initUI(){
                     showAds()
                 }
             })
-    }
-
-    imgRemove.setOnClickListener {
-        Navigator.onMoveProVersion(this)
     }
 }
 

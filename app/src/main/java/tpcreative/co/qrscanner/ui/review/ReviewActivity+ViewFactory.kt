@@ -20,7 +20,6 @@ import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_review.*
-import kotlinx.android.synthetic.main.activity_review.imgRemove
 import kotlinx.android.synthetic.main.activity_review.toolbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,9 +59,6 @@ fun ReviewActivity.initUI(){
     }
     if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd() && !Utils.isHiddenAds()) {
         QRScannerApplication.getInstance().requestInterstitialViewCodeAd()
-    }
-    imgRemove.setOnClickListener {
-        Navigator.onMoveProVersion(this)
     }
     checkingShowAds()
     /*Press back button*/

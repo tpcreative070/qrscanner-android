@@ -12,7 +12,6 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_text.*
-import kotlinx.android.synthetic.main.activity_text.imgRemove
 import kotlinx.android.synthetic.main.activity_text.llLargeAds
 import kotlinx.android.synthetic.main.activity_text.llSmallAds
 import kotlinx.android.synthetic.main.activity_text.rlAdsRoot
@@ -48,9 +47,6 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         }
         if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds()) {
             QRScannerApplication.getInstance().requestCreateLargeView(this)
-        }
-        imgRemove.setOnClickListener {
-            Navigator.onMoveProVersion(this)
         }
         checkingShowAds()
         edtText.setOnEditorActionListener(this)

@@ -12,7 +12,6 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import kotlinx.android.synthetic.main.activity_wifi.*
-import kotlinx.android.synthetic.main.activity_wifi.imgRemove
 import kotlinx.android.synthetic.main.activity_wifi.llLargeAds
 import kotlinx.android.synthetic.main.activity_wifi.llSmallAds
 import kotlinx.android.synthetic.main.activity_wifi.rlAdsRoot
@@ -25,7 +24,6 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.backup.initUI
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.regex.Pattern
 
@@ -49,9 +47,6 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         }
         if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds()) {
             QRScannerApplication.getInstance().requestCreateLargeView(this)
-        }
-        imgRemove.setOnClickListener {
-            Navigator.onMoveProVersion(this)
         }
         checkingShowAds()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
