@@ -45,9 +45,6 @@ fun MainActivity.initUI(){
         }
         setupTabIcons()
     }
-    ServiceManager.getInstance().onStartService()
-    PremiumManager.getInstance().onStartInAppPurchase()
-    Theme.getInstance()?.getList()
     if(Utils.isHiddenAds()){
         rlAdsRoot.visibility = View.GONE
     }
