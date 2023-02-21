@@ -24,7 +24,6 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Configuration
-import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.RetrofitBuilder
 import tpcreative.co.qrscanner.common.api.RootAPI
@@ -130,6 +129,13 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+        if (Utils.onIsIntro()){
+            if (Utils.getMillisecondsNewUser()<=0){
+                Utils.setMillisecondsNewUser(System.currentTimeMillis())
+            }
+        }else{
+            Utils.setMillisecondsNewUser(System.currentTimeMillis() + getInstance().getCurrentTimeUnit())
+        }
         if (activity is MainActivity) {
             this.activity = activity
         }
@@ -1130,7 +1136,40 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return true
     }
 
+    private fun isLiveAfterExpiredTime(): Boolean{
+        val mCurrentMillisecond = System.currentTimeMillis()
+        val latestDateTimeUpdatedApp = Utils.getMillisecondsUpdatedApp()
+        val mCurrentTimeUnit = getCurrentTimeUnit()
+        val mAfter4Day  = latestDateTimeUpdatedApp + mCurrentTimeUnit
+        Utils.Log(TAG,"CurrentTimeUnit $mCurrentTimeUnit")
+        Utils.Log(TAG,"Current time $mCurrentMillisecond")
+        return (mCurrentMillisecond>mAfter4Day) && latestDateTimeUpdatedApp>0
+    }
+
+    fun isLiveExpiredTimeForNewUser() : Boolean {
+        val mResult = Utils.getMillisecondsNewUser()
+        Utils.Log(TAG,"get Current time new Users $mResult")
+        if (System.currentTimeMillis()>mResult){
+            return true
+        }
+        return false
+    }
+
+    private fun getCurrentTimeUnit(): Long {
+        return if(DEBUG){
+            Configuration.FOUR_MINUTES
+        }else{
+            Configuration.FOUR_HOURS
+        }
+    }
+
     fun isLiveAds() : Boolean{
+        if (DEBUG){
+            val isLiveAds  = isLiveAfterExpiredTime()
+            val isLiveAdsForNewUser  = isLiveExpiredTimeForNewUser()
+            Utils.Log(TAG,"Live app after expired $isLiveAds")
+            Utils.Log(TAG,"Live app after expire for new user $isLiveAdsForNewUser")
+        }
         return Configuration.liveAds
     }
 
@@ -1214,7 +1253,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         /*Condition to refresh ads is past 3 hours*/
         var mLatestTime = Utils.getKeepAdsRefreshLatestTime()
         val mCurrentTime = System.currentTimeMillis()
-        mLatestTime += Utils.TEN_MINUTES
+        mLatestTime += Configuration.TEN_MINUTES
         if (mCurrentTime>mLatestTime){
             isMainView = true
             isResultSmallView = true

@@ -26,6 +26,8 @@ import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.ScannerSingleton.SingletonScannerListener
+import tpcreative.co.qrscanner.common.controller.PremiumManager
+import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
@@ -195,6 +197,12 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             }
         }
         onBeepAndVibrate()
+        if (!viewModel.isRequiredStartService){
+            ServiceManager.getInstance().onStartService()
+            PremiumManager.getInstance().onStartInAppPurchase()
+            Utils.onCheckingNewApp()
+            viewModel.isRequiredStartService = true
+        }
     }
 
     fun onAddPermissionGallery() {

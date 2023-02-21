@@ -2,6 +2,9 @@ package tpcreative.co.qrscanner.common
 
 class Configuration {
     companion object {
+        const val TEN_MINUTES = 600000
+        const val FOUR_HOURS = 14400000L
+        const val FOUR_MINUTES = 240000L
         const val liveAds = true
         const val enableHelpFeedbackSmallView = true
 
@@ -29,13 +32,13 @@ class Configuration {
 
         const val enableMainView = false
 
-        const val enableInterstitialAd = false
+        const val enableInterstitialAd = true
 
-        const val enableInterstitialViewCodeAd = false
+        const val enableInterstitialViewCodeAd = true
 
         const val hiddenFreeReleaseAds = false
 
-        const val hiddenFreeInnovationAds = true
+        const val hiddenFreeInnovationAds = false
     }
 
 }

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
+import android.util.Log
 import android.util.TypedValue
 import android.webkit.URLUtil
 import androidx.core.content.ContextCompat
@@ -41,7 +42,6 @@ object Utils {
     val TAG = Utils::class.java.simpleName
     const val CODE_EXCEPTION = 1111
     const val FORMAT_DISPLAY: String = "dd/MM/yyyy HH:mm:ss a"
-    const val TEN_MINUTES = 600000
 
     fun getUUId(): String? {
         return try {
@@ -172,6 +172,64 @@ object Utils {
     fun setMultipleScan(isValue: Boolean) {
         return PrefsController.putBoolean(QRScannerApplication.getInstance().getString(R.string.key_multiple_scan), isValue)
     }
+
+    fun getMillisecondsNewUser(): Long {
+        return PrefsController.getLong(QRScannerApplication.getInstance().getString(R.string.key_new_users_for_current_time), 0)
+    }
+
+    fun setMillisecondsNewUser(value: Long) {
+        return PrefsController.putLong(QRScannerApplication.getInstance().getString(R.string.key_new_users_for_current_time), value)
+    }
+
+    fun getMillisecondsUpdatedApp(): Long {
+        return PrefsController.getLong(QRScannerApplication.getInstance().getString(R.string.key_current_time_update_app), 0)
+    }
+
+    fun setMillisecondsUpdatedApp(value: Long) {
+        return PrefsController.putLong(QRScannerApplication.getInstance().getString(R.string.key_current_time_update_app), value)
+    }
+
+    fun getCurrentCodeVersion() : Int {
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), 0)
+    }
+
+    fun setCurrentCodeVersion(code : Int){
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), code)
+    }
+
+    fun setCurrentListThemeColor(value :  MutableList<Theme>){
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list), Gson().toJson(value))
+    }
+
+    fun onCheckingNewApp(){
+        try {
+            val value = getCurrentListThemeColor()
+            val currentCodeVersion: Int = getCurrentCodeVersion()
+            return if (value!=null && getMillisecondsUpdatedApp() > 0 && currentCodeVersion == BuildConfig.VERSION_CODE) {
+                Log(TAG, "Already install this version")
+            } else {
+                val mList: MutableList<Theme> = ArrayList(ThemeUtil.getThemeList())
+                setCurrentListThemeColor(mList)
+                setCurrentCodeVersion(BuildConfig.VERSION_CODE)
+                setMillisecondsUpdatedApp(System.currentTimeMillis())
+                Log(TAG, "New install this version")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun getCurrentListThemeColor(): MutableList<Theme>? {
+        try {
+            val result: String? = PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_theme_list), null)
+            val listType = object : TypeToken<ArrayList<Theme>>() {}.type
+            return Gson().fromJson<MutableList<Theme>?>(result, listType)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
 
     fun isSkipDuplicates(): Boolean {
         return PrefsController.getBoolean(QRScannerApplication.Companion.getInstance().getString(R.string.key_skip_duplicates), false)
@@ -803,9 +861,9 @@ object Utils {
 
     fun isHiddenAds() : Boolean{
         return if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
-            (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium())
+            (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
-            (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium())
+            (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         } else{
             isPremium()
         }
