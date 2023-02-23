@@ -48,9 +48,6 @@ fun MainActivity.initUI(){
     if(Utils.isHiddenAds()){
         rlAdsRoot.visibility = View.GONE
     }
-    if (QRScannerApplication.getInstance().isMainView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableMainView() && !Utils.isHiddenAds()) {
-        QRScannerApplication.getInstance().requestMainView(this)
-    }
 
     if (Build.VERSION.SDK_INT >= 33) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(

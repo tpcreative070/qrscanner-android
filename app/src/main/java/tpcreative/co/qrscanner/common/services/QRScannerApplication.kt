@@ -39,7 +39,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var pathFolder: String? = null
     private var isLive = false
     private var activity: MainActivity? = null
-    private var adMainView: AdView? = null
     private var adResultSmallView: AdView? = null
     private var adResultLargeView : AdView? = null
     private var adReviewSmallView : AdView? = null
@@ -56,7 +55,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var mInterstitialViewCodeAd: InterstitialAd? = null
     private var isRequestInterstitialAd : Boolean = true
     private var isRequestInterstitialViewCodeAd: Boolean = true
-    private var isMainView = true
     private var isResultSmallView = true
     private var isResultLargeView = true
     private var isReviewSmallView = true
@@ -134,7 +132,17 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 Utils.setMillisecondsNewUser(System.currentTimeMillis())
             }
         }else{
-            Utils.setMillisecondsNewUser(System.currentTimeMillis() + getInstance().getCurrentTimeUnit())
+            /*If current milliseconds less than fours days show app immediately*/
+            val mAfterFourDays = Configuration.FOUR_DAYS + Configuration.CURRENT_MILLISECONDS
+            if (System.currentTimeMillis()>mAfterFourDays){
+                Utils.setMillisecondsNewUser(System.currentTimeMillis())
+            }else{
+                Utils.setMillisecondsNewUser(System.currentTimeMillis() + getInstance().getCurrentTimeUnit())
+            }
+        }
+        if (DEBUG){
+            val mAfterFourDays = Configuration.FOUR_DAYS + Configuration.CURRENT_MILLISECONDS
+            Utils.Log(TAG,"Four days $mAfterFourDays")
         }
         if (activity is MainActivity) {
             this.activity = activity
@@ -201,50 +209,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun getPackageId(): String {
         return BuildConfig.APPLICATION_ID
-    }
-
-    fun requestMainView(context: Context){
-        Utils.Log(TAG, "show ads...")
-         adMainView = AdView(context)
-        adMainView?.setAdSize(AdSize.BANNER)
-        if (Utils.isDebug()) {
-            Utils.Log(TAG, "show ads isDebug...")
-            adMainView?.adUnitId = getString(R.string.banner_home_footer_test)
-        } else {
-            if (Utils.isInnovation()){
-                adMainView?.adUnitId = getString(R.string.innovation_banner_main)
-            }else{
-                adMainView?.adUnitId = getString(R.string.banner_main)
-            }
-        }
-        val adRequest = AdRequest.Builder().build()
-        adMainView?.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                isMainView = false
-                Utils.Log(TAG, "Ads successful")
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                isMainView = true
-                Utils.Log(TAG, "Ads failed")
-            }
-
-            override fun onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen
-            }
-
-            override fun onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            override fun onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        }
-        adMainView?.loadAd(adRequest)
     }
 
     fun requestResultSmallView(context: Context){
@@ -911,18 +875,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         }
     }
 
-    fun loadMainView(layAd: LinearLayout?) {
-        if (adMainView == null) {
-            Utils.Log(TAG, "ads null")
-            return
-        }
-        if (adMainView?.parent != null) {
-            val tempVg: ViewGroup = adMainView?.parent as ViewGroup
-            tempVg.removeView(adMainView)
-        }
-        layAd?.addView(adMainView)
-    }
-
     fun loadResultSmallView(layAd: LinearLayout?) {
         if (adResultSmallView == null) {
             Utils.Log(TAG, "ads null")
@@ -1093,10 +1045,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return isBackupLargeView
     }
 
-    fun isMainView(): Boolean {
-        return isMainView
-    }
-
     fun isResultSmallView(): Boolean {
         return isResultSmallView
     }
@@ -1255,7 +1203,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         val mCurrentTime = System.currentTimeMillis()
         mLatestTime += Configuration.TEN_MINUTES
         if (mCurrentTime>mLatestTime){
-            isMainView = true
             isResultSmallView = true
             isResultLargeView = true
             isReviewSmallView = true
