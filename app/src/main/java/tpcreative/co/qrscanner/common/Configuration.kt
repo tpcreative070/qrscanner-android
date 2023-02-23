@@ -40,7 +40,6 @@ class Configuration {
 
         const val hiddenFreeReleaseAds = false
 
-        const val hiddenFreeInnovationAds = false
+        const val hiddenFreeInnovationAds = true
     }
-
 }
