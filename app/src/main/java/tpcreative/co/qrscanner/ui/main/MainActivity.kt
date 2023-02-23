@@ -254,15 +254,6 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         ServiceManager.getInstance().onPreparingSyncData(true)
     }
 
-    fun doShowAds(value: Boolean) {
-        if (value) {
-            QRScannerApplication.getInstance().loadMainView(llSmallAds)
-        } else {
-            Utils.Log(TAG, "loading ads...3")
-            llSmallAds.visibility = View.GONE
-        }
-    }
-
     companion object {
         private val TAG = MainActivity::class.java.simpleName
     }
