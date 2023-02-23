@@ -65,10 +65,10 @@ fun ChangeFileColorActivity.checkingShowAds(){
 }
 
 fun ChangeFileColorActivity.getData(){
-    viewModel.getData().observe(this, Observer {
-        adapter?.setDataSource(it)
+    viewModel.getData { data ->
+        adapter?.setDataSource(data)
         onGenerateReview("123")
-    })
+    }
 }
 
 fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {

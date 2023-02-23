@@ -132,16 +132,17 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 Utils.setMillisecondsNewUser(System.currentTimeMillis())
             }
         }else{
-            /*If current milliseconds less than fours days show app immediately*/
-            val mAfterFourDays = Configuration.FOUR_DAYS + Configuration.CURRENT_MILLISECONDS
-            if (System.currentTimeMillis()>mAfterFourDays){
+            /*If current milliseconds less than two days show app immediately*/
+            val mAfterTwoDays = Configuration.TWO_DAYS + Configuration.CURRENT_MILLISECONDS
+            if (System.currentTimeMillis()>mAfterTwoDays){
                 Utils.setMillisecondsNewUser(System.currentTimeMillis())
             }else{
                 Utils.setMillisecondsNewUser(System.currentTimeMillis() + getInstance().getCurrentTimeUnit())
             }
         }
         if (DEBUG){
-            val mAfterFourDays = Configuration.FOUR_DAYS + Configuration.CURRENT_MILLISECONDS
+            Utils.Log(TAG,"Current mullisecons")
+            val mAfterFourDays = Configuration.TWO_DAYS + Configuration.CURRENT_MILLISECONDS
             Utils.Log(TAG,"Four days $mAfterFourDays")
         }
         if (activity is MainActivity) {

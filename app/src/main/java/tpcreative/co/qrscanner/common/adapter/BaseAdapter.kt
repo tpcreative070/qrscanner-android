@@ -1,4 +1,5 @@
 package co.tpcreative.supersafe.common.adapter
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ open class BaseAdapter<V, VH : BaseHolder<V>>(inflater: LayoutInflater) : Recycl
         return mDataSource.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setDataSource(dataSource: MutableList<V>?) {
         try {
             dataSource?.let {

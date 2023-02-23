@@ -5,8 +5,8 @@ class Configuration {
         const val TEN_MINUTES = 600000
         const val FOUR_HOURS = 14400000L
         const val FOUR_MINUTES = 240000L
-        const val FOUR_DAYS  = 345600000L
-        const val CURRENT_MILLISECONDS = 1677133366969L
+        const val TWO_DAYS  = 172800000L
+        const val CURRENT_MILLISECONDS = 1677169175228L
         const val liveAds = true
         const val enableHelpFeedbackSmallView = true
 

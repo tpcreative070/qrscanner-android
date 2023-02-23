@@ -26,13 +26,14 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     protected var stringBuilderClipboard: StringBuilder? = StringBuilder()
     val mListNavigation : MutableList<ItemNavigation> = mutableListOf()
 
-    fun getIntent(activity: Activity?)  = liveData(Dispatchers.Main){
+    fun getIntent(activity: Activity?,myCallback: (done:Boolean) -> Unit) {
         val data = activity?.intent?.serializable(QRScannerApplication.getInstance().getString(R.string.key_data),GeneralModel::class.java)
         result = data
         isFavorite = data?.favorite ?: false
         takeNoted = result?.noted.toString()
         Utils.Log(TAG,Gson().toJson(result))
-        emit(true)
+        Utils.Log(TAG,"Restore data 2")
+        myCallback.invoke(true)
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
