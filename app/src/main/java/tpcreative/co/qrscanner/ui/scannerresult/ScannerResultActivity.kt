@@ -39,6 +39,8 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     private var create: GeneralModel? = null
     var adapter: ScannerResultActivityAdapter? = null
     private var code: String? = null
+    private val keyFavorite = "KEY_FAVORITE"
+    private val keyNOTE = "KEY_NOTE"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
@@ -48,6 +50,21 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_result, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putBoolean(keyFavorite,  viewModel.isFavorite)
+        savedInstanceState.putString(keyNOTE, viewModel.takeNoted)
+        Utils.Log(TAG,"Restore data 0 ${viewModel.isFavorite} ${viewModel.takeNoted}")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        viewModel.isFavorite = savedInstanceState.getBoolean(keyFavorite)
+        viewModel.takeNoted = savedInstanceState.getString(keyNOTE) ?:""
+        onCheckFavorite()
+        Utils.Log(TAG,"Restore data 1 ${viewModel.isFavorite} ${viewModel.takeNoted}")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -307,7 +324,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             }
             onInsertUpdateHistory(history)
             title = history.titleDisplay
-            onReloadData()
             onCheckFavorite()
             onCopy()
             onHandleBarCode()

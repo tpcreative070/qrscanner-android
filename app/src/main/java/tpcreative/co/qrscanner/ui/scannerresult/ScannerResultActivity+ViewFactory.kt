@@ -68,9 +68,9 @@ fun ScannerResultActivity.initRecycleView() {
 }
 
 fun ScannerResultActivity.getDataIntent() {
-    viewModel.getIntent(this).observe(this, Observer {
+    viewModel.getIntent(this){
         setView()
-    })
+    }
 }
 
 fun ScannerResultActivity.checkingShowAds(){

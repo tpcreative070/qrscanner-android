@@ -11,7 +11,7 @@ import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 class ChangeFileColorViewModel : BaseViewModel<EmptyModel>() {
     var mList: MutableList<Theme> = mutableListOf()
     var mTheme: Theme? = null
-    fun getData()  = liveData(Dispatchers.Main){
+    fun getData(myCallback: (list: MutableList<Theme>) -> Unit){
         mList = Theme.getInstance()!!.getList()
         mTheme = Theme.getInstance()?.getThemeInfo()
         if (mTheme != null) {
@@ -20,8 +20,7 @@ class ChangeFileColorViewModel : BaseViewModel<EmptyModel>() {
             }
         }
         Utils.Log(TAG, "Value :" + Gson().toJson(mList))
-        //view.onSuccessful("Successful", EnumStatus.SHOW_DATA)
-        emit(mList)
+        myCallback.invoke(mList)
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
