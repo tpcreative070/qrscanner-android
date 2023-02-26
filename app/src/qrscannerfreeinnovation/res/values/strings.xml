@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">QR Scanner</string>
+    <string name="view_code">View code</string>
+    <string name="scan_photo">Scan photo</string>
+    <string name="admob_app_id">ca-app-pub-6636099832091388~4585811332</string>
+</resources>
