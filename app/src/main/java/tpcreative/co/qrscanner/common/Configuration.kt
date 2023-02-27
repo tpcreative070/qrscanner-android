@@ -3,8 +3,8 @@ package tpcreative.co.qrscanner.common
 class Configuration {
     companion object {
         const val TEN_MINUTES = 600000
-        const val FOUR_HOURS = 14400000L
-        const val FOUR_MINUTES = 240000L
+        const val THIRTY_MINUTES = 1800000L
+        const val THREE_MINUTES = 180000L
         const val TWO_DAYS  = 172800000L
         const val CURRENT_MILLISECONDS = 1677402341954L
         const val liveAds = true
