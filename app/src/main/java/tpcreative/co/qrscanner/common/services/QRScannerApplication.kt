@@ -71,6 +71,20 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var options: GoogleSignInOptions.Builder? = null
     private var requiredScopes: MutableSet<Scope>? = null
     private var requiredScopesString: MutableList<String>? = null
+    private var allowRequestFailureCreateSmall  = 0
+    private var allowRequestFailureCreateLarge  = 0
+    private var allowRequestFailureReviewSmall  = 0
+    private var allowRequestFailureReviewLarge  = 0
+    private var allowRequestFailureResultSmall  = 0
+    private var allowRequestFailureResultLarge  = 0
+    private var allowRequestFailureHelpFeedbackSmall  = 0
+    private var allowRequestFailureHelpFeedbackLarge  = 0
+    private var allowRequestFailureChangeColorSmall  = 0
+    private var allowRequestFailureChangeColorLarge  = 0
+    private var allowRequestFailureBackupSmall  = 0
+    private var allowRequestFailureBackupLarge  = 0
+    private var allowRequestFailureViewCode  = 0
+    private var allowRequestFailureAnywhere = 0
     override fun onCreate() {
         super.onCreate()
         mInstance = this
@@ -141,7 +155,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             }
         }
         if (DEBUG){
-            Utils.Log(TAG,"Current mullisecons")
+            Utils.Log(TAG,"Current milliseconds ${System.currentTimeMillis()}")
             val mAfterFourDays = Configuration.TWO_DAYS + Configuration.CURRENT_MILLISECONDS
             Utils.Log(TAG,"Four days $mAfterFourDays")
         }
@@ -235,7 +249,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isResultSmallView = true
+                isResultSmallView = allowRequestFailureResultSmall <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureResultSmall+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -279,7 +294,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isResultLargeView = true
+                isResultLargeView = allowRequestFailureResultLarge <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureResultLarge+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -323,7 +339,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isReviewSmallView = true
+                isReviewSmallView = allowRequestFailureReviewSmall <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureReviewSmall+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -343,6 +360,53 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         }
         adReviewSmallView?.loadAd(adRequest)
     }
+
+
+    fun requestReviewLargeView(context: Context){
+        Utils.Log(TAG, "requestReviewLargeView ads...")
+        adReviewLargeView = AdView(context)
+        adReviewLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        if (Utils.isDebug()) {
+            Utils.Log(TAG, "show ads isDebug...")
+            adReviewLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
+        } else {
+            if (Utils.isInnovation()){
+                adReviewLargeView?.adUnitId = getString(R.string.innovation_banner_review_large)
+            }else{
+                adReviewLargeView?.adUnitId = getString(R.string.banner_review_large)
+            }
+        }
+        val adRequest = AdRequest.Builder().build()
+        adReviewLargeView?.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                isReviewLargeView = false
+                Utils.Log(TAG, "Ads successful")
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                isReviewLargeView = allowRequestFailureReviewLarge <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureReviewLarge+=1
+                Utils.Log(TAG, "Ads failed")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        adReviewLargeView?.loadAd(adRequest)
+    }
+
 
     fun requestHelpFeedbackSmallView(context: Context){
         Utils.Log(TAG, "requestReviewSmallView ads...")
@@ -367,7 +431,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isHelpFeedbackSmallView = true
+                isHelpFeedbackSmallView = allowRequestFailureHelpFeedbackSmall <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureHelpFeedbackSmall+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -411,7 +476,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isHelpFeedbackLargeView = true
+                isHelpFeedbackLargeView = allowRequestFailureHelpFeedbackLarge <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureHelpFeedbackLarge+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -456,7 +522,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isChangeColorSmallView = true
+                isChangeColorSmallView = allowRequestFailureChangeColorSmall <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureChangeColorSmall+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -500,7 +567,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isChangeColorLargeView = true
+                isChangeColorLargeView = allowRequestFailureChangeColorLarge <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureChangeColorLarge+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -545,7 +613,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isBackupSmallView = true
+                isBackupSmallView = allowRequestFailureBackupSmall <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureBackupSmall+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -589,7 +658,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isBackupLargeView = true
+                isBackupLargeView = allowRequestFailureBackupLarge <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureBackupLarge+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -608,52 +678,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             }
         }
         adBackupLargeView?.loadAd(adRequest)
-    }
-
-
-
-    fun requestReviewLargeView(context: Context){
-        Utils.Log(TAG, "requestReviewLargeView ads...")
-        adReviewLargeView = AdView(context)
-        adReviewLargeView?.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        if (Utils.isDebug()) {
-            Utils.Log(TAG, "show ads isDebug...")
-            adReviewLargeView?.adUnitId = getString(R.string.banner_home_footer_test)
-        } else {
-            if (Utils.isInnovation()){
-                adReviewLargeView?.adUnitId = getString(R.string.innovation_banner_review_large)
-            }else{
-                adReviewLargeView?.adUnitId = getString(R.string.banner_review_large)
-            }
-        }
-        val adRequest = AdRequest.Builder().build()
-        adReviewLargeView?.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                isReviewLargeView = false
-                Utils.Log(TAG, "Ads successful")
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                isReviewLargeView = true
-                Utils.Log(TAG, "Ads failed")
-            }
-
-            override fun onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen
-            }
-
-            override fun onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            override fun onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        }
-        adReviewLargeView?.loadAd(adRequest)
     }
 
     fun requestCreateSmallView(context: Context){
@@ -679,7 +703,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isCreateSmallView = true
+                isCreateSmallView = allowRequestFailureCreateSmall <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureCreateSmall+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -723,7 +748,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
-                isCreateLargeView = true
+                isCreateLargeView = allowRequestFailureCreateLarge <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureCreateLarge+=1
                 Utils.Log(TAG, "Ads failed")
             }
 
@@ -761,7 +787,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         InterstitialAd.load(this,id, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 mInterstitialAd = null
-                isRequestInterstitialAd = true
+                isRequestInterstitialAd = allowRequestFailureAnywhere <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureAnywhere+=1
                 Utils.Log(TAG, "Interstitial was failed")
             }
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -827,7 +854,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         InterstitialAd.load(this,id, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 mInterstitialViewCodeAd = null
-                isRequestInterstitialViewCodeAd = true
+                isRequestInterstitialViewCodeAd = allowRequestFailureViewCode <= Configuration.COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID
+                allowRequestFailureViewCode+=1
                 Utils.Log(TAG, "Interstitial was failed")
             }
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -1216,6 +1244,20 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             isChangeColorLargeView = true
             isBackupSmallView = true
             isBackupLargeView = true
+            allowRequestFailureCreateSmall  = 0
+            allowRequestFailureCreateLarge  = 0
+            allowRequestFailureReviewSmall  = 0
+            allowRequestFailureReviewLarge  = 0
+            allowRequestFailureResultSmall  = 0
+            allowRequestFailureResultLarge  = 0
+            allowRequestFailureHelpFeedbackSmall  = 0
+            allowRequestFailureHelpFeedbackLarge  = 0
+            allowRequestFailureChangeColorSmall  = 0
+            allowRequestFailureChangeColorLarge  = 0
+            allowRequestFailureBackupSmall  = 0
+            allowRequestFailureBackupLarge  = 0
+            allowRequestFailureViewCode  = 0
+            allowRequestFailureAnywhere  = 0
             Utils.setKeepAdsRefreshLatestTime(mCurrentTime)
             Utils.Log(TAG,"Force refresh ads")
         }else{
