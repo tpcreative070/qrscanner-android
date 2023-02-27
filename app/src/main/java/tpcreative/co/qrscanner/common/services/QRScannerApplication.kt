@@ -1134,9 +1134,9 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     private fun getCurrentTimeUnit(): Long {
         return if(DEBUG){
-            Configuration.FOUR_MINUTES
+            Configuration.THREE_MINUTES
         }else{
-            Configuration.FOUR_HOURS
+            Configuration.THIRTY_MINUTES
         }
     }
 
