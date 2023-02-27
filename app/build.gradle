@@ -16,6 +16,11 @@ android {
             versionName appVersionName
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             multiDexEnabled true
+            copy {
+                from 'src/googleservice/qrscanner'
+                include '*.json'
+                into '.'
+            }
         }
 
         qrnow {
@@ -26,6 +31,11 @@ android {
             versionName appVersionName
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             multiDexEnabled true
+            copy {
+                from 'src/googleservice/qrnow'
+                include '*.json'
+                into '.'
+            }
         }
     }
 

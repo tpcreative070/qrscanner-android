@@ -31,8 +31,19 @@ fun Bitmap.CompressFormat.extension() = when (this) {
     else -> "jpg"
 }
 
-fun loadBitmap(imageFile: File) = BitmapFactory.decodeFile(imageFile.absolutePath).run {
-    determineImageRotation(imageFile, this)
+fun loadBitmap(imageFile: File) : Bitmap {
+    val options: BitmapFactory.Options
+    try {
+        BitmapFactory.decodeFile(imageFile.absolutePath).run {
+            return determineImageRotation(imageFile, this)
+        }
+    } catch (e: Exception) {
+        options = BitmapFactory.Options()
+        options.inSampleSize = 2
+        BitmapFactory.decodeFile(imageFile.absolutePath, options).run {
+            return determineImageRotation(imageFile, this)
+        }
+    }
 }
 
 fun decodeSampledBitmapFromFile(imageFile: File, reqWidth: Int, reqHeight: Int): Bitmap {
