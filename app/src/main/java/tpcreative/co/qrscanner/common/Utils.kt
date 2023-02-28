@@ -862,7 +862,7 @@ object Utils {
     fun isHiddenAds() : Boolean{
         return if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
             (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
-        } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
+        } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText() || BuildConfig.APPLICATION_ID == R.string.qr_now_free_innovation.toText()){
             (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         } else{
             isPremium()
@@ -1095,7 +1095,7 @@ object Utils {
     }
 
     fun isInnovation(): Boolean{
-        if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
+        if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText() || BuildConfig.APPLICATION_ID == R.string.qr_now_free_innovation.toText()){
             return true
         }
         return false

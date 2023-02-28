@@ -266,6 +266,9 @@ class SettingsFragment : BaseFragment() {
                         else if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_free_innovation)){
                             shareToSocial(getString(R.string.qrscanner_free_innovation))
                         }
+                        else if (BuildConfig.APPLICATION_ID == getString(R.string.qr_now_free_innovation)){
+                            shareToSocial(getString(R.string.qr_now_free_innovation))
+                        }
                         else {
                             shareToSocial(getString(R.string.scanner_app))
                         }
@@ -547,6 +550,9 @@ class SettingsFragment : BaseFragment() {
             }
             if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_free_innovation)){
                 id = getString(R.string.qrscanner_free_innovation)
+            }
+            if (BuildConfig.APPLICATION_ID == getString(R.string.qr_now_free_innovation)){
+                id = getString(R.string.qr_now_free_innovation)
             }
             val uri = Uri.parse("market://details?id=$id")
             val goToMarket = Intent(Intent.ACTION_VIEW, uri)

@@ -110,7 +110,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDGdrfAVeZEceHLWJH7v_2-9rVwHLgg8cw" />
+            android:value="@string/key_google_maps" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
