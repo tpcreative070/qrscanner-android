@@ -1227,10 +1227,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun refreshAds(){
-        /*Condition to refresh ads is past 3 hours*/
+        /*Condition to refresh ads is past 20 minutes*/
         var mLatestTime = Utils.getKeepAdsRefreshLatestTime()
         val mCurrentTime = System.currentTimeMillis()
-        mLatestTime += Configuration.THREE_HOURS
+        mLatestTime += Configuration.TWENTY_MINUTES
         if (mCurrentTime>mLatestTime){
             isResultSmallView = true
             isResultLargeView = true
