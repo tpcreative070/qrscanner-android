@@ -45,6 +45,7 @@
     <string name="url_live">http://tpcreative.me:8081</string>
     <string name="server_client_id">369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com</string>
     <string name="key_google_maps">AIzaSyDGdrfAVeZEceHLWJH7v_2-9rVwHLgg8cw</string>
+    <string name="youtubeid">eNhq6s1kmhw</string>
     <string name="tvPrimacyPolicy">https://sites.google.com/view/tpcreative/home</string>
     <string name="access_token">Bearer %1$s</string>
     <string name="tpcreative">http://tpcreative.co</string>
