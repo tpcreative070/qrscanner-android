@@ -21,4 +21,8 @@
     <string name="server_client_id">512864774649-jikdaimhaggvod3rg0a8ooc69i6eopgl.apps.googleusercontent.com</string>
     <string name="key_google_maps">AIzaSyBqUTSCRe2466-5qe6RKmKjHIAvA29H3e4</string>
     <string name="youtubeid">2CqHBEt-vBQ</string>
+    <string name="tvPrimacyPolicy">https://sites.google.com/view/qrnow/home</string>
+    <string name="email_contact">qrnow.me@gmail.com</string>
+    <string name="lifetime">me.qrnow.qrscanner.free.release.lifetime.v1</string>
+    <string name="innovation_lifetime">me.qrnow.qrscanner.free.innovation.lifetime.v1</string>
 </resources>

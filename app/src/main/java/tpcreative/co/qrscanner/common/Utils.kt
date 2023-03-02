@@ -1038,14 +1038,14 @@ object Utils {
     fun onSentEmail(context: Context){
         try {
             val emailIntent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("mailto:care@tpcreative.me")
+                data = Uri.parse("mailto:${R.string.email_contact.toText()}")
                 putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
             }
             context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
         }catch (e: Exception){
             e.printStackTrace()
             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:care@tpcreative.me")
+                data = Uri.parse("mailto:${R.string.email_contact.toText()}")
                 putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
             }
             context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))

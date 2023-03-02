@@ -47,6 +47,7 @@
     <string name="key_google_maps">AIzaSyDGdrfAVeZEceHLWJH7v_2-9rVwHLgg8cw</string>
     <string name="youtubeid">eNhq6s1kmhw</string>
     <string name="tvPrimacyPolicy">https://sites.google.com/view/tpcreative/home</string>
+    <string name="email_contact">care@tpcreative.me</string>
     <string name="access_token">Bearer %1$s</string>
     <string name="tpcreative">http://tpcreative.co</string>
     <string name="qrscanner_free_develop">tpcreative.co.qrscanner.free.develop</string>
@@ -58,8 +59,6 @@
     <string name="one_years">tpcreative.co.qrscanner.free.release.one.year</string>
     <string name="lifetime">tpcreative.co.qrscanner.free.release.lifetime.v1</string>
     <string name="innovation_lifetime">tpcreative.co.qrscanner.free.innovation.lifetime.v1</string>
-    <string name="qr_now_lifetime">me.qrnow.qrscanner.free.release.lifetime.v1</string>
-    <string name="qr_now_innovation_lifetime">me.qrnow.qrscanner.free.innovation.lifetime.v1</string>
     <string name="qrscanner_pro_release">tpcreative.co.qrscanner</string>
     <string name="supersafe_live">co.tpcreative.supersafe</string>
     <string name="save_your_voicemails_live">co.tpcreative.saveyourvoicemails</string>
