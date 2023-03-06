@@ -8,7 +8,7 @@ class Configuration {
         const val TWO_DAYS  = 172800000L
         const val CURRENT_MILLISECONDS = 1677547920404L
         const val liveAds = true
-        const val COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID = 1
+        const val COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID = 3
         const val enableHelpFeedbackSmallView = true
 
         const val enableHelpFeedbackLargeView = true
@@ -48,6 +48,7 @@ class Configuration {
         const val hiddenReviewAds = false
 
         const val hiddenFreeReleaseAds = false
-        const val hiddenFreeInnovationAds = true
+        const val hiddenFreeInnovationAds = false
+        const val hiddenSuperFreeInnovationAds = true
     }
 }

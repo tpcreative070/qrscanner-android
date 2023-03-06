@@ -1219,6 +1219,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return Configuration.hiddenFreeInnovationAds
     }
 
+    fun isHiddenSuperFreeInnovationAds(): Boolean {
+        return Configuration.hiddenSuperFreeInnovationAds
+    }
+
     fun setRequestClearCacheData(data : Boolean){
         this.requestClearCacheData = data
     }

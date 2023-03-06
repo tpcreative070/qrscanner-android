@@ -899,9 +899,13 @@ object Utils {
         }
         return if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
             (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
-        } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText() || BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
+        } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
             (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
-        } else{
+        }
+        else if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
+            (QRScannerApplication.getInstance().isHiddenSuperFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+        }
+        else{
             isPremium()
         }
     }
