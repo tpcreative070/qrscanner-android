@@ -42,10 +42,10 @@ class Configuration {
         const val hiddenMainAds = true
         const val hiddenChangeColorAds = true
         const val hiddenBackupAds = true
+        const val hiddenCreateAds = true
         const val hiddenHelpFeedbackAds = true
         const val hiddenScannerResultAds = false
         const val hiddenReviewAds = false
-        const val hiddenCreateAds = false
 
         const val hiddenFreeReleaseAds = false
         const val hiddenFreeInnovationAds = true

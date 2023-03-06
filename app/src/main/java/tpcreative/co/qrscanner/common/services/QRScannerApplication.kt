@@ -1137,7 +1137,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return if(DEBUG){
             Configuration.THREE_MINUTES
         }else{
-            Configuration.THIRTY_MINUTES
+            Configuration.THREE_MINUTES
         }
     }
 
