@@ -138,7 +138,7 @@ class GenerateViewModel : BaseViewModel<EmptyModel>(){
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds()) {
+        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.CREATE)) {
             emit(true)
         } else {
             emit(false)

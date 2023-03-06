@@ -18,8 +18,8 @@ android {
             multiDexEnabled true
         }
 
-        qrnow {
-            applicationId "me.qrnow.qrscanner"
+        superqrscanner {
+            applicationId "com.superqrscanner"
             minSdkVersion appMinSdkVersion
             targetSdkVersion appTargetSdkVersion
             versionCode appVersionCode

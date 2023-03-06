@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">QRNow</string>
+    <string name="app_name">SuperQRScanner</string>
     <string name="view_code">View code</string>
     <string name="scan_photo">Scan photo</string>
     <string name="admob_app_id">ca-app-pub-6636099832091388~4585811332</string>
@@ -22,7 +22,7 @@
     <string name="key_google_maps">AIzaSyBqUTSCRe2466-5qe6RKmKjHIAvA29H3e4</string>
     <string name="youtubeid">2CqHBEt-vBQ</string>
     <string name="tvPrimacyPolicy">https://sites.google.com/view/qrnow/home</string>
-    <string name="email_contact">qrnow.me@gmail.com</string>
-    <string name="lifetime">me.qrnow.qrscanner.free.release.lifetime.v1</string>
-    <string name="innovation_lifetime">me.qrnow.qrscanner.free.innovation.lifetime.v1</string>
+    <string name="email_contact">superqrscanner.com@gmail.com</string>
+    <string name="lifetime">com.superqrscanner.free.release.lifetime.v1</string>
+    <string name="innovation_lifetime">com.superqrscanner.free.innovation.lifetime.v1</string>
 </resources>

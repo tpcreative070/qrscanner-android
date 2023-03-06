@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.common.controller.PremiumManager
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.Theme
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
@@ -45,7 +46,7 @@ fun MainActivity.initUI(){
         }
         setupTabIcons()
     }
-    if(Utils.isHiddenAds()){
+    if(Utils.isHiddenAds(EnumScreens.MAIN)){
         rlAdsRoot.visibility = View.GONE
     }
 

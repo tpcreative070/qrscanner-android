@@ -18,12 +18,13 @@ import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
+import tpcreative.co.qrscanner.model.EnumScreens
 
 fun ChangeFileColorActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isHiddenAds()){
+    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)){
         rlAdsRoot.visibility = View.GONE
         rlBannerLarger.visibility = View.GONE
     }
@@ -45,14 +46,14 @@ fun ChangeFileColorActivity.initUI(){
             })
     }
 
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()  && !Utils.isHiddenAds()) {
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
-    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isHiddenAds()) {
+    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)) {
         QRScannerApplication.getInstance().requestChangeColorSmallView(this)
     }
 
-    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds()) {
+    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)) {
         QRScannerApplication.getInstance().requestChangeColorLargeView(this)
     }
     checkingShowAds()
@@ -85,7 +86,7 @@ fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
 }
 
 fun ChangeFileColorActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isHiddenAds()){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)){
         // Back is pressed... Finishing the activity
         finish()
     }else{

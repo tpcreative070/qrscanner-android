@@ -3,6 +3,7 @@ import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.BillingProcessor.IPurchasesResponseListener
 import com.anjlab.android.iab.v3.PurchaseInfo
 import com.google.gson.Gson
+import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.SettingsSingleton
@@ -11,6 +12,7 @@ import tpcreative.co.qrscanner.common.Utils.Log
 import tpcreative.co.qrscanner.common.Utils.isAlreadyCheckout
 import tpcreative.co.qrscanner.common.Utils.isRealCheckedOut
 import tpcreative.co.qrscanner.common.api.request.CheckoutRequest
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 
@@ -20,7 +22,11 @@ class PremiumManager : BillingProcessor.IBillingHandler {
 
     fun onStartInAppPurchase() {
         if (Utils.isInnovation()){
-            bp = BillingProcessor(QRScannerApplication.getInstance(), ConstantKey.GooglePlayInnovationPublicKey, this)
+            if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
+                bp = BillingProcessor(QRScannerApplication.getInstance(), ConstantKey.GooglePlaySuperInnovationPublicKey, this)
+            }else{
+                bp = BillingProcessor(QRScannerApplication.getInstance(), ConstantKey.GooglePlayInnovationPublicKey, this)
+            }
         }else{
             bp = BillingProcessor(QRScannerApplication.getInstance(), ConstantKey.GooglePlayPublicKey, this)
         }

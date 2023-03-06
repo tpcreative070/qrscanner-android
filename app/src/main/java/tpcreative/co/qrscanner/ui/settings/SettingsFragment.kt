@@ -15,7 +15,6 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
-import androidx.preference.Preference.OnPreferenceChangeListener
 import androidx.preference.PreferenceFragmentCompat
 import co.tpcreative.supersafe.common.controller.EncryptedPreferenceDataStore
 import com.afollestad.materialdialogs.MaterialDialog
@@ -266,8 +265,8 @@ class SettingsFragment : BaseFragment() {
                         else if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_free_innovation)){
                             shareToSocial(getString(R.string.qrscanner_free_innovation))
                         }
-                        else if (BuildConfig.APPLICATION_ID == getString(R.string.qr_now_free_innovation)){
-                            shareToSocial(getString(R.string.qr_now_free_innovation))
+                        else if (BuildConfig.APPLICATION_ID == getString(R.string.super_qrscanner_free_innovation)){
+                            shareToSocial(getString(R.string.super_qrscanner_free_innovation))
                         }
                         else {
                             shareToSocial(getString(R.string.scanner_app))
@@ -551,8 +550,8 @@ class SettingsFragment : BaseFragment() {
             if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_free_innovation)){
                 id = getString(R.string.qrscanner_free_innovation)
             }
-            if (BuildConfig.APPLICATION_ID == getString(R.string.qr_now_free_innovation)){
-                id = getString(R.string.qr_now_free_innovation)
+            if (BuildConfig.APPLICATION_ID == getString(R.string.super_qrscanner_free_innovation)){
+                id = getString(R.string.super_qrscanner_free_innovation)
             }
             val uri = Uri.parse("market://details?id=$id")
             val goToMarket = Intent(Intent.ACTION_VIEW, uri)
