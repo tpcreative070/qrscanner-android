@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
-import android.util.Log
 import android.util.TypedValue
 import android.webkit.URLUtil
 import androidx.core.content.ContextCompat
@@ -859,12 +858,54 @@ object Utils {
         return isAlreadyCheckout()
     }
 
-    fun isHiddenAds() : Boolean{
+    fun isHiddenAds(enumScreens: EnumScreens) : Boolean{
+        when(enumScreens){
+            EnumScreens.HELP_FEEDBACK ->{
+                if (Configuration.hiddenHelpFeedbackAds){
+                    return true
+                }
+            }
+            EnumScreens.MAIN ->{
+                if (Configuration.hiddenMainAds){
+                   return true
+                }
+            }
+            EnumScreens.CREATE ->{
+                if (Configuration.hiddenCreateAds){
+                    return true
+                }
+            }
+            EnumScreens.SCANNER_RESULT ->{
+                if (Configuration.hiddenScannerResultAds){
+                    return true
+                }
+            }
+            EnumScreens.REVIEW->{
+                if (Configuration.hiddenReviewAds){
+                    return true
+                }
+            }
+            EnumScreens.CHANGE_COLOR ->{
+                if (Configuration.hiddenChangeColorAds){
+                    return true
+                }
+            }
+            EnumScreens.BACKUP ->{
+                if (Configuration.hiddenBackupAds){
+                    return true
+                }
+            }
+            else -> {}
+        }
         return if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
             (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
             (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
-        } else{
+        }
+        else if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
+            (QRScannerApplication.getInstance().isHiddenSuperFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+        }
+        else{
             isPremium()
         }
     }
@@ -1038,14 +1079,14 @@ object Utils {
     fun onSentEmail(context: Context){
         try {
             val emailIntent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("mailto:care@tpcreative.me")
+                data = Uri.parse("mailto:${R.string.email_contact.toText()}")
                 putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
             }
             context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
         }catch (e: Exception){
             e.printStackTrace()
             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:care@tpcreative.me")
+                data = Uri.parse("mailto:${R.string.email_contact.toText()}")
                 putExtra(Intent.EXTRA_SUBJECT, "QRScanner")
             }
             context.startActivity(Intent.createChooser(emailIntent, R.string.help_feedback.toText()))
@@ -1095,7 +1136,7 @@ object Utils {
     }
 
     fun isInnovation(): Boolean{
-        if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
+        if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText() || BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
             return true
         }
         return false

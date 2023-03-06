@@ -2,9 +2,9 @@ package tpcreative.co.qrscanner.common
 
 class Configuration {
     companion object {
-        const val TWENTY_MINUTES = 1200000L
         const val THIRTY_MINUTES = 1800000L
         const val THREE_MINUTES = 180000L
+        const val TWENTY_MINUTES = 1200000L
         const val TWO_DAYS  = 172800000L
         const val CURRENT_MILLISECONDS = 1677547920404L
         const val liveAds = true
@@ -39,8 +39,16 @@ class Configuration {
 
         const val enableInterstitialViewCodeAd = false
 
-        const val hiddenFreeReleaseAds = false
+        const val hiddenMainAds = true
+        const val hiddenChangeColorAds = true
+        const val hiddenBackupAds = true
+        const val hiddenCreateAds = true
+        const val hiddenHelpFeedbackAds = true
+        const val hiddenScannerResultAds = false
+        const val hiddenReviewAds = false
 
-        const val hiddenFreeInnovationAds = true
+        const val hiddenFreeReleaseAds = false
+        const val hiddenFreeInnovationAds = false
+        const val hiddenSuperFreeInnovationAds = true
     }
 }

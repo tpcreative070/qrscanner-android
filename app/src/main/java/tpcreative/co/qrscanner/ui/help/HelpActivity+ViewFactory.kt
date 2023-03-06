@@ -17,21 +17,22 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.model.EnumScreens
 
 fun HelpActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isHiddenAds()){
+    if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)){
         rlAdsRoot.visibility = View.GONE
         rlBannerLarger.visibility = View.GONE
     }
     initRecycleView(layoutInflater)
     getData()
-    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds()) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)) {
         QRScannerApplication.getInstance().requestHelpFeedbackSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds()) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)) {
         QRScannerApplication.getInstance().requestHelpFeedbackLargeView(this)
     }
     checkingShowAds()

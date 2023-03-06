@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
+import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.ItemNavigation
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
@@ -34,7 +35,7 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds()) {
+        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.REVIEW)) {
             emit(true)
         } else {
             emit(false)

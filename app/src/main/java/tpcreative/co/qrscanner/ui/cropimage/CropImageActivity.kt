@@ -1,12 +1,14 @@
 package tpcreative.co.qrscanner.ui.cropimage
+
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
-import android.os.*
-import androidx.lifecycle.lifecycleScope
-import android.view.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
+import android.view.Window
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
@@ -14,9 +16,10 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.zxing.*
-import com.google.zxing.client.result.*
+import com.google.zxing.client.result.ResultParser
 import com.google.zxing.common.HybridBinarizer
 import com.isseiaoki.simplecropview.callback.CropCallback
 import com.isseiaoki.simplecropview.callback.LoadCallback
@@ -25,20 +28,25 @@ import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.*
 import kotlinx.android.synthetic.main.crop_activity_crop.*
 import kotlinx.android.synthetic.main.crop_layout_done_cancel.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.*
+import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.Navigator
+import tpcreative.co.qrscanner.common.ProgressDialog
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.FileUtil
-import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumImplement
+import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import java.io.File
 import java.util.*
+
 
 class CropImageActivity : BaseActivitySlide(){
 
@@ -256,21 +264,40 @@ class CropImageActivity : BaseActivitySlide(){
                             Utils.Log(TAG,"Reader again...2")
                         }
                     }
+
+                    try {
+                        if (mResult==null){
+                            bitmap  = createBlackAndWhite(it)
+                            bitmap?.let { bitmapResult ->
+                                intArray = IntArray(bitmapResult.width * bitmapResult.height)
+                                bitmapResult.getPixels(intArray, 0, bitmapResult.width, 0, 0, bitmapResult.width, bitmapResult.height)
+                                source = RGBLuminanceSource(bitmapResult.width, bitmapResult.height, intArray)
+                                mBitmap = BinaryBitmap(HybridBinarizer(source))
+                                Utils.Log(TAG,"Reader again...3")
+                                mResult = reader.decode(mBitmap)
+                            }
+                        }
+                    }catch (e : Exception){
+                        e.printStackTrace()
+                        Utils.Log(TAG,"Reader again...4")
+                    }
+
                     try {
                         if (mResult==null){
                             bitmap = it.rotate(90F)
-                            Utils.Log(TAG,"Reader again")
+                            Utils.Log(TAG,"Reader again 5")
                             bitmap?.let { bitmapResult ->
                                 intArray = IntArray(bitmapResult.width * bitmapResult.height)
                                 bitmapResult.getPixels(intArray, 0, bitmapResult.width, 0, 0, bitmapResult.width, bitmapResult.height)
                                 source = RGBLuminanceSource(bitmapResult.width, bitmapResult.height, intArray)
                                 mBitmap = BinaryBitmap(HybridBinarizer(source))
                                 mResult = reader.decode(mBitmap)
-                                Utils.Log(TAG,"Reader again...")
+                                Utils.Log(TAG,"Reader again 6")
                             }
                         }
                     }catch (e: Exception){
                         e.printStackTrace()
+                        Utils.Log(TAG,"Reader again 7")
                     }
                     if (mResult != null) {
                         lifecycleScope.launch(Dispatchers.Main){
@@ -347,6 +374,33 @@ class CropImageActivity : BaseActivitySlide(){
         override fun onError(e: Throwable) {
             Utils.Log(TAG,"Crop error")
         }
+    }
+
+    private fun createBlackAndWhite(src: Bitmap): Bitmap? {
+        val width = src.width
+        val height = src.height
+        val bmOut = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val factor = 255f
+        val redBri = 0.2126f
+        val greenBri = 0.2126f
+        val blueBri = 0.0722f
+        val length = width * height
+        val mInPixels = IntArray(length)
+        val mOutPixels = IntArray(length)
+        src.getPixels(mInPixels, 0, width, 0, 0, width, height)
+        for ((point, pix) in mInPixels.withIndex()) {
+            val mR = pix shr 16 and 0xFF
+            val mG = pix shr 8 and 0xFF
+            val mB = pix and 0xFF
+            val lum = redBri * mR / factor + greenBri * mG / factor + blueBri * mB / factor
+            if (lum > 0.4) {
+                mOutPixels[point] = -0x1
+            } else {
+                mOutPixels[point] = -0x1000000
+            }
+        }
+        bmOut.setPixels(mOutPixels, 0, width, 0, 0, width, height)
+        return bmOut
     }
 
     private val mMoveUpCallback: MoveUpCallback

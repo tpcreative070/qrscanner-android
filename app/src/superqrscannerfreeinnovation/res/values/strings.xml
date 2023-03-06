@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">SuperScanner</string>
+    <string name="view_code">View code</string>
+    <string name="scan_photo">Scan photo</string>
+    <string name="admob_app_id">ca-app-pub-6636099832091388~4585811332</string>
+    <string name="innovation_banner_result_small">ca-app-pub-6636099832091388/8757539372</string>
+    <string name="innovation_banner_result_large">ca-app-pub-6636099832091388/5911884183</string>
+    <string name="innovation_banner_review_small">ca-app-pub-6636099832091388/7444457702</string>
+    <string name="innovation_banner_review_large">ca-app-pub-6636099832091388/9974418128</string>
+    <string name="innovation_banner_create_large">ca-app-pub-6636099832091388/2192131023</string>
+    <string name="innovation_banner_create_small">ca-app-pub-6636099832091388/4530519756</string>
+    <string name="innovation_banner_backup_small">ca-app-pub-6636099832091388/6625651313</string>
+    <string name="innovation_banner_backup_large">ca-app-pub-6636099832091388/7747161292</string>
+    <string name="innovation_banner_change_color_small">ca-app-pub-6636099832091388/2494834615</string>
+    <string name="innovation_banner_change_color_large">ca-app-pub-6636099832091388/2111691234</string>
+    <string name="innovation_banner_help_feedback_small">ca-app-pub-6636099832091388/9607037875</string>
+    <string name="innovation_banner_help_feedback_large">ca-app-pub-6636099832091388/5476221177</string>
+    <string name="innovation_interstitial_anywhere">ca-app-pub-6636099832091388/1345404475</string>
+    <string name="innovation_interstitial_view_code">ca-app-pub-6636099832091388/6214587772</string>
+    <string name="server_client_id">512864774649-jikdaimhaggvod3rg0a8ooc69i6eopgl.apps.googleusercontent.com</string>
+    <string name="key_google_maps">AIzaSyBqUTSCRe2466-5qe6RKmKjHIAvA29H3e4</string>
+    <string name="youtubeid">2CqHBEt-vBQ</string>
+    <string name="tvPrimacyPolicy">https://sites.google.com/view/qrnow/home</string>
+    <string name="email_contact">superqrscanner.com@gmail.com</string>
+    <string name="lifetime">com.superqrscanner.free.release.lifetime.v1</string>
+    <string name="innovation_lifetime">com.superqrscanner.free.innovation.lifetime.v1</string>
+</resources>

@@ -36,16 +36,16 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wifi)
         setSupportActionBar(toolbar)
-        if(Utils.isHiddenAds()){
+        if(Utils.isHiddenAds(EnumScreens.CREATE)){
             rlAdsRoot.visibility = View.GONE
             rlBannerLarger.visibility = View.GONE
         }
         setupViewModel()
         getIntentData()
-        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isHiddenAds()) {
+        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isHiddenAds(EnumScreens.CREATE)) {
             QRScannerApplication.getInstance().requestCreateSmallView(this)
         }
-        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds()) {
+        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds(EnumScreens.CREATE)) {
             QRScannerApplication.getInstance().requestCreateLargeView(this)
         }
         checkingShowAds()

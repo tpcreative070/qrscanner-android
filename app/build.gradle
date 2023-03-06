@@ -6,15 +6,29 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion appCompileSdkVersion
-    defaultConfig {
-        applicationId "tpcreative.co.qrscanner"
-        minSdkVersion appMinSdkVersion
-        targetSdkVersion appTargetSdkVersion
-        versionCode appVersionCode
-        versionName appVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
+    flavorDimensions("default")
+    productFlavors {
+        qrscanner {
+            applicationId "tpcreative.co.qrscanner"
+            minSdkVersion appMinSdkVersion
+            targetSdkVersion appTargetSdkVersion
+            versionCode appVersionCode
+            versionName appVersionName
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            multiDexEnabled true
+        }
+
+        superqrscanner {
+            applicationId "com.superqrscanner"
+            minSdkVersion appMinSdkVersion
+            targetSdkVersion appTargetSdkVersion
+            versionCode appVersionCode
+            versionName appVersionName
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            multiDexEnabled true
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled true

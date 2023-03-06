@@ -52,7 +52,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
                 onAlertSendEmail()
             }
             EnumAction.GUIDES_VIDEO ->{
-                Utils.watchYoutubeVideo(this,Constant.youtube_id)
+                Utils.watchYoutubeVideo(this,getString(R.string.youtubeid))
             }
             else -> {}
         }

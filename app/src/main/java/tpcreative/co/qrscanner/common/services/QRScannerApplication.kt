@@ -30,6 +30,7 @@ import tpcreative.co.qrscanner.common.api.RootAPI
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.helper.ThemeHelper
+import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
@@ -98,7 +99,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
-        if (!Utils.isHiddenAds()) {
+        if (!Utils.isHiddenAds(EnumScreens.NONE)) {
             Utils.Log(TAG, "Start ads")
             MobileAds.initialize(this) { }
         }
@@ -1136,7 +1137,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         return if(DEBUG){
             Configuration.THREE_MINUTES
         }else{
-            Configuration.THIRTY_MINUTES
+            Configuration.THREE_MINUTES
         }
     }
 
@@ -1216,6 +1217,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
     fun isHiddenFreeInnovationAds(): Boolean {
         return Configuration.hiddenFreeInnovationAds
+    }
+
+    fun isHiddenSuperFreeInnovationAds(): Boolean {
+        return Configuration.hiddenSuperFreeInnovationAds
     }
 
     fun setRequestClearCacheData(data : Boolean){

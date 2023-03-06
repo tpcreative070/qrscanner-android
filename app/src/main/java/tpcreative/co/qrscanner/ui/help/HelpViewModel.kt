@@ -6,10 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.model.EmptyModel
-import tpcreative.co.qrscanner.model.EnumAction
-import tpcreative.co.qrscanner.model.HelpModel
-import tpcreative.co.qrscanner.model.Theme
+import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
@@ -25,7 +22,7 @@ class HelpViewModel : BaseViewModel<EmptyModel>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds()) {
+        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)) {
             emit(true)
         } else {
             emit(false)

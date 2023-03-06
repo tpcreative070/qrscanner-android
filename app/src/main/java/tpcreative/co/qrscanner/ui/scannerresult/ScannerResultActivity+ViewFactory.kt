@@ -24,12 +24,14 @@ import kotlinx.android.synthetic.main.activity_result.scrollView
 import kotlinx.android.synthetic.main.activity_result.toolbar
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Configuration
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EnumAction
+import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.Theme
 import java.util.*
 
@@ -42,14 +44,14 @@ fun ScannerResultActivity.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
-    if(Utils.isHiddenAds()){
+    if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT)){
         rlAdsRoot.visibility = View.GONE
         rlBannerLarger.visibility = View.GONE
     }
-    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds()) {
+    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT)) {
         QRScannerApplication.getInstance().requestResultSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isHiddenAds()) {
+    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT)) {
         QRScannerApplication.getInstance().requestResultLargeView(this)
     }
     checkingShowAds()

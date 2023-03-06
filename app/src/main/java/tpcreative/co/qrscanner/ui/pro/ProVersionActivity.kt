@@ -7,11 +7,13 @@ import com.anjlab.android.iab.v3.PurchaseInfo
 import com.anjlab.android.iab.v3.SkuDetails
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_pro_version.*
+import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.toText
 
 class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingProcessor.IBillingHandler  {
     private var bp: BillingProcessor? = null
@@ -23,7 +25,11 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
         btnUpgradeNow.setOnClickListener(this)
         title = getString(R.string.pro_version)
         if (Utils.isInnovation()){
-            bp = BillingProcessor(this, ConstantKey.GooglePlayInnovationPublicKey, this)
+            if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
+                bp = BillingProcessor(this, ConstantKey.GooglePlaySuperInnovationPublicKey, this)
+            }else{
+                bp = BillingProcessor(this, ConstantKey.GooglePlayInnovationPublicKey, this)
+            }
         }else{
             bp = BillingProcessor(this, ConstantKey.GooglePlayPublicKey, this)
         }

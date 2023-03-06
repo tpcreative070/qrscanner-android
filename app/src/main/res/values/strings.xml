@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--Do not use this code start for multiple languages -->
-    <string name="innovation_banner_result_small">ca-app-pub-6636099832091388/8757539372</string>
-    <string name="innovation_banner_result_large">ca-app-pub-6636099832091388/5911884183</string>
-    <string name="innovation_banner_review_small">ca-app-pub-6636099832091388/7444457702</string>
-    <string name="innovation_banner_review_large">ca-app-pub-6636099832091388/9974418128</string>
-    <string name="innovation_banner_create_large">ca-app-pub-6636099832091388/2192131023</string>
-    <string name="innovation_banner_create_small">ca-app-pub-6636099832091388/4530519756</string>
-    <string name="innovation_banner_backup_small">ca-app-pub-6636099832091388/6625651313</string>
-    <string name="innovation_banner_backup_large">ca-app-pub-6636099832091388/7747161292</string>
-    <string name="innovation_banner_change_color_small">ca-app-pub-6636099832091388/2494834615</string>
-    <string name="innovation_banner_change_color_large">ca-app-pub-6636099832091388/2111691234</string>
-    <string name="innovation_banner_help_feedback_small">ca-app-pub-6636099832091388/9607037875</string>
-    <string name="innovation_banner_help_feedback_large">ca-app-pub-6636099832091388/5476221177</string>
-    <string name="innovation_interstitial_anywhere">ca-app-pub-6636099832091388/1345404475</string>
-    <string name="innovation_interstitial_view_code">ca-app-pub-6636099832091388/6214587772</string>
+    <string name="innovation_banner_result_small">ca-app-pub-1338847113684939/7737246955</string>
+    <string name="innovation_banner_result_large">ca-app-pub-1338847113684939/5956976015</string>
+    <string name="innovation_banner_review_small">ca-app-pub-1338847113684939/5194574598</string>
+    <string name="innovation_banner_review_large">ca-app-pub-1338847113684939/3762057513</string>
+    <string name="innovation_banner_create_large">ca-app-pub-1338847113684939/8942247916</string>
+    <string name="innovation_banner_create_small">ca-app-pub-1338847113684939/8287641793</string>
+    <string name="innovation_banner_backup_small">ca-app-pub-1338847113684939/2899583744</string>
+    <string name="innovation_banner_backup_large">ca-app-pub-1338847113684939/7960338733</string>
+    <string name="innovation_banner_change_color_small">ca-app-pub-1338847113684939/3689921234</string>
+    <string name="innovation_banner_change_color_large">ca-app-pub-1338847113684939/2017731008</string>
+    <string name="innovation_banner_help_feedback_small">ca-app-pub-1338847113684939/4021093724</string>
+    <string name="innovation_banner_help_feedback_large">ca-app-pub-1338847113684939/9704649337</string>
+    <string name="innovation_interstitial_anywhere">ca-app-pub-1338847113684939/5111083616</string>
+    <string name="innovation_interstitial_view_code">ca-app-pub-1338847113684939/1394930385</string>
 
-    <string name="admob_app_id">ca-app-pub-6485042687080931~2094523138</string>
-    <string name="banner_result_small">ca-app-pub-6485042687080931/9645440599</string>
-    <string name="banner_result_large">ca-app-pub-6485042687080931/3056251014</string>
-    <string name="banner_review_small">ca-app-pub-6485042687080931/3487495856</string>
-    <string name="banner_review_large">ca-app-pub-6485042687080931/9561680110</string>
-    <string name="banner_create_small">ca-app-pub-6485042687080931/2924389073</string>
-    <string name="banner_create_large">ca-app-pub-6485042687080931/9286617444</string>
-    <string name="banner_backup_small">ca-app-pub-6485042687080931/9533759959</string>
-    <string name="banner_backup_large">ca-app-pub-6485042687080931/5155800748</string>
-    <string name="banner_change_color_small">ca-app-pub-6485042687080931/7985144065</string>
-    <string name="banner_change_color_large">ca-app-pub-6485042687080931/5107699287</string>
-    <string name="banner_help_feedback_small">ca-app-pub-6485042687080931/2582157035</string>
-    <string name="banner_help_feedback_large">ca-app-pub-6485042687080931/9976882586</string>
-    <string name="interstitial_anywhere">ca-app-pub-6485042687080931/9641840661</string>
-    <string name="interstitial_view_code">ca-app-pub-6485042687080931/3411474233</string>
+    <string name="admob_app_id">ca-app-pub-1338847113684939~2572248867</string>
+    <string name="banner_result_small">ca-app-pub-1338847113684939/3102446494</string>
+    <string name="banner_result_large">ca-app-pub-1338847113684939/3206673680</string>
+    <string name="banner_review_small">ca-app-pub-1338847113684939/2108944931</string>
+    <string name="banner_review_large">ca-app-pub-1338847113684939/6287847182</string>
+    <string name="banner_create_small">ca-app-pub-1338847113684939/4974765511</string>
+    <string name="banner_create_large">ca-app-pub-1338847113684939/3122643703</string>
+    <string name="banner_backup_small">ca-app-pub-1338847113684939/9524670023</string>
+    <string name="banner_backup_large">ca-app-pub-1338847113684939/1809562036</string>
+    <string name="banner_change_color_small">ca-app-pub-1338847113684939/8969850841</string>
+    <string name="banner_change_color_large">ca-app-pub-1338847113684939/5369802596</string>
+    <string name="banner_help_feedback_small">ca-app-pub-1338847113684939/6898506683</string>
+    <string name="banner_help_feedback_large">ca-app-pub-1338847113684939/9795863261</string>
+    <string name="interstitial_anywhere">ca-app-pub-1338847113684939/7656769170</string>
+    <string name="interstitial_view_code">ca-app-pub-1338847113684939/2959261671</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="url_google">https://www.googleapis.com/</string>
@@ -40,15 +40,22 @@
     <string name="debug">debug</string>
     <string name="scanner_app">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner.free.release</string>
     <string name="scanner_app_pro">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner</string>
+    <string name="qr_now_app">https://play.google.com/store/apps/details?id=me.qrnow.qrscanner.free.release</string>
     <string name="url_developer">http://192.168.1.3:8082</string>
     <string name="url_live">http://tpcreative.me:8081</string>
     <string name="server_client_id">369444282152-hcourv8j2gd2pmqvf93l8nv5n0onlegm.apps.googleusercontent.com</string>
+    <string name="key_google_maps">AIzaSyDGdrfAVeZEceHLWJH7v_2-9rVwHLgg8cw</string>
+    <string name="youtubeid">eNhq6s1kmhw</string>
     <string name="tvPrimacyPolicy">https://sites.google.com/view/tpcreative/home</string>
+    <string name="email_contact">care@tpcreative.me</string>
     <string name="access_token">Bearer %1$s</string>
     <string name="tpcreative">http://tpcreative.co</string>
     <string name="qrscanner_free_develop">tpcreative.co.qrscanner.free.develop</string>
     <string name="qrscanner_free_release">tpcreative.co.qrscanner.free.release</string>
     <string name="qrscanner_free_innovation">tpcreative.co.qrscanner.free.innovation</string>
+    <string name="super_qrscanner_free_develop">com.superqrscanner.free.develop</string>
+    <string name="super_qrscanner_free_release">com.superqrscanner.free.release</string>
+    <string name="super_qrscanner_free_innovation">com.superqrscanner.free.innovation</string>
     <string name="one_years">tpcreative.co.qrscanner.free.release.one.year</string>
     <string name="lifetime">tpcreative.co.qrscanner.free.release.lifetime.v1</string>
     <string name="innovation_lifetime">tpcreative.co.qrscanner.free.innovation.lifetime.v1</string>

@@ -5,12 +5,13 @@ import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EmptyModel
+import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
 class BackupViewModel : BaseViewModel<EmptyModel>() {
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds()) {
+        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.BACKUP)) {
             emit(true)
         } else {
             emit(false)
