@@ -142,7 +142,7 @@ suspend fun ScannerResultActivity.onGenerateReview(code: String?, mFormatCode: B
             val barcodeEncoder = BarcodeEncoder()
             val hints: MutableMap<EncodeHintType?, Any?> =
                 EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
-
+            hints[EncodeHintType.CHARACTER_SET] = Charsets.UTF_8
             val theme: Theme? = Theme.getInstance()?.getThemeInfo()
             val mBitmap = if ((BarcodeFormat.QR_CODE !=  mFormatCode)) {
                 hints[EncodeHintType.MARGIN] = 5
