@@ -215,7 +215,7 @@ class ReviewActivity : BaseActivitySlide() {
                 val barcodeEncoder = BarcodeEncoder()
                 val hints: MutableMap<EncodeHintType?, Any?> =
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
-
+                hints[EncodeHintType.CHARACTER_SET] = Charsets.UTF_8
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
                 val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
@@ -265,6 +265,7 @@ class ReviewActivity : BaseActivitySlide() {
                 val barcodeEncoder = BarcodeEncoder()
                 val hints: MutableMap<EncodeHintType?, Any?> =
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
+                hints[EncodeHintType.CHARACTER_SET] = Charsets.UTF_8
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
                 bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))  {
