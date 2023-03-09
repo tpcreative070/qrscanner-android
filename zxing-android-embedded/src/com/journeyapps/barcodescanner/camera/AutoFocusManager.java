@@ -32,7 +32,7 @@ public final class AutoFocusManager {
 
     private static final String TAG = AutoFocusManager.class.getSimpleName();
 
-    private static final long AUTO_FOCUS_INTERVAL_MS = 2000L;
+    private static final long AUTO_FOCUS_INTERVAL_MS = 500L;
 
     private boolean stopped;
     private boolean focusing;

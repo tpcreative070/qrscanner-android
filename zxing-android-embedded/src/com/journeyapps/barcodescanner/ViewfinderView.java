@@ -58,6 +58,7 @@ public class ViewfinderView extends View {
     protected final int laserColor;
     protected final int resultPointColor;
     protected boolean laserVisibility;
+    protected boolean pointResultVisibility;
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
@@ -103,7 +104,9 @@ public class ViewfinderView extends View {
         this.resultPointColor = attributes.getColor(R.styleable.zxing_finder_zxing_possible_result_points,
                 ContextCompat.getColor(getContext(),R.color.zxing_possible_result_points));
         this.laserVisibility = attributes.getBoolean(R.styleable.zxing_finder_zxing_viewfinder_laser_visibility,
-                true);
+                false);
+        this.pointResultVisibility = attributes.getBoolean(R.styleable.zxing_finder_zxing_viewfinder_point_result_visibility,
+                false);
 
         attributes.recycle();
 
@@ -301,41 +304,43 @@ public class ViewfinderView extends View {
                 canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
             }
 
-            final float scaleX = this.getWidth() / (float) previewSize.width;
-            final float scaleY = this.getHeight() / (float) previewSize.height;
+            if (pointResultVisibility){
+                final float scaleX = this.getWidth() / (float) previewSize.width;
+                final float scaleY = this.getHeight() / (float) previewSize.height;
 
-            // draw the last possible result points
-            if (!lastPossibleResultPoints.isEmpty()) {
-                paint.setAlpha(CURRENT_POINT_OPACITY / 2);
-                paint.setColor(resultPointColor);
-                float radius = POINT_SIZE / 2.0f;
-                for (final ResultPoint point : lastPossibleResultPoints) {
-                    canvas.drawCircle(
-                             (int) (point.getX() * scaleX),
-                             (int) (point.getY() * scaleY),
-                            radius, paint
-                    );
-                }
-                lastPossibleResultPoints.clear();
-            }
-
-            // draw current possible result points
-            if (!possibleResultPoints.isEmpty()) {
-                paint.setAlpha(CURRENT_POINT_OPACITY);
-                paint.setColor(resultPointColor);
-                for (final ResultPoint point : possibleResultPoints) {
-                    canvas.drawCircle(
-                            (int) (point.getX() * scaleX),
-                            (int) (point.getY() * scaleY),
-                            POINT_SIZE, paint
-                    );
+                // draw the last possible result points
+                if (!lastPossibleResultPoints.isEmpty()) {
+                    paint.setAlpha(CURRENT_POINT_OPACITY / 2);
+                    paint.setColor(resultPointColor);
+                    float radius = POINT_SIZE / 2.0f;
+                    for (final ResultPoint point : lastPossibleResultPoints) {
+                        canvas.drawCircle(
+                                (int) (point.getX() * scaleX),
+                                (int) (point.getY() * scaleY),
+                                radius, paint
+                        );
+                    }
+                    lastPossibleResultPoints.clear();
                 }
 
-                // swap and clear buffers
-                final List<ResultPoint> temp = possibleResultPoints;
-                possibleResultPoints = lastPossibleResultPoints;
-                lastPossibleResultPoints = temp;
-                possibleResultPoints.clear();
+                // draw current possible result points
+                if (!possibleResultPoints.isEmpty()) {
+                    paint.setAlpha(CURRENT_POINT_OPACITY);
+                    paint.setColor(resultPointColor);
+                    for (final ResultPoint point : possibleResultPoints) {
+                        canvas.drawCircle(
+                                (int) (point.getX() * scaleX),
+                                (int) (point.getY() * scaleY),
+                                POINT_SIZE, paint
+                        );
+                    }
+
+                    // swap and clear buffers
+                    final List<ResultPoint> temp = possibleResultPoints;
+                    possibleResultPoints = lastPossibleResultPoints;
+                    lastPossibleResultPoints = temp;
+                    possibleResultPoints.clear();
+                }
             }
 
             // Request another update at the animation interval, but only repaint the laser line,
