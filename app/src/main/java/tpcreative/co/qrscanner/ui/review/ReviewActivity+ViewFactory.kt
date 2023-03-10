@@ -19,7 +19,10 @@ import androidx.print.PrintHelper
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.activity_help.*
 import kotlinx.android.synthetic.main.activity_review.*
+import kotlinx.android.synthetic.main.activity_review.rlAdsRoot
+import kotlinx.android.synthetic.main.activity_review.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_review.toolbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,17 +50,19 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     scrollView.smoothScrollTo(0, 0)
     getIntentData()
-    if(Utils.isHiddenAds(EnumScreens.REVIEW)){
+    if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }
+    if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
         rlBannerLarger.visibility = View.GONE
     }
-    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW)) {
+    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)) {
         QRScannerApplication.getInstance().requestReviewSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView() && !Utils.isHiddenAds(EnumScreens.REVIEW)) {
+    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView() && !Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)) {
         QRScannerApplication.getInstance().requestReviewLargeView(this)
     }
-    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd() && !Utils.isHiddenAds(EnumScreens.REVIEW)) {
+    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd()) {
         QRScannerApplication.getInstance().requestInterstitialViewCodeAd()
     }
     checkingShowAds()
@@ -337,7 +342,7 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
 }
 
 fun ReviewActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() || Utils.isHiddenAds(EnumScreens.REVIEW)){
+    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd()){
         // Back is pressed... Finishing the activity
         finish()
     }else{

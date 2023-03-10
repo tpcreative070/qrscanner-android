@@ -59,7 +59,7 @@
                         android:id="@+id/viewUnderline"
                         android:background="@color/grey_lighter"
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"/>
+                        android:layout_height="1dp"/>
                     <RelativeLayout
                         android:layout_below="@+id/viewUnderline"
                         android:id="@+id/rlAdvertising"
@@ -99,12 +99,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
-                android:layout_marginTop="@dimen/margin_2"
-                android:layout_marginBottom="@dimen/margin_2"
+                android:layout_marginTop="@dimen/margin_5"
                 android:id="@+id/llSmallAds"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/banner_height"
-                android:gravity="center"
+                android:gravity="bottom"
                 android:orientation="vertical"/>
         </RelativeLayout>
     </RelativeLayout>

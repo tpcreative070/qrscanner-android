@@ -11,7 +11,7 @@ import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
 class BackupViewModel : BaseViewModel<EmptyModel>() {
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.BACKUP)) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
             emit(true)
         } else {
             emit(false)

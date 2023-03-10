@@ -860,38 +860,73 @@ object Utils {
 
     fun isHiddenAds(enumScreens: EnumScreens) : Boolean{
         when(enumScreens){
-            EnumScreens.HELP_FEEDBACK ->{
-                if (Configuration.hiddenHelpFeedbackAds){
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                if (Configuration.hiddenHelpFeedbackSmallAds){
                     return true
                 }
             }
-            EnumScreens.MAIN ->{
-                if (Configuration.hiddenMainAds){
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                if (Configuration.hiddenHelpFeedbackLargeAds){
+                    return true
+                }
+            }
+            EnumScreens.MAIN_SMALL ->{
+                if (Configuration.hiddenMainSmallAds){
                    return true
                 }
             }
-            EnumScreens.CREATE ->{
-                if (Configuration.hiddenCreateAds){
+            EnumScreens.MAIN_LARGE ->{
+                if (Configuration.hiddenMainLargeAds){
                     return true
                 }
             }
-            EnumScreens.SCANNER_RESULT ->{
-                if (Configuration.hiddenScannerResultAds){
+            EnumScreens.CREATE_SMALL ->{
+                if (Configuration.hiddenCreateSmallAds){
                     return true
                 }
             }
-            EnumScreens.REVIEW->{
-                if (Configuration.hiddenReviewAds){
+            EnumScreens.CREATE_LARGE ->{
+                if (Configuration.hiddenCreateLargeAds){
                     return true
                 }
             }
-            EnumScreens.CHANGE_COLOR ->{
-                if (Configuration.hiddenChangeColorAds){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                if (Configuration.hiddenScannerResultSmallAds){
                     return true
                 }
             }
-            EnumScreens.BACKUP ->{
-                if (Configuration.hiddenBackupAds){
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                if (Configuration.hiddenScannerResultLargeAds){
+                    return true
+                }
+            }
+            EnumScreens.REVIEW_SMALL->{
+                if (Configuration.hiddenReviewSmallAds){
+                    return true
+                }
+            }
+            EnumScreens.REVIEW_LARGE->{
+                if (Configuration.hiddenReviewLargeAds){
+                    return true
+                }
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                if (Configuration.hiddenChangeColorSmallAds){
+                    return true
+                }
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                if (Configuration.hiddenChangeColorLargeAds){
+                    return true
+                }
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                if (Configuration.hiddenBackupSmallAds){
+                    return true
+                }
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                if (Configuration.hiddenBackupLargeAds){
                     return true
                 }
             }

@@ -22,7 +22,7 @@ class HelpViewModel : BaseViewModel<EmptyModel>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
             emit(true)
         } else {
             emit(false)

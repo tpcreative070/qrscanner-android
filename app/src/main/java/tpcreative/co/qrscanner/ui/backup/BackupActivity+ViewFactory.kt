@@ -29,8 +29,10 @@ fun BackupActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isHiddenAds(EnumScreens.BACKUP)){
+    if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }
+    if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
         rlBannerLarger.visibility = View.GONE
     }
     BackupSingleton.getInstance()?.setListener(this)
@@ -61,15 +63,15 @@ fun BackupActivity.initUI(){
         onShowConnectionAlert()
     }
 
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd() && !Utils.isHiddenAds(EnumScreens.BACKUP)) {
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
 
-    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView() && !Utils.isHiddenAds(EnumScreens.BACKUP)) {
+    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView() && !Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)) {
         QRScannerApplication.getInstance().requestBackupSmallView(this)
     }
 
-    if (QRScannerApplication.getInstance().isBackupLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupLargeView() && !Utils.isHiddenAds(EnumScreens.BACKUP)) {
+    if (QRScannerApplication.getInstance().isBackupLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupLargeView() && !Utils.isHiddenAds(EnumScreens.BACKUP_LARGE)) {
         QRScannerApplication.getInstance().requestBackupLargeView(this)
     }
     checkingShowAds()
@@ -107,7 +109,7 @@ fun BackupActivity.initUI(){
 }
 
 fun BackupActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isHiddenAds(EnumScreens.BACKUP)){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
         // Back is pressed... Finishing the activity
         finish()
     }else{

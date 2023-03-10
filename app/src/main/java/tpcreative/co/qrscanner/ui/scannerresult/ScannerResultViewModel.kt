@@ -37,7 +37,7 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT)) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
             emit(true)
         } else {
            emit(false)
