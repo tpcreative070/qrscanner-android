@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_chage_file_color.recyclerView
 import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_chage_file_color.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_chage_file_color.toolbar
+import kotlinx.android.synthetic.main.activity_help.*
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -24,8 +25,10 @@ fun ChangeFileColorActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)){
+    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }
+    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)){
         rlBannerLarger.visibility = View.GONE
     }
     initRecycleView(layoutInflater)
@@ -46,14 +49,14 @@ fun ChangeFileColorActivity.initUI(){
             })
     }
 
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)) {
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
-    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)) {
+    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)) {
         QRScannerApplication.getInstance().requestChangeColorSmallView(this)
     }
 
-    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)) {
+    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)) {
         QRScannerApplication.getInstance().requestChangeColorLargeView(this)
     }
     checkingShowAds()
@@ -86,7 +89,7 @@ fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
 }
 
 fun ChangeFileColorActivity.showAds(){
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() || Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)){
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd()){
         // Back is pressed... Finishing the activity
         finish()
     }else{

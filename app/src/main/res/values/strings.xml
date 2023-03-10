@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--Do not use this code start for multiple languages -->
-    <string name="innovation_banner_result_small">ca-app-pub-1338847113684939/7737246955</string>
-    <string name="innovation_banner_result_large">ca-app-pub-1338847113684939/5956976015</string>
-    <string name="innovation_banner_review_small">ca-app-pub-1338847113684939/5194574598</string>
-    <string name="innovation_banner_review_large">ca-app-pub-1338847113684939/3762057513</string>
+    <string name="innovation_banner_result_small">ca-app-pub-9751397320629924/6181380877</string>
+    <string name="innovation_banner_result_large">ca-app-pub-9751397320629924/8648596262</string>
+    <string name="innovation_banner_review_small">ca-app-pub-9751397320629924/6022432925</string>
+    <string name="innovation_banner_review_large">ca-app-pub-9751397320629924/2083187915</string>
     <string name="innovation_banner_create_large">ca-app-pub-1338847113684939/8942247916</string>
     <string name="innovation_banner_create_small">ca-app-pub-1338847113684939/8287641793</string>
     <string name="innovation_banner_backup_small">ca-app-pub-1338847113684939/2899583744</string>
@@ -16,11 +16,11 @@
     <string name="innovation_interstitial_anywhere">ca-app-pub-1338847113684939/5111083616</string>
     <string name="innovation_interstitial_view_code">ca-app-pub-1338847113684939/1394930385</string>
 
-    <string name="admob_app_id">ca-app-pub-1338847113684939~2572248867</string>
-    <string name="banner_result_small">ca-app-pub-1338847113684939/3102446494</string>
-    <string name="banner_result_large">ca-app-pub-1338847113684939/3206673680</string>
-    <string name="banner_review_small">ca-app-pub-1338847113684939/2108944931</string>
-    <string name="banner_review_large">ca-app-pub-1338847113684939/6287847182</string>
+    <string name="admob_app_id">ca-app-pub-9751397320629924~6876333687</string>
+    <string name="banner_result_small">ca-app-pub-9751397320629924/9770106246</string>
+    <string name="banner_result_large">ca-app-pub-9751397320629924/5743231325</string>
+    <string name="banner_review_small">ca-app-pub-9751397320629924/6863088912</string>
+    <string name="banner_review_large">ca-app-pub-9751397320629924/8457024578</string>
     <string name="banner_create_small">ca-app-pub-1338847113684939/4974765511</string>
     <string name="banner_create_large">ca-app-pub-1338847113684939/3122643703</string>
     <string name="banner_backup_small">ca-app-pub-1338847113684939/9524670023</string>

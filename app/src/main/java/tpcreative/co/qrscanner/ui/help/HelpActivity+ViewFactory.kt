@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_help.*
 import kotlinx.android.synthetic.main.activity_help.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_help.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_help.toolbar
+import kotlinx.android.synthetic.main.activity_text.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -23,16 +24,18 @@ fun HelpActivity.initUI(){
     setupViewModel()
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)){
+    if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }
+    if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)){
         rlBannerLarger.visibility = View.GONE
     }
     initRecycleView(layoutInflater)
     getData()
-    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)) {
         QRScannerApplication.getInstance().requestHelpFeedbackSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK)) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)) {
         QRScannerApplication.getInstance().requestHelpFeedbackLargeView(this)
     }
     checkingShowAds()

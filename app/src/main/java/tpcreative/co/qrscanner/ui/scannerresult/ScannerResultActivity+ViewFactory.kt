@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_result.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_result.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_result.scrollView
 import kotlinx.android.synthetic.main.activity_result.toolbar
+import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Configuration
@@ -44,14 +45,16 @@ fun ScannerResultActivity.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
-    if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT)){
+    if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }
+    if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
         rlBannerLarger.visibility = View.GONE
     }
-    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT)) {
+    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)) {
         QRScannerApplication.getInstance().requestResultSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT)) {
+    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)) {
         QRScannerApplication.getInstance().requestResultLargeView(this)
     }
     checkingShowAds()

@@ -35,7 +35,7 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.REVIEW)) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
             emit(true)
         } else {
             emit(false)

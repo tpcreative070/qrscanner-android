@@ -46,7 +46,7 @@ fun MainActivity.initUI(){
         }
         setupTabIcons()
     }
-    if(Utils.isHiddenAds(EnumScreens.MAIN)){
+    if(Utils.isHiddenAds(EnumScreens.MAIN_SMALL)){
         rlAdsRoot.visibility = View.GONE
     }
 

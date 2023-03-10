@@ -11,6 +11,7 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.activity_backup.*
 import kotlinx.android.synthetic.main.activity_text.*
 import kotlinx.android.synthetic.main.activity_text.llLargeAds
 import kotlinx.android.synthetic.main.activity_text.llSmallAds
@@ -36,16 +37,18 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         setContentView(R.layout.activity_text)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if(Utils.isHiddenAds(EnumScreens.CREATE)){
+        if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             rlAdsRoot.visibility = View.GONE
+        }
+        if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             rlBannerLarger.visibility = View.GONE
         }
         setupViewModel()
         getIntentData()
-        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isHiddenAds(EnumScreens.CREATE)) {
+        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isHiddenAds(EnumScreens.CREATE_SMALL)) {
             QRScannerApplication.getInstance().requestCreateSmallView(this)
         }
-        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds(EnumScreens.CREATE)) {
+        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds(EnumScreens.CREATE_LARGE)) {
             QRScannerApplication.getInstance().requestCreateLargeView(this)
         }
         checkingShowAds()

@@ -25,7 +25,7 @@ class ChangeFileColorViewModel : BaseViewModel<EmptyModel>() {
     }
 
     fun doShowAds() = liveData(Dispatchers.Main) {
-        if (QRScannerApplication.getInstance().isLiveAds() && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR)) {
+        if (QRScannerApplication.getInstance().isLiveAds()) {
             emit(true)
         } else {
             emit(false)
