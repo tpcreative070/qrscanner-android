@@ -701,19 +701,19 @@ inline fun <reified T : Any, reified G : Any> Utils.onGeneralParse(data: G, claz
                     history.hashClipboard?.set(ConstantKey.URL, create.url)
                     history.url = create.url
                     history.createType = create.createType?.name
-                    history.navigationList?.add(
-                        ItemNavigation(
-                            create.createType,
-                            ConstantValue.NONE,
-                            ConstantValue.NONE,
-                            create.barcodeFormat,
-                            create.fragmentType,
-                            EnumAction.SEARCH,
-                            R.drawable.ic_search,
-                            create.url,
-                            create.favorite
-                        )
-                    )
+//                    history.navigationList?.add(
+//                        ItemNavigation(
+//                            create.createType,
+//                            ConstantValue.NONE,
+//                            ConstantValue.NONE,
+//                            create.barcodeFormat,
+//                            create.fragmentType,
+//                            EnumAction.SEARCH,
+//                            R.drawable.ic_search,
+//                            create.url,
+//                            create.favorite
+//                        )
+//                    )
                     history.navigationList?.add(
                         ItemNavigation(
                             create.createType,

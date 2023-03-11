@@ -10,8 +10,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath 'com.google.gms:google-services:4.3.14'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
+        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.guardsquare:proguard-gradle:7.1.0'
     }
@@ -45,16 +45,16 @@ task clean(type: Delete) {
 }
 
 subprojects {
-    ext.appVersionCode = 340
-    ext.appVersionName = "3.4.0"
+    ext.appVersionCode = 341
+    ext.appVersionName = "3.4.1"
     ext.appMinSdkVersion = 23
-    ext.appSupportVersion = "1.5.1"
+    ext.appSupportVersion = "1.6.1"
     ext.appRetrofit = "2.9.0"
     ext.appCompileSdkVersion = 33
     ext.appTargetSdkVersion = 33
     ext.appBuildToolsVersion = "32.0.0"
     ext.build_versions_java_version = 1.8
-    ext.appGoogleMaterial = "1.7.0"
+    ext.appGoogleMaterial = "1.8.0"
     ext.apppreferenceV14 = "1.0.0"
     ext.appCardView = "1.0.0"
     ext.appRecyclerView = "1.2.1"
@@ -65,15 +65,15 @@ subprojects {
     ext.annotationExperimental = "1.2.0"
     ext.coroutinesCore =  "1.5.0"
     ext.coroutinesAndroid =  "1.6.4"
-    ext.playServicesAds = "21.2.0"
-    ext.firebaseCrashlytics = "18.2.13"
-    ext.firebaseAnalytics = "21.1.1"
+    ext.playServicesAds = "21.5.0"
+    ext.firebaseCrashlytics = "18.3.5"
+    ext.firebaseAnalytics = "21.2.0"
     ext.googleApiClientAndroid = "1.26.0"
     ext.googleApiServicesDrive = "v3-rev126-1.24.1"
     ext.playServicesDrive = "17.0.0"
-    ext.playServicesAuth = "20.3.0"
+    ext.playServicesAuth = "20.4.1"
     ext.androidPlayCore = "1.10.3"
-    ext.exifinterface = "1.3.3"
+    ext.exifinterface = "1.3.6"
     ext.mediationTestSuite = "3.0.0"
     ext.audienceNetworkSDK = "6.5.1"
     ext.lifecycleExtensions = "2.2.0"
@@ -96,9 +96,9 @@ subprojects {
     ext.storageLib = "2.1.0"
     ext.playServicesMaps = "18.1.0"
     ext.timber = "4.7.1"
-    ext.gson = "2.8.9"
+    ext.gson = "2.9.0"
     ext.dexter = "6.2.3"
-    ext.roomVersion = "2.4.3"
+    ext.roomVersion = "2.5.0"
     ext.materialDialogsInput = "3.3.0"
     ext.zxingCore = "3.5.1"
     ext.appIntro  = "6.2.0"
