@@ -8,7 +8,9 @@ open class BaseResponse : Serializable {
     var message: String? = null
     var error = false
     var nextPage: String? = null
-    var version: Version? = null
+    var qrscannerFreeRelease: Version? = null
+    var qrscannerFreeInnovation: Version? = null
+    var superQRScannerFreeInnovation: Version? = null
     fun toFormResponse(): String? {
         return Gson().toJson(this)
     }

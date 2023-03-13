@@ -9,6 +9,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest
 import tpcreative.co.qrscanner.common.api.requester.DriveService
+import tpcreative.co.qrscanner.common.api.response.BaseResponse
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
 import tpcreative.co.qrscanner.common.extension.getContext
 import tpcreative.co.qrscanner.common.extension.onSupportOldVersion
@@ -98,6 +99,28 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
                     Status.SUCCESS -> {
                         Utils.Log(TAG,"getDriveAbout is successful")
                         Resource.success(true)
+                    }
+                    else -> {
+                        Utils.Log(TAG,"getDriveAbout is failed")
+                        Utils.Log(TAG,mResultDriveAbout.message)
+                        Resource.error(mResultDriveAbout.code ?: Utils.CODE_EXCEPTION,mResultDriveAbout.message ?:"",null)
+                    }
+                }
+            }catch (e : Exception){
+                Resource.error(Utils.CODE_EXCEPTION, e.message ?:"",null)
+            }
+        }
+    }
+
+    suspend fun onCheckVersion() : Resource<BaseResponse> {
+        return withContext(Dispatchers.IO){
+            try {
+                val mResultDriveAbout = driveService.onCheckVersion()
+                Utils.Log(TAG,"getDriveAbout")
+                when(mResultDriveAbout.status){
+                    Status.SUCCESS -> {
+                        Utils.Log(TAG,"getDriveAbout is successful")
+                        Resource.success(mResultDriveAbout.data)
                     }
                     else -> {
                         Utils.Log(TAG,"getDriveAbout is failed")

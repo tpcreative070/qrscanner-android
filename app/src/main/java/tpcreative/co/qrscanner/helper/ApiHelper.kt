@@ -10,6 +10,8 @@ class ApiHelper {
     /*This is area for drive*/
     suspend fun onGetDriveAbout(authToken: String?) =  getDriveApi()?.onGetDriveAbout(authToken)
 
+    suspend fun onCheckVersion(url: String?) =  getDriveApi()?.onCheckVersion(url)
+
     suspend fun uploadFileMultipleInAppFolder(@Header("Authorization") authToken: String?,
                                 @Part metaPart: MultipartBody.Part?,
                                 @Part dataPart: MultipartBody.Part?,

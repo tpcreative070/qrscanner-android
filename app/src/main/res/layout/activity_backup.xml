@@ -142,14 +142,16 @@
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:layout_centerInParent="true"
+                    android:background="@color/lightAds"
                     android:layout_below="@+id/rlAdvertising"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="@dimen/margin_5"
+                    android:layout_marginStart="@dimen/margin_5"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:layout_marginBottom="@dimen/margin_20"
                     android:id="@+id/llLargeAds"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/banner_rectangle_review_height"
+                    android:layout_width="@dimen/icon_size_300"
+                    android:layout_height="@dimen/icon_size_250"
                     android:gravity="center"
                     android:orientation="vertical"/>
             </RelativeLayout>
@@ -159,15 +161,16 @@
             android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary"
             android:id="@+id/rlAdsRoot"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_marginTop="@dimen/margin_5"
-                android:id="@+id/llSmallAds"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/banner_height"
-                android:gravity="bottom"
-                android:orientation="vertical"/>
+<!--            <LinearLayout-->
+<!--                android:layout_marginTop="@dimen/margin_5"-->
+<!--                android:id="@+id/llSmallAds"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/banner_height"-->
+<!--                android:gravity="bottom"-->
+<!--                android:orientation="vertical"/>-->
         </RelativeLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

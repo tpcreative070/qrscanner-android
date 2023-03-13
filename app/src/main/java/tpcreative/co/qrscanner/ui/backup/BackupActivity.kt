@@ -3,11 +3,11 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.activity_backup.*
-import kotlinx.android.synthetic.main.activity_backup.llSmallAds
 import kotlinx.android.synthetic.main.activity_backup.rlAdsRoot
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -17,13 +17,17 @@ import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.onDisplayLatTimeSyncedCompletely
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerService.ServiceManagerSyncDataListener
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.EnumScreens
 
 class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     lateinit var viewModel : BackupViewModel
+    lateinit var llSmallAds : LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
+        llSmallAds = AdsView().createLayout()
         initUI()
     }
 
@@ -142,6 +146,18 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
         super.onDestroy()
         BackupSingleton.getInstance()?.setListener(null)
         SettingsSingleton.getInstance()?.onSyncDataRequest()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.BACKUP_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.BACKUP_LARGE)
+    }
+
+    override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.BACKUP_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.BACKUP_LARGE)
+        super.onPause()
     }
 
     override fun startServiceNow() {

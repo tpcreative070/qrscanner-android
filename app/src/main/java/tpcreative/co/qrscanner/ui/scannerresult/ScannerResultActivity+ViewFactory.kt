@@ -47,6 +47,8 @@ fun ScannerResultActivity.initUI(){
     getDataIntent()
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }else{
+        rlAdsRoot.addView(llSmallAds)
     }
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
         rlBannerLarger.visibility = View.GONE

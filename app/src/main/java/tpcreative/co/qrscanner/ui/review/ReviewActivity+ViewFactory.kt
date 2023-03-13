@@ -19,10 +19,10 @@ import androidx.print.PrintHelper
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_help.*
 import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.android.synthetic.main.activity_review.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_review.rlBannerLarger
+import kotlinx.android.synthetic.main.activity_review.scrollView
 import kotlinx.android.synthetic.main.activity_review.toolbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +52,8 @@ fun ReviewActivity.initUI(){
     getIntentData()
     if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }else{
+        rlAdsRoot.addView(llSmallAds)
     }
     if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
         rlBannerLarger.visibility = View.GONE
@@ -84,6 +86,7 @@ fun ReviewActivity.initUI(){
     }
     onHandlerIntent()
 }
+
 
 /*Share File To QRScanner*/
 private fun ReviewActivity.onHandlerIntent() {

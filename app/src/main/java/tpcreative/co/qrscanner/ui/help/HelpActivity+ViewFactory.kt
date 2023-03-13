@@ -10,9 +10,11 @@ import co.tpcreative.supersafe.common.adapter.DividerItemDecoration
 import co.tpcreative.supersafe.common.adapter.clearDecorations
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.activity_help.*
+import kotlinx.android.synthetic.main.activity_help.recyclerView
 import kotlinx.android.synthetic.main.activity_help.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_help.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_help.toolbar
+import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_text.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
@@ -26,6 +28,8 @@ fun HelpActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }else{
+        rlAdsRoot.addView(llSmallAds)
     }
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)){
         rlBannerLarger.visibility = View.GONE

@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.create
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.lifecycle.Observer
@@ -11,10 +12,10 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
+import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_text.*
 import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.android.synthetic.main.activity_wifi.llLargeAds
-import kotlinx.android.synthetic.main.activity_wifi.llSmallAds
 import kotlinx.android.synthetic.main.activity_wifi.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_wifi.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_wifi.toolbar
@@ -24,6 +25,7 @@ import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListene
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.regex.Pattern
@@ -33,14 +35,18 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     var mAwesomeValidation: AwesomeValidation? = null
     var typeEncrypt: String? = ConstantValue.WPA
     private var save: GeneralModel? = null
+    lateinit var llSmallAds : LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wifi)
+        llSmallAds = AdsView().createLayout()
         setSupportActionBar(toolbar)
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             rlAdsRoot.visibility = View.GONE
+        }else{
+            rlAdsRoot.addView(llSmallAds)
         }
-        if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
+        if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
             rlBannerLarger.visibility = View.GONE
         }
         setupViewModel()
@@ -136,7 +142,9 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         Utils.Log(TAG, "onStop")
     }
 
-    public override fun onPause() {
+    override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CREATE_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CREATE_LARGE)
         super.onPause()
         Utils.Log(TAG, "onPause")
     }
@@ -149,6 +157,8 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
 
     public override fun onResume() {
         super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_LARGE)
         GenerateSingleton.getInstance()?.setListener(this)
         checkingShowAds()
         Utils.Log(TAG, "onResume")

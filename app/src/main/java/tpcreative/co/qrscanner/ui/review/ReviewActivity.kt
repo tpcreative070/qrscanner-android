@@ -6,10 +6,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.ads.AdSize
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -30,6 +33,7 @@ import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -49,9 +53,11 @@ class ReviewActivity : BaseActivitySlide() {
     private var save: SaveModel = SaveModel()
     var dialog : Dialog? = null
     var isAlreadySaved  = false
+    lateinit var llSmallAds : LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
+        llSmallAds = AdsView().createLayout()
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
     }
@@ -74,10 +80,14 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onResume() {
         super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
         checkingShowAds()
     }
 
     override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.REVIEW_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.REVIEW_LARGE)
         super.onPause()
     }
 

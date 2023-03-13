@@ -106,4 +106,5 @@ subprojects {
     ext.billingInApp = "2.0.3"
     ext.compressor = "3.0.1"
     ext.lifecycle = "2.5.1"
+    ext.window = "1.0.0"
 }

@@ -10,6 +10,7 @@ import android.provider.ContactsContract
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.afollestad.materialdialogs.MaterialDialog
@@ -28,6 +29,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
@@ -41,9 +43,12 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     private var code: String? = null
     private val keyFavorite = "KEY_FAVORITE"
     private val keyNOTE = "KEY_NOTE"
+    lateinit var llSmallAds : LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
+        llSmallAds = AdsView().createLayout()
         initUI()
     }
 
@@ -390,6 +395,8 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     }
 
     override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.SCANNER_RESULT_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.SCANNER_RESULT_LARGE)
         super.onPause()
         Utils.Log(TAG, "onPause")
     }
@@ -408,6 +415,8 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     override fun onResume() {
         super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.SCANNER_RESULT_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.SCANNER_RESULT_LARGE)
         checkingShowAds()
         Utils.Log(TAG, "onResume")
     }

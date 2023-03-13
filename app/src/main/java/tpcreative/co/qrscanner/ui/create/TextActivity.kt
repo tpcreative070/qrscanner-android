@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.create
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.lifecycle.Observer
@@ -11,10 +12,8 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_backup.*
 import kotlinx.android.synthetic.main.activity_text.*
 import kotlinx.android.synthetic.main.activity_text.llLargeAds
-import kotlinx.android.synthetic.main.activity_text.llSmallAds
 import kotlinx.android.synthetic.main.activity_text.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_text.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_text.toolbar
@@ -24,21 +23,25 @@ import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListene
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.backup.initUI
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
     lateinit var viewModel: GenerateViewModel
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
+    lateinit var llSmallAds : LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_text)
+        llSmallAds = AdsView().createLayout()
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             rlAdsRoot.visibility = View.GONE
+        }else{
+            rlAdsRoot.addView(llSmallAds)
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             rlBannerLarger.visibility = View.GONE
@@ -117,9 +120,10 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         Utils.Log(TAG, "onStop")
     }
 
-    public override fun onPause() {
+    override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CREATE_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CREATE_LARGE)
         super.onPause()
-        Utils.Log(TAG, "onPause")
     }
 
     public override fun onDestroy() {
@@ -128,7 +132,9 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         Utils.Log(TAG, "onDestroy")
     }
 
-    public override fun onResume() {
+    override fun onResume() {
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_LARGE)
         super.onResume()
         GenerateSingleton.getInstance()?.setListener(this)
         checkingShowAds()

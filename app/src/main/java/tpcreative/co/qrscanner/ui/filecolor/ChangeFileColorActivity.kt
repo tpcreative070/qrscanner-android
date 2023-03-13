@@ -2,18 +2,18 @@ package tpcreative.co.qrscanner.ui.filecolor
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_chage_file_color.*
-import kotlinx.android.synthetic.main.activity_chage_file_color.llSmallAds
-import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.*
 import java.util.*
 
@@ -21,9 +21,11 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     private var bitmap: Bitmap? = null
     lateinit var viewModel : ChangeFileColorViewModel
     var adapter: ChangeFileColorAdapter? = null
+    lateinit var llSmallAds : LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chage_file_color)
+        llSmallAds = AdsView().createLayout()
         initUI()
 
     }
@@ -37,6 +39,14 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
 
     override fun onResume() {
         super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CHANGE_COLOR_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CHANGE_COLOR_LARGE)
+    }
+
+    override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CHANGE_COLOR_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CHANGE_COLOR_LARGE)
+        super.onPause()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

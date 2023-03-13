@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_backup.*
 import kotlinx.android.synthetic.main.activity_backup.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_backup.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_backup.toolbar
+import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_wifi.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.BackupSingleton
@@ -31,6 +32,8 @@ fun BackupActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }else{
+        rlAdsRoot.addView(llSmallAds)
     }
     if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
         rlBannerLarger.visibility = View.GONE

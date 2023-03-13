@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
 import kotlinx.android.synthetic.main.activity_chage_file_color.rlBannerLarger
 import kotlinx.android.synthetic.main.activity_chage_file_color.toolbar
 import kotlinx.android.synthetic.main.activity_help.*
+import kotlinx.android.synthetic.main.activity_result.*
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -27,6 +28,8 @@ fun ChangeFileColorActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)){
         rlAdsRoot.visibility = View.GONE
+    }else{
+        rlAdsRoot.addView(llSmallAds)
     }
     if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)){
         rlBannerLarger.visibility = View.GONE

@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">QR Scanner</string>
+    <string name="admob_app_id">ca-app-pub-7516875432485813~1373854861</string>
+    <string name="banner_result_small">ca-app-pub-7516875432485813/2424880951</string>
+    <string name="banner_result_large">ca-app-pub-7516875432485813/2477137258</string>
+    <string name="banner_review_small">ca-app-pub-7516875432485813/8148266334</string>
+    <string name="banner_review_large">ca-app-pub-7516875432485813/5924856850</string>
+    <string name="banner_create_small">ca-app-pub-7516875432485813/3298693510</string>
+    <string name="banner_create_large">ca-app-pub-7516875432485813/7046366836</string>
+    <string name="banner_backup_small">ca-app-pub-7516875432485813/4420203493</string>
+    <string name="banner_backup_large">ca-app-pub-7516875432485813/2433739375</string>
+    <string name="banner_change_color_small">ca-app-pub-7516875432485813/7537892241</string>
+    <string name="banner_change_color_large">ca-app-pub-7516875432485813/8167876814</string>
+    <string name="banner_help_feedback_small">ca-app-pub-7516875432485813/3447438143</string>
+    <string name="banner_help_feedback_large">ca-app-pub-7516875432485813/7195111462</string>
+    <string name="interstitial_anywhere">ca-app-pub-7516875432485813/7909141921</string>
+    <string name="interstitial_view_code">ca-app-pub-7516875432485813/9341357680</string>
 </resources>

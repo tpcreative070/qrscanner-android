@@ -39,23 +39,23 @@ class Configuration {
 
         const val enableInterstitialViewCodeAd = false
 
-        const val hiddenMainSmallAds = true
-        const val hiddenMainLargeAds = true
-        const val hiddenChangeColorSmallAds = true
-        const val hiddenChangeColorLargeAds = true
-        const val hiddenBackupSmallAds = true
-        const val hiddenBackupLargeAds = true
-        const val hiddenCreateSmallAds = true
-        const val hiddenCreateLargeAds = true
-        const val hiddenHelpFeedbackSmallAds = true
-        const val hiddenHelpFeedbackLargeAds = true
+        const val hiddenMainSmallAds = false
+        const val hiddenMainLargeAds = false
+        const val hiddenChangeColorSmallAds = false
+        const val hiddenChangeColorLargeAds = false
+        const val hiddenBackupSmallAds = false
+        const val hiddenBackupLargeAds = false
+        const val hiddenCreateSmallAds = false
+        const val hiddenCreateLargeAds = false
+        const val hiddenHelpFeedbackSmallAds = false
+        const val hiddenHelpFeedbackLargeAds = false
         const val hiddenScannerResultSmallAds = false
-        const val hiddenScannerResultLargeAds = true
+        const val hiddenScannerResultLargeAds = false
         const val hiddenReviewSmallAds = false
-        const val hiddenReviewLargeAds = true
+        const val hiddenReviewLargeAds = false
 
         const val hiddenFreeReleaseAds = false
-        const val hiddenFreeInnovationAds = true
+        const val hiddenFreeInnovationAds = false
         const val hiddenSuperFreeInnovationAds = true
     }
 }

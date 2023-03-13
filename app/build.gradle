@@ -84,7 +84,7 @@ android {
         }
 
         freeinnovation {
-            //initWith(buildTypes.debug)
+            initWith(buildTypes.debug)
             applicationIdSuffix ".free.innovation"
             // Enables code shrinking, obfuscation, and optimization for only
             // your project's release build type.
@@ -210,6 +210,7 @@ dependencies {
     implementation "com.afollestad.material-dialogs:core:$materialDialogsInput"
     implementation "com.github.AppIntro:AppIntro:$appIntro"
     implementation "com.anjlab.android.iab.v3:library:$billingInApp"
+    implementation "androidx.window:window:$window"
     implementation project(':compressor')
 }
 

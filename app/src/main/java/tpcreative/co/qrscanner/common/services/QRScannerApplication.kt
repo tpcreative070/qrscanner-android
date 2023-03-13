@@ -8,11 +8,14 @@ import android.content.ContextWrapper
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.DisplayMetrics
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -20,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.android.synthetic.main.activity_review.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R
@@ -29,6 +33,7 @@ import tpcreative.co.qrscanner.common.api.RetrofitBuilder
 import tpcreative.co.qrscanner.common.api.RootAPI
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.extension.pxToDp
 import tpcreative.co.qrscanner.helper.ThemeHelper
 import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.EnumThemeMode
@@ -36,10 +41,14 @@ import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
 import java.util.*
 
+
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
     private var pathFolder: String? = null
     private var isLive = false
     private var activity: MainActivity? = null
+    private var mWithAd : Int = 0
+    private var mHeight : Int = 0
+    private var mMaximumHeight : Int = 0
     private var adResultSmallView: AdView? = null
     private var adResultLargeView : AdView? = null
     private var adReviewSmallView : AdView? = null
@@ -99,10 +108,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 .setPrefsName(packageName)
                 .setUseDefaultSharedPreference(true)
                 .build()
-        if (!Utils.isHiddenAds(EnumScreens.NONE)) {
-            Utils.Log(TAG, "Start ads")
-            MobileAds.initialize(this) { }
-        }
+        MobileAds.initialize(this) { }
         ServiceManager.getInstance().setContext(this)
         val firstRunning: Boolean = PrefsController.getBoolean(getString(R.string.key_not_first_running), false)
         if (!firstRunning) {
@@ -142,6 +148,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+        currentScreen(activity)
         if (Utils.onIsIntro()){
             if (Utils.getMillisecondsNewUser()<=0){
                 Utils.setMillisecondsNewUser(System.currentTimeMillis())
@@ -163,6 +170,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (activity is MainActivity) {
             this.activity = activity
         }
+        Utils.Log(TAG,"Call 123")
     }
 
     override fun onActivityStarted(activity: Activity) {
@@ -230,7 +238,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestResultSmallView(context: Context){
         Utils.Log(TAG, "requestResultSmallView ads...")
         adResultSmallView = AdView(context)
-        adResultSmallView?.setAdSize(AdSize.BANNER)
+        val mSize = adSize()
+        adResultSmallView?.setAdSize(mSize)
         if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             adResultSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
@@ -320,7 +329,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestReviewSmallView(context: Context){
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adReviewSmallView = AdView(context)
-        adReviewSmallView?.setAdSize(AdSize.BANNER)
+        val mSize = adSize()
+        adReviewSmallView?.setAdSize(mSize)
         if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             adReviewSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
@@ -412,7 +422,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestHelpFeedbackSmallView(context: Context){
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adHelpFeedbackSmallView = AdView(context)
-        adHelpFeedbackSmallView?.setAdSize(AdSize.BANNER)
+        val mSize = adSize()
+        adHelpFeedbackSmallView?.setAdSize(mSize)
         if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             adHelpFeedbackSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
@@ -503,7 +514,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestChangeColorSmallView(context: Context){
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adChangeColorSmallView = AdView(context)
-        adChangeColorSmallView?.setAdSize(AdSize.BANNER)
+        val mSize = adSize()
+        adChangeColorSmallView?.setAdSize(mSize)
         if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             adChangeColorSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
@@ -594,7 +606,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestBackupSmallView(context: Context){
         Utils.Log(TAG, "requestReviewSmallView ads...")
         adBackupSmallView = AdView(context)
-        adBackupSmallView?.setAdSize(AdSize.BANNER)
+        val mSize = adSize()
+        adBackupSmallView?.setAdSize(mSize)
         if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             adBackupSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
@@ -684,7 +697,8 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestCreateSmallView(context: Context){
         Utils.Log(TAG, "requestCreateSmallView ads...")
         adCreateSmallView = AdView(context)
-        adCreateSmallView?.setAdSize(AdSize.BANNER)
+        val mSize = adSize()
+        adCreateSmallView?.setAdSize(mSize)
         if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             adCreateSmallView?.adUnitId = getString(R.string.banner_home_footer_test)
@@ -1267,6 +1281,129 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             Utils.Log(TAG,"Force refresh ads")
         }else{
             Utils.Log(TAG,"Waiting for refresh ads $mLatestTime - $mCurrentTime")
+        }
+    }
+
+    private fun currentScreen(activity: Activity) {
+//        val windowMetrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity)
+//        val currentBounds = windowMetrics.bounds
+//
+//        val width = currentBounds.width()
+//        val height = currentBounds.height()
+//
+//        val density = resources.displayMetrics.density
+
+        val display = activity.windowManager.defaultDisplay
+        val outMetrics = DisplayMetrics()
+        display.getMetrics(outMetrics)
+
+        val density = outMetrics.density
+
+        val adWidthPixels = outMetrics.widthPixels.toFloat()
+        val adWidth = (adWidthPixels / density).toInt()
+        mWithAd = adWidth
+        Utils.Log(TAG,"width $mWithAd")
+        Utils.Log(TAG,"width ${pxToDp(mWithAd.toFloat())}")
+
+        mMaximumHeight = if (Utils.isTablet()){
+            this.pxToDp(100F).toInt()
+        }else{
+            this.pxToDp(70F).toInt()
+        }
+    }
+
+    fun getMaximumBannerHeight() : Int{
+        return mMaximumHeight
+    }
+
+    private fun  adSize() : AdSize{
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, mWithAd)
+    }
+
+
+    fun onPauseAds(enum : EnumScreens){
+        when(enum){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                adResultSmallView?.pause()
+            }
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                adResultLargeView?.pause()
+            }
+
+            EnumScreens.REVIEW_SMALL ->{
+                adReviewSmallView?.pause()
+            }
+            EnumScreens.REVIEW_LARGE ->{
+                adReviewLargeView?.pause()
+            }
+            EnumScreens.CREATE_SMALL ->{
+                adCreateSmallView?.pause()
+            }
+            EnumScreens.CREATE_LARGE ->{
+                adCreateLargeView?.pause()
+            }
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                adHelpFeedbackSmallView?.pause()
+            }
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                adHelpFeedbackLargeView?.pause()
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                adChangeColorSmallView?.pause()
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                adChangeColorLargeView?.pause()
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                adBackupSmallView?.pause()
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                adBackupSmallView?.pause()
+            }
+            else -> {}
+        }
+    }
+
+    fun onResumeAds(enum : EnumScreens){
+        when(enum){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                adResultSmallView?.resume()
+            }
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                adResultLargeView?.resume()
+            }
+
+            EnumScreens.REVIEW_SMALL ->{
+                adReviewSmallView?.resume()
+            }
+            EnumScreens.REVIEW_LARGE ->{
+                adReviewLargeView?.resume()
+            }
+            EnumScreens.CREATE_SMALL ->{
+                adCreateSmallView?.resume()
+            }
+            EnumScreens.CREATE_LARGE ->{
+                adCreateLargeView?.resume()
+            }
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                adHelpFeedbackSmallView?.resume()
+            }
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                adHelpFeedbackLargeView?.resume()
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                adChangeColorSmallView?.resume()
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                adChangeColorLargeView?.resume()
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                adBackupSmallView?.resume()
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                adBackupSmallView?.resume()
+            }
+            else -> {}
         }
     }
 
