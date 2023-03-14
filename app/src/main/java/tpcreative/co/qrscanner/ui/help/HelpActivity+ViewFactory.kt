@@ -9,13 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import co.tpcreative.supersafe.common.adapter.DividerItemDecoration
 import co.tpcreative.supersafe.common.adapter.clearDecorations
 import com.afollestad.materialdialogs.MaterialDialog
-import kotlinx.android.synthetic.main.activity_help.*
-import kotlinx.android.synthetic.main.activity_help.recyclerView
-import kotlinx.android.synthetic.main.activity_help.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_help.rlBannerLarger
-import kotlinx.android.synthetic.main.activity_help.toolbar
-import kotlinx.android.synthetic.main.activity_result.*
-import kotlinx.android.synthetic.main.activity_text.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -24,15 +17,15 @@ import tpcreative.co.qrscanner.model.EnumScreens
 
 fun HelpActivity.initUI(){
     setupViewModel()
-    setSupportActionBar(toolbar)
+    setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)){
-        rlAdsRoot.visibility = View.GONE
+        binding.rlAdsRoot.visibility = View.GONE
     }else{
-        rlAdsRoot.addView(llSmallAds)
+        binding.rlAdsRoot.addView(llSmallAds)
     }
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)){
-        rlBannerLarger.visibility = View.GONE
+        binding.rlBannerLarger.visibility = View.GONE
     }
     initRecycleView(layoutInflater)
     getData()
@@ -60,10 +53,10 @@ fun HelpActivity.getData(){
 fun HelpActivity.initRecycleView(layoutInflater: LayoutInflater) {
     adapter = HelpAdapter(layoutInflater, applicationContext, this)
     val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-    recyclerView.layoutManager = mLayoutManager
-    recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
-    recyclerView.clearDecorations()
-    recyclerView.adapter = adapter
+    binding.recyclerView.layoutManager = mLayoutManager
+    binding.recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+    binding.recyclerView.clearDecorations()
+    binding.recyclerView.adapter = adapter
 }
 
 fun HelpActivity.onAlertSendEmail() {

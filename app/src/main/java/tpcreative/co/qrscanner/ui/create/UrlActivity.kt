@@ -9,22 +9,23 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_url.*
-import kotlinx.android.synthetic.main.activity_url.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.databinding.ActivityUrlBinding
 import tpcreative.co.qrscanner.model.*
 
 class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
+    lateinit var binding : ActivityUrlBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_url)
-        setSupportActionBar(toolbar)
+        binding = ActivityUrlBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
@@ -33,7 +34,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
         } else {
             Utils.Log(TAG, "Data is null")
         }
-        edtUrl.setOnEditorActionListener(this)
+        binding.edtUrl.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -64,7 +65,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
             val create = GeneralModel(save)
-            create.url = edtUrl.text.toString().trim { it <= ' ' }
+            create.url = binding.edtUrl.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.URI
             create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
@@ -78,17 +79,17 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
     }
 
     private fun focusUI() {
-        edtUrl.requestFocus()
+        binding.edtUrl.requestFocus()
     }
 
     fun clearAndFocusUI() {
-        edtUrl.requestFocus()
-        edtUrl.setText("")
+        binding.edtUrl.requestFocus()
+        binding.edtUrl.setText("")
     }
 
     fun onSetData() {
-        edtUrl.setText(save?.url)
-        edtUrl.setSelection(edtUrl.text?.length ?: 0)
+        binding.edtUrl.setText(save?.url)
+        binding.edtUrl.setSelection(binding.edtUrl.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 

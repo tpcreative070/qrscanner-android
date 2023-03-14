@@ -2,24 +2,19 @@ package tpcreative.co.qrscanner.ui.tipsscanning
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
-import kotlinx.android.synthetic.main.tips_scanning_items.view.*
-import kotlinx.android.synthetic.main.tips_scanning_items_portrait.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.margin
 import tpcreative.co.qrscanner.common.extension.onFormatBarcodeDisplay
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.TipsScanningModel
-import kotlin.math.max
-import kotlin.math.min
 
 const val VIEW_TYPE_PORTRAIT = 1
 const val VIEW_TYPE_LANDSCAPE = 2
@@ -49,14 +44,15 @@ class TipsScanningAdapter (inflater: LayoutInflater, private val context: Contex
     }
 
     inner class ItemHolder(itemView: View) : BaseHolder<TipsScanningModel>(itemView) {
-        private val tvTitle : AppCompatTextView = itemView.tvBarTitle
-        private val imgCode: ImageView = itemView.imgBarCode
-        private val imgCodeStatus : ImageView = itemView.imgBarCodeStatus
-        private val imgShadow : ImageView = itemView.imgBarcodeShadow
-        private val imgLedWhenDark : ImageView = itemView.imgBarcodeLedWhenDark
-        private val imgLed: ImageView = itemView.imgBarcodeLed
-        private val imgLowContrast : ImageView = itemView.imgBarcodoLowContrast
-        private val imgCircleCodeStatus: ImageView = itemView.imgCircleBarCodeStatus
+        private val tvTitle : AppCompatTextView = itemView.findViewById(R.id.tvBarTitle)
+        private val imgCode: ImageView = itemView.findViewById(R.id.imgBarCode)
+        private val imgCodeStatus : ImageView = itemView.findViewById(R.id.imgBarCodeStatus)
+        private val imgShadow : ImageView = itemView.findViewById(R.id.imgBarcodeShadow)
+        private val imgLedWhenDark : ImageView = itemView.findViewById(R.id.imgBarcodeLedWhenDark)
+        private val imgLed: ImageView = itemView.findViewById(R.id.imgBarcodeLed)
+        private val imgLowContrast : ImageView = itemView.findViewById(R.id.imgBarcodoLowContrast)
+        private val imgCircleCodeStatus: ImageView = itemView.findViewById(R.id.imgCircleBarCodeStatus)
+        private val rlBarcode: RelativeLayout = itemView.findViewById(R.id.rlBarcode)
         override fun bind(data: TipsScanningModel, position: Int) {
             super.bind(data, position)
             tvTitle.text = Utils.onFormatBarcodeDisplay(data.enumAction)
@@ -79,17 +75,18 @@ class TipsScanningAdapter (inflater: LayoutInflater, private val context: Contex
                 }
                 else -> {}
             }
-            itemView.rlBarcode.setOnClickListener {
+            rlBarcode.setOnClickListener {
                 itemSelectedListener?.onClickItem(position)
             }
         }
     }
 
     inner class ItemHolderPortrait(itemView: View) : BaseHolder<TipsScanningModel>(itemView) {
-        private val tvTitle : AppCompatTextView = itemView.tvPortraitTitle
-        private val imgCode: ImageView = itemView.imgPortraitCode
-        private val imgCodeStatus : ImageView = itemView.imgPortraitCodeStatus
-        private val imgCircleCodeStatus: ImageView = itemView.imgCirclePortraitCodeStatus
+        private val tvTitle : AppCompatTextView = itemView.findViewById(R.id.tvPortraitTitle)
+        private val imgCode: ImageView = itemView.findViewById(R.id.imgPortraitCode)
+        private val imgCodeStatus : ImageView = itemView.findViewById(R.id.imgPortraitCodeStatus)
+        private val imgCircleCodeStatus: ImageView = itemView.findViewById(R.id.imgCirclePortraitCodeStatus)
+        private val rlPortraitCode: RelativeLayout = itemView.findViewById(R.id.rlPortraitCode)
         override fun bind(data: TipsScanningModel, position: Int) {
             super.bind(data, position)
             tvTitle.text = Utils.onFormatBarcodeDisplay(data.enumAction)
@@ -102,7 +99,7 @@ class TipsScanningAdapter (inflater: LayoutInflater, private val context: Contex
                 }
                 else -> {}
             }
-            itemView.rlPortraitCode.setOnClickListener {
+            rlPortraitCode.setOnClickListener {
                 itemSelectedListener?.onClickItem(position)
             }
         }

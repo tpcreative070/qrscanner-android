@@ -30,6 +30,8 @@ import tpcreative.co.qrscanner.common.preference.MyPreferenceCategory
 import tpcreative.co.qrscanner.common.preference.MyPreferenceProVersion
 import tpcreative.co.qrscanner.common.preference.MySwitchPreference
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.databinding.FragmentSaverBinding
+import tpcreative.co.qrscanner.databinding.FragmentSettingsBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.helper.ThemeHelper
 import tpcreative.co.qrscanner.model.EnumThemeMode
@@ -39,7 +41,7 @@ import tpcreative.co.qrscanner.model.Theme
 
 class SettingsFragment : BaseFragment() {
     private var mStateSaved = false
-
+    lateinit var binding : FragmentSettingsBinding
     override fun onSaveInstanceState(outState: Bundle) {
         mStateSaved = true;
         super.onSaveInstanceState(outState)
@@ -50,7 +52,8 @@ class SettingsFragment : BaseFragment() {
     }
 
     override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater?.inflate(R.layout.fragment_settings, viewGroup, false)
+        binding = FragmentSettingsBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun work() {

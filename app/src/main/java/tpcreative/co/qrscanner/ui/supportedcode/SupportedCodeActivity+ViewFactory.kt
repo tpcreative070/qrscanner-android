@@ -6,14 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_suported_code.*
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 
 fun SupportedCodeActivity.initUI(){
-    setSupportActionBar(toolbar)
+    setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     setupViewModel()
     initRecycleView(layoutInflater)
@@ -30,10 +29,10 @@ fun SupportedCodeActivity.initRecycleView(layoutInflater: LayoutInflater) {
     adapter = SupportedCodeAdapter(layoutInflater, applicationContext, this)
     val mNoOfColumns = Utils.calculateNoOfColumns(this,170F)
     val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, mNoOfColumns)
-    recyclerView.addItemDecoration(GridSpacingItemDecoration(mNoOfColumns, 40, true))
-    recyclerView.layoutManager = mLayoutManager
-    recyclerView.itemAnimator = DefaultItemAnimator()
-    recyclerView.adapter = adapter
+    binding.recyclerView.addItemDecoration(GridSpacingItemDecoration(mNoOfColumns, 40, true))
+    binding.recyclerView.layoutManager = mLayoutManager
+    binding.recyclerView.itemAnimator = DefaultItemAnimator()
+    binding.recyclerView.adapter = adapter
 }
 
 

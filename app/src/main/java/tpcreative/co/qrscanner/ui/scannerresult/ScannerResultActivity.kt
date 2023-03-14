@@ -18,7 +18,6 @@ import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,6 +29,7 @@ import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
+import tpcreative.co.qrscanner.databinding.ActivityResultBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
@@ -44,10 +44,11 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     private val keyFavorite = "KEY_FAVORITE"
     private val keyNOTE = "KEY_NOTE"
     lateinit var llSmallAds : LinearLayout
-
+    lateinit var binding : ActivityResultBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result)
+        binding = ActivityResultBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         llSmallAds = AdsView().createLayout()
         initUI()
     }
@@ -314,9 +315,9 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         create?.let {
             val mMap = Utils.onGeneralParse(it,HashMap::class)
             code = it.code
-            tvContent.text = "${mMap[ConstantKey.CONTENT]}"
-            tvBarCodeFormat.text =  "${mMap[ConstantKey.BARCODE_FORMAT]}"
-            tvCreatedDatetime.text = "${mMap[ConstantKey.CREATED_DATETIME]}"
+            binding.tvContent.text = "${mMap[ConstantKey.CONTENT]}"
+            binding.tvBarCodeFormat.text =  "${mMap[ConstantKey.BARCODE_FORMAT]}"
+            binding.tvCreatedDatetime.text = "${mMap[ConstantKey.CREATED_DATETIME]}"
             val history = Utils.onGeneralParse(it,HistoryModel::class)
             history.code = code
             history.hashClipboard?.let {
@@ -443,7 +444,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadResultSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadResultLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadResultLargeView(binding.llLargeAds)
         }
     }
 

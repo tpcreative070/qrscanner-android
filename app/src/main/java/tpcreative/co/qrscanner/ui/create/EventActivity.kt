@@ -12,13 +12,13 @@ import com.google.zxing.client.result.ParsedResultType
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment.SimpleDateMonthAndDayFormatException
-import kotlinx.android.synthetic.main.activity_event.*
-import kotlinx.android.synthetic.main.activity_event.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.databinding.ActivityEmailBinding
+import tpcreative.co.qrscanner.databinding.ActivityEventBinding
 import tpcreative.co.qrscanner.model.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,15 +32,17 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     private var isClick = false
     private var isBegin = false
     private var save: GeneralModel? = null
+    lateinit var binding : ActivityEventBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_event)
-        setSupportActionBar(toolbar)
+        binding = ActivityEventBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        llEndTime.setOnClickListener(this)
-        llBeginTime.setOnClickListener(this)
-        tvBeginTime.setOnClickListener(this)
-        tvEndTime.setOnClickListener(this)
+        binding.llEndTime.setOnClickListener(this)
+        binding.llBeginTime.setOnClickListener(this)
+        binding.tvBeginTime.setOnClickListener(this)
+        binding.tvEndTime.setOnClickListener(this)
         initDateTimePicker()
         val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
@@ -49,9 +51,9 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
         } else {
             Utils.Log(TAG, "Data is null")
         }
-        edtTitle.setOnEditorActionListener(this)
-        edtLocation.setOnEditorActionListener(this)
-        edtDescription.setOnEditorActionListener(this)
+        binding.edtTitle.setOnEditorActionListener(this)
+        binding.edtLocation.setOnEditorActionListener(this)
+        binding.edtDescription.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -128,9 +130,9 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                 return
             }
             val create = GeneralModel(save)
-            create.title = edtTitle.text.toString()
-            create.location = edtLocation.text.toString()
-            create.description = edtDescription.text.toString()
+            create.title = binding.edtTitle.text.toString()
+            create.location = binding.edtLocation.text.toString()
+            create.description = binding.edtDescription.text.toString()
             create.startEvent = Utils.getCurrentDatetimeEvent(beginDateTimeMilliseconds)
             create.endEvent = Utils.getCurrentDatetimeEvent(endDateTimeMilliseconds)
             create.startEventMilliseconds = beginDateTimeMilliseconds
@@ -267,7 +269,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                         Utils.onDropDownAlert(this@EventActivity, "Starting event data time must be greater than current date time")
                     } else {
                         beginDateTimeMilliseconds = date?.time ?: 0
-                        tvBeginTime.text = myDateFormat.format(date)
+                        binding.tvBeginTime.text = myDateFormat.format(date)
                     }
                 } else {
                     if (currentMilliseconds > date?.time ?: 0) {
@@ -278,7 +280,7 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
                         Utils.onDropDownAlert(this@EventActivity, "Ending event data time must be greater than begin date time")
                     } else {
                         endDateTimeMilliseconds = date?.time ?:0
-                        tvEndTime.text = myDateFormat.format(date)
+                        binding.tvEndTime.text = myDateFormat.format(date)
                     }
                 }
                 isClick = false
@@ -307,18 +309,18 @@ class EventActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenera
     }
 
     private fun focusUI() {
-        edtTitle.requestFocus()
+        binding.edtTitle.requestFocus()
     }
 
     fun onSetData() {
-        edtTitle.setText("${save?.title}")
-        edtDescription.setText("${save?.description}")
-        edtLocation.setText("${save?.location}")
-        tvBeginTime.text = Utils.convertMillisecondsToDateTime(save?.startEventMilliseconds ?: 0)
-        tvEndTime.text = Utils.convertMillisecondsToDateTime(save?.endEventMilliseconds ?: 0)
+        binding.edtTitle.setText("${save?.title}")
+        binding.edtDescription.setText("${save?.description}")
+        binding.edtLocation.setText("${save?.location}")
+        binding.tvBeginTime.text = Utils.convertMillisecondsToDateTime(save?.startEventMilliseconds ?: 0)
+        binding.tvEndTime.text = Utils.convertMillisecondsToDateTime(save?.endEventMilliseconds ?: 0)
         beginDateTimeMilliseconds = save?.startEventMilliseconds ?: 0
         endDateTimeMilliseconds = save?.endEventMilliseconds ?: 0
-        edtTitle.setSelection(edtTitle.text?.length ?: 0)
+        binding.edtTitle.setSelection(binding.edtTitle.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 

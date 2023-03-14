@@ -2,22 +2,23 @@ package tpcreative.co.qrscanner.ui.create
 import android.content.*
 import android.os.Bundle
 import android.view.*
-import kotlinx.android.synthetic.main.fragment_generate.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
-import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.databinding.FragmentGenerateBinding
 import tpcreative.co.qrscanner.model.QRCodeType
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.*
 
 class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
     lateinit var viewModel : GenerateViewModel
+    lateinit var binding : FragmentGenerateBinding
     override fun getLayoutId(): Int {
         return 0
     }
 
-    override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater?.inflate(R.layout.fragment_generate, viewGroup, false)
+    override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View {
+        binding = FragmentGenerateBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun work() {
@@ -42,12 +43,12 @@ class GenerateFragment : BaseFragment(), GenerateCell.ItemSelectedListener {
             cell.setListener(this)
             cells.add(cell)
         }
-        recyclerView.removeAllCells()
-        recyclerView.addCells(cells)
+        binding.recyclerView.removeAllCells()
+        binding.recyclerView.addCells(cells)
     }
 
     override fun onClickItem(position: Int, isChecked: Boolean) {
-        var mPosition = position
+        val mPosition = position
         when (mPosition) {
             0 -> {
                 Navigator.onGenerateView(activity, null, BarcodeActivity::class.java)

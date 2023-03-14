@@ -20,7 +20,6 @@ import com.google.zxing.Result
 import com.google.zxing.client.result.ParsedResultType
 import com.google.zxing.client.result.ResultParser
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +34,7 @@ import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
+import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.util.*
@@ -54,9 +54,11 @@ class ReviewActivity : BaseActivitySlide() {
     var dialog : Dialog? = null
     var isAlreadySaved  = false
     lateinit var llSmallAds : LinearLayout
+    lateinit var binding : ActivityReviewBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_review)
+        binding = ActivityReviewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         llSmallAds = AdsView().createLayout()
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
@@ -108,9 +110,9 @@ class ReviewActivity : BaseActivitySlide() {
             save = Utils.onGeneralParse(it,SaveModel::class)
             code = save.code
             type = save.type
-            txtSubject.text = type
-            txtDisplay.text = code
-            txtFormat.text = format
+            binding.txtSubject.text = type
+            binding.txtDisplay.text = code
+            binding.txtFormat.text = format
             CoroutineScope(Dispatchers.IO).launch {
                 onGenerateReview(code)
                 onGenerateQRCode(code)
@@ -262,7 +264,7 @@ class ReviewActivity : BaseActivitySlide() {
                         hints
                     )
                 }
-                imgResult.setImageBitmap(mBitmap)
+                binding.imgResult.setImageBitmap(mBitmap)
                 onSavedData()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -323,7 +325,7 @@ class ReviewActivity : BaseActivitySlide() {
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadReviewSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadReviewLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadReviewLargeView(binding.llLargeAds)
         }
     }
 

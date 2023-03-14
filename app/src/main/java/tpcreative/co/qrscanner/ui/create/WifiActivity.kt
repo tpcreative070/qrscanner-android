@@ -12,13 +12,6 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_result.*
-import kotlinx.android.synthetic.main.activity_text.*
-import kotlinx.android.synthetic.main.activity_wifi.*
-import kotlinx.android.synthetic.main.activity_wifi.llLargeAds
-import kotlinx.android.synthetic.main.activity_wifi.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_wifi.rlBannerLarger
-import kotlinx.android.synthetic.main.activity_wifi.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -26,6 +19,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
+import tpcreative.co.qrscanner.databinding.ActivityWifiBinding
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.regex.Pattern
@@ -36,18 +30,20 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     var typeEncrypt: String? = ConstantValue.WPA
     private var save: GeneralModel? = null
     lateinit var llSmallAds : LinearLayout
+    lateinit var binding : ActivityWifiBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wifi)
+        binding = ActivityWifiBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         llSmallAds = AdsView().createLayout()
-        setSupportActionBar(toolbar)
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
-            rlAdsRoot.visibility = View.GONE
+            binding.rlAdsRoot.visibility = View.GONE
         }else{
-            rlAdsRoot.addView(llSmallAds)
+            binding.rlAdsRoot.addView(llSmallAds)
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
-            rlBannerLarger.visibility = View.GONE
+            binding.rlBannerLarger.visibility = View.GONE
         }
         setupViewModel()
         getIntentData()
@@ -59,11 +55,11 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         }
         checkingShowAds()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        radio0.setOnClickListener(this)
-        radio1.setOnClickListener(this)
-        radio2.setOnClickListener(this)
-        edtSSID.setOnEditorActionListener(this)
-        edtPassword.setOnEditorActionListener(this)
+        binding.radio0.setOnClickListener(this)
+        binding.radio1.setOnClickListener(this)
+        binding.radio2.setOnClickListener(this)
+        binding.edtSSID.setOnEditorActionListener(this)
+        binding.edtPassword.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,8 +90,8 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
             val create = GeneralModel(save)
-            create.ssId = edtSSID.text.toString().trim { it <= ' ' }
-            create.password = edtPassword.text.toString()
+            create.ssId = binding.edtSSID.text.toString().trim { it <= ' ' }
+            create.password = binding.edtPassword.text.toString()
             create.networkEncryption = typeEncrypt
             create.createType = ParsedResultType.WIFI
             create.barcodeFormat = BarcodeFormat.QR_CODE.name
@@ -112,20 +108,20 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     }
 
     private fun focusUI() {
-        edtSSID.requestFocus()
+        binding.edtSSID.requestFocus()
     }
 
     fun onSetData() {
-        edtSSID.setText(save?.ssId)
-        edtPassword.setText(save?.password)
+        binding.edtSSID.setText(save?.ssId)
+        binding.edtPassword.setText(save?.password)
         if (save?.networkEncryption == ConstantValue.WPA) {
-            radio0.isChecked = true
+            binding.radio0.isChecked = true
         } else if (save?.networkEncryption == ConstantValue.WEP) {
-            radio1.isChecked = true
+            binding.radio1.isChecked = true
         } else {
-            radio2.isChecked = true
+            binding.radio2.isChecked = true
         }
-        edtSSID.setSelection(edtSSID.text?.length ?: 0)
+        binding.edtSSID.setSelection(binding.edtSSID.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 
@@ -218,7 +214,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadCreateLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadCreateLargeView(binding.llLargeAds)
         }
     }
 

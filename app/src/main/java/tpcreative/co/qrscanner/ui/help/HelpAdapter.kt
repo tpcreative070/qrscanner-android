@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
-import kotlinx.android.synthetic.main.help_item_standard.view.*
-import kotlinx.android.synthetic.main.help_item_custom.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.HelpModel
@@ -44,29 +43,31 @@ class HelpAdapter (inflater: LayoutInflater, private val context: Context, priva
     }
 
     inner class ItemHolderStandard(itemView: View) : BaseHolder<HelpModel>(itemView) {
-        private val tvTitle : AppCompatTextView = itemView.tvStandardTitle
-        private val imgDisplay: ImageView = itemView.imgStandardIcon
-        private val imgCircle: ImageView = itemView.imgStandardCircle
+        private val tvTitle : AppCompatTextView = itemView.findViewById(R.id.tvStandardTitle)
+        private val imgDisplay: ImageView = itemView.findViewById(R.id.imgStandardIcon)
+        private val imgCircle: ImageView = itemView.findViewById(R.id.imgStandardCircle)
+        private val rlStandard : RelativeLayout = itemView.findViewById(R.id.rlStandard)
 
         override fun bind(data: HelpModel, position: Int) {
             super.bind(data, position)
             tvTitle.text = data.title
             imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
             imgCircle.setImageResource(data.color)
-            itemView.rlStandard.setOnClickListener {
+            rlStandard.setOnClickListener {
                 itemSelectedListener?.onClickItem(position)
             }
         }
     }
 
     inner class ItemHolderCustom(itemView: View) : BaseHolder<HelpModel>(itemView) {
-        private val tvTitle : AppCompatTextView = itemView.tvTitle
-        private val imgDisplay: ImageView = itemView.imgIcon
+        private val tvTitle : AppCompatTextView = itemView.findViewById(R.id.tvTitle)
+        private val imgDisplay: ImageView = itemView.findViewById(R.id.imgIcon)
+        private val rlCustom : RelativeLayout = itemView.findViewById(R.id.rlCustom)
         override fun bind(data: HelpModel, position: Int) {
             super.bind(data, position)
             tvTitle.text = data.title
             imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
-            itemView.rlCustom.setOnClickListener {
+            rlCustom.setOnClickListener {
                 itemSelectedListener?.onClickItem(position)
             }
         }

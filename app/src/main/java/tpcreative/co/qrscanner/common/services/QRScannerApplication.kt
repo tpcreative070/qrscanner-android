@@ -23,7 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlinx.android.synthetic.main.activity_review.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R

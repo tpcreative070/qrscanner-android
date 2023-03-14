@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.jaychang.srv.SimpleCell
 import com.jaychang.srv.SimpleViewHolder
-import kotlinx.android.synthetic.main.generate_item.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.model.QRCodeType
 
@@ -46,10 +45,10 @@ class GenerateCell(item: QRCodeType) : SimpleCell<QRCodeType, GenerateCell.ViewH
     }
 
     class ViewHolder(itemView: View) : SimpleViewHolder(itemView) {
-        val tvName: AppCompatTextView = itemView.tvName
-        val imgIcon: AppCompatImageView = itemView.imgIcon
-        val imgDefault: AppCompatImageView = itemView.imgDefault
-        val llRoot: LinearLayout = itemView.llRoot
+        val tvName: AppCompatTextView = itemView.findViewById(R.id.tvName)
+        val imgIcon: AppCompatImageView = itemView.findViewById(R.id.imgIcon)
+        val imgDefault: AppCompatImageView = itemView.findViewById(R.id.imgDefault)
+        val llRoot: LinearLayout = itemView.findViewById(R.id.llRoot)
     }
 
     interface ItemSelectedListener {

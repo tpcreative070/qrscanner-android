@@ -20,7 +20,6 @@ import com.google.zxing.client.result.*
 import com.google.zxing.datamatrix.DataMatrixWriter
 import com.google.zxing.oned.*
 import com.google.zxing.pdf417.PDF417Writer
-import kotlinx.android.synthetic.main.custom_spinner_item.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.ConstantValue

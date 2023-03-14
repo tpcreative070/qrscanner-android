@@ -29,14 +29,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_location.*
-import kotlinx.android.synthetic.main.activity_location.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.openAppSystemSettings
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.databinding.ActivityLocationBinding
 import tpcreative.co.qrscanner.model.*
 
 class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, OnMyLocationClickListener, OnMapReadyCallback, OnRequestPermissionsResultCallback, OnMapClickListener, LocationListener, SingletonGenerateListener,OnEditorActionListener {
@@ -50,10 +49,12 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     private var isRunning = false
     private var save: GeneralModel? = null
     private var isEdit : Boolean = false
+    lateinit var binding : ActivityLocationBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_location)
-        setSupportActionBar(toolbar)
+        binding = ActivityLocationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
@@ -67,9 +68,9 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
             Utils.Log(TAG, "Data is null")
         }
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        edtLatitude.setOnEditorActionListener(this)
-        edtLongitude.setOnEditorActionListener(this)
-        edtQuery.setOnEditorActionListener(this)
+        binding.edtLatitude.setOnEditorActionListener(this)
+        binding.edtLongitude.setOnEditorActionListener(this)
+        binding.edtQuery.setOnEditorActionListener(this)
     }
 
     private fun showGpsWarningDialog() {
@@ -95,9 +96,9 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         )
         lastLat = p0.latitude
         lastLon = p0.longitude
-        edtLatitude.setText("$lastLat")
-        edtLongitude.setText("$lastLon")
-        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+        binding.edtLatitude.setText("$lastLat")
+        binding.edtLongitude.setText("$lastLon")
+        binding.edtLatitude.setSelection(binding.edtLatitude.text?.length ?: 0)
         isEdit = false
     }
 
@@ -134,9 +135,9 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
                             if (!isEdit){
                                 lastLat = myLocation.latitude
                                 lastLon = myLocation.longitude
-                                edtLatitude.setText("$lastLat")
-                                edtLongitude.setText("$lastLon")
-                                edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+                                binding.edtLatitude.setText("$lastLat")
+                                binding.edtLongitude.setText("$lastLon")
+                                binding.edtLatitude.setSelection(binding.edtLatitude.text?.length ?: 0)
                             }
                         }
                     }
@@ -162,7 +163,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
             try {
                 create.lat = lastLat
                 create.lon = lastLon
-                create.query = edtQuery.text.toString()
+                create.query = binding.edtQuery.text.toString()
                 create.createType = ParsedResultType.GEO
                 create.barcodeFormat = BarcodeFormat.QR_CODE.name
                 Navigator.onMoveToReview(this, create)
@@ -181,16 +182,16 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     }
 
     private fun focusUI() {
-        edtLatitude.requestFocus()
+        binding.edtLatitude.requestFocus()
     }
 
     fun onSetData() {
-        edtLatitude.setText("${save?.lat}")
-        edtLongitude.setText("${save?.lon}")
+        binding.edtLatitude.setText("${save?.lat}")
+        binding.edtLongitude.setText("${save?.lon}")
         lastLat = save?.lat ?:0.0
         lastLon = save?.lon ?:0.0
-        edtQuery.setText(save?.query)
-        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+        binding.edtQuery.setText(save?.query)
+        binding.edtLatitude.setSelection(binding.edtLatitude.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 
@@ -266,9 +267,9 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
                     if (!isEdit){
                         lastLat = myLocation.latitude
                         lastLon = myLocation.longitude
-                        edtLatitude.setText("$lastLat")
-                        edtLongitude.setText("$lastLon")
-                        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+                        binding.edtLatitude.setText("$lastLat")
+                        binding.edtLongitude.setText("$lastLon")
+                        binding.edtLatitude.setSelection(binding.edtLatitude.text?.length ?: 0)
                     }
                 }
             }
@@ -300,9 +301,9 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
                 if (!isEdit){
                     lastLat = location.latitude
                     lastLon = location.longitude
-                    edtLatitude.setText("$lastLat")
-                    edtLongitude.setText("$lastLon")
-                    edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+                    binding.edtLatitude.setText("$lastLat")
+                    binding.edtLongitude.setText("$lastLon")
+                    binding.edtLatitude.setSelection(binding.edtLatitude.text?.length ?: 0)
                 }
                 if (location.hasAccuracy()) {
                     isRunning = true
@@ -332,9 +333,9 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
         mMap?.clear()
         lastLat = location.latitude
         lastLon = location.longitude
-        edtLatitude.setText("$lastLat")
-        edtLongitude.setText("$lastLon")
-        edtLatitude.setSelection(edtLatitude.text?.length ?: 0)
+        binding.edtLatitude.setText("$lastLat")
+        binding.edtLongitude.setText("$lastLon")
+        binding.edtLatitude.setSelection(binding.edtLatitude.text?.length ?: 0)
         isEdit = false
     }
 

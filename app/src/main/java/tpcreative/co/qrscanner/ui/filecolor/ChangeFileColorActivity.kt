@@ -6,14 +6,13 @@ import android.widget.LinearLayout
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import kotlinx.android.synthetic.main.activity_chage_file_color.*
-import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
+import tpcreative.co.qrscanner.databinding.ActivityChageFileColorBinding
 import tpcreative.co.qrscanner.model.*
 import java.util.*
 
@@ -22,9 +21,11 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     lateinit var viewModel : ChangeFileColorViewModel
     var adapter: ChangeFileColorAdapter? = null
     lateinit var llSmallAds : LinearLayout
+    lateinit var binding : ActivityChageFileColorBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chage_file_color)
+        binding = ActivityChageFileColorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         llSmallAds = AdsView().createLayout()
         initUI()
 
@@ -67,7 +68,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadChangeColorLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadChangeColorLargeView(binding.llLargeAds)
         }
     }
 
@@ -78,7 +79,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
             hints[EncodeHintType.MARGIN] = 2
             val theme: Theme? = Theme.getInstance()?.getThemeInfo()
             bitmap = barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.QR_CODE, Constant.QRCodeViewWidth, Constant.QRCodeViewHeight, hints)
-            imgResult.setImageBitmap(bitmap)
+            binding.imgResult.setImageBitmap(bitmap)
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.ui.save
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_saver.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.SaveModel
@@ -30,7 +29,7 @@ fun SaveFragment.deleteEntireItem(){
 }
 
 private fun SaveFragment.onActionView() {
-    rlDelete.setOnClickListener {
+    binding.rlDelete.setOnClickListener {
         val listSave: MutableList<SaveModel> = SQLiteHelper.getSaveList()
         if (listSave.size == 0) {
             return@setOnClickListener
@@ -38,7 +37,7 @@ private fun SaveFragment.onActionView() {
         dialogEntireDelete()
     }
 
-    rlCSV.setOnClickListener {
+    binding.rlCSV.setOnClickListener {
         val listSave: MutableList<SaveModel> = SQLiteHelper.getSaveList()
         if (listSave.size == 0) {
             return@setOnClickListener

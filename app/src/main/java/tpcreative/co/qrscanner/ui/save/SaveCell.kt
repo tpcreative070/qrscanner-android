@@ -9,7 +9,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.jaychang.srv.SimpleCell
 import com.jaychang.srv.SimpleViewHolder
-import kotlinx.android.synthetic.main.save_item.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.model.SaveModel
@@ -90,12 +89,12 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel, SaveCell.ViewHolder>(ite
      * Define your view holder, which must extend SimpleViewHolder.
      */
     class ViewHolder(itemView: View) : SimpleViewHolder(itemView) {
-        val tvTime: AppCompatTextView = itemView.tvDate
-        val tvContent: AppCompatTextView = itemView.tvContent
-        val ckDelete: AppCompatCheckBox = itemView.ckDelete
-        val imgEdit: AppCompatImageView = itemView.imgEdit
-        val lItem: LinearLayout = itemView.lItem
-        val llCheckedBox: LinearLayout =  itemView.llCheckedBox
+        val tvTime: AppCompatTextView = itemView.findViewById(R.id.tvDate)
+        val tvContent: AppCompatTextView = itemView.findViewById(R.id.tvContent)
+        val ckDelete: AppCompatCheckBox = itemView.findViewById(R.id.ckDelete)
+        val imgEdit: AppCompatImageView = itemView.findViewById(R.id.imgEdit)
+        val lItem: LinearLayout = itemView.findViewById(R.id.lItem)
+        val llCheckedBox: LinearLayout =  itemView.findViewById(R.id.llCheckedBox)
     }
 
     interface ItemSelectedListener {

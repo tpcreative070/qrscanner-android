@@ -12,11 +12,6 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_text.*
-import kotlinx.android.synthetic.main.activity_text.llLargeAds
-import kotlinx.android.synthetic.main.activity_text.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_text.rlBannerLarger
-import kotlinx.android.synthetic.main.activity_text.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
@@ -24,6 +19,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
+import tpcreative.co.qrscanner.databinding.ActivityTextBinding
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
@@ -32,19 +28,21 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
     lateinit var llSmallAds : LinearLayout
+    lateinit var binding : ActivityTextBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_text)
+        binding = ActivityTextBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         llSmallAds = AdsView().createLayout()
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
-            rlAdsRoot.visibility = View.GONE
+            binding.rlAdsRoot.visibility = View.GONE
         }else{
-            rlAdsRoot.addView(llSmallAds)
+            binding.rlAdsRoot.addView(llSmallAds)
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
-            rlBannerLarger.visibility = View.GONE
+            binding.rlBannerLarger.visibility = View.GONE
         }
         setupViewModel()
         getIntentData()
@@ -55,7 +53,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
             QRScannerApplication.getInstance().requestCreateLargeView(this)
         }
         checkingShowAds()
-        edtText.setOnEditorActionListener(this)
+        binding.edtText.setOnEditorActionListener(this)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_select, menu)
@@ -84,7 +82,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             val create = GeneralModel(save)
-            create.textProductIdISNB = edtText.text.toString().trim { it <= ' ' }
+            create.textProductIdISNB = binding.edtText.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.TEXT
             create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
@@ -98,12 +96,12 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     }
 
     private fun focusUI() {
-        edtText.requestFocus()
+        binding.edtText.requestFocus()
     }
 
     fun onSetData() {
-        edtText.setText(save?.textProductIdISNB)
-        edtText.setSelection(edtText.text?.length ?: 0)
+        binding.edtText.setText(save?.textProductIdISNB)
+        binding.edtText.setSelection(binding.edtText.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 
@@ -173,7 +171,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadCreateLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadCreateLargeView(binding.llLargeAds)
         }
     }
 
