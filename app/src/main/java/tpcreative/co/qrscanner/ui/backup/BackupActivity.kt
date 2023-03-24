@@ -22,13 +22,13 @@ import tpcreative.co.qrscanner.model.EnumScreens
 
 class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     lateinit var viewModel : BackupViewModel
-    lateinit var llSmallAds : LinearLayout
+    lateinit var llSmallAds : AdsView
     lateinit var binding: ActivityBackupBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBackupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView().createLayout()
+        llSmallAds = AdsView(this)
         initUI()
     }
 
@@ -96,7 +96,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadBackupSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadBackupSmallView(llSmallAds.getSmallAds())
             QRScannerApplication.getInstance().loadBackupLargeView(binding.llLargeAds)
         } else {
             binding.rlAdsRoot.visibility = View.GONE

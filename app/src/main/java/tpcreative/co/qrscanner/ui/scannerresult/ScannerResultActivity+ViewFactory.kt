@@ -12,10 +12,11 @@ import co.tpcreative.supersafe.common.adapter.clearDecorations
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.getInputLayout
 import com.afollestad.materialdialogs.input.input
+import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
-import com.journeyapps.barcodescanner.BarcodeEncoder
+//import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
@@ -39,7 +40,7 @@ fun ScannerResultActivity.initUI(){
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds)
+        binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE

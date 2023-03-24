@@ -14,7 +14,7 @@ import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.zxing.client.result.ParsedResultType
-import com.journeyapps.barcodescanner.Size
+//import com.journeyapps.barcodescanner.Size
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -747,7 +747,7 @@ object Utils {
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),Gson().toJson(mRect))
     }
 
-    private fun getFrameRectPortrait() : RectF?{
+    fun getFrameRectPortrait() : RectF?{
         val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),null)
         return Gson().fromJson(json, RectF::class.java)
     }
@@ -756,7 +756,7 @@ object Utils {
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),Gson().toJson(mRect))
     }
 
-    private fun getFrameRectLandscape() : RectF?{
+    fun getFrameRectLandscape() : RectF?{
         val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),null)
         return Gson().fromJson(json, RectF::class.java)
     }
@@ -801,25 +801,25 @@ object Utils {
         return PrefsController.getInt(R.string.key_count_continue_scan.toText(),0)
     }
 
-    fun getFramePortraitSize() : Size? {
-        val mRect = getFrameRectPortrait()
-        mRect?.let { node ->
-            val mWidth = node.right - node.left
-            val mHeight = node.bottom - node.top
-            return Size(mWidth.toInt(),mHeight.toInt())
-        }
-        return null
-    }
+//    fun getFramePortraitSize() : Size? {
+//        val mRect = getFrameRectPortrait()
+//        mRect?.let { node ->
+//            val mWidth = node.right - node.left
+//            val mHeight = node.bottom - node.top
+//            return Size(mWidth.toInt(),mHeight.toInt())
+//        }
+//        return null
+//    }
 
-    fun getFrameLandscapeSize() : Size? {
-        val mRect = getFrameRectLandscape()
-        mRect?.let { node ->
-            val mWidth = node.right - node.left
-            val mHeight = node.bottom - node.top
-            return Size(mWidth.toInt(),mHeight.toInt())
-        }
-        return null
-    }
+//    fun getFrameLandscapeSize() : Size? {
+//        val mRect = getFrameRectLandscape()
+//        mRect?.let { node ->
+//            val mWidth = node.right - node.left
+//            val mHeight = node.bottom - node.top
+//            return Size(mWidth.toInt(),mHeight.toInt())
+//        }
+//        return null
+//    }
 
     fun isEqualTimeSynced(value: String?): Boolean {
         return value == getLastTimeSynced()

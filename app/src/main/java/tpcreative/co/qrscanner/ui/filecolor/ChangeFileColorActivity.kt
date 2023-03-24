@@ -3,9 +3,10 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
+import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
-import com.journeyapps.barcodescanner.BarcodeEncoder
+//import com.journeyapps.barcodescanner.BarcodeEncoder
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
@@ -20,13 +21,13 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     private var bitmap: Bitmap? = null
     lateinit var viewModel : ChangeFileColorViewModel
     var adapter: ChangeFileColorAdapter? = null
-    lateinit var llSmallAds : LinearLayout
+    lateinit var llSmallAds : AdsView
     lateinit var binding : ActivityChageFileColorBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChageFileColorBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView().createLayout()
+        llSmallAds = AdsView(this)
         initUI()
 
     }
@@ -67,7 +68,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds.getSmallAds())
             QRScannerApplication.getInstance().loadChangeColorLargeView(binding.llLargeAds)
         }
     }

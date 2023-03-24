@@ -6,20 +6,18 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.ads.AdSize
+import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.Result
 import com.google.zxing.client.result.ParsedResultType
 import com.google.zxing.client.result.ResultParser
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,13 +51,13 @@ class ReviewActivity : BaseActivitySlide() {
     private var save: SaveModel = SaveModel()
     var dialog : Dialog? = null
     var isAlreadySaved  = false
-    lateinit var llSmallAds : LinearLayout
+    lateinit var llSmallAds : AdsView
     lateinit var binding : ActivityReviewBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView().createLayout()
+        llSmallAds = AdsView(this)
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
     }
@@ -324,7 +322,7 @@ class ReviewActivity : BaseActivitySlide() {
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadReviewSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadReviewSmallView(llSmallAds.getSmallAds())
             QRScannerApplication.getInstance().loadReviewLargeView(binding.llLargeAds)
         }
     }

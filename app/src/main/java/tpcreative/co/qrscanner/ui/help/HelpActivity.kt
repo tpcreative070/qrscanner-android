@@ -17,13 +17,13 @@ import tpcreative.co.qrscanner.ui.tipsscanning.TipsScanningActivity
 class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
     lateinit var viewModel : HelpViewModel
     var adapter: HelpAdapter? = null
-    lateinit var llSmallAds : LinearLayout
+    lateinit var llSmallAds : AdsView
     lateinit var binding : ActivityHelpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView().createLayout()
+        llSmallAds = AdsView(this)
         initUI()
     }
 
@@ -48,7 +48,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadHelpFeedbackSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadHelpFeedbackSmallView(llSmallAds.getSmallAds())
             QRScannerApplication.getInstance().loadHelpFeedbackLargeView(binding.llLargeAds)
         }
     }

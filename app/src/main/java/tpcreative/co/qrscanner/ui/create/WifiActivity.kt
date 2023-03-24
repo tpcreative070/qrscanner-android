@@ -29,18 +29,18 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     var mAwesomeValidation: AwesomeValidation? = null
     var typeEncrypt: String? = ConstantValue.WPA
     private var save: GeneralModel? = null
-    lateinit var llSmallAds : LinearLayout
+    lateinit var llSmallAds : AdsView
     lateinit var binding : ActivityWifiBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWifiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        llSmallAds = AdsView().createLayout()
+        llSmallAds = AdsView(this)
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlAdsRoot.visibility = View.GONE
         }else{
-            binding.rlAdsRoot.addView(llSmallAds)
+            binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
             binding.rlBannerLarger.visibility = View.GONE
@@ -213,7 +213,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     /*show ads*/
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds.getSmallAds())
             QRScannerApplication.getInstance().loadCreateLargeView(binding.llLargeAds)
         }
     }

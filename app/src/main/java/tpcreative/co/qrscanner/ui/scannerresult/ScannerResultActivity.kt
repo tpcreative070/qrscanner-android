@@ -43,13 +43,13 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     private var code: String? = null
     private val keyFavorite = "KEY_FAVORITE"
     private val keyNOTE = "KEY_NOTE"
-    lateinit var llSmallAds : LinearLayout
+    lateinit var llSmallAds : AdsView
     lateinit var binding : ActivityResultBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView().createLayout()
+        llSmallAds = AdsView(this)
         initUI()
     }
 
@@ -443,7 +443,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadResultSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadResultSmallView(llSmallAds.getSmallAds())
             QRScannerApplication.getInstance().loadResultLargeView(binding.llLargeAds)
         }
     }

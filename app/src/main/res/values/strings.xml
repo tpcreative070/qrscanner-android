@@ -39,6 +39,8 @@
     <string name="release">release</string>
     <string name="debug">debug</string>
     <string name="scanner_app">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner.free.release</string>
+    <string name="scanner_app_free_innovation">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner.free.innovation</string>
+    <string name="scanner_app_super_innovation">https://play.google.com/store/apps/details?id=com.superqrscanner.free.innovation</string>
     <string name="scanner_app_pro">https://play.google.com/store/apps/details?id=tpcreative.co.qrscanner</string>
     <string name="qr_now_app">https://play.google.com/store/apps/details?id=me.qrnow.qrscanner.free.release</string>
     <string name="url_developer">http://192.168.1.3:8082</string>
@@ -164,6 +166,8 @@
     <string name="key_keep_ads_refresh_latest_time">key_keep_ads_refresh_latest_time</string>
     <string name="key_current_time_update_app">key_current_time_update_app</string>
     <string name="key_new_users_for_current_time">key_new_users_for_current_time</string>
+    <integer name="zxing_viewfinder_border_width">5</integer>
+    <integer name="zxing_viewfinder_border_length">60</integer>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -525,4 +529,5 @@
     <string name="processing">Processing</string>
     <string name="scan_image">Scan image</string>
     <string name="qr_code_or_barcode_not_found">QR code or Barcode not found</string>
+    <string name="remove_ads">Remove ads</string>
 </resources>

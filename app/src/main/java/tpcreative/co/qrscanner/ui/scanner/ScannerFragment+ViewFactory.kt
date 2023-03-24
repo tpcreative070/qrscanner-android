@@ -5,13 +5,12 @@ import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toRect
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
 import com.isseiaoki.simplecropview.callback.LoadCallback
 import com.isseiaoki.simplecropview.callback.MoveUpCallback
-import com.journeyapps.barcodescanner.CameraPreview
-import com.journeyapps.barcodescanner.Size
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -31,14 +30,14 @@ import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 
 fun ScannerFragment.initUI(){
     setupViewModel()
-    binding.rlRight?.setOnClickListener { view ->
+    binding.rlLight.setOnClickListener { view ->
         if (Utils.isLight()) {
-            binding.zxingBarcodeScanner.setTorchOff()
+            viewModel.isLight = false
             binding.switchFlashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
             binding.tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
             Utils.setLight(false)
         } else {
-            binding.zxingBarcodeScanner.setTorchOn()
+            viewModel.isLight = true
             binding.switchFlashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
             binding.tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
             Utils.setLight(true)
@@ -46,12 +45,7 @@ fun ScannerFragment.initUI(){
     }
 
     binding.rlHelp.setOnClickListener { view ->
-        if (viewModel.isResume){
-            binding.zxingBarcodeScanner.pauseAndWait()
-            viewModel.isResume = false
-        }
         Navigator.onMoveToHelp(context)
-        binding.zxingBarcodeScanner.statusView.visibility = View.GONE
     }
 
     binding.rlGallery.setOnClickListener { view ->
@@ -59,10 +53,6 @@ fun ScannerFragment.initUI(){
     }
 
     binding.btnDone.setOnClickListener {
-        if (viewModel.isResume){
-            binding.zxingBarcodeScanner.pauseAndWait()
-            viewModel.isResume = false
-        }
         viewModel.isRequestDone = true
         doRefreshView()
         ResponseSingleton.getInstance()?.onScannerDone()
@@ -71,34 +61,25 @@ fun ScannerFragment.initUI(){
     binding.seekbarZoom.setOnSeekBarChangeListener(object :OnSeekBarChangeListener{
         override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
             Utils.Log(TAG,"onProgressChanged $p1")
-            if (binding.zxingBarcodeScanner.barcodeView?.cameraInstance!=null && binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.isCheckReadyCamera() == true){
-                binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.setZoom(p1)
-                binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.cameraSettings?.zoom = p1
-            }
+            viewModel.zoom = p1 / 100.toFloat()
         }
 
         override fun onStartTrackingTouch(p0: SeekBar?) {
-            binding.zxingBarcodeScanner.barcodeView?.stopDecoding()
             QRScannerApplication.getInstance().getActivity()?.lock(true)
         }
 
         override fun onStopTrackingTouch(p0: SeekBar?) {
             Utils.Log(TAG,"onStopTrackingTouch")
             QRScannerApplication.getInstance().getActivity()?.lock(false)
-            binding.zxingBarcodeScanner.decodeContinuous(callback)
         }
     })
 
     binding.imgZoomIn.setOnClickListener {
-        if (binding.zxingBarcodeScanner.barcodeView?.cameraInstance!=null && binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.isCheckReadyCamera() == true) {
-            binding.seekbarZoom.progress = 100
-        }
+        binding.seekbarZoom.progress = 100
     }
 
     binding.imgZoomOut.setOnClickListener {
-        if (binding.zxingBarcodeScanner.barcodeView?.cameraInstance!=null && binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.isCheckReadyCamera() == true) {
-            binding.seekbarZoom.progress = 0
-        }
+        binding.seekbarZoom.progress = 0
     }
 
     binding.rlScanPermission.setOnClickListener {
@@ -150,12 +131,9 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
     var mRespect : RectF? =  null
     if (isLandscape()){
         mRespect = RectF(binding.viewCrop.left.toFloat(),binding.viewCrop.top.toFloat(),binding.viewCrop.right.toFloat(),binding.viewCrop.bottom.toFloat())
-        if (Utils.getFrameLandscapeSize()==null){
+        if (Utils.getFrameRectLandscape()==null){
             Utils.setFrameRectLandscape(mRespect)
             mRequestRectFocus = mRespect
-            binding.zxingBarcodeScanner.barcodeView?.framingRectSize = Utils.getFrameLandscapeSize()
-            binding.zxingBarcodeScanner.pause()
-            binding.zxingBarcodeScanner.resume()
         }
     }
     binding.cropImageView.setDebugAdvance(true)
@@ -171,30 +149,21 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
 private val ScannerFragment.mMoveUpCallback: MoveUpCallback
     get() = object : MoveUpCallback {
             override fun onSuccess(width: Int, height: Int,rectF: RectF) {
-                if (viewModel.isResume){
-                    binding.zxingBarcodeScanner.pauseAndWait()
-                    viewModel.isResume = false
-                }
-                binding.zxingBarcodeScanner.barcodeView?.framingRectSize = Size(width,height)
                 if (isLandscape()){
                     Utils.setFrameRectLandscape(rectF)
                 }else{
                     Utils.setFrameRectPortrait(rectF)
                 }
+                binding.overlay.setFrameRect(rectF.toRect())
                 Utils.Log(TAG,"onSuccess ${rectF.toString()}")
             }
             override fun onError(e: Throwable) {}
              override fun onDown() {
                  Utils.Log(TAG,"onDown")
-                 binding.zxingBarcodeScanner.barcodeView?.stopDecoding()
             }
 
             override fun onRelease() {
-                binding.zxingBarcodeScanner.decodeContinuous(callback)
-                if (!viewModel.isResume){
-                    binding.zxingBarcodeScanner.resume()
-                    viewModel.isResume = true
-                }
+                isInitial = false
                 Utils.Log(TAG,"onRelease")
             }
         }
@@ -207,35 +176,35 @@ private val ScannerFragment.mLoadCallback: LoadCallback
         override fun onError(e: Throwable) {}
     }
 
-val ScannerFragment.stateListener: CameraPreview.StateListener
-    get() = object : CameraPreview.StateListener {
-        override fun previewSized() {}
-        override fun previewStarted() {
-            if (mFrameRect==null){
-                val mRect = Rect(binding.zxingBarcodeScanner.barcodeView.defaultFramingRect)
-                mFrameRect = RectF(binding.zxingBarcodeScanner.barcodeView.framingRect.left.toFloat(),
-                    binding.zxingBarcodeScanner.barcodeView.framingRect.top.toFloat(),
-                    binding.zxingBarcodeScanner.barcodeView.framingRect.right.toFloat(),
-                    binding.zxingBarcodeScanner.barcodeView.framingRect.bottom.toFloat()
-                )
-                initCropView(mFrameRect,mRect)
-                if (binding.zxingBarcodeScanner.barcodeView?.cameraInstance!=null){
-                    binding.seekbarZoom.max =  binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.maxZoom() ?:0
-                }
-            }
-        }
-
-        override fun previewStopped() {}
-        override fun cameraError(error: Exception) {
-
-        }
-        override fun cameraClosed() {
-            if (viewModel.isRequestDone){
-                viewModel.isRequestDone = false
-            }
-            Utils.Log(TAG,"camera close")
-        }
-    }
+//val ScannerFragment.stateListener: CameraPreview.StateListener
+//    get() = object : CameraPreview.StateListener {
+//        override fun previewSized() {}
+//        override fun previewStarted() {
+//            if (mFrameRect==null){
+//                val mRect = Rect(binding.zxingBarcodeScanner.barcodeView.defaultFramingRect)
+//                mFrameRect = RectF(binding.zxingBarcodeScanner.barcodeView.framingRect.left.toFloat(),
+//                    binding.zxingBarcodeScanner.barcodeView.framingRect.top.toFloat(),
+//                    binding.zxingBarcodeScanner.barcodeView.framingRect.right.toFloat(),
+//                    binding.zxingBarcodeScanner.barcodeView.framingRect.bottom.toFloat()
+//                )
+//                initCropView(mFrameRect,mRect)
+//                if (binding.zxingBarcodeScanner.barcodeView?.cameraInstance!=null){
+//                    binding.seekbarZoom.max =  binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.maxZoom() ?:0
+//                }
+//            }
+//        }
+//
+//        override fun previewStopped() {}
+//        override fun cameraError(error: Exception) {
+//
+//        }
+//        override fun cameraClosed() {
+//            if (viewModel.isRequestDone){
+//                viewModel.isRequestDone = false
+//            }
+//            Utils.Log(TAG,"camera close")
+//        }
+//    }
 
 fun ScannerFragment.onAddPermissionCamera() {
     Dexter.withContext(requireContext())
@@ -244,7 +213,7 @@ fun ScannerFragment.onAddPermissionCamera() {
         .withListener(object : MultiplePermissionsListener {
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                 if (report?.areAllPermissionsGranted() == true) {
-                    binding.zxingBarcodeScanner?.resume()
+                   // binding.zxingBarcodeScanner?.resume()
                 }
                 if (report?.isAnyPermissionPermanentlyDenied ==true && viewModel.isAnyPermissionPermanentlyDenied){
                     onAlert()

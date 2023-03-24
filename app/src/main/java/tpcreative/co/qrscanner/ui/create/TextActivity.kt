@@ -27,19 +27,19 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     lateinit var viewModel: GenerateViewModel
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
-    lateinit var llSmallAds : LinearLayout
+    lateinit var llSmallAds : AdsView
     lateinit var binding : ActivityTextBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTextBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView().createLayout()
+        llSmallAds = AdsView(this)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlAdsRoot.visibility = View.GONE
         }else{
-            binding.rlAdsRoot.addView(llSmallAds)
+            binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlBannerLarger.visibility = View.GONE
@@ -170,7 +170,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     /*show ads*/
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds)
+            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds.getSmallAds())
             QRScannerApplication.getInstance().loadCreateLargeView(binding.llLargeAds)
         }
     }

@@ -266,10 +266,10 @@ class SettingsFragment : BaseFragment() {
                             shareToSocial(getString(R.string.scanner_app_pro))
                         }
                         else if (BuildConfig.APPLICATION_ID == getString(R.string.qrscanner_free_innovation)){
-                            shareToSocial(getString(R.string.qrscanner_free_innovation))
+                            shareToSocial(getString(R.string.scanner_app_free_innovation))
                         }
                         else if (BuildConfig.APPLICATION_ID == getString(R.string.super_qrscanner_free_innovation)){
-                            shareToSocial(getString(R.string.super_qrscanner_free_innovation))
+                            shareToSocial(getString(R.string.scanner_app_super_innovation))
                         }
                         else {
                             shareToSocial(getString(R.string.scanner_app))

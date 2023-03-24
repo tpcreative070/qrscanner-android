@@ -198,18 +198,18 @@
                         </RelativeLayout>
 
                         <LinearLayout
-                            android:layout_centerInParent="true"
-                            android:background="@color/lightAds"
-                            android:layout_below="@+id/rlAdvertising"
-                            android:layout_marginEnd="@dimen/margin_5"
-                            android:layout_marginStart="@dimen/margin_5"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:layout_marginBottom="@dimen/margin_20"
                             android:id="@+id/llLargeAds"
                             android:layout_width="@dimen/icon_size_300"
                             android:layout_height="@dimen/icon_size_250"
+                            android:layout_below="@+id/rlAdvertising"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="@dimen/margin_5"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_marginEnd="@dimen/margin_5"
+                            android:layout_marginBottom="@dimen/margin_20"
+                            android:background="@color/lightAds"
                             android:gravity="center"
-                            android:orientation="vertical"/>
+                            android:orientation="vertical" />
                     </RelativeLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
