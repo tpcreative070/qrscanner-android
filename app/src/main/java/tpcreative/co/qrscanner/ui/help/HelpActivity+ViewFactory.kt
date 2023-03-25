@@ -13,19 +13,23 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.EnumScreens
 
 fun HelpActivity.initUI(){
     setupViewModel()
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    llSmallAds = AdsView(this)
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
+        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
     }
     initRecycleView(layoutInflater)
     getData()

@@ -23,7 +23,6 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
         super.onCreate(savedInstanceState)
         binding = ActivityHelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView(this)
         initUI()
     }
 
@@ -49,7 +48,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadHelpFeedbackSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadHelpFeedbackLargeView(binding.llLargeAds)
+            QRScannerApplication.getInstance().loadHelpFeedbackLargeView(llSmallAds.getLargeAds())
         }
     }
 

@@ -2,9 +2,7 @@ package tpcreative.co.qrscanner.common.extension
 
 import android.content.Context
 import android.content.res.Configuration
-import android.util.DisplayMetrics
-
-
+import androidx.fragment.app.Fragment
 
 
 fun Context.isLandscape():Boolean{
@@ -19,4 +17,9 @@ fun Context.pxToDp(px : Float):Float{
 
 fun Context.dpToPx_(dp: Float) : Float{
     return dp * resources.displayMetrics.density
+}
+
+fun Context.pxToSp(px: Float): Float {
+    val scaledDensity = resources.displayMetrics.scaledDensity
+    return px / scaledDensity
 }

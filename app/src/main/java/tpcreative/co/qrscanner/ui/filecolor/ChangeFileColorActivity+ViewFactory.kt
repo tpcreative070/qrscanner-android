@@ -14,19 +14,23 @@ import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.EnumScreens
 
 fun ChangeFileColorActivity.initUI(){
     setupViewModel()
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    llSmallAds = AdsView(this)
     if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
+        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
     }
     initRecycleView(layoutInflater)
     getData()

@@ -23,6 +23,7 @@ import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.Theme
@@ -37,13 +38,16 @@ fun ScannerResultActivity.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
+    llSmallAds = AdsView(this)
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
+        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
     }
     if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)) {
         QRScannerApplication.getInstance().requestResultSmallView(this)

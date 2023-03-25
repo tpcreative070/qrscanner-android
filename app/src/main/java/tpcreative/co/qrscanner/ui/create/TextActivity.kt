@@ -39,10 +39,12 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlAdsRoot.visibility = View.GONE
         }else{
-            binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
+            binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlBannerLarger.visibility = View.GONE
+        }else{
+            binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
         }
         setupViewModel()
         getIntentData()
@@ -171,7 +173,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadCreateLargeView(binding.llLargeAds)
+            QRScannerApplication.getInstance().loadCreateLargeView(llSmallAds.getLargeAds())
         }
     }
 

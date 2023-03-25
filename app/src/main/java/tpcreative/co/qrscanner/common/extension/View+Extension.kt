@@ -26,6 +26,17 @@ fun View.screenLocationSafe(callback: (Int, Int) -> Unit) {
     }
 }
 
+
+fun View.addRipple() = with(TypedValue()) {
+    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
+    setBackgroundResource(resourceId)
+}
+
+fun View.addCircleRipple() = with(TypedValue()) {
+    context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, this, true)
+    setBackgroundResource(resourceId)
+}
+
 fun View.rotateBitmap(context: Context, angle: Int?, color :Int): Bitmap? {
     val keyguardManager: KeyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
     val orientation = context.resources.configuration.orientation

@@ -28,7 +28,6 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
         super.onCreate(savedInstanceState)
         binding = ActivityBackupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView(this)
         initUI()
     }
 
@@ -97,7 +96,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadBackupSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadBackupLargeView(binding.llLargeAds)
+            QRScannerApplication.getInstance().loadBackupLargeView(llSmallAds.getLargeAds())
         } else {
             binding.rlAdsRoot.visibility = View.GONE
         }

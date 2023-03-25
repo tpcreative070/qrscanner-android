@@ -57,7 +57,6 @@ class ReviewActivity : BaseActivitySlide() {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView(this)
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
     }
@@ -323,7 +322,7 @@ class ReviewActivity : BaseActivitySlide() {
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadReviewSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadReviewLargeView(binding.llLargeAds)
+            QRScannerApplication.getInstance().loadReviewLargeView(llSmallAds.getLargeAds())
         }
     }
 

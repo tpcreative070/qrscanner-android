@@ -27,7 +27,6 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
         super.onCreate(savedInstanceState)
         binding = ActivityChageFileColorBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView(this)
         initUI()
 
     }
@@ -69,7 +68,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadChangeColorLargeView(binding.llLargeAds)
+            QRScannerApplication.getInstance().loadChangeColorLargeView(llSmallAds.getLargeAds())
         }
     }
 

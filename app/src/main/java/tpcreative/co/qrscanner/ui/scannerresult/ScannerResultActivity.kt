@@ -49,7 +49,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView(this)
         initUI()
     }
 
@@ -444,7 +443,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
             QRScannerApplication.getInstance().loadResultSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadResultLargeView(binding.llLargeAds)
+            QRScannerApplication.getInstance().loadResultLargeView(llSmallAds.getLargeAds())
         }
     }
 

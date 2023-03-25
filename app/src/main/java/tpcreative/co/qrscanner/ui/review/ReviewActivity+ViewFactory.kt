@@ -31,6 +31,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -45,13 +46,16 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     binding.scrollView.smoothScrollTo(0, 0)
     getIntentData()
+    llSmallAds = AdsView(this)
     if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getSmallAds())
+        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
     }
     if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)) {
         QRScannerApplication.getInstance().requestReviewSmallView(this)
