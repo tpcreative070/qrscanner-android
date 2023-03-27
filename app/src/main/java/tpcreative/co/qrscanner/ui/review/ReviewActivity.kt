@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
@@ -51,7 +50,7 @@ class ReviewActivity : BaseActivitySlide() {
     private var save: SaveModel = SaveModel()
     var dialog : Dialog? = null
     var isAlreadySaved  = false
-    lateinit var llSmallAds : AdsView
+    var viewAds : AdsView? = null
     lateinit var binding : ActivityReviewBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -321,8 +320,8 @@ class ReviewActivity : BaseActivitySlide() {
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadReviewSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadReviewLargeView(llSmallAds.getLargeAds())
+            QRScannerApplication.getInstance().loadReviewSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadReviewLargeView(viewAds?.getLargeAds())
         }
     }
 

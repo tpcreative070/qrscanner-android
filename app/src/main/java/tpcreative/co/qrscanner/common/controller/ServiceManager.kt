@@ -156,7 +156,7 @@ class ServiceManager : BaseView<Any?> {
         }
     }
 
-    private fun onCheckVersion(){
+    fun onCheckVersion(){
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val mResult = driveViewModel.onCheckVersion()
@@ -166,7 +166,7 @@ class ServiceManager : BaseView<Any?> {
                             mResult.data?.qrscannerFreeRelease?.let {
                                 try {
                                     mVersion = it
-                                    Utils.Log(TAG, "Check version success ${it.toJson()} ")
+                                    Utils.Log(TAG, "Check version success f ${it.toJson()} ")
                                 }catch (e: Exception){
                                     e.printStackTrace()
                                 }
@@ -175,7 +175,7 @@ class ServiceManager : BaseView<Any?> {
                             mResult.data?.qrscannerFreeInnovation?.let {
                                 try {
                                     mVersion = it
-                                    Utils.Log(TAG, "Check version success ${it.toJson()} ")
+                                    Utils.Log(TAG, "Check version success n ${it.toJson()} ")
                                 }catch (e: Exception){
                                     e.printStackTrace()
                                 }
@@ -185,7 +185,7 @@ class ServiceManager : BaseView<Any?> {
                             mResult.data?.superQRScannerFreeInnovation?.let {
                                 try {
                                     mVersion = it
-                                    Utils.Log(TAG, "Check version success ${it.toJson()} ")
+                                    Utils.Log(TAG, "Check version success s ${it.toJson()} ")
                                 }catch (e: Exception){
                                     e.printStackTrace()
                                 }

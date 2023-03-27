@@ -10,7 +10,6 @@ import android.provider.ContactsContract
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.afollestad.materialdialogs.MaterialDialog
@@ -43,7 +42,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     private var code: String? = null
     private val keyFavorite = "KEY_FAVORITE"
     private val keyNOTE = "KEY_NOTE"
-    lateinit var llSmallAds : AdsView
+    var viewAds : AdsView? = null
     lateinit var binding : ActivityResultBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -442,8 +441,8 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadResultSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadResultLargeView(llSmallAds.getLargeAds())
+            QRScannerApplication.getInstance().loadResultSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadResultLargeView(viewAds?.getLargeAds())
         }
     }
 

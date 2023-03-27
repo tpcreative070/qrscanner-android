@@ -8,6 +8,7 @@ class Configuration {
         const val TWO_DAYS  = 172800000L
         const val CURRENT_MILLISECONDS = 1677547920404L
         const val liveAds = true
+        const val request_remote_debug_app = false
         const val COUNT_ALLOW_REQUEST_FAILURE_EACH_AD_ID = 3
         const val enableHelpFeedbackSmallView = true
 

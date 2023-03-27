@@ -3,7 +3,6 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.tapadoo.alerter.Alerter
@@ -22,7 +21,7 @@ import tpcreative.co.qrscanner.model.EnumScreens
 
 class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     lateinit var viewModel : BackupViewModel
-    lateinit var llSmallAds : AdsView
+    var viewAds : AdsView? = null
     lateinit var binding: ActivityBackupBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,8 +94,8 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadBackupSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadBackupLargeView(llSmallAds.getLargeAds())
+            QRScannerApplication.getInstance().loadBackupSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadBackupLargeView(viewAds?.getLargeAds())
         } else {
             binding.rlAdsRoot.visibility = View.GONE
         }

@@ -6,9 +6,8 @@ import android.net.ConnectivityManager
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
-import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.ImageFileFilter
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.presenter.BaseView
 import tpcreative.co.qrscanner.common.presenter.PresenterService
 import tpcreative.co.qrscanner.model.EnumStatus
@@ -57,6 +56,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
         if (view != null) {
             if (isConnected) {
                 view.onSuccessful("Connected network", EnumStatus.CONNECTED)
+                ServiceManager.getInstance().onCheckVersion()
             } else {
                 view.onSuccessful("Disconnected network", EnumStatus.DISCONNECTED)
             }

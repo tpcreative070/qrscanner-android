@@ -12,7 +12,9 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import androidx.window.layout.WindowMetricsCalculator
@@ -23,16 +25,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.isseiaoki.simplecropview.CropImageView
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Configuration
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.RetrofitBuilder
 import tpcreative.co.qrscanner.common.api.RootAPI
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.controller.ServiceManager
-import tpcreative.co.qrscanner.common.extension.pxToDp
+import tpcreative.co.qrscanner.common.extension.*
+import tpcreative.co.qrscanner.common.view.CircleImageView
 import tpcreative.co.qrscanner.helper.ThemeHelper
 import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.EnumThemeMode
@@ -919,6 +924,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadResultSmallView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_small_offline).apply {
+                layAd?.addView(this)
+                this!!.findViewById<CircleImageView?>(R.id.imgCircleAds).apply {
+                    this.setImageResource(R.color.colorAccent)
+                }
+            }
+
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adResultSmallView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -932,6 +950,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadResultLargeView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_large_offline).apply {
+                layAd?.addView(this)
+            }
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adResultLargeView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -945,6 +972,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
 
     fun loadReviewSmallView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_small_offline).apply {
+                layAd?.addView(this)
+                this!!.findViewById<CircleImageView?>(R.id.imgCircleAds).apply {
+                    this.setImageResource(R.color.colorAccent)
+                }
+            }
+
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adReviewSmallView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -957,6 +997,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadReviewLargeView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_large_offline).apply {
+                layAd?.addView(this)
+            }
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adReviewLargeView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -969,6 +1018,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadCreateSmallView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_small_offline).apply {
+                layAd?.addView(this)
+                this!!.findViewById<CircleImageView?>(R.id.imgCircleAds).apply {
+                    this.setImageResource(R.color.colorAccent)
+                }
+            }
+
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adCreateSmallView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -981,6 +1043,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadCreateLargeView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_large_offline).apply {
+                layAd?.addView(this)
+            }
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adCreateLargeView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -993,6 +1064,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadHelpFeedbackSmallView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_small_offline).apply {
+                layAd?.addView(this)
+                this!!.findViewById<CircleImageView?>(R.id.imgCircleAds).apply {
+                    this.setImageResource(R.color.colorAccent)
+                }
+            }
+
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adHelpFeedbackSmallView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -1005,6 +1089,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadHelpFeedbackLargeView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_large_offline).apply {
+                layAd?.addView(this)
+            }
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adHelpFeedbackLargeView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -1017,6 +1110,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadChangeColorSmallView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_small_offline).apply {
+                layAd?.addView(this)
+                this!!.findViewById<CircleImageView?>(R.id.imgCircleAds).apply {
+                    this.setImageResource(R.color.colorAccent)
+                }
+            }
+
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adChangeColorSmallView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -1029,6 +1135,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadChangeColorLargeView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_large_offline).apply {
+                layAd?.addView(this)
+            }
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adChangeColorLargeView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -1041,6 +1156,19 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadBackupSmallView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_small_offline).apply {
+                layAd?.addView(this)
+                this!!.findViewById<CircleImageView?>(R.id.imgCircleAds).apply {
+                    this.setImageResource(R.color.colorAccent)
+                }
+            }
+
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adBackupSmallView == null) {
             Utils.Log(TAG, "ads null")
             return
@@ -1053,6 +1181,15 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadBackupLargeView(layAd: LinearLayout?) {
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
+            val mView = layAd?.layout(R.layout.layout_content_large_offline).apply {
+                layAd?.addView(this)
+            }
+            mView?.setOnClickListener {
+                Navigator.onFromAdsMoveToProVersion(this)
+            }
+            return
+        }
         if (adBackupLargeView == null) {
             Utils.Log(TAG, "ads null")
             return

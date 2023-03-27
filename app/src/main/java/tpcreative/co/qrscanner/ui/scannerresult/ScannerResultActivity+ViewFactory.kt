@@ -38,16 +38,18 @@ fun ScannerResultActivity.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
-    llSmallAds = AdsView(this)
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
     }else{
-        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
     if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)) {
         QRScannerApplication.getInstance().requestResultSmallView(this)

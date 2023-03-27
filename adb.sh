@@ -19,3 +19,9 @@ adb -P 9999 start-server
 #export PATH="$HOME/.bin:$PATH"
 #export PATH="/Volumes/Data/Android/sdk/platform-tools":$PATH
 #export PATH=${PATH}:$HOME/Volumes/Data/Android/sdk/platform-tools/
+
+
+#Install apk
+
+#adb -s 192.168.1.5:9999 install app-qrscanner-freerelease.apk
+#adb -s adb-R58W20L08TZ-xyrRgB._adb-tls-connect._tcp. install app-qrscanner-freerelease.apk

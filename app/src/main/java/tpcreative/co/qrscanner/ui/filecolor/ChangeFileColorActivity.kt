@@ -2,7 +2,6 @@ package tpcreative.co.qrscanner.ui.filecolor
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
-import android.widget.LinearLayout
 import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -21,7 +20,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     private var bitmap: Bitmap? = null
     lateinit var viewModel : ChangeFileColorViewModel
     var adapter: ChangeFileColorAdapter? = null
-    lateinit var llSmallAds : AdsView
+    var viewAds : AdsView?  = null
     lateinit var binding : ActivityChageFileColorBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +66,8 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadChangeColorLargeView(llSmallAds.getLargeAds())
+            QRScannerApplication.getInstance().loadChangeColorSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadChangeColorLargeView(viewAds?.getLargeAds())
         }
     }
 

@@ -13,10 +13,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
-import tpcreative.co.qrscanner.common.extension.addRipple
-import tpcreative.co.qrscanner.common.extension.isLandscape
-import tpcreative.co.qrscanner.common.extension.margin
-import tpcreative.co.qrscanner.common.extension.pxToDp
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 
@@ -31,8 +28,6 @@ class AdsView  : View{
     private lateinit var mLargeContentAds : LinearLayout
     private lateinit var mViewUnderLine : View
     private lateinit var mRemoveLargeAds : LinearLayout
-    private lateinit var mSmallAdsOffline : LinearLayout
-    private lateinit var mLargeAdsOffline : LinearLayout
 
     constructor(context: Context) : super(context) {
         mRemoveSmallAds = createRemoveSmallAds()
@@ -65,8 +60,9 @@ class AdsView  : View{
 
     private fun createRootSmallLayout() : LinearLayout {
         val parent = LinearLayout(QRScannerApplication.getInstance())
-        val params = RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
             QRScannerApplication.getInstance().getMaximumBannerHeight())
+        params.gravity = Gravity.CENTER or Gravity.BOTTOM
         parent.orientation =  LinearLayout.VERTICAL
         parent.addView(mRemoveSmallAds)
         parent.addView(mSmallAds)
@@ -150,6 +146,19 @@ class AdsView  : View{
             parent.margin(left = context.pxToDp(5f),top = context.pxToDp(5f), bottom = context.pxToDp(10f))
         }
 
+        parent.setBackgroundColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.lightAds))
+        return parent
+    }
+
+    private fun createLargeAdsOfflineLayout() : View {
+        val parent = this.layout(R.layout.layout_content_large_offline)
+        parent.layoutParams = LinearLayout.LayoutParams(context.pxToDp(300F).toInt(),
+            context.pxToDp(250F).toInt())
+        if (context.isLandscape()){
+            parent.margin(left = (QRScannerApplication.getInstance().getWidth()/3.5).toFloat(),top = context.pxToDp(5f), bottom = context.pxToDp(10f))
+        }else{
+            parent.margin(left = context.pxToDp(5f),top = context.pxToDp(5f), bottom = context.pxToDp(10f))
+        }
         parent.setBackgroundColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.lightAds))
         return parent
     }

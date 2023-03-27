@@ -530,4 +530,6 @@
     <string name="scan_image">Scan image</string>
     <string name="qr_code_or_barcode_not_found">QR code or Barcode not found</string>
     <string name="remove_ads">Remove ads</string>
+    <string name="ad">Ad</string>
+    <string name="one_time_purchase_no_subscription">One-time purchase(no subscription)</string>
 </resources>

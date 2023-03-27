@@ -17,23 +17,25 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.EnumScreens
-import tpcreative.co.qrscanner.ui.filecolor.*
+import tpcreative.co.qrscanner.ui.review.initUI
 
 fun BackupActivity.initUI(){
     TAG = this::class.java.simpleName
     setupViewModel()
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    llSmallAds = AdsView(this)
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
     if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
         binding.rlBannerLarger.visibility = View.GONE
     }else{
-        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
     BackupSingleton.getInstance()?.setListener(this)
     val email = Utils.getDriveEmail()

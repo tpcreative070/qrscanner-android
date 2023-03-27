@@ -1,5 +1,7 @@
 package tpcreative.co.qrscanner.model
+import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Configuration
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import java.io.Serializable
 import java.util.*
 
@@ -27,6 +29,7 @@ class Version() : Serializable {
     var hiddenFreeReleaseAds: Boolean? = false
     var hiddenFreeInnovationAds: Boolean? = false
     var hiddenSuperFreeInnovationAds: Boolean? = true
+    var app_id : String? = null
     var ads: Ads? = null
     var content: HashMap<Any?, String?>? = null
 
@@ -48,5 +51,6 @@ class Version() : Serializable {
         hiddenFreeReleaseAds = Configuration.hiddenMainLargeAds
         hiddenFreeInnovationAds = Configuration.hiddenMainLargeAds
         hiddenSuperFreeInnovationAds = Configuration.hiddenMainLargeAds
+        app_id = QRScannerApplication.getInstance().getString(R.string.admob_app_id)
     }
 }

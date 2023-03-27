@@ -20,16 +20,18 @@ fun HelpActivity.initUI(){
     setupViewModel()
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    llSmallAds = AdsView(this)
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
     }else{
-        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
     initRecycleView(layoutInflater)
     getData()

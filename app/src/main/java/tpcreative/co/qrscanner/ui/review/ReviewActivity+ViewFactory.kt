@@ -26,7 +26,6 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -35,6 +34,7 @@ import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.io.File
 import java.io.FileOutputStream
 
@@ -46,16 +46,18 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     binding.scrollView.smoothScrollTo(0, 0)
     getIntentData()
-    llSmallAds = AdsView(this)
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
     if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
         binding.rlAdsRoot.visibility = View.GONE
     }else{
-        binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
     }else{
-        binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
     if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)) {
         QRScannerApplication.getInstance().requestReviewSmallView(this)

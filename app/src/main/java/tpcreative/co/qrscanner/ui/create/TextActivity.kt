@@ -2,7 +2,6 @@ package tpcreative.co.qrscanner.ui.create
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.lifecycle.Observer
@@ -21,30 +20,33 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.databinding.ActivityTextBinding
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.initUI
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
     lateinit var viewModel: GenerateViewModel
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
-    lateinit var llSmallAds : AdsView
+    var viewAds : AdsView? = null
     lateinit var binding : ActivityTextBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTextBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        llSmallAds = AdsView(this)
+        if (!Utils.isPremium()){
+            viewAds = AdsView(this)
+        }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlAdsRoot.visibility = View.GONE
         }else{
-            binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
+            binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlBannerLarger.visibility = View.GONE
         }else{
-            binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
+            binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
         }
         setupViewModel()
         getIntentData()
@@ -172,8 +174,8 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     /*show ads*/
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadCreateLargeView(llSmallAds.getLargeAds())
+            QRScannerApplication.getInstance().loadCreateSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadCreateLargeView(viewAds?.getLargeAds())
         }
     }
 

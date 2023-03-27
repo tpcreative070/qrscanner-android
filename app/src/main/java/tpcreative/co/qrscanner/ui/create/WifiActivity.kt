@@ -2,7 +2,6 @@ package tpcreative.co.qrscanner.ui.create
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.lifecycle.Observer
@@ -21,6 +20,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.databinding.ActivityWifiBinding
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.initUI
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.regex.Pattern
 
@@ -29,23 +29,25 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     var mAwesomeValidation: AwesomeValidation? = null
     var typeEncrypt: String? = ConstantValue.WPA
     private var save: GeneralModel? = null
-    lateinit var llSmallAds : AdsView
+    var viewAds : AdsView? = null
     lateinit var binding : ActivityWifiBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWifiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        llSmallAds = AdsView(this)
+        if (!Utils.isPremium()){
+            viewAds = AdsView(this)
+        }
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
             binding.rlAdsRoot.visibility = View.GONE
         }else{
-            binding.rlAdsRoot.addView(llSmallAds.getRootSmallAds())
+            binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
             binding.rlBannerLarger.visibility = View.GONE
         }else{
-            binding.rlBannerLarger.addView(llSmallAds.getRootLargeAds())
+            binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
         }
         setupViewModel()
         getIntentData()
@@ -215,8 +217,8 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     /*show ads*/
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadCreateLargeView(llSmallAds.getLargeAds())
+            QRScannerApplication.getInstance().loadCreateSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadCreateLargeView(viewAds?.getLargeAds())
         }
     }
 

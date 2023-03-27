@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.ui.help
 import android.os.Bundle
-import android.widget.LinearLayout
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ScannerSingleton
@@ -17,7 +16,7 @@ import tpcreative.co.qrscanner.ui.tipsscanning.TipsScanningActivity
 class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
     lateinit var viewModel : HelpViewModel
     var adapter: HelpAdapter? = null
-    lateinit var llSmallAds : AdsView
+    var viewAds : AdsView? = null
     lateinit var binding : ActivityHelpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +46,8 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadHelpFeedbackSmallView(llSmallAds.getSmallAds())
-            QRScannerApplication.getInstance().loadHelpFeedbackLargeView(llSmallAds.getLargeAds())
+            QRScannerApplication.getInstance().loadHelpFeedbackSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadHelpFeedbackLargeView(viewAds?.getLargeAds())
         }
     }
 

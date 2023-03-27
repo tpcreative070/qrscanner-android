@@ -26,6 +26,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.controller.PrefsController
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.getContext
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -859,8 +860,15 @@ object Utils {
         return isAlreadyCheckout()
     }
 
+    private fun isRequestRemoteDebugApp(): Boolean{
+        if (BuildConfig.DEBUG && !Configuration.request_remote_debug_app){
+           return true
+        }
+        return false
+    }
+
     fun isHiddenAds(enumScreens: EnumScreens) : Boolean{
-        if (BuildConfig.DEBUG){
+        if (isRequestRemoteDebugApp()){
             ServiceManager.getInstance().mVersion = Version()
         }
         when(enumScreens){
@@ -1191,6 +1199,15 @@ object Utils {
 
     fun isTablet(): Boolean {
         return QRScannerApplication.getInstance().resources.configuration.smallestScreenWidthDp >= 600
+    }
+
+    fun isRequestShowLocalAds()  :Boolean{
+        val mData = ServiceManager.getInstance().mVersion
+        Utils.Log(TAG,"Load data ${mData?.toJson()}")
+        if (mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)){
+            return false
+        }
+        return true
     }
 
     interface UtilsListener {
