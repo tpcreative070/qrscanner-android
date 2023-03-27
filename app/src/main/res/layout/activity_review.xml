@@ -91,42 +91,6 @@
                     android:id="@+id/rlBannerLarger"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-<!--                    <View-->
-<!--                        android:id="@+id/viewUnderline"-->
-<!--                        android:background="@color/grey_lighter"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="1dp"/>-->
-<!--                    <RelativeLayout-->
-<!--                        android:layout_below="@+id/viewUnderline"-->
-<!--                        android:id="@+id/rlAdvertising"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content">-->
-<!--                        <androidx.appcompat.widget.AppCompatTextView-->
-<!--                            android:layout_marginStart="@dimen/margin_50"-->
-<!--                            android:layout_centerInParent="true"-->
-<!--                            android:layout_marginTop="@dimen/margin_15"-->
-<!--                            style="@style/brandonRegularTextView"-->
-<!--                            android:gravity="center"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:textSize="@dimen/text_size_14"-->
-<!--                            android:text="@string/advertising"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"/>-->
-<!--                    </RelativeLayout>-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_centerInParent="true"-->
-<!--                        android:background="@color/lightAds"-->
-<!--                        android:layout_below="@+id/rlAdvertising"-->
-<!--                        android:layout_marginEnd="@dimen/margin_5"-->
-<!--                        android:layout_marginStart="@dimen/margin_5"-->
-<!--                        android:layout_marginTop="@dimen/margin_5"-->
-<!--                        android:layout_marginBottom="@dimen/margin_20"-->
-<!--                        android:id="@+id/llLargeAds"-->
-<!--                        android:layout_width="@dimen/icon_size_300"-->
-<!--                        android:layout_height="@dimen/icon_size_250"-->
-<!--                        android:gravity="center"-->
-<!--                        android:orientation="vertical"/>-->
                 </RelativeLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -137,13 +101,6 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:layout_height="wrap_content">
-<!--            <LinearLayout-->
-<!--                android:layout_marginTop="@dimen/margin_5"-->
-<!--                android:id="@+id/llSmallAds"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="@dimen/banner_height"-->
-<!--                android:gravity="bottom"-->
-<!--                android:orientation="vertical"/>-->
         </RelativeLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
