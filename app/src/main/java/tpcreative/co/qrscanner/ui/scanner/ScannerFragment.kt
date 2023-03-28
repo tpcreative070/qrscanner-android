@@ -57,6 +57,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
     lateinit var binding: FragmentScannerBinding
     private val executor = Executors.newSingleThreadExecutor()
     private var isStop: Boolean = false
+    var isCropViewFinder : Boolean = false
     var isInitial: Boolean = false
     private var preview: Preview? = null
     private var cameraProvider: ProcessCameraProvider? = null
@@ -169,6 +170,17 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
             PremiumManager.getInstance().onStartInAppPurchase()
             Utils.onCheckingNewApp()
             viewModel.isRequiredStartService = true
+        }
+        binding.overlay.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!isInitial) {
+                val mRectDefault = Rect(binding.overlay.getDefaultFrameRect())
+                val mRect = binding.overlay.getFrameRect()
+                mFrameRect = RectF(mRect?.left?.toFloat() ?:0F,mRect?.top?.toFloat() ?:0F,mRect?.right?.toFloat() ?:0F,mRect?.bottom?.toFloat() ?:0F)
+                initCropView(mFrameRect,mRectDefault)
+                Utils.Log(TAG,"mRect $mRectDefault")
+                Utils.Log(TAG,"mRect default $mRect")
+                isInitial = true
+            }
         }
         bindCameraUseCases()
     }
@@ -423,17 +435,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
 //                    image.close()
 //                    return@Analyzer
 //                }
-                // Early exit: image analysis is in paused state
-                val cropSize = image.height / 3 * 2
-                val cropRect = if (isChecked)
-                    Rect(
-                        (image.width - cropSize) / 2, (image.height - cropSize) / 2,
-                        (image.width - cropSize) / 2 + cropSize, (image.height - cropSize) / 2 + cropSize
-                    )
-                else
-                    Rect(0, 0, image.width, image.height)
-                //image.setCropRect(cropRect)
-                Utils.Log(TAG,"Area focus old ${cropRect}")
                 Utils.Log(TAG,"Area focus ${binding.overlay.getFrameRect()}")
 
                 if (!isInitial) {
@@ -496,7 +497,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                             if (mResult.barcodeFormat != null) {
                                 create.barcodeFormat = mResult.barcodeFormat.name
                             }
-                            if (!isStop){
+                            if (!isStop && !isCropViewFinder){
                                 showResult("", resultPoints, image)
                                 doNavigation(create)
                                 beepManager?.playBeepSoundAndVibrate()
@@ -517,7 +518,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                 }
                 camera?.cameraControl?.setLinearZoom(viewModel.zoom)
                 camera?.cameraControl?.enableTorch(viewModel.isLight)
-                showResult(resultText, resultPoints, image)
+                if (!isCropViewFinder){
+                    showResult(resultText, resultPoints, image)
+                }
                 Utils.Log(TAG,"Result text $resultText")
             })
 

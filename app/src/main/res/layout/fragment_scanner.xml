@@ -283,19 +283,19 @@
 
         </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/rlGallery"
+                android:id="@+id/rlGalleryNoPermission"
                 android:background="@color/material_gray_400"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_margin="@dimen/margin_10"
                     android:id="@+id/imgGalleryPermission"
                     android:layout_width="@dimen/icon_size_50"
                     android:layout_height="@dimen/icon_size_50"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/margin_10"
                     app:srcCompat="@drawable/ic_gallery" />
 
                 <TextView

@@ -55,6 +55,10 @@ fun ScannerFragment.initUI(){
         onAddPermissionGallery()
     }
 
+    binding.rlGalleryNoPermission?.setOnClickListener {
+        onAddPermissionGallery()
+    }
+
     binding.btnDone.setOnClickListener {
         viewModel.isRequestDone = true
         doRefreshView()
@@ -166,10 +170,12 @@ private val ScannerFragment.mMoveUpCallback: MoveUpCallback
             override fun onError(e: Throwable) {}
              override fun onDown() {
                  Utils.Log(TAG,"onDown")
+                 isCropViewFinder = true
             }
 
             override fun onRelease() {
                 isInitial = false
+                isCropViewFinder = false
                 Utils.Log(TAG,"onRelease")
             }
         }
