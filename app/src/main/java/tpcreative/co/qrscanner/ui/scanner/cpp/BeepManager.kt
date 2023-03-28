@@ -13,22 +13,6 @@ import java.io.IOException
 class BeepManager(activity: Activity) {
     private val context: Context
 
-    /**
-     * Call updatePrefs() after setting this.
-     *
-     * If the device is in silent mode, it will not beep.
-     *
-     * @param beepEnabled true to enable beep
-     */
-    var isBeepEnabled = true
-
-    /**
-     * Call updatePrefs() after setting this.
-     *
-     * @param vibrateEnabled true to enable vibrate
-     */
-    var isVibrateEnabled = false
-
     init {
         activity.volumeControlStream = AudioManager.STREAM_MUSIC
 
@@ -39,12 +23,12 @@ class BeepManager(activity: Activity) {
     @SuppressLint("MissingPermission")
     @Synchronized
     fun playBeepSoundAndVibrate() {
-        if (isBeepEnabled) {
+        if (Utils.getBeep()) {
             playBeepSound()
         }
-        if (isVibrateEnabled) {
+        if (Utils.getVibrate()) {
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator?.vibrate(VIBRATE_DURATION)
+            vibrator.vibrate(VIBRATE_DURATION)
         }
     }
 

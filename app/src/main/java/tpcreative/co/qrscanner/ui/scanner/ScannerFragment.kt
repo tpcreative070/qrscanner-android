@@ -166,7 +166,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
         }
         beepManager = BeepManager(activity())
         onHandlerIntent()
-        onBeepAndVibrate()
         if (!viewModel.isRequiredStartService) {
             ServiceManager.getInstance().onStartService()
             PremiumManager.getInstance().onStartInAppPurchase()
@@ -189,14 +188,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
 
     fun onAddPermissionGallery() {
         onGetGallery()
-    }
-
-    private fun onBeepAndVibrate() {
-        if (beepManager == null) {
-            return
-        }
-        beepManager?.isBeepEnabled = Utils.getBeep()
-        beepManager?.isVibrateEnabled = Utils.getVibrate()
     }
 
     override fun setVisible() {
@@ -235,7 +226,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
         super.onResume()
         if (this::viewModel.isInitialized) {
             isStop = false
-            onBeepAndVibrate()
             bindCameraUseCases()
             if (!Utils.isMultipleScan()) {
                 binding.btnDone.visibility = View.INVISIBLE
