@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.afollestad.materialdialogs.utils.MDUtil.isLandscape
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.extension.*
@@ -150,19 +150,6 @@ class AdsView  : View{
         return parent
     }
 
-    private fun createLargeAdsOfflineLayout() : View {
-        val parent = this.layout(R.layout.layout_content_large_offline)
-        parent.layoutParams = LinearLayout.LayoutParams(context.pxToDp(300F).toInt(),
-            context.pxToDp(250F).toInt())
-        if (context.isLandscape()){
-            parent.margin(left = (QRScannerApplication.getInstance().getWidth()/3.5).toFloat(),top = context.pxToDp(5f), bottom = context.pxToDp(10f))
-        }else{
-            parent.margin(left = context.pxToDp(5f),top = context.pxToDp(5f), bottom = context.pxToDp(10f))
-        }
-        parent.setBackgroundColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.lightAds))
-        return parent
-    }
-
     private fun createUnderLine() : View {
         val parent = View(QRScannerApplication.getInstance())
         parent.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -191,14 +178,6 @@ class AdsView  : View{
         tv.setTextColor(ContextCompat.getColor(context,R.color.black))
         parent.addView(tv)
         return parent
-
-//        val parent = TextView(context)
-//        parent.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-//        parent.text = QRScannerApplication.getInstance().getString(R.string.advertising)
-//        val mTextSize = resources.getDimension(R.dimen.text_size_14)
-//        parent.setTextSize(TypedValue.COMPLEX_UNIT_SP,mTextSize)
-//        parent.typeface = Typeface.DEFAULT_BOLD;
-//        return parent
     }
 
     private fun createRemoveLargeAds() : LinearLayout {
@@ -213,7 +192,7 @@ class AdsView  : View{
         params.setMargins(0,  context.pxToDp(10f).toInt(),0,0)
         parent.layoutParams = params
         val mImageView = ImageView(QRScannerApplication.getInstance())
-        mImageView.setPadding(QRScannerApplication.getInstance().pxToDp(12F).toInt(), QRScannerApplication.getInstance().pxToDp(12F).toInt(),QRScannerApplication.getInstance().pxToDp(12F).toInt(),QRScannerApplication.getInstance().pxToDp(12F).toInt())
+        mImageView.setPadding(QRScannerApplication.getInstance().pxToDp(10F).toInt(), QRScannerApplication.getInstance().pxToDp(10F).toInt(),QRScannerApplication.getInstance().pxToDp(10F).toInt(),QRScannerApplication.getInstance().pxToDp(10F).toInt())
         mImageView.layoutParams =
             ViewGroup.LayoutParams(context.pxToDp(35f).toInt(),context.pxToDp(35f).toInt() )
         mImageView.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_close))

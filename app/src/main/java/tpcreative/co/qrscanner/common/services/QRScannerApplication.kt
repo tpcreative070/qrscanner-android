@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import androidx.window.layout.WindowMetricsCalculator
+import com.afollestad.materialdialogs.utils.MDUtil.isLandscape
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
