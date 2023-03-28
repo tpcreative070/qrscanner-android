@@ -182,36 +182,6 @@ private val ScannerFragment.mLoadCallback: LoadCallback
         override fun onError(e: Throwable) {}
     }
 
-//val ScannerFragment.stateListener: CameraPreview.StateListener
-//    get() = object : CameraPreview.StateListener {
-//        override fun previewSized() {}
-//        override fun previewStarted() {
-//            if (mFrameRect==null){
-//                val mRect = Rect(binding.zxingBarcodeScanner.barcodeView.defaultFramingRect)
-//                mFrameRect = RectF(binding.zxingBarcodeScanner.barcodeView.framingRect.left.toFloat(),
-//                    binding.zxingBarcodeScanner.barcodeView.framingRect.top.toFloat(),
-//                    binding.zxingBarcodeScanner.barcodeView.framingRect.right.toFloat(),
-//                    binding.zxingBarcodeScanner.barcodeView.framingRect.bottom.toFloat()
-//                )
-//                initCropView(mFrameRect,mRect)
-//                if (binding.zxingBarcodeScanner.barcodeView?.cameraInstance!=null){
-//                    binding.seekbarZoom.max =  binding.zxingBarcodeScanner.barcodeView?.cameraInstance?.maxZoom() ?:0
-//                }
-//            }
-//        }
-//
-//        override fun previewStopped() {}
-//        override fun cameraError(error: Exception) {
-//
-//        }
-//        override fun cameraClosed() {
-//            if (viewModel.isRequestDone){
-//                viewModel.isRequestDone = false
-//            }
-//            Utils.Log(TAG,"camera close")
-//        }
-//    }
-
 fun ScannerFragment.onAddPermissionCamera() {
     Dexter.withContext(requireContext())
         .withPermissions(

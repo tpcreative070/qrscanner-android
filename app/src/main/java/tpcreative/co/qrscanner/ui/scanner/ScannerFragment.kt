@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.toPointF
 import androidx.core.graphics.toRect
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.window.layout.WindowMetricsCalculator
 import com.google.gson.Gson
 import com.google.zxing.*
@@ -63,45 +62,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
     private var cameraProvider: ProcessCameraProvider? = null
 
     private var imageAnalyzer: ImageAnalysis? = null
-
-
-//    val callback: BarcodeCallback = object : BarcodeCallback {
-//        override fun barcodeResult(result: BarcodeResult?) {
-//            try {
-//                Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)
-//                if (activity == null) {
-//                    return
-//                }
-//                result?.result?.let { mResult ->
-//                    Utils.Log(TAG,"Text result ${mResult.text}")
-//                    val create = Utils.onGeneralParse(mResult,GeneralModel::class)
-//                    create.fragmentType = EnumFragmentType.SCANNER
-//                    create.enumImplement = EnumImplement.VIEW
-//                    create.barcodeFormat = BarcodeFormat.QR_CODE.name
-//                    if (mResult.barcodeFormat != null) {
-//                        create.barcodeFormat = mResult.barcodeFormat.name
-//                    }
-//                    val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
-//                    val canvas = Canvas(mBitmap);
-//                    canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
-//                    //binding.zxingBarcodeScanner.viewFinder?.addResultPoint(mResult.resultPoints?.toMutableList())
-//                    var mIsBarcode = false
-//                    if (mResult.barcodeFormat != BarcodeFormat.QR_CODE && mResult.barcodeFormat != BarcodeFormat.DATA_MATRIX   && mResult.barcodeFormat != BarcodeFormat.AZTEC){
-//                        mIsBarcode = true
-//                    }
-//                    Utils.Log(TAG,"Result meta ${result.resultMetadata.toJson()}")
-//                   // binding.zxingBarcodeScanner.viewFinder?.drawResultBitmap(mBitmap,mIsBarcode,result.degree)
-//                   // binding.zxingBarcodeScanner.viewFinder?.addTransferResultPoint(result.transformedResultPoints)
-//                    Utils.Log(TAG, "barcode ==> format ${result.barcodeFormat?.name}")
-//                    doNavigation(create)
-//                }
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//
-//        override fun possibleResultPoints(resultPoints: MutableList<ResultPoint?>?) {}
-//    }
 
     private fun doNavigation(create: GeneralModel?){
         if (Utils.isMultipleScan()) {
@@ -261,6 +221,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
         super.onResume()
         if (this::viewModel.isInitialized) {
             isStop = false
+            onBeepAndVibrate()
             bindCameraUseCases()
             if (!Utils.isMultipleScan()) {
                 binding.btnDone.visibility = View.INVISIBLE
