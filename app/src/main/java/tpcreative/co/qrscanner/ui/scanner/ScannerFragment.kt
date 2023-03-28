@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.ui.scanner
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.hardware.camera2.*
@@ -18,6 +19,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toPointF
 import androidx.core.graphics.toRect
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.window.layout.WindowMetricsCalculator
 import com.google.gson.Gson
@@ -149,7 +151,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
             )
             binding.tvLight.setTextColor(
                 ContextCompat.getColor(
-                    requireContext(),
+                    context(),
                     R.color.colorAccent
                 )
             )
@@ -160,9 +162,9 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                     R.color.white
                 ), PorterDuff.Mode.SRC_ATOP
             )
-            binding.tvLight.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            binding.tvLight.setTextColor(ContextCompat.getColor(context(), R.color.white))
         }
-        beepManager = BeepManager(requireActivity())
+        beepManager = BeepManager(activity())
         onHandlerIntent()
         onBeepAndVibrate()
         if (!viewModel.isRequiredStartService) {
@@ -264,7 +266,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
 
     private fun beginCrop(source: Uri?) {
         val destination = Uri.fromFile(File(activity?.cacheDir, "cropped"))
-        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(requireContext()))
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(context()))
     }
 
     private fun handleCrop(resultCode: Int, result: Intent?) {
@@ -274,7 +276,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
             mResult?.let { onFilterResult(it) }
             Utils.Log(TAG, "Result of cropped " + Gson().toJson(mResult))
         } else if (resultCode == Crop.RESULT_ERROR) {
-            Utils.onAlertNotify(requireActivity(), "${Crop.getError(result)?.message}")
+            Utils.onAlertNotify(activity(), "${Crop.getError(result)?.message}")
         } else if (resultCode == Activity.RESULT_CANCELED) {
             setVisible()
         }
@@ -378,14 +380,17 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
     @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
     private fun  bindCameraUseCases() = binding.viewFinder.post {
         val viewFinder = binding.viewFinder
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context())
         cameraProviderFuture.addListener({
             // Set up the view finder use case to display camera preview
             // The display information
             //val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
             //val metrics: WindowMetrics = requireContext().getSystemService(WindowManager::class.java).currentWindowMetrics
-            val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(requireActivity())
-
+            if (!isAdded){
+                Utils.Log(TAG,"Stop working")
+                return@addListener
+            }
+            val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity())
             // The ratio for the output image and preview
             val aspectRatio = aspectRatio(metrics.bounds.width(), metrics.bounds.height())
             // The display rotation
@@ -524,7 +529,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                 Utils.Log(TAG,"Result text $resultText")
             })
 
-        }, ContextCompat.getMainExecutor(requireContext()))
+        }, ContextCompat.getMainExecutor(context()))
     }
 
     private fun crop(image : ImageProxy) : Rect{
@@ -555,6 +560,16 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
             Utils.Log(TAG, "Result text $resultText")
             binding.overlay.update(binding.viewFinder, image, points)
         }
+
+   fun activity(): FragmentActivity {
+        return this.activity
+            ?: throw IllegalStateException("Fragment $this not attached to an activity.")
+    }
+
+   fun context(): Context {
+        return this.context
+            ?: throw java.lang.IllegalStateException("Fragment $this not attached to a context.")
+    }
 
     companion object {
         private val TAG = ScannerFragment::class.java.simpleName
