@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.toRect
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.isseiaoki.simplecropview.callback.LoadCallback
 import com.isseiaoki.simplecropview.callback.MoveUpCallback
@@ -16,6 +17,8 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ResponseSingleton
@@ -109,9 +112,12 @@ private fun ScannerFragment.setupViewModel() {
 }
 
 fun ScannerFragment.updateValue(mValue : Int) {
-    viewModel.updateValue(mValue).observe(this, Observer {
-        binding.tvCount.text = String.format(R.string.total.toText(),it)
-    })
+    viewModel.updateValue(mValue){
+        lifecycleScope.launch(Dispatchers.Main){
+            binding.tvCount.text = String.format(R.string.total.toText(),it)
+            Utils.Log(TAG,"Count value $it")
+        }
+    }
 }
 
 fun ScannerFragment.doRefreshView() {

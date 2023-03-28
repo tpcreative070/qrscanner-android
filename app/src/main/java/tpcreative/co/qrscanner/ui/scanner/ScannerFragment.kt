@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.toPointF
 import androidx.core.graphics.toRect
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.window.layout.WindowMetricsCalculator
 import com.google.gson.Gson
 import com.google.zxing.*
@@ -104,13 +105,15 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
 
     private fun doNavigation(create: GeneralModel?){
         if (Utils.isMultipleScan()) {
+            Utils.Log(TAG,"Stopping call...")
             binding.btnDone.visibility = View.VISIBLE
             binding.tvCount.visibility = View.VISIBLE
             updateValue(1)
             viewModel.doSaveItems(create)
-            isStop = true
+            Utils.Log(TAG,"Stopping call $isStop")
             CoroutineScope(Dispatchers.Main).launch {
                 delay(1000)
+                Utils.Log(TAG,"Stopping call delay")
                 isStop = false
             }
         } else {
@@ -177,7 +180,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
             ), PorterDuff.Mode.SRC_ATOP
         )
         if (Utils.isLight()) {
-            // binding.zxingBarcodeScanner.setTorchOn()
             binding.switchFlashlight.setColorFilter(
                 ContextCompat.getColor(
                     QRScannerApplication.getInstance(),
@@ -191,7 +193,6 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                 )
             )
         } else {
-            // binding.zxingBarcodeScanner.setTorchOff()
             binding.switchFlashlight.setColorFilter(
                 ContextCompat.getColor(
                     QRScannerApplication.getInstance(),

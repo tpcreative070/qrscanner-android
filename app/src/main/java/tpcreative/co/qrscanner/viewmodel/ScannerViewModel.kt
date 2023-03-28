@@ -26,10 +26,10 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
     var zoom : Float = 0F
 
 
-    fun updateValue(mValue: Int) = liveData(Dispatchers.Main){
+    fun updateValue(mValue: Int, callback: (result: Int?) -> Unit){
         mCount += mValue
         Utils.setCountContinueScan(mCount)
-        emit(mCount)
+        callback.invoke(mCount)
     }
 
     fun doSaveItems(mCreate: GeneralModel?) {
