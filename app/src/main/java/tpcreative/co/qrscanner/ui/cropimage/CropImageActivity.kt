@@ -15,6 +15,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toPointF
+import androidx.core.graphics.toRect
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
@@ -24,10 +26,9 @@ import com.google.zxing.common.HybridBinarizer
 import com.isseiaoki.simplecropview.callback.CropCallback
 import com.isseiaoki.simplecropview.callback.LoadCallback
 import com.isseiaoki.simplecropview.callback.MoveUpCallback
+import com.zxingcpp.BarcodeReader
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.*
-import kotlinx.android.synthetic.main.crop_activity_crop.*
-import kotlinx.android.synthetic.main.crop_layout_done_cancel.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
@@ -40,6 +41,7 @@ import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.FileUtil
+import tpcreative.co.qrscanner.databinding.CropActivityCropBinding
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumImplement
 import tpcreative.co.qrscanner.model.GeneralModel
@@ -57,14 +59,16 @@ class CropImageActivity : BaseActivitySlide(){
     private var actualImage: File? = null
     private var compressedImage: File? = null
     private var mFileDestination : File = File("")
+    lateinit var binding : CropActivityCropBinding
+    val readerCpp = BarcodeReader()
     public override fun onCreate(icicle: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(icicle)
         dialog = ProgressDialog.progressDialog(this,R.string.loading.toText())
         setupViews()
         onHandlerIntent()
-        btn_done.isEnabled = false
-        btn_done.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+        binding.doneCancelBar.btnDone.isEnabled = false
+        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
@@ -115,23 +119,24 @@ class CropImageActivity : BaseActivitySlide(){
     private fun setCompressedImage() {
         compressedImage?.let {
             dismissLoading()
-            cropImageView?.load(it.toUri())
+            binding.cropImageView?.load(it.toUri())
                 ?.initialFrameRect(null)
                 ?.useThumbnail(true)
                 ?.execute(mLoadCallback)
-            cropImageView?.moveUp()
+            binding.cropImageView?.moveUp()
                 ?.execute(mMoveUpCallback)
             Utils.Log(TAG, "Compressed image save in " + it.path)
         }
     }
 
     private fun setupViews() {
-        setContentView(R.layout.crop_activity_crop)
-        btn_cancel.setOnClickListener {
+        binding = CropActivityCropBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.doneCancelBar.btnCancel.setOnClickListener {
             setResult(RESULT_CANCELED)
             finish()
         }
-       btn_done.setOnClickListener {
+       binding.doneCancelBar.btnDone.setOnClickListener {
            onCompleteCrop()
        }
     }
@@ -184,7 +189,7 @@ class CropImageActivity : BaseActivitySlide(){
                     create.barcodeFormat = mResult.barcodeFormat.name
                 }
                 mCreate = create
-                tvFormatType.text = Utils.onTranslateCreateType(parsedResult.type)
+                binding.tvFormatType.text = Utils.onTranslateCreateType(parsedResult.type)
                 /*Auto detect and navigation*/
                 if (isAutoComplete && Utils.isAutoComplete()){
                     onCompleteCrop()
@@ -238,7 +243,7 @@ class CropImageActivity : BaseActivitySlide(){
         setResult(RESULT_OK, Intent().putExtra(Crop.REQUEST_DATA, Gson().toJson(encode)))
     }
 
-    private suspend fun onRenderCode(bm: Bitmap?) {
+    private fun onRenderCode(bm: Bitmap?) {
         var bitmap = bm
         Utils.Log(TAG,"Requesting....")
         try {
@@ -301,31 +306,31 @@ class CropImageActivity : BaseActivitySlide(){
                     }
                     if (mResult != null) {
                         lifecycleScope.launch(Dispatchers.Main){
-                            btn_done.isEnabled = true
-                            btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
+                            binding.doneCancelBar.btnDone.isEnabled = true
+                            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
                             setResultEncode(mResult)
                             onParseData(mResult)
                         }
                     } else {
                         lifecycleScope.launch(Dispatchers.Main){
-                            btn_done.isEnabled = false
-                            btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
-                            tvFormatType.text = ""
+                            binding.doneCancelBar.btnDone.isEnabled = false
+                            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                            binding.tvFormatType.text = ""
                         }
                     }
                 } catch (e: NotFoundException) {
                     e.printStackTrace()
                     Utils.Log(TAG, "Do not recognize qrcode type ${e.message}")
                     lifecycleScope.launch(Dispatchers.Main){
-                        btn_done.isEnabled = false
-                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                        binding.doneCancelBar.btnDone.isEnabled = false
+                        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
                     }
                 } catch (e: ChecksumException) {
                     e.printStackTrace()
                     Utils.Log(TAG, "Do not recognize qrcode type ChecksumException")
                     lifecycleScope.launch(Dispatchers.Main){
-                        btn_done.isEnabled = false
-                        btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                        binding.doneCancelBar.btnDone.isEnabled = false
+                        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
                     }
                 }
             }
@@ -333,8 +338,8 @@ class CropImageActivity : BaseActivitySlide(){
             e.printStackTrace()
             Utils.Log(TAG, "Do not recognize qrcode type FormatException")
             lifecycleScope.launch(Dispatchers.Main){
-                btn_done.isEnabled = false
-                btn_done.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                binding.doneCancelBar.btnDone.isEnabled = false
+                binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
             }
         }
         finally {
@@ -356,7 +361,7 @@ class CropImageActivity : BaseActivitySlide(){
     private val mLoadCallback: LoadCallback = object : LoadCallback {
         override fun onSuccess() {
             try {
-                cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
+                binding.cropImageView.crop(compressedImage?.toUri())?.execute(mCropCallback)
             }catch (e : Exception){
                 e.printStackTrace()
             }
@@ -368,7 +373,8 @@ class CropImageActivity : BaseActivitySlide(){
         override fun onSuccess(cropped: Bitmap) {
              Utils.Log(TAG,"Crop success ${cropped.width} ${cropped.height}")
             lifecycleScope.launch(Dispatchers.IO) {
-                onRenderCode(cropped)
+                //onRenderCode(cropped)
+                handleScan(cropped)
             }
         }
         override fun onError(e: Throwable) {
@@ -376,6 +382,100 @@ class CropImageActivity : BaseActivitySlide(){
         }
     }
 
+    private fun handleScan(cropped: Bitmap){
+        val resultText: String
+        var resultPoints: List<PointF>? = null
+        readerCpp.options = BarcodeReader.Options(
+            formats = setOf(),
+            tryHarder = true,
+            tryRotate = true,
+            tryInvert = false,
+            tryDownscale = false
+        )
+        var mBitmap : Bitmap? = null
+        try {
+            mBitmap = createBlackAndWhite(cropped)
+            mBitmap?.let { mBmFilter ->
+                var mResultData = readerCpp.read(mBmFilter,Rect(0, 0, mBmFilter.width, mBmFilter.height))
+                if (mResultData==null){
+                    mBitmap = Bitmap.createScaledBitmap(cropped,800,800,true)
+                    mBitmap?.let { mBmScale ->
+                        mResultData = readerCpp.read(mBmScale,Rect(0, 0, mBmScale.width, mBmScale.height))
+                        if (mResultData!=null){
+                            Utils.Log(TAG,"Found data...")
+                        }else{
+                            Utils.Log(TAG,"Not found data...")
+                        }
+                    }
+                }
+                if (mResultData!=null){
+                    resultText = try {
+                        resultPoints = mResultData?.position?.let {
+                            listOf(
+                                it.topLeft,
+                                it.topRight,
+                                it.bottomRight,
+                                it.bottomLeft
+                            ).map { p ->
+                                p.toPointF()
+                            }
+                        }
+                        (mResultData?.let {
+                            val mResultPoint = Array(1) { i ->
+                                ResultPoint(
+                                    (resultPoints?.get(0)?.x ?: 0).toFloat(),
+                                    (resultPoints?.get(0)?.y ?: 0).toFloat()
+                                )
+                            }
+                            val mResult = Result(
+                                it.text,
+                                it.bytes,
+                                mResultPoint,
+                                it.format.cppFormatToJavaFormat()
+                            )
+
+                            val parsedResult = ResultParser.parseResult(mResult)
+                            if (parsedResult != null) {
+                                lifecycleScope.launch(Dispatchers.Main){
+                                    binding.doneCancelBar.btnDone.isEnabled = true
+                                    binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
+                                    setResultEncode(mResult)
+                                    onParseData(mResult)
+                                }
+                            }
+                            "${it.format} (${it.contentType}): " +
+                                    "${
+                                        if (it.contentType != BarcodeReader.ContentType.BINARY) it.text else it.bytes!!.joinToString(
+                                            separator = ""
+                                        ) { v -> "%02x".format(v) }
+                                    }"
+                        }
+                            ?: "")
+                    } catch (e: Throwable) {
+                        lifecycleScope.launch(Dispatchers.Main){
+                            binding.doneCancelBar.btnDone.isEnabled = false
+                            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                            binding.tvFormatType.text = ""
+                        }
+                        e.message ?: "Error"
+                    }
+                    Utils.Log(TAG,"Result text $resultText")
+                }else{
+                    lifecycleScope.launch(Dispatchers.Main){
+                        binding.doneCancelBar.btnDone.isEnabled = false
+                        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                        binding.tvFormatType.text = ""
+                    }
+                }
+            }
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+        finally {
+            mBitmap?.recycle()
+            cropped.recycle()
+        }
+    }
     private fun createBlackAndWhite(src: Bitmap): Bitmap? {
         val width = src.width
         val height = src.height
@@ -412,7 +512,7 @@ class CropImageActivity : BaseActivitySlide(){
             }
             override fun onRelease() {
                 try {
-                    cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
+                    binding.cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
                 }catch (e: Exception){
                     e.printStackTrace()
                 }

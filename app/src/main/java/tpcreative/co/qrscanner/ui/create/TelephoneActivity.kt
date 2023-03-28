@@ -9,22 +9,23 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_telephone.*
-import kotlinx.android.synthetic.main.activity_telephone.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.databinding.ActivityTelephoneBinding
 import tpcreative.co.qrscanner.model.*
 
 class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
+    lateinit var binding : ActivityTelephoneBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_telephone)
-        setSupportActionBar(toolbar)
+        binding = ActivityTelephoneBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
@@ -33,7 +34,7 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
         } else {
             Utils.Log(TAG, "Data is null")
         }
-        edtPhone.setOnEditorActionListener(this)
+        binding.edtPhone.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -64,7 +65,7 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
             val create = GeneralModel(save)
-            create.phone = edtPhone.text.toString().trim { it <= ' ' }
+            create.phone = binding.edtPhone.text.toString().trim { it <= ' ' }
             create.createType = ParsedResultType.TEL
             create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
@@ -78,12 +79,12 @@ class TelephoneActivity : BaseActivitySlide(), SingletonGenerateListener,OnEdito
     }
 
     fun focusUI() {
-        edtPhone.requestFocus()
+        binding.edtPhone.requestFocus()
     }
 
     fun onSetData() {
-        edtPhone.setText(save?.phone)
-        edtPhone.setSelection(edtPhone.text?.length ?: 0)
+        binding.edtPhone.setText(save?.phone)
+        binding.edtPhone.setSelection(binding.edtPhone.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 

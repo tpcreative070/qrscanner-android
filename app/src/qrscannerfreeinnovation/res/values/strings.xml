@@ -4,4 +4,18 @@
     <string name="view_code">View code</string>
     <string name="scan_photo">Scan photo</string>
     <string name="admob_app_id">ca-app-pub-9751397320629924~5563252010</string>
+    <string name="innovation_banner_result_small">ca-app-pub-9751397320629924/6181380877</string>
+    <string name="innovation_banner_result_large">ca-app-pub-9751397320629924/8648596262</string>
+    <string name="innovation_banner_review_small">ca-app-pub-9751397320629924/6022432925</string>
+    <string name="innovation_banner_review_large">ca-app-pub-9751397320629924/2083187915</string>
+    <string name="innovation_banner_create_large">ca-app-pub-1338847113684939/8942247916</string>
+    <string name="innovation_banner_create_small">ca-app-pub-1338847113684939/8287641793</string>
+    <string name="innovation_banner_backup_small">ca-app-pub-1338847113684939/2899583744</string>
+    <string name="innovation_banner_backup_large">ca-app-pub-1338847113684939/7960338733</string>
+    <string name="innovation_banner_change_color_small">ca-app-pub-1338847113684939/3689921234</string>
+    <string name="innovation_banner_change_color_large">ca-app-pub-1338847113684939/2017731008</string>
+    <string name="innovation_banner_help_feedback_small">ca-app-pub-1338847113684939/4021093724</string>
+    <string name="innovation_banner_help_feedback_large">ca-app-pub-1338847113684939/9704649337</string>
+    <string name="innovation_interstitial_anywhere">ca-app-pub-1338847113684939/5111083616</string>
+    <string name="innovation_interstitial_view_code">ca-app-pub-1338847113684939/1394930385</string>
 </resources>

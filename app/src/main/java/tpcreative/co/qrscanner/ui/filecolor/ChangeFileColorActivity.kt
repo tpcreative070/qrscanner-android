@@ -2,18 +2,17 @@ package tpcreative.co.qrscanner.ui.filecolor
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
+import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import kotlinx.android.synthetic.main.activity_chage_file_color.*
-import kotlinx.android.synthetic.main.activity_chage_file_color.llSmallAds
-import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
-import tpcreative.co.qrscanner.R
+//import com.journeyapps.barcodescanner.BarcodeEncoder
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
+import tpcreative.co.qrscanner.databinding.ActivityChageFileColorBinding
 import tpcreative.co.qrscanner.model.*
 import java.util.*
 
@@ -21,9 +20,12 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     private var bitmap: Bitmap? = null
     lateinit var viewModel : ChangeFileColorViewModel
     var adapter: ChangeFileColorAdapter? = null
+    var viewAds : AdsView?  = null
+    lateinit var binding : ActivityChageFileColorBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chage_file_color)
+        binding = ActivityChageFileColorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initUI()
 
     }
@@ -37,6 +39,14 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
 
     override fun onResume() {
         super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CHANGE_COLOR_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CHANGE_COLOR_LARGE)
+    }
+
+    override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CHANGE_COLOR_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CHANGE_COLOR_LARGE)
+        super.onPause()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -56,8 +66,8 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadChangeColorSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadChangeColorLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadChangeColorSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadChangeColorLargeView(viewAds?.getLargeAds())
         }
     }
 
@@ -68,7 +78,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
             hints[EncodeHintType.MARGIN] = 2
             val theme: Theme? = Theme.getInstance()?.getThemeInfo()
             bitmap = barcodeEncoder.encodeBitmap(this, theme?.getPrimaryDarkColor() ?:0, code, BarcodeFormat.QR_CODE, Constant.QRCodeViewWidth, Constant.QRCodeViewHeight, hints)
-            imgResult.setImageBitmap(bitmap)
+            binding.imgResult.setImageBitmap(bitmap)
         } catch (e: Exception) {
             e.printStackTrace()
         }

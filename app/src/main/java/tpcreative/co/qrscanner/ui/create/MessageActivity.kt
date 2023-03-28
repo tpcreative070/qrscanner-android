@@ -10,22 +10,23 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_message.*
-import kotlinx.android.synthetic.main.activity_message.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.databinding.ActivityMessageBinding
 import tpcreative.co.qrscanner.model.*
 
 class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
+    lateinit var binding : ActivityMessageBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_message)
-        setSupportActionBar(toolbar)
+        binding = ActivityMessageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val mData = intent?.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
@@ -34,8 +35,8 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         } else {
             Utils.Log(TAG, "Data is null")
         }
-        edtTo.setOnEditorActionListener(this)
-        edtMessage.setOnEditorActionListener(this)
+        binding.edtTo.setOnEditorActionListener(this)
+        binding.edtMessage.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -65,8 +66,8 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
         hideSoftKeyBoard()
         if (mAwesomeValidation?.validate() == true) {
             val create = GeneralModel(save)
-            create.phone = edtTo.text.toString()
-            create.message = edtMessage.text.toString()
+            create.phone = binding.edtTo.text.toString()
+            create.message = binding.edtMessage.text.toString()
             create.createType = ParsedResultType.SMS
             create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this, create)
@@ -82,13 +83,13 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     }
 
     private fun focusUI() {
-        edtTo.requestFocus()
+        binding.edtTo.requestFocus()
     }
 
     fun onSetData() {
-        edtTo.setText(save?.phone)
-        edtMessage.setText(save?.message)
-        edtTo.setSelection(edtTo.text?.length ?: 0)
+        binding.edtTo.setText(save?.phone)
+        binding.edtMessage.setText(save?.message)
+        binding.edtTo.setSelection(binding.edtTo.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 

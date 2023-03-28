@@ -11,20 +11,16 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_text.*
-import kotlinx.android.synthetic.main.activity_wifi.*
-import kotlinx.android.synthetic.main.activity_wifi.llLargeAds
-import kotlinx.android.synthetic.main.activity_wifi.llSmallAds
-import kotlinx.android.synthetic.main.activity_wifi.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_wifi.rlBannerLarger
-import kotlinx.android.synthetic.main.activity_wifi.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
+import tpcreative.co.qrscanner.databinding.ActivityWifiBinding
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.initUI
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.regex.Pattern
 
@@ -33,15 +29,25 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     var mAwesomeValidation: AwesomeValidation? = null
     var typeEncrypt: String? = ConstantValue.WPA
     private var save: GeneralModel? = null
+    var viewAds : AdsView? = null
+    lateinit var binding : ActivityWifiBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wifi)
-        setSupportActionBar(toolbar)
-        if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
-            rlAdsRoot.visibility = View.GONE
+        binding = ActivityWifiBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        if (!Utils.isPremium()){
+            viewAds = AdsView(this)
         }
         if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
-            rlBannerLarger.visibility = View.GONE
+            binding.rlAdsRoot.visibility = View.GONE
+        }else{
+            binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
+        }
+        if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
+            binding.rlBannerLarger.visibility = View.GONE
+        }else{
+            binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
         }
         setupViewModel()
         getIntentData()
@@ -53,11 +59,11 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         }
         checkingShowAds()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        radio0.setOnClickListener(this)
-        radio1.setOnClickListener(this)
-        radio2.setOnClickListener(this)
-        edtSSID.setOnEditorActionListener(this)
-        edtPassword.setOnEditorActionListener(this)
+        binding.radio0.setOnClickListener(this)
+        binding.radio1.setOnClickListener(this)
+        binding.radio2.setOnClickListener(this)
+        binding.edtSSID.setOnEditorActionListener(this)
+        binding.edtPassword.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -88,8 +94,8 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
             val create = GeneralModel(save)
-            create.ssId = edtSSID.text.toString().trim { it <= ' ' }
-            create.password = edtPassword.text.toString()
+            create.ssId = binding.edtSSID.text.toString().trim { it <= ' ' }
+            create.password = binding.edtPassword.text.toString()
             create.networkEncryption = typeEncrypt
             create.createType = ParsedResultType.WIFI
             create.barcodeFormat = BarcodeFormat.QR_CODE.name
@@ -106,20 +112,20 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     }
 
     private fun focusUI() {
-        edtSSID.requestFocus()
+        binding.edtSSID.requestFocus()
     }
 
     fun onSetData() {
-        edtSSID.setText(save?.ssId)
-        edtPassword.setText(save?.password)
+        binding.edtSSID.setText(save?.ssId)
+        binding.edtPassword.setText(save?.password)
         if (save?.networkEncryption == ConstantValue.WPA) {
-            radio0.isChecked = true
+            binding.radio0.isChecked = true
         } else if (save?.networkEncryption == ConstantValue.WEP) {
-            radio1.isChecked = true
+            binding.radio1.isChecked = true
         } else {
-            radio2.isChecked = true
+            binding.radio2.isChecked = true
         }
-        edtSSID.setSelection(edtSSID.text?.length ?: 0)
+        binding.edtSSID.setSelection(binding.edtSSID.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 
@@ -136,7 +142,9 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         Utils.Log(TAG, "onStop")
     }
 
-    public override fun onPause() {
+    override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CREATE_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.CREATE_LARGE)
         super.onPause()
         Utils.Log(TAG, "onPause")
     }
@@ -149,6 +157,8 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
 
     public override fun onResume() {
         super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_LARGE)
         GenerateSingleton.getInstance()?.setListener(this)
         checkingShowAds()
         Utils.Log(TAG, "onResume")
@@ -207,8 +217,8 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     /*show ads*/
     private fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadCreateSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadCreateLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadCreateSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadCreateLargeView(viewAds?.getLargeAds())
         }
     }
 

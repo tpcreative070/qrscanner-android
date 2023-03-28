@@ -2,26 +2,30 @@ package tpcreative.co.qrscanner.ui.scanner
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.*
+import android.hardware.camera2.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.camera2.interop.Camera2CameraControl
+import androidx.camera.camera2.interop.CaptureRequestOptions
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toPointF
+import androidx.core.graphics.toRect
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.window.layout.WindowMetricsCalculator
 import com.google.gson.Gson
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.Result
-import com.google.zxing.ResultPoint
-import com.google.zxing.client.android.BeepManager
+import com.google.zxing.*
 import com.google.zxing.client.result.ResultParser
-import com.journeyapps.barcodescanner.BarcodeCallback
-import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.Size
-import com.journeyapps.barcodescanner.camera.CameraSettings
-import kotlinx.android.synthetic.main.fragment_scanner.*
+import com.zxingcpp.BarcodeReader
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -32,225 +36,170 @@ import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.common.view.crop.Crop.Companion.getImagePicker
+import tpcreative.co.qrscanner.databinding.FragmentScannerBinding
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumImplement
-import tpcreative.co.qrscanner.model.EnumRotation
 import tpcreative.co.qrscanner.model.GeneralModel
+import tpcreative.co.qrscanner.ui.scanner.cpp.BeepManager
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
-import kotlin.coroutines.CoroutineContext
+import java.util.*
+import java.util.concurrent.Executors
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 
-class ScannerFragment : BaseFragment(), SingletonScannerListener{
-    lateinit var viewModel : ScannerViewModel
+class ScannerFragment : BaseFragment(), SingletonScannerListener {
+    lateinit var viewModel: ScannerViewModel
     private var beepManager: BeepManager? = null
-    private val cameraSettings: CameraSettings = CameraSettings()
-    var typeCamera = 0
     var isRunning = false
     var mFrameRect: RectF? = null
-    private var orientationEventListener: OrientationEventListener? = null
-    val callback: BarcodeCallback = object : BarcodeCallback {
-        override fun barcodeResult(result: BarcodeResult?) {
-            try {
-                Utils.Log(TAG, "Call back :" + result?.text + "  type :" + result?.barcodeFormat?.name)
-                if (activity == null) {
-                    return
-                }
-                result?.result?.let { mResult ->
-                    Utils.Log(TAG,"Text result ${mResult.text}")
-                    val create = Utils.onGeneralParse(mResult,GeneralModel::class)
-                    create.fragmentType = EnumFragmentType.SCANNER
-                    create.enumImplement = EnumImplement.VIEW
-                    create.barcodeFormat = BarcodeFormat.QR_CODE.name
-                    if (mResult.barcodeFormat != null) {
-                        create.barcodeFormat = mResult.barcodeFormat.name
-                    }
-                    val mBitmap = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888)
-                    val canvas = Canvas(mBitmap);
-                    canvas.drawColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
-                    zxing_barcode_scanner?.viewFinder?.addResultPoint(mResult.resultPoints?.toMutableList())
-                    var mIsBarcode = false
-                    if (mResult.barcodeFormat != BarcodeFormat.QR_CODE && mResult.barcodeFormat != BarcodeFormat.DATA_MATRIX   && mResult.barcodeFormat != BarcodeFormat.AZTEC){
-                        mIsBarcode = true
-                    }
-                    Utils.Log(TAG,"Result meta ${result.resultMetadata.toJson()}")
-                    zxing_barcode_scanner?.viewFinder?.drawResultBitmap(mBitmap,mIsBarcode,result.degree)
-                    zxing_barcode_scanner?.viewFinder?.addTransferResultPoint(result.transformedResultPoints)
-                    Utils.Log(TAG, "barcode ==> format ${result.barcodeFormat?.name}")
-                    doNavigation(create)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+    lateinit var binding: FragmentScannerBinding
+    private val executor = Executors.newSingleThreadExecutor()
+    private var isStop: Boolean = false
+    var isCropViewFinder : Boolean = false
+    var isInitial: Boolean = false
+    private var preview: Preview? = null
+    private var cameraProvider: ProcessCameraProvider? = null
 
-        fun doNavigation(create: GeneralModel?) {
-            if (Utils.isMultipleScan()) {
-                if (viewModel.isRequestDone){
-                    if (viewModel.isResume){
-                        zxing_barcode_scanner?.pauseAndWait()
-                        viewModel.isResume = false
-                    }
-                    return
-                }
-                btnDone.visibility = View.VISIBLE
-                tvCount.visibility = View.VISIBLE
-                updateValue(1)
-                viewModel.doSaveItems(create)
-                if (zxing_barcode_scanner != null) {
-                    if (viewModel.isResume){
-                        zxing_barcode_scanner?.pauseAndWait()
-                        viewModel.isResume = false
-                    }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(1000)
-                        zxing_barcode_scanner?.viewFinder?.drawViewfinder()
-                        if (!viewModel.isResume){
-                            zxing_barcode_scanner?.resume()
-                            viewModel.isResume = true
-                        }
-                    }
-                }
-            } else {
-                scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
-                if (zxing_barcode_scanner != null) {
-                    if (viewModel.isResume){
-                        zxing_barcode_scanner?.pauseAndWait()
-                        viewModel.isResume = false
-                    }
-                }
-            }
-            beepManager?.playBeepSoundAndVibrate()
-        }
+    private var imageAnalyzer: ImageAnalysis? = null
 
-        override fun possibleResultPoints(resultPoints: MutableList<ResultPoint?>?) {}
+    private fun doNavigation(create: GeneralModel?){
+        if (Utils.isMultipleScan()) {
+            Utils.Log(TAG,"Stopping call...")
+            binding.btnDone.visibility = View.VISIBLE
+            binding.tvCount.visibility = View.VISIBLE
+            updateValue(1)
+            viewModel.doSaveItems(create)
+            Utils.Log(TAG,"Stopping call $isStop")
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(1000)
+                Utils.Log(TAG,"Stopping call delay")
+                isStop = false
+            }
+        } else {
+            scanForResult.launch(
+                Navigator.onResultView(
+                    activity,
+                    create,
+                    ScannerResultActivity::class.java
+                )
+            )
+        }
     }
+
 
     override fun getLayoutId(): Int {
         return 0
     }
 
     override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater?.inflate(R.layout.fragment_scanner, viewGroup, false)
+        binding = FragmentScannerBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun work() {
         super.work()
         initUI()
-        if (!Utils.checkPermission(Manifest.permission.CAMERA)){
-            rlScanner?.visibility = View.INVISIBLE
-            rlPermission?.visibility = View.VISIBLE
-        }else{
-            rlScanner?.visibility = View.VISIBLE
-            rlPermission?.visibility = View.INVISIBLE
+        binding.overlay.viewTreeObserver.addOnGlobalLayoutListener {
+            if (isLandscape()) {
+                var mRespect: RectF? = Utils.getFrameRectLandscape()
+                if (mRespect==null){
+                    mRespect = RectF(binding.viewCrop.left.toFloat(),binding.viewCrop.top.toFloat(),binding.viewCrop.right.toFloat(),binding.viewCrop.bottom.toFloat())
+                    Utils.setFrameRectLandscape(mRespect)
+                }
+                Utils.getFrameRectLandscape()?.toRect()?.let {
+                    binding.overlay.setFrameRect(it)
+                }
+                Utils.getFrameRectLandscape()?.toRect()?.let {
+                    binding.overlay.setFrameRect(it)
+                }
+            } else {
+                Utils.getFrameRectPortrait()?.toRect()?.let {
+                    binding.overlay.setFrameRect(it)
+                }
+            }
+        }
+        if (!Utils.checkPermission(Manifest.permission.CAMERA)) {
+            binding.rlScanner.visibility = View.INVISIBLE
+            binding.rlPermission.visibility = View.VISIBLE
+        } else {
+            binding.rlScanner.visibility = View.VISIBLE
+            binding.rlPermission.visibility = View.INVISIBLE
         }
         ScannerSingleton.getInstance()?.setListener(this)
-        zxing_barcode_scanner?.decodeContinuous(callback)
-        zxing_barcode_scanner?.statusView?.visibility = View.GONE
-        zxing_barcode_scanner?.barcodeView?.marginFraction = 0.2
-        Utils.Log(TAG,"view ${viewCrop.left}")
-        if (isLandscape()){
-            var mSize: Size? = Utils.getFrameLandscapeSize()
-            if (mSize==null){
-                val width: Int = (requireContext().resources?.displayMetrics?.widthPixels ?:0) - (Utils.spToPx(80F,requireContext())*2)
-                val height: Int = (requireContext().resources?.displayMetrics?.heightPixels ?:0) - (Utils.spToPx(100F,requireContext())*2)
-                mSize = Size(width,height)
-                Utils.Log(TAG,"viewCrop - with: $width height: $height")
-            }
-            zxing_barcode_scanner?.barcodeView?.framingRectSize = mSize
-        }else{
-            zxing_barcode_scanner?.barcodeView?.framingRectSize = Utils.getFramePortraitSize()
-        }
-        imgCreate.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-        imgGallery.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
+        binding.imgCreate.setColorFilter(
+            ContextCompat.getColor(
+                QRScannerApplication.getInstance(),
+                R.color.white
+            ), PorterDuff.Mode.SRC_ATOP
+        )
+        binding.imgGallery.setColorFilter(
+            ContextCompat.getColor(
+                QRScannerApplication.getInstance(),
+                R.color.white
+            ), PorterDuff.Mode.SRC_ATOP
+        )
         if (Utils.isLight()) {
-            zxing_barcode_scanner.setTorchOn()
-            switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
-            tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorAccent))
+            binding.switchFlashlight.setColorFilter(
+                ContextCompat.getColor(
+                    QRScannerApplication.getInstance(),
+                    R.color.colorAccent
+                ), PorterDuff.Mode.SRC_ATOP
+            )
+            binding.tvLight.setTextColor(
+                ContextCompat.getColor(
+                    context(),
+                    R.color.colorAccent
+                )
+            )
         } else {
-            zxing_barcode_scanner.setTorchOff()
-            switch_flashlight.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.white), PorterDuff.Mode.SRC_ATOP)
-            tvLight.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            binding.switchFlashlight.setColorFilter(
+                ContextCompat.getColor(
+                    QRScannerApplication.getInstance(),
+                    R.color.white
+                ), PorterDuff.Mode.SRC_ATOP
+            )
+            binding.tvLight.setTextColor(ContextCompat.getColor(context(), R.color.white))
         }
-        typeCamera = if (Utils.checkCameraBack(context)) {
-            cameraSettings.requestedCameraId = Constant.CAMERA_FACING_BACK
-            0
-        } else {
-            if (Utils.checkCameraFront(context)) {
-                cameraSettings.requestedCameraId = Constant.CAMERA_FACING_FRONT
-                1
-            } else {
-                2
-            }
-        }
-        zxing_barcode_scanner?.barcodeView?.cameraSettings = cameraSettings
-        beepManager = BeepManager(activity)
+        beepManager = BeepManager(activity())
         onHandlerIntent()
-        if (zxing_barcode_scanner != null) {
-            if (!zxing_barcode_scanner.isActivated) {
-                if (!viewModel.isResume){
-                    zxing_barcode_scanner?.resume()
-                    viewModel.isResume = true
-                }
-                zxing_barcode_scanner?.barcodeView?.addStateListener(stateListener)
-            }
-        }
-        onBeepAndVibrate()
-        if (!viewModel.isRequiredStartService){
+        if (!viewModel.isRequiredStartService) {
             ServiceManager.getInstance().onStartService()
             PremiumManager.getInstance().onStartInAppPurchase()
             Utils.onCheckingNewApp()
             viewModel.isRequiredStartService = true
         }
+        binding.overlay.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!isInitial) {
+                val mRectDefault = Rect(binding.overlay.getDefaultFrameRect())
+                val mRect = binding.overlay.getFrameRect()
+                mFrameRect = RectF(mRect?.left?.toFloat() ?:0F,mRect?.top?.toFloat() ?:0F,mRect?.right?.toFloat() ?:0F,mRect?.bottom?.toFloat() ?:0F)
+                initCropView(mFrameRect,mRectDefault)
+                Utils.Log(TAG,"mRect $mRectDefault")
+                Utils.Log(TAG,"mRect default $mRect")
+                isInitial = true
+            }
+        }
+        bindCameraUseCases()
     }
 
     fun onAddPermissionGallery() {
-        if (zxing_barcode_scanner != null) {
-            if (viewModel.isResume){
-                zxing_barcode_scanner?.pauseAndWait()
-                viewModel.isResume = false
-            }
-        }
         onGetGallery()
     }
 
-    private fun onBeepAndVibrate() {
-        if (beepManager == null) {
-            return
-        }
-        beepManager?.isBeepEnabled = Utils.getBeep()
-        beepManager?.isVibrateEnabled = Utils.getVibrate()
-    }
-
     override fun setVisible() {
-        if (zxing_barcode_scanner != null) {
-            zxing_barcode_scanner?.viewFinder?.drawViewfinder()
-            if (!viewModel.isResume){
-                zxing_barcode_scanner?.resume()
-                viewModel.isResume = true
-            }
-        }
+        //bindCameraUseCases()
     }
 
     override fun setInvisible() {
-        if (zxing_barcode_scanner != null) {
-            if (viewModel.isResume){
-                zxing_barcode_scanner?.pauseAndWait()
-                viewModel.isResume = false
-            }
-        }
+       //cameraProvider?.unbindAll()
     }
 
     override fun onStop() {
         super.onStop()
-        if (zxing_barcode_scanner != null) {
-            if (viewModel.isResume){
-                zxing_barcode_scanner?.pauseAndWait()
-                viewModel.isResume = false
-            }
-        }
-        orientationEventListener?.disable()
         Utils.Log(TAG, "onStop")
     }
 
@@ -262,8 +211,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
         ResponseSingleton.getInstance()?.onResumeAds()
         Utils.Log(TAG, "onStart")
-        orientationEventListener?.enable()
-        if (viewModel.isRequestSettings){
+        if (viewModel.isRequestSettings) {
             checkVisit()
             viewModel.isRequestSettings = false
         }
@@ -272,30 +220,18 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
     override fun onDestroy() {
         super.onDestroy()
         Utils.Log(TAG, "onDestroy")
-        if (typeCamera != 2) {
-            if (zxing_barcode_scanner != null) {
-                if (viewModel.isResume){
-                    zxing_barcode_scanner?.pauseAndWait()
-                    viewModel.isResume = false
-                }
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
-         if (zxing_barcode_scanner != null && !zxing_barcode_scanner.isActivated) {
-             zxing_barcode_scanner?.viewFinder?.drawViewfinder()
-             if (!viewModel.isResume){
-                 zxing_barcode_scanner?.resume()
-                 viewModel.isResume = true
-             }
-             if (!Utils.isMultipleScan()) {
-                 btnDone.visibility = View.INVISIBLE
-                 tvCount.visibility = View.INVISIBLE
-             }
-         }
-        Utils.Log(TAG, "onResume")
+        if (this::viewModel.isInitialized) {
+            isStop = false
+            bindCameraUseCases()
+            if (!Utils.isMultipleScan()) {
+                binding.btnDone.visibility = View.INVISIBLE
+                binding.tvCount.visibility = View.INVISIBLE
+            }
+        }
     }
 
     private val scanForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -320,7 +256,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
 
     private fun beginCrop(source: Uri?) {
         val destination = Uri.fromFile(File(activity?.cacheDir, "cropped"))
-        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(requireContext()))
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(context()))
     }
 
     private fun handleCrop(resultCode: Int, result: Intent?) {
@@ -330,7 +266,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             mResult?.let { onFilterResult(it) }
             Utils.Log(TAG, "Result of cropped " + Gson().toJson(mResult))
         } else if (resultCode == Crop.RESULT_ERROR) {
-            Utils.onAlertNotify(requireActivity(),"${Crop.getError(result)?.message}")
+            Utils.onAlertNotify(activity(), "${Crop.getError(result)?.message}")
         } else if (resultCode == Activity.RESULT_CANCELED) {
             setVisible()
         }
@@ -355,47 +291,34 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
                 create.barcodeFormat = result.barcodeFormat.name
             }
             beepManager?.playBeepSoundAndVibrate()
-            if (zxing_barcode_scanner != null) {
-                if (viewModel.isResume){
-                    zxing_barcode_scanner?.pauseAndWait()
-                    viewModel.isResume = false
-                }
-            }
-            Utils.Log(TAG,"barcode ==> type ${parsedResult.type}")
+            Utils.Log(TAG, "barcode ==> type ${parsedResult.type}")
             Utils.Log(TAG, "barcode ==> format ${mResult.barcodeFormat?.name}")
-            scanForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
+            scanForResult.launch(
+                Navigator.onResultView(
+                    activity,
+                    create,
+                    ScannerResultActivity::class.java
+                )
+            )
+            cameraProvider?.unbindAll()
         }
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
-        if (zxing_barcode_scanner != null) {
+        if (this::viewModel.isInitialized) {
             if (menuVisible) {
-                if (typeCamera != 2) {
-                    onBeepAndVibrate()
-                    if (!viewModel.isResume){
-                        zxing_barcode_scanner.resume()
-                        viewModel.isResume = true
-                        Utils.Log(TAG, "Request scanner resume...")
-                    }
-                    Utils.Log(TAG, "Fragment visit...resume...")
-                }
+                Utils.Log(TAG, "Fragment visit...resume...")
             } else {
-                if (typeCamera != 2) {
-                    if (viewModel.isResume){
-                        //Using pause in able to reduce lag when swipe page
-                        zxing_barcode_scanner?.pause()
-                        viewModel.isResume = false
-                        Utils.Log(TAG, "Request scanner pause...")
-                    }
-                }
+                cameraProvider?.unbindAll()
             }
+            Utils.Log(TAG, "Fragment visit...$menuVisible")
         }
-        Utils.Log(TAG, "Fragment visit...$menuVisible")
     }
 
     override fun onPause() {
         super.onPause()
+        Utils.Log(TAG,"onPause")
     }
 
     /*Share File To QRScanner*/
@@ -428,6 +351,216 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
         }
     }
 
+
+    /**
+     *  Detecting the most suitable aspect ratio for current dimensions
+     *
+     *  @param width - preview width
+     *  @param height - preview height
+     *  @return suitable aspect ratio
+     */
+    private fun aspectRatio(width: Int, height: Int): Int {
+        val previewRatio = max(width, height).toDouble() / min(width, height)
+        if (abs(previewRatio - RATIO_4_3_VALUE) <= abs(previewRatio - RATIO_16_9_VALUE)) {
+            return AspectRatio.RATIO_4_3
+        }
+        return AspectRatio.RATIO_16_9
+    }
+
+    @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
+    private fun  bindCameraUseCases() = binding.viewFinder.post {
+        val viewFinder = binding.viewFinder
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context())
+        cameraProviderFuture.addListener({
+            // Set up the view finder use case to display camera preview
+            // The display information
+            //val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
+            //val metrics: WindowMetrics = requireContext().getSystemService(WindowManager::class.java).currentWindowMetrics
+            if (!isAdded){
+                Utils.Log(TAG,"Stop working")
+                return@addListener
+            }
+            val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity())
+            // The ratio for the output image and preview
+            val aspectRatio = aspectRatio(metrics.bounds.width(), metrics.bounds.height())
+            // The display rotation
+            val rotation = viewFinder.display.rotation
+
+            // The Configuration of camera preview
+            preview = Preview.Builder()
+                .setTargetAspectRatio(aspectRatio) // set the camera aspect ratio
+                .setTargetRotation(rotation) // set the camera rotation
+                .build()
+
+            // The Configuration of image analyzing
+            imageAnalyzer = ImageAnalysis.Builder()
+                .setTargetAspectRatio(aspectRatio) // set the analyzer aspect ratio
+                .setTargetRotation(rotation) // set the analyzer rotation
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST) // in our analysis, we care about the latest image
+                .build()
+
+            val readerCpp = BarcodeReader()
+
+            // Create a new camera selector each time, enforcing lens facing
+            val cameraSelector =
+                CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+
+            // Camera provider is now guaranteed to be available
+            cameraProvider = cameraProviderFuture.get()
+
+            // Apply declared configs to CameraX using the same lifecycle owner
+            cameraProvider?.unbindAll()
+            val camera = cameraProvider?.bindToLifecycle(
+                this as LifecycleOwner, cameraSelector, preview, imageAnalyzer
+            )
+
+            // Reduce exposure time to decrease effect of motion blur
+            camera?.let {
+                val camera2 = Camera2CameraControl.from(it.cameraControl)
+                camera2.captureRequestOptions = CaptureRequestOptions.Builder()
+                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, 1600)
+                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, -8)
+                    .build()
+            }
+            // Use the camera object to link our preview use case with the view
+            val isChecked = true
+            preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+            imageAnalyzer?.setAnalyzer(executor, ImageAnalysis.Analyzer { image ->
+//                if (isStop) {
+//                    image.close()
+//                    return@Analyzer
+//                }
+                Utils.Log(TAG,"Area focus ${binding.overlay.getFrameRect()}")
+
+                if (!isInitial) {
+                    val mRectDefault = Rect(binding.overlay.getDefaultFrameRect())
+                    val mRect = binding.overlay.getFrameRect()
+                    mFrameRect = RectF(mRect?.left?.toFloat() ?:0F,mRect?.top?.toFloat() ?:0F,mRect?.right?.toFloat() ?:0F,mRect?.bottom?.toFloat() ?:0F)
+                    initCropView(mFrameRect,mRectDefault)
+                    Utils.Log(TAG,"mRect $mRectDefault")
+                    Utils.Log(TAG,"mRect default $mRect")
+                    isInitial = true
+                }
+                val resultText: String
+                var resultPoints: List<PointF>? = null
+
+                readerCpp.options = BarcodeReader.Options(
+                    formats = setOf(),
+                    tryHarder = true,
+                    tryRotate = true,
+                    tryInvert = false,
+                    tryDownscale = false
+                )
+
+                resultText = try {
+                    image.setCropRect(crop(image))
+                    val result = readerCpp.read(image)
+                    //RSS-14
+                    Utils.Log(TAG,"Result text first ${result?.text}")
+                    Utils.Log(TAG,"Result format type first ${result?.format?.name}")
+                    resultPoints = result?.position?.let {
+                        listOf(
+                            it.topLeft,
+                            it.topRight,
+                            it.bottomRight,
+                            it.bottomLeft
+                        ).map { p ->
+                            p.toPointF()
+                        }
+                    }
+                    (result?.let {
+                        val mResultPoint = Array(1) { i ->
+                            ResultPoint(
+                                (resultPoints?.get(0)?.x ?: 0).toFloat(),
+                                (resultPoints?.get(0)?.y ?: 0).toFloat()
+                            )
+                        }
+                        val mResult = Result(
+                            it.text,
+                            it.bytes,
+                            mResultPoint,
+                            it.format.cppFormatToJavaFormat()
+                        )
+
+                        val parsedResult = ResultParser.parseResult(mResult)
+                        Utils.Log(TAG,"Parse result 3 ${parsedResult.type}")
+                        if (parsedResult != null) {
+                            val create = Utils.onGeneralParse(mResult, GeneralModel::class)
+                            create.fragmentType = EnumFragmentType.SCANNER
+                            create.enumImplement = EnumImplement.VIEW
+                            create.barcodeFormat = BarcodeFormat.QR_CODE.name
+                            if (mResult.barcodeFormat != null) {
+                                create.barcodeFormat = mResult.barcodeFormat.name
+                            }
+                            if (!isStop && !isCropViewFinder){
+                                showResult("", resultPoints, image)
+                                doNavigation(create)
+                                beepManager?.playBeepSoundAndVibrate()
+                                isStop = true
+                            }
+                            Utils.Log(TAG, "Type result ${parsedResult.type}")
+                        }
+                        "${it.format} (${it.contentType}): " +
+                                "${
+                                    if (it.contentType != BarcodeReader.ContentType.BINARY) it.text else it.bytes!!.joinToString(
+                                        separator = ""
+                                    ) { v -> "%02x".format(v) }
+                                }"
+                    }
+                        ?: "")
+                } catch (e: Throwable) {
+                    e.message ?: "Error"
+                }
+                camera?.cameraControl?.setLinearZoom(viewModel.zoom)
+                camera?.cameraControl?.enableTorch(viewModel.isLight)
+                if (!isCropViewFinder){
+                    showResult(resultText, resultPoints, image)
+                }
+                Utils.Log(TAG,"Result text $resultText")
+            })
+
+        }, ContextCompat.getMainExecutor(context()))
+    }
+
+    private fun crop(image : ImageProxy) : Rect{
+        val mCropped = binding.overlay.getFrameRect()
+        val mRect =  Rect(0, 0, image.width, image.height)
+        var mCropWidthSize = mCropped?.height() ?: image.height
+        var mCropHeightSize = mCropped?.width() ?: image.width
+        if (isLandscape()){
+            mCropWidthSize = (mCropped?.width() ?: image.width)
+            mCropHeightSize = (mCropped?.height() ?: image.height)
+        }
+        mRect.left = (image.width - mCropWidthSize)/2
+        mRect.top = (image.height - mCropHeightSize)/2
+        mRect.right = (image.width - mCropWidthSize)/2 + mCropWidthSize
+        mRect.bottom = (image.height - mCropHeightSize)/2 + mCropHeightSize
+
+        Utils.Log(TAG,"Area focus detect ${mRect} Rotation ${image.imageInfo.rotationDegrees}")
+        return mRect
+    }
+
+    private fun showResult(
+        resultText: String,
+        points: List<PointF>?,
+        image: ImageProxy
+    ) =
+        binding.viewFinder.post {
+            // Update the text and UI
+            Utils.Log(TAG, "Result text $resultText")
+            binding.overlay.update(binding.viewFinder, image, points)
+        }
+
+   fun activity(): FragmentActivity {
+        return this.activity
+            ?: throw IllegalStateException("Fragment $this not attached to an activity.")
+    }
+
+   fun context(): Context {
+        return this.context
+            ?: throw java.lang.IllegalStateException("Fragment $this not attached to a context.")
+    }
+
     companion object {
         private val TAG = ScannerFragment::class.java.simpleName
         fun newInstance(index: Int): ScannerFragment {
@@ -437,5 +570,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener{
             fragment.arguments = b
             return fragment
         }
+        private const val RATIO_4_3_VALUE = 4.0 / 3.0
+        private const val RATIO_16_9_VALUE = 16.0 / 9.0
     }
 }

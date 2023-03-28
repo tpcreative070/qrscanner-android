@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
 import com.jaychang.srv.SimpleCell
 import com.jaychang.srv.SimpleViewHolder
-import kotlinx.android.synthetic.main.history_item.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.model.HistoryModel
@@ -82,11 +81,11 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
      * Define your view holder, which must extend SimpleViewHolder.
      */
     class ViewHolder(itemView: View) : SimpleViewHolder(itemView) {
-        val tvTime: AppCompatTextView = itemView.tvDate
-        val tvContent: AppCompatTextView = itemView.tvContent
-        val ckDelete: AppCompatCheckBox = itemView.ckDelete
-        val lItem: LinearLayout = itemView.lItem
-        var llCheckedBox: LinearLayout = itemView.llCheckedBox
+        val tvTime: AppCompatTextView = itemView.findViewById(R.id.tvDate)
+        val tvContent: AppCompatTextView = itemView.findViewById(R.id.tvContent)
+        val ckDelete: AppCompatCheckBox = itemView.findViewById(R.id.ckDelete)
+        val lItem: LinearLayout = itemView.findViewById(R.id.lItem)
+        var llCheckedBox: LinearLayout = itemView.findViewById(R.id.llCheckedBox)
     }
 
     interface ItemSelectedListener {

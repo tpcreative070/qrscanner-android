@@ -9,27 +9,31 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_chage_file_color.recyclerView
-import kotlinx.android.synthetic.main.activity_chage_file_color.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_chage_file_color.rlBannerLarger
-import kotlinx.android.synthetic.main.activity_chage_file_color.toolbar
-import kotlinx.android.synthetic.main.activity_help.*
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.EnumScreens
+import tpcreative.co.qrscanner.ui.review.initUI
 
 fun ChangeFileColorActivity.initUI(){
     setupViewModel()
-    setSupportActionBar(toolbar)
+    setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
     if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)){
-        rlAdsRoot.visibility = View.GONE
+        binding.rlAdsRoot.visibility = View.GONE
+    }else{
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)){
-        rlBannerLarger.visibility = View.GONE
+        binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
     initRecycleView(layoutInflater)
     getData()
@@ -82,10 +86,10 @@ fun ChangeFileColorActivity.initRecycleView(layoutInflater: LayoutInflater) {
         mNoOfColumns = 4
     }
     val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, mNoOfColumns)
-    recyclerView.addItemDecoration(GridSpacingItemDecoration(mNoOfColumns, 20, true))
-    recyclerView.layoutManager = mLayoutManager
-    recyclerView.itemAnimator = DefaultItemAnimator()
-    recyclerView.adapter = adapter
+    binding.recyclerView.addItemDecoration(GridSpacingItemDecoration(mNoOfColumns, 20, true))
+    binding.recyclerView.layoutManager = mLayoutManager
+    binding.recyclerView.itemAnimator = DefaultItemAnimator()
+    binding.recyclerView.adapter = adapter
 }
 
 fun ChangeFileColorActivity.showAds(){

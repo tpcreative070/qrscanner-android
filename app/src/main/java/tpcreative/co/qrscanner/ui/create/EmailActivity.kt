@@ -10,23 +10,23 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_email.*
-import kotlinx.android.synthetic.main.activity_email.edtMessage
-import kotlinx.android.synthetic.main.activity_email.toolbar
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.GenerateSingleton.SingletonGenerateListener
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.databinding.ActivityEmailBinding
 import tpcreative.co.qrscanner.model.*
 
 class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorActionListener {
     private var mAwesomeValidation: AwesomeValidation? = null
     private var save: GeneralModel? = null
+    lateinit var binding : ActivityEmailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_email)
-        setSupportActionBar(toolbar)
+        binding = ActivityEmailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val mData = intent.serializable(getString(R.string.key_data),GeneralModel::class.java)
         if (mData != null) {
@@ -35,9 +35,9 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
         } else {
             Utils.Log(TAG, "Data is null")
         }
-        edtEmail.setOnEditorActionListener(this)
-        edtSubject.setOnEditorActionListener(this)
-        edtMessage.setOnEditorActionListener(this)
+        binding.edtEmail.setOnEditorActionListener(this)
+        binding.edtSubject.setOnEditorActionListener(this)
+        binding.edtMessage.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -68,9 +68,9 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
             val create = GeneralModel(save)
-            create.email = edtEmail.text.toString().trim { it <= ' ' }
-            create.subject = edtSubject.text.toString()
-            create.message = edtMessage?.text.toString()
+            create.email = binding.edtEmail.text.toString().trim { it <= ' ' }
+            create.subject = binding.edtSubject.text.toString()
+            create.message = binding.edtMessage?.text.toString()
             create.createType = ParsedResultType.EMAIL_ADDRESS
             create.barcodeFormat = BarcodeFormat.QR_CODE.name
             Navigator.onMoveToReview(this@EmailActivity, create)
@@ -86,14 +86,14 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
     }
 
     private fun focusUI() {
-        edtEmail.requestFocus()
+        binding.edtEmail.requestFocus()
     }
 
     fun onSetData() {
-        edtEmail.setText("${save?.email}")
-        edtSubject.setText("${save?.subject}")
-        edtMessage.setText("${save?.message}")
-        edtEmail.setSelection(edtEmail.text?.length ?: 0)
+        binding.edtEmail.setText("${save?.email}")
+        binding.edtSubject.setText("${save?.subject}")
+        binding.edtMessage.setText("${save?.message}")
+        binding.edtEmail.setSelection(binding.edtEmail.text?.length ?: 0)
         hideSoftKeyBoard()
     }
 

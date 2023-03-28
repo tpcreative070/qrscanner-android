@@ -14,7 +14,7 @@ import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.zxing.client.result.ParsedResultType
-import com.journeyapps.barcodescanner.Size
+//import com.journeyapps.barcodescanner.Size
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -24,7 +24,9 @@ import com.tapadoo.alerter.Alerter
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.controller.PrefsController
+import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.getContext
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -746,7 +748,7 @@ object Utils {
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),Gson().toJson(mRect))
     }
 
-    private fun getFrameRectPortrait() : RectF?{
+    fun getFrameRectPortrait() : RectF?{
         val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_portrait),null)
         return Gson().fromJson(json, RectF::class.java)
     }
@@ -755,7 +757,7 @@ object Utils {
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),Gson().toJson(mRect))
     }
 
-    private fun getFrameRectLandscape() : RectF?{
+    fun getFrameRectLandscape() : RectF?{
         val json =  PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_frame_rect_landscape),null)
         return Gson().fromJson(json, RectF::class.java)
     }
@@ -800,25 +802,25 @@ object Utils {
         return PrefsController.getInt(R.string.key_count_continue_scan.toText(),0)
     }
 
-    fun getFramePortraitSize() : Size? {
-        val mRect = getFrameRectPortrait()
-        mRect?.let { node ->
-            val mWidth = node.right - node.left
-            val mHeight = node.bottom - node.top
-            return Size(mWidth.toInt(),mHeight.toInt())
-        }
-        return null
-    }
+//    fun getFramePortraitSize() : Size? {
+//        val mRect = getFrameRectPortrait()
+//        mRect?.let { node ->
+//            val mWidth = node.right - node.left
+//            val mHeight = node.bottom - node.top
+//            return Size(mWidth.toInt(),mHeight.toInt())
+//        }
+//        return null
+//    }
 
-    fun getFrameLandscapeSize() : Size? {
-        val mRect = getFrameRectLandscape()
-        mRect?.let { node ->
-            val mWidth = node.right - node.left
-            val mHeight = node.bottom - node.top
-            return Size(mWidth.toInt(),mHeight.toInt())
-        }
-        return null
-    }
+//    fun getFrameLandscapeSize() : Size? {
+//        val mRect = getFrameRectLandscape()
+//        mRect?.let { node ->
+//            val mWidth = node.right - node.left
+//            val mHeight = node.bottom - node.top
+//            return Size(mWidth.toInt(),mHeight.toInt())
+//        }
+//        return null
+//    }
 
     fun isEqualTimeSynced(value: String?): Boolean {
         return value == getLastTimeSynced()
@@ -858,75 +860,85 @@ object Utils {
         return isAlreadyCheckout()
     }
 
+    private fun isRequestRemoteDebugApp(): Boolean{
+        if (BuildConfig.DEBUG && !Configuration.request_remote_debug_app){
+           return true
+        }
+        return false
+    }
+
     fun isHiddenAds(enumScreens: EnumScreens) : Boolean{
+        if (isRequestRemoteDebugApp()){
+            ServiceManager.getInstance().mVersion = Version()
+        }
         when(enumScreens){
             EnumScreens.HELP_FEEDBACK_SMALL ->{
-                if (Configuration.hiddenHelpFeedbackSmallAds){
+                if (Configuration.hiddenHelpFeedbackSmallAds || ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackSmallAds == true){
                     return true
                 }
             }
             EnumScreens.HELP_FEEDBACK_LARGE ->{
-                if (Configuration.hiddenHelpFeedbackLargeAds){
+                if (Configuration.hiddenHelpFeedbackLargeAds || ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackLargeAds == true){
                     return true
                 }
             }
             EnumScreens.MAIN_SMALL ->{
-                if (Configuration.hiddenMainSmallAds){
+                if (Configuration.hiddenMainSmallAds || ServiceManager.getInstance().mVersion?.hiddenMainSmallAds == true){
                    return true
                 }
             }
             EnumScreens.MAIN_LARGE ->{
-                if (Configuration.hiddenMainLargeAds){
+                if (Configuration.hiddenMainLargeAds || ServiceManager.getInstance().mVersion?.hiddenMainLargeAds == true){
                     return true
                 }
             }
             EnumScreens.CREATE_SMALL ->{
-                if (Configuration.hiddenCreateSmallAds){
+                if (Configuration.hiddenCreateSmallAds || ServiceManager.getInstance().mVersion?.hiddenCreateSmallAds == true){
                     return true
                 }
             }
             EnumScreens.CREATE_LARGE ->{
-                if (Configuration.hiddenCreateLargeAds){
+                if (Configuration.hiddenCreateLargeAds || ServiceManager.getInstance().mVersion?.hiddenCreateLargeAds == true){
                     return true
                 }
             }
             EnumScreens.SCANNER_RESULT_SMALL ->{
-                if (Configuration.hiddenScannerResultSmallAds){
+                if (Configuration.hiddenScannerResultSmallAds || ServiceManager.getInstance().mVersion?.hiddenScannerResultSmallAds == true){
                     return true
                 }
             }
             EnumScreens.SCANNER_RESULT_LARGE ->{
-                if (Configuration.hiddenScannerResultLargeAds){
+                if (Configuration.hiddenScannerResultLargeAds || ServiceManager.getInstance().mVersion?.hiddenScannerResultLargeAds == true){
                     return true
                 }
             }
             EnumScreens.REVIEW_SMALL->{
-                if (Configuration.hiddenReviewSmallAds){
+                if (Configuration.hiddenReviewSmallAds || ServiceManager.getInstance().mVersion?.hiddenReviewSmallAds == true){
                     return true
                 }
             }
             EnumScreens.REVIEW_LARGE->{
-                if (Configuration.hiddenReviewLargeAds){
+                if (Configuration.hiddenReviewLargeAds || ServiceManager.getInstance().mVersion?.hiddenReviewLargeAds == true){
                     return true
                 }
             }
             EnumScreens.CHANGE_COLOR_SMALL ->{
-                if (Configuration.hiddenChangeColorSmallAds){
+                if (Configuration.hiddenChangeColorSmallAds || ServiceManager.getInstance().mVersion?.hiddenChangeColorSmallAds == true){
                     return true
                 }
             }
             EnumScreens.CHANGE_COLOR_LARGE ->{
-                if (Configuration.hiddenChangeColorLargeAds){
+                if (Configuration.hiddenChangeColorLargeAds || ServiceManager.getInstance().mVersion?.hiddenChangeColorLargeAds == true){
                     return true
                 }
             }
             EnumScreens.BACKUP_SMALL ->{
-                if (Configuration.hiddenBackupSmallAds){
+                if (Configuration.hiddenBackupSmallAds || ServiceManager.getInstance().mVersion?.hiddenBackupSmallAds == true){
                     return true
                 }
             }
             EnumScreens.BACKUP_LARGE ->{
-                if (Configuration.hiddenBackupLargeAds){
+                if (Configuration.hiddenBackupLargeAds || ServiceManager.getInstance().mVersion?.hiddenBackupLargeAds == true){
                     return true
                 }
             }
@@ -1183,6 +1195,19 @@ object Utils {
         }else{
             getContext().getString(R.string.lifetime)
         }
+    }
+
+    fun isTablet(): Boolean {
+        return QRScannerApplication.getInstance().resources.configuration.smallestScreenWidthDp >= 600
+    }
+
+    fun isRequestShowLocalAds()  :Boolean{
+        val mData = ServiceManager.getInstance().mVersion
+        Utils.Log(TAG,"Load data ${mData?.toJson()}")
+        if (mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)){
+            return false
+        }
+        return true
     }
 
     interface UtilsListener {

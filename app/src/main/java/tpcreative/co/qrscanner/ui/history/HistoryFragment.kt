@@ -14,10 +14,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import co.tpcreative.supersafe.common.network.Status
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,9 +23,9 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
-import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.databinding.FragmentHistoryBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
@@ -42,6 +40,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     var actionMode: ActionMode? = null
     var dialog : Dialog? = null
     var dialogExport : Dialog? = null
+    lateinit var binding : FragmentHistoryBinding
     private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
@@ -49,8 +48,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             actionMode = mode
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
-            rlDelete.visibility = View.INVISIBLE
-            rlCSV.visibility = View.INVISIBLE
+            binding.rlDelete.visibility = View.INVISIBLE
+            binding.rlCSV.visibility = View.INVISIBLE
             return true
         }
 
@@ -81,7 +80,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
                     if (actionMode != null) {
                         actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
                     }
-                    recyclerView.removeAllCells()
+                    binding.recyclerView.removeAllCells()
                     bindData()
                     return true
                 }
@@ -104,15 +103,15 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         override fun onDestroyActionMode(mode: ActionMode?) {
             actionMode = null
             isSelectedAll = false
-            rlDelete.visibility = View.VISIBLE
-            rlCSV.visibility = View.VISIBLE
+            binding.rlDelete.visibility = View.VISIBLE
+            binding.rlCSV.visibility = View.VISIBLE
             val list: MutableList<HistoryModel> = viewModel.getListGroup()
             viewModel.mList.clear()
             for (index in list) {
                 index.setDeleted(false)
                 viewModel.mList.add(index)
             }
-            recyclerView.removeAllCells()
+            binding.recyclerView.removeAllCells()
             bindData()
             misDeleted = false
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
@@ -125,7 +124,8 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater?.inflate(R.layout.fragment_history, viewGroup, false)
+        binding = FragmentHistoryBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun work() {
@@ -157,7 +157,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
                 return false
             }
         }
-        recyclerView.setSectionHeader(sh)
+        binding.recyclerView.setSectionHeader(sh)
     }
 
     fun bindData() {
@@ -170,12 +170,12 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
             cells.add(cell)
         }
         if (mListItems.size > 0) {
-            tvNotFoundItems.visibility = View.INVISIBLE
+            binding.tvNotFoundItems.visibility = View.INVISIBLE
         } else {
-            tvNotFoundItems.visibility = View.VISIBLE
+            binding.tvNotFoundItems.visibility = View.VISIBLE
         }
-        recyclerView.addCells(cells)
-        tvCount.text = "${viewModel.count()}"
+        binding.recyclerView.addCells(cells)
+        binding.tvCount.text = "${viewModel.count()}"
     }
 
     override fun getContext(): Context? {
@@ -209,7 +209,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         if (actionMode != null) {
             actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
         }
-        recyclerView.removeAllCells()
+        binding.recyclerView.removeAllCells()
         bindData()
         misDeleted = true
     }
@@ -242,9 +242,9 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
 
     override fun reloadData() {
         CoroutineScope(Dispatchers.Main).launch {
-            if (recyclerView != null) {
+            if (binding.recyclerView != null) {
                 viewModel.getListGroup()
-                recyclerView.removeAllCells()
+                binding.recyclerView.removeAllCells()
                 bindData()
             }
         }
@@ -292,7 +292,7 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
     }
 
     fun updateView() {
-        recyclerView.removeAllCells()
+        binding.recyclerView.removeAllCells()
         bindData()
     }
 

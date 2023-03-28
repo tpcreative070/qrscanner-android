@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.common.extension
 
+import android.R
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.res.Configuration
@@ -8,10 +9,13 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 
 val View.screenLocation get(): IntArray {
     val point = IntArray(2)
@@ -24,6 +28,17 @@ fun View.screenLocationSafe(callback: (Int, Int) -> Unit) {
         val (x, y) = screenLocation
         callback(x, y)
     }
+}
+
+
+fun View.addRipple() = with(TypedValue()) {
+    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
+    setBackgroundResource(resourceId)
+}
+
+fun View.addCircleRipple() = with(TypedValue()) {
+    context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, this, true)
+    setBackgroundResource(resourceId)
 }
 
 fun View.rotateBitmap(context: Context, angle: Int?, color :Int): Bitmap? {
@@ -67,4 +82,10 @@ fun RecyclerView.autoFitColumns(columnWidth: Int) {
     val displayMetrics = this.context.resources.displayMetrics
     val noOfColumns = ((displayMetrics.widthPixels / displayMetrics.density) / columnWidth).toInt()
     this.layoutManager = GridLayoutManager(this.context, noOfColumns)
+}
+
+fun View.layout(@LayoutRes id : Int) :View{
+    val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val v = inflater.inflate(id, null)
+    return v
 }

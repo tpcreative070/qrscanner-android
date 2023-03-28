@@ -42,6 +42,12 @@ object Navigator {
         context?.startActivity(intent)
     }
 
+    fun onFromAdsMoveToProVersion(context: Context?) {
+        val intent = Intent(context, ProVersionActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
+        context?.startActivity(intent)
+    }
+
     fun <T> onGenerateView(context: Activity?, save: GeneralModel?, clazz: Class<T>) {
         val intent = Intent(context, clazz)
         val bundle = Bundle()

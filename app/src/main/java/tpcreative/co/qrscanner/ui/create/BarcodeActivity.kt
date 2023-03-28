@@ -16,7 +16,6 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.basgeekball.awesomevalidation.utility.custom.SimpleCustomValidation
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_barcode.*
 import org.apache.commons.validator.routines.ISBNValidator
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.GenerateSingleton
@@ -26,6 +25,8 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.isSpecialCharacters
 import tpcreative.co.qrscanner.common.extension.validBarcode
+import tpcreative.co.qrscanner.databinding.ActivityBackupBinding
+import tpcreative.co.qrscanner.databinding.ActivityBarcodeBinding
 import tpcreative.co.qrscanner.model.FormatTypeModel
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
@@ -36,11 +37,13 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     var save: GeneralModel? = null
     var dataAdapter: CustomDropDownAdapter? = null
     lateinit var viewModel : GenerateViewModel
+    lateinit var binding : ActivityBarcodeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_barcode)
+        binding = ActivityBarcodeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initUI()
-        edtBarCode.setOnEditorActionListener(this)
+        binding.edtBarCode.setOnEditorActionListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -71,11 +74,11 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
         if (mAwesomeValidation?.validate() == true) {
             Utils.Log(TAG, "Passed")
             val create = GeneralModel(save)
-            create.textProductIdISNB = edtBarCode.text.toString().trim { it <= ' ' }
+            create.textProductIdISNB = binding.edtBarCode.text.toString().trim { it <= ' ' }
             create.barcodeFormat = viewModel.mType?.name
             if (create.barcodeFormat == BarcodeFormat.EAN_13.name){
                 val validator = ISBNValidator()
-                if (validator.isValid(edtBarCode.text.toString())){
+                if (validator.isValid(binding.edtBarCode.text.toString())){
                     create.createType = ParsedResultType.ISBN
                 }else{
                     create.createType = ParsedResultType.PRODUCT
@@ -197,68 +200,68 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     }
 
     private fun focusUI() {
-        edtBarCode.requestFocus()
+        binding.edtBarCode.requestFocus()
     }
 
     fun onSetData() {
-        edtBarCode.setText(save?.textProductIdISNB)
+        binding.edtBarCode.setText(save?.textProductIdISNB)
         if (save?.barcodeFormat == BarcodeFormat.EAN_8.name) {
             viewModel.mType = BarcodeFormat.EAN_8
             viewModel.mLength = 8
-            spinner.setSelection(0)
+            binding.spinner.setSelection(0)
         }
         else if (save?.barcodeFormat == BarcodeFormat.EAN_13.name) {
             viewModel.mType = BarcodeFormat.EAN_13
             viewModel.mLength = 13
-            spinner.setSelection(1)
+            binding.spinner.setSelection(1)
         }
         else if (save?.barcodeFormat == BarcodeFormat.UPC_A.name){
             viewModel.mType = BarcodeFormat.UPC_A
             viewModel.mLength = 12
-            spinner.setSelection(2)
+            binding.spinner.setSelection(2)
         }
         else if (save?.barcodeFormat == BarcodeFormat.UPC_E.name){
             viewModel.mType = BarcodeFormat.UPC_E
             viewModel.mLength = 8
-            spinner.setSelection(3)
+            binding.spinner.setSelection(3)
         }else if (save?.barcodeFormat == BarcodeFormat.CODABAR.name){
             viewModel.mType = BarcodeFormat.CODABAR
             viewModel.mLength = 40
-            spinner.setSelection(4)
+            binding.spinner.setSelection(4)
         }else if (save?.barcodeFormat == BarcodeFormat.DATA_MATRIX.name){
             viewModel.mType = BarcodeFormat.DATA_MATRIX
             viewModel.mLength = 50
-            spinner.setSelection(5)
+            binding.spinner.setSelection(5)
         }
         else if (save?.barcodeFormat == BarcodeFormat.PDF_417.name){
             viewModel.mType = BarcodeFormat.PDF_417
             viewModel.mLength = 50
-            spinner.setSelection(6)
+            binding.spinner.setSelection(6)
         }
         else if (save?.barcodeFormat == BarcodeFormat.AZTEC.name){
             viewModel.mType = BarcodeFormat.AZTEC
             viewModel.mLength = 50
-            spinner.setSelection(7)
+            binding.spinner.setSelection(7)
         }
         else if (save?.barcodeFormat == BarcodeFormat.CODE_128.name){
             viewModel.mType = BarcodeFormat.CODE_128
             viewModel.mLength = 50
-            spinner.setSelection(8)
+            binding.spinner.setSelection(8)
         }
         else if (save?.barcodeFormat == BarcodeFormat.CODE_39.name){
             viewModel.mType = BarcodeFormat.CODE_39
             viewModel.mLength = 50
-            spinner.setSelection(9)
+            binding.spinner.setSelection(9)
         }
         else if (save?.barcodeFormat == BarcodeFormat.CODE_93.name){
             viewModel.mType = BarcodeFormat.CODE_93
             viewModel.mLength = 50
-            spinner.setSelection(10)
+            binding.spinner.setSelection(10)
         }
         else if (save?.barcodeFormat == BarcodeFormat.ITF.name){
             viewModel.mType = BarcodeFormat.ITF
             viewModel.mLength = 50
-            spinner.setSelection(11)
+            binding.spinner.setSelection(11)
         }
         hideSoftKeyBoard()
     }
@@ -313,61 +316,61 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     // add items into spinner dynamically
     private fun addItemsOnSpinner() {
         dataAdapter = CustomDropDownAdapter(this, viewModel.mBarcodeFormat)
-        spinner.adapter = dataAdapter
+        binding.spinner.adapter = dataAdapter
     }
 
     private fun addListenerOnSpinnerItemSelection() {
-        spinner.onItemSelectedListener = CustomOnItemSelectedListener()
+        binding.spinner.onItemSelectedListener = CustomOnItemSelectedListener()
     }
 
     inner class CustomOnItemSelectedListener : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
             val type = dataAdapter?.getItem(pos)
             if (type?.id === BarcodeFormat.EAN_13.name) {
-                edtBarCode.setHint(R.string.hint_13)
-                viewModel.doSetMaxLength(BarcodeFormat.EAN_13, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_13)
+                viewModel.doSetMaxLength(BarcodeFormat.EAN_13, binding.edtBarCode)
             }
             else if (type?.id === BarcodeFormat.EAN_8.name){
-                edtBarCode.setHint(R.string.hint_8)
-                viewModel.doSetMaxLength(BarcodeFormat.EAN_8, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_8)
+                viewModel.doSetMaxLength(BarcodeFormat.EAN_8, binding.edtBarCode)
             }
             else if (type?.id === BarcodeFormat.UPC_E.name){
-                edtBarCode.setHint(R.string.hint_8)
-                viewModel.doSetMaxLength(BarcodeFormat.UPC_E, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_8)
+                viewModel.doSetMaxLength(BarcodeFormat.UPC_E, binding.edtBarCode)
             }else if (type?.id === BarcodeFormat.UPC_A.name){
-                edtBarCode.setHint(R.string.hint_12)
-                viewModel.doSetMaxLength(BarcodeFormat.UPC_A, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_12)
+                viewModel.doSetMaxLength(BarcodeFormat.UPC_A, binding.edtBarCode)
             }
             else if (type?.id === BarcodeFormat.CODABAR.name){
-                edtBarCode.setHint(R.string.hint_digits)
-                viewModel.doSetMaxLength(BarcodeFormat.CODABAR, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_digits)
+                viewModel.doSetMaxLength(BarcodeFormat.CODABAR, binding.edtBarCode)
             }
             else if (type?.id === BarcodeFormat.CODE_39.name){
-                edtBarCode.setHint(R.string.hint_uppercase_characters)
-                viewModel.doSetMaxLength(BarcodeFormat.CODE_39, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_uppercase_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.CODE_39, binding.edtBarCode)
             }
             else if (type?.id === BarcodeFormat.CODE_93.name){
-                edtBarCode.setHint(R.string.hint_uppercase_characters)
-                viewModel.doSetMaxLength(BarcodeFormat.CODE_93, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_uppercase_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.CODE_93, binding.edtBarCode)
             }
             else if (type?.id === BarcodeFormat.ITF.name){
-                edtBarCode.setHint(R.string.hint_digits)
-                viewModel.doSetMaxLength(BarcodeFormat.ITF, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_digits)
+                viewModel.doSetMaxLength(BarcodeFormat.ITF, binding.edtBarCode)
             }
             else {
-                edtBarCode.setHint(R.string.hint_characters)
-                viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, edtBarCode)
+                binding.edtBarCode.setHint(R.string.hint_characters)
+                viewModel.doSetMaxLength(BarcodeFormat.DATA_MATRIX, binding.edtBarCode)
             }
             viewModel.mType = BarcodeFormat.valueOf(type?.id ?:BarcodeFormat.QR_CODE.name)
             if (viewModel.isText(save?.textProductIdISNB)){
-                edtBarCode.setText(save?.textProductIdISNB)
+                binding.edtBarCode.setText(save?.textProductIdISNB)
                 val mLength = save?.textProductIdISNB?.length?:0
                 if (viewModel.mLength >= mLength){
-                    edtBarCode.setSelection(mLength)
+                    binding.edtBarCode.setSelection(mLength)
                 }else{
-                    edtBarCode.setSelection(save?.textProductIdISNB?.substring(0,viewModel.mLength)?.length ?:0)
+                    binding.edtBarCode.setSelection(save?.textProductIdISNB?.substring(0,viewModel.mLength)?.length ?:0)
                 }
-                edtBarCode.requestFocus()
+                binding.edtBarCode.requestFocus()
             }
         }
 

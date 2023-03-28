@@ -3,10 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <FrameLayout
-        android:id="@+id/flContainer_review"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
     <RelativeLayout
         android:id="@+id/rlScanner"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,12 +12,31 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/viewFinder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/zxing_barcode_scanner">
-            <View
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <tpcreative.co.qrscanner.ui.scanner.cpp.PreviewOverlay
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+<!--        <androidx.camera.view.PreviewView-->
+<!--            android:id="@+id/viewFinder"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:scaleType="fitCenter"/>-->
+        <View
                 android:id="@+id/viewCrop"
                 android:layout_marginEnd="@dimen/margin_60"
                 android:layout_marginStart="@dimen/margin_60"
@@ -28,11 +44,11 @@
                 android:layout_marginBottom="@dimen/margin_150"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+
             <com.isseiaoki.simplecropview.CropImageView
                 android:id="@+id/cropImageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:padding="@dimen/spacing_xlarge"
                 app:scv_only_rl_enabled="true"
                 app:scv_guidelines_enabled="false"
@@ -45,16 +61,16 @@
                 app:scv_background_color="@color/transparent"
                 app:scv_crop_mode="free"
                 app:scv_frame_color="@color/colorAccent"
-                app:scv_frame_stroke_weight="1dp"
+                app:scv_frame_stroke_weight="@dimen/margin_1"
                 app:scv_guide_color="@color/colorAccent"
                 app:scv_guide_show_mode="show_always"
-                app:scv_guide_stroke_weight="1dp"
+                app:scv_guide_stroke_weight="@dimen/margin_1"
                 app:scv_handle_color="@color/colorAccent"
                 app:scv_handle_show_mode="show_always"
-                app:scv_handle_size="14dp"
-                app:scv_min_frame_size="50dp"
+                app:scv_handle_size="@dimen/margin_14"
+                app:scv_min_frame_size="@dimen/margin_50"
                 app:scv_overlay_color="@color/transparent"
-                app:scv_touch_padding="8dp"/>
+                app:scv_touch_padding="@dimen/margin_8"/>
             <RelativeLayout
                 android:layout_alignParentTop="true"
                 android:id="@+id/rlHeader"
@@ -224,7 +240,6 @@
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
             </RelativeLayout>
-        </com.journeyapps.barcodescanner.DecoratedBarcodeView>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rlPermission"
@@ -268,19 +283,19 @@
 
         </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/rlGallery"
+                android:id="@+id/rlGalleryNoPermission"
                 android:background="@color/material_gray_400"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_margin="@dimen/margin_10"
                     android:id="@+id/imgGalleryPermission"
                     android:layout_width="@dimen/icon_size_50"
                     android:layout_height="@dimen/icon_size_50"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/margin_10"
                     app:srcCompat="@drawable/ic_gallery" />
 
                 <TextView

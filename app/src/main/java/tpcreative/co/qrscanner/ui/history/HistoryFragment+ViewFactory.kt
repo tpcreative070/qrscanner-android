@@ -1,11 +1,8 @@
 package tpcreative.co.qrscanner.ui.history
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_history.*
-import kotlinx.android.synthetic.main.fragment_history.view.*
 import tpcreative.co.qrscanner.common.HistorySingleton
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
-import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.HistoryModel
 import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
@@ -47,14 +44,14 @@ fun HistoryFragment.deleteEntireItem(){
 }
 
 private fun HistoryFragment.onActionView() {
-    rlDelete.setOnClickListener {
+    binding.rlDelete.setOnClickListener {
         val listHistory: MutableList<HistoryModel> = SQLiteHelper.getHistoryList()
         if (listHistory.size == 0) {
             return@setOnClickListener
         }
         dialogEntireDelete()
     }
-    rlCSV.setOnClickListener {
+    binding.rlCSV.setOnClickListener {
         val listHistory: MutableList<HistoryModel> = SQLiteHelper.getHistoryList()
         if (listHistory.size == 0) {
             return@setOnClickListener

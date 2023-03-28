@@ -6,7 +6,6 @@ import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.PurchaseInfo
 import com.anjlab.android.iab.v3.SkuDetails
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_pro_version.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
@@ -14,15 +13,18 @@ import tpcreative.co.qrscanner.common.SettingsSingleton
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.toText
+import tpcreative.co.qrscanner.databinding.ActivityProVersionBinding
 
 class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingProcessor.IBillingHandler  {
     private var bp: BillingProcessor? = null
+    lateinit var binding : ActivityProVersionBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pro_version)
-        setSupportActionBar(toolbar)
+        binding = ActivityProVersionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        btnUpgradeNow.setOnClickListener(this)
+        binding.btnUpgradeNow.setOnClickListener(this)
         title = getString(R.string.pro_version)
         if (Utils.isInnovation()){
             if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
@@ -112,7 +114,7 @@ class ProVersionActivity : BaseActivitySlide(), View.OnClickListener, BillingPro
         bp?.getPurchaseListingDetailsAsync(Utils.getInAppId(),object  : BillingProcessor.ISkuDetailsResponseListener{
             override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
                 val mPrice = products?.firstOrNull()?.priceText
-                tvPrice.text = mPrice
+                binding.tvPrice.text = mPrice
             }
             override fun onSkuDetailsError(error: String?) {
             }

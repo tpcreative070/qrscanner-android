@@ -6,10 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
-    <FrameLayout
-        android:id="@+id/flContainer_review"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
     <RelativeLayout
         android:id="@+id/rlScanner"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,11 +15,24 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/viewFinder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/zxing_barcode_scanner">
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <tpcreative.co.qrscanner.ui.scanner.cpp.PreviewOverlay
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
             <View
                 android:id="@+id/viewCrop"
                 android:layout_marginEnd="@dimen/margin_80"
@@ -31,34 +41,32 @@
                 android:layout_marginBottom="@dimen/margin_60"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            <com.isseiaoki.simplecropview.CropImageView
-                android:contentDescription="@string/todo"
-                android:id="@+id/cropImageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="@dimen/spacing_xlarge"
-                app:scv_only_rl_enabled="true"
-                app:scv_guidelines_enabled="false"
-                app:scv_guide_borderline_touch_down_enabled="true"
-                app:scv_size_icon="@dimen/icon_size_25"
-                app:scv_size_icon_margin="@dimen/margin_12"
-                app:scv_custom_icon_src="@drawable/ic_full"
-                app:scv_custom_icon_tint_color="?attr/colorAccent"
-                app:scv_overlay_area_color="@color/colorOverlay"
-                app:scv_background_color="@color/transparent"
-                app:scv_crop_mode="free"
-                app:scv_frame_color="@color/colorAccent"
-                app:scv_frame_stroke_weight="1dp"
-                app:scv_guide_color="@color/colorAccent"
-                app:scv_guide_show_mode="show_always"
-                app:scv_guide_stroke_weight="1dp"
-                app:scv_handle_color="@color/colorAccent"
-                app:scv_handle_show_mode="show_always"
-                app:scv_handle_size="14dp"
-                app:scv_min_frame_size="50dp"
-                app:scv_overlay_color="@color/transparent"
-                app:scv_touch_padding="8dp"/>
+        <com.isseiaoki.simplecropview.CropImageView
+            android:id="@+id/cropImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/spacing_xlarge"
+            app:scv_only_rl_enabled="true"
+            app:scv_guidelines_enabled="false"
+            app:scv_guide_borderline_touch_down_enabled="true"
+            app:scv_size_icon="@dimen/icon_size_25"
+            app:scv_size_icon_margin="@dimen/margin_12"
+            app:scv_custom_icon_src="@drawable/ic_full"
+            app:scv_custom_icon_tint_color="?attr/colorAccent"
+            app:scv_overlay_area_color="@color/colorOverlay"
+            app:scv_background_color="@color/transparent"
+            app:scv_crop_mode="free"
+            app:scv_frame_color="@color/colorAccent"
+            app:scv_frame_stroke_weight="@dimen/margin_1"
+            app:scv_guide_color="@color/colorAccent"
+            app:scv_guide_show_mode="show_always"
+            app:scv_guide_stroke_weight="@dimen/margin_1"
+            app:scv_handle_color="@color/colorAccent"
+            app:scv_handle_show_mode="show_always"
+            app:scv_handle_size="@dimen/margin_14"
+            app:scv_min_frame_size="@dimen/margin_50"
+            app:scv_overlay_color="@color/transparent"
+            app:scv_touch_padding="@dimen/margin_8"/>
             <RelativeLayout
                 android:layout_alignParentTop="true"
                 android:id="@+id/rlHeader"
@@ -251,7 +259,6 @@
                         android:contentDescription="@string/todo" />
                 </RelativeLayout>
             </RelativeLayout>
-        </com.journeyapps.barcodescanner.DecoratedBarcodeView>
     </RelativeLayout>
 
     <RelativeLayout
@@ -302,7 +309,7 @@
             <RelativeLayout
                 android:layout_marginStart="@dimen/margin_10"
                 android:layout_weight="1"
-                android:id="@+id/rlGallery"
+                android:id="@+id/rlGalleryNoPermission"
                 android:background="@color/material_gray_400"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

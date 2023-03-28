@@ -10,6 +10,7 @@
     <color name="ColorRedV1">#f91806</color>
     <color name="colorAccent">#e19704</color>
     <color name="colorAccentDark">#ab7304</color>
+    <color name="colorAccentOverLay">#B2E19704</color>
     <color name="grey_lighter">#999898</color>
     <color name="grey_light">#9E9E9E</color>
     <color name="grey_dark">#424242</color>
@@ -35,6 +36,7 @@
     <color name="black">#FF000000</color>
     <color name="blackTheme">#FF000000</color>
     <color name="material_gray_theme">#EEEEEE</color>
+    <color name="lightAds">#48A5A5A5</color>
 
     <color name="inbox_primary">#4285f4</color>
     <color name="inbox_primary_dark">#3367d6</color>
@@ -720,4 +722,18 @@
     <color name="windowBackground">#1C1C1C</color>
     <color name="overlay">#AA1C1C1C</color>
     <color name="colorOverlay">#60E19704</color>
+    /*Custom camera review/
+    <color name="zxing_possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
+    <color name="zxing_result_view">#b0000000</color>
+    <color name="zxing_status_text">#ffffffff</color>
+    <color name="zxing_transparent">#00000000</color>
+    <color name="zxing_viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+    <color name="zxing_viewfinder_mask">#60000000</color>
+
+    <color name="zxing_custom_possible_result_points">#903A89CF</color>
+    <color name="zxing_custom_result_view">#b0000000</color>
+    <color name="zxing_custom_viewfinder_laser">#1976D2</color>
+    <color name="zxing_custom_viewfinder_mask">#60000000</color>
+    <color name="zxing_colorAccent">#e19704</color>
+    <color name="zxing_colorBlueLight">#19a7a7</color>
 </resources>

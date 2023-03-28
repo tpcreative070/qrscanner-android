@@ -160,7 +160,8 @@
         <activity
             android:name=".ui.create.BarcodeActivity"
             android:label="@string/barcode" />
-        <activity android:name=".ui.scannerresult.ScannerResultActivity" />
+        <activity android:name=".ui.scannerresult.ScannerResultActivity"
+            android:exported="true"/>
         <activity
             android:name=".ui.cropimage.CropImageActivity"
             android:exported="true">

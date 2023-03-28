@@ -14,11 +14,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.api.requester.DriveService
 import tpcreative.co.qrscanner.common.api.requester.UserService
 import tpcreative.co.qrscanner.common.extension.setDisplayLatTimeSyncedCompletely
+import tpcreative.co.qrscanner.common.extension.toJson
+import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.presenter.BaseView
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerService
@@ -27,6 +30,7 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumStatus
 import tpcreative.co.qrscanner.model.SyncDataModel
+import tpcreative.co.qrscanner.model.Version
 import tpcreative.co.qrscanner.viewmodel.DriveViewModel
 import tpcreative.co.qrscanner.viewmodel.UserViewModel
 import java.io.File
@@ -39,12 +43,14 @@ class ServiceManager : BaseView<Any?> {
     private var isSyncingData = false
     private val driveViewModel = DriveViewModel(DriveService())
     private val userViewModel = UserViewModel(UserService())
-    var myConnection: ServiceConnection = object : ServiceConnection {
+    var mVersion : Version? = Version()
+    private var myConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName?, binder: IBinder?) {
             Utils.Log(TAG, "connected")
             myService = (binder as LocalBinder?)?.getService()
             myService?.bindView(this@ServiceManager)
             getInstance().onPreparingSyncData(false)
+            getInstance().onCheckVersion()
         }
         //binder comes from server to communicate with method's of
         override fun onServiceDisconnected(className: ComponentName?) {
@@ -147,6 +153,57 @@ class ServiceManager : BaseView<Any?> {
         isDismiss = isDismissApp
         CoroutineScope(Dispatchers.IO).launch {
             getItemList()
+        }
+    }
+
+    fun onCheckVersion(){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val mResult = driveViewModel.onCheckVersion()
+                when (mResult.status) {
+                    Status.SUCCESS -> {
+                        if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
+                            mResult.data?.qrscannerFreeRelease?.let {
+                                try {
+                                    mVersion = it
+                                    Utils.Log(TAG, "Check version success f ${it.toJson()} ")
+                                }catch (e: Exception){
+                                    e.printStackTrace()
+                                }
+                            }
+                        } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
+                            mResult.data?.qrscannerFreeInnovation?.let {
+                                try {
+                                    mVersion = it
+                                    Utils.Log(TAG, "Check version success n ${it.toJson()} ")
+                                }catch (e: Exception){
+                                    e.printStackTrace()
+                                }
+                            }
+                        }
+                        else if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
+                            mResult.data?.superQRScannerFreeInnovation?.let {
+                                try {
+                                    mVersion = it
+                                    Utils.Log(TAG, "Check version success s ${it.toJson()} ")
+                                }catch (e: Exception){
+                                    e.printStackTrace()
+                                }
+                            }
+                        }
+                        else{
+                            Utils.Log(TAG,"Nothing todo")
+                        }
+                    }
+                    else -> {
+                        Utils.Log(TAG, "Fetch check version issue ${mResult.message}")
+                        Resource.error(mResult.code ?: Utils.CODE_EXCEPTION, mResult.message
+                            ?: "", null)
+                    }
+                }
+            } catch (e: Exception) {
+                Resource.error(Utils.CODE_EXCEPTION, e.message ?: "", null)
+            }
         }
     }
 

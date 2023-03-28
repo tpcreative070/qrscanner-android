@@ -2,26 +2,21 @@ package tpcreative.co.qrscanner.ui.create
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_barcode.*
-import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
-import tpcreative.co.qrscanner.model.GeneralModel
-import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 fun BarcodeActivity.initUI(){
     TAG = this::class.java.name
     setupViewModel()
-    setSupportActionBar(toolbar)
+    setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     doInitView()
     getIntentData()
-    btnRandom.setOnClickListener {
+    binding.btnRandom.setOnClickListener {
         val mValue = Utils.generateRandomDigits(viewModel.mLength - 1).toString() + ""
         val mResult = Utils.generateEAN(mValue)
-        edtBarCode.setText(mResult)
+        binding.edtBarCode.setText(mResult)
     }
 }
 

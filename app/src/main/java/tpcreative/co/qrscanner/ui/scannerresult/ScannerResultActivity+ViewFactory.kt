@@ -12,25 +12,18 @@ import co.tpcreative.supersafe.common.adapter.clearDecorations
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.getInputLayout
 import com.afollestad.materialdialogs.input.input
+import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import kotlinx.android.synthetic.main.activity_result.*
-import kotlinx.android.synthetic.main.activity_result.recyclerView
-import kotlinx.android.synthetic.main.activity_result.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_result.rlBannerLarger
-import kotlinx.android.synthetic.main.activity_result.scrollView
-import kotlinx.android.synthetic.main.activity_result.toolbar
-import kotlinx.android.synthetic.main.activity_review.*
+//import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Configuration
 import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.model.EnumAction
 import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.Theme
@@ -39,17 +32,24 @@ import java.util.*
 
 fun ScannerResultActivity.initUI(){
     TAG = this::class.java.name
-    setSupportActionBar(toolbar)
+    setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    scrollView.smoothScrollTo(0, 0)
+    binding.scrollView.smoothScrollTo(0, 0)
     initRecycleView()
     setupViewModel()
     getDataIntent()
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
-        rlAdsRoot.visibility = View.GONE
+        binding.rlAdsRoot.visibility = View.GONE
+    }else{
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
-        rlBannerLarger.visibility = View.GONE
+        binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
     if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)) {
         QRScannerApplication.getInstance().requestResultSmallView(this)
@@ -63,13 +63,10 @@ fun ScannerResultActivity.initUI(){
 fun ScannerResultActivity.initRecycleView() {
     adapter = ScannerResultActivityAdapter(layoutInflater, this, this)
     val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-    if (recyclerView == null) {
-        Utils.Log(TAG, "recyclerview is null")
-    }
-    recyclerView.layoutManager = mLayoutManager
-    recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
-    recyclerView.clearDecorations()
-    recyclerView.adapter = adapter
+    binding.recyclerView.layoutManager = mLayoutManager
+    binding.recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+    binding.recyclerView.clearDecorations()
+    binding.recyclerView.adapter = adapter
 }
 
 fun ScannerResultActivity.getDataIntent() {
@@ -210,24 +207,24 @@ suspend fun ScannerResultActivity.onDecode(bitmap : Bitmap) =
                         val drawable = FlagKit.getDrawable(this@onDecode, "us")
                         val l = Locale("", "us")
 
-                        imgFlag.setImageDrawable(drawable)
-                        tvFlag.text = String.format(getString(R.string.country_display1),l.displayCountry)
+                        binding.imgFlag.setImageDrawable(drawable)
+                        binding.tvFlag.text = String.format(getString(R.string.country_display1),l.displayCountry)
 
                         val drawable1 = FlagKit.getDrawable(this@onDecode, "ca")
                         val l1 = Locale("", "ca")
 
-                        imgFlag1.setImageDrawable(drawable1)
-                        tvFlag1.text = String.format(getString(R.string.country_display),l1.displayCountry)
-                        imgFlag1.visibility = View.VISIBLE
-                        tvFlag1.visibility = View.VISIBLE
+                        binding.imgFlag1.setImageDrawable(drawable1)
+                        binding.tvFlag1.text = String.format(getString(R.string.country_display),l1.displayCountry)
+                        binding.imgFlag1.visibility = View.VISIBLE
+                        binding.tvFlag1.visibility = View.VISIBLE
                     }else{
                         val drawable = FlagKit.getDrawable(this@onDecode, it.toString().lowercase())
                         val l = Locale("", it.toString().lowercase())
-                        imgFlag.setImageDrawable(drawable)
-                        tvFlag.text = String.format(getString(R.string.country_display),l.displayCountry)
+                        binding.imgFlag.setImageDrawable(drawable)
+                        binding.tvFlag.text = String.format(getString(R.string.country_display),l.displayCountry)
                     }
-                    imgFlag.visibility = View.VISIBLE
-                    tvFlag.visibility = View.VISIBLE
+                    binding.imgFlag.visibility = View.VISIBLE
+                    binding.tvFlag.visibility = View.VISIBLE
                 }
                 bitmap.recycle()
             }

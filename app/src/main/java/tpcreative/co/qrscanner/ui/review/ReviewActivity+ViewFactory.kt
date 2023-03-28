@@ -19,11 +19,6 @@ import androidx.print.PrintHelper
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
-import kotlinx.android.synthetic.main.activity_help.*
-import kotlinx.android.synthetic.main.activity_review.*
-import kotlinx.android.synthetic.main.activity_review.rlAdsRoot
-import kotlinx.android.synthetic.main.activity_review.rlBannerLarger
-import kotlinx.android.synthetic.main.activity_review.toolbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,14 +26,15 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.io.File
 import java.io.FileOutputStream
 
@@ -46,15 +42,22 @@ import java.io.FileOutputStream
 fun ReviewActivity.initUI(){
     TAG = this::class.java.simpleName
     setupViewModel()
-    setSupportActionBar(toolbar)
+    setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    scrollView.smoothScrollTo(0, 0)
+    binding.scrollView.smoothScrollTo(0, 0)
     getIntentData()
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
     if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
-        rlAdsRoot.visibility = View.GONE
+        binding.rlAdsRoot.visibility = View.GONE
+    }else{
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
     if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
-        rlBannerLarger.visibility = View.GONE
+        binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
     if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)) {
         QRScannerApplication.getInstance().requestReviewSmallView(this)
@@ -84,6 +87,7 @@ fun ReviewActivity.initUI(){
     }
     onHandlerIntent()
 }
+
 
 /*Share File To QRScanner*/
 private fun ReviewActivity.onHandlerIntent() {
@@ -212,9 +216,9 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(enumAction: EnumAction,text : Str
             history.barcodeFormat = BarcodeFormat.QR_CODE.name
             /*For display*/
             format = BarcodeFormat.QR_CODE.name
-            txtSubject.text = subject
-            txtDisplay.text = text
-            txtFormat.text = format
+            binding.txtSubject.text = subject
+            binding.txtDisplay.text = text
+            binding.txtFormat.text = format
         }
         EnumAction.VIEW_CODE -> {
             /*
@@ -239,9 +243,9 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(enumAction: EnumAction,text : Str
             history.barcodeFormat = BarcodeFormat.QR_CODE.name
             /*For display*/
             format = BarcodeFormat.QR_CODE.name
-            txtSubject.text = subject
-            txtDisplay.text = text
-            txtFormat.text = format
+            binding.txtSubject.text = subject
+            binding.txtDisplay.text = text
+            binding.txtFormat.text = format
         }
         EnumAction.VIEW_CROP ->{
             mSave?.let {
@@ -260,9 +264,9 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(enumAction: EnumAction,text : Str
                 history.barcodeFormat = mSave.barcodeFormat
                 /*For display*/
                 format =  mSave.barcodeFormat
-                txtSubject.text = history.type
-                txtDisplay.text = history.code
-                txtFormat.text = format
+                binding.txtSubject.text = history.type
+                binding.txtDisplay.text = history.code
+                binding.txtFormat.text = format
             }
         }
         else -> {}

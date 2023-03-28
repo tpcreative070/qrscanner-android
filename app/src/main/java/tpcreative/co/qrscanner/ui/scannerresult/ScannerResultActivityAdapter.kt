@@ -4,10 +4,12 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
-import kotlinx.android.synthetic.main.item_navigation.view.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.onBarCodeId
@@ -35,29 +37,37 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
             this.mPosition = position
             val mContactKey = data.contactKey
             val mContactValue = data.contactValue
+            val rlBasic : RelativeLayout = itemView.findViewById(R.id.rlBasic)
+            val rlAdvance : RelativeLayout = itemView.findViewById(R.id.rlAdvance)
+            val imgTypeQRCode : ImageView = itemView.findViewById(R.id.imgTypeQRCode)
+            val imgMarkFavorite : ImageView = itemView.findViewById(R.id.imgMarkFavorite)
+            val tvTitle : TextView = itemView.findViewById(R.id.tvTitle)
+            val imgAction : ImageView = itemView.findViewById(R.id.imgAction)
+            val rlHome : RelativeLayout = itemView.findViewById(R.id.rlHome)
+            val imgTakeNote : ImageView = itemView.findViewById(R.id.imgTakeNote)
             if (data.enumAction == EnumAction.DO_ADVANCE){
-                itemView.rlBasic.visibility = View.GONE
-                itemView.rlAdvance.visibility = View.VISIBLE
-                itemView.imgTypeQRCode.setImageDrawable(Utils.onBarCodeId(data.barcodeFormat))
+                rlBasic.visibility = View.GONE
+                rlAdvance.visibility = View.VISIBLE
+                imgTypeQRCode.setImageDrawable(Utils.onBarCodeId(data.barcodeFormat))
                 if (data.isFavorite == true){
-                    itemView.imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_favorite_24))
+                    imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_favorite_24))
                 }else{
-                    itemView.imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_unfavorite_24))
+                    imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_unfavorite_24))
                 }
             }else{
-                itemView.rlAdvance.visibility = View.GONE
-                itemView.rlBasic.visibility = View.VISIBLE
-                itemView.tvTitle.text = data.value
-                itemView.imgAction.setImageDrawable(ContextCompat.getDrawable(context, data.res))
-                itemView.imgAction.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
+                rlAdvance.visibility = View.GONE
+                rlBasic.visibility = View.VISIBLE
+                tvTitle.text = data.value
+                imgAction.setImageDrawable(ContextCompat.getDrawable(context, data.res))
+                imgAction.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP)
             }
-            itemView.rlHome.setOnClickListener {
+            rlHome.setOnClickListener {
                 itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.VIEW_CODE)
             }
-            itemView.imgTakeNote.setOnClickListener {
+            imgTakeNote.setOnClickListener {
                 itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.TAKE_NOTE)
             }
-            itemView.imgMarkFavorite.setOnClickListener {
+            imgMarkFavorite.setOnClickListener {
                 itemSelectedListener?.onClickItem(mPosition,mContactKey,mContactValue,EnumAction.MARK_FAVORITE)
             }
         }

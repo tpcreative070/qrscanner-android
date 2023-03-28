@@ -18,11 +18,6 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
 import com.jaychang.srv.decoration.SectionHeaderProvider
 import com.jaychang.srv.decoration.SimpleSectionHeaderProvider
-import kotlinx.android.synthetic.main.fragment_saver.*
-import kotlinx.android.synthetic.main.fragment_saver.recyclerView
-import kotlinx.android.synthetic.main.fragment_saver.rlCSV
-import kotlinx.android.synthetic.main.fragment_saver.rlDelete
-import kotlinx.android.synthetic.main.fragment_saver.tvNotFoundItems
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,6 +27,7 @@ import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.databinding.FragmentSaverBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.create.*
@@ -48,6 +44,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     var dialog : Dialog? = null
     var dialogExport : Dialog? = null
     lateinit var viewModel : SaveViewModel
+    lateinit var binding : FragmentSaverBinding
     private val callback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             val menuInflater: MenuInflater? = mode?.menuInflater
@@ -55,8 +52,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             actionMode = mode
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
             window?.statusBarColor = ContextCompat.getColor(context!!, R.color.colorAccentDark)
-            rlDelete.visibility = View.INVISIBLE
-            rlCSV.visibility = View.INVISIBLE
+            binding.rlDelete.visibility = View.INVISIBLE
+            binding.rlCSV.visibility = View.INVISIBLE
             return true
         }
 
@@ -87,7 +84,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
                     if (actionMode != null) {
                         actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
                     }
-                    recyclerView.removeAllCells()
+                    binding.recyclerView.removeAllCells()
                     bindData()
                     return true
                 }
@@ -112,15 +109,15 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         override fun onDestroyActionMode(mode: ActionMode?) {
             actionMode = null
             isSelectedAll = false
-            rlDelete.visibility = View.VISIBLE
-            rlCSV.visibility = View.VISIBLE
+            binding.rlDelete.visibility = View.VISIBLE
+            binding.rlCSV.visibility = View.VISIBLE
             val list: MutableList<SaveModel> = viewModel.getListGroup()
             viewModel.mList.clear()
             for (index in list) {
                 index.setDeleted(false)
                 viewModel.mList.add(index)
             }
-            recyclerView.removeAllCells()
+            binding.recyclerView.removeAllCells()
             bindData()
             misDeleted = false
             val window: Window? = QRScannerApplication.getInstance().getActivity()?.window
@@ -133,7 +130,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
-        return inflater?.inflate(R.layout.fragment_saver, viewGroup, false)
+        binding = FragmentSaverBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun work() {
@@ -162,7 +160,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
                 return false
             }
         }
-        recyclerView.setSectionHeader(sh)
+        binding.recyclerView.setSectionHeader(sh)
     }
 
     fun bindData() {
@@ -174,12 +172,12 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
             cells.add(cell)
         }
         if (mListItems.size > 0) {
-            tvNotFoundItems.visibility = View.INVISIBLE
+            binding.tvNotFoundItems.visibility = View.INVISIBLE
         } else {
-            tvNotFoundItems.visibility = View.VISIBLE
+            binding.tvNotFoundItems.visibility = View.VISIBLE
         }
-        recyclerView.addCells(cells)
-        tvCount.text = "${viewModel.count()}"
+        binding.recyclerView.addCells(cells)
+        binding.tvCount.text = "${viewModel.count()}"
     }
 
     override fun isDeleted(): Boolean {
@@ -214,7 +212,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         if (actionMode != null) {
             actionMode?.title = viewModel.getCheckedCount().toString() + " " + getString(R.string.selected)
         }
-        recyclerView.removeAllCells()
+        binding.recyclerView.removeAllCells()
         bindData()
         misDeleted = true
     }
@@ -295,8 +293,8 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     override fun reloadData() {
         CoroutineScope(Dispatchers.Main).launch {
             viewModel.getListGroup()
-            if (recyclerView!=null){
-                recyclerView.removeAllCells()
+            if (binding.recyclerView!=null){
+                binding.recyclerView.removeAllCells()
                 bindData()
             }
         }
@@ -349,7 +347,7 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
     }
 
     fun updateView() {
-        recyclerView.removeAllCells()
+        binding.recyclerView.removeAllCells()
         bindData()
     }
 

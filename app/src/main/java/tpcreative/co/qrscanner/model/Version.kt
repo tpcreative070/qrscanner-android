@@ -1,15 +1,56 @@
 package tpcreative.co.qrscanner.model
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Configuration
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import java.io.Serializable
 import java.util.*
 
-class Version : Serializable {
+class Version() : Serializable {
     var title: String? = null
     var release = false
-    var isShowFamilyApps = false
-    var isAds = false
-    var isProVersion = false
-    var version_name: String? = null
-    var version_code = 0
+    var version_name : String? = ""
+    var version_code : Int? = 1
+    var isAds : Boolean? = true
+    var isProVersion : Boolean? = false
+    var hiddenMainSmallAds: Boolean? = true
+    var hiddenMainLargeAds: Boolean? = true
+    var hiddenChangeColorSmallAds: Boolean? = true
+    var hiddenChangeColorLargeAds: Boolean? = true
+    var hiddenBackupSmallAds: Boolean? = true
+    var hiddenBackupLargeAds: Boolean? = true
+    var hiddenCreateSmallAds: Boolean? = true
+    var hiddenCreateLargeAds: Boolean? = true
+    var hiddenHelpFeedbackSmallAds: Boolean? = true
+    var hiddenHelpFeedbackLargeAds: Boolean? = true
+    var hiddenScannerResultSmallAds: Boolean? = true
+    var hiddenScannerResultLargeAds: Boolean? = true
+    var hiddenReviewSmallAds: Boolean? = true
+    var hiddenReviewLargeAds: Boolean? = true
+    var hiddenFreeReleaseAds: Boolean? = false
+    var hiddenFreeInnovationAds: Boolean? = false
+    var hiddenSuperFreeInnovationAds: Boolean? = true
+    var app_id : String? = null
     var ads: Ads? = null
     var content: HashMap<Any?, String?>? = null
+
+    init {
+        hiddenMainSmallAds = Configuration.hiddenMainSmallAds
+        hiddenMainLargeAds = Configuration.hiddenMainLargeAds
+        hiddenChangeColorSmallAds = Configuration.hiddenMainLargeAds
+        hiddenChangeColorLargeAds = Configuration.hiddenMainLargeAds
+        hiddenBackupSmallAds = Configuration.hiddenMainLargeAds
+        hiddenBackupLargeAds = Configuration.hiddenMainLargeAds
+        hiddenCreateSmallAds = Configuration.hiddenMainLargeAds
+        hiddenCreateLargeAds = Configuration.hiddenMainLargeAds
+        hiddenHelpFeedbackSmallAds = Configuration.hiddenMainLargeAds
+        hiddenHelpFeedbackLargeAds = Configuration.hiddenMainLargeAds
+        hiddenScannerResultSmallAds = Configuration.hiddenMainLargeAds
+        hiddenScannerResultLargeAds = Configuration.hiddenMainLargeAds
+        hiddenReviewSmallAds = Configuration.hiddenMainLargeAds
+        hiddenReviewLargeAds = Configuration.hiddenMainLargeAds
+        hiddenFreeReleaseAds = Configuration.hiddenMainLargeAds
+        hiddenFreeInnovationAds = Configuration.hiddenMainLargeAds
+        hiddenSuperFreeInnovationAds = Configuration.hiddenMainLargeAds
+        app_id = QRScannerApplication.getInstance().getString(R.string.admob_app_id)
+    }
 }

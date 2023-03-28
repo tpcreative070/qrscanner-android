@@ -15,6 +15,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.api.RetrofitBuilder
 import tpcreative.co.qrscanner.common.api.request.DownloadFileRequest
+import tpcreative.co.qrscanner.common.api.response.BaseResponse
 import tpcreative.co.qrscanner.common.api.response.DriveResponse
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.download.ProgressResponseBody
@@ -32,6 +33,18 @@ class DriveService {
             try {
                 val mResult = ApiHelper.getInstance()?.onGetDriveAbout(Utils.getAccessToken())
                 ResponseHandler.handleSuccess(mResult as DriveAbout)
+            }
+            catch (throwable : Exception){
+                ResponseHandler.handleException(throwable)
+            }
+        }
+    }
+
+    suspend fun onCheckVersion() : Resource<BaseResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mResult = ApiHelper.getInstance()?.onCheckVersion("http://tpcreative.me/qrscanner.php")
+                ResponseHandler.handleSuccess(mResult as BaseResponse)
             }
             catch (throwable : Exception){
                 ResponseHandler.handleException(throwable)

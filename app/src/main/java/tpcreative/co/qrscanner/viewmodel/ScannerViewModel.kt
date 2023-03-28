@@ -18,17 +18,18 @@ class ScannerViewModel : BaseViewModel<EmptyModel>(){
     var stringBuilderClipboard: StringBuilder? = StringBuilder()
     var mCount = 0
     var history: HistoryModel? = HistoryModel()
-    var isResume : Boolean = false
     var isRequestDone : Boolean = false
     var isRequestSettings : Boolean = false
     var isAnyPermissionPermanentlyDenied : Boolean = false
     var isRequiredStartService : Boolean = false
+    var isLight : Boolean = false
+    var zoom : Float = 0F
 
 
-    fun updateValue(mValue: Int) = liveData(Dispatchers.Main){
+    fun updateValue(mValue: Int, callback: (result: Int?) -> Unit){
         mCount += mValue
         Utils.setCountContinueScan(mCount)
-        emit(mCount)
+        callback.invoke(mCount)
     }
 
     fun doSaveItems(mCreate: GeneralModel?) {

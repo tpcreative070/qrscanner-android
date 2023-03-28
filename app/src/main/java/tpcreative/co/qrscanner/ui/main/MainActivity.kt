@@ -1,30 +1,34 @@
 package tpcreative.co.qrscanner.ui.main
 import android.content.IntentFilter
-import android.graphics.*
+import android.graphics.Point
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.widget.*
+import android.view.LayoutInflater
+import android.view.View
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.tasks.Task
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.llSmallAds
-import kotlinx.android.synthetic.main.activity_main.toolbar
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.*
+import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.HistorySingleton
 import tpcreative.co.qrscanner.common.ResponseSingleton.SingleTonResponseListener
+import tpcreative.co.qrscanner.common.SaveSingleton
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivity
 import tpcreative.co.qrscanner.common.controller.PremiumManager
 import tpcreative.co.qrscanner.common.controller.ServiceManager
-import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.services.QRScannerReceiver
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
+import tpcreative.co.qrscanner.databinding.ActivityMainBinding
 import tpcreative.co.qrscanner.viewmodel.MainViewModel
 
 
@@ -36,6 +40,8 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     var receiver: QRScannerReceiver? = null
     private var isScanner : Boolean = false
     private var isCreate : Boolean = false
+
+
 
     private val tabIcons: IntArray = intArrayOf(
             R.drawable.ic_history,
@@ -50,14 +56,18 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
         R.drawable.ic_history,
         R.drawable.ic_settings)
 
-    fun getToolbar(): Toolbar? {
-        return toolbar
+    fun getToolbar(): Toolbar {
+        return binding.toolbar
     }
+
+    lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initUI()
+        windowManager.defaultDisplay.getSize(screenParametersPoint)
     }
 
     private fun callRateApp(){
@@ -86,7 +96,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     }
 
     fun lock(isLock : Boolean){
-        viewpager.setSwipeableDisable(isLock)
+        binding.viewpager.setSwipeableDisable(isLock)
     }
 
     fun setupViewPager(viewPager: ViewPager?) {
@@ -103,11 +113,11 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     fun setupTabIcons() {
         try {
-            tabs.getTabAt(0)?.setIcon(tabIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
-            tabs.getTabAt(1)?.setIcon(tabIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
-            tabs.getTabAt(2)?.setIcon(tabIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
-            tabs.getTabAt(3)?.setIcon(tabIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
-            tabs.getTabAt(4)?.setIcon(tabIcons[4])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(0)?.setIcon(tabIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(1)?.setIcon(tabIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(2)?.setIcon(tabIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(3)?.setIcon(tabIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(4)?.setIcon(tabIcons[4])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
         } catch (e: Exception) {
             e.message
         }
@@ -115,10 +125,10 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     fun setupInnovationTabIcons() {
         try {
-            tabs.getTabAt(0)?.setIcon(tabInnovationIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
-            tabs.getTabAt(1)?.setIcon(tabInnovationIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
-            tabs.getTabAt(2)?.setIcon(tabInnovationIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
-            tabs.getTabAt(3)?.setIcon(tabInnovationIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(0)?.setIcon(tabInnovationIcons[0])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(1)?.setIcon(tabInnovationIcons[1])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(2)?.setIcon(tabInnovationIcons[2])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
+            binding.tabs.getTabAt(3)?.setIcon(tabInnovationIcons[3])?.icon?.let { MyDrawableCompat.setColorFilter(it, ContextCompat.getColor(this, R.color.white)) }
         } catch (e: Exception) {
             e.message
         }
@@ -196,12 +206,10 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     override fun onScannerDone() {
         Utils.Log(TAG, "onScannerDone")
-        if (viewpager != null) {
-            if (Utils.isInnovation()){
-                viewpager.currentItem = 2
-            }else{
-                viewpager.currentItem = 0
-            }
+        if (Utils.isInnovation()){
+            binding.viewpager.currentItem = 2
+        }else{
+            binding.viewpager.currentItem = 0
         }
     }
 
@@ -256,5 +264,9 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
+        lateinit var screenParametersPoint: Point
+    }
+    init {
+        screenParametersPoint = Point()
     }
 }

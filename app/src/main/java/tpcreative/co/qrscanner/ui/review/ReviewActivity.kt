@@ -10,14 +10,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.Result
 import com.google.zxing.client.result.ParsedResultType
 import com.google.zxing.client.result.ResultParser
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +29,9 @@ import tpcreative.co.qrscanner.common.extension.onGeneralParse
 import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
+import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.util.*
@@ -49,9 +50,12 @@ class ReviewActivity : BaseActivitySlide() {
     private var save: SaveModel = SaveModel()
     var dialog : Dialog? = null
     var isAlreadySaved  = false
+    var viewAds : AdsView? = null
+    lateinit var binding : ActivityReviewBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_review)
+        binding = ActivityReviewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
     }
@@ -74,10 +78,14 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onResume() {
         super.onResume()
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
         checkingShowAds()
     }
 
     override fun onPause() {
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.REVIEW_SMALL)
+        QRScannerApplication.getInstance().onPauseAds(EnumScreens.REVIEW_LARGE)
         super.onPause()
     }
 
@@ -98,9 +106,9 @@ class ReviewActivity : BaseActivitySlide() {
             save = Utils.onGeneralParse(it,SaveModel::class)
             code = save.code
             type = save.type
-            txtSubject.text = type
-            txtDisplay.text = code
-            txtFormat.text = format
+            binding.txtSubject.text = type
+            binding.txtDisplay.text = code
+            binding.txtFormat.text = format
             CoroutineScope(Dispatchers.IO).launch {
                 onGenerateReview(code)
                 onGenerateQRCode(code)
@@ -252,7 +260,7 @@ class ReviewActivity : BaseActivitySlide() {
                         hints
                     )
                 }
-                imgResult.setImageBitmap(mBitmap)
+                binding.imgResult.setImageBitmap(mBitmap)
                 onSavedData()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -312,8 +320,8 @@ class ReviewActivity : BaseActivitySlide() {
     /*show ads*/
     fun doShowAds(isShow: Boolean) {
         if (isShow) {
-            QRScannerApplication.getInstance().loadReviewSmallView(llSmallAds)
-            QRScannerApplication.getInstance().loadReviewLargeView(llLargeAds)
+            QRScannerApplication.getInstance().loadReviewSmallView(viewAds?.getSmallAds())
+            QRScannerApplication.getInstance().loadReviewLargeView(viewAds?.getLargeAds())
         }
     }
 
