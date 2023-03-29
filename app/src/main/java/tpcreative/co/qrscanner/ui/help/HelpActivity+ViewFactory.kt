@@ -35,10 +35,10 @@ fun HelpActivity.initUI(){
     }
     initRecycleView(layoutInflater)
     getData()
-    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestHelpFeedbackSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)) {
+    if (QRScannerApplication.getInstance().isHelpFeedbackLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackLargeView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestHelpFeedbackLargeView(this)
     }
     checkingShowAds()

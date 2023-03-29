@@ -12,8 +12,6 @@ import android.os.Parcelable
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.camera2.interop.Camera2CameraControl
-import androidx.camera.camera2.interop.CaptureRequestOptions
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -367,6 +365,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
         return AspectRatio.RATIO_16_9
     }
 
+    private fun getTargetResolution(): android.util.Size {
+        return when (resources.configuration.orientation) {
+            android.content.res.Configuration.ORIENTATION_PORTRAIT -> android.util.Size(1200, 1600)
+            android.content.res.Configuration.ORIENTATION_LANDSCAPE -> android.util.Size(1600, 1200)
+            else -> android.util.Size(1600, 1200)
+        }
+    }
+
     @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
     private fun  bindCameraUseCases() = binding.viewFinder.post {
         val viewFinder = binding.viewFinder
@@ -414,16 +420,40 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                 this as LifecycleOwner, cameraSelector, preview, imageAnalyzer
             )
 
-            // Reduce exposure time to decrease effect of motion blur
-            camera?.let {
-                val camera2 = Camera2CameraControl.from(it.cameraControl)
-                camera2.captureRequestOptions = CaptureRequestOptions.Builder()
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, 1600)
-                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, -8)
-                    .build()
-            }
+//             Reduce exposure time to decrease effect of motion blur
+//            camera?.let {
+//                val camera2 = Camera2CameraControl.from(it.cameraControl)
+//                camera2.captureRequestOptions = CaptureRequestOptions.Builder()
+//                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, 1600)
+//                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, -1)
+//                    .build()
+//
+//                viewFinder.afterMeasured {
+//                    //val factory = DisplayOrientedMeteringPointFactory(metrics.bounds.width(), camera?.cameraInfo, previewView.width.toFloat(), previewView.height.toFloat())
+//                   Utils.Log(TAG,"Call auto focus")
+//                    val mRect = binding.overlay.getFrameRect()
+//                    val mX = mRect?.centerX() ?: .5f
+//                    val mY = mRect?.centerY() ?: .5f
+//                    val autoFocusPoint = SurfaceOrientedMeteringPointFactory(metrics.bounds.width().toFloat(), metrics.bounds.height().toFloat())
+//                        .createPoint(.5f,.5f)
+//                    try {
+//                        val autoFocusAction = FocusMeteringAction.Builder(
+//                            autoFocusPoint,
+//                            FocusMeteringAction.FLAG_AF
+//                        ).apply {
+//                            //start auto-focusing after 2 seconds
+//                            setAutoCancelDuration(1, TimeUnit.SECONDS)
+//                        }.build()
+//                        camera.cameraControl.startFocusAndMetering(autoFocusAction)
+//                        Utils.Log(TAG,"Call auto focus...")
+//                    } catch (e: CameraInfoUnavailableException) {
+//                        Utils.Log("ERROR", "cannot access camera ${e.message}")
+//                    }
+//                }
+//
+//            }
+
             // Use the camera object to link our preview use case with the view
-            val isChecked = true
             preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
             imageAnalyzer?.setAnalyzer(executor, ImageAnalysis.Analyzer { image ->
 //                if (isStop) {

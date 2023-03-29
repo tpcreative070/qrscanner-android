@@ -955,7 +955,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (!isOnline() || Utils.isRequestShowLocalAds()){
             layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
-                this?.findViewById<RelativeLayout>(R.id.rlProVersion).apply {
+                this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
                     this?.setOnClickListener {
                         Navigator.onFromAdsMoveToProVersion(applicationContext)
                     }
@@ -1005,7 +1005,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (!isOnline() || Utils.isRequestShowLocalAds()){
             layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
-                this?.findViewById<RelativeLayout>(R.id.rlProVersion).apply {
+                this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
                     this?.setOnClickListener {
                         Navigator.onFromAdsMoveToProVersion(applicationContext)
                     }
@@ -1054,7 +1054,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (!isOnline() || Utils.isRequestShowLocalAds()){
             layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
-                this?.findViewById<RelativeLayout>(R.id.rlProVersion).apply {
+                this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
                     this?.setOnClickListener {
                         Navigator.onFromAdsMoveToProVersion(applicationContext)
                     }
@@ -1103,7 +1103,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (!isOnline() || Utils.isRequestShowLocalAds()){
             layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
-                this?.findViewById<RelativeLayout>(R.id.rlProVersion).apply {
+                this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
                     this?.setOnClickListener {
                         Navigator.onFromAdsMoveToProVersion(applicationContext)
                     }
@@ -1152,7 +1152,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (!isOnline() || Utils.isRequestShowLocalAds()){
                 layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
-                this?.findViewById<RelativeLayout>(R.id.rlProVersion).apply {
+                this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
                     this?.setOnClickListener {
                         Navigator.onFromAdsMoveToProVersion(applicationContext)
                     }
@@ -1202,7 +1202,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         if (!isOnline() || Utils.isRequestShowLocalAds()){
             layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
-                this?.findViewById<RelativeLayout>(R.id.rlProVersion).apply {
+                this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
                     this?.setOnClickListener {
                         Navigator.onFromAdsMoveToProVersion(applicationContext)
                     }

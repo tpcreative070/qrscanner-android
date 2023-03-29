@@ -59,10 +59,10 @@ fun ReviewActivity.initUI(){
     }else{
         binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
-    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)) {
+    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestReviewSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView() && !Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)) {
+    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView() && !Utils.isHiddenAds(EnumScreens.REVIEW_LARGE) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestReviewLargeView(this)
     }
     if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd()) {

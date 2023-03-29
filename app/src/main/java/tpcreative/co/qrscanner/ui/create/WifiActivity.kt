@@ -51,10 +51,10 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         }
         setupViewModel()
         getIntentData()
-        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isHiddenAds(EnumScreens.CREATE_SMALL)) {
+        if (QRScannerApplication.getInstance().isCreateSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateSmallView() && !Utils.isHiddenAds(EnumScreens.CREATE_SMALL) && !Utils.isRequestShowLocalAds()) {
             QRScannerApplication.getInstance().requestCreateSmallView(this)
         }
-        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds(EnumScreens.CREATE_LARGE)) {
+        if (QRScannerApplication.getInstance().isCreateLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableCreateLargeView() && !Utils.isHiddenAds(EnumScreens.CREATE_LARGE) && !Utils.isRequestShowLocalAds()) {
             QRScannerApplication.getInstance().requestCreateLargeView(this)
         }
         checkingShowAds()

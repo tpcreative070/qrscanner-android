@@ -56,11 +56,11 @@ fun ChangeFileColorActivity.initUI(){
     if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
         QRScannerApplication.getInstance().requestInterstitialAd()
     }
-    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)) {
+    if (QRScannerApplication.getInstance().isChangeColorSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorSmallView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestChangeColorSmallView(this)
     }
 
-    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)) {
+    if (QRScannerApplication.getInstance().isChangeColorLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableChangeColorLargeView()  && !Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestChangeColorLargeView(this)
     }
     checkingShowAds()
