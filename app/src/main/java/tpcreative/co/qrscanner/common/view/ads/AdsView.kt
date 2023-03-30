@@ -189,7 +189,7 @@ class AdsView  : View{
             gravity = Gravity.CENTER or Gravity.TOP
         }
         parent.orientation = LinearLayout.VERTICAL
-        params.setMargins(0,  context.pxToDp(9.5f).toInt(),0,0)
+        params.setMargins(0,  context.pxToDp(10f).toInt(),0,0)
         parent.layoutParams = params
         val mImageView = ImageView(QRScannerApplication.getInstance())
         mImageView.setPadding(QRScannerApplication.getInstance().pxToDp(10F).toInt(), QRScannerApplication.getInstance().pxToDp(10F).toInt(),QRScannerApplication.getInstance().pxToDp(10F).toInt(),QRScannerApplication.getInstance().pxToDp(10F).toInt())

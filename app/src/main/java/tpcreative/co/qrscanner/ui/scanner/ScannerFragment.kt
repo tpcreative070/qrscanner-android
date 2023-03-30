@@ -10,10 +10,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.camera2.interop.Camera2CameraControl
-import androidx.camera.camera2.interop.CaptureRequestOptions
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -46,6 +45,7 @@ import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -367,6 +367,14 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
         return AspectRatio.RATIO_16_9
     }
 
+    private fun getTargetResolution(): android.util.Size {
+        return when (resources.configuration.orientation) {
+            android.content.res.Configuration.ORIENTATION_PORTRAIT -> android.util.Size(1200, 1600)
+            android.content.res.Configuration.ORIENTATION_LANDSCAPE -> android.util.Size(1600, 1200)
+            else -> android.util.Size(1600, 1200)
+        }
+    }
+
     @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
     private fun  bindCameraUseCases() = binding.viewFinder.post {
         val viewFinder = binding.viewFinder
@@ -414,16 +422,40 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                 this as LifecycleOwner, cameraSelector, preview, imageAnalyzer
             )
 
-            // Reduce exposure time to decrease effect of motion blur
-            camera?.let {
-                val camera2 = Camera2CameraControl.from(it.cameraControl)
-                camera2.captureRequestOptions = CaptureRequestOptions.Builder()
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, 1600)
-                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, -8)
-                    .build()
-            }
+//            Reduce exposure time to decrease effect of motion blur
+//            camera?.let {
+//                observeCameraState(it.cameraInfo)
+//                val camera2 = Camera2CameraControl.from(it.cameraControl)
+//                camera2.captureRequestOptions = CaptureRequestOptions.Builder()
+//                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, 1600)
+//                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, -1)
+//                    .build()
+//
+//                viewFinder.afterMeasured {
+//                    val mMetrics: WindowMetrics = requireContext().getSystemService(WindowManager::class.java).currentWindowMetrics
+//                   Utils.Log(TAG,"Call auto focus")
+//                    val mRect = binding.overlay.getFrameRect()
+//                    val mX = mRect?.centerX() ?: .5f
+//                    val mY = mRect?.centerY() ?: .5f
+//                    val autoFocusPoint = SurfaceOrientedMeteringPointFactory(mMetrics.bounds.width().toFloat(), mMetrics.bounds.height().toFloat())
+//                        .createPoint(.5f,.5f)
+//                    try {
+//                        val autoFocusAction = FocusMeteringAction.Builder(
+//                            autoFocusPoint,
+//                            FocusMeteringAction.FLAG_AF
+//                        ).apply {
+//                            //start auto-focusing after 2 seconds
+//                            setAutoCancelDuration(1, TimeUnit.SECONDS)
+//                        }.build()
+//                        camera.cameraControl.startFocusAndMetering(autoFocusAction)
+//                        Utils.Log(TAG,"Call auto focus...")
+//                    } catch (e: CameraInfoUnavailableException) {
+//                        Utils.Log("ERROR", "cannot access camera ${e.message}")
+//                    }
+//                }
+//            }
+
             // Use the camera object to link our preview use case with the view
-            val isChecked = true
             preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
             imageAnalyzer?.setAnalyzer(executor, ImageAnalysis.Analyzer { image ->
 //                if (isStop) {
@@ -520,6 +552,73 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
             })
 
         }, ContextCompat.getMainExecutor(context()))
+    }
+
+    private fun observeCameraState(cameraInfo: CameraInfo) {
+        cameraInfo.cameraState.observe(viewLifecycleOwner) { cameraState ->
+            run {
+                when (cameraState.type) {
+                    CameraState.Type.PENDING_OPEN -> {
+                        // Ask the user to close other camera apps
+                        Utils.Log(TAG,"CameraState: Pending Open")
+                    }
+                    CameraState.Type.OPENING -> {
+                        // Show the Camera UI
+                        Utils.Log(TAG,"CameraState: Opening")
+                    }
+                    CameraState.Type.OPEN -> {
+                        // Setup Camera resources and begin processing
+                        Utils.Log(TAG,"CameraState: Open")
+                    }
+                    CameraState.Type.CLOSING -> {
+                        // Close camera UI
+                        Utils.Log(TAG,"CameraState: Closing")
+                    }
+                    CameraState.Type.CLOSED -> {
+                        // Free camera resources
+                        Utils.Log(TAG,"CameraState: Closed")
+                    }
+                }
+            }
+
+            cameraState.error?.let { error ->
+                when (error.code) {
+                    // Open errors
+                    CameraState.ERROR_STREAM_CONFIG -> {
+                        // Make sure to setup the use cases properly
+                        Utils.Log(TAG,"Stream config error")
+                    }
+                    // Opening errors
+                    CameraState.ERROR_CAMERA_IN_USE -> {
+                        // Close the camera or ask user to close another camera app that's using the
+                        // camera
+                        Utils.Log(TAG,"Camera in use")
+                    }
+                    CameraState.ERROR_MAX_CAMERAS_IN_USE -> {
+                        // Close another open camera in the app, or ask the user to close another
+                        // camera app that's using the camera
+                        Utils.Log(TAG,"Max cameras in use")
+                    }
+                    CameraState.ERROR_OTHER_RECOVERABLE_ERROR -> {
+                        Utils.Log(TAG,"Other recoverable error")
+                    }
+                    // Closing errors
+                    CameraState.ERROR_CAMERA_DISABLED -> {
+                        // Ask the user to enable the device's cameras
+                        Utils.Log(TAG,"Camera disabled")
+                    }
+                    CameraState.ERROR_CAMERA_FATAL_ERROR -> {
+                        // Ask the user to reboot the device to restore camera function
+                        Utils.Log(TAG,"Fatal error")
+                    }
+                    // Closed errors
+                    CameraState.ERROR_DO_NOT_DISTURB_MODE_ENABLED -> {
+                        // Ask the user to disable the "Do Not Disturb" mode, then reopen the camera
+                        Utils.Log(TAG,"Do not disturb mode enabled")
+                    }
+                }
+            }
+        }
     }
 
     private fun crop(image : ImageProxy) : Rect{

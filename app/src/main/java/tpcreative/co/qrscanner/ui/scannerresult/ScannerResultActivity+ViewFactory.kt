@@ -51,10 +51,10 @@ fun ScannerResultActivity.initUI(){
     }else{
         binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
-    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)) {
+    if (QRScannerApplication.getInstance().isResultSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultSmallView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestResultSmallView(this)
     }
-    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)) {
+    if (QRScannerApplication.getInstance().isResultLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableResultLargeView() && !Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestResultLargeView(this)
     }
     checkingShowAds()

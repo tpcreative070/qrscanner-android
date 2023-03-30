@@ -51,6 +51,5 @@ class Version() : Serializable {
         hiddenFreeReleaseAds = Configuration.hiddenMainLargeAds
         hiddenFreeInnovationAds = Configuration.hiddenMainLargeAds
         hiddenSuperFreeInnovationAds = Configuration.hiddenMainLargeAds
-        app_id = QRScannerApplication.getInstance().getString(R.string.admob_app_id)
     }
 }

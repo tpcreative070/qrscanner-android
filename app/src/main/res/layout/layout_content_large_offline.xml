@@ -43,6 +43,8 @@
                     android:layout_height="@dimen/icon_size_60"/>
             </androidx.cardview.widget.CardView>
             <androidx.appcompat.widget.AppCompatTextView
+                android:maxLines="1"
+                android:inputType="text"
                 android:textSize="@dimen/large"
                 style="@style/brandonRegularTextInputLayout"
                 android:textStyle="bold"
@@ -53,6 +55,8 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:maxLines="1"
+                android:inputType="text"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="@dimen/margin_20"
                 android:layout_toEndOf="@+id/cardView"
@@ -82,6 +86,8 @@
                     android:layout_width="@dimen/icon_size_20"
                     android:layout_height="@dimen/icon_size_20"/>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:maxLines="1"
+                    android:inputType="text"
                     android:layout_marginStart="@dimen/margin_10"
                     android:text="@string/one_time_purchase_no_subscription"
                     android:layout_width="match_parent"
@@ -104,7 +110,8 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
+                android:orientation="horizontal"
                 android:id="@+id/rlProVersion"
                 android:layout_marginEnd="@dimen/margin_10"
                 android:layout_marginStart="@dimen/margin_10"
@@ -113,15 +120,18 @@
                 android:layout_below="@+id/llNoAdvertising"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <androidx.appcompat.widget.AppCompatTextView
+                <RelativeLayout
                     android:paddingTop="@dimen/margin_10"
                     android:paddingBottom="@dimen/margin_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatTextView
                     android:textColor="@color/white"
                     android:gravity="center"
                     android:layout_marginStart="@dimen/margin_10"
                     android:text="@string/pro_version"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="@dimen/icon_size_20"
@@ -131,8 +141,9 @@
                     android:layout_marginEnd="@dimen/margin_10"
                     app:srcCompat="@drawable/ic_next"
                     app:tint="@color/white" />
+                </RelativeLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
