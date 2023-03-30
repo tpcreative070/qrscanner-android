@@ -1203,7 +1203,10 @@ object Utils {
 
     fun isRequestShowLocalAds()  :Boolean{
         val mData = ServiceManager.getInstance().mVersion
-        Utils.Log(TAG,"Load data ${mData?.toJson()}")
+        Log(TAG,"Load data ${mData?.toJson()}")
+        if (mData?.app_id.isNullOrEmpty()){
+            return true
+        }
         if (mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)){
             return false
         }

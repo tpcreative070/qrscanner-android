@@ -6,6 +6,7 @@ adb -P 9999 start-server
 
 # The issue could not connect to the devices try to do some steps below
 
+# reset wifi
 # adb kill-server
 #lsof -i :9999 and 5555
 #kill -9 <PID>

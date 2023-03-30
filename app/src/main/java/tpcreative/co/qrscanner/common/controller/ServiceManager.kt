@@ -42,7 +42,6 @@ class ServiceManager : BaseView<Any?> {
     private var isDismiss = false
     private var isSyncingData = false
     private val driveViewModel = DriveViewModel(DriveService())
-    private val userViewModel = UserViewModel(UserService())
     var mVersion : Version? = Version()
     private var myConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName?, binder: IBinder?) {
