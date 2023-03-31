@@ -175,7 +175,7 @@ class SettingsFragment : BaseFragment() {
         private fun askChooseTheme(listener: ServiceManager.ServiceManagerClickedItemsListener?) {
             MaterialDialog(requireContext()).show {
                 title(R.string.change_theme)
-                listItemsSingleChoice(R.array.themeEntryArray, initialSelection = Utils.getPositionTheme()) { dialog, index, text ->
+                listItemsSingleChoice(R.array.themeEntryArray, initialSelection = Utils.getPositionTheme()) { _, index, _ ->
                     mPosition =index
                     EnumThemeMode.byPosition(mPosition)?.ordinal?.let { Utils.setPositionTheme(it) }
                     listener?.onYes()

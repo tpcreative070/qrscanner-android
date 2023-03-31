@@ -105,7 +105,9 @@ object Utils {
         try {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val date = dateFormat.parse(value)
-            return date.time
+            if (date != null) {
+                return date.time
+            }
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -120,7 +122,7 @@ object Utils {
             var dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val date = dateFormat.parse(value)
             dateFormat = SimpleDateFormat(FORMAT_DISPLAY, Locale.getDefault())
-            return dateFormat.format(date)
+            return date?.let { dateFormat.format(it) }
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -292,8 +294,8 @@ object Utils {
 
     fun getCodeContentByHistory(item: HistoryModel?): String? {
         /*Product id must be plus barcode format type*/
-        var code : String? = ""
-        var mData = ""
+        val code: String?
+        val mData: String
         if (item != null) {
             val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
@@ -360,8 +362,8 @@ object Utils {
 
     fun getCodeContentByGenerate(item: SaveModel?): String? {
         /*Product id must be plus barcode format type*/
-        var code : String? = ""
-        var mData = ""
+        val code: String?
+        val mData: String
         if (item != null) {
             val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
@@ -1204,6 +1206,9 @@ object Utils {
     fun isRequestShowLocalAds()  :Boolean{
         val mData = ServiceManager.getInstance().mVersion
         Log(TAG,"Load data ${mData?.toJson()}")
+        if(BuildConfig.DEBUG){
+            return false
+        }
         if (mData?.app_id.isNullOrEmpty()){
             return true
         }

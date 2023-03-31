@@ -423,7 +423,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     private fun onCopyDialog() {
         viewModel.hashCopyResult?.clear()
         MaterialDialog(this).show {
-            listItemsMultiChoice(items = viewModel.hashCopy?.values?.toMutableList()?.map { it.orEmpty() }) { _, index, text ->
+            listItemsMultiChoice(items = viewModel.hashCopy?.values?.toMutableList()?.map { it.orEmpty() }) { _, _, text ->
                 Utils.Log(TAG,"Selected $text")
                 text.forEachIndexed { index, i ->
                     viewModel.hashCopyResult?.put(index,i.toString())

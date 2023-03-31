@@ -20,7 +20,6 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.databinding.ActivityWifiBinding
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.review.initUI
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 import java.util.regex.Pattern
 

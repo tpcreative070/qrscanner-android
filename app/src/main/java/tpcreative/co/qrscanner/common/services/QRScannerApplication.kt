@@ -9,16 +9,15 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.view.View
+import android.view.Display
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.hardware.display.DisplayManagerCompat
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import androidx.window.layout.WindowMetricsCalculator
-import com.afollestad.materialdialogs.utils.MDUtil.isLandscape
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -26,7 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.isseiaoki.simplecropview.CropImageView
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.BuildConfig.DEBUG
 import tpcreative.co.qrscanner.R
@@ -793,7 +791,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestInterstitialAd(){
         Utils.Log(TAG, "Interstitial requesting...")
         val adRequest = AdRequest.Builder().build()
-        var id = ""
+        val id: String
         id = if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             getString(R.string.interstitial_test)
@@ -860,7 +858,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     fun requestInterstitialViewCodeAd(){
         Utils.Log(TAG, "Interstitial requesting...")
         val adRequest = AdRequest.Builder().build()
-        var id = ""
+        val id: String
         id = if (Utils.isDebug()) {
             Utils.Log(TAG, "show ads isDebug...")
             getString(R.string.interstitial_test)
@@ -1442,31 +1440,56 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     private fun currentScreen(activity: Activity) {
-//        val windowMetrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity)
-//        val currentBounds = windowMetrics.bounds
-//
-//        val width = currentBounds.width()
-//        val height = currentBounds.height()
-//
-//        val density = resources.displayMetrics.density
-
-        val display = activity.windowManager.defaultDisplay
-        val outMetrics = DisplayMetrics()
-        display.getMetrics(outMetrics)
-
-        val density = outMetrics.density
-
-        val adWidthPixels = outMetrics.widthPixels.toFloat()
-        val adWidth = (adWidthPixels / density).toInt()
-        mWithAd = adWidth
-        Utils.Log(TAG,"width $mWithAd")
-        Utils.Log(TAG,"width ${pxToDp(mWithAd.toFloat())}")
-
-        mMaximumHeight = if (Utils.isTablet()){
-            this.pxToDp(105F).toInt()
-        }else{
-            this.pxToDp(90F).toInt()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val defaultDisplay =
+                DisplayManagerCompat.getInstance(this).getDisplay(Display.DEFAULT_DISPLAY)
+            val displayContext = createDisplayContext(defaultDisplay!!)
+            val outMetrics = displayContext.resources.displayMetrics
+            val density = outMetrics.density
+            val adWidthPixels = outMetrics.widthPixels.toFloat()
+            val adWidth = (adWidthPixels / density).toInt()
+            mWithAd = adWidth
+            Utils.Log(TAG,"width $mWithAd")
+            Utils.Log(TAG,"width ${pxToDp(mWithAd.toFloat())}")
+            mMaximumHeight = if (Utils.isTablet()){
+                this.pxToDp(105F).toInt()
+            }else{
+                this.pxToDp(90F).toInt()
+            }
+        } else {
+            val outMetrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
+            activity.windowManager.defaultDisplay.getMetrics(outMetrics)
+            val density = outMetrics.density
+            val adWidthPixels = outMetrics.widthPixels.toFloat()
+            val adWidth = (adWidthPixels / density).toInt()
+            mWithAd = adWidth
+            Utils.Log(TAG,"width $mWithAd")
+            Utils.Log(TAG,"width ${pxToDp(mWithAd.toFloat())}")
+            mMaximumHeight = if (Utils.isTablet()){
+                this.pxToDp(105F).toInt()
+            }else{
+                this.pxToDp(90F).toInt()
+            }
         }
+
+//        val display = activity.windowManager.defaultDisplay
+//        val outMetrics = DisplayMetrics()
+//        display.getMetrics(outMetrics)
+//
+//        val density = outMetrics.density
+//
+//        val adWidthPixels = outMetrics.widthPixels.toFloat()
+//        val adWidth = (adWidthPixels / density).toInt()
+//        mWithAd = adWidth
+//        Utils.Log(TAG,"width $mWithAd")
+//        Utils.Log(TAG,"width ${pxToDp(mWithAd.toFloat())}")
+//
+//        mMaximumHeight = if (Utils.isTablet()){
+//            this.pxToDp(105F).toInt()
+//        }else{
+//            this.pxToDp(90F).toInt()
+//        }
     }
 
     fun getMaximumBannerHeight() : Int{
