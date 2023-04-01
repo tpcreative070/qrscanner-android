@@ -4,7 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
+import android.net.Uri
+import androidx.core.content.ContentProviderCompat.requireContext
+import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
+import java.io.File
 
 fun Bitmap.addPaddingTopForBitmap(paddingTop: Int): Bitmap? {
     try {
@@ -62,4 +67,18 @@ fun Bitmap.addPaddingLeftForBitmap(paddingLeft: Int): Bitmap? {
 fun Bitmap.rotate(degrees: Float): Bitmap {
     val matrix = Matrix().apply { postRotate(degrees) }
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+fun Bitmap.storeBitmap() : Uri?{
+    val imageFolder = File(QRScannerApplication.getInstance().cacheDir, Constant.images_folder)
+    imageFolder.mkdirs()
+    val file = File(imageFolder, "shared_design_qr_code.png")
+    val mUri = QRScannerApplication.getInstance().getUriForFile(file)
+    mUri?.run {
+        QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {
+            this@storeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, this)
+            close()
+        }
+    }
+    return mUri
 }

@@ -14,8 +14,9 @@ import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.extension.toBitmap
+import tpcreative.co.qrscanner.common.extension.storeBitmap
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
 import tpcreative.co.qrscanner.ui.review.ReviewViewModel
 
@@ -73,9 +74,15 @@ class ChangeDesignActivity : BaseActivitySlide() {
             .build()
         val data = QrData.Text(viewModel.create.code?:"")
         val drawable : Drawable = QrCodeDrawable(data, options)
-        val mBitmap = drawable.toBitmap(200,200,Bitmap.Config.ARGB_8888)
         binding.imgQRCode.setImageDrawable(drawable)
+    }
 
+    private fun share(){
+        val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,1024,Bitmap.Config.ARGB_8888)
+        val mUri = mBitmap.storeBitmap()
+        if (mUri != null) {
+            Utils.onShareImage(this,mUri)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -85,6 +92,7 @@ class ChangeDesignActivity : BaseActivitySlide() {
                 return true
             }
             R.id.menu_item_png_export -> {
+                share()
                 return true
             }
             R.id.menu_item_print -> {

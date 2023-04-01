@@ -31,6 +31,7 @@ import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import java.io.*
 import java.net.URLEncoder
 import java.text.ParseException
@@ -1031,6 +1032,16 @@ object Utils {
         context.startActivity(intentMap)
     }
 
+    fun onShareImage(context : Context, uri : Uri){
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_STREAM,uri)
+        intent.clipData = ClipData.newRawUri("", uri);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        context.startActivity(Intent.createChooser(intent, "Share"))
+    }
+
     fun getImageUri(bitmap : Bitmap?) : Uri? {
         val imageFolder = File(QRScannerApplication.getInstance().cacheDir,  Constant.images_folder)
         try {
@@ -1212,7 +1223,7 @@ object Utils {
         if (mData?.app_id.isNullOrEmpty()){
             return true
         }
-        if (mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)){
+        if ((mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)) && ((mData.version_code?:0) >= BuildConfig.VERSION_CODE)){
             return false
         }
         return true
