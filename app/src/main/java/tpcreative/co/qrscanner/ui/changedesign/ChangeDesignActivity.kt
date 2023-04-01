@@ -1,9 +1,13 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
+import android.graphics.Bitmap
 import android.graphics.Path
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.github.alexzhirkevich.customqrgenerator.QrData
 import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
@@ -11,6 +15,7 @@ import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
+import tpcreative.co.qrscanner.common.extension.toBitmap
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
 import tpcreative.co.qrscanner.ui.review.ReviewViewModel
 
@@ -68,7 +73,30 @@ class ChangeDesignActivity : BaseActivitySlide() {
             .build()
         val data = QrData.Text(viewModel.create.code?:"")
         val drawable : Drawable = QrCodeDrawable(data, options)
+        val mBitmap = drawable.toBitmap(200,200,Bitmap.Config.ARGB_8888)
         binding.imgQRCode.setImageDrawable(drawable)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            R.id.menu_item_png_export -> {
+                return true
+            }
+            R.id.menu_item_print -> {
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_change_design, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     object Circle : QrVectorPixelShape {
