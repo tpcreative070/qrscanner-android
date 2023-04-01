@@ -56,6 +56,48 @@
                         android:layout_marginTop="@dimen/margin_20"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/llChangeDesign"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/margin_7"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/rlRight"
+                        android:layout_width="@dimen/icon_size_45"
+                        android:layout_height="@dimen/icon_size_45">
+
+                        <tpcreative.co.qrscanner.common.view.CircleImageView
+                            android:layout_margin="5dp"
+                            android:layout_centerInParent="true"
+                            android:id="@+id/imgStandardCircle"
+                            android:layout_width="@dimen/icon_size_30"
+                            android:layout_height="@dimen/icon_size_30"/>
+
+                        <ImageView
+                            android:src="@drawable/ic_paint"
+                            android:layout_centerInParent="true"
+                            android:id="@+id/imgStandardIcon"
+                            android:layout_width="@dimen/icon_size_18"
+                            android:layout_height="@dimen/icon_size_18"/>
+
+                    </RelativeLayout>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginStart="@dimen/margin_10"
+                        style="@style/brandonRegularTextView"
+                        android:text="@string/change_design"
+                        android:layout_gravity="center"
+                        android:gravity="start"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_marginTop="@dimen/margin_7"
                     android:layout_marginBottom="@dimen/margin_10"
                     android:layout_marginEnd="@dimen/margin_20"

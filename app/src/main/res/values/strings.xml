@@ -532,4 +532,5 @@
     <string name="remove_ads">Remove ads</string>
     <string name="ad">Ad</string>
     <string name="one_time_purchase_no_subscription">One-time purchase(no subscription)</string>
+    <string name="change_design">Change Design</string>
 </resources>

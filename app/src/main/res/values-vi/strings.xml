@@ -360,4 +360,5 @@
     <string name="qr_code_or_barcode_not_found">Mã QR hoặc Mã vạch không tìm thấy</string>
     <string name="remove_ads">Bỏ quảng cáo</string>
     <string name="one_time_purchase_no_subscription">Mua một lần(sử dụng trọn đời)</string>
+    <string name="change_design">Thay đổi QR</string>
 </resources>

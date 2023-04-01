@@ -20,7 +20,7 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     val TAG = this::class.java.name
     var create: GeneralModel = GeneralModel()
     var isSharedIntent : Boolean = false
-    fun getIntent(activity: Activity?) = liveData(Dispatchers.Main)  {
+    fun getIntent(activity: Activity?,callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
         if (action != Intent.ACTION_SEND){
@@ -29,7 +29,7 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
             if (data != null) {
                 create = data
                 Utils.Log(TAG,Gson().toJson(create))
-                emit(true)
+                callback.invoke(true)
             }
         }
     }

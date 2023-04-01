@@ -26,6 +26,7 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -34,6 +35,7 @@ import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignActivity
 import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.io.File
 import java.io.FileOutputStream
@@ -45,6 +47,7 @@ fun ReviewActivity.initUI(){
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     binding.scrollView.smoothScrollTo(0, 0)
+    binding.imgStandardCircle.setImageResource(R.color.colorAccent)
     getIntentData()
     if (!Utils.isPremium()){
         viewAds = AdsView(this)
@@ -84,6 +87,10 @@ fun ReviewActivity.initUI(){
                     showAds()
                 }
             })
+    }
+
+    binding.llChangeDesign.setOnClickListener {
+        Navigator.onIntent(this,ChangeDesignActivity::class.java)
     }
     onHandlerIntent()
 }
@@ -293,13 +300,13 @@ fun ReviewActivity.checkingShowAds(){
 }
 
 fun ReviewActivity.getIntentData(){
-    viewModel.getIntent(this).observe(this, Observer {
+    viewModel.getIntent(this) {
         if (it){
             setView()
         }else{
             onCatch()
         }
-    })
+    }
 }
 
 suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat) = withContext(Dispatchers.IO){
