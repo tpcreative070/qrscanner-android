@@ -34,6 +34,10 @@ buildscript {
                         && !details.requested.name.contains('com') ) {
                     details.useVersion appGoogleMaterial
                 }
+
+                if (details.requested.group == 'org.jetbrains.kotlin') {
+                    details.useVersion kotlin_version
+                }
             }
         }
     }
