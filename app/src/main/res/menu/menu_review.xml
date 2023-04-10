@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/menu_item_change_design"
-        android:icon="@drawable/ic_paint"
-        app:showAsAction="always"
-        android:title="@string/change_design"
-        android:orderInCategory="99"/>
+<!--    <item-->
+<!--        android:id="@+id/menu_item_change_design"-->
+<!--        android:icon="@drawable/ic_paint"-->
+<!--        app:showAsAction="always"-->
+<!--        android:title="@string/change_design"-->
+<!--        android:orderInCategory="99"/>-->
     <item
         android:id="@+id/menu_item_png_export"
         android:icon="@drawable/ic_baseline_png_export_32"

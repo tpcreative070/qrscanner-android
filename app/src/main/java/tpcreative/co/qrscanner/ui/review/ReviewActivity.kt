@@ -165,9 +165,9 @@ class ReviewActivity : BaseActivitySlide() {
                 showAds()
                 return true
             }
-            R.id.menu_item_change_design ->{
-                Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
-            }
+//            R.id.menu_item_change_design ->{
+//                Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+//            }
             R.id.menu_item_png_export -> {
                 if (!isRequestExportPNG){
                     isRequestExportPNG = true
