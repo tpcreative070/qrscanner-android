@@ -192,7 +192,7 @@ class AdsView  : View{
         params.setMargins(0,  context.pxToDp(10f).toInt(),0,0)
         parent.layoutParams = params
         val mImageView = ImageView(QRScannerApplication.getInstance())
-        mImageView.setPadding(QRScannerApplication.getInstance().pxToDp(10F).toInt(), QRScannerApplication.getInstance().pxToDp(10F).toInt(),QRScannerApplication.getInstance().pxToDp(10F).toInt(),QRScannerApplication.getInstance().pxToDp(10F).toInt())
+        mImageView.setPadding(QRScannerApplication.getInstance().pxToDp(7F).toInt(), QRScannerApplication.getInstance().pxToDp(7F).toInt(),QRScannerApplication.getInstance().pxToDp(7F).toInt(),QRScannerApplication.getInstance().pxToDp(7F).toInt())
         mImageView.layoutParams =
             ViewGroup.LayoutParams(context.pxToDp(35f).toInt(),context.pxToDp(35f).toInt() )
         mImageView.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_close))

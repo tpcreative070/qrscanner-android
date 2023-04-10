@@ -210,7 +210,7 @@ class DriveViewModel(private val driveService: DriveService)  :  BaseViewModel<E
     }
 
     private fun loadFromTempFile(file: File?): String? {
-        var jString: String? = null
+        var jString: String?
         var stream: FileInputStream? = null
         try {
             stream = FileInputStream(file)

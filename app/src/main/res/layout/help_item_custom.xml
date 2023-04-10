@@ -17,7 +17,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_marginTop="@dimen/margin_5"
-                android:src="@drawable/ic_youtube"
+                android:src="@drawable/ic_youtube_png"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="@dimen/margin_10"

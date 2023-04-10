@@ -109,7 +109,7 @@
 
 
 
-
+    <dimen name="margin_0">0sp</dimen>
     <dimen name="margin_1">1sp</dimen>
     <dimen name="margin_2">2sp</dimen>
     <dimen name="margin_3">3sp</dimen>

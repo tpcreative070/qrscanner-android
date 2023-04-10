@@ -120,7 +120,7 @@ fun ScannerResultActivity.enterTakeNote() {
             .negativeButton {
             }
             .positiveButton(R.string.save)
-            .input(hintRes = R.string.enter_take_note, inputType = (InputType.TYPE_CLASS_TEXT),maxLength = 100, allowEmpty = false){ dialog, text->
+            .input(hintRes = R.string.enter_take_note, inputType = (InputType.TYPE_CLASS_TEXT),maxLength = 100, allowEmpty = false){ _, text->
                 viewModel.takeNoted = text.toString()
                 updatedTakeNote()
             }

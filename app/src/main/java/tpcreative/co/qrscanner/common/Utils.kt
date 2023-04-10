@@ -31,6 +31,7 @@ import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import java.io.*
 import java.net.URLEncoder
 import java.text.ParseException
@@ -105,7 +106,9 @@ object Utils {
         try {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val date = dateFormat.parse(value)
-            return date.time
+            if (date != null) {
+                return date.time
+            }
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -120,7 +123,7 @@ object Utils {
             var dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val date = dateFormat.parse(value)
             dateFormat = SimpleDateFormat(FORMAT_DISPLAY, Locale.getDefault())
-            return dateFormat.format(date)
+            return date?.let { dateFormat.format(it) }
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -292,8 +295,8 @@ object Utils {
 
     fun getCodeContentByHistory(item: HistoryModel?): String? {
         /*Product id must be plus barcode format type*/
-        var code : String? = ""
-        var mData = ""
+        val code: String?
+        val mData: String
         if (item != null) {
             val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
@@ -360,8 +363,8 @@ object Utils {
 
     fun getCodeContentByGenerate(item: SaveModel?): String? {
         /*Product id must be plus barcode format type*/
-        var code : String? = ""
-        var mData = ""
+        val code: String?
+        val mData: String
         if (item != null) {
             val mResult: ParsedResultType = item.createType?.let { ParsedResultType.valueOf(it) } ?: return null
             return when (mResult) {
@@ -1029,6 +1032,16 @@ object Utils {
         context.startActivity(intentMap)
     }
 
+    fun onShareImage(context : Context, uri : Uri){
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_STREAM,uri)
+        intent.clipData = ClipData.newRawUri("", uri);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        context.startActivity(Intent.createChooser(intent, "Share"))
+    }
+
     fun getImageUri(bitmap : Bitmap?) : Uri? {
         val imageFolder = File(QRScannerApplication.getInstance().cacheDir,  Constant.images_folder)
         try {
@@ -1204,10 +1217,13 @@ object Utils {
     fun isRequestShowLocalAds()  :Boolean{
         val mData = ServiceManager.getInstance().mVersion
         Log(TAG,"Load data ${mData?.toJson()}")
+        if(BuildConfig.DEBUG){
+            return false
+        }
         if (mData?.app_id.isNullOrEmpty()){
             return true
         }
-        if (mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)){
+        if ((mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)) && ((mData.version_code?:0) >= BuildConfig.VERSION_CODE)){
             return false
         }
         return true

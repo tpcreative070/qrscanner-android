@@ -34,6 +34,8 @@ import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignActivity
+import tpcreative.co.qrscanner.ui.create.BarcodeActivity
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -106,6 +108,7 @@ class ReviewActivity : BaseActivitySlide() {
             save = Utils.onGeneralParse(it,SaveModel::class)
             code = save.code
             type = save.type
+            create?.code = code
             binding.txtSubject.text = type
             binding.txtDisplay.text = code
             binding.txtFormat.text = format
@@ -162,6 +165,9 @@ class ReviewActivity : BaseActivitySlide() {
                 showAds()
                 return true
             }
+//            R.id.menu_item_change_design ->{
+//                Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+//            }
             R.id.menu_item_png_export -> {
                 if (!isRequestExportPNG){
                     isRequestExportPNG = true

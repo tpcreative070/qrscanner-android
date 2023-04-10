@@ -84,15 +84,15 @@ android {
         }
 
         freeinnovation {
-            //initWith(buildTypes.debug)
+            initWith(buildTypes.debug)
             applicationIdSuffix ".free.innovation"
             // Enables code shrinking, obfuscation, and optimization for only
             // your project's release build type.
-            minifyEnabled true
+            minifyEnabled false
 
             // Enables resource shrinking, which is performed by the
             // Android Gradle plugin.
-            shrinkResources true
+            shrinkResources false
 
             // Includes the default ProGuard rules files that are packaged with
             // the Android Gradle plugin. To learn more, go to the section about
@@ -216,6 +216,7 @@ dependencies {
     implementation "com.anjlab.android.iab.v3:library:$billingInApp"
     implementation "androidx.window:window:$window"
     implementation project(':compressor')
+    implementation project(':custom_qr_generator')
     implementation files('libs/zxingcpp-release.aar')
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
