@@ -533,4 +533,9 @@
     <string name="ad">Ad</string>
     <string name="one_time_purchase_no_subscription">One-time purchase(no subscription)</string>
     <string name="change_design">Change Design</string>
+    <string name="template">Template</string>
+    <string name="color">Color</string>
+    <string name="dots">Dots</string>
+    <string name="eyes">Eyes</string>
+    <string name="logo">Logo</string>
 </resources>

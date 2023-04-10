@@ -19,6 +19,7 @@ class ConstantKey {
         const val NOTE = "note"
         const val BIRTHDAY = "birthday"
         const val key_saved = "key_saved"
+        const val key_logo_is_selected = "key_logo_is_selected"
 
         const val TITLE  = "title"
         const val LOCATION = "location"

@@ -108,6 +108,7 @@ class ReviewActivity : BaseActivitySlide() {
             save = Utils.onGeneralParse(it,SaveModel::class)
             code = save.code
             type = save.type
+            create?.code = code
             binding.txtSubject.text = type
             binding.txtDisplay.text = code
             binding.txtFormat.text = format

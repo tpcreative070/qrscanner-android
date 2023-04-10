@@ -90,7 +90,10 @@ fun ReviewActivity.initUI(){
     }
 
     binding.llChangeDesign.setOnClickListener {
-        Navigator.onIntent(this,ChangeDesignActivity::class.java)
+        Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+    }
+    binding.imgResult.setOnClickListener {
+        Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
     }
     onHandlerIntent()
 }

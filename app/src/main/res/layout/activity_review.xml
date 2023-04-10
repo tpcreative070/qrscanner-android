@@ -57,11 +57,12 @@
                 </LinearLayout>
                 <LinearLayout
                     android:visibility="gone"
+                    android:background="@color/material_gray_100"
                     android:id="@+id/llChangeDesign"
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/margin_7"
-                    android:layout_marginEnd="@dimen/margin_20"
-                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_0"
+                    android:layout_marginStart="@dimen/margin_0"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -81,13 +82,13 @@
                             android:src="@drawable/ic_paint"
                             android:layout_centerInParent="true"
                             android:id="@+id/imgStandardIcon"
-                            android:layout_width="@dimen/icon_size_18"
-                            android:layout_height="@dimen/icon_size_18"/>
+                            android:layout_width="@dimen/icon_size_25"
+                            android:layout_height="@dimen/icon_size_25"/>
 
                     </RelativeLayout>
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_marginStart="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_2"
                         style="@style/brandonRegularTextView"
                         android:text="@string/change_design"
                         android:layout_gravity="center"

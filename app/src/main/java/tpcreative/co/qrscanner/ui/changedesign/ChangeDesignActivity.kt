@@ -1,29 +1,35 @@
 package tpcreative.co.qrscanner.ui.changedesign
-
 import android.graphics.Bitmap
 import android.graphics.Path
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.content.ContextCompat
+import android.view.View
 import androidx.core.graphics.drawable.toBitmap
-import com.github.alexzhirkevich.customqrgenerator.QrData
 import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
-import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
-import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.ConstantKey
+import tpcreative.co.qrscanner.common.ListenerView
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.storeBitmap
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
-import tpcreative.co.qrscanner.ui.review.ReviewViewModel
+import tpcreative.co.qrscanner.model.ChangeDesignModel
+import tpcreative.co.qrscanner.model.EnumView
+import tpcreative.co.qrscanner.ui.changedesign.fragment.*
 
 
-class ChangeDesignActivity : BaseActivitySlide() {
-    lateinit var viewModel: ReviewViewModel
+class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelectedListener{
+    lateinit var viewModel: ChangeDesignViewModel
     lateinit var binding : ActivityChangeDesignBinding
+    var adapter: ChangeDesignAdapter? = null
+    private lateinit var viewTemplate : TemplateFragment
+    private lateinit var viewColor : ColorFragment
+    private lateinit var viewDots : DotsFragment
+    private lateinit var viewEyes : EyesFragment
+    private lateinit var viewLogo : LogoFragment
+    private lateinit var viewText : TextFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChangeDesignBinding.inflate(layoutInflater)
@@ -31,50 +37,129 @@ class ChangeDesignActivity : BaseActivitySlide() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initUI()
+        registerLayout()
     }
 
-    fun onGenerateQR(){
-        val options = QrVectorOptions.Builder()
-            .setPadding(.3f)
-            .setLogo(
-                QrVectorLogo(
-                    drawable = ContextCompat
-                        .getDrawable(this, R.drawable.design_wifi),
-                    size = .25f,
-                    padding = QrVectorLogoPadding.Natural(.2f),
-                    shape = QrVectorLogoShape
-                        .Circle
-                )
-            )
-            .setBackground(
-                QrVectorBackground(
-                    drawable = ContextCompat
-                        .getDrawable(this, R.color.white),
-                )
-            )
-            .setColors(
-                QrVectorColors(
-                    dark = QrVectorColor
-                        .Solid(ContextCompat.getColor(this,R.color.colorAccent)),
-                    ball = QrVectorColor.Solid(
-                        ContextCompat.getColor(this, R.color.colorAccent)
-                    )
-                )
-            )
-            .setShapes(
-                QrVectorShapes(
-                    darkPixel = QrVectorPixelShape
-                        .RoundCorners(.5f),
-                    ball = QrVectorBallShape
-                        .RoundCorners(.25f),
-                    frame = QrVectorFrameShape
-                        .RoundCorners(.25f),
-                )
-            )
-            .build()
-        val data = QrData.Text(viewModel.create.code?:"")
-        val drawable : Drawable = QrCodeDrawable(data, options)
-        binding.imgQRCode.setImageDrawable(drawable)
+    private fun registerLayout(){
+        viewTemplate = binding.includeLayoutTemplate.root
+        viewTemplate.setBinding(binding.includeLayoutTemplate)
+        viewTemplate.setListener(object :ListenerView {
+            override fun onDone() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+            override fun onClose() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        })
+
+        viewColor = binding.includeLayoutColor.root
+        viewColor.setBinding(binding.includeLayoutColor)
+        viewColor.setListener(object : ListenerView {
+            override fun onDone() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+            override fun onClose() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        })
+
+        viewDots = binding.includeLayoutDots.root
+        viewDots.setBinding(binding.includeLayoutDots)
+        viewDots.setListener(object :ListenerView {
+            override fun onDone() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+            override fun onClose() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        })
+
+        viewEyes = binding.includeLayoutEyes.root
+        viewEyes.setBinding(binding.includeLayoutEyes)
+        viewEyes.setListener(object :ListenerView {
+            override fun onDone() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+            override fun onClose() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        })
+
+        viewLogo = binding.includeLayoutLogo.root
+        viewLogo.setBinding(binding.includeLayoutLogo,object  : LogoFragment.ListenerLogoFragment{
+            override fun logoSelectedIndex(index: Int) {
+                viewModel.logoSelectedIndex = index
+                onHandleResponse()
+            }
+
+            override fun getData(): MutableList<ChangeDesignModel> {
+                return viewModel.mLogoList
+            }
+        })
+        viewLogo.setSelectedIndex(viewModel.logoSelectedIndex)
+        viewLogo.load()
+        viewLogo.setListener(object :ListenerView {
+            override fun onDone() {
+                onVisit(EnumView.ALL_HIDDEN)
+                onHandleResponse()
+            }
+            override fun onClose() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        })
+
+        viewText = binding.includeLayoutText.root
+        viewText.setBinding(binding.includeLayoutText)
+        viewText.setListener(object :ListenerView {
+            override fun onDone() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+            override fun onClose() {
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        })
+        onVisit(viewModel.enumView)
+    }
+
+    private fun onHandleResponse(){
+        viewModel.onGenerateQR {
+            binding.imgQRCode.setImageDrawable(it)
+        }
+    }
+
+    private fun onVisit(view : EnumView){
+        viewModel.enumView = view
+        viewTemplate.visibility = View.INVISIBLE
+        viewColor.visibility = View.INVISIBLE
+        viewDots.visibility = View.INVISIBLE
+        viewEyes.visibility = View.INVISIBLE
+        viewLogo.visibility = View.INVISIBLE
+        viewText.visibility = View.INVISIBLE
+        binding.recyclerView.visibility = View.INVISIBLE
+        when(view){
+            EnumView.TEMPLATE ->{
+                viewTemplate.visibility = View.VISIBLE
+            }
+            EnumView.COLOR ->{
+                viewColor.visibility = View.VISIBLE
+            }
+            EnumView.DOTS ->{
+                viewDots.visibility = View.VISIBLE
+            }
+            EnumView.EYES ->{
+                viewEyes.visibility = View.VISIBLE
+            }
+            EnumView.LOGO ->{
+                viewLogo.visibility = View.VISIBLE
+                viewLogo.show()
+            }
+            EnumView.TEXT ->{
+                viewText.visibility = View.VISIBLE
+            }
+            else -> {
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun share(){
@@ -83,6 +168,11 @@ class ChangeDesignActivity : BaseActivitySlide() {
         if (mUri != null) {
             Utils.onShareImage(this,mUri)
         }
+    }
+
+    override fun onClickItem(position: Int) {
+        val mType = adapter?.getItem(position)
+        mType?.enumView?.let { onVisit(it) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -107,8 +197,21 @@ class ChangeDesignActivity : BaseActivitySlide() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    object Circle : QrVectorPixelShape {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(ConstantKey.key_saved, viewModel.enumView.name)
+        outState.putInt(ConstantKey.key_logo_is_selected,viewModel.logoSelectedIndex)
+        Utils.Log(TAG,"State saved ${viewModel.enumView.name}")
+    }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.key_saved) ?:EnumView.ALL_HIDDEN.name)
+        viewModel.logoSelectedIndex = savedInstanceState.getInt(ConstantKey.key_logo_is_selected)
+        Utils.Log(TAG,"State restore ${viewModel.enumView.name}")
+    }
+
+    object Circle : QrVectorPixelShape {
         override fun createPath(size: Float, neighbors: Neighbors): Path = Path().apply {
             addCircle(size/2f, size/2f, size/2, Path.Direction.CW)
         }
