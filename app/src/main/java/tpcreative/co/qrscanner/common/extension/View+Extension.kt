@@ -1,6 +1,5 @@
 package tpcreative.co.qrscanner.common.extension
 
-import android.R
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.res.Configuration
@@ -13,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -104,4 +104,16 @@ inline fun View.afterMeasured(crossinline block: () -> Unit) {
             }
         })
     }
+}
+
+fun View.changeWith(width : Int){
+    this.layoutParams = LinearLayout.LayoutParams(width, height)
+}
+
+fun View.changeHeight(height : Int){
+    this.layoutParams = LinearLayout.LayoutParams(width, height)
+}
+
+fun View.change(width : Int,height : Int){
+    this.layoutParams = LinearLayout.LayoutParams(width, height)
 }

@@ -53,20 +53,23 @@
                         android:id="@+id/imgResult"
                         android:layout_width="@dimen/icon_size_300"
                         android:layout_height="@dimen/icon_size_300"
-                        android:layout_marginTop="@dimen/margin_20"/>
+                        android:layout_marginTop="@dimen/margin_10"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:visibility="gone"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:background="@color/material_gray_100"
                     android:id="@+id/llChangeDesign"
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/margin_7"
                     android:layout_marginEnd="@dimen/margin_0"
+                    android:paddingTop="@dimen/margin_2"
+                    android:paddingBottom="@dimen/margin_2"
                     android:layout_marginStart="@dimen/margin_0"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <RelativeLayout
+                        android:layout_marginStart="@dimen/margin_10"
                         android:id="@+id/rlRight"
                         android:layout_width="@dimen/icon_size_45"
                         android:layout_height="@dimen/icon_size_45">
@@ -106,27 +109,42 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:textStyle="bold"
-                        android:textSize="@dimen/text_size_17"
-                        style="@style/brandonRedBoldTextView"
-                        android:id="@+id/txtSubject"
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_marginTop="@dimen/margin_10"
-                        style="@style/brandonRegularTextView"
-                        android:id="@+id/txtDisplay"
-                        android:inputType="textMultiLine"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:maxLines="1"
+                            android:inputType="text"
+                            android:textSize="@dimen/text_size_15"
+                            style="@style/brandonRegularTextView"
+                            android:id="@+id/txtFormat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_marginStart="@dimen/margin_3"
+                            android:layout_marginEnd="@dimen/margin_3"
+                            android:text="•"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:maxLines="1"
+                            android:inputType="text"
+                            android:textSize="@dimen/text_size_15"
+                            style="@style/brandonRedBoldTextView"
+                            android:id="@+id/txtSubject"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:textSize="@dimen/text_size_15"
-                        android:textColor="@color/colorAccent"
-                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_5"
                         style="@style/brandonRegularTextView"
-                        android:id="@+id/txtFormat"
+                        android:id="@+id/txtDisplay"
+                        android:inputType="textMultiLine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>

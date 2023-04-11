@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
-import tpcreative.co.qrscanner.common.ListenerView
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.storeBitmap
@@ -30,63 +31,38 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     private lateinit var viewEyes : EyesFragment
     private lateinit var viewLogo : LogoFragment
     private lateinit var viewText : TextFragment
+    private val mFragments : MutableList<Fragment> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChangeDesignBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initUI()
         registerLayout()
     }
 
+    private fun loadFragment(homeFragment: Fragment) {
+        val transaction = this.supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayout,homeFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
     private fun registerLayout(){
-        viewTemplate = binding.includeLayoutTemplate.root
-        viewTemplate.setBinding(binding.includeLayoutTemplate)
-        viewTemplate.setListener(object :ListenerView {
-            override fun onDone() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-            override fun onClose() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-        })
+        viewTemplate = TemplateFragment()
+        viewColor = ColorFragment()
+        viewDots = DotsFragment()
+        viewEyes = EyesFragment()
+        viewLogo = LogoFragment()
+        viewText = TextFragment()
 
-        viewColor = binding.includeLayoutColor.root
-        viewColor.setBinding(binding.includeLayoutColor)
-        viewColor.setListener(object : ListenerView {
-            override fun onDone() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-            override fun onClose() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-        })
-
-        viewDots = binding.includeLayoutDots.root
-        viewDots.setBinding(binding.includeLayoutDots)
-        viewDots.setListener(object :ListenerView {
-            override fun onDone() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-            override fun onClose() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-        })
-
-        viewEyes = binding.includeLayoutEyes.root
-        viewEyes.setBinding(binding.includeLayoutEyes)
-        viewEyes.setListener(object :ListenerView {
-            override fun onDone() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-            override fun onClose() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-        })
-
-        viewLogo = binding.includeLayoutLogo.root
-        viewLogo.setBinding(binding.includeLayoutLogo,object  : LogoFragment.ListenerLogoFragment{
+        mFragments.add(viewTemplate)
+        mFragments.add(viewColor)
+        mFragments.add(viewDots)
+        mFragments.add(viewEyes)
+        mFragments.add(viewLogo)
+        mFragments.add(viewText)
+        viewLogo.setSelectedIndex(viewModel.logoSelectedIndex)
+        viewLogo.setBinding(object  : LogoFragment.ListenerLogoFragment{
             override fun logoSelectedIndex(index: Int) {
                 viewModel.logoSelectedIndex = index
                 onHandleResponse()
@@ -96,29 +72,8 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
                 return viewModel.mLogoList
             }
         })
-        viewLogo.setSelectedIndex(viewModel.logoSelectedIndex)
-        viewLogo.load()
-        viewLogo.setListener(object :ListenerView {
-            override fun onDone() {
-                onVisit(EnumView.ALL_HIDDEN)
-                onHandleResponse()
-            }
-            override fun onClose() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-        })
-
-        viewText = binding.includeLayoutText.root
-        viewText.setBinding(binding.includeLayoutText)
-        viewText.setListener(object :ListenerView {
-            override fun onDone() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-            override fun onClose() {
-                onVisit(EnumView.ALL_HIDDEN)
-            }
-        })
-        onVisit(viewModel.enumView)
+//        viewLogo.load()
+        onVisit(EnumView.ALL_HIDDEN)
     }
 
     private fun onHandleResponse(){
@@ -127,37 +82,44 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         }
     }
 
-    private fun onVisit(view : EnumView){
-        viewModel.enumView = view
-        viewTemplate.visibility = View.INVISIBLE
-        viewColor.visibility = View.INVISIBLE
-        viewDots.visibility = View.INVISIBLE
-        viewEyes.visibility = View.INVISIBLE
-        viewLogo.visibility = View.INVISIBLE
-        viewText.visibility = View.INVISIBLE
-        binding.recyclerView.visibility = View.INVISIBLE
+    @Deprecated("Deprecated in Java", ReplaceWith("onBackPressedDispatcher.onBackPressed()"))
+    override fun onBackPressed() {
+        super.onBackPressed()
+        onBackPressedDispatcher.onBackPressed() //with this line
+    }
+
+    fun onVisit(view : EnumView){
         when(view){
             EnumView.TEMPLATE ->{
-                viewTemplate.visibility = View.VISIBLE
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.template)
+                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
             }
             EnumView.COLOR ->{
-                viewColor.visibility = View.VISIBLE
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.color)
+                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
             }
             EnumView.DOTS ->{
-                viewDots.visibility = View.VISIBLE
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.dots)
+                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
             }
             EnumView.EYES ->{
-                viewEyes.visibility = View.VISIBLE
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.eyes)
+                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
             }
             EnumView.LOGO ->{
-                viewLogo.visibility = View.VISIBLE
-                viewLogo.show()
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.logo)
+                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+//                val drawable = ContextCompat.getDrawable(this, R.drawable.ic_close)
+//                binding.doneCancelBar?.tvCancel?.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
             }
             EnumView.TEXT ->{
-                viewText.visibility = View.VISIBLE
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.text)
+                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
             }
             else -> {
                 binding.recyclerView.visibility = View.VISIBLE
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.cancel)
+                binding.doneCancelBar?.tvDone?.text = getString(R.string.save)
             }
         }
     }
@@ -173,14 +135,11 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     override fun onClickItem(position: Int) {
         val mType = adapter?.getItem(position)
         mType?.enumView?.let { onVisit(it) }
+        loadFragment(mFragments[position])
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
             R.id.menu_item_png_export -> {
                 share()
                 return true

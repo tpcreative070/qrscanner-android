@@ -5,8 +5,9 @@ adb -P 9999 start-server
 
 
 # The issue could not connect to the devices try to do some steps below
-
+#Issue on >= Android 10(Turn off Wifi debug on all devices Android 11 later, Our purpose on Android >= Android)
 # reset wifi
+# Close IDE and Open
 # adb kill-server
 #lsof -i :9999 and 5555
 #kill -9 <PID>

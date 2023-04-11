@@ -13,8 +13,8 @@
             android:id="@+id/rlBasic"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginEnd="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_15"
-            android:layout_marginBottom="@dimen/margin_15"
+            android:layout_marginTop="@dimen/margin_3"
+            android:layout_marginBottom="@dimen/margin_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <androidx.appcompat.widget.AppCompatImageView
@@ -34,6 +34,13 @@
                 android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+<!--            Make to fit with advance view-->
+            <View
+                android:padding="@dimen/margin_7"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/icon_size_40"
+                android:layout_height="@dimen/icon_size_40"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -42,8 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginEnd="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_15"
-            android:layout_marginBottom="@dimen/margin_15">
+            android:layout_marginTop="@dimen/margin_3"
+            android:layout_marginBottom="@dimen/margin_3">
             <RelativeLayout
                 android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
