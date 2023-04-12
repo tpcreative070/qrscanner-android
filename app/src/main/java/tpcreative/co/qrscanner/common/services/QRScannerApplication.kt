@@ -950,7 +950,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadResultLargeView(layAd: LinearLayout?) {
-        if (isOnline() || Utils.isRequestShowLocalAds()){
+        if (!isOnline() || Utils.isRequestShowLocalAds()){
             layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
                 this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
