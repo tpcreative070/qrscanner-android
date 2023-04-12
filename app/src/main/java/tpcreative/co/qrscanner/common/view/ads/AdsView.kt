@@ -96,7 +96,7 @@ class AdsView  : View{
         parent.layoutParams = params
         val tv = TextView(QRScannerApplication.getInstance())
         tv.text = QRScannerApplication.getInstance().getString(R.string.remove_ads)
-        tv.setPadding(0, QRScannerApplication.getInstance().pxToDp(5F).toInt(),0,QRScannerApplication.getInstance().pxToDp(5F).toInt())
+        tv.setPadding(0, 5F.px,0,5F.px)
         tv.setTextColor(QRScannerApplication.getInstance().getColor(R.color.white))
         tv.layoutParams =
             ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -131,21 +131,21 @@ class AdsView  : View{
         parent.layoutParams = params
         parent.addView(mLargeAds)
         parent.addView(mRemoveLargeAds)
+        parent.margin(top = 5f, bottom = 10f.px.toFloat())
         return parent
     }
 
     private fun createLargeAdsLayout() : LinearLayout {
         val parent = LinearLayout(QRScannerApplication.getInstance())
-        parent.layoutParams = LinearLayout.LayoutParams(context.pxToDp(300F).toInt(),
-            context.pxToDp(250F).toInt())
+        parent.layoutParams = LinearLayout.LayoutParams(300F.px,
+            250F.px)
         parent.orientation = LinearLayout.VERTICAL
         parent.gravity = Gravity.CENTER
         if (context.isLandscape()){
-            parent.margin(left = (QRScannerApplication.getInstance().getWidth()/3.5).toFloat(),top = context.pxToDp(5f), bottom = context.pxToDp(10f))
+            parent.margin(left = (QRScannerApplication.getInstance().getWidth()/3.5).toFloat())
         }else{
-            parent.margin(left = context.pxToDp(5f),top = context.pxToDp(5f), bottom = context.pxToDp(10f))
+            parent.margin(left = 5f.px.toFloat())
         }
-
         parent.setBackgroundColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.lightAds))
         return parent
     }
@@ -153,7 +153,7 @@ class AdsView  : View{
     private fun createUnderLine() : View {
         val parent = View(QRScannerApplication.getInstance())
         parent.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-            context.pxToDp(1F).toInt())
+            1F.px)
         parent.setBackgroundColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.grey_lighter))
         return parent
     }
@@ -170,12 +170,13 @@ class AdsView  : View{
         parent.layoutParams = params
         val tv = TextView(QRScannerApplication.getInstance())
         tv.text = QRScannerApplication.getInstance().getString(R.string.advertising)
-        tv.setPadding(0, QRScannerApplication.getInstance().pxToDp(5F).toInt(),0,QRScannerApplication.getInstance().pxToDp(5F).toInt())
-        tv.layoutParams =
-            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        tv.setPadding(0, 5F.px,0,5F.px)
         tv.gravity = Gravity.CENTER
-        tv.setTypeface(tv.typeface, Typeface.BOLD)
+        tv.setTypeface(tv.typeface, Typeface.NORMAL)
         tv.setTextColor(ContextCompat.getColor(context,R.color.black))
+        val mTextParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        mTextParams.topMargin = 10f.px
+        tv.layoutParams = mTextParams
         parent.addView(tv)
         return parent
     }
@@ -189,12 +190,11 @@ class AdsView  : View{
             gravity = Gravity.CENTER or Gravity.TOP
         }
         parent.orientation = LinearLayout.VERTICAL
-        params.setMargins(0,  context.pxToDp(9.5f).toInt(),0,0)
         parent.layoutParams = params
         val mImageView = ImageView(QRScannerApplication.getInstance())
-        mImageView.setPadding(QRScannerApplication.getInstance().pxToDp(7F).toInt(), QRScannerApplication.getInstance().pxToDp(7F).toInt(),QRScannerApplication.getInstance().pxToDp(7F).toInt(),QRScannerApplication.getInstance().pxToDp(7F).toInt())
+        mImageView.setPadding(7F.px, 7F.px,7F.px,7F.px)
         mImageView.layoutParams =
-            ViewGroup.LayoutParams(context.pxToDp(35f).toInt(),context.pxToDp(35f).toInt() )
+            ViewGroup.LayoutParams(35f.px,35f.px)
         mImageView.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_close))
         mImageView.setColorFilter(ContextCompat.getColor(QRScannerApplication.getInstance(), R.color.material_black_1000), PorterDuff.Mode.SRC_ATOP)
         mImageView.setBackgroundColor(ContextCompat.getColor(context,R.color.lightAds))

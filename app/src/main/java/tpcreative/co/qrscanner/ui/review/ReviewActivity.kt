@@ -126,8 +126,8 @@ class ReviewActivity : BaseActivitySlide() {
         if (isBarCode()){
             //binding.imgResult.change(Utils.dpToSp(300f,this@ReviewActivity),Utils.dpToSp(200f,this@ReviewActivity))
             val params = LinearLayout.LayoutParams(
-                pxToDp(300f).toInt(),
-                pxToDp(200f).toInt()
+                300f.px,
+                200f.px
             ).apply {
                 gravity = Gravity.CENTER
                 topMargin = 10

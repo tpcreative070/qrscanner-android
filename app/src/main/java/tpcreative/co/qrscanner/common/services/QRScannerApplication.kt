@@ -950,7 +950,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     fun loadResultLargeView(layAd: LinearLayout?) {
-        if (!isOnline() || Utils.isRequestShowLocalAds()){
+        if (isOnline() || Utils.isRequestShowLocalAds()){
             layAd?.layout(R.layout.layout_content_large_offline).apply {
                 layAd?.addView(this)
                 this?.findViewById<LinearLayout>(R.id.rlProVersion).apply {
@@ -1450,11 +1450,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             val adWidth = (adWidthPixels / density).toInt()
             mWithAd = adWidth
             Utils.Log(TAG,"width $mWithAd")
-            Utils.Log(TAG,"width ${pxToDp(mWithAd.toFloat())}")
+            Utils.Log(TAG,"width ${mWithAd.px}")
             mMaximumHeight = if (Utils.isTablet()){
-                this.pxToDp(105F).toInt()
+                105F.px
             }else{
-                this.pxToDp(90F).toInt()
+               90F.px
             }
         } else {
             val outMetrics = DisplayMetrics()
@@ -1465,11 +1465,11 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             val adWidth = (adWidthPixels / density).toInt()
             mWithAd = adWidth
             Utils.Log(TAG,"width $mWithAd")
-            Utils.Log(TAG,"width ${pxToDp(mWithAd.toFloat())}")
+            Utils.Log(TAG,"width ${mWithAd.px}")
             mMaximumHeight = if (Utils.isTablet()){
-                this.pxToDp(105F).toInt()
+                105F.px
             }else{
-                this.pxToDp(90F).toInt()
+                90F.px
             }
         }
 
