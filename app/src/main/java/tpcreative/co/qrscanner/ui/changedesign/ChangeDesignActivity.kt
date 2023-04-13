@@ -82,12 +82,6 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         }
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith("onBackPressedDispatcher.onBackPressed()"))
-    override fun onBackPressed() {
-        super.onBackPressed()
-        onBackPressedDispatcher.onBackPressed() //with this line
-    }
-
     fun onVisit(view : EnumView){
         when(view){
             EnumView.TEMPLATE ->{

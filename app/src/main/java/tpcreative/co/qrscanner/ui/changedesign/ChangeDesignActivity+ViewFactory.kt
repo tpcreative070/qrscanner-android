@@ -50,6 +50,7 @@ fun ChangeDesignActivity.initUI(){
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
             OnBackInvokedDispatcher.PRIORITY_DEFAULT
         ) {
+            Utils.Log("ChangeDesign","Hidden view 33")
             supportFragmentManager.fragments.apply {
                 if (this.isEmpty()){
                     finish()
@@ -61,13 +62,14 @@ fun ChangeDesignActivity.initUI(){
                     Utils.Log("ChangeDesign","Hidden view 0")
                 }
             }
-            Utils.Log("ChangeDesign","Hidden view 0")
         }
     } else {
+        Utils.Log("ChangeDesign","Register change design")
         onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
+                    Utils.Log("ChangeDesign","Hidden view 29")
                     supportFragmentManager.fragments.apply {
                         if (this.isEmpty()){
                             finish()
@@ -79,7 +81,6 @@ fun ChangeDesignActivity.initUI(){
                             Utils.Log("ChangeDesign","Hidden view 1")
                         }
                     }
-                    Utils.Log("ChangeDesign","Hidden view 0")
                 }
             })
     }
