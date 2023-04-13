@@ -94,7 +94,7 @@ fun ReviewActivity.initUI(){
     }
     binding.imgResult.setOnClickListener {
         if (!isBarCode()){
-            Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+            //Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
         }
     }
     onHandlerIntent()

@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.scanner
 import android.Manifest
+import android.app.Activity
 import android.graphics.*
 import android.view.View
 import android.widget.SeekBar
@@ -146,14 +147,16 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
             mRequestRectFocus = mRespect
         }
     }
-    binding.cropImageView.setDebugAdvance(true)
-    binding.cropImageView.load(mUri)
-        ?.initialFrameRect(mRequestRectFocus)
-        ?.initialFrameRectByRespectScaleView(mRespect)
-        ?.useThumbnail(true)
-        ?.execute(mLoadCallback)
-    binding.cropImageView.moveUp()
-        ?.execute(mMoveUpCallback)
+    (context as Activity).runOnUiThread {
+        binding.cropImageView.setDebugAdvance(true)
+        binding.cropImageView.load(mUri)
+            ?.initialFrameRect(mRequestRectFocus)
+            ?.initialFrameRectByRespectScaleView(mRespect)
+            ?.useThumbnail(true)
+            ?.execute(mLoadCallback)
+        binding.cropImageView.moveUp()
+            ?.execute(mMoveUpCallback)
+    }
 }
 
 private val ScannerFragment.mMoveUpCallback: MoveUpCallback
