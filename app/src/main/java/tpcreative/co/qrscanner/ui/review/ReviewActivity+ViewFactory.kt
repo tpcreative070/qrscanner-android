@@ -93,7 +93,9 @@ fun ReviewActivity.initUI(){
         Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
     }
     binding.imgResult.setOnClickListener {
-        Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+        if (!isBarCode()){
+            //Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+        }
     }
     onHandlerIntent()
 }
@@ -356,6 +358,7 @@ suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format:
 }
 
 fun ReviewActivity.showAds(){
+    Utils.Log(TAG,"onPressedBack")
     if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd()){
         // Back is pressed... Finishing the activity
         finish()

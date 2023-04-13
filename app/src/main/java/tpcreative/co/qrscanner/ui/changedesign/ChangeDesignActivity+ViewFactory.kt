@@ -1,6 +1,9 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
+import android.os.Build
 import android.view.LayoutInflater
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,12 +13,76 @@ import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.extension.isLandscape
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
+import tpcreative.co.qrscanner.model.EnumView
+import tpcreative.co.qrscanner.ui.changedesign.fragment.LogoFragment
 
 fun ChangeDesignActivity.initUI(){
     setupViewModel()
     getIntentData()
     initRecycleView(layoutInflater)
     getData()
+    binding.doneCancelBar?.btnDone?.setOnClickListener {
+        supportFragmentManager.fragments.apply {
+            if (this.isEmpty()){
+                finish()
+            }else{
+                for (fragment in this) {
+                    supportFragmentManager.beginTransaction().remove(fragment).commit()
+                }
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        }
+    }
+    binding.doneCancelBar?.btnCancel?.setOnClickListener {
+       supportFragmentManager.fragments.apply {
+            if (this.isEmpty()){
+                finish()
+            }else{
+                for (fragment in this) {
+                    supportFragmentManager.beginTransaction().remove(fragment).commit()
+                }
+                onVisit(EnumView.ALL_HIDDEN)
+            }
+        }
+    }
+
+    if (Build.VERSION.SDK_INT >= 33) {
+        onBackInvokedDispatcher.registerOnBackInvokedCallback(
+            OnBackInvokedDispatcher.PRIORITY_DEFAULT
+        ) {
+            supportFragmentManager.fragments.apply {
+                if (this.isEmpty()){
+                    finish()
+                }else{
+                    for (fragment in this) {
+                        supportFragmentManager.beginTransaction().remove(fragment).commit()
+                    }
+                    onVisit(EnumView.ALL_HIDDEN)
+                    Utils.Log("ChangeDesign","Hidden view 0")
+                }
+            }
+            Utils.Log("ChangeDesign","Hidden view 0")
+        }
+    } else {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    supportFragmentManager.fragments.apply {
+                        if (this.isEmpty()){
+                            finish()
+                        }else{
+                            for (fragment in this) {
+                                supportFragmentManager.beginTransaction().remove(fragment).commit()
+                            }
+                            onVisit(EnumView.ALL_HIDDEN)
+                            Utils.Log("ChangeDesign","Hidden view 1")
+                        }
+                    }
+                    Utils.Log("ChangeDesign","Hidden view 0")
+                }
+            })
+    }
 }
 
 private fun ChangeDesignActivity.getIntentData(){

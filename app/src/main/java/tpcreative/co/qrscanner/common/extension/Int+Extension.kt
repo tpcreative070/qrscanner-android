@@ -1,16 +1,12 @@
 package tpcreative.co.qrscanner.common.extension
 
-import android.content.Context
+import android.content.res.Resources
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 fun Int.toText() : String{
     return QRScannerApplication.getInstance().getString(this)
 }
 
-fun Int.pxToDp():Float{
-    return this * QRScannerApplication.getInstance().resources.displayMetrics.density
-}
+val Int.dp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
-fun Int.dpToPx() : Float{
-    return this * QRScannerApplication.getInstance().resources.displayMetrics.density
-}
+val Int.px: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()

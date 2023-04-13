@@ -6,8 +6,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
@@ -24,10 +27,7 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.extension.getDisplay
-import tpcreative.co.qrscanner.common.extension.onGeneralParse
-import tpcreative.co.qrscanner.common.extension.onTranslateCreateType
-import tpcreative.co.qrscanner.common.extension.toText
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
@@ -112,12 +112,28 @@ class ReviewActivity : BaseActivitySlide() {
             binding.txtSubject.text = type
             binding.txtDisplay.text = code
             binding.txtFormat.text = format
+            redesignLayout()
             CoroutineScope(Dispatchers.IO).launch {
                 onGenerateReview(code)
                 onGenerateQRCode(code)
                 onDrawOnBitmap(Utils.getDisplay(GeneralModel(save))?:"",Utils.onTranslateCreateType(it
                     .createType ?: ParsedResultType.TEXT), BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))
             }
+        }
+    }
+
+    private fun redesignLayout(){
+        if (isBarCode()){
+            //binding.imgResult.change(Utils.dpToSp(300f,this@ReviewActivity),Utils.dpToSp(200f,this@ReviewActivity))
+            val params = LinearLayout.LayoutParams(
+                300f.px,
+                200f.px
+            ).apply {
+                gravity = Gravity.CENTER
+                topMargin = 10
+            }
+            binding.imgResult.layoutParams = params
+            binding.llChangeDesign.visibility = View.GONE
         }
     }
 
@@ -232,7 +248,7 @@ class ReviewActivity : BaseActivitySlide() {
                 hints[EncodeHintType.CHARACTER_SET] = Charsets.UTF_8
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
                 Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
-                val mBitmap = if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
+                val mBitmap = if (isBarCode()) {
                     hints[EncodeHintType.MARGIN] = 5
                     var mFormatCode = BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
                     if(mFormatCode == BarcodeFormat.RSS_14){
@@ -254,6 +270,7 @@ class ReviewActivity : BaseActivitySlide() {
                         mHeight,
                         hints
                     )
+
                 } else {
                     hints[EncodeHintType.MARGIN] = 2
                     barcodeEncoder.encodeBitmap(
@@ -272,6 +289,14 @@ class ReviewActivity : BaseActivitySlide() {
                 e.printStackTrace()
             }
         }
+
+
+    fun isBarCode() : Boolean{
+        if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
+            return true
+        }
+        return false
+    }
 
     suspend fun onGenerateQRCode(code: String?) =
         withContext(Dispatchers.IO) {

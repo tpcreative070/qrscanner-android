@@ -32,7 +32,7 @@ fun BackupActivity.initUI(){
     }else{
         binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
     }
-    if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
+    if(Utils.isHiddenAds(EnumScreens.BACKUP_LARGE)){
         binding.rlBannerLarger.visibility = View.GONE
     }else{
         binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())

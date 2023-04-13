@@ -42,7 +42,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         }else{
             binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
         }
-        if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
+        if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
             binding.rlBannerLarger.visibility = View.GONE
         }else{
             binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())

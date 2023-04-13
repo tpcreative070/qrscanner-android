@@ -3,7 +3,7 @@
     android:background="@color/material_gray_050"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
             </androidx.cardview.widget.CardView>
             <androidx.appcompat.widget.AppCompatTextView
                 android:maxLines="1"
-                android:inputType="text"
+                android:ellipsize="end"
                 android:textSize="@dimen/large"
                 style="@style/brandonRegularTextInputLayout"
                 android:textStyle="bold"
@@ -121,8 +121,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
-                    android:paddingTop="@dimen/margin_10"
-                    android:paddingBottom="@dimen/margin_10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatTextView

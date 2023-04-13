@@ -6,6 +6,7 @@
         android:id="@+id/btn_cancel"
         style="@style/Crop.ActionButton">
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCancel"
             android:drawableTint="@color/white"
             style="@style/Crop.ActionButtonText.Cancel" />
     </FrameLayout>
@@ -16,6 +17,7 @@
         android:id="@+id/btn_done"
         style="@style/Crop.ActionButton">
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDone"
             android:drawableTint="@color/white"
             style="@style/Crop.ActionButtonText.Done" />
     </FrameLayout>

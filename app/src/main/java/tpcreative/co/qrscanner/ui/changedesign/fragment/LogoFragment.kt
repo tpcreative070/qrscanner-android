@@ -3,21 +3,24 @@ package tpcreative.co.qrscanner.ui.changedesign.fragment
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import tpcreative.co.qrscanner.common.BaseFragment
 import tpcreative.co.qrscanner.common.ListenerView
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
 import tpcreative.co.qrscanner.common.extension.isLandscape
 import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
+import tpcreative.co.qrscanner.databinding.FragmentEyesBinding
 import tpcreative.co.qrscanner.databinding.FragmentLogoBinding
 import tpcreative.co.qrscanner.model.ChangeDesignModel
 
-class LogoFragment : ConstraintLayout, LogoFragmentAdapter.ItemSelectedListener {
-    private lateinit var mListener : ListenerView
+class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     private lateinit var binding : FragmentLogoBinding
     private lateinit var mContext : Context
     private lateinit var adapter: LogoFragmentAdapter
@@ -26,33 +29,29 @@ class LogoFragment : ConstraintLayout, LogoFragmentAdapter.ItemSelectedListener 
     private var logoIndexSelected : Int = -1
     private lateinit var listener : ListenerLogoFragment
 
-    constructor(context: Context) : super(context) {
-        mContext = context
-        mInflater = LayoutInflater.from(context)
+    override fun getLayoutId(): Int {
+        return 0
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        mContext = context
-        mInflater = LayoutInflater.from(context)
-    }
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+    override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
+        binding = FragmentLogoBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    fun setListener(mListenerView: ListenerView){
-        this.mListener = mListenerView
+    override fun work() {
+        super.work()
+        mContext = requireContext()
+        mInflater = requireActivity().layoutInflater
+        load()
     }
 
-    fun setBinding(binding : FragmentLogoBinding,listenerLogoFragment: ListenerLogoFragment){
-        this.listener = listenerLogoFragment
-        this.binding = binding
-        binding.includeLayoutHeader.imgClose.setOnClickListener {
-            Utils.Log("TAG","Close")
-            mListener.onClose()
-        }
-        binding.includeLayoutHeader.imgDone.setOnClickListener {
-            Utils.Log("TAG","Done")
-            mListener.onDone()
-        }
+    override fun onResume() {
+        super.onResume()
+        show()
+    }
+
+    fun setBinding(listenerView: ListenerLogoFragment){
+        this.listener = listenerView
     }
 
     fun setSelectedIndex(index : Int){
@@ -62,7 +61,7 @@ class LogoFragment : ConstraintLayout, LogoFragmentAdapter.ItemSelectedListener 
     private fun initRecycleView(layoutInflater: LayoutInflater) {
         adapter = LogoFragmentAdapter(layoutInflater, mContext, this)
         var mNoOfColumns = Utils.calculateNoOfColumns(mContext,80F)
-        if(context.isLandscape()){
+        if(context?.isLandscape() == true){
             mNoOfColumns = Utils.calculateNoOfColumns(mContext,160F)
         }
         val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(mContext, mNoOfColumns)
@@ -103,7 +102,7 @@ class LogoFragment : ConstraintLayout, LogoFragmentAdapter.ItemSelectedListener 
         adapter.setDataSource(mList)
     }
 
-    fun load(){
+    private fun load(){
         initRecycleView(mInflater)
         initializedData()
         reload()
