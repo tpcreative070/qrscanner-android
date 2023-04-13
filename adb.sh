@@ -12,7 +12,7 @@ adb -P 9999 start-server
 #lsof -i :9999 and 5555
 #kill -9 <PID>
 # Start port and server again
-#adb tcpip 9999(Try before connection to internet) -> restarting in TCP mode port: 9999
+#adb tcpip 9999(Try before connection to internet, connect cable) -> restarting in TCP mode port: 9999
 #adb -P 9999 start-server
 
 #nano ~/.zshrc
