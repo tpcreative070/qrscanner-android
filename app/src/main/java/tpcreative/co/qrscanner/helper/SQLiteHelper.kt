@@ -1,12 +1,10 @@
 package tpcreative.co.qrscanner.helper
 import android.content.*
 import tpcreative.co.qrscanner.common.*
+import tpcreative.co.qrscanner.common.entities.DesignQREntity
 import tpcreative.co.qrscanner.common.entities.InstanceGenerator
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.model.HistoryEntityModel
-import tpcreative.co.qrscanner.model.HistoryModel
-import tpcreative.co.qrscanner.model.SaveEntityModel
-import tpcreative.co.qrscanner.model.SaveModel
+import tpcreative.co.qrscanner.model.*
 import java.util.*
 
 object SQLiteHelper {
@@ -283,5 +281,53 @@ object SQLiteHelper {
         return ArrayList()
     }
 
+    fun onDelete(entity: DesignQRModel?): Boolean? {
+        try {
+            val mData = DesignQREntityModel(entity)
+            return getInstance()?.onDelete(mData)
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return false
+    }
 
+    fun onInsert(data: DesignQRModel?) {
+        try {
+            if (data == null) {
+                return
+            }
+            val mData = DesignQREntityModel(data)
+            getInstance()?.onInsert(mData)
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+    }
+
+    fun getDesignQR(uuIdQR: String?): DesignQRModel? {
+        try {
+            val mResult = getInstance()?.getItemByUUIdQR(uuIdQR)
+            if (mResult != null) {
+                return DesignQRModel(mResult)
+            }
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
+
+    fun loadList(): MutableList<DesignQRModel>? {
+        try {
+            val  mList = mutableListOf<DesignQRModel>()
+            val mResult = getInstance()?.getLoadAll()
+            if (mResult != null) {
+                mResult.forEach {
+                    mList.add(DesignQRModel(it))
+                }
+                return mList
+            }
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
 }

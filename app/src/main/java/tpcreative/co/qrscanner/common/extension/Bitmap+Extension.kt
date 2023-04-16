@@ -82,3 +82,18 @@ fun Bitmap.storeBitmap() : Uri?{
     }
     return mUri
 }
+
+fun Bitmap.storeBitmap(fileName : String) : Uri?{
+    val imageFolder = QRScannerApplication.getInstance().getPathFolder()?.let { File(it) }
+    imageFolder?.mkdirs()
+    val file = File(imageFolder, "$fileName shared_design_qr_code.png")
+    val mUri = QRScannerApplication.getInstance().getUriForFile(file)
+    mUri?.run {
+        QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {
+            this@storeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, this)
+            close()
+        }
+    }
+    return mUri
+}
+

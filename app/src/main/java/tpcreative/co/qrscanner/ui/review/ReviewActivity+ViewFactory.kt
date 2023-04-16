@@ -90,11 +90,11 @@ fun ReviewActivity.initUI(){
     }
 
     binding.llChangeDesign.setOnClickListener {
-        Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+        onOpenChangeDesign()
     }
     binding.imgResult.setOnClickListener {
         if (!isBarCode()){
-            Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+            onOpenChangeDesign()
         }
     }
     onHandlerIntent()
@@ -316,6 +316,11 @@ fun ReviewActivity.getIntentData(){
 
 suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat) = withContext(Dispatchers.IO){
     var mBm: Bitmap?
+    mergeUUID()
+    if (create?.uuId?.findImageName()?.isFile==true){
+        processDrawnDone = true
+        return@withContext
+    }
     bitmap?.let {data ->
          if (BarcodeFormat.QR_CODE != format && !viewModel.isSharedIntent){
              mBm = data.addPaddingLeftForBitmap(50)

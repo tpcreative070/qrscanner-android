@@ -19,12 +19,13 @@ import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.databinding.FragmentEyesBinding
 import tpcreative.co.qrscanner.databinding.FragmentLogoBinding
 import tpcreative.co.qrscanner.model.ChangeDesignModel
+import tpcreative.co.qrscanner.model.LogoModel
 
 class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     private lateinit var binding : FragmentLogoBinding
     private lateinit var mContext : Context
     private lateinit var adapter: LogoFragmentAdapter
-    private lateinit var mList : MutableList<ChangeDesignModel>
+    private lateinit var mList : MutableList<LogoModel>
     private lateinit var mInflater: LayoutInflater
     private var logoIndexSelected : Int = -1
     private lateinit var listener : ListenerLogoFragment
@@ -110,6 +111,6 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
 
     interface ListenerLogoFragment {
         fun logoSelectedIndex(index : Int)
-        fun getData() : MutableList<ChangeDesignModel>
+        fun getData() : MutableList<LogoModel>
     }
 }

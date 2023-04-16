@@ -16,8 +16,8 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.storeBitmap
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
-import tpcreative.co.qrscanner.model.ChangeDesignModel
 import tpcreative.co.qrscanner.model.EnumView
+import tpcreative.co.qrscanner.model.LogoModel
 import tpcreative.co.qrscanner.ui.changedesign.fragment.*
 
 
@@ -65,10 +65,11 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         viewLogo.setBinding(object  : LogoFragment.ListenerLogoFragment{
             override fun logoSelectedIndex(index: Int) {
                 viewModel.logoSelectedIndex = index
+                viewModel.onHandle(EnumView.LOGO,index)
                 onHandleResponse()
             }
 
-            override fun getData(): MutableList<ChangeDesignModel> {
+            override fun getData(): MutableList<LogoModel> {
                 return viewModel.mLogoList
             }
         })
@@ -86,34 +87,55 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         when(view){
             EnumView.TEMPLATE ->{
                 binding.doneCancelBar?.tvCancel?.text = getString(R.string.template)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar?.btnSave?.text = getString(R.string.done)
+                binding.doneCancelBar?.imgCancel?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar?.btnSave?.visibility = View.INVISIBLE
+                binding.doneCancelBar?.imgDone?.visibility = View.VISIBLE
             }
             EnumView.COLOR ->{
                 binding.doneCancelBar?.tvCancel?.text = getString(R.string.color)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar?.btnSave?.text = getString(R.string.done)
+                binding.doneCancelBar?.imgCancel?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar?.btnSave?.visibility = View.INVISIBLE
+                binding.doneCancelBar?.imgDone?.visibility = View.VISIBLE
             }
             EnumView.DOTS ->{
                 binding.doneCancelBar?.tvCancel?.text = getString(R.string.dots)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar?.btnSave?.text = getString(R.string.done)
+                binding.doneCancelBar?.imgCancel?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar?.btnSave?.visibility = View.INVISIBLE
+                binding.doneCancelBar?.imgDone?.visibility = View.VISIBLE
             }
             EnumView.EYES ->{
                 binding.doneCancelBar?.tvCancel?.text = getString(R.string.eyes)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar?.btnSave?.text = getString(R.string.done)
+                binding.doneCancelBar?.imgCancel?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar?.btnSave?.visibility = View.INVISIBLE
+                binding.doneCancelBar?.imgDone?.visibility = View.VISIBLE
             }
             EnumView.LOGO ->{
                 binding.doneCancelBar?.tvCancel?.text = getString(R.string.logo)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar?.btnSave?.text = getString(R.string.done)
+                binding.doneCancelBar?.imgCancel?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar?.btnSave?.visibility = View.INVISIBLE
+                binding.doneCancelBar?.imgDone?.visibility = View.VISIBLE
 //                val drawable = ContextCompat.getDrawable(this, R.drawable.ic_close)
 //                binding.doneCancelBar?.tvCancel?.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
             }
             EnumView.TEXT ->{
                 binding.doneCancelBar?.tvCancel?.text = getString(R.string.text)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar?.btnSave?.text = getString(R.string.done)
+                binding.doneCancelBar?.imgCancel?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar?.btnSave?.visibility = View.INVISIBLE
+                binding.doneCancelBar?.imgDone?.visibility = View.VISIBLE
             }
             else -> {
                 binding.recyclerView.visibility = View.VISIBLE
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.cancel)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.save)
+                binding.doneCancelBar?.tvCancel?.text = getString(R.string.change_design)
+                binding.doneCancelBar?.imgCancel?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_baseline_arrow_back_24))
+                binding.doneCancelBar?.btnSave?.text = getString(R.string.save)
+                binding.doneCancelBar?.btnSave?.visibility = View.VISIBLE
+                binding.doneCancelBar?.imgDone?.visibility = View.INVISIBLE
             }
         }
     }

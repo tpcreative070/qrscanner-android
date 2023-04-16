@@ -1,27 +1,35 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
+import android.app.Activity
+import android.graphics.Bitmap
 import android.os.Build
 import android.view.LayoutInflater
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
-import tpcreative.co.qrscanner.common.extension.isLandscape
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
+import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.DesignQRModel
 import tpcreative.co.qrscanner.model.EnumView
 import tpcreative.co.qrscanner.ui.changedesign.fragment.LogoFragment
+import java.io.File
 
 fun ChangeDesignActivity.initUI(){
     setupViewModel()
     getIntentData()
     initRecycleView(layoutInflater)
     getData()
-    binding.doneCancelBar?.btnDone?.setOnClickListener {
+    binding.doneCancelBar?.rlDone?.setOnClickListener {
         supportFragmentManager.fragments.apply {
             if (this.isEmpty()){
                 finish()
@@ -33,7 +41,7 @@ fun ChangeDesignActivity.initUI(){
             }
         }
     }
-    binding.doneCancelBar?.btnCancel?.setOnClickListener {
+    binding.doneCancelBar?.rlCancel?.setOnClickListener {
        supportFragmentManager.fragments.apply {
             if (this.isEmpty()){
                 finish()
@@ -84,15 +92,46 @@ fun ChangeDesignActivity.initUI(){
                 }
             })
     }
+
+    binding.doneCancelBar?.btnSave?.setOnClickListener {
+        Utils.Log(TAG,"uuid ${viewModel.create.uuId}")
+        val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,1024, Bitmap.Config.ARGB_8888)
+        val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"")
+        if (mUri != null) {
+            //Utils.onShareImage(this,mUri)
+            viewModel.onSaveToDB()
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
+    }
+
+    if (viewModel.create.uuId?.findImageName()?.isFile==true){
+        Utils.Log(TAG,"Found file")
+    }else{
+        Utils.Log(TAG,"Not found")
+    }
+    Utils.Log(TAG,"String res ${R.color.colorAccent.StringHexNoTransparency}")
+    val mResult = SQLiteHelper.loadList()
+    Utils.Log(TAG,"Design data ${mResult?.toJson()}")
+
+    Utils.Log(TAG,"Design data map ${Constant.mList.toJson()}")
+
+    binding.doneCancelBar?.imgCancel?.addCircleRipple()
+    binding.doneCancelBar?.imgDone?.addCircleRipple()
+    binding.doneCancelBar?.btnSave?.addCircleRipple()
 }
 
 private fun ChangeDesignActivity.getIntentData(){
     viewModel.getIntent(this) {
         if (it){
             viewModel.onGenerateQR {mData->
-                binding.imgQRCode.setImageDrawable(mData)
+                val mFile = viewModel.create.uuId?.findImageName()
+                if (mFile!=null){
+                    binding.imgQRCode.setImageURI(mFile.toUri())
+                }else{
+                    binding.imgQRCode.setImageDrawable(mData)
+                }
             }
-
         }
     }
 }

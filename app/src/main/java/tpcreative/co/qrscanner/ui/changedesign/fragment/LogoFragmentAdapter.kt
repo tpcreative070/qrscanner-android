@@ -14,14 +14,15 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.model.ChangeDesignModel
+import tpcreative.co.qrscanner.model.LogoModel
 
-class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?) : BaseAdapter<ChangeDesignModel, BaseHolder<ChangeDesignModel>>(inflater) {
+class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?) : BaseAdapter<LogoModel, BaseHolder<LogoModel>>(inflater) {
     private val TAG = LogoFragmentAdapter::class.java.simpleName
     override fun getItemCount(): Int {
         return mDataSource.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder<ChangeDesignModel> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder<LogoModel> {
         return  ItemHolderStandard(inflater!!.inflate(R.layout.logo_item, parent, false))
     }
 
@@ -29,12 +30,12 @@ class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Contex
         fun onClickItem(position: Int)
     }
 
-    private inner class ItemHolderStandard(itemView: View) : BaseHolder<ChangeDesignModel>(itemView) {
+    private inner class ItemHolderStandard(itemView: View) : BaseHolder<LogoModel>(itemView) {
         private val imgDisplay: ImageView = itemView.findViewById(R.id.imgIcon)
         private val rlRoot : RelativeLayout = itemView.findViewById(R.id.rlRoot)
         private val viewSelected : View = itemView.findViewById(R.id.viewSelected)
 
-        override fun bind(data: ChangeDesignModel, position: Int) {
+        override fun bind(data: LogoModel, position: Int) {
             super.bind(data, position)
             imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
             //imgDisplay.setColorFilter(data.tint,PorterDuff.Mode.SRC_ATOP)

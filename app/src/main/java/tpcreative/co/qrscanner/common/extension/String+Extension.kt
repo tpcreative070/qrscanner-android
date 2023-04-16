@@ -6,6 +6,8 @@ import android.view.WindowManager
 import com.google.gson.Gson
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import java.io.File
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -54,4 +56,17 @@ fun String.isSpecialCharacters() : Boolean{
     val p: Pattern = Pattern.compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE)
     val m: Matcher = p.matcher(this)
     return m.find()
+}
+
+fun String.createFolder(){
+    File(this).mkdirs()
+}
+
+fun String.findImageName() : File?{
+    val imageFolder = QRScannerApplication.getInstance().getPathFolder()?.let { File(it) }
+    val mFile = File(imageFolder, "$this shared_design_qr_code.png")
+    if (mFile.exists()){
+        return mFile
+    }
+    return null
 }
