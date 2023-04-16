@@ -29,7 +29,7 @@ fun ChangeDesignActivity.initUI(){
     getIntentData()
     initRecycleView(layoutInflater)
     getData()
-    binding.doneCancelBar?.rlDone?.setOnClickListener {
+    binding.doneCancelBar.rlDone?.setOnClickListener {
         supportFragmentManager.fragments.apply {
             if (this.isEmpty()){
                 finish()
@@ -41,7 +41,7 @@ fun ChangeDesignActivity.initUI(){
             }
         }
     }
-    binding.doneCancelBar?.rlCancel?.setOnClickListener {
+    binding.doneCancelBar.rlCancel?.setOnClickListener {
        supportFragmentManager.fragments.apply {
             if (this.isEmpty()){
                 finish()
@@ -93,7 +93,7 @@ fun ChangeDesignActivity.initUI(){
             })
     }
 
-    binding.doneCancelBar?.btnSave?.setOnClickListener {
+    binding.doneCancelBar.btnSave?.setOnClickListener {
         Utils.Log(TAG,"uuid ${viewModel.create.uuId}")
         val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,1024, Bitmap.Config.ARGB_8888)
         val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"")
@@ -114,11 +114,11 @@ fun ChangeDesignActivity.initUI(){
     val mResult = SQLiteHelper.loadList()
     Utils.Log(TAG,"Design data ${mResult?.toJson()}")
 
-    Utils.Log(TAG,"Design data map ${Constant.mList.toJson()}")
+//    Utils.Log(TAG,"Design data map ${Constant.mList.toJson()}")
 
-    binding.doneCancelBar?.imgCancel?.addCircleRipple()
-    binding.doneCancelBar?.imgDone?.addCircleRipple()
-    binding.doneCancelBar?.btnSave?.addCircleRipple()
+    binding.doneCancelBar.imgCancel.addCircleRipple()
+    binding.doneCancelBar.imgDone.addCircleRipple()
+    binding.doneCancelBar.btnSave.addCircleRipple()
 }
 
 private fun ChangeDesignActivity.getIntentData(){

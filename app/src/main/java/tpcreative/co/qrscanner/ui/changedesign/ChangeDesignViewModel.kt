@@ -10,9 +10,12 @@ import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.EnumIcon
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.icon
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.extension.toJson
+import tpcreative.co.qrscanner.common.extension.toObject
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -24,7 +27,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var mList: MutableList<ChangeDesignCategoryModel> = mutableListOf()
     var create: GeneralModel = GeneralModel()
     var enumView  = EnumView.ALL_HIDDEN
-    var logoSelectedIndex : Int = -1
+    var index  : Int = -1
+    lateinit var indexLogo : LogoModel
     var mLogoList = mutableListOf<LogoModel>()
     var changeDesignReview :ChangeDesignModel = ChangeDesignModel()
     var changeDesignSave :ChangeDesignModel = ChangeDesignModel()
@@ -38,6 +42,19 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     R.string.key_data), GeneralModel::class.java)
             if (data != null) {
                 create = data
+                indexLogo = defaultObject()
+                val mDataStore = SQLiteHelper.getDesignQR(data.uuId)
+                if (mDataStore!=null){
+                    try {
+                        val mDesign = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
+                        indexLogo = mDesign.logo ?: defaultObject()
+                        Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
+                    }catch (e : Exception){
+                        e.printStackTrace()
+                    }
+                }else{
+                    Utils.Log(TAG,"Data logo not found")
+                }
                 callback.invoke(true)
             }
         }
@@ -47,21 +64,21 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     fun getData(callback: (result: MutableList<ChangeDesignCategoryModel>) -> Unit){
         mList.clear()
         mList.add(
-            ChangeDesignCategoryModel(R.drawable.ic_template,QRScannerApplication.getInstance().getString(R.string.template),EnumView.TEMPLATE,false,R.color.transparent,true)
+            ChangeDesignCategoryModel(EnumIcon.ic_template.icon,QRScannerApplication.getInstance().getString(R.string.template),EnumView.TEMPLATE,R.color.transparent,EnumIcon.ic_template)
         )
         mList.add(
-            ChangeDesignCategoryModel(R.drawable.ic_paint,QRScannerApplication.getInstance().getString(R.string.color),EnumView.COLOR,false,R.color.transparent,true))
+            ChangeDesignCategoryModel(EnumIcon.ic_paint.icon,QRScannerApplication.getInstance().getString(R.string.color),EnumView.COLOR,R.color.transparent,EnumIcon.ic_paint))
         mList.add(
-            ChangeDesignCategoryModel(R.drawable.ic_dots,QRScannerApplication.getInstance().getString(R.string.dots),EnumView.DOTS,false,R.color.transparent,true)
+            ChangeDesignCategoryModel(EnumIcon.ic_dots.icon,QRScannerApplication.getInstance().getString(R.string.dots),EnumView.DOTS,R.color.transparent,EnumIcon.ic_dots)
         )
         mList.add(
-            ChangeDesignCategoryModel(R.drawable.ic_eyes,QRScannerApplication.getInstance().getString(R.string.eyes),EnumView.EYES,false,R.color.transparent,true)
+            ChangeDesignCategoryModel(EnumIcon.ic_eyes.icon,QRScannerApplication.getInstance().getString(R.string.eyes),EnumView.EYES,R.color.transparent,EnumIcon.ic_eyes)
         )
         mList.add(
-            ChangeDesignCategoryModel(R.drawable.ic_registered,QRScannerApplication.getInstance().getString(R.string.logo),EnumView.LOGO,false,R.color.transparent,true)
+            ChangeDesignCategoryModel(EnumIcon.ic_registered.icon,QRScannerApplication.getInstance().getString(R.string.logo),EnumView.LOGO,R.color.transparent,EnumIcon.ic_registered)
         )
         mList.add(
-            ChangeDesignCategoryModel(R.drawable.ic_design_text,QRScannerApplication.getInstance().getString(R.string.text),EnumView.TEXT,false,R.color.transparent,true)
+            ChangeDesignCategoryModel(EnumIcon.ic_design_text.icon,QRScannerApplication.getInstance().getString(R.string.text),EnumView.TEXT,R.color.transparent,EnumIcon.ic_design_text)
         )
         callback(mList)
     }
@@ -70,98 +87,98 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mLogoList.clear()
         mLogoList.add(
             LogoModel(
-                R.drawable.bg_white,
+                EnumIcon.bg_white.icon,
                 QRScannerApplication.getInstance().getString(R.string.template),
-                EnumView.TEMPLATE,false,R.color.transparent,false)
+                EnumIcon.bg_white,false,R.color.transparent,false)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.design_wifi,
+                EnumIcon.design_wifi.icon,
                 QRScannerApplication.getInstance().getString(R.string.template),
-                EnumView.TEMPLATE,false,R.color.transparent,true)
+                EnumIcon.design_wifi,false,R.color.transparent,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_twitter,
+                EnumIcon.ic_twitter.icon,
                 QRScannerApplication.getInstance().getString(R.string.color),
-                EnumView.COLOR,false,R.color.transparent,true)
+                EnumIcon.ic_twitter,false,R.color.transparent,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_youtube_png,
+                EnumIcon.ic_youtube_png.icon,
                 QRScannerApplication.getInstance().getString(R.string.dots),
-                EnumView.DOTS,false,R.color.transparent,true)
+                EnumIcon.ic_youtube_png,false,R.color.transparent,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_whatapp,
+                EnumIcon.ic_whatapp.icon,
                 QRScannerApplication.getInstance().getString(R.string.eyes),
-                EnumView.EYES,false,R.color.transparent,true)
+                EnumIcon.ic_whatapp,false,R.color.transparent,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_instagram,
+                EnumIcon.ic_instagram.icon,
                 QRScannerApplication.getInstance().getString(R.string.logo),
-                EnumView.LOGO,false,R.color.transparent,true)
+                EnumIcon.ic_instagram,false,R.color.transparent,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_paypal,
+                EnumIcon.ic_paypal.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.transparent,true)
+                EnumIcon.ic_paypal,false,R.color.transparent,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_email,
+                EnumIcon.ic_email.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_email,false,R.color.black,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_message,
+                EnumIcon.ic_message.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_message,false,R.color.black,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_location,
+                EnumIcon.ic_location.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_location,false,R.color.black,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_calender,
+                EnumIcon.ic_calender.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_calender,false,R.color.black,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_contact,
+                EnumIcon.ic_contact.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_contact,false,R.color.black,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_phone,
+                EnumIcon.ic_phone.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_phone,false,R.color.black,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_text,
+                EnumIcon.ic_text.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_text,false,R.color.black,true)
         )
         mLogoList.add(
             LogoModel(
-                R.drawable.ic_network,
+                EnumIcon.ic_network.icon,
                 QRScannerApplication.getInstance().getString(R.string.text),
-                EnumView.TEXT,false,R.color.black,true)
+                EnumIcon.ic_network,false,R.color.black,true)
         )
     }
 
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
-        val mDataResult = getDataResult()
+        val mDataResult = indexLogo
         val options = QrVectorOptions.Builder()
             .setPadding(.15f)
             .setBackground(
@@ -242,10 +259,17 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     fun onSaveToDB(){
         val mData =  DesignQRModel()
         val mDesign = ChangeDesignModel()
-        mDesign.logo = getDataResult()
+        mDesign.logo = indexLogo
         mData.uuIdQR = create.uuId
         mData.codeDesign = mDesign.toJson()
         SQLiteHelper.onInsert(mData)
+    }
+
+    fun defaultObject() : LogoModel {
+        return LogoModel(
+            EnumIcon.bg_white.icon,
+            QRScannerApplication.getInstance().getString(R.string.template),
+            EnumIcon.bg_white,false,R.color.transparent,false)
     }
 
     val context = QRScannerApplication.getInstance()

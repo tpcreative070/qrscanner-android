@@ -948,12 +948,12 @@ object Utils {
             else -> {}
         }
         return if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
-            (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+            (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || ServiceManager.getInstance().mVersion?.hiddenFreeReleaseAds == true || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
-            (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+            (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || ServiceManager.getInstance().mVersion?.hiddenFreeInnovationAds == true || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         }
         else if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
-            (QRScannerApplication.getInstance().isHiddenSuperFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+            (QRScannerApplication.getInstance().isHiddenSuperFreeInnovationAds() || ServiceManager.getInstance().mVersion?.hiddenSuperFreeInnovationAds == true || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         }
         else{
             isPremium()

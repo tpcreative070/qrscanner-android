@@ -27,8 +27,8 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     private lateinit var adapter: LogoFragmentAdapter
     private lateinit var mList : MutableList<LogoModel>
     private lateinit var mInflater: LayoutInflater
-    private var logoIndexSelected : Int = -1
-    private lateinit var listener : ListenerLogoFragment
+    private var index : LogoModel? = null
+    private var listener : ListenerLogoFragment? = null
 
     override fun getLayoutId(): Int {
         return 0
@@ -55,8 +55,8 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
         this.listener = listenerView
     }
 
-    fun setSelectedIndex(index : Int){
-        this.logoIndexSelected = index
+    fun setSelectedIndex(index : LogoModel){
+        this.index = index
     }
 
     private fun initRecycleView(layoutInflater: LayoutInflater) {
@@ -73,15 +73,16 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     }
 
     override fun onClickItem(position: Int) {
-        listener.logoSelectedIndex(position)
-        this.logoIndexSelected = position
+        listener?.logoSelectedIndex(position,mList[position])
+        this.index = mList.get(position)
         Utils.Log("TAG","index $position")
         reload()
     }
 
     private fun reload(){
+        Utils.Log(TAG,"Index logo ${index?.toJson()}")
         mList = mList.mapIndexed { index, data ->
-            if (index == logoIndexSelected) data.apply {
+            if (data.enumIcon == this.index?.enumIcon) data.apply {
                 isSelected = true
                 Utils.Log("TAG","Selected at $index")
             }
@@ -95,7 +96,7 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
 
     private fun initializedData(){
         mList = mutableListOf()
-        mList.addAll(listener.getData())
+        listener?.getData()?.let { mList.addAll(it) }
     }
 
     fun show(){
@@ -110,7 +111,7 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     }
 
     interface ListenerLogoFragment {
-        fun logoSelectedIndex(index : Int)
+        fun logoSelectedIndex(index : Int, selectedObject :LogoModel)
         fun getData() : MutableList<LogoModel>
     }
 }

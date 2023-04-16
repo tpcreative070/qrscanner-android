@@ -39,7 +39,9 @@ class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Contex
             super.bind(data, position)
             imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
             //imgDisplay.setColorFilter(data.tint,PorterDuff.Mode.SRC_ATOP)
-            MyDrawableCompat.setColorFilter(imgDisplay.drawable,ContextCompat.getColor(context, data.tint?: R.color.transparent))
+            MyDrawableCompat.setColorFilter(imgDisplay.drawable,ContextCompat.getColor(context,
+                data.tint
+            ))
             viewSelected.visibility = if(data.isSelected) View.VISIBLE else View.INVISIBLE
             Utils.Log("TAG","Selected ${data.isSelected}")
             rlRoot.setOnClickListener {
