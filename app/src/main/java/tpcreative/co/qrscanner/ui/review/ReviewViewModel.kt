@@ -34,11 +34,11 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
         }
     }
 
-    fun doShowAds() = liveData(Dispatchers.Main) {
+    fun doShowAds(callback : (Boolean)->Unit){
         if (QRScannerApplication.getInstance().isLiveAds()) {
-            emit(true)
+            callback.invoke(true)
         } else {
-            emit(false)
+            callback.invoke(false)
         }
     }
 

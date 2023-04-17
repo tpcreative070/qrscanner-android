@@ -299,9 +299,9 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(enumAction: EnumAction,text : Str
 }
 
 fun ReviewActivity.checkingShowAds(){
-    viewModel.doShowAds().observe(this, Observer {
+    viewModel.doShowAds {
         doShowAds(it)
-    })
+    }
 }
 
 fun ReviewActivity.getIntentData(){

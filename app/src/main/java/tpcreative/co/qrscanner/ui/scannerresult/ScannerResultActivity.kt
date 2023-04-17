@@ -10,6 +10,7 @@ import android.provider.ContactsContract
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.afollestad.materialdialogs.MaterialDialog
@@ -43,6 +44,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
     private val keyFavorite = "KEY_FAVORITE"
     private val keyNOTE = "KEY_NOTE"
     var viewAds : AdsView? = null
+    private var isLoaded  : Boolean = false
     lateinit var binding : ActivityResultBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -414,9 +416,18 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     override fun onResume() {
         super.onResume()
+        if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
+            binding.rlAdsRoot.visibility = View.GONE
+        }
+        if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
+            binding.rlBannerLarger.visibility = View.GONE
+        }
+        if (isLoaded){
+            checkingShowAds()
+        }
+        isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.SCANNER_RESULT_SMALL)
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.SCANNER_RESULT_LARGE)
-        checkingShowAds()
         Utils.Log(TAG, "onResume")
     }
 

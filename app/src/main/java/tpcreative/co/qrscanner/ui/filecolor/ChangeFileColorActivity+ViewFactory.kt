@@ -67,9 +67,9 @@ fun ChangeFileColorActivity.initUI(){
 }
 
 fun ChangeFileColorActivity.checkingShowAds(){
-    viewModel.doShowAds().observe(this, Observer {
+    viewModel.doShowAds{
         doShowAds(it)
-    })
+    }
 }
 
 fun ChangeFileColorActivity.getData(){
