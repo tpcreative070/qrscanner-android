@@ -20,7 +20,11 @@ class ConstantKey {
         const val BIRTHDAY = "birthday"
         const val key_saved = "key_saved"
         const val key_logo_is_selected = "key_logo_is_selected"
-        const val key_change_design = "key_change_design"
+        const val key_change_design_view = "key_change_design_view"
+        const val key_change_design_save = "key_save_change_save"
+        const val key_change_design_review = "key_save_change_review"
+        const val key_change_design_logo = "key_save_change_logo"
+        const val key_change_design_index = "key_change_design_index"
 
         const val TITLE  = "title"
         const val LOCATION = "location"

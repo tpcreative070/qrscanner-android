@@ -30,8 +30,9 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var index  : Int = -1
     lateinit var indexLogo : LogoModel
     var mLogoList = mutableListOf<LogoModel>()
-    var changeDesignReview :ChangeDesignModel = ChangeDesignModel()
-    var changeDesignSave :ChangeDesignModel = ChangeDesignModel()
+    lateinit var changeDesignReview :ChangeDesignModel
+    lateinit var changeDesignSave :ChangeDesignModel
+    lateinit var changeDesignOriginal :ChangeDesignModel
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
@@ -48,11 +49,18 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     try {
                         val mDesign = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
                         indexLogo = mDesign.logo ?: defaultObject()
+                        changeDesignSave = ChangeDesignModel(mDesign)
+                        changeDesignReview =  ChangeDesignModel(mDesign)
+                        changeDesignOriginal = ChangeDesignModel(mDesign)
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
                     }catch (e : Exception){
                         e.printStackTrace()
                     }
                 }else{
+                    indexLogo = defaultObject()
+                    changeDesignSave = ChangeDesignModel()
+                    changeDesignReview =  ChangeDesignModel()
+                    changeDesignOriginal = ChangeDesignModel()
                     Utils.Log(TAG,"Data logo not found")
                 }
                 callback.invoke(true)
@@ -178,7 +186,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     }
 
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
-        val mDataResult = indexLogo
+        val mDataResult = changeDesignReview.logo
+        Utils.Log(TAG,"Generate icon ${mDataResult?.toJson()}")
         val options = QrVectorOptions.Builder()
             .setPadding(.15f)
             .setBackground(
@@ -206,12 +215,12 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 //                        .RoundCorners(.25f),
 //                )
 //            )
-        var mDrawable : Drawable? = null
+        val mDrawable: Drawable?
         if (mDataResult?.isRequestIcon == true){
             mDrawable = ContextCompat
                 .getDrawable(context, mDataResult.icon)
             mDrawable?.let {
-                MyDrawableCompat.setColorFilter(it,ContextCompat.getColor(context, mDataResult.tint?: R.color.transparent))
+                MyDrawableCompat.setColorFilter(it,ContextCompat.getColor(context, mDataResult.tint))
             }
             options.setLogo(
                 QrVectorLogo(
@@ -228,11 +237,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         callback.invoke(drawable)
     }
 
-    fun onSave(){
-
-    }
-
-    fun onHandle(enumView: EnumView, position : Int){
+    fun selectedIndexOnReview(){
         when(enumView){
             EnumView.TEMPLATE ->{
 
@@ -247,7 +252,57 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
             }
             EnumView.LOGO ->{
-                changeDesignReview.logo = mLogoList[position]
+                changeDesignReview.logo = indexLogo
+            }
+            EnumView.TEXT ->{
+
+            }
+            else -> {}
+        }
+    }
+
+    fun selectedIndexRestore(){
+        val mData = ChangeDesignModel(changeDesignSave)
+        when(enumView){
+            EnumView.TEMPLATE ->{
+
+            }
+            EnumView.COLOR ->{
+
+            }
+            EnumView.DOTS ->{
+
+            }
+            EnumView.EYES->{
+
+            }
+            EnumView.LOGO ->{
+                changeDesignReview = mData
+                indexLogo = mData.logo ?: defaultObject()
+            }
+            EnumView.TEXT ->{
+
+            }
+            else -> {}
+        }
+    }
+
+    fun selectedIndexOnSave(){
+        when(enumView){
+            EnumView.TEMPLATE ->{
+
+            }
+            EnumView.COLOR ->{
+
+            }
+            EnumView.DOTS ->{
+
+            }
+            EnumView.EYES->{
+
+            }
+            EnumView.LOGO ->{
+                changeDesignSave.logo = indexLogo
             }
             EnumView.TEXT ->{
 
@@ -258,10 +313,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     fun onSaveToDB(){
         val mData =  DesignQRModel()
-        val mDesign = ChangeDesignModel()
-        mDesign.logo = indexLogo
         mData.uuIdQR = create.uuId
-        mData.codeDesign = mDesign.toJson()
+        mData.codeDesign = changeDesignSave.toJson()
         SQLiteHelper.onInsert(mData)
     }
 
@@ -270,6 +323,13 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             EnumIcon.bg_white.icon,
             QRScannerApplication.getInstance().getString(R.string.template),
             EnumIcon.bg_white,false,R.color.transparent,false)
+    }
+
+    fun isChanged() : Boolean{
+        if (changeDesignOriginal.toJson() != changeDesignSave.toJson()){
+            return true
+        }
+        return false
     }
 
     val context = QRScannerApplication.getInstance()

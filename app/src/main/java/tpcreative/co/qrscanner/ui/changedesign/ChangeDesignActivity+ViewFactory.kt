@@ -3,6 +3,7 @@ package tpcreative.co.qrscanner.ui.changedesign
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Build
+import android.text.InputType
 import android.view.LayoutInflater
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
@@ -12,44 +13,52 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.getInputLayout
+import com.afollestad.materialdialogs.input.input
+import com.google.android.material.textfield.TextInputLayout
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.DesignQRModel
 import tpcreative.co.qrscanner.model.EnumView
-import tpcreative.co.qrscanner.ui.changedesign.fragment.LogoFragment
-import java.io.File
+import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
+import tpcreative.co.qrscanner.ui.scannerresult.updatedTakeNote
 
 fun ChangeDesignActivity.initUI(){
     setupViewModel()
     getIntentData()
     initRecycleView(layoutInflater)
     getData()
-    binding.doneCancelBar.rlDone?.setOnClickListener {
+    binding.doneCancelBar.rlDone.setOnClickListener {
         supportFragmentManager.fragments.apply {
-            if (this.isEmpty()){
-                finish()
-            }else{
-                for (fragment in this) {
-                    supportFragmentManager.beginTransaction().remove(fragment).commit()
-                }
-                onVisit(EnumView.ALL_HIDDEN)
+            for (fragment in this) {
+                supportFragmentManager.beginTransaction().remove(fragment).commit()
             }
+            viewModel.selectedIndexOnSave()
+            onGenerateQRReview()
+            onClearAction()
         }
     }
-    binding.doneCancelBar.rlCancel?.setOnClickListener {
+    binding.doneCancelBar.rlCancel.setOnClickListener {
        supportFragmentManager.fragments.apply {
             if (this.isEmpty()){
-                finish()
+                if (viewModel.isChanged()){
+                    askCancel()
+                }else{
+                    finish()
+                }
             }else{
                 for (fragment in this) {
                     supportFragmentManager.beginTransaction().remove(fragment).commit()
                 }
-                onVisit(EnumView.ALL_HIDDEN)
+                Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
+                viewModel.selectedIndexRestore()
+                viewLogo.setSelectedIndex(viewModel.indexLogo)
+                onGenerateQRReview()
+                onClearAction()
             }
         }
     }
@@ -61,12 +70,19 @@ fun ChangeDesignActivity.initUI(){
             Utils.Log("ChangeDesign","Hidden view 33")
             supportFragmentManager.fragments.apply {
                 if (this.isEmpty()){
-                    finish()
+                    if (viewModel.isChanged()){
+                        askCancel()
+                    }else{
+                        finish()
+                    }
                 }else{
                     for (fragment in this) {
                         supportFragmentManager.beginTransaction().remove(fragment).commit()
                     }
-                    onVisit(EnumView.ALL_HIDDEN)
+                    viewModel.selectedIndexRestore()
+                    viewLogo.setSelectedIndex(viewModel.indexLogo)
+                    onGenerateQRReview()
+                    onClearAction()
                     Utils.Log("ChangeDesign","Hidden view 0")
                 }
             }
@@ -80,12 +96,19 @@ fun ChangeDesignActivity.initUI(){
                     Utils.Log("ChangeDesign","Hidden view 29")
                     supportFragmentManager.fragments.apply {
                         if (this.isEmpty()){
-                            finish()
+                            if (viewModel.isChanged()){
+                                askCancel()
+                            }else{
+                                finish()
+                            }
                         }else{
                             for (fragment in this) {
                                 supportFragmentManager.beginTransaction().remove(fragment).commit()
                             }
-                            onVisit(EnumView.ALL_HIDDEN)
+                            viewModel.selectedIndexRestore()
+                            viewLogo.setSelectedIndex(viewModel.indexLogo)
+                            onGenerateQRReview()
+                            onClearAction()
                             Utils.Log("ChangeDesign","Hidden view 1")
                         }
                     }
@@ -93,7 +116,7 @@ fun ChangeDesignActivity.initUI(){
             })
     }
 
-    binding.doneCancelBar.btnSave?.setOnClickListener {
+    binding.doneCancelBar.btnSave.setOnClickListener {
         Utils.Log(TAG,"uuid ${viewModel.create.uuId}")
         val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,1024, Bitmap.Config.ARGB_8888)
         val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"")
@@ -119,6 +142,12 @@ fun ChangeDesignActivity.initUI(){
     binding.doneCancelBar.imgCancel.addCircleRipple()
     binding.doneCancelBar.imgDone.addCircleRipple()
     binding.doneCancelBar.btnSave.addCircleRipple()
+}
+
+private fun ChangeDesignActivity.onClearAction(){
+    viewModel.enumView = EnumView.ALL_HIDDEN
+    viewModel.index = -1
+    onVisit(EnumView.ALL_HIDDEN)
 }
 
 private fun ChangeDesignActivity.getIntentData(){
@@ -153,6 +182,20 @@ fun ChangeDesignActivity.initRecycleView(layoutInflater: LayoutInflater) {
     binding.recyclerView.layoutManager = mLayoutManager
     binding.recyclerView.itemAnimator = DefaultItemAnimator()
     binding.recyclerView.adapter = adapter
+}
+
+fun ChangeDesignActivity.askCancel() {
+    val mMessage = getString(R.string.asking_exit_qr)
+    val builder: MaterialDialog = MaterialDialog(this)
+        .title(text = mMessage)
+        .negativeButton(R.string.exit)
+        .cancelable(true)
+        .cancelOnTouchOutside(false)
+        .negativeButton {
+            finish()
+        }
+        .positiveButton(R.string.not_exit)
+    builder.show()
 }
 
 private fun ChangeDesignActivity.setupViewModel() {

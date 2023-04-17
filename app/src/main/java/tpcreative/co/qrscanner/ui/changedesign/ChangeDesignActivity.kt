@@ -14,9 +14,9 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.extension.storeBitmap
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
 import tpcreative.co.qrscanner.model.EnumView
 import tpcreative.co.qrscanner.model.LogoModel
@@ -31,7 +31,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     private lateinit var viewColor : ColorFragment
     private lateinit var viewDots : DotsFragment
     private lateinit var viewEyes : EyesFragment
-    private lateinit var viewLogo : LogoFragment
+    lateinit var viewLogo : LogoFragment
     private lateinit var viewText : TextFragment
     private val mFragments : MutableList<Fragment> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,19 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         binding = ActivityChangeDesignBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initUI()
-        registerLayout()
+        if (savedInstanceState != null) {
+            viewModel.index = savedInstanceState.getInt(ConstantKey.key_change_design_index)
+            viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.key_change_design_view) ?:EnumView.ALL_HIDDEN.name)
+            viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.key_change_design_logo) ?: viewModel.defaultObject()
+            viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.key_change_design_save) ?: viewModel.changeDesignSave
+            viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.key_change_design_review) ?: viewModel.changeDesignReview
+            Utils.Log(TAG,"State instance saveInstanceState has value")
+            registerLayout()
+            onGenerateQRReview()
+        }else{
+            Utils.Log(TAG,"State instance saveInstanceState null")
+            registerLayout()
+        }
     }
 
     private fun loadFragment(homeFragment: Fragment) {
@@ -64,26 +76,29 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         mFragments.add(viewLogo)
         mFragments.add(viewText)
         viewLogo.setSelectedIndex(viewModel.indexLogo)
+        Utils.Log(TAG,"State instance register ${viewModel.indexLogo.toJson()}")
         viewLogo.setBinding(object  : LogoFragment.ListenerLogoFragment{
             override fun logoSelectedIndex(index: Int,selectedObject : LogoModel) {
                 viewModel.indexLogo = selectedObject
-                viewModel.onHandle(EnumView.LOGO,index)
-                onHandleResponse()
+                viewModel.selectedIndexOnReview()
+                onGenerateQRReview()
             }
 
             override fun getData(): MutableList<LogoModel> {
                 return viewModel.mLogoList
             }
         })
-//        viewLogo.load()
+        Utils.Log(TAG,"State instance enumview ${viewModel.enumView.name}")
+        Utils.Log(TAG,"State instance index ${viewModel.index}")
         onVisit(viewModel.enumView)
         if (viewModel.index>=0){
             loadFragment(mFragments[viewModel.index])
         }
     }
 
-    private fun onHandleResponse(){
+    fun onGenerateQRReview(){
         viewModel.onGenerateQR {
+            binding.imgQRCode.setImageDrawable(null)
             binding.imgQRCode.setImageDrawable(it)
         }
     }
@@ -125,8 +140,6 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
                 binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
                 binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
                 binding.doneCancelBar.imgDone.visibility = View.VISIBLE
-//                val drawable = ContextCompat.getDrawable(this, R.drawable.ic_close)
-//                binding.doneCancelBar?.tvCancel?.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
             }
             EnumView.TEXT ->{
                 binding.doneCancelBar.tvCancel.text = getString(R.string.text)
@@ -157,6 +170,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     override fun onClickItem(position: Int) {
         val mType = adapter?.getItem(position)
         viewModel.index = position
+        Utils.Log(TAG,"State instance click $position")
         mType?.enumView?.let { onVisit(it) }
         loadFragment(mFragments[position])
     }
@@ -181,18 +195,24 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(ConstantKey.key_saved, viewModel.enumView.name)
-        outState.putSerializable(ConstantKey.key_logo_is_selected,viewModel.indexLogo)
-        outState.putInt(ConstantKey.key_change_design,viewModel.index)
-        Utils.Log(TAG,"State saved ${viewModel.enumView.name}")
+        outState.putInt(ConstantKey.key_change_design_index,viewModel.index)
+        outState.putString(ConstantKey.key_change_design_view, viewModel.enumView.name)
+        outState.putSerializable(ConstantKey.key_change_design_logo,viewModel.indexLogo)
+        outState.putSerializable(ConstantKey.key_change_design_save,viewModel.changeDesignSave)
+        outState.putSerializable(ConstantKey.key_change_design_review,viewModel.changeDesignReview)
+        Utils.Log(TAG,"State instance save ${viewModel.indexLogo.toJson()}")
+        Utils.Log(TAG,"State instance save index ${viewModel.index}")
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        viewModel.index = savedInstanceState.getInt(ConstantKey.key_change_design_index)
+        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.key_change_design_view) ?:EnumView.ALL_HIDDEN.name)
+        viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.key_change_design_logo) ?: viewModel.defaultObject()
+        viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.key_change_design_save) ?: viewModel.changeDesignSave
+        viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.key_change_design_review) ?: viewModel.changeDesignReview
+        Utils.Log(TAG,"State instance restore ${viewModel.indexLogo.toJson()}")
+        Utils.Log(TAG,"State instance restore index ${viewModel.index}")
         super.onRestoreInstanceState(savedInstanceState)
-        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.key_saved) ?:EnumView.ALL_HIDDEN.name)
-        viewModel.index = savedInstanceState.getInt(ConstantKey.key_change_design)
-        viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.key_logo_is_selected) ?: viewModel.defaultObject()
-        Utils.Log(TAG,"State restore ${viewModel.enumView.name}")
     }
 
     object Circle : QrVectorPixelShape {

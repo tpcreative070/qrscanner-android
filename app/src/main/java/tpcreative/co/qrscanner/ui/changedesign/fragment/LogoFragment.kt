@@ -1,6 +1,7 @@
 package tpcreative.co.qrscanner.ui.changedesign.fragment
 
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -102,6 +103,14 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     fun show(){
         Utils.Log("TAG","Show data ${mList.toJson()}")
         adapter.setDataSource(mList)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun load(){

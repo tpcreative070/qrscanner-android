@@ -538,4 +538,7 @@
     <string name="dots">Dots</string>
     <string name="eyes">Eyes</string>
     <string name="logo">Logo</string>
+    <string name="asking_exit_qr">Your QR code is not saved. Are you sure to exit?</string>
+    <string name="exit">Exit</string>
+    <string name="not_exit">Not Exit</string>
 </resources>

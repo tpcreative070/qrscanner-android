@@ -361,4 +361,12 @@
     <string name="remove_ads">Bỏ quảng cáo</string>
     <string name="one_time_purchase_no_subscription">Mua một lần(sử dụng trọn đời)</string>
     <string name="change_design">Thay đổi QR</string>
+    <string name="template">Bản mẫu</string>
+    <string name="color">Màu sắc</string>
+    <string name="dots">Dấu chấm</string>
+    <string name="eyes">Mã mắt</string>
+    <string name="logo">Logo</string>
+    <string name="asking_exit_qr">Mã QR của bạn không được lưu. Bạn có chắc chắn để thoát?</string>
+    <string name="exit">Thoát</string>
+    <string name="not_exit">Không thoát</string>
 </resources>
