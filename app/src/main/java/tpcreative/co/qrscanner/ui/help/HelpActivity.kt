@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.help
 import android.os.Bundle
+import android.view.View
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ScannerSingleton
@@ -18,6 +19,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
     var adapter: HelpAdapter? = null
     var viewAds : AdsView? = null
     lateinit var binding : ActivityHelpBinding
+    private var isLoaded : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHelpBinding.inflate(layoutInflater)
@@ -32,6 +34,16 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
+        if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)){
+            binding.rlAdsRoot.visibility = View.GONE
+        }
+        if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)){
+            binding.rlBannerLarger.visibility = View.GONE
+        }
+        if (isLoaded){
+            checkingShowAds()
+        }
+        isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.HELP_FEEDBACK_SMALL)
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.HELP_FEEDBACK_LARGE)
     }

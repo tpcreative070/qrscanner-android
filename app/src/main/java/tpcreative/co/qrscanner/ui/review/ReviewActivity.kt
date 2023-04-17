@@ -54,6 +54,7 @@ class ReviewActivity : BaseActivitySlide() {
     var isAlreadySaved  = false
     var viewAds : AdsView? = null
     lateinit var binding : ActivityReviewBinding
+    private var isLoaded : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
@@ -80,9 +81,18 @@ class ReviewActivity : BaseActivitySlide() {
 
     override fun onResume() {
         super.onResume()
+        if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
+            binding.rlAdsRoot.visibility = View.GONE
+        }
+        if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
+            binding.rlBannerLarger.visibility = View.GONE
+        }
+        if (isLoaded){
+            checkingShowAds()
+        }
+        isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_LARGE)
-        checkingShowAds()
     }
 
     override fun onPause() {
