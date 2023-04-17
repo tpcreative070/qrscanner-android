@@ -76,9 +76,9 @@ fun ScannerResultActivity.getDataIntent() {
 }
 
 fun ScannerResultActivity.checkingShowAds(){
-    viewModel.doShowAds().observe(this, Observer {
+    viewModel.doShowAds{
         doShowAds(it)
-    })
+    }
 }
 
 fun ScannerResultActivity.updatedFavorite(){

@@ -120,9 +120,9 @@ fun BackupActivity.showAds(){
 }
 
 fun BackupActivity.checkingShowAds(){
-    viewModel.doShowAds().observe(this, Observer {
+    viewModel.doShowAds{
         doShowAds(it)
-    })
+    }
 }
 
 private fun BackupActivity.setupViewModel() {

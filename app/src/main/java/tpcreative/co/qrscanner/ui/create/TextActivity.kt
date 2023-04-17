@@ -28,6 +28,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     private var save: GeneralModel? = null
     var viewAds : AdsView? = null
     lateinit var binding : ActivityTextBinding
+    private var isLoaded : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTextBinding.inflate(layoutInflater)
@@ -134,11 +135,20 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     }
 
     override fun onResume() {
+        super.onResume()
+        if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
+            binding.rlAdsRoot.visibility = View.GONE
+        }
+        if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
+            binding.rlBannerLarger.visibility = View.GONE
+        }
+        if (isLoaded){
+            checkingShowAds()
+        }
+        isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_SMALL)
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.CREATE_LARGE)
-        super.onResume()
         GenerateSingleton.getInstance()?.setListener(this)
-        checkingShowAds()
         Utils.Log(TAG, "onResume")
     }
 
@@ -165,9 +175,9 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     }
 
     private fun checkingShowAds(){
-        viewModel.doShowAds().observe(this, Observer {
+        viewModel.doShowAds {
             doShowAds(it)
-        })
+        }
     }
 
     /*show ads*/

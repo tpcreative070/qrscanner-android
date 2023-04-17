@@ -23,6 +23,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
     lateinit var viewModel : BackupViewModel
     var viewAds : AdsView? = null
     lateinit var binding: ActivityBackupBinding
+    private var isLoaded : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBackupBinding.inflate(layoutInflater)
@@ -96,8 +97,6 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
         if (isShow) {
             QRScannerApplication.getInstance().loadBackupSmallView(viewAds?.getSmallAds())
             QRScannerApplication.getInstance().loadBackupLargeView(viewAds?.getLargeAds())
-        } else {
-            binding.rlAdsRoot.visibility = View.GONE
         }
     }
 
@@ -149,6 +148,16 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
 
     override fun onResume() {
         super.onResume()
+        if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
+            binding.rlAdsRoot.visibility = View.GONE
+        }
+        if(Utils.isHiddenAds(EnumScreens.BACKUP_LARGE)){
+            binding.rlBannerLarger.visibility = View.GONE
+        }
+        if (isLoaded){
+            checkingShowAds()
+        }
+        isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.BACKUP_SMALL)
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.BACKUP_LARGE)
     }

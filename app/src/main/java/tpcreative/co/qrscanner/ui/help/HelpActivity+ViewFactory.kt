@@ -45,9 +45,9 @@ fun HelpActivity.initUI(){
 }
 
 fun HelpActivity.checkingShowAds(){
-    viewModel.doShowAds().observe(this, Observer {
+    viewModel.doShowAds{
         doShowAds(it)
-    })
+    }
 }
 
 fun HelpActivity.getData(){
