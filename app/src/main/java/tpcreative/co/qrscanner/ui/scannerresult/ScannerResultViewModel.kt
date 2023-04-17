@@ -7,7 +7,9 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.HistorySingleton
 import tpcreative.co.qrscanner.common.SaveSingleton
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.findImageName
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
@@ -102,14 +104,23 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
             EnumFragmentType.HISTORY -> {
                 val mItem = SQLiteHelper.getHistoryItemById(result?.id)
                 SQLiteHelper.onDelete(mItem)
+                onDeleteChangeDesign(result)
             }
             EnumFragmentType.SAVER -> {
                 val mItem = SQLiteHelper.getSaveItemById(result?.id)
                 SQLiteHelper.onDelete(mItem)
+                onDeleteChangeDesign(result)
             }
             else -> Utils.Log("ScannerResultViewModel", "Nothing")
         }
         emit(true)
+    }
+
+    private fun onDeleteChangeDesign(data : GeneralModel?){
+        data?.uuId?.findImageName()?.delete()
+        val mData = SQLiteHelper.getDesignQR(data?.uuId)
+        Utils.Log(TAG,"Data change design requesting delete ${mData?.toJson()}")
+        SQLiteHelper.onDelete(mData)
     }
 
     fun getResult(value: HashMap<Any?, String?>?): String {

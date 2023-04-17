@@ -32,7 +32,6 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.create.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
-import tpcreative.co.qrscanner.viewmodel.SaveViewModel
 import java.io.File
 import java.util.*
 

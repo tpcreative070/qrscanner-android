@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
@@ -41,11 +40,9 @@ import tpcreative.co.qrscanner.model.EnumImplement
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.ui.scanner.cpp.BeepManager
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
-import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
