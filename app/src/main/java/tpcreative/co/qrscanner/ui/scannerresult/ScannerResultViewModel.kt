@@ -144,6 +144,7 @@ class ScannerResultViewModel : BaseViewModel<ItemNavigation>() {
             result?.noted = ""
             takeNoted = ""
             result?.id = mModel?.id ?: 0
+            result?.uuId = mModel?.uuId ?:Utils.getUUId()
         }
     }
 

@@ -26,6 +26,7 @@ class DesignQREntity {
     }
 
     constructor(data : DesignQREntityModel?){
+        this.id = data?.id ?:0
         this.uuId = data?.uuId ?: ""
         this.uuIdQR = data?.uuIdQR ?:""
         this.codeDesign = data?.codeDesign

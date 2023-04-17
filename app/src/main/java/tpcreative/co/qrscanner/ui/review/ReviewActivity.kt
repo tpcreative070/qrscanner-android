@@ -395,8 +395,14 @@ class ReviewActivity : BaseActivitySlide() {
     }
 
     fun mergeUUID() {
-        if (create?.enumImplement == EnumImplement.CREATE && !isAlreadySaved){
+        if (create?.enumImplement == EnumImplement.CREATE){
             create?.uuId = save.uuId
+        }
+        else if (create?.enumImplement == EnumImplement.EDIT){
+            viewModel.onDeleteChangeDesign(create)
+        }
+        else if (create?.enumImplement == EnumImplement.VIEW){
+            Utils.Log(TAG,"Data change design . ${create?.toJson()}")
         }
     }
 

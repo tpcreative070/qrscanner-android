@@ -63,6 +63,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     changeDesignOriginal = ChangeDesignModel()
                     Utils.Log(TAG,"Data logo not found")
                 }
+                Utils.Log(TAG,"Data change design ${create.toJson()}")
                 callback.invoke(true)
             }
         }
