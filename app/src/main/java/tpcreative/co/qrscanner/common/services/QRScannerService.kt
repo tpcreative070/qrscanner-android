@@ -40,6 +40,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
 
     override fun onDestroy() {
         super.onDestroy()
+        QRScannerApplication.getInstance().onDestroyAllAds()
         if (QRScannerApplication.getInstance().isRequestClearCacheData()){
             this.cacheDir.deleteRecursively()
             this.cacheDir.mkdirs()

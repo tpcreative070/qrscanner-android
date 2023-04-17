@@ -32,7 +32,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        QRScannerApplication.getInstance().onResumeAds(EnumScreens.HELP_FEEDBACK_LARGE)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.HELP_FEEDBACK_SMALL)
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.HELP_FEEDBACK_LARGE)
     }
 

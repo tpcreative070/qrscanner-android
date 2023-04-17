@@ -86,7 +86,7 @@ class ReviewActivity : BaseActivitySlide() {
     override fun onResume() {
         super.onResume()
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
-        QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
+        QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_LARGE)
         checkingShowAds()
     }
 

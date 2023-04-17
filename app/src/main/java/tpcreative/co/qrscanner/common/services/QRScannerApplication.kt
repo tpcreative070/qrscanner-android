@@ -1514,89 +1514,170 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
 
 
     fun onPauseAds(enum : EnumScreens){
-//        when(enum){
-//            EnumScreens.SCANNER_RESULT_SMALL ->{
-//                adResultSmallView?.pause()
-//            }
-//            EnumScreens.SCANNER_RESULT_LARGE ->{
-//                adResultLargeView?.pause()
-//            }
-//
-//            EnumScreens.REVIEW_SMALL ->{
-//                adReviewSmallView?.pause()
-//            }
-//            EnumScreens.REVIEW_LARGE ->{
-//                adReviewLargeView?.pause()
-//            }
-//            EnumScreens.CREATE_SMALL ->{
-//                adCreateSmallView?.pause()
-//            }
-//            EnumScreens.CREATE_LARGE ->{
-//                adCreateLargeView?.pause()
-//            }
-//            EnumScreens.HELP_FEEDBACK_SMALL ->{
-//                adHelpFeedbackSmallView?.pause()
-//            }
-//            EnumScreens.HELP_FEEDBACK_LARGE ->{
-//                adHelpFeedbackLargeView?.pause()
-//            }
-//            EnumScreens.CHANGE_COLOR_SMALL ->{
-//                adChangeColorSmallView?.pause()
-//            }
-//            EnumScreens.CHANGE_COLOR_LARGE ->{
-//                adChangeColorLargeView?.pause()
-//            }
-//            EnumScreens.BACKUP_SMALL ->{
-//                adBackupSmallView?.pause()
-//            }
-//            EnumScreens.BACKUP_LARGE ->{
-//                adBackupSmallView?.pause()
-//            }
-//            else -> {}
-//        }
+        when(enum){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                adResultSmallView?.pause()
+            }
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                adResultLargeView?.pause()
+            }
+
+            EnumScreens.REVIEW_SMALL ->{
+                adReviewSmallView?.pause()
+            }
+            EnumScreens.REVIEW_LARGE ->{
+                adReviewLargeView?.pause()
+            }
+            EnumScreens.CREATE_SMALL ->{
+                adCreateSmallView?.pause()
+            }
+            EnumScreens.CREATE_LARGE ->{
+                adCreateLargeView?.pause()
+            }
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                adHelpFeedbackSmallView?.pause()
+            }
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                adHelpFeedbackLargeView?.pause()
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                adChangeColorSmallView?.pause()
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                adChangeColorLargeView?.pause()
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                adBackupSmallView?.pause()
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                adBackupLargeView?.pause()
+            }
+            else -> {}
+        }
     }
 
     fun onResumeAds(enum : EnumScreens){
-//        when(enum){
-//            EnumScreens.SCANNER_RESULT_SMALL ->{
-//                adResultSmallView?.resume()
-//            }
-//            EnumScreens.SCANNER_RESULT_LARGE ->{
-//                adResultLargeView?.resume()
-//            }
-//
-//            EnumScreens.REVIEW_SMALL ->{
-//                adReviewSmallView?.resume()
-//            }
-//            EnumScreens.REVIEW_LARGE ->{
-//                adReviewLargeView?.resume()
-//            }
-//            EnumScreens.CREATE_SMALL ->{
-//                adCreateSmallView?.resume()
-//            }
-//            EnumScreens.CREATE_LARGE ->{
-//                adCreateLargeView?.resume()
-//            }
-//            EnumScreens.HELP_FEEDBACK_SMALL ->{
-//                adHelpFeedbackSmallView?.resume()
-//            }
-//            EnumScreens.HELP_FEEDBACK_LARGE ->{
-//                adHelpFeedbackLargeView?.resume()
-//            }
-//            EnumScreens.CHANGE_COLOR_SMALL ->{
-//                adChangeColorSmallView?.resume()
-//            }
-//            EnumScreens.CHANGE_COLOR_LARGE ->{
-//                adChangeColorLargeView?.resume()
-//            }
-//            EnumScreens.BACKUP_SMALL ->{
-//                adBackupSmallView?.resume()
-//            }
-//            EnumScreens.BACKUP_LARGE ->{
-//                adBackupSmallView?.resume()
-//            }
-//            else -> {}
-//        }
+        when(enum){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                adResultSmallView?.resume()
+            }
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                adResultLargeView?.resume()
+            }
+
+            EnumScreens.REVIEW_SMALL ->{
+                adReviewSmallView?.resume()
+            }
+            EnumScreens.REVIEW_LARGE ->{
+                adReviewLargeView?.resume()
+            }
+            EnumScreens.CREATE_SMALL ->{
+                adCreateSmallView?.resume()
+            }
+            EnumScreens.CREATE_LARGE ->{
+                adCreateLargeView?.resume()
+            }
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                adHelpFeedbackSmallView?.resume()
+            }
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                adHelpFeedbackLargeView?.resume()
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                adChangeColorSmallView?.resume()
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                adChangeColorLargeView?.resume()
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                adBackupSmallView?.resume()
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                adBackupLargeView?.resume()
+            }
+            else -> {}
+        }
+    }
+
+    fun onDestroyAds(enum : EnumScreens){
+        when(enum){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                isResultSmallView = true
+                adResultSmallView?.destroy()
+            }
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                isResultLargeView = true
+                adResultLargeView?.destroy()
+            }
+            EnumScreens.REVIEW_SMALL ->{
+                isResultSmallView = true
+                adReviewSmallView?.destroy()
+            }
+            EnumScreens.REVIEW_LARGE ->{
+                isReviewLargeView = true
+                adReviewLargeView?.destroy()
+            }
+            EnumScreens.CREATE_SMALL ->{
+                isCreateSmallView = true
+                adCreateSmallView?.destroy()
+            }
+            EnumScreens.CREATE_LARGE ->{
+                isCreateLargeView = true
+                adCreateLargeView?.destroy()
+            }
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                isHelpFeedbackSmallView = true
+                adHelpFeedbackSmallView?.destroy()
+            }
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                isHelpFeedbackLargeView = true
+                adHelpFeedbackLargeView?.destroy()
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                isChangeColorSmallView = true
+                adChangeColorSmallView?.destroy()
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                isChangeColorLargeView = true
+                adChangeColorLargeView?.destroy()
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                isBackupSmallView = true
+                adBackupSmallView?.destroy()
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                isBackupLargeView = true
+                adBackupLargeView?.destroy()
+            }
+            else -> {}
+        }
+    }
+
+    fun onDestroyAllAds(){
+        isResultSmallView = true
+        adResultSmallView?.destroy()
+        isResultLargeView = true
+        adResultLargeView?.destroy()
+        isResultSmallView = true
+        adReviewSmallView?.destroy()
+        isReviewLargeView = true
+        adReviewLargeView?.destroy()
+        isCreateSmallView = true
+        adCreateSmallView?.destroy()
+        isCreateLargeView = true
+        adCreateLargeView?.destroy()
+        isHelpFeedbackSmallView = true
+        adHelpFeedbackSmallView?.destroy()
+        isHelpFeedbackLargeView = true
+        adHelpFeedbackLargeView?.destroy()
+        isChangeColorSmallView = true
+        adChangeColorSmallView?.destroy()
+        isChangeColorLargeView = true
+        adChangeColorLargeView?.destroy()
+        isBackupSmallView = true
+        adBackupSmallView?.destroy()
+        isBackupLargeView = true
+        adBackupLargeView?.destroy()
     }
 
     companion object {
