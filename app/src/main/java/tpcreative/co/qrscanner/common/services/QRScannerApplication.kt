@@ -1413,32 +1413,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         val mCurrentTime = System.currentTimeMillis()
         mLatestTime += Configuration.TWENTY_MINUTES
         if (mCurrentTime>mLatestTime){
-            isResultSmallView = true
-            isResultLargeView = true
-            isReviewSmallView = true
-            isReviewLargeView = true
-            isCreateSmallView = true
-            isCreateLargeView = true
-            isHelpFeedbackSmallView = true
-            isHelpFeedbackLargeView = true
-            isChangeColorSmallView = true
-            isChangeColorLargeView = true
-            isBackupSmallView = true
-            isBackupLargeView = true
-            allowRequestFailureCreateSmall  = 0
-            allowRequestFailureCreateLarge  = 0
-            allowRequestFailureReviewSmall  = 0
-            allowRequestFailureReviewLarge  = 0
-            allowRequestFailureResultSmall  = 0
-            allowRequestFailureResultLarge  = 0
-            allowRequestFailureHelpFeedbackSmall  = 0
-            allowRequestFailureHelpFeedbackLarge  = 0
-            allowRequestFailureChangeColorSmall  = 0
-            allowRequestFailureChangeColorLarge  = 0
-            allowRequestFailureBackupSmall  = 0
-            allowRequestFailureBackupLarge  = 0
-            allowRequestFailureViewCode  = 0
-            allowRequestFailureAnywhere  = 0
+            onDestroyAllAds()
             Utils.setKeepAdsRefreshLatestTime(mCurrentTime)
             Utils.Log(TAG,"Force refresh ads")
         }else{
@@ -1521,7 +1496,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             EnumScreens.SCANNER_RESULT_LARGE ->{
                 adResultLargeView?.pause()
             }
-
             EnumScreens.REVIEW_SMALL ->{
                 adReviewSmallView?.pause()
             }
@@ -1564,7 +1538,6 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             EnumScreens.SCANNER_RESULT_LARGE ->{
                 adResultLargeView?.resume()
             }
-
             EnumScreens.REVIEW_SMALL ->{
                 adReviewSmallView?.resume()
             }
@@ -1658,7 +1631,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adResultSmallView?.destroy()
         isResultLargeView = true
         adResultLargeView?.destroy()
-        isResultSmallView = true
+        isReviewSmallView = true
         adReviewSmallView?.destroy()
         isReviewLargeView = true
         adReviewLargeView?.destroy()
@@ -1678,6 +1651,20 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adBackupSmallView?.destroy()
         isBackupLargeView = true
         adBackupLargeView?.destroy()
+        allowRequestFailureCreateSmall  = 0
+        allowRequestFailureCreateLarge  = 0
+        allowRequestFailureReviewSmall  = 0
+        allowRequestFailureReviewLarge  = 0
+        allowRequestFailureResultSmall  = 0
+        allowRequestFailureResultLarge  = 0
+        allowRequestFailureHelpFeedbackSmall  = 0
+        allowRequestFailureHelpFeedbackLarge  = 0
+        allowRequestFailureChangeColorSmall  = 0
+        allowRequestFailureChangeColorLarge  = 0
+        allowRequestFailureBackupSmall  = 0
+        allowRequestFailureBackupLarge  = 0
+        allowRequestFailureViewCode  = 0
+        allowRequestFailureAnywhere  = 0
     }
 
     companion object {
