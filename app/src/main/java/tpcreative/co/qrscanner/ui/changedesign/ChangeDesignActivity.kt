@@ -1,10 +1,14 @@
 package tpcreative.co.qrscanner.ui.changedesign
+import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Path
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
@@ -17,10 +21,13 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.common.extension.storeBitmap
 import tpcreative.co.qrscanner.common.extension.toJson
+import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
+import tpcreative.co.qrscanner.model.EnumChangeDesignType
 import tpcreative.co.qrscanner.model.EnumView
 import tpcreative.co.qrscanner.model.LogoModel
 import tpcreative.co.qrscanner.ui.changedesign.fragment.*
+import java.io.File
 
 
 class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelectedListener{
@@ -79,9 +86,13 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         Utils.Log(TAG,"State instance register ${viewModel.indexLogo.toJson()}")
         viewLogo.setBinding(object  : LogoFragment.ListenerLogoFragment{
             override fun logoSelectedIndex(index: Int,selectedObject : LogoModel) {
-                viewModel.indexLogo = selectedObject
-                viewModel.selectedIndexOnReview()
-                onGenerateQRReview()
+                if (selectedObject.enumChangeDesignType ==EnumChangeDesignType.VIP){
+                    onGetGallery()
+                }else{
+                    viewModel.indexLogo = selectedObject
+                    viewModel.selectedIndexOnReview()
+                    onGenerateQRReview()
+                }
             }
 
             override fun getData(): MutableList<LogoModel> {
@@ -213,6 +224,29 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         Utils.Log(TAG,"State instance restore ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance restore index ${viewModel.index}")
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    private val pickGalleryForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_PICK")
+            beginCrop(result.data?.data)
+        }
+    }
+
+    private fun beginCrop(source: Uri?) {
+        val destination = Uri.fromFile(File(this.cacheDir, "cropped"))
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(this))
+    }
+
+    private val cropForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_CROP")
+            //handleCrop(result.resultCode, result.data)
+        }
+    }
+
+    private fun onGetGallery() {
+        pickGalleryForResult.launch(Crop.getImagePicker())
     }
 
     object Circle : QrVectorPixelShape {

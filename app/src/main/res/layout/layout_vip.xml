@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/rlRoot"
+        android:id="@+id/rlRootVip"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,11 +16,11 @@
         <RelativeLayout
             android:background="?android:attr/selectableItemBackground"
             android:layout_margin="@dimen/margin_5"
-            android:id="@+id/rlIcon"
+            android:id="@+id/rlIconVip"
             android:orientation="vertical"
             android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="@dimen/icon_size_60"
+            android:layout_height="@dimen/icon_size_60">
             <androidx.cardview.widget.CardView
                 android:layout_margin="@dimen/margin_5"
                 android:alpha="0.1"
@@ -31,11 +31,30 @@
                 android:layout_height="@dimen/icon_size_50"/>
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_centerInParent="true"
-                android:id="@+id/imgIcon"
+                android:id="@+id/imgIconVip"
                 android:layout_width="@dimen/icon_size_40"
                 android:layout_height="@dimen/icon_size_40"/>
+            <RelativeLayout
+                android:layout_margin="@dimen/margin_2"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="@dimen/icon_size_30"
+                android:layout_height="@dimen/icon_size_30">
+            <tpcreative.co.qrscanner.common.view.CircleImageView
+                android:layout_centerInParent="true"
+                android:id="@+id/imgCircleCodeStatus"
+                android:layout_width="@dimen/icon_size_20"
+                android:layout_height="@dimen/icon_size_20"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:padding="@dimen/margin_1"
+                app:srcCompat="@drawable/ic_lock"
+                android:tint="@color/white"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/icon_size_20"
+                android:layout_height="@dimen/icon_size_20"/>
+            </RelativeLayout>
             <View
-                android:id="@+id/viewSelected"
+                android:id="@+id/viewSelectedVip"
                 android:layout_centerInParent="true"
                 android:background="@drawable/bg_selected_highlight"
                 android:layout_width="@dimen/icon_size_50"

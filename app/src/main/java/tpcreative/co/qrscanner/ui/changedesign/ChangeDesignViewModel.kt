@@ -97,92 +97,82 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mLogoList.add(
             LogoModel(
                 EnumIcon.bg_white.icon,
-                QRScannerApplication.getInstance().getString(R.string.template),
-                EnumIcon.bg_white,false,R.color.transparent,false)
+                EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_gallery.icon,
+                EnumIcon.ic_gallery,false,R.color.material_gray_700,false,EnumChangeDesignType.VIP)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.design_wifi.icon,
-                QRScannerApplication.getInstance().getString(R.string.template),
-                EnumIcon.design_wifi,false,R.color.transparent,true)
+                EnumIcon.design_wifi,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_twitter.icon,
-                QRScannerApplication.getInstance().getString(R.string.color),
-                EnumIcon.ic_twitter,false,R.color.transparent,true)
+                EnumIcon.ic_twitter,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_youtube_png.icon,
-                QRScannerApplication.getInstance().getString(R.string.dots),
-                EnumIcon.ic_youtube_png,false,R.color.transparent,true)
+                EnumIcon.ic_youtube_png,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_whatapp.icon,
-                QRScannerApplication.getInstance().getString(R.string.eyes),
-                EnumIcon.ic_whatapp,false,R.color.transparent,true)
+                EnumIcon.ic_whatapp,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_instagram.icon,
-                QRScannerApplication.getInstance().getString(R.string.logo),
-                EnumIcon.ic_instagram,false,R.color.transparent,true)
+                EnumIcon.ic_instagram,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_paypal.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_paypal,false,R.color.transparent,true)
+                EnumIcon.ic_paypal,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_email.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_email,false,R.color.black,true)
+                EnumIcon.ic_email,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_message.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_message,false,R.color.black,true)
+                EnumIcon.ic_message,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_location.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_location,false,R.color.black,true)
+                EnumIcon.ic_location,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_calender.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_calender,false,R.color.black,true)
+                EnumIcon.ic_calender,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_contact.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_contact,false,R.color.black,true)
+                EnumIcon.ic_contact,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_phone.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_phone,false,R.color.black,true)
+                EnumIcon.ic_phone,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_text.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_text,false,R.color.black,true)
+                EnumIcon.ic_text,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_network.icon,
-                QRScannerApplication.getInstance().getString(R.string.text),
-                EnumIcon.ic_network,false,R.color.black,true)
+                EnumIcon.ic_network,false,R.color.black,true,EnumChangeDesignType.NORMAL)
         )
     }
 
@@ -322,8 +312,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     fun defaultObject() : LogoModel {
         return LogoModel(
             EnumIcon.bg_white.icon,
-            QRScannerApplication.getInstance().getString(R.string.template),
-            EnumIcon.bg_white,false,R.color.transparent,false)
+            EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL)
     }
 
     fun isChanged() : Boolean{

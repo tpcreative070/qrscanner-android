@@ -1,11 +1,14 @@
 package tpcreative.co.qrscanner.ui.changedesign.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -62,7 +65,7 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
 
     private fun initRecycleView(layoutInflater: LayoutInflater) {
         adapter = LogoFragmentAdapter(layoutInflater, mContext, this)
-        var mNoOfColumns = Utils.calculateNoOfColumns(mContext,80F)
+        var mNoOfColumns = Utils.calculateNoOfColumns(mContext,90F)
         if(context?.isLandscape() == true){
             mNoOfColumns = Utils.calculateNoOfColumns(mContext,160F)
         }
@@ -104,15 +107,6 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
         Utils.Log("TAG","Show data ${mList.toJson()}")
         adapter.setDataSource(mList)
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
-
     private fun load(){
         initRecycleView(mInflater)
         initializedData()
