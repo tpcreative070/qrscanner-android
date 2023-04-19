@@ -38,6 +38,10 @@ fun ScannerResultActivity.initUI(){
     initRecycleView()
     setupViewModel()
     getDataIntent()
+    loadAds()
+}
+
+fun ScannerResultActivity.loadAds(){
     if (!Utils.isPremium()){
         viewAds = AdsView(this)
     }

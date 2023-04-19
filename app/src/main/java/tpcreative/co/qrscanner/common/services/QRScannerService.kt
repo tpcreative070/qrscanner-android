@@ -6,6 +6,8 @@ import android.net.ConnectivityManager
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
+import androidx.lifecycle.ProcessLifecycleOwner
+import tpcreative.co.qrscanner.common.AppLifecycleListener
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.presenter.BaseView
@@ -23,6 +25,7 @@ class QRScannerService : PresenterService<BaseView<*>?>(), QRScannerReceiver.Con
         onInitReceiver()
         QRScannerApplication.getInstance().setConnectivityListener(this)
         QRScannerApplication.getInstance().setRequestClearCacheData(false)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleListener())
     }
 
     override fun onActionScreenOff() {

@@ -24,19 +24,6 @@ fun BackupActivity.initUI(){
     setupViewModel()
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if (!Utils.isPremium()){
-        viewAds = AdsView(this)
-    }
-    if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
-        binding.rlAdsRoot.visibility = View.GONE
-    }else{
-        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
-    }
-    if(Utils.isHiddenAds(EnumScreens.BACKUP_LARGE)){
-        binding.rlBannerLarger.visibility = View.GONE
-    }else{
-        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
-    }
     BackupSingleton.getInstance()?.setListener(this)
     val email = Utils.getDriveEmail()
     if (email != null) {
@@ -64,19 +51,6 @@ fun BackupActivity.initUI(){
     if (NetworkUtil.pingIpAddress(this)) {
         onShowConnectionAlert()
     }
-
-    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
-        QRScannerApplication.getInstance().requestInterstitialAd()
-    }
-
-    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView() && !Utils.isHiddenAds(EnumScreens.BACKUP_SMALL) && !Utils.isRequestShowLocalAds()) {
-        QRScannerApplication.getInstance().requestBackupSmallView(this)
-    }
-
-    if (QRScannerApplication.getInstance().isBackupLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupLargeView() && !Utils.isHiddenAds(EnumScreens.BACKUP_LARGE) && !Utils.isRequestShowLocalAds()) {
-        QRScannerApplication.getInstance().requestBackupLargeView(this)
-    }
-    checkingShowAds()
 
     binding.btnEnable.setOnClickListener {
         if (NetworkUtil.pingIpAddress(this)) {
@@ -108,6 +82,36 @@ fun BackupActivity.initUI(){
                 }
             })
     }
+    loadAds()
+}
+
+fun BackupActivity.loadAds(){
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
+    if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
+        binding.rlAdsRoot.visibility = View.GONE
+    }else{
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
+    }
+    if(Utils.isHiddenAds(EnumScreens.BACKUP_LARGE)){
+        binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
+    }
+
+    if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {
+        QRScannerApplication.getInstance().requestInterstitialAd()
+    }
+
+    if (QRScannerApplication.getInstance().isBackupSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupSmallView() && !Utils.isHiddenAds(EnumScreens.BACKUP_SMALL) && !Utils.isRequestShowLocalAds()) {
+        QRScannerApplication.getInstance().requestBackupSmallView(this)
+    }
+
+    if (QRScannerApplication.getInstance().isBackupLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableBackupLargeView() && !Utils.isHiddenAds(EnumScreens.BACKUP_LARGE) && !Utils.isRequestShowLocalAds()) {
+        QRScannerApplication.getInstance().requestBackupLargeView(this)
+    }
+    checkingShowAds()
 }
 
 fun BackupActivity.showAds(){
