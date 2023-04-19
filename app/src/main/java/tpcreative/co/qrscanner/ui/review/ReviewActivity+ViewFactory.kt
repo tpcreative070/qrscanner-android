@@ -141,7 +141,7 @@ private fun ReviewActivity.onHandlerIntent() {
 
 private fun ReviewActivity.beginCrop(source: Uri?) {
     val destination = Uri.fromFile(File(cacheDir, "cropped"))
-    cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start((this)))
+    cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start((this),false))
 }
 
 private fun ReviewActivity.setupViewModel() {

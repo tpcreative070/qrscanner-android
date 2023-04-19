@@ -253,7 +253,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
 
     private fun beginCrop(source: Uri?) {
         val destination = Uri.fromFile(File(activity?.cacheDir, "cropped"))
-        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(context()))
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(context(),false))
     }
 
     private fun handleCrop(resultCode: Int, result: Intent?) {

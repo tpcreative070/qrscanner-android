@@ -2,8 +2,10 @@ package tpcreative.co.qrscanner.common.view.crop
 import android.content.*
 import android.net.Uri
 import android.provider.MediaStore
+import tpcreative.co.qrscanner.common.extension.parcelable
 import tpcreative.co.qrscanner.common.extension.serializable
 import tpcreative.co.qrscanner.ui.cropimage.CropImageActivity
+import tpcreative.co.qrscanner.ui.cropimage.key_type
 
 /**
  * Builder for crop Intents and utils for handling result
@@ -64,8 +66,8 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
      * @param fragment Fragment to receive result
      */
     @JvmOverloads
-    fun start(context: Context) : Intent? {
-       return getIntent(context)
+    fun start(context: Context,isChangeDesign: Boolean) : Intent? {
+       return getIntent(context,isChangeDesign)
     }
 
     /**
@@ -74,8 +76,9 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
      * @param context Context
      * @return Intent for CropImageActivity
      */
-    private fun getIntent(context: Context): Intent? {
+    private fun getIntent(context: Context,isChangeDesign : Boolean): Intent? {
         cropIntent?.setClass(context, CropImageActivity::class.java)
+        cropIntent?.putExtra(key_type,isChangeDesign)
         return cropIntent
     }
 
@@ -84,6 +87,7 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
         const val REQUEST_PICK = 9162
         const val RESULT_ERROR = 404
         val REQUEST_DATA: String = "DATA"
+        val REQUEST_CHANGE_DESIGN_DATA = "CHANGE_DESIGN_DATA"
 
         /**
          * Create a crop Intent builder with source and destination image Uris
@@ -97,6 +101,10 @@ class Crop private constructor(source: Uri?, destination: Uri?) {
 
         fun getOutputString(result: Intent?): String? {
             return result?.getStringExtra(REQUEST_DATA)
+        }
+
+        fun getOutputUri(result: Intent?): Uri? {
+            return result?.parcelable(REQUEST_CHANGE_DESIGN_DATA)
         }
 
         /**

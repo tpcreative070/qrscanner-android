@@ -12,6 +12,6 @@ val Int.dp: Int get() = (this / Resources.getSystem().displayMetrics.density).to
 
 val Int.px: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-val Int.StringRes: String get() = QRScannerApplication.getInstance().getString(this)
-val Int.StringHex: String get() = "#" + Integer.toHexString(ContextCompat.getColor(QRScannerApplication.getInstance(),this));
-val Int.StringHexNoTransparency: String get() = String.format("#%06x", ContextCompat.getColor(QRScannerApplication.getInstance(), this) and 0xffffff)
+val Int.stringRes: String get() = QRScannerApplication.getInstance().getString(this)
+val Int.stringHex: String get() = "#" + Integer.toHexString(ContextCompat.getColor(QRScannerApplication.getInstance(),this));
+val Int.stringHexNoTransparency: String get() = String.format("#%06x", ContextCompat.getColor(QRScannerApplication.getInstance(), this) and 0xffffff)

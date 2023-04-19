@@ -1,11 +1,14 @@
 package tpcreative.co.qrscanner.common.extension
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.net.Uri
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.ui.review.ReviewActivity
@@ -76,7 +79,7 @@ fun Bitmap.storeBitmap() : Uri?{
     val mUri = QRScannerApplication.getInstance().getUriForFile(file)
     mUri?.run {
         QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {
-            this@storeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, this)
+            this@storeBitmap.compress(Bitmap.CompressFormat.PNG, 100, this)
             close()
         }
     }
@@ -90,10 +93,19 @@ fun Bitmap.storeBitmap(fileName : String) : Uri?{
     val mUri = QRScannerApplication.getInstance().getUriForFile(file)
     mUri?.run {
         QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {
-            this@storeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, this)
+            this@storeBitmap.compress(Bitmap.CompressFormat.PNG, 100, this)
             close()
         }
     }
     return mUri
+}
+
+fun Bitmap.toCircular(context: Context, newCornerRadius: Float? = null): RoundedBitmapDrawable {
+    return RoundedBitmapDrawableFactory.create(context.resources, this).apply {
+        isCircular = true
+        newCornerRadius?.let {
+            cornerRadius = it
+        }
+    }
 }
 

@@ -298,6 +298,7 @@
     <string name="crop__done">XONG</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">HUỶ</string>
     <string name="drag_the_orange_markers_to_detect_barcode">Kéo các điểm đánh dấu màu cam để phát hiện mã vạch hoặc mã QR</string>
+    <string name="drag_the_orange_markers_to_crop_picture">Kéo các điểm đánh dấu màu cam để cắt ảnh</string>
     <string name="add_note">Thêm ghi chú</string>
     <string name="take_note">Ghi chú</string>
     <string name="add_favorite">Thêm yêu thích</string>
@@ -369,4 +370,7 @@
     <string name="asking_exit_qr">Mã QR của bạn không được lưu. Bạn có chắc chắn để thoát?</string>
     <string name="exit">Thoát</string>
     <string name="not_exit">Không thoát</string>
+    <string name="original">Nguyên mẫu</string>
+    <string name="square">Vuông</string>
+    <string name="circle">Tròn</string>
 </resources>

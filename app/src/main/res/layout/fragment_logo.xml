@@ -15,16 +15,69 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include
-                android:visibility="gone"
-                android:id="@+id/include_layout_header"
+            <RelativeLayout
+                android:id="@+id/rlShape"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/layout_header" />
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_margin="@dimen/margin_10"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:id="@+id/rlOriginal"
+                        android:layout_margin="@dimen/margin_10"
+                        android:background="@drawable/bg_history_rounded"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_margin="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="@string/original"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:id="@+id/rlSquare"
+                        android:layout_margin="@dimen/margin_10"
+                        android:background="@drawable/bg_history_rounded"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_margin="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="@string/square"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:id="@+id/rlCircle"
+                        android:layout_margin="@dimen/margin_10"
+                        android:background="@drawable/bg_history_rounded"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_margin="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="@string/circle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="@dimen/margin_20"
                 android:id="@+id/recyclerView"
-                android:layout_below="@+id/include_layout_header"
+                android:layout_below="@+id/rlShape"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </RelativeLayout>

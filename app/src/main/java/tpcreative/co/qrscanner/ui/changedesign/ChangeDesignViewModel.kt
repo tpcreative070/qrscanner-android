@@ -2,20 +2,22 @@ package tpcreative.co.qrscanner.ui.changedesign
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.toColorInt
 import com.github.alexzhirkevich.customqrgenerator.QrData
+import com.github.alexzhirkevich.customqrgenerator.style.Color
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.EnumIcon
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.icon
-import tpcreative.co.qrscanner.common.extension.serializable
-import tpcreative.co.qrscanner.common.extension.toJson
-import tpcreative.co.qrscanner.common.extension.toObject
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.helper.SQLiteHelper
@@ -33,6 +35,9 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     lateinit var changeDesignReview :ChangeDesignModel
     lateinit var changeDesignSave :ChangeDesignModel
     lateinit var changeDesignOriginal :ChangeDesignModel
+    var shape : EnumShape = EnumShape.ORIGINAL
+    var uri : Uri? = null
+    var bitmap : Bitmap? = null
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
@@ -97,82 +102,82 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mLogoList.add(
             LogoModel(
                 EnumIcon.bg_white.icon,
-                EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL)
+                EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_gallery.icon,
-                EnumIcon.ic_gallery,false,R.color.material_gray_700,false,EnumChangeDesignType.VIP)
+                EnumIcon.ic_gallery,false,R.color.material_gray_700,false,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.design_wifi.icon,
-                EnumIcon.design_wifi,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.design_wifi,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_twitter.icon,
-                EnumIcon.ic_twitter,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_twitter,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_youtube_png.icon,
-                EnumIcon.ic_youtube_png,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_youtube_png,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_whatapp.icon,
-                EnumIcon.ic_whatapp,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_whatapp,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_instagram.icon,
-                EnumIcon.ic_instagram,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_instagram,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_paypal.icon,
-                EnumIcon.ic_paypal,false,R.color.transparent,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_paypal,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_email.icon,
-                EnumIcon.ic_email,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_email,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_message.icon,
-                EnumIcon.ic_message,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_message,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_location.icon,
-                EnumIcon.ic_location,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_location,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_calender.icon,
-                EnumIcon.ic_calender,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_calender,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_contact.icon,
-                EnumIcon.ic_contact,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_contact,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_phone.icon,
-                EnumIcon.ic_phone,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_phone,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_text.icon,
-                EnumIcon.ic_text,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_text,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_network.icon,
-                EnumIcon.ic_network,false,R.color.black,true,EnumChangeDesignType.NORMAL)
+                EnumIcon.ic_network,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
     }
 
@@ -184,7 +189,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             .setBackground(
                 QrVectorBackground(
                     drawable = ContextCompat
-                        .getDrawable(context, R.color.white),
+                        .getDrawable(context, R.color.colorAccent),
                 )
             )
 //            .setColors(
@@ -207,21 +212,60 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 //                )
 //            )
         val mDrawable: Drawable?
+        val shape : QrVectorLogoShape = when(this.shape){
+            EnumShape.SQUARE ->{
+                QrVectorLogoShape.Square
+            }
+            EnumShape.CIRCLE ->{
+                QrVectorLogoShape.Circle
+            }
+            else -> {
+                QrVectorLogoShape.Default
+            }
+        }
         if (mDataResult?.isRequestIcon == true){
             mDrawable = ContextCompat
                 .getDrawable(context, mDataResult.icon)
             mDrawable?.let {
                 MyDrawableCompat.setColorFilter(it,ContextCompat.getColor(context, mDataResult.tint))
             }
+            Utils.Log(TAG,"Result cropped bitmap  to res")
             options.setLogo(
                 QrVectorLogo(
                     drawable = mDrawable,
                     size = .22f,
                     padding = QrVectorLogoPadding.Natural(.06f),
-                    shape = QrVectorLogoShape
-                        .Circle
+                    shape = shape,
+                    backgroundColor = QrVectorColor
+                        .Solid(R.color.white.stringHexNoTransparency.toColorInt())
                 )
             )
+        }else{
+            if (bitmap!=null){
+                when(this.shape){
+                    EnumShape.CIRCLE ->{
+                        mDrawable = bitmap?.toCircular(QRScannerApplication.getInstance(),15f)
+                    }
+                    EnumShape.SQUARE ->{
+                        mDrawable = bitmap?.toCircular(QRScannerApplication.getInstance(),50f)
+                    }
+                    else -> {
+                        mDrawable = bitmap?.toDrawable(QRScannerApplication.getInstance().resources)
+                    }
+                }
+                options.setLogo(
+                    QrVectorLogo(
+                        drawable = mDrawable,
+                        size = .22f,
+                        padding = QrVectorLogoPadding.Natural(.06f),
+                        shape = shape,
+                        backgroundColor =  QrVectorColor
+                            .Solid(R.color.transparent.stringHexNoTransparency.toColorInt())
+                    )
+                )
+                Utils.Log(TAG,"Result cropped bitmap  to drawable")
+            }
+            Utils.Log(TAG,"Result cropped bitmap nothing")
         }
         val mData = QrData.Text(create.code?:"")
         val drawable : Drawable = QrCodeDrawable(mData, options.build(), Charsets.UTF_8)
@@ -312,7 +356,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     fun defaultObject() : LogoModel {
         return LogoModel(
             EnumIcon.bg_white.icon,
-            EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL)
+            EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
     }
 
     fun isChanged() : Boolean{
@@ -320,6 +364,15 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             return true
         }
         return false
+    }
+
+    fun onUpdateBitmap(bitmap: Bitmap?){
+        this.bitmap = bitmap
+    }
+
+    fun onCleanBitMap(){
+        this.bitmap?.recycle()
+        this.bitmap = null
     }
 
     val context = QRScannerApplication.getInstance()

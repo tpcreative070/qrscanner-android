@@ -56,7 +56,7 @@ fun ChangeDesignActivity.initUI(){
                 }
                 Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
                 viewModel.selectedIndexRestore()
-                viewLogo.setSelectedIndex(viewModel.indexLogo)
+                viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
                 onGenerateQRReview()
                 onClearAction()
             }
@@ -80,7 +80,7 @@ fun ChangeDesignActivity.initUI(){
                         supportFragmentManager.beginTransaction().remove(fragment).commit()
                     }
                     viewModel.selectedIndexRestore()
-                    viewLogo.setSelectedIndex(viewModel.indexLogo)
+                    viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
                     onGenerateQRReview()
                     onClearAction()
                     Utils.Log("ChangeDesign","Hidden view 0")
@@ -106,7 +106,7 @@ fun ChangeDesignActivity.initUI(){
                                 supportFragmentManager.beginTransaction().remove(fragment).commit()
                             }
                             viewModel.selectedIndexRestore()
-                            viewLogo.setSelectedIndex(viewModel.indexLogo)
+                            viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
                             onGenerateQRReview()
                             onClearAction()
                             Utils.Log("ChangeDesign","Hidden view 1")
@@ -133,7 +133,7 @@ fun ChangeDesignActivity.initUI(){
     }else{
         Utils.Log(TAG,"Not found")
     }
-    Utils.Log(TAG,"String res ${R.color.colorAccent.StringHexNoTransparency}")
+    Utils.Log(TAG,"String res ${R.color.colorAccent.stringHexNoTransparency}")
     val mResult = SQLiteHelper.loadList()
     Utils.Log(TAG,"Design data ${mResult?.toJson()}")
 

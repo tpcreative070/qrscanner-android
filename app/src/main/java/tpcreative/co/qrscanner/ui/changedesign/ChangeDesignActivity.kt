@@ -1,6 +1,8 @@
 package tpcreative.co.qrscanner.ui.changedesign
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Path
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +13,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
@@ -24,6 +27,7 @@ import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
 import tpcreative.co.qrscanner.model.EnumChangeDesignType
+import tpcreative.co.qrscanner.model.EnumShape
 import tpcreative.co.qrscanner.model.EnumView
 import tpcreative.co.qrscanner.model.LogoModel
 import tpcreative.co.qrscanner.ui.changedesign.fragment.*
@@ -47,12 +51,20 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         setContentView(binding.root)
         initUI()
         if (savedInstanceState != null) {
-            viewModel.index = savedInstanceState.getInt(ConstantKey.key_change_design_index)
-            viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.key_change_design_view) ?:EnumView.ALL_HIDDEN.name)
-            viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.key_change_design_logo) ?: viewModel.defaultObject()
-            viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.key_change_design_save) ?: viewModel.changeDesignSave
-            viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.key_change_design_review) ?: viewModel.changeDesignReview
+            viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
+            viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
+            viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
+            viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
+            viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
+            viewModel.uri = Uri.parse(savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_URI))
+            viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
             Utils.Log(TAG,"State instance saveInstanceState has value")
+            val bitmap = viewModel.uri?.let {
+                contentResolver.openInputStream(it).use { data ->
+                    BitmapFactory.decodeStream(data)
+                }
+            }
+            viewModel.onUpdateBitmap(bitmap)
             registerLayout()
             onGenerateQRReview()
         }else{
@@ -82,17 +94,32 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         mFragments.add(viewEyes)
         mFragments.add(viewLogo)
         mFragments.add(viewText)
-        viewLogo.setSelectedIndex(viewModel.indexLogo)
+        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
         Utils.Log(TAG,"State instance register ${viewModel.indexLogo.toJson()}")
         viewLogo.setBinding(object  : LogoFragment.ListenerLogoFragment{
             override fun logoSelectedIndex(index: Int,selectedObject : LogoModel) {
+                Utils.Log(TAG,"Selected index ${selectedObject.toJson()}")
                 if (selectedObject.enumChangeDesignType ==EnumChangeDesignType.VIP){
+                    viewModel.indexLogo = selectedObject
+                    viewModel.selectedIndexOnReview()
                     onGetGallery()
                 }else{
+                    viewModel.onCleanBitMap()
                     viewModel.indexLogo = selectedObject
                     viewModel.selectedIndexOnReview()
                     onGenerateQRReview()
                 }
+            }
+
+            override fun logoSelectedIndex(
+                index: Int,
+                enumShape: EnumShape?,
+                selectedObject: LogoModel
+            ) {
+                viewModel.indexLogo = selectedObject
+                viewModel.shape = enumShape ?: EnumShape.ORIGINAL
+                viewModel.selectedIndexOnReview()
+                onGenerateQRReview()
             }
 
             override fun getData(): MutableList<LogoModel> {
@@ -151,6 +178,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
                 binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
                 binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
                 binding.doneCancelBar.imgDone.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.INVISIBLE
             }
             EnumView.TEXT ->{
                 binding.doneCancelBar.tvCancel.text = getString(R.string.text)
@@ -206,21 +234,25 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(ConstantKey.key_change_design_index,viewModel.index)
-        outState.putString(ConstantKey.key_change_design_view, viewModel.enumView.name)
-        outState.putSerializable(ConstantKey.key_change_design_logo,viewModel.indexLogo)
-        outState.putSerializable(ConstantKey.key_change_design_save,viewModel.changeDesignSave)
-        outState.putSerializable(ConstantKey.key_change_design_review,viewModel.changeDesignReview)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX,viewModel.index)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_VIEW, viewModel.enumView.name)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO,viewModel.indexLogo)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignSave)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignReview)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_URI,viewModel.uri.toString())
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_SHAPE,viewModel.shape.name)
         Utils.Log(TAG,"State instance save ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance save index ${viewModel.index}")
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        viewModel.index = savedInstanceState.getInt(ConstantKey.key_change_design_index)
-        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.key_change_design_view) ?:EnumView.ALL_HIDDEN.name)
-        viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.key_change_design_logo) ?: viewModel.defaultObject()
-        viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.key_change_design_save) ?: viewModel.changeDesignSave
-        viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.key_change_design_review) ?: viewModel.changeDesignReview
+        viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
+        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
+        viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
+        viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
+        viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
+        viewModel.uri = Uri.parse(savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_URI))
+        viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
         Utils.Log(TAG,"State instance restore ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance restore index ${viewModel.index}")
         super.onRestoreInstanceState(savedInstanceState)
@@ -235,13 +267,28 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     private fun beginCrop(source: Uri?) {
         val destination = Uri.fromFile(File(this.cacheDir, "cropped"))
-        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(this))
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(this,true))
     }
 
     private val cropForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             Utils.Log(TAG, "REQUEST_CROP")
-            //handleCrop(result.resultCode, result.data)
+            handleCrop(result.resultCode, result.data)
+        }
+    }
+
+    private fun handleCrop(resultCode: Int, result: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val mData: Uri? = Crop.getOutputUri(result)
+            Utils.Log(TAG,"Result cropped ${mData.toString()}")
+            val bitmap = mData?.let {
+                viewModel.uri = mData
+                contentResolver.openInputStream(it).use { data ->
+                    BitmapFactory.decodeStream(data)
+                }
+            }
+            viewModel.onUpdateBitmap(bitmap)
+            onGenerateQRReview()
         }
     }
 
