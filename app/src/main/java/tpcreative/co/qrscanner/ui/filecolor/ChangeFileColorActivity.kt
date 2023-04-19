@@ -47,7 +47,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
             binding.rlBannerLarger.visibility = View.GONE
         }
         if (isLoaded){
-            checkingShowAds()
+            loadAds()
         }
         isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.CHANGE_COLOR_SMALL)

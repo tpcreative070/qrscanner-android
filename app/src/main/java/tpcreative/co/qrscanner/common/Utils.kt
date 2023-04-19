@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
+import android.provider.Settings
 import android.util.TypedValue
 import android.webkit.URLUtil
 import androidx.core.content.ContextCompat
@@ -874,6 +875,14 @@ object Utils {
         if (isRequestRemoteDebugApp()){
             ServiceManager.getInstance().mVersion = Version()
         }
+        if (isTestTab()){
+            return true
+        }
+        if (!isDebug()){
+            if (QRScannerApplication.getInstance().getString(R.string.admob_app_id) != ServiceManager.getInstance().mVersion?.app_id){
+                return true
+            }
+        }
         when(enumScreens){
             EnumScreens.HELP_FEEDBACK_SMALL ->{
                 if (Configuration.hiddenHelpFeedbackSmallAds || ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackSmallAds == true){
@@ -1227,6 +1236,14 @@ object Utils {
             return false
         }
         return true
+    }
+
+    private fun isTestTab() : Boolean{
+        val testLabSetting = Settings.System.getString(QRScannerApplication.getInstance().contentResolver, "firebase.test.lab")
+        if ("true" == testLabSetting) {
+          return true
+        }
+        return false
     }
 
     interface UtilsListener {

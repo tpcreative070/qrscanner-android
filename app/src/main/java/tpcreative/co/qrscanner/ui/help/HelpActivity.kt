@@ -41,7 +41,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
             binding.rlBannerLarger.visibility = View.GONE
         }
         if (isLoaded){
-            checkingShowAds()
+            loadAds()
         }
         isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.HELP_FEEDBACK_SMALL)

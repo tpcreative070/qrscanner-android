@@ -88,7 +88,7 @@ class ReviewActivity : BaseActivitySlide() {
             binding.rlBannerLarger.visibility = View.GONE
         }
         if (isLoaded){
-            checkingShowAds()
+            loadAds()
         }
         isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.REVIEW_SMALL)
