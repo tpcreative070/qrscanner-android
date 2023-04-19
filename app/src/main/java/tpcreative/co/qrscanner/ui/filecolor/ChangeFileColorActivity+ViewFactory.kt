@@ -22,19 +22,6 @@ fun ChangeFileColorActivity.initUI(){
     setupViewModel()
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    if (!Utils.isPremium()){
-        viewAds = AdsView(this)
-    }
-    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)){
-        binding.rlAdsRoot.visibility = View.GONE
-    }else{
-        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
-    }
-    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)){
-        binding.rlBannerLarger.visibility = View.GONE
-    }else{
-        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
-    }
     initRecycleView(layoutInflater)
     getData()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -51,6 +38,23 @@ fun ChangeFileColorActivity.initUI(){
                     showAds()
                 }
             })
+    }
+    loadAds()
+}
+
+fun ChangeFileColorActivity.loadAds(){
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
+    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)){
+        binding.rlAdsRoot.visibility = View.GONE
+    }else{
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
+    }
+    if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)){
+        binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
 
     if (QRScannerApplication.getInstance().isRequestInterstitialAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialAd()) {

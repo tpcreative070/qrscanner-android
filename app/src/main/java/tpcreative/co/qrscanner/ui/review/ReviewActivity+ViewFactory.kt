@@ -48,30 +48,7 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     binding.scrollView.smoothScrollTo(0, 0)
     binding.imgStandardCircle.setImageResource(R.color.colorAccent)
-    getIntentData()
-    if (!Utils.isPremium()){
-        viewAds = AdsView(this)
-    }
-    if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
-        binding.rlAdsRoot.visibility = View.GONE
-    }else{
-        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
-    }
-    if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
-        binding.rlBannerLarger.visibility = View.GONE
-    }else{
-        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
-    }
-    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL) && !Utils.isRequestShowLocalAds()) {
-        QRScannerApplication.getInstance().requestReviewSmallView(this)
-    }
-    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView() && !Utils.isHiddenAds(EnumScreens.REVIEW_LARGE) && !Utils.isRequestShowLocalAds()) {
-        QRScannerApplication.getInstance().requestReviewLargeView(this)
-    }
-    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd()) {
-        QRScannerApplication.getInstance().requestInterstitialViewCodeAd()
-    }
-    checkingShowAds()
+    loadAds()
     /*Press back button*/
     if (Build.VERSION.SDK_INT >= 33) {
         onBackInvokedDispatcher.registerOnBackInvokedCallback(
@@ -98,6 +75,33 @@ fun ReviewActivity.initUI(){
         }
     }
     onHandlerIntent()
+}
+
+fun ReviewActivity.loadAds(){
+    getIntentData()
+    if (!Utils.isPremium()){
+        viewAds = AdsView(this)
+    }
+    if(Utils.isHiddenAds(EnumScreens.REVIEW_SMALL)){
+        binding.rlAdsRoot.visibility = View.GONE
+    }else{
+        binding.rlAdsRoot.addView(viewAds?.getRootSmallAds())
+    }
+    if(Utils.isHiddenAds(EnumScreens.REVIEW_LARGE)){
+        binding.rlBannerLarger.visibility = View.GONE
+    }else{
+        binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
+    }
+    if (QRScannerApplication.getInstance().isReviewSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewSmallView() && !Utils.isHiddenAds(EnumScreens.REVIEW_SMALL) && !Utils.isRequestShowLocalAds()) {
+        QRScannerApplication.getInstance().requestReviewSmallView(this)
+    }
+    if (QRScannerApplication.getInstance().isReviewLargeView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableReviewLargeView() && !Utils.isHiddenAds(EnumScreens.REVIEW_LARGE) && !Utils.isRequestShowLocalAds()) {
+        QRScannerApplication.getInstance().requestReviewLargeView(this)
+    }
+    if (QRScannerApplication.getInstance().isRequestInterstitialViewCodeAd() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableInterstitialViewCodeAd()) {
+        QRScannerApplication.getInstance().requestInterstitialViewCodeAd()
+    }
+    checkingShowAds()
 }
 
 

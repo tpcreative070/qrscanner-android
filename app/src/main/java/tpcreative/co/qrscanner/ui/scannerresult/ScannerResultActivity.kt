@@ -423,7 +423,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
             binding.rlBannerLarger.visibility = View.GONE
         }
         if (isLoaded){
-            checkingShowAds()
+            loadAds()
         }
         isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.SCANNER_RESULT_SMALL)

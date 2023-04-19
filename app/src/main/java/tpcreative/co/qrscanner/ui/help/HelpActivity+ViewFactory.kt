@@ -20,6 +20,12 @@ fun HelpActivity.initUI(){
     setupViewModel()
     setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    initRecycleView(layoutInflater)
+    getData()
+    loadAds()
+}
+
+fun HelpActivity.loadAds(){
     if (!Utils.isPremium()){
         viewAds = AdsView(this)
     }
@@ -33,8 +39,6 @@ fun HelpActivity.initUI(){
     }else{
         binding.rlBannerLarger.addView(viewAds?.getRootLargeAds())
     }
-    initRecycleView(layoutInflater)
-    getData()
     if (QRScannerApplication.getInstance().isHelpFeedbackSmallView() && QRScannerApplication.getInstance().isLiveAds() && QRScannerApplication.getInstance().isEnableHelpFeedbackSmallView() && !Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL) && !Utils.isRequestShowLocalAds()) {
         QRScannerApplication.getInstance().requestHelpFeedbackSmallView(this)
     }

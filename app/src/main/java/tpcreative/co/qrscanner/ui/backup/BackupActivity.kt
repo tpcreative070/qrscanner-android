@@ -155,7 +155,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
             binding.rlBannerLarger.visibility = View.GONE
         }
         if (isLoaded){
-            checkingShowAds()
+            loadAds()
         }
         isLoaded = true
         QRScannerApplication.getInstance().onResumeAds(EnumScreens.BACKUP_SMALL)
