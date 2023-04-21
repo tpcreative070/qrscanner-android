@@ -1486,8 +1486,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private fun  adSize() : AdSize{
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, mWithAd)
     }
-
-
+    
     fun onPauseAds(enum : EnumScreens){
 //        when(enum){
 //            EnumScreens.SCANNER_RESULT_SMALL ->{
