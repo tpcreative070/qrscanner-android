@@ -469,6 +469,7 @@
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
     <string name="drag_the_orange_markers_to_detect_barcode">Drag the orange markers to detect barcode or QR-code</string>
+    <string name="drag_the_orange_markers_to_crop_picture">Drag the orange markers to crop the picture</string>
     <string name="add_note">Add note</string>
     <string name="take_note">Take Note</string>
     <string name="add_favorite">Add to favorites</string>
@@ -538,4 +539,11 @@
     <string name="dots">Dots</string>
     <string name="eyes">Eyes</string>
     <string name="logo">Logo</string>
+    <string name="asking_exit_qr">Your QR code is not saved. Are you sure to exit?</string>
+    <string name="exit">Exit</string>
+    <string name="not_exit">Not Exit</string>
+    <string name="original">Original</string>
+    <string name="square">Square</string>
+    <string name="circle">Circle</string>
+
 </resources>

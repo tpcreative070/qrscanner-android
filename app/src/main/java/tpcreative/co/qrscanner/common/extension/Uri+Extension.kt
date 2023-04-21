@@ -8,8 +8,10 @@ import android.net.Uri
 import android.provider.ContactsContract
 import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.AddressModel
 import tpcreative.co.qrscanner.model.ContactModel
+import java.io.IOException
 
 @SuppressLint("Range")
 fun Uri.onParseContact(context: Context) : ContactModel{
@@ -234,3 +236,13 @@ fun Uri.onParseContact(context: Context) : ContactModel{
     cursor?.close()
     return mContact
 }
+
+val Uri.isExist : Boolean
+    get() = try {
+        QRScannerApplication.getInstance().contentResolver.openInputStream(this)?.use {
+        }
+        true
+    }
+    catch (e: IOException) {
+        false
+    }

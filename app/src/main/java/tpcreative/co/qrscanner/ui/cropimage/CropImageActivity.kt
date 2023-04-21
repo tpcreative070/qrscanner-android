@@ -15,8 +15,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.drawable.toIcon
 import androidx.core.graphics.toPointF
-import androidx.core.graphics.toRect
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
@@ -49,10 +50,11 @@ import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import java.io.File
 import java.util.*
 
-
+const val key_type = "key_type"
 class CropImageActivity : BaseActivitySlide(){
 
     private var isShareIntent = false
+    private var isChangeDesign = false
     private var mCreate : GeneralModel? = null
     private var isAutoComplete : Boolean = true
     private var dialog : Dialog? = null
@@ -60,32 +62,22 @@ class CropImageActivity : BaseActivitySlide(){
     private var compressedImage: File? = null
     private var mFileDestination : File = File("")
     lateinit var binding : CropActivityCropBinding
-    val readerCpp = BarcodeReader()
-    public override fun onCreate(icicle: Bundle?) {
+    private val readerCpp = BarcodeReader()
+    private var bitmapChangeDesign : Bitmap?  = null
+    public override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        super.onCreate(icicle)
+        super.onCreate(savedInstanceState)
         dialog = ProgressDialog.progressDialog(this,R.string.loading.toText())
         setupViews()
         onHandlerIntent()
-        binding.doneCancelBar.btnDone.isEnabled = false
-        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            onBackInvokedDispatcher.registerOnBackInvokedCallback(
-                OnBackInvokedDispatcher.PRIORITY_DEFAULT
-            ) {
-                setResult(RESULT_CANCELED)
-                finish()
-            }
-        } else {
-            onBackPressedDispatcher.addCallback(
-                this,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        setResult(RESULT_CANCELED)
-                        finish()
-                    }
-                })
-        }
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    setResult(RESULT_CANCELED)
+                    finish()
+                }
+            })
     }
 
     private fun customCompressImage(images : File?) {
@@ -119,11 +111,11 @@ class CropImageActivity : BaseActivitySlide(){
     private fun setCompressedImage() {
         compressedImage?.let {
             dismissLoading()
-            binding.cropImageView?.load(it.toUri())
+            binding.cropImageView.load(it.toUri())
                 ?.initialFrameRect(null)
                 ?.useThumbnail(true)
                 ?.execute(mLoadCallback)
-            binding.cropImageView?.moveUp()
+            binding.cropImageView.moveUp()
                 ?.execute(mMoveUpCallback)
             Utils.Log(TAG, "Compressed image save in " + it.path)
         }
@@ -137,7 +129,13 @@ class CropImageActivity : BaseActivitySlide(){
             finish()
         }
        binding.doneCancelBar.btnDone.setOnClickListener {
-           onCompleteCrop()
+           if (isChangeDesign){
+               val mUri = bitmapChangeDesign?.storeBitmap()
+               setResultChangeDesign(mUri)
+               finish()
+           }else{
+               onCompleteCrop()
+           }
        }
     }
 
@@ -153,10 +151,21 @@ class CropImageActivity : BaseActivitySlide(){
             }else{
                 sourceUri = intent.data
                 isShareIntent = false
+                val bundle :Bundle? = intent.extras
+                isChangeDesign = bundle?.getBoolean(key_type,false) ?: false
+                Utils.Log(TAG,"bundle response $isChangeDesign")
             }
         } catch (e: Exception) {
             Utils.onDropDownAlert(this, getString(R.string.error_occurred_importing))
             e.printStackTrace()
+        }
+        if (isChangeDesign){
+            binding.doneCancelBar.btnDone.isEnabled = true
+            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
+            binding.tvGuide.text = getString(R.string.drag_the_orange_markers_to_crop_picture)
+        }else{
+            binding.doneCancelBar.btnDone.isEnabled = false
+            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
         }
         loadInput(sourceUri)
     }
@@ -242,6 +251,11 @@ class CropImageActivity : BaseActivitySlide(){
     private fun setResultEncode(encode: Result?) {
         setResult(RESULT_OK, Intent().putExtra(Crop.REQUEST_DATA, Gson().toJson(encode)))
     }
+
+    private fun setResultChangeDesign(uri: Uri?) {
+        setResult(RESULT_OK, Intent().putExtra(Crop.REQUEST_CHANGE_DESIGN_DATA,uri))
+    }
+
 
     private fun onRenderCode(bm: Bitmap?) {
         var bitmap = bm
@@ -374,7 +388,11 @@ class CropImageActivity : BaseActivitySlide(){
              Utils.Log(TAG,"Crop success ${cropped.width} ${cropped.height}")
             lifecycleScope.launch(Dispatchers.IO) {
                 //onRenderCode(cropped)
-                handleScan(cropped)
+                if (isChangeDesign){
+                   bitmapChangeDesign = cropped
+                }else{
+                    handleScan(cropped)
+                }
             }
         }
         override fun onError(e: Throwable) {
@@ -512,7 +530,7 @@ class CropImageActivity : BaseActivitySlide(){
             }
             override fun onRelease() {
                 try {
-                    binding.cropImageView?.crop(compressedImage?.toUri())?.execute(mCropCallback)
+                    binding.cropImageView.crop(compressedImage?.toUri())?.execute(mCropCallback)
                 }catch (e: Exception){
                     e.printStackTrace()
                 }

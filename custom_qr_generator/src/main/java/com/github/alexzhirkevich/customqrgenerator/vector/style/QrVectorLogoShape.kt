@@ -10,6 +10,8 @@ interface QrVectorLogoShape : QrVectorShapeModifier {
     
     object Circle : QrVectorLogoShape, QrVectorShapeModifier by CircleVectorShape(1f)
 
+    object Square : QrVectorLogoShape, QrVectorShapeModifier by SquareVectorShape(1f)
+
     
     data class RoundCorners(
         @FloatRange(from = 0.0, to = .5) val radius: Float

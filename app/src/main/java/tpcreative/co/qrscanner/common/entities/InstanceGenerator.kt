@@ -15,12 +15,14 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.util.*
 
-@Database(entities = [HistoryEntity::class, SaveEntity::class], version = 6, exportSchema = false)
+@Database(entities = [HistoryEntity::class, SaveEntity::class,DesignQREntity::class], version = 7, exportSchema = false)
 abstract class InstanceGenerator : RoomDatabase() {
     @Ignore
     abstract fun historyDao(): HistoryDao?
     @Ignore
     abstract fun saveDao(): SaveDao?
+    @Ignore
+    abstract fun designQRDao() : DesignQRDao?
     fun onInsert(cTalkManager: HistoryEntityModel?) {
         try {
             if (cTalkManager == null) {
@@ -306,14 +308,51 @@ abstract class InstanceGenerator : RoomDatabase() {
         return false
     }
 
-    fun onDeleteSaveSpecific(uuId: String?): Boolean {
+    fun getItemByUUIdQR(id: String?): DesignQREntityModel? {
         try {
-            instance?.saveDao()?.deleteSpecific(uuId)
+            val mResult = instance?.designQRDao()?.loadItem(id)
+            if (mResult != null) {
+                return DesignQREntityModel(mResult)
+            }
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
+    }
+
+    fun onDelete(entity: DesignQREntityModel?): Boolean {
+        try {
+            instance?.designQRDao()?.delete(DesignQREntity(entity))
             return true
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
         }
         return false
+    }
+
+    fun onInsert(data: DesignQREntityModel?) {
+        try {
+            if (data == null) {
+                return
+            }
+            instance?.designQRDao()?.insert(DesignQREntity(data))
+        } catch (e: Exception) {
+            Utils.Log(TAG, "${e.message}")
+        }
+    }
+
+    fun getLoadAll(): MutableList<DesignQREntityModel>?{
+        try {
+            val mValue = instance?.designQRDao()?.loadAll()
+            val mList: MutableList<DesignQREntityModel> = mutableListOf()
+            mValue?.forEach {
+                mList.add(DesignQREntityModel(it))
+            }
+            return mList
+        } catch (e: Exception) {
+            Utils.Log(TAG,"${e.message}")
+        }
+        return null
     }
 
     companion object {
@@ -371,13 +410,21 @@ abstract class InstanceGenerator : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_6_7 = object : Migration(6, 7){
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS `design_qr` (`id` INTEGER NOT NULL,`uuId` TEXT,`uuIdQR` TEXT,`codeDesign` TEXT,`createDatetime` TEXT,`updatedDateTime` TEXT, PRIMARY KEY(`id`))")
+                database.execSQL("CREATE UNIQUE INDEX index_design_qr_uuIdQR ON  design_qr(uuIdQR)")
+            }
+        }
+
         fun getInstance(context: Context?): InstanceGenerator? {
             if (instance == null) {
                 instance = context?.let {
                     Room.databaseBuilder(it,
                             InstanceGenerator::class.java, it.getString(R.string.database_name))
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                MIGRATION_5_6)
+                                MIGRATION_5_6,
+                                MIGRATION_6_7)
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .build()

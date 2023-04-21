@@ -29,7 +29,6 @@ import tpcreative.co.qrscanner.common.extension.openAppSystemSettings
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.viewmodel.ScannerViewModel
 
 
 fun ScannerFragment.initUI(){

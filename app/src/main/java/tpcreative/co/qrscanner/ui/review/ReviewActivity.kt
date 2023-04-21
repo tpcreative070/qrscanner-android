@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
@@ -13,6 +14,9 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -24,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
@@ -251,6 +256,13 @@ class ReviewActivity : BaseActivitySlide() {
 
     suspend fun onGenerateReview(code: String?) =
         withContext(Dispatchers.Main) {
+            mergeUUID()
+            val mFile = create?.uuId?.findImageName()
+            if (mFile!=null){
+                binding.imgResult.setImageURI(mFile.toUri())
+                onSavedData()
+                return@withContext
+            }
             try {
                 val barcodeEncoder = BarcodeEncoder()
                 val hints: MutableMap<EncodeHintType?, Any?> =
@@ -310,6 +322,15 @@ class ReviewActivity : BaseActivitySlide() {
 
     suspend fun onGenerateQRCode(code: String?) =
         withContext(Dispatchers.IO) {
+            mergeUUID()
+            val mFile = create?.uuId?.findImageName()
+            if (mFile!=null){
+                mUri = FileProvider.getUriForFile(this@ReviewActivity, BuildConfig.APPLICATION_ID + ".provider", mFile)
+                bitmap = BitmapFactory.decodeFile(mFile.absolutePath)
+                isRequestPrint = false
+                isRequestExportPNG = false
+                return@withContext
+            }
             try {
                 val barcodeEncoder = BarcodeEncoder()
                 val hints: MutableMap<EncodeHintType?, Any?> =
@@ -363,6 +384,35 @@ class ReviewActivity : BaseActivitySlide() {
         if (isShow) {
             QRScannerApplication.getInstance().loadReviewSmallView(viewAds?.getSmallAds())
             QRScannerApplication.getInstance().loadReviewLargeView(viewAds?.getLargeAds())
+        }
+    }
+
+    private val pickForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val mFile = create?.uuId?.findImageName()
+            if (mFile!=null){
+                Utils.Log(TAG, "Response data")
+                mUri = FileProvider.getUriForFile(this@ReviewActivity, BuildConfig.APPLICATION_ID + ".provider", mFile)
+                bitmap = BitmapFactory.decodeFile(mFile.absolutePath)
+                binding.imgResult.setImageURI(null)
+                binding.imgResult.setImageURI(mFile.toUri())
+            }
+        }
+    }
+
+    fun onOpenChangeDesign() {
+        pickForResult.launch(Navigator.onResultView(this,create,ChangeDesignActivity::class.java))
+    }
+
+    fun mergeUUID() {
+        if (create?.enumImplement == EnumImplement.CREATE){
+            create?.uuId = save.uuId
+        }
+        else if (create?.enumImplement == EnumImplement.EDIT){
+            viewModel.onDeleteChangeDesign(create)
+        }
+        else if (create?.enumImplement == EnumImplement.VIEW){
+            Utils.Log(TAG,"Data change design . ${create?.toJson()}")
         }
     }
 

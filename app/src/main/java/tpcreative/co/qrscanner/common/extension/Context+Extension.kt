@@ -3,10 +3,12 @@ package tpcreative.co.qrscanner.common.extension
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.common.Utils
@@ -47,4 +49,9 @@ fun Context.openAppSystemSettings() {
 
 fun Context.getUriForFile(file: File): Uri? {
     return FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
+}
+
+fun Context.getResource(name:String): Drawable? {
+    val resID = this.resources.getIdentifier(name , "drawable", this.packageName)
+    return ActivityCompat.getDrawable(this,resID)
 }

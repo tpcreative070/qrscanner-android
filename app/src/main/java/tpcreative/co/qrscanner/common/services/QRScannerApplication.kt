@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.hardware.display.DisplayManagerCompat
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -42,11 +41,12 @@ import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
+import java.io.File
 import java.util.*
 
 
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
-    private var pathFolder: String? = null
+    private var qrPath: String? = null
     private var isLive = false
     private var activity: MainActivity? = null
     private var mWithAd : Int = 0
@@ -102,6 +102,13 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         super.onCreate()
         mInstance = this
         isLive = true
+        qrPath = getExternalFilesDir(null)?.absolutePath + "/QRScanner/"
+        if (qrPath?.let { File(it).exists() } == true){
+            Utils.Log(TAG,"Folder already created $qrPath")
+        }else{
+            Utils.Log(TAG,"Requesting create folder")
+            qrPath?.createFolder()
+        }
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         serverAPI = RetrofitBuilder.getService(typeService = EnumTypeServices.SYSTEM)
         serverDriveApi = RetrofitBuilder.getService(getString(R.string.url_google), typeService = EnumTypeServices.GOOGLE_DRIVE)
@@ -197,7 +204,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
     override fun onActivityDestroyed(activity: Activity) {}
     fun getPathFolder(): String? {
-        return pathFolder
+        return qrPath
     }
 
     fun setConnectivityListener(listener: QRScannerReceiver.ConnectivityReceiverListener?) {

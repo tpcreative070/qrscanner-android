@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Crop.DoneCancelBar">
     <FrameLayout
-        android:foreground="@drawable/item_effect"
+        android:foreground="?android:attr/selectableItemBackground"
         android:background="@color/colorPrimary"
         android:id="@+id/btn_cancel"
         style="@style/Crop.ActionButton">
@@ -12,7 +12,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:foreground="@drawable/item_effect"
+        android:foreground="?android:attr/selectableItemBackground"
         android:background="@color/colorPrimary"
         android:id="@+id/btn_done"
         style="@style/Crop.ActionButton">

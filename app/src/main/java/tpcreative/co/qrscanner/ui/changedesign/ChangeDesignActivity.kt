@@ -1,12 +1,20 @@
 package tpcreative.co.qrscanner.ui.changedesign
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Path
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
@@ -14,11 +22,15 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.extension.storeBitmap
+import tpcreative.co.qrscanner.common.extension.*
+import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
-import tpcreative.co.qrscanner.model.ChangeDesignModel
+import tpcreative.co.qrscanner.model.EnumChangeDesignType
+import tpcreative.co.qrscanner.model.EnumShape
 import tpcreative.co.qrscanner.model.EnumView
+import tpcreative.co.qrscanner.model.LogoModel
 import tpcreative.co.qrscanner.ui.changedesign.fragment.*
+import java.io.File
 
 
 class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelectedListener{
@@ -29,7 +41,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     private lateinit var viewColor : ColorFragment
     private lateinit var viewDots : DotsFragment
     private lateinit var viewEyes : EyesFragment
-    private lateinit var viewLogo : LogoFragment
+    lateinit var viewLogo : LogoFragment
     private lateinit var viewText : TextFragment
     private val mFragments : MutableList<Fragment> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +49,31 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         binding = ActivityChangeDesignBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initUI()
-        registerLayout()
+        if (savedInstanceState != null) {
+            viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
+            viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
+            viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
+            viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
+            viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
+            val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
+            viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
+            Utils.Log(TAG,"State instance saveInstanceState has value")
+            if (mUri.isExist){
+                viewModel.uri = mUri
+                val bitmap = viewModel.uri?.let {
+                    Utils.Log(TAG,"value uri ${it}")
+                    contentResolver.openInputStream(it).use { data ->
+                        BitmapFactory.decodeStream(data)
+                    }
+                }
+                viewModel.onUpdateBitmap(bitmap)
+            }
+            registerLayout()
+        }else{
+            Utils.Log(TAG,"State instance saveInstanceState null")
+            registerLayout()
+        }
+        onGenerateQRReview()
     }
 
     private fun loadFragment(homeFragment: Fragment) {
@@ -61,65 +97,110 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         mFragments.add(viewEyes)
         mFragments.add(viewLogo)
         mFragments.add(viewText)
-        viewLogo.setSelectedIndex(viewModel.logoSelectedIndex)
+        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
+        Utils.Log(TAG,"State instance register ${viewModel.indexLogo.toJson()}")
         viewLogo.setBinding(object  : LogoFragment.ListenerLogoFragment{
-            override fun logoSelectedIndex(index: Int) {
-                viewModel.logoSelectedIndex = index
-                onHandleResponse()
+            override fun logoSelectedIndex(index: Int,selectedObject : LogoModel) {
+                Utils.Log(TAG,"Selected index ${selectedObject.toJson()}")
+                if (selectedObject.enumChangeDesignType ==EnumChangeDesignType.VIP){
+                    viewModel.indexLogo = selectedObject
+                    viewModel.selectedIndexOnReview()
+                    onGetGallery()
+                }else{
+                    viewModel.onCleanBitMap()
+                    viewModel.indexLogo = selectedObject
+                    viewModel.selectedIndexOnReview()
+                    onGenerateQRReview()
+                }
             }
 
-            override fun getData(): MutableList<ChangeDesignModel> {
+            override fun logoSelectedIndex(
+                index: Int,
+                enumShape: EnumShape?,
+                selectedObject: LogoModel
+            ) {
+                viewModel.indexLogo = selectedObject
+                viewModel.shape = enumShape ?: EnumShape.ORIGINAL
+                viewModel.selectedIndexOnReview()
+                onGenerateQRReview()
+            }
+
+            override fun getData(): MutableList<LogoModel> {
                 return viewModel.mLogoList
             }
         })
-//        viewLogo.load()
-        onVisit(EnumView.ALL_HIDDEN)
-    }
-
-    private fun onHandleResponse(){
-        viewModel.onGenerateQR {
-            binding.imgQRCode.setImageDrawable(it)
+        Utils.Log(TAG,"State instance enumview ${viewModel.enumView.name}")
+        Utils.Log(TAG,"State instance index ${viewModel.index}")
+        onVisit(viewModel.enumView)
+        if (viewModel.index>=0){
+            loadFragment(mFragments[viewModel.index])
         }
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith("onBackPressedDispatcher.onBackPressed()"))
-    override fun onBackPressed() {
-        super.onBackPressed()
-        onBackPressedDispatcher.onBackPressed() //with this line
+    fun onGenerateQRReview(){
+        viewModel.onGenerateQR {mData->
+            val mFile = viewModel.create.uuId?.findImageName()
+            if (mFile!=null && viewModel.bitmap==null && !viewModel.isChangedReview()){
+                binding.imgQRCode.setImageURI(mFile.toUri())
+            }else{
+                binding.imgQRCode.setImageDrawable(mData)
+            }
+        }
     }
 
     fun onVisit(view : EnumView){
+        viewModel.enumView = view
         when(view){
             EnumView.TEMPLATE ->{
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.template)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar.tvCancel.text = getString(R.string.template)
+                binding.doneCancelBar.btnSave.text = getString(R.string.done)
+                binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
+                binding.doneCancelBar.imgDone.visibility = View.VISIBLE
             }
             EnumView.COLOR ->{
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.color)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar.tvCancel.text = getString(R.string.color)
+                binding.doneCancelBar.btnSave.text = getString(R.string.done)
+                binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
+                binding.doneCancelBar.imgDone.visibility = View.VISIBLE
             }
             EnumView.DOTS ->{
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.dots)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar.tvCancel.text = getString(R.string.dots)
+                binding.doneCancelBar.btnSave.text = getString(R.string.done)
+                binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
+                binding.doneCancelBar.imgDone.visibility = View.VISIBLE
             }
             EnumView.EYES ->{
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.eyes)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar.tvCancel.text = getString(R.string.eyes)
+                binding.doneCancelBar.btnSave.text = getString(R.string.done)
+                binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
+                binding.doneCancelBar.imgDone.visibility = View.VISIBLE
             }
             EnumView.LOGO ->{
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.logo)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
-//                val drawable = ContextCompat.getDrawable(this, R.drawable.ic_close)
-//                binding.doneCancelBar?.tvCancel?.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+                binding.doneCancelBar.tvCancel.text = getString(R.string.logo)
+                binding.doneCancelBar.btnSave.text = getString(R.string.done)
+                binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
+                binding.doneCancelBar.imgDone.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.INVISIBLE
             }
             EnumView.TEXT ->{
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.text)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.done)
+                binding.doneCancelBar.tvCancel.text = getString(R.string.text)
+                binding.doneCancelBar.btnSave.text = getString(R.string.done)
+                binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
+                binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
+                binding.doneCancelBar.imgDone.visibility = View.VISIBLE
             }
             else -> {
                 binding.recyclerView.visibility = View.VISIBLE
-                binding.doneCancelBar?.tvCancel?.text = getString(R.string.cancel)
-                binding.doneCancelBar?.tvDone?.text = getString(R.string.save)
+                binding.doneCancelBar.tvCancel.text = getString(R.string.change_design)
+                binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_baseline_arrow_back_24))
+                binding.doneCancelBar.btnSave.text = getString(R.string.save)
+                binding.doneCancelBar.btnSave.visibility = View.VISIBLE
+                binding.doneCancelBar.imgDone.visibility = View.INVISIBLE
             }
         }
     }
@@ -134,6 +215,8 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     override fun onClickItem(position: Int) {
         val mType = adapter?.getItem(position)
+        viewModel.index = position
+        Utils.Log(TAG,"State instance click $position")
         mType?.enumView?.let { onVisit(it) }
         loadFragment(mFragments[position])
     }
@@ -158,16 +241,69 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(ConstantKey.key_saved, viewModel.enumView.name)
-        outState.putInt(ConstantKey.key_logo_is_selected,viewModel.logoSelectedIndex)
-        Utils.Log(TAG,"State saved ${viewModel.enumView.name}")
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX,viewModel.index)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_VIEW, viewModel.enumView.name)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO,viewModel.indexLogo)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignSave)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignReview)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_URI,"${viewModel.uri}")
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE,viewModel.shape.name)
+        Utils.Log(TAG,"State instance save ${viewModel.indexLogo.toJson()}")
+        Utils.Log(TAG,"State instance save index ${viewModel.index}")
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
+        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
+        viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
+        viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
+        viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
+        val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
+        if (mUri.isExist){
+            viewModel.uri = mUri
+        }
+        viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
+        Utils.Log(TAG,"State instance restore ${viewModel.indexLogo.toJson()}")
+        Utils.Log(TAG,"State instance restore index ${viewModel.index}")
         super.onRestoreInstanceState(savedInstanceState)
-        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.key_saved) ?:EnumView.ALL_HIDDEN.name)
-        viewModel.logoSelectedIndex = savedInstanceState.getInt(ConstantKey.key_logo_is_selected)
-        Utils.Log(TAG,"State restore ${viewModel.enumView.name}")
+    }
+
+    private val pickGalleryForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_PICK")
+            beginCrop(result.data?.data)
+        }
+    }
+
+    private fun beginCrop(source: Uri?) {
+        val destination = Uri.fromFile(File(this.cacheDir, "cropped"))
+        cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start(this,true))
+    }
+
+    private val cropForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG, "REQUEST_CROP")
+            handleCrop(result.resultCode, result.data)
+        }
+    }
+
+    private fun handleCrop(resultCode: Int, result: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val mData: Uri? = Crop.getOutputUri(result)
+            Utils.Log(TAG,"Result cropped ${mData.toString()}")
+            val bitmap = mData?.let {
+                viewModel.uri = mData
+                contentResolver.openInputStream(it).use { data ->
+                    BitmapFactory.decodeStream(data)
+                }
+            }
+            viewModel.onUpdateBitmap(bitmap)
+            onGenerateQRReview()
+        }
+    }
+
+    private fun onGetGallery() {
+        pickGalleryForResult.launch(Crop.getImagePicker())
     }
 
     object Circle : QrVectorPixelShape {

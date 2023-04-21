@@ -5,7 +5,6 @@ import tpcreative.co.qrscanner.common.HistorySingleton
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.HistoryModel
-import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 
 fun HistoryFragment.initUI(){
     setupViewModel()

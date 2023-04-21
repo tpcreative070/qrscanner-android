@@ -5,7 +5,10 @@ import tpcreative.co.qrscanner.ui.backup.BackupViewModel
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignViewModel
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 import tpcreative.co.qrscanner.ui.help.HelpViewModel
+import tpcreative.co.qrscanner.ui.history.HistoryViewModel
 import tpcreative.co.qrscanner.ui.review.ReviewViewModel
+import tpcreative.co.qrscanner.ui.save.SaveViewModel
+import tpcreative.co.qrscanner.ui.scanner.ScannerViewModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultViewModel
 import tpcreative.co.qrscanner.ui.supportedcode.SupportedCodeViewModel
 import tpcreative.co.qrscanner.ui.tipsscanning.TipsScanningViewModel

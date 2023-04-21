@@ -1,15 +1,18 @@
 package tpcreative.co.qrscanner.common.extension
 
+import android.R.attr
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.net.Uri
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
-import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import java.io.File
+
 
 fun Bitmap.addPaddingTopForBitmap(paddingTop: Int): Bitmap? {
     try {
@@ -76,9 +79,32 @@ fun Bitmap.storeBitmap() : Uri?{
     val mUri = QRScannerApplication.getInstance().getUriForFile(file)
     mUri?.run {
         QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {
-            this@storeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, this)
+            this@storeBitmap.compress(Bitmap.CompressFormat.PNG, 100, this)
             close()
         }
     }
     return mUri
 }
+
+fun Bitmap.storeBitmap(fileName : String) : Uri?{
+    val imageFolder = QRScannerApplication.getInstance().getPathFolder()?.let { File(it) }
+    imageFolder?.mkdirs()
+    val file = File(imageFolder, "$fileName shared_design_qr_code.png")
+    val mUri = QRScannerApplication.getInstance().getUriForFile(file)
+    mUri?.run {
+        QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {
+            this@storeBitmap.compress(Bitmap.CompressFormat.PNG, 100, this)
+            close()
+        }
+    }
+    return mUri
+}
+
+fun Bitmap.toCircular(context: Context, newCornerRadius: Float, isCircle :Boolean): RoundedBitmapDrawable {
+    return RoundedBitmapDrawableFactory.create(context.resources, this).apply {
+        isCircular = isCircle
+        val roundPx = this@toCircular.width  * newCornerRadius
+        cornerRadius = roundPx
+    }
+}
+

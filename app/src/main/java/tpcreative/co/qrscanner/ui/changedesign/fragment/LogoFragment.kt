@@ -1,14 +1,20 @@
 package tpcreative.co.qrscanner.ui.changedesign.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.BaseFragment
 import tpcreative.co.qrscanner.common.ListenerView
 import tpcreative.co.qrscanner.common.Utils
@@ -19,21 +25,25 @@ import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.databinding.FragmentEyesBinding
 import tpcreative.co.qrscanner.databinding.FragmentLogoBinding
 import tpcreative.co.qrscanner.model.ChangeDesignModel
+import tpcreative.co.qrscanner.model.EnumShape
+import tpcreative.co.qrscanner.model.LogoModel
 
 class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     private lateinit var binding : FragmentLogoBinding
     private lateinit var mContext : Context
     private lateinit var adapter: LogoFragmentAdapter
-    private lateinit var mList : MutableList<ChangeDesignModel>
+    private lateinit var mList : MutableList<LogoModel>
     private lateinit var mInflater: LayoutInflater
-    private var logoIndexSelected : Int = -1
-    private lateinit var listener : ListenerLogoFragment
+    private var index : LogoModel? = null
+    private var listener : ListenerLogoFragment? = null
+    private var currentPosition  = 0
+    private var shape : EnumShape = EnumShape.ORIGINAL
 
     override fun getLayoutId(): Int {
         return 0
     }
 
-    override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View? {
+    override fun getLayoutId(inflater: LayoutInflater?, viewGroup: ViewGroup?): View {
         binding = FragmentLogoBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -42,6 +52,38 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
         super.work()
         mContext = requireContext()
         mInflater = requireActivity().layoutInflater
+        binding.rlOriginal.setOnClickListener {
+            binding.rlOriginal.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_selected_highlight)
+            binding.rlSquare.background = null
+            binding.rlCircle.background =null
+            shape = EnumShape.ORIGINAL
+            listener?.logoSelectedIndex(currentPosition,shape,mList[currentPosition])
+        }
+        binding.rlSquare.setOnClickListener {
+            binding.rlOriginal.background = null
+            binding.rlSquare.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_selected_highlight)
+            binding.rlCircle.background =null
+            shape = EnumShape.SQUARE
+            listener?.logoSelectedIndex(currentPosition,shape,mList[currentPosition])
+        }
+        binding.rlCircle.setOnClickListener {
+            binding.rlOriginal.background = null
+            binding.rlSquare.background = null
+            binding.rlCircle.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_selected_highlight)
+            shape = EnumShape.CIRCLE
+            listener?.logoSelectedIndex(currentPosition,shape,mList[currentPosition])
+        }
+        when(shape){
+            EnumShape.ORIGINAL ->{
+                binding.rlOriginal.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_selected_highlight)
+            }
+            EnumShape.SQUARE ->{
+                binding.rlSquare.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_selected_highlight)
+            }
+            else -> {
+                binding.rlCircle.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_selected_highlight)
+            }
+        }
         load()
     }
 
@@ -54,13 +96,14 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
         this.listener = listenerView
     }
 
-    fun setSelectedIndex(index : Int){
-        this.logoIndexSelected = index
+    fun setSelectedIndex(index : LogoModel,mShare : EnumShape){
+        this.index = index
+        this.shape = mShare
     }
 
     private fun initRecycleView(layoutInflater: LayoutInflater) {
         adapter = LogoFragmentAdapter(layoutInflater, mContext, this)
-        var mNoOfColumns = Utils.calculateNoOfColumns(mContext,80F)
+        var mNoOfColumns = Utils.calculateNoOfColumns(mContext,90F)
         if(context?.isLandscape() == true){
             mNoOfColumns = Utils.calculateNoOfColumns(mContext,160F)
         }
@@ -72,16 +115,19 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     }
 
     override fun onClickItem(position: Int) {
-        listener.logoSelectedIndex(position)
-        this.logoIndexSelected = position
+        this.currentPosition = position
+        listener?.logoSelectedIndex(position,mList[position])
+        this.index = mList[position]
         Utils.Log("TAG","index $position")
         reload()
     }
 
     private fun reload(){
+        Utils.Log(TAG,"Index logo ${index?.toJson()}")
         mList = mList.mapIndexed { index, data ->
-            if (index == logoIndexSelected) data.apply {
+            if (data.enumIcon == this.index?.enumIcon) data.apply {
                 isSelected = true
+                currentPosition = index
                 Utils.Log("TAG","Selected at $index")
             }
             else data.apply {
@@ -94,14 +140,13 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
 
     private fun initializedData(){
         mList = mutableListOf()
-        mList.addAll(listener.getData())
+        listener?.getData()?.let { mList.addAll(it) }
     }
 
     fun show(){
         Utils.Log("TAG","Show data ${mList.toJson()}")
         adapter.setDataSource(mList)
     }
-
     private fun load(){
         initRecycleView(mInflater)
         initializedData()
@@ -109,7 +154,8 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     }
 
     interface ListenerLogoFragment {
-        fun logoSelectedIndex(index : Int)
-        fun getData() : MutableList<ChangeDesignModel>
+        fun logoSelectedIndex(index : Int, selectedObject :LogoModel)
+        fun logoSelectedIndex(index : Int,enumShape: EnumShape?, selectedObject :LogoModel)
+        fun getData() : MutableList<LogoModel>
     }
 }

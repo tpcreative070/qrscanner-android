@@ -1,57 +1,57 @@
-package tpcreative.co.qrscanner.viewmodel
+package tpcreative.co.qrscanner.ui.save
 import androidx.lifecycle.liveData
-import com.google.api.client.json.Json
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.findImageName
 import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.model.SaveModel
 import tpcreative.co.qrscanner.model.TypeCategories
-import java.util.*
+import tpcreative.co.qrscanner.viewmodel.BaseViewModel
+import java.util.HashMap
 
-class HistoryViewModel : BaseViewModel<HistoryModel>() {
+class SaveViewModel  : BaseViewModel<TypeCategories>(){
     val TAG = this::class.java.name
     var mListCategories: MutableList<TypeCategories> = mutableListOf()
-    var mList: MutableList<HistoryModel> = mutableListOf()
-    var mLatestValue: HistoryModel = HistoryModel()
-    private var i = 0
+    var mList: MutableList<SaveModel> = mutableListOf()
+    var mLatestValue: SaveModel?
     var mFavoriteCategory = TypeCategories(-1,"Favorite")
+    private var i = 0
 
-    private fun getFavorite() : MutableList<HistoryModel> {
-        val mList: MutableList<HistoryModel> = mutableListOf()
-        val mFavoriteList = SQLiteHelper.getHistoryFavoriteItemList(true)
+    private fun getFavorite() : MutableList<SaveModel> {
+        val mList: MutableList<SaveModel> = mutableListOf()
+        val mFavoriteList = SQLiteHelper.getSaveFavoriteItemList(true)
         for (index in mFavoriteList) {
             index.typeCategories = mFavoriteCategory
             mList.add(index)
         }
         mList.sortBy { it.getUpdatedTimeToMilliseconds()}
         mList.reverse()
-        return mList
+        return  mList
     }
-
-    private fun getLatestList(mData: MutableList<HistoryModel>): MutableList<HistoryModel> {
-        val mList: MutableList<HistoryModel> = mutableListOf()
+    private fun getLatestList(mData: MutableList<SaveModel>): MutableList<SaveModel> {
+        val mList: MutableList<SaveModel> = mutableListOf()
         if (mData.size > 0) {
             mLatestValue = mData[0]
             for (index in mData) {
-                if (index.createType == mLatestValue.createType && index.favorite == false) {
-                    index.typeCategories = TypeCategories(0, mLatestValue.createType)
+                if (index.createType == mLatestValue?.createType && index.favorite == false) {
+                    index.typeCategories = TypeCategories(0, mLatestValue?.createType)
                     mList.add(index)
                 }
             }
         }
         mList.sortBy { it.getUpdatedTimeToMilliseconds()}
         mList.reverse()
-        return mList
+        return  mList
     }
 
-    private fun getUniqueList(): MutableMap<String?, HistoryModel?> {
-        val histories = SQLiteHelper.getHistoryList()
-        Utils.Log(TAG, "History list " + Gson().toJson(histories))
-        Utils.Log(TAG, Gson().toJson(histories))
-        val hashMap: MutableMap<String?, HistoryModel?> = HashMap()
-        for (index in histories) {
+    private fun getUniqueList(){
+        val saver = SQLiteHelper.getSaveList()
+        Utils.Log(TAG, "Save list " + Gson().toJson(saver))
+        Utils.Log(TAG, Gson().toJson(saver))
+        val hashMap: MutableMap<String?, SaveModel?> = HashMap()
+        for (index in saver) {
             hashMap[index.createType] = index
         }
         mListCategories.clear()
@@ -60,32 +60,31 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
             mListCategories.add(TypeCategories(i, key))
             i += 1
         }
-        return hashMap
     }
 
-    fun getListGroup(): MutableList<HistoryModel> {
+    fun getListGroup(): MutableList<SaveModel> {
         getUniqueList()
-        val list = SQLiteHelper.getHistoryList()
-        val mList: MutableList<HistoryModel> = mutableListOf()
+        val list = SQLiteHelper.getSaveList()
+        val mLocalList: MutableList<SaveModel> = mutableListOf()
         val mLatestType = getLatestList(list)
         val mFavoriteList = getFavorite()
         Utils.Log(TAG, "Favorite list " + Gson().toJson(mFavoriteList))
         Utils.Log(TAG, "Latest list " + Gson().toJson(mLatestType))
         Utils.Log(TAG, "Latest object " + Gson().toJson(mLatestValue))
         for (index in mListCategories) {
-            for (history in list) {
-                if (index.getType() == history.createType && index.getType() != mLatestValue.createType && history.favorite == false) {
-                    history.typeCategories = index
-                    mList.add(history)
+            for (save in list) {
+                if (index.getType() == save.createType && index.getType() != mLatestValue?.createType && save.favorite == false) {
+                    save.typeCategories = index
+                    mLocalList.add(save)
                 }
             }
         }
-
         /*Added latest list to ArrayList*/
         mFavoriteList.addAll(mLatestType)
-        mFavoriteList.addAll(mList)
+        mFavoriteList.addAll(mLocalList)
         this.mList.clear()
         this.mList.addAll(mFavoriteList)
+        Utils.Log(TAG, "Latest object final ${Gson().toJson(this.mList)}")
         return mFavoriteList
     }
 
@@ -100,13 +99,11 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
     }
 
     fun deleteItem() = liveData(Dispatchers.IO) {
-        mList.let {
+        val list = mList
+        list.let {
             for (index in it) {
-                Utils.Log(TAG,"deleteItem 0")
                 if (index.isDeleted()) {
-                    Utils.Log(TAG,"deleteItem 1")
                     if (index.isChecked()) {
-                        Utils.Log(TAG,"deleteItem 2")
                         SQLiteHelper.onDelete(index)
                     }
                 }
@@ -117,19 +114,33 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
     }
 
     fun deleteEntireItem() = liveData(Dispatchers.IO) {
-        val list = SQLiteHelper.getHistoryList()
+        val list = SQLiteHelper.getSaveList()
         if (list.size>0){
             for (index in list) {
                 Utils.Log(TAG,"deleteItem 0")
                 SQLiteHelper.onDelete(index)
+                onDeleteChangeDesign(index)
             }
         }
         getListGroup()
         emit(true)
     }
 
+    private fun onDeleteChangeDesign(data : SaveModel?){
+        data?.uuId?.findImageName()?.delete()
+        val mData = SQLiteHelper.getDesignQR(data?.uuId)
+        Utils.Log(TAG,"Data change design requesting delete ${mData?.toJson()}")
+        SQLiteHelper.onDelete(mData)
+    }
+
     fun count() : Int{
-        val list = SQLiteHelper.getHistoryList()
+        val list = SQLiteHelper.getSaveList()
         return list.size
     }
+
+    init {
+        mLatestValue = SaveModel()
+    }
+
 }
+

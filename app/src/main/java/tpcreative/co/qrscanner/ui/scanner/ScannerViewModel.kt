@@ -1,4 +1,4 @@
-package tpcreative.co.qrscanner.viewmodel
+package tpcreative.co.qrscanner.ui.scanner
 import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
@@ -11,6 +11,7 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.model.EmptyModel
 import tpcreative.co.qrscanner.model.HistoryModel
+import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 import java.util.HashMap
 
 class ScannerViewModel : BaseViewModel<EmptyModel>(){

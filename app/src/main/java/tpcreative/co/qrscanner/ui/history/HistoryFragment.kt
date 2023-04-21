@@ -29,7 +29,6 @@ import tpcreative.co.qrscanner.databinding.FragmentHistoryBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
-import tpcreative.co.qrscanner.viewmodel.HistoryViewModel
 import java.io.File
 import java.util.*
 

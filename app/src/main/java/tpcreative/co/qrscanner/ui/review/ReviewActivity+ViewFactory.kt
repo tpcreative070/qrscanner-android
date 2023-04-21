@@ -50,28 +50,20 @@ fun ReviewActivity.initUI(){
     binding.imgStandardCircle.setImageResource(R.color.colorAccent)
     loadAds()
     /*Press back button*/
-    if (Build.VERSION.SDK_INT >= 33) {
-        onBackInvokedDispatcher.registerOnBackInvokedCallback(
-            OnBackInvokedDispatcher.PRIORITY_DEFAULT
-        ) {
-            showAds()
-        }
-    } else {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    showAds()
-                }
-            })
-    }
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showAds()
+            }
+        })
 
     binding.llChangeDesign.setOnClickListener {
-        Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+        onOpenChangeDesign()
     }
     binding.imgResult.setOnClickListener {
         if (!isBarCode()){
-            //Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+            onOpenChangeDesign()
         }
     }
     onHandlerIntent()
@@ -145,7 +137,7 @@ private fun ReviewActivity.onHandlerIntent() {
 
 private fun ReviewActivity.beginCrop(source: Uri?) {
     val destination = Uri.fromFile(File(cacheDir, "cropped"))
-    cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start((this)))
+    cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start((this),false))
 }
 
 private fun ReviewActivity.setupViewModel() {
@@ -320,6 +312,11 @@ fun ReviewActivity.getIntentData(){
 
 suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat) = withContext(Dispatchers.IO){
     var mBm: Bitmap?
+    mergeUUID()
+    if (create?.uuId?.findImageName()?.isFile==true){
+        processDrawnDone = true
+        return@withContext
+    }
     bitmap?.let {data ->
          if (BarcodeFormat.QR_CODE != format && !viewModel.isSharedIntent){
              mBm = data.addPaddingLeftForBitmap(50)
