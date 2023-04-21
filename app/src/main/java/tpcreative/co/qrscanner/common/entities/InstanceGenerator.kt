@@ -386,4 +386,5 @@ abstract class InstanceGenerator : RoomDatabase() {
             return instance
         }
     }
+    
 }
