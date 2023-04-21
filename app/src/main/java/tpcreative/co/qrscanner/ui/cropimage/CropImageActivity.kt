@@ -70,23 +70,14 @@ class CropImageActivity : BaseActivitySlide(){
         dialog = ProgressDialog.progressDialog(this,R.string.loading.toText())
         setupViews()
         onHandlerIntent()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            onBackInvokedDispatcher.registerOnBackInvokedCallback(
-                OnBackInvokedDispatcher.PRIORITY_DEFAULT
-            ) {
-                setResult(RESULT_CANCELED)
-                finish()
-            }
-        } else {
-            onBackPressedDispatcher.addCallback(
-                this,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        setResult(RESULT_CANCELED)
-                        finish()
-                    }
-                })
-        }
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    setResult(RESULT_CANCELED)
+                    finish()
+                }
+            })
     }
 
     private fun customCompressImage(images : File?) {

@@ -33,8 +33,8 @@ internal class SquareVectorShape(
     val corners = floatArrayOf(
         15f, 15f,   // Top left radius in px
         15f, 15f,   // Top right radius in px
-        15f,  15f,     // Bottom right radius in px
-        15f,  15f      // Bottom left radius in px
+        15f, 15f,     // Bottom right radius in px
+        15f, 15f      // Bottom left radius in px
     )
     override fun createPath(size: Float, neighbors: Neighbors): Path = Path().apply {
         addRoundRect(

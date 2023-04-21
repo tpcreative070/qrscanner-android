@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
@@ -21,9 +22,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
-import tpcreative.co.qrscanner.common.extension.serializable
-import tpcreative.co.qrscanner.common.extension.storeBitmap
-import tpcreative.co.qrscanner.common.extension.toJson
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
 import tpcreative.co.qrscanner.model.EnumChangeDesignType
@@ -56,21 +55,25 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
             viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
             viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
             viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
-            viewModel.uri = Uri.parse(savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_URI))
+            val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
             viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
             Utils.Log(TAG,"State instance saveInstanceState has value")
-            val bitmap = viewModel.uri?.let {
-                contentResolver.openInputStream(it).use { data ->
-                    BitmapFactory.decodeStream(data)
+            if (mUri.isExist){
+                viewModel.uri = mUri
+                val bitmap = viewModel.uri?.let {
+                    Utils.Log(TAG,"value uri ${it}")
+                    contentResolver.openInputStream(it).use { data ->
+                        BitmapFactory.decodeStream(data)
+                    }
                 }
+                viewModel.onUpdateBitmap(bitmap)
             }
-            viewModel.onUpdateBitmap(bitmap)
             registerLayout()
-            onGenerateQRReview()
         }else{
             Utils.Log(TAG,"State instance saveInstanceState null")
             registerLayout()
         }
+        onGenerateQRReview()
     }
 
     private fun loadFragment(homeFragment: Fragment) {
@@ -135,9 +138,13 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     }
 
     fun onGenerateQRReview(){
-        viewModel.onGenerateQR {
-            binding.imgQRCode.setImageDrawable(null)
-            binding.imgQRCode.setImageDrawable(it)
+        viewModel.onGenerateQR {mData->
+            val mFile = viewModel.create.uuId?.findImageName()
+            if (mFile!=null && viewModel.bitmap==null && !viewModel.isChangedReview()){
+                binding.imgQRCode.setImageURI(mFile.toUri())
+            }else{
+                binding.imgQRCode.setImageDrawable(mData)
+            }
         }
     }
 
@@ -239,8 +246,8 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO,viewModel.indexLogo)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignSave)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignReview)
-        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_URI,viewModel.uri.toString())
-        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_SHAPE,viewModel.shape.name)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_URI,"${viewModel.uri}")
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE,viewModel.shape.name)
         Utils.Log(TAG,"State instance save ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance save index ${viewModel.index}")
     }
@@ -251,7 +258,10 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
         viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
         viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
-        viewModel.uri = Uri.parse(savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_URI))
+        val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
+        if (mUri.isExist){
+            viewModel.uri = mUri
+        }
         viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
         Utils.Log(TAG,"State instance restore ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance restore index ${viewModel.index}")

@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/material_gray_200"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.changedesign.ChangeDesignActivity">
@@ -37,8 +38,8 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgQRCode"
                     android:layout_centerInParent="true"
-                    android:layout_width="300dp"
-                    android:layout_height="300dp"/>
+                    android:layout_width="@dimen/icon_size_250"
+                    android:layout_height="@dimen/icon_size_250"/>
             </RelativeLayout>
 
             <RelativeLayout

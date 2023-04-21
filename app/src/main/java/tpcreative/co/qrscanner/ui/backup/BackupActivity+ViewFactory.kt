@@ -67,21 +67,13 @@ fun BackupActivity.initUI(){
     }
 
     /*Press back button*/
-    if (Build.VERSION.SDK_INT >= 33) {
-        onBackInvokedDispatcher.registerOnBackInvokedCallback(
-            OnBackInvokedDispatcher.PRIORITY_DEFAULT
-        ) {
-            showAds()
-        }
-    } else {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    showAds()
-                }
-            })
-    }
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showAds()
+            }
+        })
     loadAds()
 }
 

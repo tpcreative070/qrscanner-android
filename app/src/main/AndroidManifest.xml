@@ -25,7 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="allowBackup">
+        android:enableOnBackInvokedCallback="true"
+        tools:replace="allowBackup"
+        tools:targetApi="tiramisu">
         <activity
             android:name=".ui.changedesign.ChangeDesignActivity"
             android:label="@string/change_design"

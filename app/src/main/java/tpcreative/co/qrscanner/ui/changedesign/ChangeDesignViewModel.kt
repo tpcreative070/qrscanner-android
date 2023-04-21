@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import com.github.alexzhirkevich.customqrgenerator.QrData
-import com.github.alexzhirkevich.customqrgenerator.style.Color
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
@@ -57,6 +56,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         changeDesignSave = ChangeDesignModel(mDesign)
                         changeDesignReview =  ChangeDesignModel(mDesign)
                         changeDesignOriginal = ChangeDesignModel(mDesign)
+                        shape = mDesign.logo?.enumShape ?: EnumShape.ORIGINAL
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
                     }catch (e : Exception){
                         e.printStackTrace()
@@ -184,6 +184,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
         val mDataResult = changeDesignReview.logo
         Utils.Log(TAG,"Generate icon ${mDataResult?.toJson()}")
+        Utils.Log(TAG,"Generate icon => shapre ${this.shape.name}")
         val options = QrVectorOptions.Builder()
             .setPadding(.15f)
             .setBackground(
@@ -214,7 +215,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         val mDrawable: Drawable?
         val shape : QrVectorLogoShape = when(this.shape){
             EnumShape.SQUARE ->{
-                QrVectorLogoShape.Square
+                QrVectorLogoShape.RoundCorners(0.2f)
             }
             EnumShape.CIRCLE ->{
                 QrVectorLogoShape.Circle
@@ -233,8 +234,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             options.setLogo(
                 QrVectorLogo(
                     drawable = mDrawable,
-                    size = .22f,
-                    padding = QrVectorLogoPadding.Natural(.06f),
+                    size = .20f,
+                    padding = QrVectorLogoPadding.Natural(.0f),
                     shape = shape,
                     backgroundColor = QrVectorColor
                         .Solid(R.color.white.stringHexNoTransparency.toColorInt())
@@ -242,22 +243,22 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             )
         }else{
             if (bitmap!=null){
-                when(this.shape){
+                mDrawable = when(this.shape){
                     EnumShape.CIRCLE ->{
-                        mDrawable = bitmap?.toCircular(QRScannerApplication.getInstance(),15f)
+                        bitmap?.toCircular(QRScannerApplication.getInstance(),0.06f,true)
                     }
                     EnumShape.SQUARE ->{
-                        mDrawable = bitmap?.toCircular(QRScannerApplication.getInstance(),50f)
+                        bitmap?.toCircular(QRScannerApplication.getInstance(),0.019f,false)
                     }
                     else -> {
-                        mDrawable = bitmap?.toDrawable(QRScannerApplication.getInstance().resources)
+                        bitmap?.toDrawable(QRScannerApplication.getInstance().resources)
                     }
                 }
                 options.setLogo(
                     QrVectorLogo(
                         drawable = mDrawable,
-                        size = .22f,
-                        padding = QrVectorLogoPadding.Natural(.06f),
+                        size = .20f,
+                        padding = QrVectorLogoPadding.Natural(.0f),
                         shape = shape,
                         backgroundColor =  QrVectorColor
                             .Solid(R.color.transparent.stringHexNoTransparency.toColorInt())
@@ -338,6 +339,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             }
             EnumView.LOGO ->{
                 changeDesignSave.logo = indexLogo
+                changeDesignSave.logo?.enumShape = shape
             }
             EnumView.TEXT ->{
 
@@ -359,8 +361,15 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
     }
 
-    fun isChanged() : Boolean{
-        if (changeDesignOriginal.toJson() != changeDesignSave.toJson()){
+    fun isChangedSave() : Boolean{
+        if (changeDesignOriginal.toJson() != changeDesignSave.toJson() || shape != changeDesignOriginal.logo?.enumShape){
+            return true
+        }
+        return false
+    }
+
+    fun isChangedReview() : Boolean {
+        if (changeDesignOriginal.toJson() != changeDesignReview.toJson() || shape != changeDesignOriginal.logo?.enumShape){
             return true
         }
         return false

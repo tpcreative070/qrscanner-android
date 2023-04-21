@@ -3,20 +3,15 @@ package tpcreative.co.qrscanner.ui.changedesign
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Build
-import android.text.InputType
 import android.view.LayoutInflater
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.getInputLayout
-import com.afollestad.materialdialogs.input.input
-import com.google.android.material.textfield.TextInputLayout
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
@@ -24,8 +19,6 @@ import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.EnumView
-import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
-import tpcreative.co.qrscanner.ui.scannerresult.updatedTakeNote
 
 fun ChangeDesignActivity.initUI(){
     setupViewModel()
@@ -45,7 +38,7 @@ fun ChangeDesignActivity.initUI(){
     binding.doneCancelBar.rlCancel.setOnClickListener {
        supportFragmentManager.fragments.apply {
             if (this.isEmpty()){
-                if (viewModel.isChanged()){
+                if (viewModel.isChangedSave()){
                     askCancel()
                 }else{
                     finish()
@@ -63,58 +56,32 @@ fun ChangeDesignActivity.initUI(){
         }
     }
 
-    if (Build.VERSION.SDK_INT >= 33) {
-        onBackInvokedDispatcher.registerOnBackInvokedCallback(
-            OnBackInvokedDispatcher.PRIORITY_DEFAULT
-        ) {
-            Utils.Log("ChangeDesign","Hidden view 33")
-            supportFragmentManager.fragments.apply {
-                if (this.isEmpty()){
-                    if (viewModel.isChanged()){
-                        askCancel()
-                    }else{
-                        finish()
-                    }
-                }else{
-                    for (fragment in this) {
-                        supportFragmentManager.beginTransaction().remove(fragment).commit()
-                    }
-                    viewModel.selectedIndexRestore()
-                    viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
-                    onGenerateQRReview()
-                    onClearAction()
-                    Utils.Log("ChangeDesign","Hidden view 0")
-                }
-            }
-        }
-    } else {
-        Utils.Log("ChangeDesign","Register change design")
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    Utils.Log("ChangeDesign","Hidden view 29")
-                    supportFragmentManager.fragments.apply {
-                        if (this.isEmpty()){
-                            if (viewModel.isChanged()){
-                                askCancel()
-                            }else{
-                                finish()
-                            }
+    Utils.Log("ChangeDesign","Register change design")
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Utils.Log("ChangeDesign","Hidden view 29")
+                supportFragmentManager.fragments.apply {
+                    if (this.isEmpty()){
+                        if (viewModel.isChangedSave()){
+                            askCancel()
                         }else{
-                            for (fragment in this) {
-                                supportFragmentManager.beginTransaction().remove(fragment).commit()
-                            }
-                            viewModel.selectedIndexRestore()
-                            viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
-                            onGenerateQRReview()
-                            onClearAction()
-                            Utils.Log("ChangeDesign","Hidden view 1")
+                            finish()
                         }
+                    }else{
+                        for (fragment in this) {
+                            supportFragmentManager.beginTransaction().remove(fragment).commit()
+                        }
+                        Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
+                        viewModel.selectedIndexRestore()
+                        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
+                        onGenerateQRReview()
+                        onClearAction()
                     }
                 }
-            })
-    }
+            } })
+
 
     binding.doneCancelBar.btnSave.setOnClickListener {
         Utils.Log(TAG,"uuid ${viewModel.create.uuId}")
@@ -151,17 +118,8 @@ private fun ChangeDesignActivity.onClearAction(){
 }
 
 private fun ChangeDesignActivity.getIntentData(){
-    viewModel.getIntent(this) {
-        if (it){
-            viewModel.onGenerateQR {mData->
-                val mFile = viewModel.create.uuId?.findImageName()
-                if (mFile!=null){
-                    binding.imgQRCode.setImageURI(mFile.toUri())
-                }else{
-                    binding.imgQRCode.setImageDrawable(mData)
-                }
-            }
-        }
+    viewModel.getIntent(this){
+        Utils.Log(TAG,"Load intent")
     }
 }
 
