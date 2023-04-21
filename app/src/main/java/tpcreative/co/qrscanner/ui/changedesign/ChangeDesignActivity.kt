@@ -25,10 +25,7 @@ import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignBinding
-import tpcreative.co.qrscanner.model.EnumChangeDesignType
-import tpcreative.co.qrscanner.model.EnumShape
-import tpcreative.co.qrscanner.model.EnumView
-import tpcreative.co.qrscanner.model.LogoModel
+import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.fragment.*
 import java.io.File
 
@@ -97,7 +94,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         mFragments.add(viewEyes)
         mFragments.add(viewLogo)
         mFragments.add(viewText)
-        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
+        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
         Utils.Log(TAG,"State instance register ${viewModel.indexLogo.toJson()}")
         viewLogo.setBinding(object  : LogoFragment.ListenerLogoFragment{
             override fun logoSelectedIndex(index: Int,selectedObject : LogoModel) {
@@ -107,7 +104,6 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
                     viewModel.selectedIndexOnReview()
                     onGetGallery()
                 }else{
-                    viewModel.onCleanBitMap()
                     viewModel.indexLogo = selectedObject
                     viewModel.selectedIndexOnReview()
                     onGenerateQRReview()
@@ -139,7 +135,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     fun onGenerateQRReview(){
         viewModel.onGenerateQR {mData->
-            val mFile = viewModel.create.uuId?.findImageName()
+            val mFile = viewModel.create.uuId?.findImageName(EnumImage.QR_CODE)
             if (mFile!=null && viewModel.bitmap==null && !viewModel.isChangedReview()){
                 binding.imgQRCode.setImageURI(mFile.toUri())
             }else{

@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.model.EnumImage
 import java.io.File
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -62,9 +63,12 @@ fun String.createFolder(){
     File(this).mkdirs()
 }
 
-fun String.findImageName() : File?{
+fun String.findImageName(enum: EnumImage) : File?{
     val imageFolder = QRScannerApplication.getInstance().getPathFolder()?.let { File(it) }
-    val mFile = File(imageFolder, "$this shared_design_qr_code.png")
+    var mFile = File(imageFolder, "$this shared_design_qr_code.png")
+    if (enum == EnumImage.LOGO){
+        mFile = File(imageFolder, "$this shared_design_logo_code.png")
+    }
     if (mFile.exists()){
         return mFile
     }

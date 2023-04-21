@@ -7,16 +7,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.findImageName
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.model.*
 
 const val NORMAL = 1
 const val VIP = 2
-class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Context, private val itemSelectedListener: ItemSelectedListener?) : BaseAdapter<LogoModel, BaseHolder<LogoModel>>(inflater) {
+class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Context,val uuId : String, private val itemSelectedListener: ItemSelectedListener?) : BaseAdapter<LogoModel, BaseHolder<LogoModel>>(inflater) {
     private val TAG = LogoFragmentAdapter::class.java.simpleName
     override fun getItemCount(): Int {
         return mDataSource.size

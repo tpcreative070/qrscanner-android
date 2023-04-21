@@ -11,6 +11,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.model.EnumImage
 import java.io.File
 
 
@@ -86,10 +87,13 @@ fun Bitmap.storeBitmap() : Uri?{
     return mUri
 }
 
-fun Bitmap.storeBitmap(fileName : String) : Uri?{
+fun Bitmap.storeBitmap(fileName : String,enumImage : EnumImage) : Uri?{
     val imageFolder = QRScannerApplication.getInstance().getPathFolder()?.let { File(it) }
     imageFolder?.mkdirs()
-    val file = File(imageFolder, "$fileName shared_design_qr_code.png")
+    var file = File(imageFolder, "$fileName shared_design_qr_code.png")
+    if (enumImage == EnumImage.LOGO){
+        file = File(imageFolder, "$fileName shared_design_logo_code.png")
+    }
     val mUri = QRScannerApplication.getInstance().getUriForFile(file)
     mUri?.run {
         QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {

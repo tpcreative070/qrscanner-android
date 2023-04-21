@@ -57,6 +57,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         changeDesignReview =  ChangeDesignModel(mDesign)
                         changeDesignOriginal = ChangeDesignModel(mDesign)
                         shape = mDesign.logo?.enumShape ?: EnumShape.ORIGINAL
+                        bitmap = create.uuId?.findImageName(EnumImage.LOGO)?.toBitmap
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
                     }catch (e : Exception){
                         e.printStackTrace()
@@ -102,82 +103,82 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mLogoList.add(
             LogoModel(
                 EnumIcon.bg_white.icon,
-                EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.bg_white,false,R.color.transparent,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_gallery.icon,
-                EnumIcon.ic_gallery,false,R.color.material_gray_700,false,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
+                EnumIcon.ic_gallery,false,R.color.material_gray_700,EnumTypeIcon.BITMAP,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.design_wifi.icon,
-                EnumIcon.design_wifi,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.design_wifi,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_twitter.icon,
-                EnumIcon.ic_twitter,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_twitter,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_youtube_png.icon,
-                EnumIcon.ic_youtube_png,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_youtube_png,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_whatapp.icon,
-                EnumIcon.ic_whatapp,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_whatapp,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_instagram.icon,
-                EnumIcon.ic_instagram,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_instagram,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_paypal.icon,
-                EnumIcon.ic_paypal,false,R.color.transparent,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_paypal,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_email.icon,
-                EnumIcon.ic_email,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_email,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_message.icon,
-                EnumIcon.ic_message,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_message,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_location.icon,
-                EnumIcon.ic_location,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_location,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_calender.icon,
-                EnumIcon.ic_calender,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_calender,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_contact.icon,
-                EnumIcon.ic_contact,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_contact,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_phone.icon,
-                EnumIcon.ic_phone,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_phone,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_text.icon,
-                EnumIcon.ic_text,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_text,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_network.icon,
-                EnumIcon.ic_network,false,R.color.black,true,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_network,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
     }
 
@@ -224,7 +225,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 QrVectorLogoShape.Default
             }
         }
-        if (mDataResult?.isRequestIcon == true){
+        if (mDataResult?.typeIcon == EnumTypeIcon.RES){
             mDrawable = ContextCompat
                 .getDrawable(context, mDataResult.icon)
             mDrawable?.let {
@@ -241,7 +242,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         .Solid(R.color.white.stringHexNoTransparency.toColorInt())
                 )
             )
-        }else{
+        }
+        else if (mDataResult?.typeIcon == EnumTypeIcon.BITMAP){
             if (bitmap!=null){
                 mDrawable = when(this.shape){
                     EnumShape.CIRCLE ->{
@@ -267,6 +269,9 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 Utils.Log(TAG,"Result cropped bitmap  to drawable")
             }
             Utils.Log(TAG,"Result cropped bitmap nothing")
+        }
+        else{
+           Utils.Log(TAG,"Nothing for icon")
         }
         val mData = QrData.Text(create.code?:"")
         val drawable : Drawable = QrCodeDrawable(mData, options.build(), Charsets.UTF_8)
@@ -358,7 +363,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     fun defaultObject() : LogoModel {
         return LogoModel(
             EnumIcon.bg_white.icon,
-            EnumIcon.bg_white,false,R.color.transparent,false,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+            EnumIcon.bg_white,false,R.color.transparent,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
     }
 
     fun isChangedSave() : Boolean{

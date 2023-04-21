@@ -38,6 +38,7 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     private var listener : ListenerLogoFragment? = null
     private var currentPosition  = 0
     private var shape : EnumShape = EnumShape.ORIGINAL
+    private var uuId : String = ""
 
     override fun getLayoutId(): Int {
         return 0
@@ -96,13 +97,14 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
         this.listener = listenerView
     }
 
-    fun setSelectedIndex(index : LogoModel,mShare : EnumShape){
+    fun setSelectedIndex(index : LogoModel,mShare : EnumShape,uuId :String){
         this.index = index
         this.shape = mShare
+        this.uuId = uuId
     }
 
     private fun initRecycleView(layoutInflater: LayoutInflater) {
-        adapter = LogoFragmentAdapter(layoutInflater, mContext, this)
+        adapter = LogoFragmentAdapter(layoutInflater, mContext, this.uuId,this)
         var mNoOfColumns = Utils.calculateNoOfColumns(mContext,90F)
         if(context?.isLandscape() == true){
             mNoOfColumns = Utils.calculateNoOfColumns(mContext,160F)

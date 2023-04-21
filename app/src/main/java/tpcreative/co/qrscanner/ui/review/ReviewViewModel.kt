@@ -62,7 +62,8 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
     }
 
     fun onDeleteChangeDesign(data : GeneralModel?){
-        data?.uuId?.findImageName()?.delete()
+        data?.uuId?.findImageName(EnumImage.QR_CODE)?.delete()
+        data?.uuId?.findImageName(EnumImage.LOGO)?.delete()
         val mData = SQLiteHelper.getDesignQR(data?.uuId)
         Utils.Log(TAG,"Data change design requesting delete ${mData?.toJson()}")
         SQLiteHelper.onDelete(mData)

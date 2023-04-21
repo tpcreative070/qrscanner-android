@@ -6,6 +6,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.findImageName
 import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.EnumImage
 import tpcreative.co.qrscanner.model.HistoryModel
 import tpcreative.co.qrscanner.model.TypeCategories
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
@@ -131,7 +132,8 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
     }
 
     private fun onDeleteChangeDesign(data : HistoryModel?){
-        data?.uuId?.findImageName()?.delete()
+        data?.uuId?.findImageName(EnumImage.QR_CODE)?.delete()
+        data?.uuId?.findImageName(EnumImage.LOGO)?.delete()
         val mData = SQLiteHelper.getDesignQR(data?.uuId)
         Utils.Log(TAG,"Data change design requesting delete ${mData?.toJson()}")
         SQLiteHelper.onDelete(mData)

@@ -313,7 +313,7 @@ fun ReviewActivity.getIntentData(){
 suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat) = withContext(Dispatchers.IO){
     var mBm: Bitmap?
     mergeUUID()
-    if (create?.uuId?.findImageName()?.isFile==true){
+    if (create?.uuId?.findImageName(EnumImage.QR_CODE)?.isFile==true){
         processDrawnDone = true
         return@withContext
     }

@@ -251,7 +251,7 @@ class ReviewActivity : BaseActivitySlide() {
     suspend fun onGenerateReview(code: String?) =
         withContext(Dispatchers.Main) {
             mergeUUID()
-            val mFile = create?.uuId?.findImageName()
+            val mFile = create?.uuId?.findImageName(EnumImage.QR_CODE)
             if (mFile!=null){
                 binding.imgResult.setImageURI(mFile.toUri())
                 onSavedData()
@@ -317,7 +317,7 @@ class ReviewActivity : BaseActivitySlide() {
     suspend fun onGenerateQRCode(code: String?) =
         withContext(Dispatchers.IO) {
             mergeUUID()
-            val mFile = create?.uuId?.findImageName()
+            val mFile = create?.uuId?.findImageName(EnumImage.QR_CODE)
             if (mFile!=null){
                 mUri = FileProvider.getUriForFile(this@ReviewActivity, BuildConfig.APPLICATION_ID + ".provider", mFile)
                 bitmap = BitmapFactory.decodeFile(mFile.absolutePath)
@@ -383,7 +383,7 @@ class ReviewActivity : BaseActivitySlide() {
 
     private val pickForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val mFile = create?.uuId?.findImageName()
+            val mFile = create?.uuId?.findImageName(EnumImage.QR_CODE)
             if (mFile!=null){
                 Utils.Log(TAG, "Response data")
                 mUri = FileProvider.getUriForFile(this@ReviewActivity, BuildConfig.APPLICATION_ID + ".provider", mFile)

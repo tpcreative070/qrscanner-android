@@ -2,9 +2,7 @@ package tpcreative.co.qrscanner.ui.changedesign
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.os.Build
 import android.view.LayoutInflater
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +16,8 @@ import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.helper.SQLiteHelper
+import tpcreative.co.qrscanner.model.EnumImage
+import tpcreative.co.qrscanner.model.EnumTypeIcon
 import tpcreative.co.qrscanner.model.EnumView
 
 fun ChangeDesignActivity.initUI(){
@@ -49,7 +49,7 @@ fun ChangeDesignActivity.initUI(){
                 }
                 Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
                 viewModel.selectedIndexRestore()
-                viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
+                viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
                 onGenerateQRReview()
                 onClearAction()
             }
@@ -75,7 +75,7 @@ fun ChangeDesignActivity.initUI(){
                         }
                         Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
                         viewModel.selectedIndexRestore()
-                        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape)
+                        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
                         onGenerateQRReview()
                         onClearAction()
                     }
@@ -86,7 +86,14 @@ fun ChangeDesignActivity.initUI(){
     binding.doneCancelBar.btnSave.setOnClickListener {
         Utils.Log(TAG,"uuid ${viewModel.create.uuId}")
         val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,1024, Bitmap.Config.ARGB_8888)
-        val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"")
+        val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"",EnumImage.QR_CODE).apply {
+            if (viewModel.indexLogo.typeIcon == EnumTypeIcon.BITMAP){
+                viewModel.bitmap?.storeBitmap(viewModel.create.uuId?:"",EnumImage.LOGO)
+            }else{
+                /*Delete none icon*/
+                viewModel.create.uuId?.findImageName(EnumImage.LOGO)?.delete()
+            }
+        }
         if (mUri != null) {
             //Utils.onShareImage(this,mUri)
             viewModel.onSaveToDB()
@@ -95,7 +102,7 @@ fun ChangeDesignActivity.initUI(){
         }
     }
 
-    if (viewModel.create.uuId?.findImageName()?.isFile==true){
+    if (viewModel.create.uuId?.findImageName(EnumImage.QR_CODE)?.isFile==true){
         Utils.Log(TAG,"Found file")
     }else{
         Utils.Log(TAG,"Not found")
