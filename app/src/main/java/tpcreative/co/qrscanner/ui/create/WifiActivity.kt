@@ -157,12 +157,6 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
 
     public override fun onResume() {
         super.onResume()
-        if(Utils.isHiddenAds(EnumScreens.CREATE_SMALL)){
-            binding.rlAdsRoot.visibility = View.GONE
-        }
-        if(Utils.isHiddenAds(EnumScreens.CREATE_LARGE)){
-            binding.rlBannerLarger.visibility = View.GONE
-        }
         if (isLoaded){
             checkingShowAds()
         }

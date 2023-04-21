@@ -34,12 +34,6 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_SMALL)){
-            binding.rlAdsRoot.visibility = View.GONE
-        }
-        if(Utils.isHiddenAds(EnumScreens.HELP_FEEDBACK_LARGE)){
-            binding.rlBannerLarger.visibility = View.GONE
-        }
         if (isLoaded){
             loadAds()
         }

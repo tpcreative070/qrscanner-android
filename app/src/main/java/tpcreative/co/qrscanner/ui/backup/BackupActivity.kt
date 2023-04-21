@@ -148,12 +148,6 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
 
     override fun onResume() {
         super.onResume()
-        if(Utils.isHiddenAds(EnumScreens.BACKUP_SMALL)){
-            binding.rlAdsRoot.visibility = View.GONE
-        }
-        if(Utils.isHiddenAds(EnumScreens.BACKUP_LARGE)){
-            binding.rlBannerLarger.visibility = View.GONE
-        }
         if (isLoaded){
             loadAds()
         }

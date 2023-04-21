@@ -40,12 +40,6 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
 
     override fun onResume() {
         super.onResume()
-        if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_SMALL)){
-            binding.rlAdsRoot.visibility = View.GONE
-        }
-        if(Utils.isHiddenAds(EnumScreens.CHANGE_COLOR_LARGE)){
-            binding.rlBannerLarger.visibility = View.GONE
-        }
         if (isLoaded){
             loadAds()
         }

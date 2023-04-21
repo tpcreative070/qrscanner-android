@@ -416,12 +416,6 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
 
     override fun onResume() {
         super.onResume()
-        if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_SMALL)){
-            binding.rlAdsRoot.visibility = View.GONE
-        }
-        if(Utils.isHiddenAds(EnumScreens.SCANNER_RESULT_LARGE)){
-            binding.rlBannerLarger.visibility = View.GONE
-        }
         if (isLoaded){
             loadAds()
         }
