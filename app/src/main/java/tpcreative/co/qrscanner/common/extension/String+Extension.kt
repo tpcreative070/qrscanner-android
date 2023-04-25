@@ -74,3 +74,8 @@ fun String.findImageName(enum: EnumImage) : File?{
     }
     return null
 }
+
+val String.changedDesignColor : String get() = Utils.getChangedDesignColor() ?: ""
+
+val String.putChangedDesignColor: Unit
+    get() = Utils.setChangedDesignColor(this)

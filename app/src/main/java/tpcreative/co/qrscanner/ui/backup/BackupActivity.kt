@@ -28,6 +28,7 @@ class BackupActivity : BaseGoogleApi(), BackupSingletonListener {
         super.onCreate(savedInstanceState)
         binding = ActivityBackupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.BACKUP_SMALL,this)
         initUI()
     }
 

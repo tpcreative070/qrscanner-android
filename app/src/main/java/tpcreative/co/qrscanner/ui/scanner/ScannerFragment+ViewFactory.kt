@@ -24,7 +24,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.ResponseSingleton
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.isLandscape
+import tpcreative.co.qrscanner.common.extension.isPortrait
 import tpcreative.co.qrscanner.common.extension.openAppSystemSettings
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -139,7 +139,7 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
     var mRequestRectFocus = requestRectFocus
     // load image
     var mRespect : RectF? =  null
-    if (isLandscape()){
+    if(!isPortrait()){
         mRespect = RectF(binding.viewCrop.left.toFloat(),binding.viewCrop.top.toFloat(),binding.viewCrop.right.toFloat(),binding.viewCrop.bottom.toFloat())
         if (Utils.getFrameRectLandscape()==null){
             Utils.setFrameRectLandscape(mRespect)
@@ -161,7 +161,7 @@ fun ScannerFragment.initCropView(requestRectFocus : RectF?, rectBitMap : Rect){
 private val ScannerFragment.mMoveUpCallback: MoveUpCallback
     get() = object : MoveUpCallback {
             override fun onSuccess(width: Int, height: Int,rectF: RectF) {
-                if (isLandscape()){
+                if(!isPortrait()){
                     Utils.setFrameRectLandscape(rectF)
                 }else{
                     Utils.setFrameRectPortrait(rectF)

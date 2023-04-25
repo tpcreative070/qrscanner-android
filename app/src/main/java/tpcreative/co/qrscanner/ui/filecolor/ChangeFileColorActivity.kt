@@ -27,6 +27,7 @@ class ChangeFileColorActivity : BaseActivitySlide(), ChangeFileColorAdapter.Item
         super.onCreate(savedInstanceState)
         binding = ActivityChageFileColorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.CHANGE_COLOR_SMALL,this)
         initUI()
 
     }

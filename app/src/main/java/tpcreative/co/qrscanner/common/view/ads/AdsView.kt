@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.afollestad.materialdialogs.utils.MDUtil.isLandscape
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
+import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
@@ -64,7 +65,10 @@ class AdsView  : View{
             QRScannerApplication.getInstance().getMaximumBannerHeight())
         params.gravity = Gravity.CENTER or Gravity.BOTTOM
         parent.orientation =  LinearLayout.VERTICAL
-        parent.addView(mRemoveSmallAds)
+        val mVersion = ServiceManager.getInstance().mVersion
+        if (mVersion?.hiddenRemoveSmallAds != true){
+            parent.addView(mRemoveSmallAds)
+        }
         parent.addView(mSmallAds)
         parent.layoutParams = params
         return parent
@@ -129,9 +133,29 @@ class AdsView  : View{
         }
         parent.orientation = LinearLayout.HORIZONTAL
         parent.layoutParams = params
-        parent.addView(mLargeAds)
-        parent.addView(mRemoveLargeAds)
+        val mVersion = ServiceManager.getInstance().mVersion
+        if (mVersion?.hiddenRemoveLargeAds == true){
+            val mLargeAdsNoRemoved = createLargeAdsLayoutWithNoRemoved()
+            parent.addView(mLargeAdsNoRemoved)
+        }else{
+            parent.addView(mLargeAds)
+            parent.addView(mRemoveLargeAds)
+        }
         parent.margin(top = 5f, bottom = 10f.px.toFloat())
+        return parent
+    }
+
+    private fun createLargeAdsLayoutWithNoRemoved() : RelativeLayout{
+        val parent = RelativeLayout(QRScannerApplication.getInstance())
+        val params = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            addRule(RelativeLayout.CENTER_IN_PARENT,mLargeAds.id)
+        }
+        parent.gravity = Gravity.CENTER
+        parent.layoutParams = params
+        parent.addView(mLargeAds)
         return parent
     }
 
@@ -141,10 +165,13 @@ class AdsView  : View{
             250F.px)
         parent.orientation = LinearLayout.VERTICAL
         parent.gravity = Gravity.CENTER
-        if (context.isLandscape()){
-            parent.margin(left = (QRScannerApplication.getInstance().getWidth()/3.5).toFloat())
-        }else{
-            parent.margin(left = 5f.px.toFloat())
+        val mVersion = ServiceManager.getInstance().mVersion
+        if (mVersion?.hiddenRemoveLargeAds != true){
+            if (context.isPortrait()){
+                parent.margin(left = 5f.px.toFloat())
+            }else{
+                parent.margin(left = (QRScannerApplication.getInstance().getWidth()/3.5).toFloat())
+            }
         }
         parent.setBackgroundColor(ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.lightAds))
         return parent

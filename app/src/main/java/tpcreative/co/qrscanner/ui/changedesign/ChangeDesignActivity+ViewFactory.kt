@@ -30,9 +30,7 @@ fun ChangeDesignActivity.initUI(){
             for (fragment in this) {
                 supportFragmentManager.beginTransaction().remove(fragment).commit()
             }
-            viewModel.selectedIndexOnSave()
-            onGenerateQRReview()
-            onClearAction()
+            onSaveAction()
         }
     }
     binding.doneCancelBar.rlCancel.setOnClickListener {
@@ -47,10 +45,7 @@ fun ChangeDesignActivity.initUI(){
                 for (fragment in this) {
                     supportFragmentManager.beginTransaction().remove(fragment).commit()
                 }
-                Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
-                viewModel.selectedIndexRestore()
-                viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
-                onGenerateQRReview()
+                onRestoreAction()
                 onClearAction()
             }
         }
@@ -74,9 +69,7 @@ fun ChangeDesignActivity.initUI(){
                             supportFragmentManager.beginTransaction().remove(fragment).commit()
                         }
                         Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
-                        viewModel.selectedIndexRestore()
-                        viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
-                        onGenerateQRReview()
+                        onRestoreAction()
                         onClearAction()
                     }
                 }
@@ -118,6 +111,27 @@ fun ChangeDesignActivity.initUI(){
     binding.doneCancelBar.btnSave.addCircleRipple()
 }
 
+fun ChangeDesignActivity.onRestoreAction(){
+    Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
+    viewModel.selectedIndexRestore()
+    when(viewModel.enumView){
+        EnumView.LOGO ->{
+            viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
+        }
+        EnumView.COLOR ->{
+            viewColor.setSelectedIndex(viewModel.indexColor.mapColor,viewModel.isOpenColorPicker,viewModel.enumType)
+        }
+        else -> {}
+    }
+    onGenerateQRReview()
+}
+
+fun ChangeDesignActivity.onSaveAction(){
+    viewModel.selectedIndexOnSave()
+    onGenerateQRReview()
+    onClearAction()
+}
+
 private fun ChangeDesignActivity.onClearAction(){
     viewModel.enumView = EnumView.ALL_HIDDEN
     viewModel.index = -1
@@ -139,7 +153,7 @@ fun ChangeDesignActivity.getData(){
 fun ChangeDesignActivity.initRecycleView(layoutInflater: LayoutInflater) {
     adapter = ChangeDesignAdapter(layoutInflater, applicationContext, this)
     var mNoOfColumns = Utils.calculateNoOfColumns(this,100F)
-    if(applicationContext.isLandscape()){
+    if(!isPortrait()){
         mNoOfColumns = Utils.calculateNoOfColumns(this,170F)
     }
     val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(this, mNoOfColumns)

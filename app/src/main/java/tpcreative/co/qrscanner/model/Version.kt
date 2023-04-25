@@ -1,6 +1,8 @@
 package tpcreative.co.qrscanner.model
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Configuration
+import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import java.io.Serializable
 import java.util.*
@@ -29,6 +31,8 @@ class Version() : Serializable {
     var hiddenFreeReleaseAds: Boolean? = false
     var hiddenFreeInnovationAds: Boolean? = false
     var hiddenSuperFreeInnovationAds: Boolean? = true
+    var hiddenRemoveSmallAds = false
+    var hiddenRemoveLargeAds = false
     var app_id : String? = null
     var ads: Ads? = null
     var content: HashMap<Any?, String?>? = null
@@ -36,20 +40,24 @@ class Version() : Serializable {
     init {
         hiddenMainSmallAds = Configuration.hiddenMainSmallAds
         hiddenMainLargeAds = Configuration.hiddenMainLargeAds
-        hiddenChangeColorSmallAds = Configuration.hiddenMainLargeAds
-        hiddenChangeColorLargeAds = Configuration.hiddenMainLargeAds
-        hiddenBackupSmallAds = Configuration.hiddenMainLargeAds
-        hiddenBackupLargeAds = Configuration.hiddenMainLargeAds
-        hiddenCreateSmallAds = Configuration.hiddenMainLargeAds
-        hiddenCreateLargeAds = Configuration.hiddenMainLargeAds
-        hiddenHelpFeedbackSmallAds = Configuration.hiddenMainLargeAds
-        hiddenHelpFeedbackLargeAds = Configuration.hiddenMainLargeAds
-        hiddenScannerResultSmallAds = Configuration.hiddenMainLargeAds
-        hiddenScannerResultLargeAds = Configuration.hiddenMainLargeAds
-        hiddenReviewSmallAds = Configuration.hiddenMainLargeAds
-        hiddenReviewLargeAds = Configuration.hiddenMainLargeAds
-        hiddenFreeReleaseAds = Configuration.hiddenMainLargeAds
-        hiddenFreeInnovationAds = Configuration.hiddenMainLargeAds
-        hiddenSuperFreeInnovationAds = Configuration.hiddenMainLargeAds
+        hiddenChangeColorSmallAds = Configuration.hiddenChangeColorSmallAds
+        hiddenChangeColorLargeAds = Configuration.hiddenChangeColorLargeAds
+        hiddenBackupSmallAds = Configuration.hiddenBackupSmallAds
+        hiddenBackupLargeAds = Configuration.hiddenBackupLargeAds
+        hiddenCreateSmallAds = Configuration.hiddenCreateSmallAds
+        hiddenCreateLargeAds = Configuration.hiddenCreateLargeAds
+        hiddenHelpFeedbackSmallAds = Configuration.hiddenHelpFeedbackSmallAds
+        hiddenHelpFeedbackLargeAds = Configuration.hiddenHelpFeedbackLargeAds
+        hiddenScannerResultSmallAds = Configuration.hiddenScannerResultSmallAds
+        hiddenScannerResultLargeAds = Configuration.hiddenScannerResultLargeAds
+        hiddenReviewSmallAds = Configuration.hiddenReviewSmallAds
+        hiddenReviewLargeAds = Configuration.hiddenReviewLargeAds
+        hiddenRemoveSmallAds = Configuration.hiddenRemoveSmallAds
+        hiddenRemoveLargeAds = Configuration.hiddenRemoveLargeAds
+
+        hiddenFreeReleaseAds = Configuration.hiddenFreeReleaseAds
+        hiddenFreeInnovationAds = Configuration.hiddenFreeInnovationAds
+        hiddenSuperFreeInnovationAds = Configuration.hiddenSuperFreeInnovationAds
+
     }
 }

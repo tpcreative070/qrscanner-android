@@ -708,6 +708,14 @@ object Utils {
         return file
     }
 
+    fun setChangedDesignColor(value: String?) {
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_changed_design_color), value)
+    }
+
+    fun getChangedDesignColor(): String? {
+        return PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_changed_design_color), "")
+    }
+
     fun setLastTimeSynced(value: String?) {
         PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_last_time_synced), value)
     }
@@ -864,17 +872,14 @@ object Utils {
         return isAlreadyCheckout()
     }
 
-    private fun isRequestRemoteDebugApp(): Boolean{
-        if (BuildConfig.DEBUG && !Configuration.request_remote_debug_app){
+    fun isRequestRemoteDebugApp(): Boolean{
+        if (BuildConfig.DEBUG && Configuration.request_remote_debug_app){
            return true
         }
         return false
     }
 
     fun isHiddenAds(enumScreens: EnumScreens) : Boolean{
-        if (isRequestRemoteDebugApp()){
-            ServiceManager.getInstance().mVersion = Version()
-        }
         if (isTestTab()){
             return true
         }
@@ -885,72 +890,72 @@ object Utils {
         }
         when(enumScreens){
             EnumScreens.HELP_FEEDBACK_SMALL ->{
-                if (Configuration.hiddenHelpFeedbackSmallAds || ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackSmallAds == true){
                     return true
                 }
             }
             EnumScreens.HELP_FEEDBACK_LARGE ->{
-                if (Configuration.hiddenHelpFeedbackLargeAds || ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackLargeAds == true){
                     return true
                 }
             }
             EnumScreens.MAIN_SMALL ->{
-                if (Configuration.hiddenMainSmallAds || ServiceManager.getInstance().mVersion?.hiddenMainSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenMainSmallAds == true){
                    return true
                 }
             }
             EnumScreens.MAIN_LARGE ->{
-                if (Configuration.hiddenMainLargeAds || ServiceManager.getInstance().mVersion?.hiddenMainLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenMainLargeAds == true){
                     return true
                 }
             }
             EnumScreens.CREATE_SMALL ->{
-                if (Configuration.hiddenCreateSmallAds || ServiceManager.getInstance().mVersion?.hiddenCreateSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenCreateSmallAds == true){
                     return true
                 }
             }
             EnumScreens.CREATE_LARGE ->{
-                if (Configuration.hiddenCreateLargeAds || ServiceManager.getInstance().mVersion?.hiddenCreateLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenCreateLargeAds == true){
                     return true
                 }
             }
             EnumScreens.SCANNER_RESULT_SMALL ->{
-                if (Configuration.hiddenScannerResultSmallAds || ServiceManager.getInstance().mVersion?.hiddenScannerResultSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenScannerResultSmallAds == true){
                     return true
                 }
             }
             EnumScreens.SCANNER_RESULT_LARGE ->{
-                if (Configuration.hiddenScannerResultLargeAds || ServiceManager.getInstance().mVersion?.hiddenScannerResultLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenScannerResultLargeAds == true){
                     return true
                 }
             }
             EnumScreens.REVIEW_SMALL->{
-                if (Configuration.hiddenReviewSmallAds || ServiceManager.getInstance().mVersion?.hiddenReviewSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenReviewSmallAds == true){
                     return true
                 }
             }
             EnumScreens.REVIEW_LARGE->{
-                if (Configuration.hiddenReviewLargeAds || ServiceManager.getInstance().mVersion?.hiddenReviewLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenReviewLargeAds == true){
                     return true
                 }
             }
             EnumScreens.CHANGE_COLOR_SMALL ->{
-                if (Configuration.hiddenChangeColorSmallAds || ServiceManager.getInstance().mVersion?.hiddenChangeColorSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenChangeColorSmallAds == true){
                     return true
                 }
             }
             EnumScreens.CHANGE_COLOR_LARGE ->{
-                if (Configuration.hiddenChangeColorLargeAds || ServiceManager.getInstance().mVersion?.hiddenChangeColorLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenChangeColorLargeAds == true){
                     return true
                 }
             }
             EnumScreens.BACKUP_SMALL ->{
-                if (Configuration.hiddenBackupSmallAds || ServiceManager.getInstance().mVersion?.hiddenBackupSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenBackupSmallAds == true){
                     return true
                 }
             }
             EnumScreens.BACKUP_LARGE ->{
-                if (Configuration.hiddenBackupLargeAds || ServiceManager.getInstance().mVersion?.hiddenBackupLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenBackupLargeAds == true){
                     return true
                 }
             }

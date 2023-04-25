@@ -64,6 +64,7 @@ class ReviewActivity : BaseActivitySlide() {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.REVIEW_SMALL,this)
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
     }
@@ -306,12 +307,16 @@ class ReviewActivity : BaseActivitySlide() {
             }
         }
 
-
     fun isBarCode() : Boolean{
-        if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
-            return true
+        try {
+            if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(""))) {
+                return true
+            }
+            return false
+        }catch (e : Exception){
+            e.printStackTrace()
+            return false
         }
-        return false
     }
 
     suspend fun onGenerateQRCode(code: String?) =

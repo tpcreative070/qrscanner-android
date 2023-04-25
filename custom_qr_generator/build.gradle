@@ -43,21 +43,3 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCore"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroid"
 }
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.github.alexzhirkevich'
-                artifactId = 'custom-qr-generator'
-                version = '1.6.0'
-            }
-        }
-        repositories {
-            maven {
-                url 'https://jitpack.io'
-            }
-        }
-    }
-}

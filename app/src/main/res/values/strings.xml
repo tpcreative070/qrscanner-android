@@ -166,6 +166,7 @@
     <string name="key_keep_ads_refresh_latest_time">key_keep_ads_refresh_latest_time</string>
     <string name="key_current_time_update_app">key_current_time_update_app</string>
     <string name="key_new_users_for_current_time">key_new_users_for_current_time</string>
+    <string name="key_changed_design_color">key_changed_design_color</string>
     <integer name="zxing_viewfinder_border_width">5</integer>
     <integer name="zxing_viewfinder_border_length">60</integer>
     <!--Do not use this code end for multiple languages -->
@@ -545,5 +546,7 @@
     <string name="original">Original</string>
     <string name="square">Square</string>
     <string name="circle">Circle</string>
+    <string name="confirm">Confirm</string>
+    <string name="opacity">Opacity</string>
 
 </resources>

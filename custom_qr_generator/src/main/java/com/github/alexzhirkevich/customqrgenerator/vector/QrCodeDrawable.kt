@@ -361,16 +361,16 @@ private class QrCodeDrawableImpl(
     }
 
     private fun isFrameStart(x: Int, y: Int) =
-            x - shapeIncrease == 0 && y - shapeIncrease == 0 ||
-            x - shapeIncrease == 0 && y + shapeIncrease == codeMatrix.size - 7 ||
-            x + shapeIncrease == codeMatrix.size - 7 && y - shapeIncrease == 0 ||
-            options.fourthEyeEnabled && x + shapeIncrease == codeMatrix.size - 7 && y + shapeIncrease == codeMatrix.size - 7
+        x - shapeIncrease == 0 && y - shapeIncrease == 0 ||
+                x - shapeIncrease == 0 && y + shapeIncrease == codeMatrix.size - 7 ||
+                x + shapeIncrease == codeMatrix.size - 7 && y - shapeIncrease == 0 ||
+                options.fourthEyeEnabled && x + shapeIncrease == codeMatrix.size - 7 && y + shapeIncrease == codeMatrix.size - 7
 
     private fun isBallStart(x: Int, y: Int) =
-            x - shapeIncrease == 2 && y + shapeIncrease == codeMatrix.size - 5 ||
-            x + shapeIncrease == codeMatrix.size - 5 && y - shapeIncrease == 2 ||
-            x - shapeIncrease == 2 && y - shapeIncrease == 2 ||
-            options.fourthEyeEnabled && x + shapeIncrease == codeMatrix.size - 5 && y + shapeIncrease == codeMatrix.size - 5
+        x - shapeIncrease == 2 && y + shapeIncrease == codeMatrix.size - 5 ||
+                x + shapeIncrease == codeMatrix.size - 5 && y - shapeIncrease == 2 ||
+                x - shapeIncrease == 2 && y - shapeIncrease == 2 ||
+                options.fourthEyeEnabled && x + shapeIncrease == codeMatrix.size - 5 && y + shapeIncrease == codeMatrix.size - 5
 
     private fun isInsideFrameOrBall(x: Int, y: Int): Boolean {
         return x - shapeIncrease in -1..7 && y - shapeIncrease in -1..7 ||
@@ -382,7 +382,7 @@ private class QrCodeDrawableImpl(
     private fun createLogo(logoSize: Float): Bitmap? =
         if (options.logo.drawable != null) {
             options.logo.scale.scale(
-                options.logo.drawable, logoSize.roundToInt(), logoSize.roundToInt()
+                options.logo.drawable, logoSize.toInt(), logoSize.toInt()
             ).let { if (it.isMutable) it else it.copy(it.config, true) }.applyCanvas {
                 val clip = Path().apply {
                     addRect(0f, 0f, logoSize, logoSize, Path.Direction.CW)
@@ -551,7 +551,7 @@ private fun QrErrorCorrectionLevel.fit(
 
 private class QrColorDrawable(
     private val color: QrVectorColor
-    ) : Drawable(){
+) : Drawable(){
 
     private var alph : Int = 255
     private var filter : ColorFilter? = null

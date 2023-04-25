@@ -15,9 +15,9 @@ import tpcreative.co.qrscanner.common.Utils
 import java.io.File
 
 
-fun Context.isLandscape():Boolean{
+fun Context.isPortrait():Boolean{
     val currentOrientation = resources.configuration.orientation
-    return (currentOrientation == Configuration.ORIENTATION_LANDSCAPE)
+    return (currentOrientation == Configuration.ORIENTATION_PORTRAIT)
 }
 
 fun Context.isOnline(): Boolean {

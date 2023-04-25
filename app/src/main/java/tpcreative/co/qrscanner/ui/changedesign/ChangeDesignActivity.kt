@@ -13,7 +13,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
@@ -35,7 +34,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     lateinit var binding : ActivityChangeDesignBinding
     var adapter: ChangeDesignAdapter? = null
     private lateinit var viewTemplate : TemplateFragment
-    private lateinit var viewColor : ColorFragment
+    lateinit var viewColor : ColorFragment
     private lateinit var viewDots : DotsFragment
     private lateinit var viewEyes : EyesFragment
     lateinit var viewLogo : LogoFragment
@@ -49,11 +48,15 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         if (savedInstanceState != null) {
             viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
             viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
-            viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
+            viewModel.selectedEnumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW) ?:EnumView.ALL_HIDDEN.name)
+            viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
             viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
             viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
             val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
             viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
+            viewModel.isOpenColorPicker = savedInstanceState.getBoolean(ConstantKey.KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER)
+            viewModel.enumType = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_COLOR_INDEX) ?:EnumImage.NONE.name)
+            viewModel.indexColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR) ?: viewModel.defaultColor()
             Utils.Log(TAG,"State instance saveInstanceState has value")
             if (mUri.isExist){
                 viewModel.uri = mUri
@@ -125,7 +128,37 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
                 return viewModel.mLogoList
             }
         })
-        Utils.Log(TAG,"State instance enumview ${viewModel.enumView.name}")
+
+        viewColor.setSelectedIndex(viewModel.indexColor.mapColor,viewModel.isOpenColorPicker,viewModel.enumType)
+        viewColor.setBinding(object  : ColorFragment.ListenerColorFragment {
+            override fun colorSelectedIndex(index: Int, selectedObject: ColorModel) {
+                viewModel.enumType = selectedObject.type
+            }
+            override fun getData(): MutableList<ColorModel> {
+                return viewModel.mColorList
+            }
+
+            override fun onColorChanged(color: String) {
+                viewModel.indexColor.mapColor[viewModel.enumType] = color
+                viewModel.selectedIndexOnReview()
+                onGenerateQRReview()
+            }
+
+            override fun onOpenColorPicker(isOpen: Boolean) {
+                viewModel.isOpenColorPicker = isOpen
+                Utils.Log(TAG,"Open color picker $isOpen")
+            }
+
+            override fun onAction(isPositive: Boolean) {
+                Utils.Log(TAG,"Show data restore $isPositive")
+//                if (!isPositive){
+//                    onRestoreAction()
+//                    Utils.Log(TAG,"Requesting restore action")
+//                }
+            }
+        })
+
+        Utils.Log(TAG,"State instance enum view ${viewModel.enumView.name}")
         Utils.Log(TAG,"State instance index ${viewModel.index}")
         onVisit(viewModel.enumView)
         if (viewModel.index>=0){
@@ -213,7 +246,9 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         val mType = adapter?.getItem(position)
         viewModel.index = position
         Utils.Log(TAG,"State instance click $position")
-        mType?.enumView?.let { onVisit(it) }
+        mType?.enumView?.let { onVisit(it)
+            viewModel.selectedEnumView = it
+        }
         loadFragment(mFragments[position])
     }
 
@@ -239,11 +274,15 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         super.onSaveInstanceState(outState)
         outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX,viewModel.index)
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_VIEW, viewModel.enumView.name)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW, viewModel.selectedEnumView.name)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO,viewModel.indexLogo)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignSave)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignReview)
+        outState.putBoolean(ConstantKey.KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER,viewModel.isOpenColorPicker)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_COLOR_INDEX,viewModel.enumType.name)
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_URI,"${viewModel.uri}")
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE,viewModel.shape.name)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR,viewModel.indexColor)
         Utils.Log(TAG,"State instance save ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance save index ${viewModel.index}")
     }
@@ -251,9 +290,13 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
         viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
-        viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultObject()
+        viewModel.selectedEnumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW) ?:EnumView.ALL_HIDDEN.name)
+        viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
         viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
         viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
+        viewModel.isOpenColorPicker = savedInstanceState.getBoolean(ConstantKey.KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER)
+        viewModel.enumType = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_COLOR_INDEX) ?:EnumImage.NONE.name)
+        viewModel.indexColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR) ?: viewModel.defaultColor()
         val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
         if (mUri.isExist){
             viewModel.uri = mUri

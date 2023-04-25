@@ -101,7 +101,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
         super.work()
         initUI()
         binding.overlay.viewTreeObserver.addOnGlobalLayoutListener {
-            if (isLandscape()) {
+            if(!isPortrait()){
                 var mRespect: RectF? = Utils.getFrameRectLandscape()
                 if (mRespect==null){
                     mRespect = RectF(binding.viewCrop.left.toFloat(),binding.viewCrop.top.toFloat(),binding.viewCrop.right.toFloat(),binding.viewCrop.bottom.toFloat())
@@ -623,7 +623,7 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
         val mRect =  Rect(0, 0, image.width, image.height)
         var mCropWidthSize = mCropped?.height() ?: image.height
         var mCropHeightSize = mCropped?.width() ?: image.width
-        if (isLandscape()){
+        if(!isPortrait()){
             mCropWidthSize = (mCropped?.width() ?: image.width)
             mCropHeightSize = (mCropped?.height() ?: image.height)
         }

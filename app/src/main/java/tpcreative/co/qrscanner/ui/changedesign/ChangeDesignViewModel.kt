@@ -29,6 +29,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var create: GeneralModel = GeneralModel()
     var enumView  = EnumView.ALL_HIDDEN
     var index  : Int = -1
+
+    /*Logo area*/
     lateinit var indexLogo : LogoModel
     var mLogoList = mutableListOf<LogoModel>()
     lateinit var changeDesignReview :ChangeDesignModel
@@ -37,6 +39,14 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var shape : EnumShape = EnumShape.ORIGINAL
     var uri : Uri? = null
     var bitmap : Bitmap? = null
+    /*Color area*/
+    var mColorList = mutableListOf<ColorModel>()
+    var isOpenColorPicker : Boolean = false
+    var enumType : EnumImage  = EnumImage.NONE
+    //var mMapColor : HashMap<EnumImage,String> = hashMapOf()
+    lateinit var indexColor : ColorModel
+    var selectedEnumView: EnumView = EnumView.ALL_HIDDEN
+
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
@@ -47,23 +57,32 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     R.string.key_data), GeneralModel::class.java)
             if (data != null) {
                 create = data
-                indexLogo = defaultObject()
+                indexLogo = defaultLogo()
+                indexColor = defaultColor()
                 val mDataStore = SQLiteHelper.getDesignQR(data.uuId)
                 if (mDataStore!=null){
                     try {
-                        val mDesign = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
-                        indexLogo = mDesign.logo ?: defaultObject()
-                        changeDesignSave = ChangeDesignModel(mDesign)
-                        changeDesignReview =  ChangeDesignModel(mDesign)
-                        changeDesignOriginal = ChangeDesignModel(mDesign)
-                        shape = mDesign.logo?.enumShape ?: EnumShape.ORIGINAL
+                        val mReview = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
+                        val mOriginal = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
+                        val mSave = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
+                        changeDesignSave = ChangeDesignModel(mSave)
+                        changeDesignOriginal = ChangeDesignModel(mOriginal)
+                        changeDesignReview =  ChangeDesignModel(mReview)
+
+                        /*Logo area*/
+                        indexLogo = mReview.logo ?: defaultLogo()
+                        shape = mReview.logo?.enumShape ?: EnumShape.ORIGINAL
                         bitmap = create.uuId?.findImageName(EnumImage.LOGO)?.toBitmap
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
+                        /*Color area*/
+                        indexColor = mReview.color ?: defaultColor()
+                        Utils.Log(TAG,"onColorChanged original 1 ${changeDesignOriginal.toJson()}")
                     }catch (e : Exception){
                         e.printStackTrace()
                     }
                 }else{
-                    indexLogo = defaultObject()
+                    indexLogo = defaultLogo()
+                    indexColor = defaultColor()
                     changeDesignSave = ChangeDesignModel()
                     changeDesignReview =  ChangeDesignModel()
                     changeDesignOriginal = ChangeDesignModel()
@@ -74,6 +93,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             }
         }
         initializedLogoData()
+        initializedColorData()
     }
 
     fun getData(callback: (result: MutableList<ChangeDesignCategoryModel>) -> Unit){
@@ -143,66 +163,69 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_email.icon,
-                EnumIcon.ic_email,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_email,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_message.icon,
-                EnumIcon.ic_message,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_message,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_location.icon,
-                EnumIcon.ic_location,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_location,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_calender.icon,
-                EnumIcon.ic_calender,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_calender,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_contact.icon,
-                EnumIcon.ic_contact,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_contact,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_phone.icon,
-                EnumIcon.ic_phone,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_phone,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_text.icon,
-                EnumIcon.ic_text,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_text,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_network.icon,
-                EnumIcon.ic_network,false,R.color.black,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_network,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
+    }
+
+    private fun initializedColorData(){
+        mColorList.clear()
+        mColorList.add(ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent,EnumImage.QR_BACKGROUND,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qrcode,R.color.colorAccent,EnumImage.QR_FOREGROUND,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qrcode,R.color.colorAccent,EnumImage.QR_BALL,false,defaultColorMap()))
     }
 
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
         val mDataResult = changeDesignReview.logo
-        Utils.Log(TAG,"Generate icon ${mDataResult?.toJson()}")
-        Utils.Log(TAG,"Generate icon => shapre ${this.shape.name}")
+        Utils.Log(TAG,"Data result of review ${changeDesignReview.color?.toJson()}")
+        Utils.Log(TAG,"Generate icon => shape ${this.shape.name}")
         val options = QrVectorOptions.Builder()
             .setPadding(.15f)
             .setBackground(
                 QrVectorBackground(
-                    drawable = ContextCompat
-                        .getDrawable(context, R.color.colorAccent),
+                    color =QrVectorColor
+                        .Solid(indexColor.mapColor[EnumImage.QR_BACKGROUND]?.toColorInt() ?: R.color.black_color_picker)
                 )
             )
-//            .setColors(
-//                QrVectorColors(
-//                    dark = QrVectorColor
-//                        .Solid(ContextCompat.getColor(context,R.color.colorAccent)),
-//                    ball = QrVectorColor.Solid(
-//                        ContextCompat.getColor(context, R.color.colorAccent)
-//                    )
-//                )
-//            )
+            .setColors(
+                QrVectorColors(
+                    dark =  QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FOREGROUND]?.toColorInt() ?: R.color.black_color_picker),
+                    ball = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker)
+                ))
 //            .setShapes(
 //                QrVectorShapes(
 //                    darkPixel = QrVectorPixelShape
@@ -235,7 +258,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             options.setLogo(
                 QrVectorLogo(
                     drawable = mDrawable,
-                    size = .20f,
+                    size = .19f,
                     padding = QrVectorLogoPadding.Natural(.0f),
                     shape = shape,
                     backgroundColor = QrVectorColor
@@ -259,7 +282,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 options.setLogo(
                     QrVectorLogo(
                         drawable = mDrawable,
-                        size = .20f,
+                        size = .19f,
                         padding = QrVectorLogoPadding.Natural(.0f),
                         shape = shape,
                         backgroundColor =  QrVectorColor
@@ -284,7 +307,10 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
             }
             EnumView.COLOR ->{
-
+                Utils.Log(TAG,"data value result original ${changeDesignOriginal.color?.mapColor?.toJson()}")
+                changeDesignReview.color = indexColor
+                Utils.Log(TAG,"data value result review ${changeDesignReview.color?.mapColor?.toJson()}")
+                Utils.Log(TAG,"data value result after original ${changeDesignOriginal.color?.mapColor?.toJson()}")
             }
             EnumView.DOTS ->{
 
@@ -304,12 +330,17 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     fun selectedIndexRestore(){
         val mData = ChangeDesignModel(changeDesignSave)
+        Utils.Log(TAG,"Show data restore ${mData.toJson()}")
         when(enumView){
             EnumView.TEMPLATE ->{
 
             }
             EnumView.COLOR ->{
-
+                val mHashMap = HashMap(mData.color?.mapColor ?: defaultColorMap())
+                val mColor = mHashMap[enumType]
+                mColor?.putChangedDesignColor
+                changeDesignReview.color?.mapColor = mHashMap
+                indexColor.mapColor = mHashMap
             }
             EnumView.DOTS ->{
 
@@ -319,7 +350,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             }
             EnumView.LOGO ->{
                 changeDesignReview = mData
-                indexLogo = mData.logo ?: defaultObject()
+                indexLogo = mData.logo ?: defaultLogo()
             }
             EnumView.TEXT ->{
 
@@ -334,7 +365,15 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
             }
             EnumView.COLOR ->{
-
+                val mHashMap = HashMap(indexColor.mapColor)
+                if (changeDesignSave.color==null){
+                    val mIndex = defaultColor()
+                    mIndex.mapColor = mHashMap
+                    changeDesignSave.color = mIndex
+                }else{
+                    changeDesignSave.color?.mapColor = mHashMap
+                }
+                Utils.Log(TAG,"SelectedIndexOnSave ${indexColor.mapColor.toJson()}")
             }
             EnumView.DOTS ->{
 
@@ -357,31 +396,73 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         val mData =  DesignQRModel()
         mData.uuIdQR = create.uuId
         mData.codeDesign = changeDesignSave.toJson()
+        Utils.Log(TAG,"Preparing data store into db ${changeDesignSave.toJson()}")
+        Utils.Log(TAG,"Preparing data model store ${mData.toJson()}")
         SQLiteHelper.onInsert(mData)
     }
 
-    fun defaultObject() : LogoModel {
+    fun defaultLogo() : LogoModel {
         return LogoModel(
             EnumIcon.bg_white.icon,
             EnumIcon.bg_white,false,R.color.transparent,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
     }
 
+    fun defaultColor() : ColorModel {
+        return ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent,EnumImage.QR_BACKGROUND,false,defaultColorMap())
+    }
+
+    fun onUpdateBitmap(bitmap: Bitmap?){
+        this.bitmap = bitmap
+    }
+
     fun isChangedSave() : Boolean{
-        if (changeDesignOriginal.toJson() != changeDesignSave.toJson() || shape != changeDesignOriginal.logo?.enumShape){
-            return true
+        Utils.Log(TAG,"Data value original ${changeDesignOriginal.color?.mapColor?.toJson()}")
+        Utils.Log(TAG,"Data value review ${indexColor.mapColor.toJson()}")
+        val mChanged = changeDesignOriginal.toJson() != changeDesignSave.toJson()
+        when(selectedEnumView){
+            EnumView.COLOR ->{
+                if (mChanged || indexColor.toJson() != changeDesignOriginal.color?.toJson()){
+                    Utils.Log(TAG,"Data value indexColor ${indexColor.toJson()}")
+                    Utils.Log(TAG,"Data value changeDesignOriginal ${changeDesignOriginal.color?.toJson()}")
+                    return true
+                }
+            }
+            EnumView.LOGO ->{
+                if (mChanged || shape != changeDesignOriginal.logo?.enumShape){
+                    return true
+                }
+            }
+            else -> {}
         }
         return false
     }
 
     fun isChangedReview() : Boolean {
-        if (changeDesignOriginal.toJson() != changeDesignReview.toJson() || shape != changeDesignOriginal.logo?.enumShape){
-            return true
+        Utils.Log(TAG,"Data value original ${changeDesignOriginal.color?.toJson()}")
+        Utils.Log(TAG,"Data value review ${indexColor.toJson()}")
+        val mChanged = changeDesignOriginal.toJson() != changeDesignReview.toJson()
+        when(selectedEnumView){
+            EnumView.COLOR ->{
+                if (mChanged || indexColor.toJson() != changeDesignOriginal.color?.toJson()){
+                    return true
+                }
+            }
+            EnumView.LOGO ->{
+                if (mChanged || shape != changeDesignOriginal.logo?.enumShape){
+                    return true
+                }
+            }
+            else -> {}
         }
         return false
     }
 
-    fun onUpdateBitmap(bitmap: Bitmap?){
-        this.bitmap = bitmap
+    private fun defaultColorMap() : HashMap<EnumImage,String>{
+        val mMap = HashMap<EnumImage,String>()
+        mMap[EnumImage.QR_BACKGROUND] = R.color.white.stringHexNoTransparency
+        mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency
+        mMap[EnumImage.QR_BALL] = R.color.black_color_picker.stringHexNoTransparency
+        return mMap
     }
 
     fun onCleanBitMap(){

@@ -373,4 +373,6 @@
     <string name="original">Nguyên mẫu</string>
     <string name="square">Vuông</string>
     <string name="circle">Tròn</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="opacity">Độ mờ</string>
 </resources>

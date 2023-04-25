@@ -1,30 +1,21 @@
 package tpcreative.co.qrscanner.ui.changedesign.fragment
 
-import android.app.Activity
 import android.content.Context
-import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.BaseFragment
-import tpcreative.co.qrscanner.common.ListenerView
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.calculateNoOfColumns
-import tpcreative.co.qrscanner.common.extension.isLandscape
+import tpcreative.co.qrscanner.common.extension.isPortrait
 import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
-import tpcreative.co.qrscanner.databinding.FragmentEyesBinding
 import tpcreative.co.qrscanner.databinding.FragmentLogoBinding
-import tpcreative.co.qrscanner.model.ChangeDesignModel
 import tpcreative.co.qrscanner.model.EnumShape
 import tpcreative.co.qrscanner.model.LogoModel
 
@@ -106,7 +97,7 @@ class LogoFragment : BaseFragment(), LogoFragmentAdapter.ItemSelectedListener {
     private fun initRecycleView(layoutInflater: LayoutInflater) {
         adapter = LogoFragmentAdapter(layoutInflater, mContext, this.uuId,this)
         var mNoOfColumns = Utils.calculateNoOfColumns(mContext,90F)
-        if(context?.isLandscape() == true){
+        if(!isPortrait()){
             mNoOfColumns = Utils.calculateNoOfColumns(mContext,160F)
         }
         val mLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(mContext, mNoOfColumns)

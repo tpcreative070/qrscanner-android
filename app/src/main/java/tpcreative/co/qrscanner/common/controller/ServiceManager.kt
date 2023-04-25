@@ -164,7 +164,9 @@ class ServiceManager : BaseView<Any?> {
                         if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
                             mResult.data?.qrscannerFreeRelease?.let {
                                 try {
-                                    mVersion = it
+                                    if (Utils.isRequestRemoteDebugApp() || !Utils.isDebug()){
+                                        mVersion = it
+                                    }
                                     Utils.Log(TAG, "Check version success f ${it.toJson()} ")
                                 }catch (e: Exception){
                                     e.printStackTrace()
@@ -173,7 +175,9 @@ class ServiceManager : BaseView<Any?> {
                         } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
                             mResult.data?.qrscannerFreeInnovation?.let {
                                 try {
-                                    mVersion = it
+                                    if (Utils.isRequestRemoteDebugApp() || !Utils.isDebug()){
+                                        mVersion = it
+                                    }
                                     Utils.Log(TAG, "Check version success n ${it.toJson()} ")
                                 }catch (e: Exception){
                                     e.printStackTrace()
@@ -183,7 +187,9 @@ class ServiceManager : BaseView<Any?> {
                         else if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
                             mResult.data?.superQRScannerFreeInnovation?.let {
                                 try {
-                                    mVersion = it
+                                    if (Utils.isRequestRemoteDebugApp() || !Utils.isDebug()){
+                                        mVersion = it
+                                    }
                                     Utils.Log(TAG, "Check version success s ${it.toJson()} ")
                                 }catch (e: Exception){
                                     e.printStackTrace()

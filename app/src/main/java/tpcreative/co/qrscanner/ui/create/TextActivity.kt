@@ -33,6 +33,9 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
         super.onCreate(savedInstanceState)
         binding = ActivityTextBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if (savedInstanceState!=null){
+            QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.CREATE_SMALL,this)
+        }
         if (!Utils.isPremium()){
             viewAds = AdsView(this)
         }

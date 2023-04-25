@@ -36,6 +36,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
         binding = ActivityWifiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.CREATE_SMALL,this)
         if (!Utils.isPremium()){
             viewAds = AdsView(this)
         }
