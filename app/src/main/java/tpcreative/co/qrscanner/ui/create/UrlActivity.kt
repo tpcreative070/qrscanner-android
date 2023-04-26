@@ -121,7 +121,7 @@ class UrlActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActi
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        //finish()
+        finish()
     }
 
     companion object {

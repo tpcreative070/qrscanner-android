@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
@@ -24,10 +25,7 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.Result
 import com.google.zxing.client.result.ParsedResultType
 import com.google.zxing.client.result.ResultParser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -41,6 +39,7 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignActivity
 import tpcreative.co.qrscanner.ui.create.BarcodeActivity
+import java.io.File
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -60,6 +59,7 @@ class ReviewActivity : BaseActivitySlide() {
     var viewAds : AdsView? = null
     lateinit var binding : ActivityReviewBinding
     private var isLoaded : Boolean = false
+    var uuId : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
@@ -390,7 +390,7 @@ class ReviewActivity : BaseActivitySlide() {
         if (result.resultCode == Activity.RESULT_OK) {
             val mFile = create?.uuId?.findImageName(EnumImage.QR_CODE)
             if (mFile!=null){
-                Utils.Log(TAG, "Response data")
+                Utils.Log(TAG, "Response data receiver ${mFile.absolutePath}")
                 mUri = FileProvider.getUriForFile(this@ReviewActivity, BuildConfig.APPLICATION_ID + ".provider", mFile)
                 bitmap = BitmapFactory.decodeFile(mFile.absolutePath)
                 binding.imgResult.setImageURI(null)
@@ -410,8 +410,8 @@ class ReviewActivity : BaseActivitySlide() {
         else if (create?.enumImplement == EnumImplement.EDIT){
             viewModel.onDeleteChangeDesign(create)
         }
-        else if (create?.enumImplement == EnumImplement.VIEW){
-            Utils.Log(TAG,"Data change design . ${create?.toJson()}")
+        else if (Intent.ACTION_SEND == intent.action){
+            create?.uuId = uuId
         }
     }
 

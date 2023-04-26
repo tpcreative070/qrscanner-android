@@ -3,6 +3,7 @@ package com.panshen.gridcolorpicker
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -293,10 +294,13 @@ internal class PaletteView(context: Context, paletteConfig: PickerConfig) : View
             checkedColor = color
             return false
         } else {
-            val colorNoAlpha = removeAlphaFromColor(color)
+            val colorNoAlpha = removeAlphaFromColor(color) ?:""
             colorList.entries
                 .flatMap { it.value }
-                .find { colorUnit -> colorUnit.colorString == colorNoAlpha }
+                .find { colorUnit ->
+                    Log.d(TAG,"Hex color find index: $colorNoAlpha ; finder: ${colorUnit.colorString}")
+                    colorNoAlpha.replace("#","") in colorUnit.colorString
+                }
                 ?.also {
                     checkedColorUnit = it
                     invalidate()

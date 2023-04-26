@@ -48,6 +48,7 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     binding.scrollView.smoothScrollTo(0, 0)
     binding.imgStandardCircle.setImageResource(R.color.colorAccent)
+    getIntentData()
     loadAds()
     /*Press back button*/
     onBackPressedDispatcher.addCallback(
@@ -70,7 +71,6 @@ fun ReviewActivity.initUI(){
 }
 
 fun ReviewActivity.loadAds(){
-    getIntentData()
     if (!Utils.isPremium()){
         viewAds = AdsView(this)
     }
@@ -284,6 +284,7 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(enumAction: EnumAction,text : Str
     val time = Utils.getCurrentDateTimeSort()
     history.createDatetime = time
     history.updatedDateTime = time
+    uuId = history.uuId
     SQLiteHelper.onInsert(history)
     viewModel.updateId(history.uuId)
     CoroutineScope(Dispatchers.Main).launch {
@@ -303,6 +304,7 @@ fun ReviewActivity.checkingShowAds(){
 fun ReviewActivity.getIntentData(){
     viewModel.getIntent(this) {
         if (it){
+            Utils.Log(TAG,"Response data call intent")
             setView()
         }else{
             onCatch()

@@ -30,6 +30,7 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_COLOR_INDEX = "key_change_design_color_index"
         const val KEY_CHANGE_DESIGN_COLOR = "key_change_design_color"
         const val KEY_CHANGE_DESIGN_SELECTED_VIEW = "key_change_design_selected_view"
+        const val KEY_SET_RESULT_OKEY = "key_set_result_okey"
 
         const val TITLE  = "title"
         const val LOCATION = "location"

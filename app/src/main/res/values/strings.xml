@@ -525,6 +525,7 @@
     <string name="scanning_using_the_camera_will_require_permission_to_access_the_camera">Scanning using the camera will require permission to access the camera.</string>
     <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location.</string>
     <string name="waiting_for_delete">Waiting for delete</string>
+    <string name="waiting_for_save">Waiting for save</string>
     <string name="waiting_for_export">Waiting for export</string>
     <string name="delete_entire_history">Delete entire history?</string>
     <string name="delete_entire_save">Delete entire save?</string>

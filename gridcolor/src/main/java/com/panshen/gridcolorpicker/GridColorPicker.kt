@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -113,6 +114,7 @@ class GridColorPicker : LinearLayout, AlphaView.OnAlphaSelectListener {
     fun checkColor(hexColor: String): Boolean {
         pickerConfig = pickerConfig.copy(checkedColor = hexColor)
         val success = paletteView.checkColor(hexColor)
+        Log.d("TAG","Hex color $hexColor")
         if (success && pickerConfig.showAlphaView) {
             alphaView.color = Color.parseColor(hexColor)
         }

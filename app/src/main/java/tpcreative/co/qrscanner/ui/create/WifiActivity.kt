@@ -171,7 +171,7 @@ class WifiActivity : BaseActivitySlide(), View.OnClickListener, SingletonGenerat
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        //finish()
+        finish()
     }
 
     override fun onClick(view: View?) {

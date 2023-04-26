@@ -89,6 +89,7 @@ fun ChangeDesignActivity.initUI(){
         }
         if (mUri != null) {
             //Utils.onShareImage(this,mUri)
+            Utils.Log(TAG,"Response data sender $mUri")
             viewModel.onSaveToDB()
             setResult(Activity.RESULT_OK)
             finish()

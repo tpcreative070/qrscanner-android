@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.changedesign
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,6 +20,7 @@ import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
+import tpcreative.co.qrscanner.common.ProgressDialog
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.*
@@ -40,10 +42,12 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     lateinit var viewLogo : LogoFragment
     private lateinit var viewText : TextFragment
     private val mFragments : MutableList<Fragment> = mutableListOf()
+    lateinit var dialog : Dialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChangeDesignBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_save.toText())
         initUI()
         if (savedInstanceState != null) {
             viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
@@ -149,12 +153,15 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
                 Utils.Log(TAG,"Open color picker $isOpen")
             }
 
-            override fun onAction(isPositive: Boolean) {
-                Utils.Log(TAG,"Show data restore $isPositive")
-//                if (!isPositive){
-//                    onRestoreAction()
-//                    Utils.Log(TAG,"Requesting restore action")
-//                }
+            override fun onDismissDialog(value: String?) {
+                if (value?.isNotEmpty() == true){
+                    /*Update previous color to index*/
+                    viewModel.indexColor.mapColor[viewModel.enumType] = value
+                    viewModel.selectedIndexOnReview()
+                    onGenerateQRReview()
+                }else{
+                    Utils.Log(TAG,"Previous color null")
+                }
             }
         })
 
@@ -343,6 +350,14 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     private fun onGetGallery() {
         pickGalleryForResult.launch(Crop.getImagePicker())
+    }
+
+    fun onShowProgressing(){
+        dialog.show()
+    }
+
+    fun onDismissProgressing(){
+        dialog.dismiss()
     }
 
     object Circle : QrVectorPixelShape {

@@ -4,14 +4,19 @@ import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import android.provider.ContactsContract
 import tpcreative.co.qrscanner.common.ConstantValue
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.AddressModel
 import tpcreative.co.qrscanner.model.ContactModel
+import java.io.FileDescriptor
 import java.io.IOException
+
 
 @SuppressLint("Range")
 fun Uri.onParseContact(context: Context) : ContactModel{
@@ -246,3 +251,17 @@ val Uri.isExist : Boolean
     catch (e: IOException) {
         false
     }
+
+fun Uri.uriToBitmap(context: Context) : Bitmap? {
+    try {
+        val parcelFileDescriptor: ParcelFileDescriptor? =
+            context.getContentResolver().openFileDescriptor(this, "r")
+        val fileDescriptor: FileDescriptor? = parcelFileDescriptor?.fileDescriptor
+        val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+        parcelFileDescriptor?.close()
+        return image
+    } catch (e: IOException) {
+        e.printStackTrace()
+        return null
+    }
+}

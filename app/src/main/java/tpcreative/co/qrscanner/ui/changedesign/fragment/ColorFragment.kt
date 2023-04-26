@@ -13,6 +13,7 @@ import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.databinding.FragmentColorBinding
 import tpcreative.co.qrscanner.model.ColorModel
 import android.content.DialogInterface
+import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.panshen.gridcolorpicker.builder.colorPickerDialog
@@ -32,6 +33,8 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
     private var isOpenColorPicker : Boolean = false
     private var enumType : EnumImage = EnumImage.NONE
     private var mapColor : HashMap<EnumImage,String> = HashMap()
+    private var previousColor : String? = ""
+    private var isAction : Boolean = false
 
     override fun getLayoutId(): Int {
         return 0
@@ -58,9 +61,10 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
         mInflater = requireActivity().layoutInflater
         load()
         Utils.Log(TAG,"Current color isOpenColorPicker  $isOpenColorPicker")
+        /*Working here when rotation*/
         if (isOpenColorPicker){
-            val mData = mapColor[enumType]
-            mData?.putChangedDesignColor
+            Utils.Log(TAG,"Previous color initialized onWork $previousColor")
+            previousColor = "".changedDesignColor
             showDialog()
         }
     }
@@ -72,6 +76,7 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
         this.isOpenColorPicker = isOpenColorPicker
         this.enumType = enumImage
         this.mapColor = mapColor
+        Utils.Log(TAG,"Previous color initialized onSelected $mapColor")
     }
 
     private fun initRecycleView(layoutInflater: LayoutInflater) {
@@ -105,10 +110,15 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
     override fun onClickItem(position: Int) {
         val mObject = mList[position]
         listener?.colorSelectedIndex(position,mObject)
-        if (enumType!=mObject.type){
+        if (enumType!=mObject.type || isAction){
             enumType = mObject.type
             dialog?.dismiss()
             dialog = null
+            previousColor = mapColor[mObject.type]
+            /*Save previous color when rotation change or cancel*/
+            previousColor?.putChangedDesignColor
+            isAction = false
+            Utils.Log(TAG,"Previous color changed position ${mObject.type}")
         }
         showDialog()
     }
@@ -128,28 +138,33 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
 //                    Toast.makeText(requireContext(), "Click Positive Button", Toast.LENGTH_SHORT)
 //                        .show()
                     listener?.onOpenColorPicker(false)
-                    listener?.onAction(true)
+                    listener?.onDismissDialog(null)
+                    previousColor = mapColor[enumType]
+                    isAction = true
+                    Utils.Log(TAG,"Previous color $previousColor")
                 }
                 onNegativeButtonClickListener = DialogInterface.OnClickListener { _, _ ->
 //                    Toast.makeText(requireContext(), "Click Negative Button", Toast.LENGTH_SHORT)
 //                        .show()
                     listener?.onOpenColorPicker(false)
-                    listener?.onAction(false)
+                    previousColor?.putChangedDesignColor
+                    listener?.onDismissDialog(previousColor)
+                    isAction = true
                 }
                 dismissListener = DialogInterface.OnDismissListener {
                     //Toast.makeText(requireContext(), "Dismiss", Toast.LENGTH_SHORT).show()
                 }
 
                 val mCurrentColor = mapColor[enumType]
-                Utils.Log(TAG,"Current color  $enumType $mCurrentColor")
+                Utils.Log(TAG,"Previous color selected $enumType $mCurrentColor")
                 colorPicker {
                     colorScheme =
                         arrayListOf(R.color.C_007c91,R.color.C_029FD6, R.color.C_0062FD, R.color.C_5023B1, R.color.C_962BB9, R.color.C_BA2C5E,R.color.C_EC407A, R.color.C_FB431B, R.color.C_FD6802, R.color.C_FFAB03, R.color.C_FFCB05, R.color.C_FFFD46, R.color.C_D8EB39, R.color.C_76BC40,R.color.C_818d00)
                     row = 10
                     checkedColor = mCurrentColor
                     selectorColorRes = R.color.colorAccent
-                    showAlphaView = true
-                    showAlphaViewLabel = true
+                    showAlphaView = false
+                    showAlphaViewLabel = false
                     alphaViewLabelText = resources.getString(R.string.opacity)
                     alphaViewLabelColorRes = R.color.colorAccent
 
@@ -174,7 +189,6 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
     }
 
     private fun afterColorChanged(color: String) {
-        color.putChangedDesignColor
         listener?.onColorChanged(color)
         Utils.Log(TAG, color)
         Utils.Log(TAG,
@@ -187,6 +201,6 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
         fun getData() : MutableList<ColorModel>
         fun onColorChanged(color : String)
         fun onOpenColorPicker(isOpen : Boolean)
-        fun onAction(isPositive : Boolean)
+        fun onDismissDialog(value : String?)
     }
 }

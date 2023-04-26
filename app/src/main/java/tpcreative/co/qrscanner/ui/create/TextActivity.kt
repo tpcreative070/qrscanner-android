@@ -1,9 +1,12 @@
 package tpcreative.co.qrscanner.ui.create
+import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.basgeekball.awesomevalidation.AwesomeValidation
@@ -20,6 +23,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.databinding.ActivityTextBinding
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.review.ReviewActivity
 import tpcreative.co.qrscanner.viewmodel.GenerateViewModel
 
 class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorActionListener {
@@ -152,7 +156,7 @@ class TextActivity : BaseActivitySlide(), SingletonGenerateListener, OnEditorAct
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        //finish()
+        finish()
     }
 
     private fun getIntentData(){
