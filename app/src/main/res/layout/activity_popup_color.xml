@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_marginBottom="@dimen/margin_20"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.davidmiguel.dragtoclose.DragToClose
+                android:layout_marginTop="@dimen/margin_150"
+                xmlns:drag="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/drag_to_close"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                drag:dragtoclose_draggableContainer="@+id/card"
+                drag:dragtoclose_draggableView="@+id/rlDragToClose"
+                drag:dragtoclose_finishActivity="true"
+                tools:context="com.davidmiguel.sample.Card1Activity">
+
+                <RelativeLayout
+                    android:id="@+id/card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_card_primary_color"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:id="@+id/rlDragToClose"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/icon_size_60">
+                        <ImageView
+                            android:padding="@dimen/margin_15"
+                            android:id="@+id/imgEdit"
+                            android:src="@drawable/ic_edit"
+                            android:layout_width="@dimen/icon_size_60"
+                            android:layout_height="@dimen/icon_size_60"/>
+                        <ImageView
+                            android:layout_alignParentEnd="true"
+                            android:padding="@dimen/margin_15"
+                            android:id="@+id/imgClose"
+                            android:src="@drawable/ic_close"
+                            android:layout_width="@dimen/icon_size_60"
+                            android:layout_height="@dimen/icon_size_60"/>
+                    </RelativeLayout>
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_below="@+id/rlDragToClose"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <com.panshen.gridcolorpicker.GridColorPicker
+                                android:id="@+id/colorPicker"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                app:gcp_alphaViewLabelColor="@color/black"
+                                app:gcp_alphaViewLabelText="@string/opacity"
+                                app:gcp_cardColor="@color/white"
+                                app:gcp_colorScheme="@array/colors"
+                                app:gcp_row="10"
+                                app:gcp_selectorColor="@color/colorAccent"
+                                app:gcp_showAlphaView="false"
+                                app:gcp_showAlphaViewLabel="false" />
+                        </RelativeLayout>
+                    </androidx.core.widget.NestedScrollView>
+                </RelativeLayout>
+            </com.davidmiguel.dragtoclose.DragToClose>
+        </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

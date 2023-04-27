@@ -218,6 +218,7 @@ dependencies {
     implementation project(':compressor')
     implementation project(':custom_qr_generator')
     implementation project(':gridcolor')
+    implementation project(':dragtoclose')
     implementation files('libs/zxingcpp-release.aar')
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"

@@ -36,6 +36,16 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".ui.changedesign.PopupColorActivity"
+            android:label="@string/change_design"
+            android:theme="@style/TransparentCompat"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".ui.supportedcode.SupportedCodeActivity"
             android:label="@string/supported_codes"
