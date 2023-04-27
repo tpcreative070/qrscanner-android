@@ -8,4 +8,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "QRScanner"
-include ':app','switchdatetime','simplerecyclerview','simplecropview','flagkit','compressor','custom_qr_generator','gridcolor','dragtoclose'
+include ':app','switchdatetime','simplerecyclerview','simplecropview','flagkit','compressor','custom_qr_generator','gridcolor','dragtoclose','multipletype'
