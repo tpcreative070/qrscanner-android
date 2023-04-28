@@ -9,18 +9,32 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.davidmiguel.dragtoclose.DragListener
 import com.davidmiguel.dragtoclose.DragToClose
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.addCircleRipple
+import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.common.extension.toJson
 import tpcreative.co.qrscanner.databinding.ActivityPopupColorBinding
+import tpcreative.co.qrscanner.model.EnumImage
 
 class PopupColorActivity : AppCompatActivity() {
     lateinit var binding : ActivityPopupColorBinding
     private val TAG = this::class.java.simpleName
+    private lateinit var imageType : EnumImage
+    private lateinit var mMapColor : HashMap<EnumImage,String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = Color.TRANSPARENT
         binding = ActivityPopupColorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val bundle: Bundle? = intent?.extras
+        mMapColor = bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP) ?: HashMap<EnumImage,String>()
+        imageType = EnumImage.valueOf(bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_TYPE) ?:"")
+        Utils.Log(TAG,"Map result ${mMapColor.toJson()}")
+        Utils.Log(TAG,"Map result image ${imageType.name}")
         binding.imgClose.setOnClickListener {
             finish()
             overridePendingTransition(R.anim.no_animation,R.anim.slide_down)
@@ -41,7 +55,7 @@ class PopupColorActivity : AppCompatActivity() {
             }
         })
 
-        binding.colorPicker.checkColor("#ffffff")
+        binding.colorPicker.checkColor(mMapColor[imageType] ?: "#ffffff")
         binding.colorPicker.onColorChanged = { color ->
             //onColorChanged(color)
             Utils.Log(TAG,"Color changed $color")
@@ -50,6 +64,9 @@ class PopupColorActivity : AppCompatActivity() {
         binding.colorPicker.afterColorChanged = { color ->
             //afterColorChanged(color)
             Utils.Log(TAG,"after color changed $color")
+            NewChangeDesignActivity.mResult?.invoke(color)
         }
+        binding.imgClose.addCircleRipple()
+        binding.imgEdit.addCircleRipple()
     }
 }

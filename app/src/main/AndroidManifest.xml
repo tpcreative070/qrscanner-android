@@ -38,6 +38,15 @@
         </activity>
 
         <activity
+            android:name=".ui.changedesign.NewChangeDesignActivity"
+            android:label="@string/change_design"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
             android:name=".ui.changedesign.PopupColorActivity"
             android:label="@string/change_design"
             android:theme="@style/TransparentCompat"

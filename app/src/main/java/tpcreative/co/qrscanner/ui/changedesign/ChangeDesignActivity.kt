@@ -51,8 +51,8 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         initUI()
         if (savedInstanceState != null) {
             viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
-            viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
-            viewModel.selectedEnumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW) ?:EnumView.ALL_HIDDEN.name)
+//            viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
+//            viewModel.selectedEnumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW) ?:EnumView.ALL_HIDDEN.name)
             viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
             viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
             viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
@@ -165,9 +165,9 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
             }
         })
 
-        Utils.Log(TAG,"State instance enum view ${viewModel.enumView.name}")
-        Utils.Log(TAG,"State instance index ${viewModel.index}")
-        onVisit(viewModel.enumView)
+//        Utils.Log(TAG,"State instance enum view ${viewModel.enumView.name}")
+//        Utils.Log(TAG,"State instance index ${viewModel.index}")
+//        onVisit(viewModel.enumView)
         if (viewModel.index>=0){
             loadFragment(mFragments[viewModel.index])
         }
@@ -185,7 +185,7 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     }
 
     fun onVisit(view : EnumView){
-        viewModel.enumView = view
+        //viewModel.enumView = view
         when(view){
             EnumView.TEMPLATE ->{
                 binding.doneCancelBar.tvCancel.text = getString(R.string.template)
@@ -253,9 +253,9 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
         val mType = adapter?.getItem(position)
         viewModel.index = position
         Utils.Log(TAG,"State instance click $position")
-        mType?.enumView?.let { onVisit(it)
-            viewModel.selectedEnumView = it
-        }
+//        mType?.enumView?.let { onVisit(it)
+//            viewModel.selectedEnumView = it
+//        }
         loadFragment(mFragments[position])
     }
 
@@ -280,8 +280,8 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX,viewModel.index)
-        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_VIEW, viewModel.enumView.name)
-        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW, viewModel.selectedEnumView.name)
+//        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_VIEW, viewModel.enumView.name)
+//        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW, viewModel.selectedEnumView.name)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO,viewModel.indexLogo)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignSave)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignReview)
@@ -296,8 +296,8 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
-        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
-        viewModel.selectedEnumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW) ?:EnumView.ALL_HIDDEN.name)
+//        viewModel.enumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_VIEW) ?:EnumView.ALL_HIDDEN.name)
+//        viewModel.selectedEnumView = EnumView.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SELECTED_VIEW) ?:EnumView.ALL_HIDDEN.name)
         viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
         viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
         viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview

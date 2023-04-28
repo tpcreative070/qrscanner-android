@@ -86,4 +86,13 @@ object Navigator {
         val intent = Intent(context, clazz)
         context?.startActivity(intent)
     }
+
+    fun <T> onPopupView(context: Activity?, mMap : HashMap<EnumImage,String>, image : EnumImage, clazz: Class<T>) : Intent {
+        val intent = Intent(context, clazz)
+        val bundle = Bundle()
+        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP, mMap)
+        bundle.putString(ConstantKey.KEY_CHANGE_DESIGN_COLOR_TYPE,image.name)
+        intent.putExtras(bundle)
+        return  intent
+    }
 }

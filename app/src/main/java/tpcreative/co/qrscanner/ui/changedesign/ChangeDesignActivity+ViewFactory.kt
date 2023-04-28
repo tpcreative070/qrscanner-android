@@ -115,15 +115,15 @@ fun ChangeDesignActivity.initUI(){
 fun ChangeDesignActivity.onRestoreAction(){
     Utils.Log(TAG,"Generate icon cancel ${viewModel.changeDesignSave.toJson()}")
     viewModel.selectedIndexRestore()
-    when(viewModel.enumView){
-        EnumView.LOGO ->{
-            viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
-        }
-        EnumView.COLOR ->{
-            viewColor.setSelectedIndex(viewModel.indexColor.mapColor,viewModel.isOpenColorPicker,viewModel.enumType)
-        }
-        else -> {}
-    }
+//    when(viewModel.enumView){
+//        EnumView.LOGO ->{
+//            viewLogo.setSelectedIndex(viewModel.indexLogo,viewModel.shape,viewModel.create.uuId ?:"")
+//        }
+//        EnumView.COLOR ->{
+//            viewColor.setSelectedIndex(viewModel.indexColor.mapColor,viewModel.isOpenColorPicker,viewModel.enumType)
+//        }
+//        else -> {}
+//    }
     onGenerateQRReview()
 }
 
@@ -134,9 +134,9 @@ fun ChangeDesignActivity.onSaveAction(){
 }
 
 private fun ChangeDesignActivity.onClearAction(){
-    viewModel.enumView = EnumView.ALL_HIDDEN
-    viewModel.index = -1
-    onVisit(EnumView.ALL_HIDDEN)
+//    viewModel.enumView = EnumView.ALL_HIDDEN
+//    viewModel.index = -1
+//    onVisit(EnumView.ALL_HIDDEN)
 }
 
 private fun ChangeDesignActivity.getIntentData(){

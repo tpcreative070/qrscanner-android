@@ -38,6 +38,7 @@ import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignActivity
+import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
 import tpcreative.co.qrscanner.ui.create.BarcodeActivity
 import java.io.File
 import java.util.*
@@ -400,7 +401,7 @@ class ReviewActivity : BaseActivitySlide() {
     }
 
     fun onOpenChangeDesign() {
-        pickForResult.launch(Navigator.onResultView(this,create,ChangeDesignActivity::class.java))
+        pickForResult.launch(Navigator.onResultView(this,create, NewChangeDesignActivity::class.java))
     }
 
     fun mergeUUID() {

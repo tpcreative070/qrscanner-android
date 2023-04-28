@@ -31,6 +31,13 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_COLOR = "key_change_design_color"
         const val KEY_CHANGE_DESIGN_SELECTED_VIEW = "key_change_design_selected_view"
         const val KEY_SET_RESULT_OKEY = "key_set_result_okey"
+        const val KEY_CHANGE_DESIGN_MULTIPLE_TYPE = "key_change_design_multiple_type"
+        const val KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION = "key_change_design_logo_previous_position"
+        const val KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION = "key_change_design_logo_previous_cancel_position"
+        const val KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_SET_LOGO = "key_change_design_logo_previous_cancel_SET_LOGO"
+        const val KEY_CHANGE_DESIGN_COLOR_MAP = "key_change_design_color_map"
+        const val KEY_CHANGE_DESIGN_COLOR_TYPE = "key_change_design_color_type"
+        const val KEY_CHANGE_DESIGN_COLOR_SELECTED_MAP = "key_change_design_color_selected_map"
 
         const val TITLE  = "title"
         const val LOCATION = "location"

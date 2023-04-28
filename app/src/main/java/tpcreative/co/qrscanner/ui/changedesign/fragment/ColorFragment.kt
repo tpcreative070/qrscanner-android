@@ -13,16 +13,12 @@ import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
 import tpcreative.co.qrscanner.databinding.FragmentColorBinding
 import tpcreative.co.qrscanner.model.ColorModel
 import android.content.DialogInterface
-import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.panshen.gridcolorpicker.builder.colorPickerDialog
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.model.EnumImage
-import tpcreative.co.qrscanner.ui.changedesign.PopupColorActivity
 
 class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
     private lateinit var binding : FragmentColorBinding
@@ -124,9 +120,9 @@ class ColorFragment : BaseFragment(),ColorFragmentAdapter.ItemSelectedListener {
             isAction = false
             Utils.Log(TAG,"Previous color changed position ${mObject.type}")
         }
-        //showDialog()
-        Navigator.onIntent(requireContext(),PopupColorActivity::class.java)
-        requireActivity().overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
+        showDialog()
+//        Navigator.onIntent(requireContext(),PopupColorActivity::class.java)
+//        requireActivity().overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
     }
 
     private fun onClearDialog(){

@@ -2,10 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:background="@color/material_gray_200"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.changedesign.ChangeDesignActivity">
+    tools:context=".ui.changedesign.NewChangeDesignActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -14,7 +14,7 @@
         android:fitsSystemWindows="true">
         <include
             android:id="@+id/done_cancel_bar"
-            layout="@layout/header_layout_change_design" />
+            layout="@layout/header_layout_new_change_design" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
@@ -28,13 +28,13 @@
 
         <LinearLayout
             android:weightSum="2"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_weight="0.7"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_margin="@dimen/margin_20"
                     android:layout_width="0dp"
@@ -47,13 +47,12 @@
                     android:id="@+id/imgQRCode"
                     android:layout_centerInParent="true"
                     tools:ignore="MissingConstraints" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <RelativeLayout
                 android:layout_weight="1.3"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
@@ -62,38 +61,38 @@
                     android:id="@+id/frameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_template"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_template"/>-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_color"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_color"-->
-<!--                    />-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_dots"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_dots"-->
-<!--                    />-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_eyes"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_eyes"/>-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_logo"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_logo"/>-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_text"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_text"/>-->
+                <!--                <include-->
+                <!--                    android:id="@+id/include_layout_template"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    layout="@layout/fragment_template"/>-->
+                <!--                <include-->
+                <!--                    android:id="@+id/include_layout_color"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    layout="@layout/fragment_color"-->
+                <!--                    />-->
+                <!--                <include-->
+                <!--                    android:id="@+id/include_layout_dots"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    layout="@layout/fragment_dots"-->
+                <!--                    />-->
+                <!--                <include-->
+                <!--                    android:id="@+id/include_layout_eyes"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    layout="@layout/fragment_eyes"/>-->
+                <!--                <include-->
+                <!--                    android:id="@+id/include_layout_logo"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    layout="@layout/fragment_logo"/>-->
+                <!--                <include-->
+                <!--                    android:id="@+id/include_layout_text"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    layout="@layout/fragment_text"/>-->
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

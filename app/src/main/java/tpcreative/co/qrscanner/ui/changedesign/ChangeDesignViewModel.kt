@@ -22,21 +22,20 @@ import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
+import java.util.TreeSet
 
 class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     val TAG = this::class.java.name
     var mList: MutableList<ChangeDesignCategoryModel> = mutableListOf()
     var create: GeneralModel = GeneralModel()
-    var enumView  = EnumView.ALL_HIDDEN
     var index  : Int = -1
-
     /*Logo area*/
     lateinit var indexLogo : LogoModel
     var mLogoList = mutableListOf<LogoModel>()
     lateinit var changeDesignReview :ChangeDesignModel
     lateinit var changeDesignSave :ChangeDesignModel
     lateinit var changeDesignOriginal :ChangeDesignModel
-    var shape : EnumShape = EnumShape.ORIGINAL
+    var shape : EnumShape = EnumShape.SQUARE
     var uri : Uri? = null
     var bitmap : Bitmap? = null
     /*Color area*/
@@ -45,7 +44,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var enumType : EnumImage  = EnumImage.NONE
     //var mMapColor : HashMap<EnumImage,String> = hashMapOf()
     lateinit var indexColor : ColorModel
-    var selectedEnumView: EnumView = EnumView.ALL_HIDDEN
+    private var isChangedCurrentBitmap : Boolean = false
+    var mapSetView : TreeSet<EnumView> = TreeSet<EnumView>()
 
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
@@ -289,7 +289,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                             .Solid(R.color.transparent.stringHexNoTransparency.toColorInt())
                     )
                 )
-                Utils.Log(TAG,"Result cropped bitmap  to drawable")
+                Utils.Log(TAG,"Result cropped bitmap  to drawable :Shape ${this.shape}")
             }
             Utils.Log(TAG,"Result cropped bitmap nothing")
         }
@@ -302,93 +302,99 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     }
 
     fun selectedIndexOnReview(){
-        when(enumView){
-            EnumView.TEMPLATE ->{
+       mapSetView.forEach {
+           when(it){
+               EnumView.TEMPLATE ->{
 
-            }
-            EnumView.COLOR ->{
-                Utils.Log(TAG,"data value result original ${changeDesignOriginal.color?.mapColor?.toJson()}")
-                changeDesignReview.color = indexColor
-                Utils.Log(TAG,"data value result review ${changeDesignReview.color?.mapColor?.toJson()}")
-                Utils.Log(TAG,"data value result after original ${changeDesignOriginal.color?.mapColor?.toJson()}")
-            }
-            EnumView.DOTS ->{
+               }
+               EnumView.COLOR ->{
+                   Utils.Log(TAG,"data value result original ${changeDesignOriginal.color?.mapColor?.toJson()}")
+                   changeDesignReview.color = indexColor
+                   Utils.Log(TAG,"data value result review ${changeDesignReview.color?.mapColor?.toJson()}")
+                   Utils.Log(TAG,"data value result after original ${changeDesignOriginal.color?.mapColor?.toJson()}")
+               }
+               EnumView.DOTS ->{
 
-            }
-            EnumView.EYES->{
+               }
+               EnumView.EYES->{
 
-            }
-            EnumView.LOGO ->{
-                changeDesignReview.logo = indexLogo
-            }
-            EnumView.TEXT ->{
+               }
+               EnumView.LOGO ->{
+                   changeDesignReview.logo = indexLogo
+               }
+               EnumView.TEXT ->{
 
-            }
-            else -> {}
-        }
+               }
+               else -> {}
+           }
+       }
     }
 
     fun selectedIndexRestore(){
         val mData = ChangeDesignModel(changeDesignSave)
         Utils.Log(TAG,"Show data restore ${mData.toJson()}")
-        when(enumView){
-            EnumView.TEMPLATE ->{
+        mapSetView.forEach {
+            when(it){
+                EnumView.TEMPLATE ->{
 
-            }
-            EnumView.COLOR ->{
-                val mHashMap = HashMap(mData.color?.mapColor ?: defaultColorMap())
-                val mColor = mHashMap[enumType]
-                mColor?.putChangedDesignColor
-                changeDesignReview.color?.mapColor = mHashMap
-                indexColor.mapColor = mHashMap
-            }
-            EnumView.DOTS ->{
+                }
+                EnumView.COLOR ->{
+                    val mHashMap = HashMap(mData.color?.mapColor ?: defaultColorMap())
+                    val mColor = mHashMap[enumType]
+                    mColor?.putChangedDesignColor
+                    changeDesignReview.color?.mapColor = mHashMap
+                    indexColor.mapColor = mHashMap
+                }
+                EnumView.DOTS ->{
 
-            }
-            EnumView.EYES->{
+                }
+                EnumView.EYES->{
 
-            }
-            EnumView.LOGO ->{
-                changeDesignReview = mData
-                indexLogo = mData.logo ?: defaultLogo()
-            }
-            EnumView.TEXT ->{
+                }
+                EnumView.LOGO ->{
+                    changeDesignReview = mData
+                    indexLogo = mData.logo ?: defaultLogo()
+                }
+                EnumView.TEXT ->{
 
+                }
+                else -> {}
             }
-            else -> {}
         }
     }
 
     fun selectedIndexOnSave(){
-        when(enumView){
-            EnumView.TEMPLATE ->{
+        mapSetView.forEach {
+            when(it){
+                EnumView.TEMPLATE ->{
 
-            }
-            EnumView.COLOR ->{
-                val mHashMap = HashMap(indexColor.mapColor)
-                if (changeDesignSave.color==null){
-                    val mIndex = defaultColor()
-                    mIndex.mapColor = mHashMap
-                    changeDesignSave.color = mIndex
-                }else{
-                    changeDesignSave.color?.mapColor = mHashMap
                 }
-                Utils.Log(TAG,"SelectedIndexOnSave ${indexColor.mapColor.toJson()}")
-            }
-            EnumView.DOTS ->{
+                EnumView.COLOR ->{
+                    val mHashMap = HashMap(indexColor.mapColor)
+                    if (changeDesignSave.color==null){
+                        val mIndex = defaultColor()
+                        mIndex.mapColor = mHashMap
+                        changeDesignSave.color = mIndex
+                    }else{
+                        changeDesignSave.color?.mapColor = mHashMap
+                    }
+                    Utils.Log(TAG,"SelectedIndexOnSave ${indexColor.mapColor.toJson()}")
+                }
+                EnumView.DOTS ->{
 
-            }
-            EnumView.EYES->{
+                }
+                EnumView.EYES->{
 
-            }
-            EnumView.LOGO ->{
-                changeDesignSave.logo = indexLogo
-                changeDesignSave.logo?.enumShape = shape
-            }
-            EnumView.TEXT ->{
+                }
+                EnumView.LOGO ->{
+                    changeDesignSave.logo = indexLogo
+                    changeDesignSave.logo?.enumShape = shape
+                }
+                EnumView.TEXT ->{
 
+                }
+                else -> {}
             }
-            else -> {}
         }
     }
 
@@ -413,26 +419,31 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     fun onUpdateBitmap(bitmap: Bitmap?){
         this.bitmap = bitmap
+        isChangedCurrentBitmap = true
     }
 
     fun isChangedSave() : Boolean{
         Utils.Log(TAG,"Data value original ${changeDesignOriginal.color?.mapColor?.toJson()}")
         Utils.Log(TAG,"Data value review ${indexColor.mapColor.toJson()}")
         val mChanged = changeDesignOriginal.toJson() != changeDesignSave.toJson()
-        when(selectedEnumView){
-            EnumView.COLOR ->{
-                if (mChanged || indexColor.toJson() != changeDesignOriginal.color?.toJson()){
-                    Utils.Log(TAG,"Data value indexColor ${indexColor.toJson()}")
-                    Utils.Log(TAG,"Data value changeDesignOriginal ${changeDesignOriginal.color?.toJson()}")
-                    return true
+        mapSetView.forEach {
+            when(it){
+                EnumView.COLOR ->{
+                    if (mChanged || indexColor.toJson() != changeDesignOriginal.color?.toJson()){
+                        Utils.Log(TAG,"Data value indexColor ${indexColor.toJson()}")
+                        Utils.Log(TAG,"Data value changeDesignOriginal ${changeDesignOriginal.color?.toJson()}")
+                        return true
+                    }
                 }
-            }
-            EnumView.LOGO ->{
-                if (mChanged || shape != changeDesignOriginal.logo?.enumShape){
-                    return true
+                EnumView.LOGO ->{
+                    Utils.Log(TAG,"Check logo share ${shape.name}")
+                    Utils.Log(TAG,"Check logo share original ${changeDesignOriginal.logo?.enumShape?.name}")
+                    if (mChanged || shape != changeDesignOriginal.logo?.enumShape || isChangedCurrentBitmap){
+                        return true
+                    }
                 }
+                else -> {}
             }
-            else -> {}
         }
         return false
     }
@@ -441,33 +452,30 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         Utils.Log(TAG,"Data value original ${changeDesignOriginal.color?.toJson()}")
         Utils.Log(TAG,"Data value review ${indexColor.toJson()}")
         val mChanged = changeDesignOriginal.toJson() != changeDesignReview.toJson()
-        when(selectedEnumView){
-            EnumView.COLOR ->{
-                if (mChanged || indexColor.toJson() != changeDesignOriginal.color?.toJson()){
-                    return true
+        mapSetView.forEach {
+            when(it){
+                EnumView.COLOR ->{
+                    if (mChanged || indexColor.toJson() != changeDesignOriginal.color?.toJson()){
+                        return true
+                    }
                 }
-            }
-            EnumView.LOGO ->{
-                if (mChanged || shape != changeDesignOriginal.logo?.enumShape){
-                    return true
+                EnumView.LOGO ->{
+                    if (mChanged || shape != changeDesignOriginal.logo?.enumShape){
+                        return true
+                    }
                 }
+                else -> {}
             }
-            else -> {}
         }
         return false
     }
 
-    private fun defaultColorMap() : HashMap<EnumImage,String>{
+    fun defaultColorMap() : HashMap<EnumImage,String>{
         val mMap = HashMap<EnumImage,String>()
         mMap[EnumImage.QR_BACKGROUND] = R.color.white.stringHexNoTransparency
         mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_BALL] = R.color.black_color_picker.stringHexNoTransparency
         return mMap
-    }
-
-    fun onCleanBitMap(){
-        this.bitmap?.recycle()
-        this.bitmap = null
     }
 
     val context = QRScannerApplication.getInstance()

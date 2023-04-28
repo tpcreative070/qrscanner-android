@@ -9,6 +9,9 @@ class ColorModel( @DrawableRes
     @ColorRes val tint : Int,
 val type : EnumImage,
 var isSelected : Boolean,
-var mapColor : HashMap<EnumImage,String>) : java.io.Serializable {
-
+var mapColor : HashMap<EnumImage,String>) : java.io.Serializable, Comparable<ColorModel> {
+    override fun compareTo(other: ColorModel) = compareValuesBy(this, other,
+        { it.type },
+        { it.type }
+    )
 }
