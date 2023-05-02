@@ -1,15 +1,21 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
+import android.R.attr.animation
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import com.github.alexzhirkevich.customqrgenerator.QrData
+import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
@@ -22,7 +28,8 @@ import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
-import java.util.TreeSet
+import java.util.*
+
 
 class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     val TAG = this::class.java.name
@@ -46,6 +53,13 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     lateinit var indexColor : ColorModel
     private var isChangedCurrentBitmap : Boolean = false
     var mapSetView : TreeSet<EnumView> = TreeSet<EnumView>()
+    var isEmptyChangeDesign : Boolean = true
+
+    /*Body*/
+    var mBodyList  = mutableListOf<BodyModel>()
+
+    /*Position marker*/
+    var mPositionMarkerList  = mutableListOf<PositionMarkerModel>()
 
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
@@ -76,9 +90,11 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
                         /*Color area*/
                         indexColor = mReview.color ?: defaultColor()
+                        isEmptyChangeDesign = false
                         Utils.Log(TAG,"onColorChanged original 1 ${changeDesignOriginal.toJson()}")
                     }catch (e : Exception){
                         e.printStackTrace()
+                        isEmptyChangeDesign = false
                     }
                 }else{
                     indexLogo = defaultLogo()
@@ -87,6 +103,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     changeDesignReview =  ChangeDesignModel()
                     changeDesignOriginal = ChangeDesignModel()
                     Utils.Log(TAG,"Data logo not found")
+                    isEmptyChangeDesign = true
                 }
                 Utils.Log(TAG,"Data change design ${create.toJson()}")
                 callback.invoke(true)
@@ -94,6 +111,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         }
         initializedLogoData()
         initializedColorData()
+        initializedPositionMarkerData()
+        initializedBodyData()
     }
 
     fun getData(callback: (result: MutableList<ChangeDesignCategoryModel>) -> Unit){
@@ -209,6 +228,22 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mColorList.add(ColorModel(R.drawable.ic_qrcode,R.color.colorAccent,EnumImage.QR_BALL,false,defaultColorMap()))
     }
 
+    private fun initializedPositionMarkerData(){
+        mPositionMarkerList.clear()
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+    }
+
+    private fun initializedBodyData(){
+        mBodyList.clear()
+        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+    }
+
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
         val mDataResult = changeDesignReview.logo
         Utils.Log(TAG,"Data result of review ${changeDesignReview.color?.toJson()}")
@@ -224,18 +259,19 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             .setColors(
                 QrVectorColors(
                     dark =  QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FOREGROUND]?.toColorInt() ?: R.color.black_color_picker),
-                    ball = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker)
+                    ball = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker),
+                    frame = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker)
                 ))
-//            .setShapes(
-//                QrVectorShapes(
-//                    darkPixel = QrVectorPixelShape
-//                        .RoundCorners(.5f),
-//                    ball = QrVectorBallShape
-//                        .RoundCorners(.25f),
-//                    frame = QrVectorFrameShape
-//                        .RoundCorners(.25f),
-//                )
-//            )
+            .setShapes(
+                QrVectorShapes(
+                    darkPixel = QrVectorPixelShape
+                        .RoundCorners(.5f),
+                    ball = QrVectorBallShape
+                        .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true),
+                    frame = QrVectorFrameShape
+                        .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
+                )
+            )
         val mDrawable: Drawable?
         val shape : QrVectorLogoShape = when(this.shape){
             EnumShape.SQUARE ->{

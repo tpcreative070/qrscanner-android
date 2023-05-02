@@ -1237,6 +1237,9 @@ object Utils {
         if (mData?.app_id.isNullOrEmpty()){
             return true
         }
+        if (!QRScannerApplication.getInstance().getAuthorized()){
+            return true
+        }
         if ((mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)) && ((mData.version_code?:0) >= BuildConfig.VERSION_CODE)){
             return false
         }

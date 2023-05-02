@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.hardware.display.DisplayManagerCompat
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import com.github.javiersantos.piracychecker.*
+import com.github.javiersantos.piracychecker.enums.InstallerID
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -104,6 +106,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var isHelpAndFeedbackLoadedAdsPortrait : Boolean = true
     private var isChangeColorAdsPortrait : Boolean = true
     private var isBackupLoadedAdsPortrait : Boolean = true
+    private var isAuthorized : Boolean = false
     override fun onCreate() {
         super.onCreate()
         mInstance = this
@@ -142,6 +145,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         requiredScopesString?.add(DriveScopes.DRIVE_APPDATA)
         requiredScopesString?.add(DriveScopes.DRIVE_FILE)
         EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
+        verifyUnauthorizedApps()
     }
 
     fun getGoogleSignInOptions(account: Account?): GoogleSignInOptions? {
@@ -1770,6 +1774,28 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             }
             else -> {}
         }
+    }
+
+
+    private fun verifyUnauthorizedApps() {
+        piracyChecker {
+            enableInstallerId(InstallerID.GOOGLE_PLAY)
+            callback {
+                allow {
+                    isAuthorized = true
+                }
+                doNotAllow { piracyCheckerError, pirateApp ->
+                    isAuthorized = false
+                }
+                onError {
+                    isAuthorized = false
+                }
+            }
+        }.start()
+    }
+
+    fun getAuthorized() : Boolean{
+        return isAuthorized
     }
 
     companion object {

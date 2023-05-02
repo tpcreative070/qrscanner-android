@@ -376,4 +376,6 @@
     <string name="circle">Tròn</string>
     <string name="confirm">Xác nhận</string>
     <string name="opacity">Độ mờ</string>
+    <string name="body">Body</string>
+    <string name="position_marker">Position Marker</string>
 </resources>

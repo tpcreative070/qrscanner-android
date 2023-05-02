@@ -549,5 +549,7 @@
     <string name="circle">Circle</string>
     <string name="confirm">Confirm</string>
     <string name="opacity">Opacity</string>
+    <string name="body">Body</string>
+    <string name="position_marker">Position Marker</string>
 
 </resources>

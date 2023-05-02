@@ -56,13 +56,15 @@ class Constant {
             put(EnumIcon.ic_text.name,R.drawable.ic_text)
             put(EnumIcon.ic_network.name,R.drawable.ic_network)
             put(EnumIcon.ic_gallery.name,R.drawable.ic_gallery)
+            put(EnumIcon.ic_body_1.name,R.drawable.ic_body_1)
+            put(EnumIcon.ic_position_marker_1.name,R.drawable.ic_position_marker_1)
         }
     }
 }
 
 enum class EnumIcon {
     ic_youtube_png, ic_twitter,ic_template,ic_paint,ic_dots,ic_eyes,ic_registered,ic_design_text,bg_white,design_wifi,ic_whatapp,ic_instagram,ic_paypal,ic_email,
-    ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery;
+    ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery,ic_body_1,ic_position_marker_1;
     companion object {
         fun fromValue(enumIcon: EnumIcon): Int {
             return Constant.mList[enumIcon.name] ?: R.drawable.icon
