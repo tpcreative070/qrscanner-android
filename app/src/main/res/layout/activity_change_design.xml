@@ -62,38 +62,6 @@
                     android:id="@+id/frameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_template"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_template"/>-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_color"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_color"-->
-<!--                    />-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_dots"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_dots"-->
-<!--                    />-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_eyes"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_eyes"/>-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_logo"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_logo"/>-->
-<!--                <include-->
-<!--                    android:id="@+id/include_layout_text"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    layout="@layout/fragment_text"/>-->
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

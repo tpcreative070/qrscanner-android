@@ -32,7 +32,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var mList: MutableList<ChangeDesignCategoryModel> = mutableListOf()
     var create: GeneralModel = GeneralModel()
     var index  : Int = -1
-    
+
     /*Logo area*/
     lateinit var indexLogo : LogoModel
     var mLogoList = mutableListOf<LogoModel>()
@@ -47,7 +47,6 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var mColorList = mutableListOf<ColorModel>()
     var isOpenColorPicker : Boolean = false
     var enumType : EnumImage  = EnumImage.NONE
-    //var mMapColor : HashMap<EnumImage,String> = hashMapOf()
     lateinit var indexColor : ColorModel
     private var isChangedCurrentBitmap : Boolean = false
     var mapSetView : TreeSet<EnumView> = TreeSet<EnumView>()
@@ -533,6 +532,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mMap[EnumImage.QR_BALL] = R.color.black_color_picker.stringHexNoTransparency
         return mMap
     }
+
+    //private fun
 
     val context = QRScannerApplication.getInstance()
 }
