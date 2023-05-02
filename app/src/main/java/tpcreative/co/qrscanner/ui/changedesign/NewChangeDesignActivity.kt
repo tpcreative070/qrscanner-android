@@ -169,7 +169,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         items.addAll(viewModel.mBodyList)
         items.forEachIndexed { index, it ->
             if (it is LogoModel){
-                if (it.enumIcon == viewModel.indexLogo.enumIcon && !viewModel.isEmptyChangeDesign){
+                if (it.enumIcon == viewModel.indexLogo.enumIcon && !viewModel.isEmptyChangeDesignLogo){
                     previousLogoPosition = index
                     it.isSelected = viewModel.indexLogo.isSelected
                     selectedSetLogo.add(it)
@@ -178,7 +178,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 }
             }
             else if (it is PositionMarkerModel){
-                if (it.enumPositionMarker == viewModel.indexPositionMarker.enumPositionMarker && !viewModel.isEmptyChangeDesign){
+                if (it.enumPositionMarker == viewModel.indexPositionMarker.enumPositionMarker && !viewModel.isEmptyChangeDesignPositionMarker){
                     previousPositionMarkerPosition = index
                     it.isSelected = viewModel.indexPositionMarker.isSelected
                     selectedSetPositionMarker.add(it)
@@ -187,7 +187,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 }
             }
             else if (it is BodyModel){
-                if (it.enumBody == viewModel.indexBody.enumBody && !viewModel.isEmptyChangeDesign){
+                if (it.enumBody == viewModel.indexBody.enumBody && !viewModel.isEmptyChangeDesignBody){
                     previousBodyPosition = index
                     it.isSelected = viewModel.indexBody.isSelected
                     selectedSetBody.add(it)

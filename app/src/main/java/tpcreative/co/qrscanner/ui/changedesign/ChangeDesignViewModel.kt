@@ -50,7 +50,9 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     lateinit var indexColor : ColorModel
     private var isChangedCurrentBitmap : Boolean = false
     var mapSetView : TreeSet<EnumView> = TreeSet<EnumView>()
-    var isEmptyChangeDesign : Boolean = true
+    var isEmptyChangeDesignLogo : Boolean = true
+    var isEmptyChangeDesignPositionMarker : Boolean = true
+    var isEmptyChangeDesignBody : Boolean = true
 
     /*Position marker*/
     var mPositionMarkerList  = mutableListOf<PositionMarkerModel>()
@@ -84,25 +86,43 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         changeDesignReview =  ChangeDesignModel(mReview)
 
                         /*Logo area*/
-                        indexLogo = mReview.logo ?: defaultLogo()
+                        mReview.logo?.let {
+                            indexLogo = it
+                            isEmptyChangeDesignLogo = false
+                        }
+                        if (mReview.logo ==null){
+                            indexLogo = defaultLogo()
+                            isEmptyChangeDesignLogo = true
+                        }
                         shape = mReview.logo?.enumShape ?: EnumShape.ORIGINAL
                         bitmap = create.uuId?.findImageName(EnumImage.LOGO)?.toBitmap
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
 
                         /*Color area*/
                         indexColor = mReview.color ?: defaultColor()
-                        isEmptyChangeDesign = false
                         Utils.Log(TAG,"onColorChanged original 1 ${changeDesignOriginal.toJson()}")
 
                         /*Position marker*/
-                        indexPositionMarker = mReview.positionMarker ?: defaultPositionMarker()
+                        mReview.positionMarker?.let {
+                            indexPositionMarker = it
+                            isEmptyChangeDesignPositionMarker = false
+                        }
+                        if (mReview.positionMarker ==null){
+                            indexPositionMarker = defaultPositionMarker()
+                            isEmptyChangeDesignPositionMarker = true
+                        }
 
                         /*Body*/
-                        indexBody = mReview.body ?: defaultBody()
-
+                        mReview.body?.let {
+                            indexBody = it
+                            isEmptyChangeDesignBody = false
+                        }
+                        if (mReview.body ==null){
+                            indexBody = defaultBody()
+                            isEmptyChangeDesignBody = true
+                        }
                     }catch (e : Exception){
                         e.printStackTrace()
-                        isEmptyChangeDesign = false
                     }
                 }else{
                     indexLogo = defaultLogo()
@@ -113,7 +133,9 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     changeDesignReview =  ChangeDesignModel()
                     changeDesignOriginal = ChangeDesignModel()
                     Utils.Log(TAG,"Data logo not found")
-                    isEmptyChangeDesign = true
+                    isEmptyChangeDesignLogo = true
+                    isEmptyChangeDesignPositionMarker = true
+                    isEmptyChangeDesignBody = true
                 }
                 Utils.Log(TAG,"Data change design ${create.toJson()}")
                 callback.invoke(true)
