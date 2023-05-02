@@ -201,14 +201,14 @@ class ChangeDesignActivity : BaseActivitySlide() , ChangeDesignAdapter.ItemSelec
                 binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
                 binding.doneCancelBar.imgDone.visibility = View.VISIBLE
             }
-            EnumView.DOTS ->{
+            EnumView.BODY ->{
                 binding.doneCancelBar.tvCancel.text = getString(R.string.dots)
                 binding.doneCancelBar.btnSave.text = getString(R.string.done)
                 binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))
                 binding.doneCancelBar.btnSave.visibility = View.INVISIBLE
                 binding.doneCancelBar.imgDone.visibility = View.VISIBLE
             }
-            EnumView.EYES ->{
+            EnumView.POSITION_MARKER ->{
                 binding.doneCancelBar.tvCancel.text = getString(R.string.eyes)
                 binding.doneCancelBar.btnSave.text = getString(R.string.done)
                 binding.doneCancelBar.imgCancel.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_close))

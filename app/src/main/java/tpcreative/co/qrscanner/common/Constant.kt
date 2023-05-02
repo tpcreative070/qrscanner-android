@@ -56,15 +56,25 @@ class Constant {
             put(EnumIcon.ic_text.name,R.drawable.ic_text)
             put(EnumIcon.ic_network.name,R.drawable.ic_network)
             put(EnumIcon.ic_gallery.name,R.drawable.ic_gallery)
-            put(EnumIcon.ic_body_1.name,R.drawable.ic_body_1)
-            put(EnumIcon.ic_position_marker_1.name,R.drawable.ic_position_marker_1)
+            put(EnumIcon.ic_frame_ball_detail.name,R.drawable.ic_frame_ball_default)
+            put(EnumIcon.ic_frame_ball_corner_10px.name,R.drawable.ic_frame_ball_corner_10px)
+            put(EnumIcon.ic_frame_ball_corner_25px.name,R.drawable.ic_frame_ball_corner_25px)
+            put(EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px.name,R.drawable.ic_frame_ball_corner_top_right_bottom_left_25px)
+            put(EnumIcon.ic_frame_ball_circle.name,R.drawable.ic_frame_ball_circle)
+            put(EnumIcon.ic_dark_default.name,R.drawable.ic_dark_default)
+            put(EnumIcon.ic_dark_corner_0_5.name,R.drawable.ic_dark_corner_0_5px)
+            put(EnumIcon.ic_dark_circle.name,R.drawable.ic_dark_circle)
+            put(EnumIcon.ic_dark_star.name,R.drawable.ic_dark_star)
         }
     }
 }
 
 enum class EnumIcon {
     ic_youtube_png, ic_twitter,ic_template,ic_paint,ic_dots,ic_eyes,ic_registered,ic_design_text,bg_white,design_wifi,ic_whatapp,ic_instagram,ic_paypal,ic_email,
-    ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery,ic_body_1,ic_position_marker_1;
+    ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery,ic_dark_corner_0_5,ic_frame_ball_corner_top_right_bottom_left_25px,ic_frame_ball_detail,ic_dark_default,ic_frame_ball_corner_10px,ic_frame_ball_corner_25px,
+    ic_frame_ball_circle,
+    ic_dark_circle,
+    ic_dark_star;
     companion object {
         fun fromValue(enumIcon: EnumIcon): Int {
             return Constant.mList[enumIcon.name] ?: R.drawable.icon

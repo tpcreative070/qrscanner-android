@@ -1,21 +1,17 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
-import android.R.attr.animation
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
+import androidx.core.graphics.toColorLong
 import com.github.alexzhirkevich.customqrgenerator.QrData
-import com.github.alexzhirkevich.customqrgenerator.style.Neighbors
+import com.github.alexzhirkevich.customqrgenerator.style.Color
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
@@ -36,6 +32,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var mList: MutableList<ChangeDesignCategoryModel> = mutableListOf()
     var create: GeneralModel = GeneralModel()
     var index  : Int = -1
+    
     /*Logo area*/
     lateinit var indexLogo : LogoModel
     var mLogoList = mutableListOf<LogoModel>()
@@ -45,6 +42,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var shape : EnumShape = EnumShape.SQUARE
     var uri : Uri? = null
     var bitmap : Bitmap? = null
+
     /*Color area*/
     var mColorList = mutableListOf<ColorModel>()
     var isOpenColorPicker : Boolean = false
@@ -55,11 +53,14 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     var mapSetView : TreeSet<EnumView> = TreeSet<EnumView>()
     var isEmptyChangeDesign : Boolean = true
 
-    /*Body*/
-    var mBodyList  = mutableListOf<BodyModel>()
-
     /*Position marker*/
     var mPositionMarkerList  = mutableListOf<PositionMarkerModel>()
+    lateinit var indexPositionMarker : PositionMarkerModel
+
+    /*Body*/
+    var mBodyList  = mutableListOf<BodyModel>()
+    lateinit var indexBody : BodyModel
+
 
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
@@ -88,10 +89,18 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         shape = mReview.logo?.enumShape ?: EnumShape.ORIGINAL
                         bitmap = create.uuId?.findImageName(EnumImage.LOGO)?.toBitmap
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
+
                         /*Color area*/
                         indexColor = mReview.color ?: defaultColor()
                         isEmptyChangeDesign = false
                         Utils.Log(TAG,"onColorChanged original 1 ${changeDesignOriginal.toJson()}")
+
+                        /*Position marker*/
+                        indexPositionMarker = mReview.positionMarker ?: defaultPositionMarker()
+
+                        /*Body*/
+                        indexBody = mReview.body ?: defaultBody()
+
                     }catch (e : Exception){
                         e.printStackTrace()
                         isEmptyChangeDesign = false
@@ -99,6 +108,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 }else{
                     indexLogo = defaultLogo()
                     indexColor = defaultColor()
+                    indexPositionMarker = defaultPositionMarker()
+                    indexBody = defaultBody()
                     changeDesignSave = ChangeDesignModel()
                     changeDesignReview =  ChangeDesignModel()
                     changeDesignOriginal = ChangeDesignModel()
@@ -123,10 +134,10 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mList.add(
             ChangeDesignCategoryModel(EnumIcon.ic_paint.icon,QRScannerApplication.getInstance().getString(R.string.color),EnumView.COLOR,R.color.transparent,EnumIcon.ic_paint))
         mList.add(
-            ChangeDesignCategoryModel(EnumIcon.ic_dots.icon,QRScannerApplication.getInstance().getString(R.string.dots),EnumView.DOTS,R.color.transparent,EnumIcon.ic_dots)
+            ChangeDesignCategoryModel(EnumIcon.ic_dots.icon,QRScannerApplication.getInstance().getString(R.string.dots),EnumView.BODY,R.color.transparent,EnumIcon.ic_dots)
         )
         mList.add(
-            ChangeDesignCategoryModel(EnumIcon.ic_eyes.icon,QRScannerApplication.getInstance().getString(R.string.eyes),EnumView.EYES,R.color.transparent,EnumIcon.ic_eyes)
+            ChangeDesignCategoryModel(EnumIcon.ic_eyes.icon,QRScannerApplication.getInstance().getString(R.string.eyes),EnumView.POSITION_MARKER,R.color.transparent,EnumIcon.ic_eyes)
         )
         mList.add(
             ChangeDesignCategoryModel(EnumIcon.ic_registered.icon,QRScannerApplication.getInstance().getString(R.string.logo),EnumView.LOGO,R.color.transparent,EnumIcon.ic_registered)
@@ -230,18 +241,19 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedPositionMarkerData(){
         mPositionMarkerList.clear()
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_position_marker_1.icon,EnumIcon.ic_position_marker_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_10px.icon,EnumIcon.ic_frame_ball_corner_10px,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_25px.icon,EnumIcon.ic_frame_ball_corner_25px,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_circle.icon,EnumIcon.ic_frame_ball_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px.icon,EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px,false,R.color.transparent,EnumChangeDesignType.NORMAL))
     }
 
     private fun initializedBodyData(){
         mBodyList.clear()
-        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mBodyList.add(BodyModel(EnumIcon.ic_body_1.icon,EnumIcon.ic_body_1,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_corner_0_5.icon,EnumIcon.ic_dark_corner_0_5,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_circle.icon,EnumIcon.ic_dark_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_star.icon,EnumIcon.ic_dark_star,false,R.color.transparent,EnumChangeDesignType.NORMAL))
     }
 
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
@@ -297,8 +309,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     size = .19f,
                     padding = QrVectorLogoPadding.Natural(.0f),
                     shape = shape,
-                    backgroundColor = QrVectorColor
-                        .Solid(R.color.white.stringHexNoTransparency.toColorInt())
+                    backgroundColor =  QrVectorColor
+                        .Solid(Color(R.color.transparent.toColorLong()))
                 )
             )
         }
@@ -322,7 +334,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         padding = QrVectorLogoPadding.Natural(.0f),
                         shape = shape,
                         backgroundColor =  QrVectorColor
-                            .Solid(R.color.transparent.stringHexNoTransparency.toColorInt())
+                            .Solid(Color(R.color.transparent.toColorLong()))
                     )
                 )
                 Utils.Log(TAG,"Result cropped bitmap  to drawable :Shape ${this.shape}")
@@ -349,10 +361,10 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                    Utils.Log(TAG,"data value result review ${changeDesignReview.color?.mapColor?.toJson()}")
                    Utils.Log(TAG,"data value result after original ${changeDesignOriginal.color?.mapColor?.toJson()}")
                }
-               EnumView.DOTS ->{
+               EnumView.BODY ->{
 
                }
-               EnumView.EYES->{
+               EnumView.POSITION_MARKER->{
 
                }
                EnumView.LOGO ->{
@@ -381,10 +393,10 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     changeDesignReview.color?.mapColor = mHashMap
                     indexColor.mapColor = mHashMap
                 }
-                EnumView.DOTS ->{
+                EnumView.BODY ->{
 
                 }
-                EnumView.EYES->{
+                EnumView.POSITION_MARKER->{
 
                 }
                 EnumView.LOGO ->{
@@ -416,10 +428,10 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     }
                     Utils.Log(TAG,"SelectedIndexOnSave ${indexColor.mapColor.toJson()}")
                 }
-                EnumView.DOTS ->{
+                EnumView.BODY ->{
 
                 }
-                EnumView.EYES->{
+                EnumView.POSITION_MARKER->{
 
                 }
                 EnumView.LOGO ->{
@@ -451,6 +463,14 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     fun defaultColor() : ColorModel {
         return ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent,EnumImage.QR_BACKGROUND,false,defaultColorMap())
+    }
+
+    fun defaultPositionMarker() : PositionMarkerModel {
+        return PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL)
+    }
+
+    fun defaultBody() : BodyModel {
+        return BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL)
     }
 
     fun onUpdateBitmap(bitmap: Bitmap?){
@@ -506,7 +526,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         return false
     }
 
-    fun defaultColorMap() : HashMap<EnumImage,String>{
+    private fun defaultColorMap() : HashMap<EnumImage,String>{
         val mMap = HashMap<EnumImage,String>()
         mMap[EnumImage.QR_BACKGROUND] = R.color.white.stringHexNoTransparency
         mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency
