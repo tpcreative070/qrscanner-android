@@ -34,8 +34,12 @@ class NewChangeDesignActivity : BaseActivitySlide(){
     private lateinit var selectedSetColor: TreeSet<ColorModel>
     private lateinit var selectedSetPositionMarker: TreeSet<PositionMarkerModel>
     private lateinit var selectedSetBody: TreeSet<BodyModel>
-    private var previousPosition : Int = -1
-    private var previousCancelPosition : Int = -1
+    private var previousLogoPosition : Int = -1
+    private var previousLogoCancelPosition : Int = -1
+    private var previousPositionMarkerPosition : Int = -1
+    private var previousPositionMarkerCancelPosition : Int = -1
+    private var previousBodyPosition : Int = -1
+    private var previousBodyCancelPosition : Int = -1
     private lateinit var selectedPreviousSetLogo: TreeSet<LogoModel>
     private lateinit var selectedPreviousSetPositionMarker: TreeSet<PositionMarkerModel>
     private lateinit var selectedPreviousSetBody: TreeSet<BodyModel>
@@ -48,6 +52,8 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         if (savedInstanceState != null) {
             viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
             viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
+            viewModel.indexPositionMarker = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER) ?: viewModel.defaultPositionMarker()
+            viewModel.indexBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_BODY) ?: viewModel.defaultBody()
             viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
             viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
             val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
@@ -56,11 +62,15 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             viewModel.enumType = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_COLOR_INDEX) ?:EnumImage.NONE.name)
             viewModel.indexColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR) ?: viewModel.defaultColor()
             items = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_MULTIPLE_TYPE) ?: ArrayList()
-            selectedPreviousSetLogo  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_LOGO) ?: TreeSet()
-            selectedPreviousSetPositionMarker  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_POSITION_MARKER) ?: TreeSet()
-            selectedPreviousSetBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_BODY) ?: TreeSet()
-            previousPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION)
-            previousCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION)
+            selectedPreviousSetLogo  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SELECTED) ?: TreeSet()
+            selectedPreviousSetPositionMarker  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_SELECTED) ?: TreeSet()
+            selectedPreviousSetBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_SELECTED) ?: TreeSet()
+            previousLogoPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION)
+            previousLogoCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION)
+            previousPositionMarkerPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_POSITION)
+            previousPositionMarkerCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_CANCEL_POSITION)
+            previousBodyPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_POSITION)
+            previousBodyCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_CANCEL_POSITION)
             viewModel.mapSetView  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_SELECTED_MAP) ?: TreeSet()
             Utils.Log(TAG,"State instance saveInstanceState has value")
             if (mUri.isExist){
@@ -123,14 +133,14 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Position marker register*/
         adapter.register(PositionMarkerSquareViewBinder(selectedSetPositionMarker,this,object :PositionMarkerSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
-
+                changePositionMarkerItem(position)
             }
         }))
 
         /*Body register*/
         adapter.register(BodySquareViewBinder(selectedSetBody,this,object :BodySquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
-
+                changeBodyItem(position)
             }
         }))
 
@@ -160,11 +170,29 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         items.forEachIndexed { index, it ->
             if (it is LogoModel){
                 if (it.enumIcon == viewModel.indexLogo.enumIcon && !viewModel.isEmptyChangeDesign){
-                    previousPosition = index
+                    previousLogoPosition = index
                     it.isSelected = viewModel.indexLogo.isSelected
                     selectedSetLogo.add(it)
                     selectedPreviousSetLogo.add(it)
                     viewModel.mapSetView.add(EnumView.LOGO)
+                }
+            }
+            else if (it is PositionMarkerModel){
+                if (it.enumPositionMarker == viewModel.indexPositionMarker.enumPositionMarker && !viewModel.isEmptyChangeDesign){
+                    previousPositionMarkerPosition = index
+                    it.isSelected = viewModel.indexPositionMarker.isSelected
+                    selectedSetPositionMarker.add(it)
+                    selectedPreviousSetPositionMarker.add(it)
+                    viewModel.mapSetView.add(EnumView.POSITION_MARKER)
+                }
+            }
+            else if (it is BodyModel){
+                if (it.enumBody == viewModel.indexBody.enumBody && !viewModel.isEmptyChangeDesign){
+                    previousBodyPosition = index
+                    it.isSelected = viewModel.indexBody.isSelected
+                    selectedSetBody.add(it)
+                    selectedPreviousSetBody.add(it)
+                    viewModel.mapSetView.add(EnumView.BODY)
                 }
             }
         }
@@ -175,14 +203,14 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         val mResult = items[position] as LogoModel
         mResult.isSelected = !mResult.isSelected
         adapter.notifyItemChanged(position)
-        if (previousPosition>=0){
-            val mPreviousResult = items[previousPosition] as LogoModel
+        if (previousLogoPosition>=0){
+            val mPreviousResult = items[previousLogoPosition] as LogoModel
             Utils.Log(TAG,"Previous data ${mPreviousResult.toJson()}")
             mPreviousResult.isSelected = !mPreviousResult.isSelected
-            adapter.notifyItemChanged(previousPosition)
-            previousCancelPosition = previousPosition
+            adapter.notifyItemChanged(previousLogoPosition)
+            previousLogoCancelPosition = previousLogoPosition
         }
-        previousPosition = position
+        previousLogoPosition = position
         val index = selectedSetLogo.firstOrNull()
         viewModel.mapSetView.add(EnumView.LOGO)
         viewModel.mapSetView
@@ -204,14 +232,14 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         val mResult = items[position] as LogoModel
         mResult.isSelected = !mResult.isSelected
         adapter.notifyItemChanged(position)
-        if (previousPosition>=0){
-            val mPreviousResult = items[previousPosition] as LogoModel
+        if (previousLogoPosition>=0){
+            val mPreviousResult = items[previousLogoPosition] as LogoModel
             Utils.Log(TAG,"Previous data ${mPreviousResult.toJson()}")
             mPreviousResult.isSelected = !mPreviousResult.isSelected
-            adapter.notifyItemChanged(previousPosition)
-            previousCancelPosition = previousPosition
+            adapter.notifyItemChanged(previousLogoPosition)
+            previousLogoCancelPosition = previousLogoPosition
         }
-        previousPosition = position
+        previousLogoPosition = position
         val index = selectedSetLogo.firstOrNull()
         viewModel.mapSetView.add(EnumView.LOGO)
         viewModel.indexLogo  = index ?: viewModel.indexLogo
@@ -220,6 +248,74 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         viewModel.selectedIndexOnReview()
         viewModel.selectedIndexOnSave()
         onGenerateQRReview()
+        Utils.Log(TAG,"IndexLogo ${viewModel.indexLogo.toJson()}")
+    }
+
+    private fun changePositionMarkerItem(position : Int){
+        val mResult = items[position] as PositionMarkerModel
+        mResult.isSelected = !mResult.isSelected
+        adapter.notifyItemChanged(position)
+        if (previousPositionMarkerPosition>=0){
+            val mPreviousResult = items[previousPositionMarkerPosition] as PositionMarkerModel
+            Utils.Log(TAG,"Previous data ${mPreviousResult.toJson()}")
+            mPreviousResult.isSelected = !mPreviousResult.isSelected
+            adapter.notifyItemChanged(previousPositionMarkerPosition)
+            previousPositionMarkerCancelPosition = previousPositionMarkerPosition
+        }
+        previousPositionMarkerPosition = position
+        val index = selectedSetPositionMarker.firstOrNull()
+        viewModel.mapSetView.add(EnumView.POSITION_MARKER)
+        viewModel.indexPositionMarker  = index ?: viewModel.indexPositionMarker
+
+        selectedPreviousSetPositionMarker.clear()
+        selectedPreviousSetPositionMarker.addAll(selectedSetPositionMarker)
+        viewModel.selectedIndexOnReview()
+        viewModel.selectedIndexOnSave()
+        onGenerateQRReview()
+
+//        if (index?.enumChangeDesignType ==EnumChangeDesignType.VIP){
+//            onGetGallery()
+//        }else{
+//            selectedPreviousSetLogo.clear()
+//            selectedPreviousSetLogo.addAll(selectedSetLogo)
+//            viewModel.selectedIndexOnReview()
+//            viewModel.selectedIndexOnSave()
+//            onGenerateQRReview()
+//        }
+        Utils.Log(TAG,"IndexLogo ${viewModel.indexLogo.toJson()}")
+    }
+
+    private fun changeBodyItem(position : Int){
+        val mResult = items[position] as BodyModel
+        mResult.isSelected = !mResult.isSelected
+        adapter.notifyItemChanged(position)
+        if (previousBodyPosition>=0){
+            val mPreviousResult = items[previousBodyPosition] as BodyModel
+            Utils.Log(TAG,"Previous data ${mPreviousResult.toJson()}")
+            mPreviousResult.isSelected = !mPreviousResult.isSelected
+            adapter.notifyItemChanged(previousBodyPosition)
+            previousBodyCancelPosition = previousBodyPosition
+        }
+        previousBodyPosition = position
+        val index = selectedSetBody.firstOrNull()
+        viewModel.mapSetView.add(EnumView.BODY)
+        viewModel.indexBody  = index ?: viewModel.indexBody
+
+        selectedPreviousSetBody.clear()
+        selectedPreviousSetBody.addAll(selectedSetBody)
+        viewModel.selectedIndexOnReview()
+        viewModel.selectedIndexOnSave()
+        onGenerateQRReview()
+
+//        if (index?.enumChangeDesignType ==EnumChangeDesignType.VIP){
+//            onGetGallery()
+//        }else{
+//            selectedPreviousSetLogo.clear()
+//            selectedPreviousSetLogo.addAll(selectedSetLogo)
+//            viewModel.selectedIndexOnReview()
+//            viewModel.selectedIndexOnSave()
+//            onGenerateQRReview()
+//        }
         Utils.Log(TAG,"IndexLogo ${viewModel.indexLogo.toJson()}")
     }
 
@@ -273,7 +369,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             Utils.Log(TAG,"Cancel ${selectedPreviousSetLogo.toJson()}")
             selectedSetLogo.clear()
             selectedSetLogo.addAll(selectedPreviousSetLogo)
-            changeLogoItemCancel(previousCancelPosition)
+            changeLogoItemCancel(previousLogoCancelPosition)
         }
     }
 
@@ -290,7 +386,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             Utils.Log(TAG,"Cancel ${selectedPreviousSetLogo.toJson()}")
             selectedSetLogo.clear()
             selectedSetLogo.addAll(selectedPreviousSetLogo)
-            changeLogoItemCancel(previousCancelPosition)
+            changeLogoItemCancel(previousLogoCancelPosition)
         }
     }
 
@@ -324,6 +420,8 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         super.onSaveInstanceState(outState)
         outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX,viewModel.index)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO,viewModel.indexLogo)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER,viewModel.indexPositionMarker)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_BODY,viewModel.indexBody)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignSave)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignReview)
         outState.putBoolean(ConstantKey.KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER,viewModel.isOpenColorPicker)
@@ -332,11 +430,15 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE,viewModel.shape.name)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR,viewModel.indexColor)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_MULTIPLE_TYPE,items)
-        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_LOGO,selectedPreviousSetLogo)
-        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_POSITION_MARKER,selectedPreviousSetPositionMarker)
-        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_BODY,selectedPreviousSetBody)
-        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION,previousPosition)
-        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION,previousCancelPosition)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SELECTED,selectedPreviousSetLogo)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_SELECTED,selectedPreviousSetPositionMarker)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_SELECTED,selectedPreviousSetBody)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION,previousLogoPosition)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION,previousLogoCancelPosition)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_POSITION,previousPositionMarkerPosition)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_CANCEL_POSITION,previousPositionMarkerCancelPosition)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_POSITION,previousBodyPosition)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_CANCEL_POSITION,previousBodyCancelPosition)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_SELECTED_MAP,viewModel.mapSetView)
         Utils.Log(TAG,"State instance save ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance save index ${viewModel.index}")
@@ -345,6 +447,8 @@ class NewChangeDesignActivity : BaseActivitySlide(){
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         viewModel.index = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX)
         viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
+        viewModel.indexPositionMarker = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER) ?: viewModel.defaultPositionMarker()
+        viewModel.indexBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_BODY) ?: viewModel.defaultBody()
         viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
         viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
         viewModel.isOpenColorPicker = savedInstanceState.getBoolean(ConstantKey.KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER)
@@ -356,11 +460,15 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         }
         viewModel.shape =  EnumShape.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_SHAPE) ?:EnumShape.ORIGINAL.name)
         items = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_MULTIPLE_TYPE) ?: ArrayList()
-        selectedPreviousSetLogo  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_LOGO) ?: TreeSet()
-        selectedPreviousSetPositionMarker  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_POSITION_MARKER) ?: TreeSet()
-        selectedPreviousSetBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SET_BODY) ?: TreeSet()
-        previousPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION)
-        previousCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION)
+        selectedPreviousSetLogo  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SELECTED) ?: TreeSet()
+        selectedPreviousSetPositionMarker  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_SELECTED) ?: TreeSet()
+        selectedPreviousSetBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_SELECTED) ?: TreeSet()
+        previousLogoPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION)
+        previousLogoCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION)
+        previousPositionMarkerPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_POSITION)
+        previousPositionMarkerCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_CANCEL_POSITION)
+        previousBodyPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_POSITION)
+        previousBodyCancelPosition = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_BODY_PREVIOUS_CANCEL_POSITION)
         viewModel.mapSetView  = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_SELECTED_MAP) ?: TreeSet()
         Utils.Log(TAG,"State instance restore ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance restore index ${viewModel.index}")

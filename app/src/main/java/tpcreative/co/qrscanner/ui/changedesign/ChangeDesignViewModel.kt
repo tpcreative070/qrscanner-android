@@ -240,19 +240,19 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedPositionMarkerData(){
         mPositionMarkerList.clear()
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_10px.icon,EnumIcon.ic_frame_ball_corner_10px,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_25px.icon,EnumIcon.ic_frame_ball_corner_25px,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_circle.icon,EnumIcon.ic_frame_ball_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px.icon,EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_10px.icon,EnumIcon.ic_frame_ball_corner_10px,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_10PX))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_25px.icon,EnumIcon.ic_frame_ball_corner_25px,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_25PX))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_circle.icon,EnumIcon.ic_frame_ball_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CIRCLE))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px.icon,EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px,false,R.color.transparent,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_RIGHT_BOTTOM_LEFT))
     }
 
     private fun initializedBodyData(){
         mBodyList.clear()
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_corner_0_5.icon,EnumIcon.ic_dark_corner_0_5,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_circle.icon,EnumIcon.ic_dark_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL))
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_star.icon,EnumIcon.ic_dark_star,false,R.color.transparent,EnumChangeDesignType.NORMAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_corner_0_5.icon,EnumIcon.ic_dark_corner_0_5,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.CORNER_5PX))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_circle.icon,EnumIcon.ic_dark_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.CIRCLE))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_star.icon,EnumIcon.ic_dark_star,false,R.color.transparent,EnumChangeDesignType.VIP,EnumBody.STAR))
     }
 
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
@@ -274,14 +274,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     frame = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker)
                 ))
             .setShapes(
-                QrVectorShapes(
-                    darkPixel = QrVectorPixelShape
-                        .RoundCorners(.5f),
-                    ball = QrVectorBallShape
-                        .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true),
-                    frame = QrVectorFrameShape
-                        .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
-                )
+                qrShapes()
             )
         val mDrawable: Drawable?
         val shape : QrVectorLogoShape = when(this.shape){
@@ -360,14 +353,14 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                    Utils.Log(TAG,"data value result review ${changeDesignReview.color?.mapColor?.toJson()}")
                    Utils.Log(TAG,"data value result after original ${changeDesignOriginal.color?.mapColor?.toJson()}")
                }
-               EnumView.BODY ->{
-
-               }
-               EnumView.POSITION_MARKER->{
-
-               }
                EnumView.LOGO ->{
                    changeDesignReview.logo = indexLogo
+               }
+               EnumView.POSITION_MARKER->{
+                   changeDesignReview.positionMarker = indexPositionMarker
+               }
+               EnumView.BODY ->{
+                   changeDesignReview.body = indexBody
                }
                EnumView.TEXT ->{
 
@@ -427,15 +420,15 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     }
                     Utils.Log(TAG,"SelectedIndexOnSave ${indexColor.mapColor.toJson()}")
                 }
-                EnumView.BODY ->{
-
-                }
-                EnumView.POSITION_MARKER->{
-
-                }
                 EnumView.LOGO ->{
                     changeDesignSave.logo = indexLogo
                     changeDesignSave.logo?.enumShape = shape
+                }
+                EnumView.POSITION_MARKER->{
+                    changeDesignSave.positionMarker = indexPositionMarker
+                }
+                EnumView.BODY ->{
+                    changeDesignSave.body = indexBody
                 }
                 EnumView.TEXT ->{
 
@@ -465,11 +458,68 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     }
 
     fun defaultPositionMarker() : PositionMarkerModel {
-        return PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL)
+        return PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT)
     }
 
     fun defaultBody() : BodyModel {
-        return BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL)
+        return BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT)
+    }
+
+    private fun qrShapes() : QrVectorShapes{
+        val body :  QrVectorPixelShape
+        val ball : QrVectorBallShape
+        val frame : QrVectorFrameShape
+        Utils.Log(TAG,"enum marker position ${indexPositionMarker.enumPositionMarker}")
+        Utils.Log(TAG,"enum body ${indexBody.enumBody}")
+        when(indexPositionMarker.enumPositionMarker){
+            EnumPositionMarker.DEFAULT ->{
+                ball = QrVectorBallShape.Default
+                frame = QrVectorFrameShape.Default
+            }
+            EnumPositionMarker.CORNER_10PX ->{
+                ball = QrVectorBallShape.RoundCorners(.10f)
+                frame = QrVectorFrameShape.RoundCorners(.10f)
+            }
+            EnumPositionMarker.CORNER_25PX ->{
+                ball = QrVectorBallShape.RoundCorners(.25f)
+                frame = QrVectorFrameShape.RoundCorners(.25f)
+            }
+            EnumPositionMarker.CIRCLE ->{
+                ball = QrVectorBallShape.Circle(1f)
+                frame = QrVectorFrameShape.Circle()
+            }
+            else -> {
+                ball = QrVectorBallShape
+                    .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
+                frame = QrVectorFrameShape
+                    .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
+                Utils.Log(TAG,"enum marker position else")
+            }
+        }
+        when(indexBody.enumBody){
+            EnumBody.DEFAULT ->{
+                body = QrVectorPixelShape
+                    .Default
+            }
+            EnumBody.CORNER_5PX ->{
+                body = QrVectorPixelShape
+                    .RoundCorners(0.5f)
+            }
+            EnumBody.CIRCLE ->{
+                body = QrVectorPixelShape
+                    .Circle()
+            }
+            else -> {
+                body = QrVectorPixelShape
+                    .Star
+            }
+        }
+
+        return QrVectorShapes(
+            darkPixel = body,
+            ball = ball,
+            frame = frame
+        )
     }
 
     fun onUpdateBitmap(bitmap: Bitmap?){
@@ -478,8 +528,9 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     }
 
     fun isChangedSave() : Boolean{
-        Utils.Log(TAG,"Data value original ${changeDesignOriginal.color?.mapColor?.toJson()}")
-        Utils.Log(TAG,"Data value review ${indexColor.mapColor.toJson()}")
+        Utils.Log(TAG,"Data value original ${changeDesignOriginal.toJson()}")
+        Utils.Log(TAG,"Data value save ${changeDesignSave.toJson()}")
+        Utils.Log(TAG,"Data value review ${changeDesignReview.toJson()}")
         val mChanged = changeDesignOriginal.toJson() != changeDesignSave.toJson()
         mapSetView.forEach {
             when(it){
@@ -497,6 +548,16 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         return true
                     }
                 }
+                EnumView.POSITION_MARKER -> {
+                    if (mChanged || indexPositionMarker.toJson() != changeDesignOriginal.positionMarker?.toJson()){
+                        return true
+                    }
+                }
+                EnumView.BODY ->{
+                    if (mChanged || indexBody.toJson() != changeDesignOriginal.body?.toJson()){
+                        return true
+                    }
+                }
                 else -> {}
             }
         }
@@ -504,9 +565,11 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     }
 
     fun isChangedReview() : Boolean {
-        Utils.Log(TAG,"Data value original ${changeDesignOriginal.color?.toJson()}")
-        Utils.Log(TAG,"Data value review ${indexColor.toJson()}")
+        Utils.Log(TAG,"Data value original ${changeDesignOriginal.toJson()}")
+        Utils.Log(TAG,"Data value save ${changeDesignSave.toJson()}")
+        Utils.Log(TAG,"Data value review ${changeDesignReview.toJson()}")
         val mChanged = changeDesignOriginal.toJson() != changeDesignReview.toJson()
+        Utils.Log(TAG,"Data value isChanged ${mChanged}")
         mapSetView.forEach {
             when(it){
                 EnumView.COLOR ->{
@@ -516,6 +579,16 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 }
                 EnumView.LOGO ->{
                     if (mChanged || shape != changeDesignOriginal.logo?.enumShape){
+                        return true
+                    }
+                }
+                EnumView.POSITION_MARKER ->{
+                    if (mChanged || indexPositionMarker.toJson() != changeDesignOriginal.positionMarker?.toJson()){
+                        return true
+                    }
+                }
+                EnumView.BODY ->{
+                    if (mChanged || indexBody.toJson() != changeDesignOriginal.body?.toJson()){
                         return true
                     }
                 }
