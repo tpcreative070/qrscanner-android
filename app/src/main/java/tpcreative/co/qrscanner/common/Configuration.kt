@@ -59,6 +59,6 @@ class Configuration {
 
         const val hiddenFreeReleaseAds = false
         const val hiddenFreeInnovationAds = false
-        const val hiddenSuperFreeInnovationAds = false
+        const val hiddenSuperFreeInnovationAds = true
     }
 }

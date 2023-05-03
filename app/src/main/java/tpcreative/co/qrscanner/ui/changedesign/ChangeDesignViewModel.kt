@@ -262,11 +262,13 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedPositionMarkerData(){
         mPositionMarkerList.clear()
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_default.icon,EnumIcon.ic_frame_ball_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT))
         mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_10px.icon,EnumIcon.ic_frame_ball_corner_10px,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_10PX))
         mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_25px.icon,EnumIcon.ic_frame_ball_corner_25px,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_25PX))
         mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_circle.icon,EnumIcon.ic_frame_ball_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CIRCLE))
         mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px.icon,EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px,false,R.color.transparent,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_RIGHT_BOTTOM_LEFT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_left_bottom_right_25px.icon,EnumIcon.ic_frame_ball_corner_top_left_bottom_right_25px,false,R.color.transparent,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_LEFT_BOTTOM_RIGHT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_left_top_right_bottom_left_25px.icon,EnumIcon.ic_frame_ball_corner_top_left_top_right_bottom_left_25px,false,R.color.transparent,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT))
     }
 
     private fun initializedBodyData(){
@@ -480,7 +482,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     }
 
     fun defaultPositionMarker() : PositionMarkerModel {
-        return PositionMarkerModel(EnumIcon.ic_frame_ball_detail.icon,EnumIcon.ic_frame_ball_detail,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT)
+        return PositionMarkerModel(EnumIcon.ic_frame_ball_default.icon,EnumIcon.ic_frame_ball_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT)
     }
 
     fun defaultBody() : BodyModel {
@@ -493,55 +495,76 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         val frame : QrVectorFrameShape
         Utils.Log(TAG,"enum marker position ${indexPositionMarker.enumPositionMarker}")
         Utils.Log(TAG,"enum body ${indexBody.enumBody}")
-        when(indexPositionMarker.enumPositionMarker){
-            EnumPositionMarker.DEFAULT ->{
-                ball = QrVectorBallShape.Default
-                frame = QrVectorFrameShape.Default
+        try {
+            when(indexPositionMarker.enumPositionMarker){
+                EnumPositionMarker.CORNER_10PX ->{
+                    ball = QrVectorBallShape.RoundCorners(.10f)
+                    frame = QrVectorFrameShape.RoundCorners(.10f)
+                }
+                EnumPositionMarker.CORNER_25PX ->{
+                    ball = QrVectorBallShape.RoundCorners(.25f)
+                    frame = QrVectorFrameShape.RoundCorners(.25f)
+                }
+                EnumPositionMarker.CIRCLE ->{
+                    ball = QrVectorBallShape.Circle(1f)
+                    frame = QrVectorFrameShape.Circle()
+                }
+                EnumPositionMarker.CORNER_TOP_RIGHT_BOTTOM_LEFT -> {
+                    ball = QrVectorBallShape
+                        .RoundCorners(.25f, topLeft = false, topRight = true, bottomLeft = true, bottomRight = false)
+                    frame = QrVectorFrameShape
+                        .RoundCorners(.25f, topLeft = false, topRight = true, bottomLeft = true, bottomRight = false)
+                }
+                EnumPositionMarker.CORNER_TOP_LEFT_BOTTOM_RIGHT -> {
+                    ball = QrVectorBallShape
+                        .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
+                    frame = QrVectorFrameShape
+                        .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
+                }
+                EnumPositionMarker.CORNER_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT -> {
+                    ball = QrVectorBallShape
+                        .RoundCorners(.25f, topLeft = true, topRight = true, bottomLeft = true, bottomRight = false)
+                    frame = QrVectorFrameShape
+                        .RoundCorners(.25f, topLeft = true, topRight = true, bottomLeft = true, bottomRight = false)
+                }
+                else -> {
+                    ball = QrVectorBallShape.Default
+                    frame = QrVectorFrameShape.Default
+                    Utils.Log(TAG,"enum marker position else")
+                }
             }
-            EnumPositionMarker.CORNER_10PX ->{
-                ball = QrVectorBallShape.RoundCorners(.10f)
-                frame = QrVectorFrameShape.RoundCorners(.10f)
+            when(indexBody.enumBody){
+                EnumBody.DEFAULT ->{
+                    body = QrVectorPixelShape
+                        .Default
+                }
+                EnumBody.CORNER_5PX ->{
+                    body = QrVectorPixelShape
+                        .RoundCorners(0.5f)
+                }
+                EnumBody.CIRCLE ->{
+                    body = QrVectorPixelShape
+                        .Circle()
+                }
+                else -> {
+                    body = QrVectorPixelShape
+                        .Star
+                }
             }
-            EnumPositionMarker.CORNER_25PX ->{
-                ball = QrVectorBallShape.RoundCorners(.25f)
-                frame = QrVectorFrameShape.RoundCorners(.25f)
-            }
-            EnumPositionMarker.CIRCLE ->{
-                ball = QrVectorBallShape.Circle(1f)
-                frame = QrVectorFrameShape.Circle()
-            }
-            else -> {
-                ball = QrVectorBallShape
-                    .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
-                frame = QrVectorFrameShape
-                    .RoundCorners(.25f, topLeft = true, topRight = false, bottomLeft = false, bottomRight = true)
-                Utils.Log(TAG,"enum marker position else")
-            }
-        }
-        when(indexBody.enumBody){
-            EnumBody.DEFAULT ->{
-                body = QrVectorPixelShape
-                    .Default
-            }
-            EnumBody.CORNER_5PX ->{
-                body = QrVectorPixelShape
-                    .RoundCorners(0.5f)
-            }
-            EnumBody.CIRCLE ->{
-                body = QrVectorPixelShape
-                    .Circle()
-            }
-            else -> {
-                body = QrVectorPixelShape
-                    .Star
-            }
-        }
 
-        return QrVectorShapes(
-            darkPixel = body,
-            ball = ball,
-            frame = frame
-        )
+            return QrVectorShapes(
+                darkPixel = body,
+                ball = ball,
+                frame = frame
+            )
+        }catch (e : Exception){
+            return QrVectorShapes(
+                darkPixel = QrVectorPixelShape
+                    .Default,
+                ball = QrVectorBallShape.Default ,
+                frame = QrVectorFrameShape.Default
+            )
+        }
     }
 
     fun onUpdateBitmap(bitmap: Bitmap?){
