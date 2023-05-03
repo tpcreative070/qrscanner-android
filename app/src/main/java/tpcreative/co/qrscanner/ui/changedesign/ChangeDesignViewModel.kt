@@ -309,7 +309,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             .setBackground(
                 QrVectorBackground(
                     color =QrVectorColor
-                        .Solid(indexColor.mapColor[EnumImage.QR_BACKGROUND]?.toColorInt() ?: R.color.black_color_picker)
+                        .Solid(indexColor.mapColor[EnumImage.QR_BACKGROUND]?.toColorInt() ?: R.color.white)
                 )
             )
             .setColors(
@@ -666,7 +666,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     private fun defaultColorMap() : HashMap<EnumImage,String>{
         val mMap = HashMap<EnumImage,String>()
-        mMap[EnumImage.QR_BACKGROUND] = R.color.black_color_picker.stringHexNoTransparency
+        mMap[EnumImage.QR_BACKGROUND] = R.color.white.stringHexNoTransparency
         mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_FRAME] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_BALL] = R.color.black_color_picker.stringHexNoTransparency
