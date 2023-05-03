@@ -183,8 +183,8 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.design_wifi.icon,
-                EnumIcon.design_wifi,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_facebook.icon,
+                EnumIcon.ic_facebook,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
@@ -210,6 +210,26 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
             LogoModel(
                 EnumIcon.ic_paypal.icon,
                 EnumIcon.ic_paypal,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_tiktok.icon,
+                EnumIcon.ic_tiktok,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_linkedin.icon,
+                EnumIcon.ic_linkedin,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_skype.icon,
+                EnumIcon.ic_skype,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.design_wifi.icon,
+                EnumIcon.design_wifi,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
@@ -255,9 +275,10 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedColorData(){
         mColorList.clear()
-        mColorList.add(ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent,EnumImage.QR_BACKGROUND,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qrcode,R.color.colorAccent,EnumImage.QR_FOREGROUND,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qrcode,R.color.colorAccent,EnumImage.QR_BALL,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_background,R.color.transparent,EnumImage.QR_BACKGROUND,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_foreground,R.color.transparent,EnumImage.QR_FOREGROUND,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_frame,R.color.transparent,EnumImage.QR_FRAME,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent,EnumImage.QR_BALL,false,defaultColorMap()))
     }
 
     private fun initializedPositionMarkerData(){
@@ -275,7 +296,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mBodyList.clear()
         mBodyList.add(BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT))
         mBodyList.add(BodyModel(EnumIcon.ic_dark_corner_0_5.icon,EnumIcon.ic_dark_corner_0_5,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.CORNER_5PX))
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_circle.icon,EnumIcon.ic_dark_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.CIRCLE))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_circle.icon,EnumIcon.ic_dark_circle,false,R.color.transparent,EnumChangeDesignType.VIP,EnumBody.CIRCLE))
         mBodyList.add(BodyModel(EnumIcon.ic_dark_star.icon,EnumIcon.ic_dark_star,false,R.color.transparent,EnumChangeDesignType.VIP,EnumBody.STAR))
     }
 
@@ -295,7 +316,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 QrVectorColors(
                     dark =  QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FOREGROUND]?.toColorInt() ?: R.color.black_color_picker),
                     ball = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker),
-                    frame = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker)
+                    frame = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FRAME]?.toColorInt() ?: R.color.black_color_picker)
                 ))
             .setShapes(
                 qrShapes()
@@ -645,8 +666,9 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     private fun defaultColorMap() : HashMap<EnumImage,String>{
         val mMap = HashMap<EnumImage,String>()
-        mMap[EnumImage.QR_BACKGROUND] = R.color.white.stringHexNoTransparency
+        mMap[EnumImage.QR_BACKGROUND] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency
+        mMap[EnumImage.QR_FRAME] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_BALL] = R.color.black_color_picker.stringHexNoTransparency
         return mMap
     }

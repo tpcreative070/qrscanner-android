@@ -67,6 +67,11 @@ class Constant {
             put(EnumIcon.ic_dark_corner_0_5.name,R.drawable.ic_dark_corner_0_5px)
             put(EnumIcon.ic_dark_circle.name,R.drawable.ic_dark_circle)
             put(EnumIcon.ic_dark_star.name,R.drawable.ic_dark_star)
+            put(EnumIcon.ic_facebook.name,R.drawable.ic_facebook)
+            put(EnumIcon.ic_tiktok.name,R.drawable.ic_tiktok)
+            put(EnumIcon.ic_line.name,R.drawable.ic_line)
+            put(EnumIcon.ic_linkedin.name,R.drawable.ic_linkedin)
+            put(EnumIcon.ic_skype.name,R.drawable.ic_skype)
         }
     }
 }
@@ -74,7 +79,7 @@ class Constant {
 enum class EnumIcon {
     ic_youtube_png, ic_twitter,ic_template,ic_paint,ic_dots,ic_eyes,ic_registered,ic_design_text,bg_white,design_wifi,ic_whatapp,ic_instagram,ic_paypal,ic_email,
     ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery,ic_dark_corner_0_5,ic_frame_ball_corner_top_right_bottom_left_25px,ic_frame_ball_default,ic_dark_default,ic_frame_ball_corner_10px,ic_frame_ball_corner_25px,
-    ic_frame_ball_corner_top_left_bottom_right_25px,
+    ic_frame_ball_corner_top_left_bottom_right_25px,ic_facebook,ic_tiktok,ic_line,ic_linkedin,ic_skype,
     ic_frame_ball_corner_top_left_top_right_bottom_left_25px,
     ic_frame_ball_circle,
     ic_dark_circle,

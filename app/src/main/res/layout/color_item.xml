@@ -17,20 +17,21 @@
             android:id="@+id/rlIcon"
             android:orientation="vertical"
             android:layout_centerInParent="true"
-            android:layout_width="@dimen/icon_size_80"
-            android:layout_height="@dimen/icon_size_80">
+            android:layout_width="@dimen/icon_size_70"
+            android:layout_height="@dimen/icon_size_70">
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_centerInParent="true"
                 android:id="@+id/imgIcon"
-                android:layout_width="@dimen/icon_size_70"
-                android:layout_height="@dimen/icon_size_70"/>
+                android:layout_width="@dimen/icon_size_60"
+                android:layout_height="@dimen/icon_size_60"/>
+
             <View
-                android:visibility="invisible"
                 android:id="@+id/viewSelected"
+                android:layout_width="@dimen/icon_size_60"
+                android:layout_height="@dimen/icon_size_60"
                 android:layout_centerInParent="true"
                 android:background="@drawable/bg_selected_highlight"
-                android:layout_width="@dimen/icon_size_70"
-                android:layout_height="@dimen/icon_size_70"/>
+                android:visibility="invisible" />
         </RelativeLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

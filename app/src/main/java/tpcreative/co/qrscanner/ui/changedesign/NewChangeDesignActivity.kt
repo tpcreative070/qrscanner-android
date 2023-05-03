@@ -216,7 +216,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         viewModel.mapSetView
         viewModel.indexLogo  = index ?: viewModel.indexLogo
 
-        if (index?.enumChangeDesignType ==EnumChangeDesignType.VIP){
+        if (index?.typeIcon == EnumTypeIcon.BITMAP){
             onGetGallery()
         }else{
             selectedPreviousSetLogo.clear()
