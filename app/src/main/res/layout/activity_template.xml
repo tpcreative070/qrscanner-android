@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/material_gray_200"
     android:layout_height="match_parent"
-    tools:context=".ui.changedesign.ChangeDesignActivity">
+    tools:context=".ui.changedesign.TemplateActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

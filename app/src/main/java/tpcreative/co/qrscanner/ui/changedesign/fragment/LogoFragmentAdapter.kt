@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.findImageName
+import tpcreative.co.qrscanner.common.extension.icon
+import tpcreative.co.qrscanner.common.extension.toColorIntThrowDefaultColor
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.model.*
 
@@ -50,11 +51,9 @@ class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Contex
 
         override fun bind(data: LogoModel, position: Int) {
             super.bind(data, position)
-            imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
+            imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.enumIcon.icon))
             //imgDisplay.setColorFilter(data.tint,PorterDuff.Mode.SRC_ATOP)
-            MyDrawableCompat.setColorFilter(imgDisplay.drawable,ContextCompat.getColor(context,
-                data.tint
-            ))
+            MyDrawableCompat.setColorFilter(imgDisplay.drawable,data.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor)
             viewSelected.visibility = if(data.isSelected) View.VISIBLE else View.INVISIBLE
             Utils.Log("TAG","Selected ${data.isSelected}")
             rlRoot.setOnClickListener {
@@ -71,11 +70,9 @@ class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Contex
         private val imgCircleCodeStatus: ImageView = itemView.findViewById(R.id.imgCircleCodeStatus)
         override fun bind(data: LogoModel, position: Int) {
             super.bind(data, position)
-            imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.icon))
+            imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,data.enumIcon.icon))
             //imgDisplay.setColorFilter(data.tint,PorterDuff.Mode.SRC_ATOP)
-            MyDrawableCompat.setColorFilter(imgDisplay.drawable,ContextCompat.getColor(context,
-                data.tint
-            ))
+            MyDrawableCompat.setColorFilter(imgDisplay.drawable,data.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor)
             viewSelected.visibility = if(data.isSelected) View.VISIBLE else View.INVISIBLE
             imgCircleCodeStatus.setImageResource(R.color.black)
             Utils.Log("TAG","Selected ${data.isSelected}")

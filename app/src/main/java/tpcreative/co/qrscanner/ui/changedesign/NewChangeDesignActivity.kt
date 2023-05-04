@@ -105,6 +105,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Logo register*/
         adapter.register(LogoSquareViewBinder(selectedSetLogo,this,object  : LogoSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
+                Utils.Log(TAG,"Clicked position $position")
                 Utils.Log(TAG,"Logo ${selectedSetLogo.toJson()}")
                 Utils.Log(TAG,"Data list ${items.toJson()}")
                 changeLogoItem(position)
@@ -113,19 +114,22 @@ class NewChangeDesignActivity : BaseActivitySlide(){
 
         /*Color register*/
         adapter.register(ColorSquareViewBinder(selectedSetColor,this,object  : ColorSquareViewBinder.ItemSelectedListener{
-            override fun onClickItem() {
+            override fun onClickItem(position : Int) {
                 Utils.Log(TAG,"Color ${selectedSetColor.toJson()}")
+                Utils.Log(TAG,"Clicked position $position")
                 val mResultSelected = selectedSetColor.first()
-                viewModel.enumType = mResultSelected.type
-                popupForResult.launch(  Navigator.onPopupView(this@NewChangeDesignActivity,viewModel.indexColor.mapColor,viewModel.enumType,PopupColorActivity::class.java))
-                overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
-                mResult = {
-                    Utils.Log(TAG,"Result value color $it")
-                    viewModel.indexColor.mapColor[viewModel.enumType] = it
-                    viewModel.mapSetView.add(EnumView.COLOR)
-                    viewModel.selectedIndexOnReview()
-                    viewModel.selectedIndexOnSave()
-                    onGenerateQRReview()
+                if (viewModel.isAllowNavigation(mResultSelected)){
+                    viewModel.enumType = mResultSelected.type
+                    popupForResult.launch(  Navigator.onPopupView(this@NewChangeDesignActivity,viewModel.indexColor.mapColor,viewModel.enumType,PopupColorActivity::class.java))
+                    overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
+                    mResult = {
+                        Utils.Log(TAG,"Result value color $it")
+                        viewModel.indexColor.mapColor[viewModel.enumType] = it
+                        viewModel.mapSetView.add(EnumView.COLOR)
+                        viewModel.selectedIndexOnReview()
+                        viewModel.selectedIndexOnSave()
+                        onGenerateQRReview()
+                    }
                 }
             }
         }))
@@ -144,6 +148,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             }
         }))
 
+        mResultTemplate  = {
+
+        }
+
 
         if (items.isEmpty()){
             loadData()
@@ -152,6 +160,21 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         }
         binding.recyclerView.adapter = adapter
         onGenerateQRReview()
+    }
+
+    private fun  onUpdateColorUI(selected : LogoModel?){
+        items.forEachIndexed { index, serializable ->
+            if (serializable is ColorModel){
+                if (serializable.type == EnumImage.QR_BACKGROUND_ICON){
+                    serializable.isSelected = !(selected?.isSupportedBGColor ?: false)
+                    adapter.notifyItemChanged(index)
+                }
+                if (serializable.type == EnumImage.QR_FOREGROUND_ICON){
+                    serializable.isSelected = !(selected?.isSupportedFGColor ?: false)
+                    adapter.notifyItemChanged(index)
+                }
+            }
+        }
     }
 
     private fun loadData(){
@@ -212,6 +235,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         }
         previousLogoPosition = position
         val index = selectedSetLogo.firstOrNull()
+        onUpdateColorUI(index)
         viewModel.mapSetView.add(EnumView.LOGO)
         viewModel.mapSetView
         viewModel.indexLogo  = index ?: viewModel.indexLogo
@@ -241,6 +265,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         }
         previousLogoPosition = position
         val index = selectedSetLogo.firstOrNull()
+        onUpdateColorUI(index)
         viewModel.mapSetView.add(EnumView.LOGO)
         viewModel.indexLogo  = index ?: viewModel.indexLogo
         selectedPreviousSetLogo.clear()
@@ -478,5 +503,6 @@ class NewChangeDesignActivity : BaseActivitySlide(){
     companion object {
         private const val SPAN_COUNT = 5
         var mResult : ((value : String) -> Unit?)? = null
+        var mResultTemplate : ((value : String) ->Unit?)? = null
     }
 }

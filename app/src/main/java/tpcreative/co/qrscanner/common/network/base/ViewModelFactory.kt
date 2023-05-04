@@ -3,6 +3,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tpcreative.co.qrscanner.ui.backup.BackupViewModel
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignViewModel
+import tpcreative.co.qrscanner.ui.changedesign.TemplateViewModel
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 import tpcreative.co.qrscanner.ui.help.HelpViewModel
 import tpcreative.co.qrscanner.ui.history.HistoryViewModel
@@ -58,6 +59,9 @@ class ViewModelFactory() : ViewModelProvider.Factory{
         }
         else if (modelClass.isAssignableFrom(ChangeDesignViewModel::class.java)){
             return ChangeDesignViewModel() as T
+        }
+        else if(modelClass.isAssignableFrom(TemplateViewModel::class.java)){
+            return TemplateViewModel() as T
         }
         throw IllegalArgumentException("Unknown class name")
     }

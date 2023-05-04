@@ -1,21 +1,23 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.graphics.toColorInt
-import androidx.core.graphics.toColorLong
+import androidx.core.graphics.toColor
 import com.github.alexzhirkevich.customqrgenerator.QrData
 import com.github.alexzhirkevich.customqrgenerator.style.Color
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumIcon
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
@@ -173,150 +175,138 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mLogoList.clear()
         mLogoList.add(
             LogoModel(
-                EnumIcon.bg_white.icon,
-                EnumIcon.bg_white,false,R.color.transparent,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.bg_white,false,false,false,R.color.transparent.stringHex,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_gallery.icon,
-                EnumIcon.ic_gallery,false,R.color.material_gray_700,EnumTypeIcon.BITMAP,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
+                EnumIcon.ic_gallery,false,false,false,R.color.material_gray_700.stringHex,EnumTypeIcon.BITMAP,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_facebook.icon,
-                EnumIcon.ic_facebook,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_facebook,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_twitter.icon,
-                EnumIcon.ic_twitter,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_twitter,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_youtube_png.icon,
-                EnumIcon.ic_youtube_png,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_youtube_png,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_whatapp.icon,
-                EnumIcon.ic_whatapp,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_whatapp,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_instagram.icon,
-                EnumIcon.ic_instagram,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_instagram,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_paypal.icon,
-                EnumIcon.ic_paypal,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_paypal,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_tiktok.icon,
-                EnumIcon.ic_tiktok,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_tiktok,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_linkedin.icon,
-                EnumIcon.ic_linkedin,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_linkedin,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_skype.icon,
-                EnumIcon.ic_skype,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
+                EnumIcon.ic_skype,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.design_wifi.icon,
-                EnumIcon.design_wifi,false,R.color.transparent,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_wifi,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_email.icon,
-                EnumIcon.ic_email,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_restaurant,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_message.icon,
-                EnumIcon.ic_message,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_email,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_location.icon,
-                EnumIcon.ic_location,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_message,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_calender.icon,
-                EnumIcon.ic_calender,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_location,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_contact.icon,
-                EnumIcon.ic_contact,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_calender,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_phone.icon,
-                EnumIcon.ic_phone,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_contact,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_text.icon,
-                EnumIcon.ic_text,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_phone,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_network.icon,
-                EnumIcon.ic_network,false,R.color.black_color_picker,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_text,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_network,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
     }
 
     private fun initializedColorData(){
         mColorList.clear()
-        mColorList.add(ColorModel(R.drawable.ic_qr_background,R.color.transparent,EnumImage.QR_BACKGROUND,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_foreground,R.color.transparent,EnumImage.QR_FOREGROUND,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_frame,R.color.transparent,EnumImage.QR_FRAME,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent,EnumImage.QR_BALL,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_background,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_foreground,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_frame,R.color.transparent.stringHex,EnumImage.QR_FRAME,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent.stringHex,EnumImage.QR_BALL,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_background_icon,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND_ICON,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND_ICON,false,defaultColorMap()))
     }
 
     private fun initializedPositionMarkerData(){
         mPositionMarkerList.clear()
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_default.icon,EnumIcon.ic_frame_ball_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_10px.icon,EnumIcon.ic_frame_ball_corner_10px,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_10PX))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_25px.icon,EnumIcon.ic_frame_ball_corner_25px,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_25PX))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_circle.icon,EnumIcon.ic_frame_ball_circle,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.CIRCLE))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px.icon,EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px,false,R.color.transparent,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_RIGHT_BOTTOM_LEFT))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_left_bottom_right_25px.icon,EnumIcon.ic_frame_ball_corner_top_left_bottom_right_25px,false,R.color.transparent,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_LEFT_BOTTOM_RIGHT))
-        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_left_top_right_bottom_left_25px.icon,EnumIcon.ic_frame_ball_corner_top_left_top_right_bottom_left_25px,false,R.color.transparent,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_default,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_10px,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_10PX))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_25px,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumPositionMarker.CORNER_25PX))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_circle,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumPositionMarker.CIRCLE))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_right_bottom_left_25px,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_RIGHT_BOTTOM_LEFT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_left_bottom_right_25px,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_LEFT_BOTTOM_RIGHT))
+        mPositionMarkerList.add(PositionMarkerModel(EnumIcon.ic_frame_ball_corner_top_left_top_right_bottom_left_25px,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumPositionMarker.CORNER_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT))
     }
 
     private fun initializedBodyData(){
         mBodyList.clear()
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT))
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_corner_0_5.icon,EnumIcon.ic_dark_corner_0_5,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.CORNER_5PX))
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_circle.icon,EnumIcon.ic_dark_circle,false,R.color.transparent,EnumChangeDesignType.VIP,EnumBody.CIRCLE))
-        mBodyList.add(BodyModel(EnumIcon.ic_dark_star.icon,EnumIcon.ic_dark_star,false,R.color.transparent,EnumChangeDesignType.VIP,EnumBody.STAR))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_default,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_corner_0_5,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumBody.CORNER_5PX))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_circle,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.CIRCLE))
+        mBodyList.add(BodyModel(EnumIcon.ic_dark_star,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.STAR))
     }
 
     fun onGenerateQR(callback: (result: Drawable) -> Unit){
         val mDataResult = changeDesignReview.logo
-        Utils.Log(TAG,"Data result of review ${changeDesignReview.color?.toJson()}")
+        Utils.Log(TAG,"Data result of review ${changeDesignReview.toJson()}")
         Utils.Log(TAG,"Generate icon => shape ${this.shape.name}")
         val options = QrVectorOptions.Builder()
             .setPadding(.15f)
             .setBackground(
                 QrVectorBackground(
+//                    color =QrVectorColor
+//                        .Solid(Color(R.color.transparent.toColorLong()))
                     color =QrVectorColor
-                        .Solid(indexColor.mapColor[EnumImage.QR_BACKGROUND]?.toColorInt() ?: R.color.white)
+                        .Solid(indexColor.mapColor[EnumImage.QR_BACKGROUND]?.toColorIntThrowDefaultColor() ?: R.color.white)
                 )
             )
             .setColors(
                 QrVectorColors(
-                    dark =  QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FOREGROUND]?.toColorInt() ?: R.color.black_color_picker),
-                    ball = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorInt() ?: R.color.black_color_picker),
-                    frame = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FRAME]?.toColorInt() ?: R.color.black_color_picker)
+                    dark =  QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FOREGROUND]?.toColorIntThrowDefaultColor() ?: R.color.black_color_picker),
+                    ball = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_BALL]?.toColorIntThrowDefaultColor() ?: R.color.black_color_picker),
+                    frame = QrVectorColor.Solid(indexColor.mapColor[EnumImage.QR_FRAME]?.toColorIntThrowDefaultColor() ?: R.color.black_color_picker)
                 ))
             .setShapes(
                 qrShapes()
@@ -333,37 +323,16 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 QrVectorLogoShape.Default
             }
         }
-        if (mDataResult?.typeIcon == EnumTypeIcon.RES){
-            mDrawable = ContextCompat
-                .getDrawable(context, mDataResult.icon)
-            mDrawable?.let {
-                MyDrawableCompat.setColorFilter(it,ContextCompat.getColor(context, mDataResult.tint))
-            }
-            Utils.Log(TAG,"Result cropped bitmap  to res")
-            options.setLogo(
-                QrVectorLogo(
-                    drawable = mDrawable,
-                    size = .19f,
-                    padding = QrVectorLogoPadding.Natural(.0f),
-                    shape = shape,
-                    backgroundColor =  QrVectorColor
-                        .Solid(Color(R.color.transparent.toColorLong()))
-                )
-            )
-        }
-        else if (mDataResult?.typeIcon == EnumTypeIcon.BITMAP){
-            if (bitmap!=null){
-                mDrawable = when(this.shape){
-                    EnumShape.CIRCLE ->{
-                        bitmap?.toCircular(QRScannerApplication.getInstance(),0.06f,true)
-                    }
-                    EnumShape.SQUARE ->{
-                        bitmap?.toCircular(QRScannerApplication.getInstance(),0.019f,false)
-                    }
-                    else -> {
-                        bitmap?.toDrawable(QRScannerApplication.getInstance().resources)
-                    }
-                }
+        when(mDataResult?.typeIcon){
+            EnumTypeIcon.RES ->{
+                mDrawable = ContextCompat
+                    .getDrawable(context, mDataResult.enumIcon.icon)
+//                mDrawable?.let {
+//                    Utils.Log(TAG,"Color result RES ${mDataResult.tintColorHex}")
+//                    MyDrawableCompat.setColorFilter(it,indexColor.mapColor[EnumImage.QR_FOREGROUND_ICON]?.toColorIntThrowDefaultColor() ?: R.color.transparent)
+//                }
+                tintFGColor(mDataResult,mDrawable)
+                Utils.Log(TAG,"Result cropped bitmap  to res ${mDataResult.typeIcon.name}")
                 options.setLogo(
                     QrVectorLogo(
                         drawable = mDrawable,
@@ -371,19 +340,64 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                         padding = QrVectorLogoPadding.Natural(.0f),
                         shape = shape,
                         backgroundColor =  QrVectorColor
-                            .Solid(Color(R.color.transparent.toColorLong()))
+                            .Solid(tintBGColor(mDataResult))
                     )
                 )
-                Utils.Log(TAG,"Result cropped bitmap  to drawable :Shape ${this.shape}")
             }
-            Utils.Log(TAG,"Result cropped bitmap nothing")
-        }
-        else{
-           Utils.Log(TAG,"Nothing for icon")
+            EnumTypeIcon.BITMAP ->{
+                if (bitmap!=null){
+                    mDrawable = when(this.shape){
+                        EnumShape.CIRCLE ->{
+                            bitmap?.toCircular(QRScannerApplication.getInstance(),0.06f,true)
+                        }
+                        EnumShape.SQUARE ->{
+                            bitmap?.toCircular(QRScannerApplication.getInstance(),0.019f,false)
+                        }
+                        else -> {
+                            bitmap?.toDrawable(QRScannerApplication.getInstance().resources)
+                        }
+                    }
+                    options.setLogo(
+                        QrVectorLogo(
+                            drawable = mDrawable,
+                            size = .19f,
+                            padding = QrVectorLogoPadding.Natural(.0f),
+                            shape = shape,
+                            backgroundColor =  QrVectorColor
+                                .Solid(mDataResult.tintColorHex?.toColorIntThrowDefaultColor() ?: R.color.transparent)
+                        )
+                    )
+                    Utils.Log(TAG,"Result cropped bitmap  to drawable :Shape ${this.shape}")
+                }
+                Utils.Log(TAG,"Result cropped bitmap nothing")
+            }
+            else -> {
+                Utils.Log(TAG,"Nothing for icon")
+            }
         }
         val mData = QrData.Text(create.code?:"")
         val drawable : Drawable = QrCodeDrawable(mData, options.build(), Charsets.UTF_8)
         callback.invoke(drawable)
+    }
+
+    @SuppressLint("ResourceAsColor")
+    @ColorInt
+    private fun tintBGColor(mDataResult: LogoModel) : Int{
+        if (mDataResult.isSupportedBGColor){
+            return indexColor.mapColor[EnumImage.QR_BACKGROUND_ICON]?.toColorIntThrowDefaultColor() ?: R.color.transparent
+        }
+        return R.color.transparent
+    }
+
+    private fun tintFGColor(mDataResult: LogoModel ,drawable: Drawable?){
+        if (mDataResult.isSupportedFGColor){
+            ContextCompat
+                .getDrawable(context, mDataResult.enumIcon.icon)
+            drawable?.let {
+                Utils.Log(TAG,"Color result RES ${mDataResult.tintColorHex}")
+                MyDrawableCompat.setColorFilter(it,indexColor.mapColor[EnumImage.QR_FOREGROUND_ICON]?.toColorIntThrowDefaultColor() ?: R.color.transparent)
+            }
+        }
     }
 
     fun selectedIndexOnReview(){
@@ -494,20 +508,19 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     fun defaultLogo() : LogoModel {
         return LogoModel(
-            EnumIcon.bg_white.icon,
-            EnumIcon.bg_white,false,R.color.transparent,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+            EnumIcon.bg_white,false,false,false,R.color.transparent.stringHex,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
     }
 
     fun defaultColor() : ColorModel {
-        return ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent,EnumImage.QR_BACKGROUND,false,defaultColorMap())
+        return ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND,false,defaultColorMap())
     }
 
     fun defaultPositionMarker() : PositionMarkerModel {
-        return PositionMarkerModel(EnumIcon.ic_frame_ball_default.icon,EnumIcon.ic_frame_ball_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT)
+        return PositionMarkerModel(EnumIcon.ic_frame_ball_default,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumPositionMarker.DEFAULT)
     }
 
     fun defaultBody() : BodyModel {
-        return BodyModel(EnumIcon.ic_dark_default.icon,EnumIcon.ic_dark_default,false,R.color.transparent,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT)
+        return BodyModel(EnumIcon.ic_dark_default,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT)
     }
 
     private fun qrShapes() : QrVectorShapes{
@@ -670,7 +683,23 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_FRAME] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_BALL] = R.color.black_color_picker.stringHexNoTransparency
+        mMap[EnumImage.QR_BACKGROUND_ICON] = R.color.transparent.stringHex
+        mMap[EnumImage.QR_FOREGROUND_ICON] = R.color.black_color_picker.stringHexNoTransparency
         return mMap
+    }
+
+    fun isAllowNavigation(selected : ColorModel): Boolean {
+        if (indexLogo.isSupportedBGColor && selected.type == EnumImage.QR_BACKGROUND_ICON){
+            return true
+        }
+        else if(indexLogo.isSupportedFGColor && selected.type == EnumImage.QR_FOREGROUND_ICON){
+            return true
+        }else{
+            if (selected.type == EnumImage.QR_BACKGROUND || selected.type == EnumImage.QR_FOREGROUND || selected.type == EnumImage.QR_FRAME || selected.type == EnumImage.QR_BALL){
+                return true
+            }
+        }
+        return false
     }
 
     //private fun

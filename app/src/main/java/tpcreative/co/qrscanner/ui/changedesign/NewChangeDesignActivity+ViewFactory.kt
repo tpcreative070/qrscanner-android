@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -37,6 +38,14 @@ fun NewChangeDesignActivity.initUI(){
         }else{
             finish()
         }
+    }
+
+    binding.doneCancelBar.tvTemplate.visibility = View.VISIBLE
+    binding.doneCancelBar.tvCancel.visibility = View.GONE
+    binding.doneCancelBar.imgCancel.visibility = View.GONE
+
+    binding.doneCancelBar.tvTemplate.setOnClickListener {
+        Navigator.onIntent(this,TemplateActivity::class.java)
     }
 
     binding.doneCancelBar.btnSave.setOnClickListener {
@@ -73,7 +82,7 @@ fun NewChangeDesignActivity.initUI(){
 
     binding.doneCancelBar.imgCancel.addCircleRipple()
     binding.doneCancelBar.btnSave.addCircleRipple()
-
+    binding.doneCancelBar.tvTemplate.addCircleRipple()
 }
 
 fun NewChangeDesignActivity.askCancel() {

@@ -17,19 +17,20 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.drakeet.multitype.ItemViewBinder
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.toColorIntThrowDefaultColor
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.model.ColorModel
-import tpcreative.co.qrscanner.model.LogoModel
-import tpcreative.co.qrscanner.ui.changedesign.fragment.LogoFragmentAdapter
 
 /**
  * @author Drakeet Xu
@@ -43,27 +44,27 @@ class ColorSquareViewBinder(val selectedSet: MutableSet<ColorModel>, val context
   override fun onBindViewHolder(holder: ViewHolder, item: ColorModel) {
     holder.square = item
     holder.squareView.setImageDrawable(ContextCompat.getDrawable(context,item.icon))
-    MyDrawableCompat.setColorFilter(holder.squareView.drawable, ContextCompat.getColor(context,
-      item.tint
-    ))
+    val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
+    Utils.Log("TAG","Color result hex $mHex")
+    MyDrawableCompat.setColorFilter(holder.squareView.drawable,mHex)
     holder.selectedView.visibility = if(item.isSelected) View.VISIBLE else View.INVISIBLE
   }
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val squareView: ImageView = itemView.findViewById(R.id.imgIcon)
-    val selectedView: View = itemView.findViewById(R.id.viewSelected)
+    val selectedView: ImageView = itemView.findViewById(R.id.viewSelected)
     lateinit var square: ColorModel
 
     init {
       itemView.setOnClickListener {
         selectedSet.clear()
         selectedSet.add(square)
-        itemSelectedListener?.onClickItem()
+        itemSelectedListener?.onClickItem(bindingAdapterPosition)
       }
     }
   }
 
   interface ItemSelectedListener {
-    fun onClickItem()
+    fun onClickItem(position : Int)
   }
 }

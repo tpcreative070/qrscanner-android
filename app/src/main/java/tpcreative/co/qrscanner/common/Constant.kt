@@ -28,6 +28,8 @@ class Constant {
         const val youtube_id = "eNhq6s1kmhw"
         const val LOG_TAKE_TIME = "LOG_TAKE_TIME"
 
+        const val defaultColor = R.color.white
+
         val  mList = mutableMapOf<String,Int>().apply {
             put(EnumIcon.ic_youtube_png.name,R.drawable.ic_youtube_png)
             put(EnumIcon.ic_twitter.name,R.drawable.ic_twitter)
@@ -39,7 +41,7 @@ class Constant {
             put(EnumIcon.ic_design_text.name,R.drawable.ic_design_text)
 
             put(EnumIcon.bg_white.name, R.drawable.bg_white)
-            put(EnumIcon.design_wifi.name,R.drawable.design_wifi)
+            put(EnumIcon.ic_wifi.name,R.drawable.ic_wifi)
             put(EnumIcon.ic_whatapp.name,R.drawable.ic_whatapp)
 
             put(EnumIcon.ic_instagram.name, R.drawable.ic_instagram)
@@ -72,14 +74,15 @@ class Constant {
             put(EnumIcon.ic_line.name,R.drawable.ic_line)
             put(EnumIcon.ic_linkedin.name,R.drawable.ic_linkedin)
             put(EnumIcon.ic_skype.name,R.drawable.ic_skype)
+            put(EnumIcon.ic_restaurant.name,R.drawable.ic_restaurant)
         }
     }
 }
 
 enum class EnumIcon {
-    ic_youtube_png, ic_twitter,ic_template,ic_paint,ic_dots,ic_eyes,ic_registered,ic_design_text,bg_white,design_wifi,ic_whatapp,ic_instagram,ic_paypal,ic_email,
+    ic_youtube_png, ic_twitter,ic_template,ic_paint,ic_dots,ic_eyes,ic_registered,ic_design_text,bg_white,ic_wifi,ic_whatapp,ic_instagram,ic_paypal,ic_email,
     ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery,ic_dark_corner_0_5,ic_frame_ball_corner_top_right_bottom_left_25px,ic_frame_ball_default,ic_dark_default,ic_frame_ball_corner_10px,ic_frame_ball_corner_25px,
-    ic_frame_ball_corner_top_left_bottom_right_25px,ic_facebook,ic_tiktok,ic_line,ic_linkedin,ic_skype,
+    ic_frame_ball_corner_top_left_bottom_right_25px,ic_facebook,ic_tiktok,ic_line,ic_linkedin,ic_skype,ic_restaurant,
     ic_frame_ball_corner_top_left_top_right_bottom_left_25px,
     ic_frame_ball_circle,
     ic_dark_circle,

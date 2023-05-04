@@ -17,6 +17,7 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,10 +27,11 @@ import androidx.recyclerview.widget.RecyclerView
 import co.tpcreative.supersafe.common.adapter.BaseHolder
 import com.drakeet.multitype.ItemViewBinder
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.extension.icon
+import tpcreative.co.qrscanner.common.extension.toColorIntThrowDefaultColor
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
-import tpcreative.co.qrscanner.model.BodyModel
 import tpcreative.co.qrscanner.model.EnumChangeDesignType
-import tpcreative.co.qrscanner.model.LogoModel
 import tpcreative.co.qrscanner.model.PositionMarkerModel
 
 class PositionMarkerSquareViewBinder(val selectedSet: MutableSet<PositionMarkerModel>, val context : Context, private val itemSelectedListener: ItemSelectedListener?) : ItemViewBinder<PositionMarkerModel, PositionMarkerSquareViewBinder.ViewHolder>() {
@@ -41,19 +43,15 @@ class PositionMarkerSquareViewBinder(val selectedSet: MutableSet<PositionMarkerM
   override fun onBindViewHolder(holder: ViewHolder, item: PositionMarkerModel) {
     if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL){
       holder.square = item
-      holder.squareView.setImageDrawable(ContextCompat.getDrawable(context,item.icon))
-      MyDrawableCompat.setColorFilter(holder.squareView.drawable, ContextCompat.getColor(context,
-        item.tint
-      ))
+      holder.squareView.setImageDrawable(ContextCompat.getDrawable(context,item.enumIcon.icon))
+      MyDrawableCompat.setColorFilter(holder.squareView.drawable,item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor)
       holder.selectedView.visibility = if(item.isSelected) View.VISIBLE else View.INVISIBLE
       holder.layoutVip.visibility = View.GONE
       holder.layoutNormal.visibility = View.VISIBLE
     }else{
       holder.square = item
-      holder.squareVipView.setImageDrawable(ContextCompat.getDrawable(context,item.icon))
-      MyDrawableCompat.setColorFilter(holder.squareVipView.drawable,ContextCompat.getColor(context,
-        item.tint
-      ))
+      holder.squareVipView.setImageDrawable(ContextCompat.getDrawable(context,item.enumIcon.icon))
+      MyDrawableCompat.setColorFilter(holder.squareVipView.drawable,item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor)
       holder.selectedViewVip.visibility = if(item.isSelected) View.VISIBLE else View.INVISIBLE
       holder.imgCircleCodeStatus.setImageResource(R.color.black)
       holder.layoutVip.visibility = View.VISIBLE

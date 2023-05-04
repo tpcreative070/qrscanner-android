@@ -1,9 +1,13 @@
 package tpcreative.co.qrscanner.common.extension
 
 import android.content.Context
+import android.graphics.Color
 import android.view.Surface
 import android.view.WindowManager
+import androidx.core.graphics.toColorInt
 import com.google.gson.Gson
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -79,3 +83,19 @@ val String.changedDesignColor : String get() = Utils.getChangedDesignColor() ?: 
 
 val String.putChangedDesignColor: Unit
     get() = Utils.setChangedDesignColor(this)
+
+
+fun String.toColorIntThrowDefaultColor() : Int{
+    return try {
+        if (this.isEmpty()){
+            Utils.Log("TAG","Color result 1")
+            return Constant.defaultColor
+        }
+        Utils.Log("TAG","Color result 2 $this")
+        this.toColorInt()
+    }
+    catch (e: Exception){
+        Utils.Log("TAG","Color result 3 $this")
+        Constant.defaultColor
+    }
+}
