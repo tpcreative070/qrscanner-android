@@ -64,8 +64,8 @@ class BodySquareViewBinder(val selectedSet: MutableSet<BodyModel>, val context :
     val selectedView: View = itemView.findViewById(R.id.viewSelected)
     val selectedViewVip: View = itemView.findViewById(R.id.viewSelectedVip)
     val imgCircleCodeStatus: ImageView = itemView.findViewById(R.id.imgCircleCodeStatus)
-    val layoutNormal : View = itemView.findViewById(R.id.layoutLogoItem)
-    val layoutVip : View = itemView.findViewById(R.id.layoutLogoVipItem)
+    val layoutNormal : View = itemView.findViewById(R.id.layoutBodyItem)
+    val layoutVip : View = itemView.findViewById(R.id.layoutBodyVipItem)
     lateinit var square: BodyModel
     init {
       itemView.setOnClickListener {

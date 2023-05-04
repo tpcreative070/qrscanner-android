@@ -31,6 +31,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.toColorIntThrowDefaultColor
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
 import tpcreative.co.qrscanner.model.ColorModel
+import tpcreative.co.qrscanner.model.EnumChangeDesignType
 
 /**
  * @author Drakeet Xu
@@ -38,21 +39,39 @@ import tpcreative.co.qrscanner.model.ColorModel
 class ColorSquareViewBinder(val selectedSet: MutableSet<ColorModel>, val context : Context,private val itemSelectedListener: ItemSelectedListener?) : ItemViewBinder<ColorModel, ColorSquareViewBinder.ViewHolder>() {
 
   override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-    return ViewHolder(inflater.inflate(R.layout.color_item, parent, false))
+    return ViewHolder(inflater.inflate(R.layout.color_square_item, parent, false))
   }
 
   override fun onBindViewHolder(holder: ViewHolder, item: ColorModel) {
     holder.square = item
-    holder.squareView.setImageDrawable(ContextCompat.getDrawable(context,item.icon))
-    val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
-    Utils.Log("TAG","Color result hex $mHex")
-    MyDrawableCompat.setColorFilter(holder.squareView.drawable,mHex)
-    holder.selectedView.visibility = if(item.isSelected) View.VISIBLE else View.INVISIBLE
+    if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL) {
+      holder.squareView.setImageDrawable(ContextCompat.getDrawable(context, item.icon))
+      val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
+      Utils.Log("TAG", "Color result hex $mHex")
+      MyDrawableCompat.setColorFilter(holder.squareView.drawable, mHex)
+      holder.selectedView.visibility = if (item.isSelected) View.VISIBLE else View.INVISIBLE
+      holder.layoutVip.visibility = View.GONE
+      holder.layoutNormal.visibility = View.VISIBLE
+    }else{
+      holder.squareVipView.setImageDrawable(ContextCompat.getDrawable(context, item.icon))
+      val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
+      Utils.Log("TAG", "Color result hex $mHex")
+      MyDrawableCompat.setColorFilter(holder.squareVipView.drawable, mHex)
+      holder.selectedViewVip.visibility = if (item.isSelected) View.VISIBLE else View.INVISIBLE
+      holder.imgCircleCodeStatus.setImageResource(R.color.black)
+      holder.layoutVip.visibility = View.VISIBLE
+      holder.layoutNormal.visibility = View.GONE
+    }
   }
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val squareView: ImageView = itemView.findViewById(R.id.imgIcon)
-    val selectedView: ImageView = itemView.findViewById(R.id.viewSelected)
+    val squareVipView: ImageView = itemView.findViewById(R.id.imgIconVip)
+    val selectedView: View = itemView.findViewById(R.id.viewSelected)
+    val selectedViewVip: View = itemView.findViewById(R.id.viewSelectedVip)
+    val imgCircleCodeStatus: ImageView = itemView.findViewById(R.id.imgCircleCodeStatus)
+    val layoutNormal : View = itemView.findViewById(R.id.layoutColorItem)
+    val layoutVip : View = itemView.findViewById(R.id.layoutColorVipItem)
     lateinit var square: ColorModel
 
     init {

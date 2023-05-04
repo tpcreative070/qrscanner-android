@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include
-            android:id="@+id/layoutLogoItem"
-            layout="@layout/body_item"/>
+            android:id="@+id/layoutPositionMarkerItem"
+            layout="@layout/position_marker_item"/>
         <include
-            android:id="@+id/layoutLogoVipItem"
-            layout= "@layout/body_item_vip"/>
+            android:id="@+id/layoutPositionMarkerVipItem"
+            layout= "@layout/position_marker_item_vip"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

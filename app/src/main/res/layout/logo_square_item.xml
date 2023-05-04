@@ -15,7 +15,7 @@
             layout="@layout/logo_item"/>
         <include
             android:id="@+id/layoutLogoVipItem"
-            layout= "@layout/layout_vip"/>
+            layout= "@layout/logo_item_vip"/>
 
 
     </RelativeLayout>

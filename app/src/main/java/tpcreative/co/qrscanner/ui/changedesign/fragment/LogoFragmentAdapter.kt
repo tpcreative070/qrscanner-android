@@ -36,7 +36,7 @@ class LogoFragmentAdapter (inflater: LayoutInflater, private val context: Contex
         if (viewType == NORMAL){
             return ItemHolderStandard(inflater!!.inflate(R.layout.logo_item, parent, false))
         }else{
-            return ItemHolderStandardVip(inflater!!.inflate(R.layout.layout_vip, parent, false))
+            return ItemHolderStandardVip(inflater!!.inflate(R.layout.logo_item_vip, parent, false))
         }
     }
 

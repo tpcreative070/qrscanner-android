@@ -261,12 +261,12 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedColorData(){
         mColorList.clear()
-        mColorList.add(ColorModel(R.drawable.ic_qr_background,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_foreground,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_frame,R.color.transparent.stringHex,EnumImage.QR_FRAME,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent.stringHex,EnumImage.QR_BALL,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_background_icon,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND_ICON,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND_ICON,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_background,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_foreground,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_frame,R.color.transparent.stringHex,EnumImage.QR_FRAME,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent.stringHex,EnumImage.QR_BALL,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_background_icon,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND_ICON,EnumChangeDesignType.VIP,true,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_foreground_icon,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND_ICON,EnumChangeDesignType.NORMAL,true,defaultColorMap()))
     }
 
     private fun initializedPositionMarkerData(){
@@ -508,11 +508,11 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
 
     fun defaultLogo() : LogoModel {
         return LogoModel(
-            EnumIcon.bg_white,false,false,false,R.color.transparent.stringHex,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+            EnumIcon.bg_white,false,false,false,R.color.transparent.stringHex,EnumTypeIcon.NONE,EnumChangeDesignType.NORMAL,EnumShape.SQUARE)
     }
 
     fun defaultColor() : ColorModel {
-        return ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND,false,defaultColorMap())
+        return ColorModel(R.drawable.ic_qrcode_bg,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND,EnumChangeDesignType.NORMAL,false,defaultColorMap())
     }
 
     fun defaultPositionMarker() : PositionMarkerModel {

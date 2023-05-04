@@ -37,7 +37,7 @@ import tpcreative.co.qrscanner.model.PositionMarkerModel
 class PositionMarkerSquareViewBinder(val selectedSet: MutableSet<PositionMarkerModel>, val context : Context, private val itemSelectedListener: ItemSelectedListener?) : ItemViewBinder<PositionMarkerModel, PositionMarkerSquareViewBinder.ViewHolder>() {
 
   override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-    return ViewHolder(inflater.inflate(R.layout.body_square_item, parent, false))
+    return ViewHolder(inflater.inflate(R.layout.position_marker_square_item, parent, false))
   }
 
   override fun onBindViewHolder(holder: ViewHolder, item: PositionMarkerModel) {
@@ -65,8 +65,8 @@ class PositionMarkerSquareViewBinder(val selectedSet: MutableSet<PositionMarkerM
     val selectedView: View = itemView.findViewById(R.id.viewSelected)
     val selectedViewVip: View = itemView.findViewById(R.id.viewSelectedVip)
     val imgCircleCodeStatus: ImageView = itemView.findViewById(R.id.imgCircleCodeStatus)
-    val layoutNormal : View = itemView.findViewById(R.id.layoutLogoItem)
-    val layoutVip : View = itemView.findViewById(R.id.layoutLogoVipItem)
+    val layoutNormal : View = itemView.findViewById(R.id.layoutPositionMarkerItem)
+    val layoutVip : View = itemView.findViewById(R.id.layoutPositionMarkerVipItem)
     lateinit var square: PositionMarkerModel
     init {
       itemView.setOnClickListener {

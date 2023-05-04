@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include
-            android:id="@+id/layoutBodyItem"
-            layout="@layout/body_item"/>
+            android:id="@+id/layoutColorItem"
+            layout="@layout/color_item"/>
         <include
-            android:id="@+id/layoutBodyVipItem"
-            layout= "@layout/body_item_vip"/>
+            android:id="@+id/layoutColorVipItem"
+            layout= "@layout/color_item_vip"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
