@@ -10,14 +10,11 @@ import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.graphics.toColor
 import com.github.alexzhirkevich.customqrgenerator.QrData
-import com.github.alexzhirkevich.customqrgenerator.style.Color
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumIcon
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
@@ -29,7 +26,7 @@ import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 import java.util.*
 
 
-class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
+class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
     val TAG = this::class.java.name
     var mList: MutableList<ChangeDesignCategoryModel> = mutableListOf()
     var create: GeneralModel = GeneralModel()
@@ -68,12 +65,13 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
-        if (action != Intent.ACTION_SEND){
+        if (action != Intent.ACTION_SEND ){
             Utils.Log(TAG,"type $bundle")
             val data  = activity?.intent?.serializable(
                 QRScannerApplication.getInstance().getString(
                     R.string.key_data), GeneralModel::class.java)
             if (data != null) {
+                Utils.Log(TAG,"Data intent ${data.toJson()}")
                 create = data
                 indexLogo = defaultLogo()
                 indexColor = defaultColor()
@@ -128,25 +126,70 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     }
                 }else{
                     indexLogo = defaultLogo()
+                    indexLogo.isSelected = true
                     indexColor = defaultColor()
+                    indexColor.isSelected = true
                     indexPositionMarker = defaultPositionMarker()
+                    indexPositionMarker.isSelected = true
                     indexBody = defaultBody()
+                    indexBody.isSelected = true
                     changeDesignSave = ChangeDesignModel()
                     changeDesignReview =  ChangeDesignModel()
                     changeDesignOriginal = ChangeDesignModel()
                     Utils.Log(TAG,"Data logo not found")
-                    isEmptyChangeDesignLogo = true
-                    isEmptyChangeDesignPositionMarker = true
-                    isEmptyChangeDesignBody = true
+                    isEmptyChangeDesignLogo = false
+                    isEmptyChangeDesignPositionMarker = false
+                    isEmptyChangeDesignBody = false
                 }
                 Utils.Log(TAG,"Data change design ${create.toJson()}")
                 callback.invoke(true)
             }
+            initializedLogoData()
+            initializedColorData()
+            initializedPositionMarkerData()
+            initializedBodyData()
         }
+    }
+
+    fun initializedData() {
+        indexLogo = defaultLogo()
+        indexColor = defaultColor()
+        indexPositionMarker = defaultPositionMarker()
+        indexBody = defaultBody()
+        changeDesignSave = ChangeDesignModel()
+        changeDesignReview =  ChangeDesignModel()
+        changeDesignOriginal = ChangeDesignModel()
+        Utils.Log(TAG,"Data logo not found")
+        isEmptyChangeDesignLogo = true
+        isEmptyChangeDesignPositionMarker = true
+        isEmptyChangeDesignBody = true
         initializedLogoData()
         initializedColorData()
         initializedPositionMarkerData()
         initializedBodyData()
+    }
+
+    fun callbackTemplate(mTemplate : TemplateModel, callback: (result: Boolean) -> Unit){
+        val mData = mTemplate.changeDesign
+        shape = mTemplate.enumShape
+        changeDesignReview = ChangeDesignModel(mData)
+        changeDesignSave = ChangeDesignModel(mData)
+        isEmptyChangeDesignLogo = mData.logo == null
+        isEmptyChangeDesignPositionMarker = mData.positionMarker == null
+        isEmptyChangeDesignBody = mData.body == null
+        indexLogo = mData.logo ?: defaultLogo()
+        indexColor = mData.color ?: defaultColor()
+        indexPositionMarker = mData.positionMarker ?: defaultPositionMarker()
+        indexBody = mData.body ?: defaultBody()
+        indexLogo.isSelected = !isEmptyChangeDesignLogo
+        indexColor.isSelected = !isEmptyChangeDesignLogo
+        indexPositionMarker.isSelected = !isEmptyChangeDesignLogo
+        indexBody.isSelected = !isEmptyChangeDesignBody
+        mapSetView.add(EnumView.LOGO)
+        mapSetView.add(EnumView.COLOR)
+        mapSetView.add(EnumView.POSITION_MARKER)
+        mapSetView.add(EnumView.BODY)
+        callback.invoke(true)
     }
 
     fun getData(callback: (result: MutableList<ChangeDesignCategoryModel>) -> Unit){
@@ -288,10 +331,11 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         mBodyList.add(BodyModel(EnumIcon.ic_dark_star,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.STAR))
     }
 
-    fun onGenerateQR(callback: (result: Drawable) -> Unit){
-        val mDataResult = changeDesignReview.logo
+    fun onGenerateQR(callback: (result: Drawable) -> Unit) : Drawable{
+        val mDataResult = indexLogo
         Utils.Log(TAG,"Data result of review ${changeDesignReview.toJson()}")
         Utils.Log(TAG,"Generate icon => shape ${this.shape.name}")
+        Utils.Log(TAG,"Data result of color ${indexColor.toJson()}")
         val options = QrVectorOptions.Builder()
             .setPadding(.15f)
             .setBackground(
@@ -323,7 +367,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 QrVectorLogoShape.Default
             }
         }
-        when(mDataResult?.typeIcon){
+        when(mDataResult.typeIcon){
             EnumTypeIcon.RES ->{
                 mDrawable = ContextCompat
                     .getDrawable(context, mDataResult.enumIcon.icon)
@@ -336,7 +380,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                 options.setLogo(
                     QrVectorLogo(
                         drawable = mDrawable,
-                        size = .19f,
+                        size = .22f,
                         padding = QrVectorLogoPadding.Natural(.0f),
                         shape = shape,
                         backgroundColor =  QrVectorColor
@@ -360,7 +404,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
                     options.setLogo(
                         QrVectorLogo(
                             drawable = mDrawable,
-                            size = .19f,
+                            size = .22f,
                             padding = QrVectorLogoPadding.Natural(.0f),
                             shape = shape,
                             backgroundColor =  QrVectorColor
@@ -378,12 +422,14 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         val mData = QrData.Text(create.code?:"")
         val drawable : Drawable = QrCodeDrawable(mData, options.build(), Charsets.UTF_8)
         callback.invoke(drawable)
+        return drawable
     }
 
     @SuppressLint("ResourceAsColor")
     @ColorInt
     private fun tintBGColor(mDataResult: LogoModel) : Int{
         if (mDataResult.isSupportedBGColor){
+            Utils.Log(TAG,"color result parse ${indexColor.mapColor[EnumImage.QR_BACKGROUND_ICON]}")
             return indexColor.mapColor[EnumImage.QR_BACKGROUND_ICON]?.toColorIntThrowDefaultColor() ?: R.color.transparent
         }
         return R.color.transparent
@@ -611,6 +657,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         Utils.Log(TAG,"Data value save ${changeDesignSave.toJson()}")
         Utils.Log(TAG,"Data value review ${changeDesignReview.toJson()}")
         val mChanged = changeDesignOriginal.toJson() != changeDesignSave.toJson()
+        Utils.Log(TAG,"Data value changed $mChanged")
         mapSetView.forEach {
             when(it){
                 EnumView.COLOR ->{
@@ -677,7 +724,7 @@ class ChangeDesignViewModel  : BaseViewModel<ItemNavigation>(){
         return false
     }
 
-    private fun defaultColorMap() : HashMap<EnumImage,String>{
+    fun defaultColorMap() : HashMap<EnumImage,String>{
         val mMap = HashMap<EnumImage,String>()
         mMap[EnumImage.QR_BACKGROUND] = R.color.white.stringHexNoTransparency
         mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency

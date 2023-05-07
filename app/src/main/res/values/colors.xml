@@ -813,4 +813,5 @@
     <color name="amber_500">#FFC107</color>
     <color name="orange_500">#FF9800</color>
     <color name="deep_orange_500">#FF5722</color>
+    <color name="twitter">#1DA1F2</color>
 </resources>

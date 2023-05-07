@@ -73,6 +73,9 @@ fun String.findImageName(enum: EnumImage) : File?{
     if (enum == EnumImage.LOGO){
         mFile = File(imageFolder, "$this shared_design_logo_code.png")
     }
+    if (enum == EnumImage.QR_TEMPLATE){
+        mFile = File(imageFolder, "$this shared_design_template_code.png")
+    }
     if (mFile.exists()){
         return mFile
     }

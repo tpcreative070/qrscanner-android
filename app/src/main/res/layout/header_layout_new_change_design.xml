@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -16,7 +17,6 @@
         android:layout_height="@dimen/icon_size_55">
 
         <RelativeLayout
-            android:layout_marginStart="@dimen/margin_13"
             android:layout_gravity="center"
             android:id="@+id/rlCancel"
             android:layout_weight="0.6"
@@ -24,6 +24,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:layout_marginStart="@dimen/margin_13"
                 android:id="@+id/imgCancel"
                 android:layout_width="@dimen/icon_size_35"
                 android:layout_height="@dimen/icon_size_35"
@@ -45,18 +46,20 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/medium_18" />
             <androidx.appcompat.widget.AppCompatTextView
-                android:visibility="invisible"
                 android:id="@+id/tvTemplate"
                 style="@style/brandonRegularTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="@dimen/margin_10"
+                android:layout_alignParentStart="true"
+                android:gravity="start|center"
                 android:ellipsize="end"
+                android:paddingStart="@dimen/margin_20"
                 android:maxLines="1"
                 android:text="@string/template"
                 android:textColor="@color/white"
-                android:textSize="@dimen/medium_18" />
+                android:textSize="@dimen/medium_18"
+                tools:ignore="RtlSymmetry" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -66,17 +69,21 @@
             android:layout_width="0dp"
             android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSave"
+                style="@style/brandonRegularTextInputLayout"
+                android:layout_width="@dimen/icon_size_100"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="@dimen/margin_10"
-                android:background="@null"
+                android:layout_alignParentEnd="true"
+                android:gravity="center|end"
+                android:ellipsize="end"
+                android:paddingEnd="@dimen/margin_20"
+                android:maxLines="1"
                 android:text="@string/save"
                 android:textColor="@color/white"
-                android:textSize="@dimen/medium_18" />
+                android:textSize="@dimen/medium_18"
+                tools:ignore="RtlSymmetry" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

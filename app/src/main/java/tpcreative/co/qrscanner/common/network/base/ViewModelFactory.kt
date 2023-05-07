@@ -61,7 +61,7 @@ class ViewModelFactory() : ViewModelProvider.Factory{
             return ChangeDesignViewModel() as T
         }
         else if(modelClass.isAssignableFrom(TemplateViewModel::class.java)){
-            return TemplateViewModel() as T
+            return TemplateViewModel(ChangeDesignViewModel()) as T
         }
         throw IllegalArgumentException("Unknown class name")
     }

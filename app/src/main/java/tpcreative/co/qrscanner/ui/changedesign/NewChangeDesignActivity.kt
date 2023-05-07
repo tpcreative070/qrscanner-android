@@ -116,6 +116,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         adapter.register(ColorSquareViewBinder(selectedSetColor,this,object  : ColorSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position : Int) {
                 Utils.Log(TAG,"Color ${selectedSetColor.toJson()}")
+                Utils.Log(TAG,"Color current ${viewModel.indexColor.toJson()}")
                 Utils.Log(TAG,"Clicked position $position")
                 val mResultSelected = selectedSetColor.first()
                 if (viewModel.isAllowNavigation(mResultSelected)){
@@ -149,7 +150,11 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         }))
 
         mResultTemplate  = {
-
+            Utils.Log(TAG,"Call back from Template activity ${it.toJson()}")
+            viewModel.callbackTemplate(it){
+                onCallbackTemplate()
+                onGenerateQRReview()
+            }
         }
 
 
@@ -192,16 +197,17 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         items.addAll(viewModel.mBodyList)
         items.forEachIndexed { index, it ->
             if (it is LogoModel){
-                if (it.enumIcon == viewModel.indexLogo.enumIcon && !viewModel.isEmptyChangeDesignLogo){
+                if (it.enumIcon == viewModel.indexLogo.enumIcon){
                     previousLogoPosition = index
                     it.isSelected = viewModel.indexLogo.isSelected
                     selectedSetLogo.add(it)
                     selectedPreviousSetLogo.add(it)
                     viewModel.mapSetView.add(EnumView.LOGO)
+                    onUpdateColorUI(it)
                 }
             }
             else if (it is PositionMarkerModel){
-                if (it.enumPositionMarker == viewModel.indexPositionMarker.enumPositionMarker && !viewModel.isEmptyChangeDesignPositionMarker){
+                if (it.enumPositionMarker == viewModel.indexPositionMarker.enumPositionMarker){
                     previousPositionMarkerPosition = index
                     it.isSelected = viewModel.indexPositionMarker.isSelected
                     selectedSetPositionMarker.add(it)
@@ -210,7 +216,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 }
             }
             else if (it is BodyModel){
-                if (it.enumBody == viewModel.indexBody.enumBody && !viewModel.isEmptyChangeDesignBody){
+                if (it.enumBody == viewModel.indexBody.enumBody){
                     previousBodyPosition = index
                     it.isSelected = viewModel.indexBody.isSelected
                     selectedSetBody.add(it)
@@ -220,6 +226,56 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             }
         }
         adapter.items = items
+    }
+
+    private fun onCallbackTemplate(){
+        selectedSetLogo.clear()
+        selectedPreviousSetLogo.clear()
+        selectedSetPositionMarker.clear()
+        selectedPreviousSetPositionMarker.clear()
+        selectedSetBody.clear()
+        selectedPreviousSetBody.clear()
+        items.forEachIndexed { index, it ->
+            if (it is LogoModel){
+                if (it.enumIcon == viewModel.indexLogo.enumIcon){
+                    previousLogoPosition = index
+                    selectedSetLogo.add(it)
+                    selectedPreviousSetLogo.add(it)
+                    viewModel.mapSetView.add(EnumView.LOGO)
+                    it.isSelected = viewModel.indexLogo.enumIcon == it.enumIcon
+                    onUpdateColorUI(it)
+                }else{
+                    it.isSelected = false
+                }
+
+                Utils.Log(TAG,"Selected logo result ${viewModel.indexLogo.enumIcon}: ${it.isSelected}")
+            }
+            else if (it is PositionMarkerModel){
+                if (it.enumPositionMarker == viewModel.indexPositionMarker.enumPositionMarker){
+                    previousPositionMarkerPosition = index
+                    selectedSetPositionMarker.add(it)
+                    selectedPreviousSetPositionMarker.add(it)
+                    viewModel.mapSetView.add(EnumView.POSITION_MARKER)
+                    it.isSelected = viewModel.indexPositionMarker.enumIcon == it.enumIcon
+                }else{
+                    it.isSelected = false
+                }
+            }
+            else if (it is BodyModel){
+                if (it.enumBody == viewModel.indexBody.enumBody){
+                    previousBodyPosition = index
+                    selectedSetBody.add(it)
+                    selectedPreviousSetBody.add(it)
+                    viewModel.mapSetView.add(EnumView.BODY)
+                    it.isSelected = viewModel.indexBody.enumIcon == it.enumIcon
+                }else{
+                    it.isSelected = false
+                }
+            }
+        }
+        adapter.items = items
+        adapter.notifyDataSetChanged()
+        Utils.Log(TAG,"Selected logo ${selectedSetLogo.toJson()}")
     }
 
     private fun changeLogoItem(position : Int){
@@ -237,7 +293,6 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         val index = selectedSetLogo.firstOrNull()
         onUpdateColorUI(index)
         viewModel.mapSetView.add(EnumView.LOGO)
-        viewModel.mapSetView
         viewModel.indexLogo  = index ?: viewModel.indexLogo
 
         if (index?.typeIcon == EnumTypeIcon.BITMAP){
@@ -503,6 +558,6 @@ class NewChangeDesignActivity : BaseActivitySlide(){
     companion object {
         private const val SPAN_COUNT = 5
         var mResult : ((value : String) -> Unit?)? = null
-        var mResultTemplate : ((value : String) ->Unit?)? = null
+        var mResultTemplate : ((value : TemplateModel) ->Unit?)? = null
     }
 }

@@ -265,7 +265,7 @@ class ReviewActivity : BaseActivitySlide() {
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
                 hints[EncodeHintType.CHARACTER_SET] = Charsets.UTF_8
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-                Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
+                Utils.Log(TAG, "barcode====================> review " + code + "--" + create?.createType?.name)
                 val mBitmap = if (isBarCode()) {
                     hints[EncodeHintType.MARGIN] = 5
                     var mFormatCode = BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
@@ -310,7 +310,7 @@ class ReviewActivity : BaseActivitySlide() {
 
     fun isBarCode() : Boolean{
         try {
-            if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(""))) {
+            if ((BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))) {
                 return true
             }
             return false
@@ -337,7 +337,7 @@ class ReviewActivity : BaseActivitySlide() {
                     EnumMap<EncodeHintType, Any?>(EncodeHintType::class.java)
                 hints[EncodeHintType.CHARACTER_SET] = Charsets.UTF_8
                 val theme: Theme? = Theme.getInstance()?.getThemeInfo()
-                Utils.Log(TAG, "barcode====================> " + code + "--" + create?.createType?.name)
+                Utils.Log(TAG, "barcode====================> generate " + code + "--" + create?.createType?.name)
                 bitmap = if (BarcodeFormat.QR_CODE !=  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name))  {
                     hints[EncodeHintType.MARGIN] = 15
                     var mFormatCode =  BarcodeFormat.valueOf(create?.barcodeFormat ?: BarcodeFormat.QR_CODE.name)
@@ -413,6 +413,7 @@ class ReviewActivity : BaseActivitySlide() {
         }
         else if (Intent.ACTION_SEND == intent.action){
             create?.uuId = uuId
+            create?.code = code
         }
     }
 

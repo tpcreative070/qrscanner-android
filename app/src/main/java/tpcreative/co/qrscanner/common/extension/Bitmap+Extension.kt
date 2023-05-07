@@ -94,6 +94,9 @@ fun Bitmap.storeBitmap(fileName : String,enumImage : EnumImage) : Uri?{
     if (enumImage == EnumImage.LOGO){
         file = File(imageFolder, "$fileName shared_design_logo_code.png")
     }
+    if (enumImage == EnumImage.QR_TEMPLATE){
+        file = File(imageFolder, "$fileName shared_design_template_code.png")
+    }
     val mUri = QRScannerApplication.getInstance().getUriForFile(file)
     mUri?.run {
         QRScannerApplication.getInstance().contentResolver?.openOutputStream(this)?.run {

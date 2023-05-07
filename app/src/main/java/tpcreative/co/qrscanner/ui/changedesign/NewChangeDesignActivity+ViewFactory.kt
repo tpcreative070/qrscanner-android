@@ -1,28 +1,19 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
-import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
-import tpcreative.co.qrscanner.common.view.GridSpacingItemDecoration
-import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.EnumImage
 import tpcreative.co.qrscanner.model.EnumTypeIcon
-import tpcreative.co.qrscanner.model.EnumView
 
 fun NewChangeDesignActivity.initUI(){
     setupViewModel()
@@ -48,7 +39,7 @@ fun NewChangeDesignActivity.initUI(){
         Navigator.onIntent(this,TemplateActivity::class.java)
     }
 
-    binding.doneCancelBar.btnSave.setOnClickListener {
+    binding.doneCancelBar.tvSave.setOnClickListener {
         val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,1024, Bitmap.Config.ARGB_8888)
         val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"",EnumImage.QR_CODE).apply {
             if (viewModel.indexLogo.typeIcon == EnumTypeIcon.BITMAP){
@@ -81,7 +72,7 @@ fun NewChangeDesignActivity.initUI(){
         })
 
     binding.doneCancelBar.imgCancel.addCircleRipple()
-    binding.doneCancelBar.btnSave.addCircleRipple()
+    binding.doneCancelBar.tvSave.addCircleRipple()
     binding.doneCancelBar.tvTemplate.addCircleRipple()
 }
 

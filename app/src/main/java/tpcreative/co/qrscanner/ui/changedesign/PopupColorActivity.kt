@@ -54,6 +54,7 @@ class PopupColorActivity : AppCompatActivity() {
                 Utils.Log(TAG, "onViewCosed()")
             }
         })
+        Utils.Log(TAG,"Checked color ${mMapColor[imageType]}")
 
         binding.colorPicker.checkColor(mMapColor[imageType] ?: "#ffffff")
         binding.colorPicker.onColorChanged = { color ->
