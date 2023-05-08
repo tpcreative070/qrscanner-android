@@ -15,9 +15,7 @@ import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.lifecycle.lifecycleScope
 import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -37,10 +35,7 @@ import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignActivity
 import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
-import tpcreative.co.qrscanner.ui.create.BarcodeActivity
-import java.io.File
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {

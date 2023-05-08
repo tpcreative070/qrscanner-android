@@ -4,16 +4,13 @@ import android.content.ClipData
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
-import android.os.Build
 import android.os.Parcelable
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.print.PrintHelper
 import com.google.gson.Gson
@@ -26,7 +23,6 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -35,8 +31,6 @@ import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignActivity
-import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.io.File
 import java.io.FileOutputStream
 
