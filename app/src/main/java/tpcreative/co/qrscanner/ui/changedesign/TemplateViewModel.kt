@@ -80,7 +80,7 @@ class TemplateViewModel(private val changeDesignViewModel: ChangeDesignViewModel
 
 
         mModel = ChangeDesignModel()
-        mModel.logo = changeDesignViewModel.mLogoList.getOrNull(12)
+        mModel.logo = changeDesignViewModel.mLogoList.getOrNull(15)
         mModel.body = changeDesignViewModel.mBodyList.getOrNull(1)
         mModel.positionMarker = changeDesignViewModel.mPositionMarkerList.getOrNull(1)
         mMapColor = changeDesignViewModel.defaultColorMap()

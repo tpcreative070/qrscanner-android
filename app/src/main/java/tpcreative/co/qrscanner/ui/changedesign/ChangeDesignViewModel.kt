@@ -262,6 +262,22 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         )
         mLogoList.add(
             LogoModel(
+                EnumIcon.ic_viber,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_heart,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_card,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_gift,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
                 EnumIcon.ic_wifi,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
