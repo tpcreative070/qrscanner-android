@@ -70,6 +70,7 @@ class Constant {
             put(EnumIcon.ic_dark_circle.name,R.drawable.ic_dark_circle)
             put(EnumIcon.ic_dark_star.name,R.drawable.ic_dark_star)
             put(EnumIcon.ic_facebook.name,R.drawable.ic_facebook)
+            put(EnumIcon.ic_facebook_messenger.name,R.drawable.ic_facebook_messenger)
             put(EnumIcon.ic_tiktok.name,R.drawable.ic_tiktok)
             put(EnumIcon.ic_line.name,R.drawable.ic_line)
             put(EnumIcon.ic_linkedin.name,R.drawable.ic_linkedin)
@@ -79,6 +80,11 @@ class Constant {
             put(EnumIcon.ic_card.name,R.drawable.ic_card)
             put(EnumIcon.ic_gift.name,R.drawable.ic_gift)
             put(EnumIcon.ic_viber.name,R.drawable.ic_viber)
+            put(EnumIcon.ic_birthday.name,R.drawable.ic_birthday)
+            put(EnumIcon.ic_visa.name,R.drawable.ic_visa)
+            put(EnumIcon.ic_master_card.name,R.drawable.ic_master_card)
+            put(EnumIcon.ic_snapchat.name,R.drawable.ic_snapchat)
+            put(EnumIcon.ic_we_chat.name,R.drawable.ic_we_chat)
         }
     }
 }
@@ -86,7 +92,7 @@ class Constant {
 enum class EnumIcon {
     ic_youtube_png, ic_twitter,ic_template,ic_paint,ic_dots,ic_eyes,ic_registered,ic_design_text,bg_white,ic_wifi,ic_whatapp,ic_instagram,ic_paypal,ic_email,
     ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery,ic_dark_corner_0_5,ic_frame_ball_corner_top_right_bottom_left_25px,ic_frame_ball_default,ic_dark_default,ic_frame_ball_corner_10px,ic_frame_ball_corner_25px,
-    ic_frame_ball_corner_top_left_bottom_right_25px,ic_facebook,ic_tiktok,ic_line,ic_linkedin,ic_skype,ic_restaurant,ic_heart,ic_card,ic_gift,ic_viber,
+    ic_frame_ball_corner_top_left_bottom_right_25px,ic_facebook,ic_facebook_messenger,ic_tiktok,ic_line,ic_linkedin,ic_skype,ic_restaurant,ic_heart,ic_card,ic_gift,ic_viber,ic_birthday,ic_visa,ic_master_card,ic_snapchat,ic_we_chat,
     ic_frame_ball_corner_top_left_top_right_bottom_left_25px,
     ic_frame_ball_circle,
     ic_dark_circle,

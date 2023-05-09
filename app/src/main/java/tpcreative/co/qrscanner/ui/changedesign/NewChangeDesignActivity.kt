@@ -20,6 +20,7 @@ import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityNewChangeDesignBinding
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.premiumpopup.PremiumPopupActivity
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -108,7 +109,12 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 Utils.Log(TAG,"Clicked position $position")
                 Utils.Log(TAG,"Logo ${selectedSetLogo.toJson()}")
                 Utils.Log(TAG,"Data list ${items.toJson()}")
-                changeLogoItem(position)
+                val mData = selectedSetLogo.firstOrNull()
+                if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP){
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,PremiumPopupActivity::class.java))
+                }else{
+                    changeLogoItem(position)
+                }
             }
         }))
 
@@ -488,6 +494,11 @@ class NewChangeDesignActivity : BaseActivitySlide(){
     }
 
     private val popupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+        }
+    }
+
+    private val premiumPopupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
         }
     }
