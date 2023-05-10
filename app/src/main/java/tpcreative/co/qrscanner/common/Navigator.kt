@@ -96,11 +96,11 @@ object Navigator {
         return  intent
     }
 
-    fun <T> onPremiumPopupView(context: Activity?, clazz: Class<T>) : Intent {
+    fun <T> onPremiumPopupView(context: Activity?,mData : ChangeDesignModel,typeShape: EnumShape, clazz: Class<T>) : Intent {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
-//        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP, mMap)
-//        bundle.putString(ConstantKey.KEY_CHANGE_DESIGN_COLOR_TYPE,image.name)
+        bundle.putSerializable(ConstantKey.KEY_PREMIUM_POPUP, mData)
+        bundle.putString(ConstantKey.KEY_PREMIUM_POPUP_TYPE_SHAPE,typeShape.name)
         intent.putExtras(bundle)
         return  intent
     }

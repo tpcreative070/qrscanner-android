@@ -22,6 +22,12 @@ val Int.stringHex: String get() = String.format(
 )
 val Int.stringHexNoTransparency: String get() = String.format("#%06x", ContextCompat.getColor(QRScannerApplication.getInstance(), this) and 0xffffff)
 
+val Int.hexColor get() = String.format("#%06X", 0xFFFFFF and this)
+
+//val Int.hexWithAlphaColor get() = String.format("#%08X", 0xFFFFFFFF and this)
+
+val Int.hexWithAlphaColor get() = java.lang.String.format("#%08X", -0x1 and this)
+
 fun Int.toColorLong() : Long{
     return try {
         this.toColorLong()

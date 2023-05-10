@@ -6,6 +6,7 @@ class Configuration {
         const val THREE_MINUTES = 180000L
         const val TWENTY_MINUTES = 1200000L
         const val TWO_DAYS  = 172800000L
+        const val WATCH_ADS = 2
         const val CURRENT_MILLISECONDS = 1677547920404L
         const val liveAds = true
         const val request_remote_debug_app = false

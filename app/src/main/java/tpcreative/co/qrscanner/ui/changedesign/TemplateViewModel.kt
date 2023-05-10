@@ -32,7 +32,7 @@ class TemplateViewModel(private val changeDesignViewModel: ChangeDesignViewModel
     }
 
     private fun initializedTemplateDate(){
-        changeDesignViewModel.initializedData()
+        changeDesignViewModel.initializedTemplateData()
         mTemplateList.clear()
         var mModel = ChangeDesignModel()
         mTemplateList.add(TemplateModel("0",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NONE,mModel))

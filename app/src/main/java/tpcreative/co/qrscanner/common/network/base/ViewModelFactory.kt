@@ -7,6 +7,7 @@ import tpcreative.co.qrscanner.ui.changedesign.TemplateViewModel
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 import tpcreative.co.qrscanner.ui.help.HelpViewModel
 import tpcreative.co.qrscanner.ui.history.HistoryViewModel
+import tpcreative.co.qrscanner.ui.premiumpopup.PremiumPopupViewModel
 import tpcreative.co.qrscanner.ui.review.ReviewViewModel
 import tpcreative.co.qrscanner.ui.save.SaveViewModel
 import tpcreative.co.qrscanner.ui.scanner.ScannerViewModel
@@ -62,6 +63,9 @@ class ViewModelFactory() : ViewModelProvider.Factory{
         }
         else if(modelClass.isAssignableFrom(TemplateViewModel::class.java)){
             return TemplateViewModel(ChangeDesignViewModel()) as T
+        }
+        else if(modelClass.isAssignableFrom(PremiumPopupViewModel::class.java)){
+            return PremiumPopupViewModel(ChangeDesignViewModel()) as T
         }
         throw IllegalArgumentException("Unknown class name")
     }

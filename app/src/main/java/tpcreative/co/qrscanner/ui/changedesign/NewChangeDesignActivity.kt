@@ -3,6 +3,7 @@ package tpcreative.co.qrscanner.ui.changedesign
 import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -110,8 +111,8 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 Utils.Log(TAG,"Logo ${selectedSetLogo.toJson()}")
                 Utils.Log(TAG,"Data list ${items.toJson()}")
                 val mData = selectedSetLogo.firstOrNull()
-                if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP){
-                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,PremiumPopupActivity::class.java))
+                if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
                 }else{
                     changeLogoItem(position)
                 }
@@ -144,14 +145,24 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Position marker register*/
         adapter.register(PositionMarkerSquareViewBinder(selectedSetPositionMarker,this,object :PositionMarkerSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
-                changePositionMarkerItem(position)
+                val mData = selectedSetPositionMarker.firstOrNull()
+                if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
+                }else{
+                    changePositionMarkerItem(position)
+                }
             }
         }))
 
         /*Body register*/
         adapter.register(BodySquareViewBinder(selectedSetBody,this,object :BodySquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
-                changeBodyItem(position)
+                val mData = selectedSetBody.firstOrNull()
+                if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
+                }else{
+                    changeBodyItem(position)
+                }
             }
         }))
 
@@ -162,7 +173,6 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 onGenerateQRReview()
             }
         }
-
 
         if (items.isEmpty()){
             loadData()

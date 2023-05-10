@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.ui.changedesign
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,17 +8,11 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
-import com.github.alexzhirkevich.customqrgenerator.QrData
-import com.github.alexzhirkevich.customqrgenerator.style.Color
-import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
-import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
-import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
@@ -77,7 +70,7 @@ class TemplateAdapter (inflater: LayoutInflater,val loadedSet: MutableSet<String
                 Utils.Log(TAG,"Loading path ${mFile.absolutePath}")
             } else {
                 val viewModel = ChangeDesignViewModel()
-                viewModel.initializedData()
+                viewModel.initializedTemplateData()
                 viewModel.indexLogo = data.changeDesign.logo ?: viewModel.defaultLogo()
                 viewModel.indexColor = data.changeDesign.color ?: viewModel.defaultColor()
                 viewModel.indexPositionMarker = data.changeDesign.positionMarker ?: viewModel.defaultPositionMarker()
@@ -136,7 +129,7 @@ class TemplateAdapter (inflater: LayoutInflater,val loadedSet: MutableSet<String
                 Utils.Log(TAG,"Loading path ${mFile.absolutePath}")
             } else {
                 val viewModel = ChangeDesignViewModel()
-                viewModel.initializedData()
+                viewModel.initializedTemplateData()
                 viewModel.indexLogo = data.changeDesign.logo ?: viewModel.defaultLogo()
                 viewModel.indexColor = data.changeDesign.color ?: viewModel.defaultColor()
                 viewModel.indexPositionMarker = data.changeDesign.positionMarker ?: viewModel.defaultPositionMarker()

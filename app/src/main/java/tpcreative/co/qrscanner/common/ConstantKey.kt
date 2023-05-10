@@ -46,6 +46,8 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_POSITION = "key_change_design_body_previous_position"
         const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_CANCEL_POSITION = "key_change_design_body_previous_cancel_position"
         const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_SELECTED = "key_change_design_body_previous_selected"
+        const val KEY_PREMIUM_POPUP = "key_premium_popup"
+        const val KEY_PREMIUM_POPUP_TYPE_SHAPE = "key_premium_popup_type_shape"
 
         const val TITLE  = "title"
         const val LOCATION = "location"

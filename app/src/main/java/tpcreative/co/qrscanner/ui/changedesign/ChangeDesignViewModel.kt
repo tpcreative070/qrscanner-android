@@ -151,7 +151,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         }
     }
 
-    fun initializedData() {
+    fun initializedTemplateData() {
         indexLogo = defaultLogo()
         indexColor = defaultColor()
         indexPositionMarker = defaultPositionMarker()
@@ -348,7 +348,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         mColorList.add(ColorModel(R.drawable.ic_qr_foreground,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
         mColorList.add(ColorModel(R.drawable.ic_qr_frame,R.color.transparent.stringHex,EnumImage.QR_FRAME,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
         mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent.stringHex,EnumImage.QR_BALL,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
-        mColorList.add(ColorModel(R.drawable.ic_qr_background_icon,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND_ICON,EnumChangeDesignType.VIP,true,defaultColorMap()))
+        mColorList.add(ColorModel(R.drawable.ic_qr_background_icon,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND_ICON,EnumChangeDesignType.NORMAL,true,defaultColorMap()))
         mColorList.add(ColorModel(R.drawable.ic_qr_foreground_icon,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND_ICON,EnumChangeDesignType.NORMAL,true,defaultColorMap()))
     }
 
@@ -787,6 +787,27 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
             }
         }
         return false
+    }
+
+    fun getChangeDataReviewToPremiumPopup(any : Any) : ChangeDesignModel {
+        val mData =  ChangeDesignModel()
+        mData.logo = indexLogo
+        mData.body = indexBody
+        mData.color= indexColor
+        mData.positionMarker = indexPositionMarker
+        if (any is LogoModel){
+            mData.logo = any
+        }
+        else if (any is BodyModel){
+            mData.body = any
+        }
+        else if (any is ColorModel){
+            mData.color= any
+        }
+        else if (any is PositionMarkerModel){
+            mData.positionMarker = any
+        }
+        return mData
     }
 
     //private fun

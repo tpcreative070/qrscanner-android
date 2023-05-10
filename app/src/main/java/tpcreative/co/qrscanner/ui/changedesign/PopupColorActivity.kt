@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
 import com.davidmiguel.dragtoclose.DragListener
 import com.davidmiguel.dragtoclose.DragToClose
@@ -13,9 +14,7 @@ import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
-import tpcreative.co.qrscanner.common.extension.addCircleRipple
-import tpcreative.co.qrscanner.common.extension.serializable
-import tpcreative.co.qrscanner.common.extension.toJson
+import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.databinding.ActivityPopupColorBinding
 import tpcreative.co.qrscanner.model.EnumImage
 
@@ -65,7 +64,9 @@ class PopupColorActivity : AppCompatActivity() {
         binding.colorPicker.afterColorChanged = { color ->
             //afterColorChanged(color)
             Utils.Log(TAG,"after color changed $color")
-            NewChangeDesignActivity.mResult?.invoke(color)
+            val mHexColorWithoutTransparent = color.toColorInt().hexColor
+            Utils.Log(TAG,"after color without no transparent $mHexColorWithoutTransparent")
+            NewChangeDesignActivity.mResult?.invoke(mHexColorWithoutTransparent)
         }
         binding.imgClose.addCircleRipple()
         binding.imgEdit.addCircleRipple()
