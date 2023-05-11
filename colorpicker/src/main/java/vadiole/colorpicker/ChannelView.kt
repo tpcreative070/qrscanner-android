@@ -196,6 +196,10 @@ internal class ChannelView(
         this.listenerRelease = listenerRelease
     }
 
+    fun setProgress(int : Int){
+        seekbar?.progress = int
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         this.listener = null

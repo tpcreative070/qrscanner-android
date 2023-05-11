@@ -38,6 +38,7 @@ import java.net.URLEncoder
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 
@@ -812,6 +813,16 @@ object Utils {
 
     fun getCountContinueScan() : Int{
         return PrefsController.getInt(R.string.key_count_continue_scan.toText(),0)
+    }
+
+    fun setPopupColorPreferenceColor(mList : ArrayList<ColorPreferenceModel>){
+        PrefsController.putString(R.string.key_popup_color_color_preference.toText(),mList.toJson())
+    }
+
+    fun getPopupColorPreferenceColor() : ArrayList<ColorPreferenceModel>?{
+        val json =  PrefsController.getString(R.string.key_popup_color_color_preference.toText(),null)
+        val itemType = object : TypeToken<ArrayList<ColorPreferenceModel>>() {}.type
+        return Gson().fromJson<ArrayList<ColorPreferenceModel>>(json, itemType)
     }
 
 //    fun getFramePortraitSize() : Size? {

@@ -1,29 +1,29 @@
 package tpcreative.co.qrscanner.ui.changedesign
+
+import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
-import androidx.lifecycle.lifecycleScope
 import com.davidmiguel.dragtoclose.DragListener
 import com.davidmiguel.dragtoclose.DragToClose
-import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
+import tpcreative.co.qrscanner.common.view.CircleImageView
 import tpcreative.co.qrscanner.databinding.ActivityPopupColorBinding
+import tpcreative.co.qrscanner.model.ColorPreferenceModel
 import tpcreative.co.qrscanner.model.EnumImage
-import tpcreative.co.qrscanner.ui.review.initUI
-import tpcreative.co.qrscanner.ui.review.showAds
 import vadiole.colorpicker.ColorModel
 import vadiole.colorpicker.ColorPickerView
 import vadiole.colorpicker.OnSwitchColorModelListener
 import vadiole.colorpicker.hexColor
+import java.util.TreeSet
 
 class PopupColorActivity : AppCompatActivity() {
     lateinit var binding : ActivityPopupColorBinding
@@ -32,12 +32,12 @@ class PopupColorActivity : AppCompatActivity() {
     private lateinit var mMapColor : HashMap<EnumImage,String>
     private lateinit var colorPicker : ColorPickerView
     private var isGrid : Boolean = true
+    private var mListColor : ArrayList<ColorPreferenceModel> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = Color.TRANSPARENT
         binding = ActivityPopupColorBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val bundle: Bundle? = intent?.extras
         mMapColor = bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP) ?: HashMap<EnumImage,String>()
         imageType = EnumImage.valueOf(bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_TYPE) ?:"")
@@ -92,11 +92,45 @@ class PopupColorActivity : AppCompatActivity() {
         }
         binding.imgClose.addCircleRipple()
         binding.imgEdit.addCircleRipple()
+        binding.imgAdd.addCircleRipple()
+        binding.imgDelete.addCircleRipple()
+
+        binding.imgAdd.setImageResource(R.color.material_gray_700)
+        binding.imgDelete.setImageResource(R.color.material_gray_700)
+        binding.imgDelete.visibility = View.INVISIBLE
+        binding.imgIconDelete.visibility = View.INVISIBLE
+        Utils.getPopupColorPreferenceColor()?.let {
+            mListColor.clear()
+            mListColor.addAll(it)
+            addChipHexColor()
+        }
         if (savedInstanceState!=null){
             isGrid = savedInstanceState.getBoolean(ConstantKey.KEY_POPUP_COLOR_GRID)
             mMapColor[imageType] = savedInstanceState.getString(ConstantKey.KEY_POPUP_COLOR_SELECTED) ?: "#FFFFFF"
+            mListColor = savedInstanceState.serializable(ConstantKey.KEY_POPUP_COLOR_COLOR_PREFERENCE) ?: arrayListOf()
+            addChipHexColor()
         }
         addSliderColor()
+
+        binding.imgAdd.setOnClickListener {
+            Utils.Log(TAG,"Add")
+            if (mListColor.size>=20){
+                return@setOnClickListener
+            }
+            val mModel = ColorPreferenceModel((mMapColor[imageType] ?: Constant.defaultColor.hexColor),System.currentTimeMillis())
+            mListColor.add(0,mModel)
+            val mResult = mListColor.distinctBy { Pair(it.hexColor, it.hexColor) }
+            mListColor.clear()
+            mListColor.addAll(mResult)
+            addChipHexColor()
+        }
+
+        binding.imgDelete.setOnClickListener {
+            Utils.Log(TAG,"Delete")
+            mListColor.remove(mListColor.lastOrNull())
+            addChipHexColor()
+        }
+
         if (isGrid){
             binding.colorPicker.visibility = View.VISIBLE
             colorPicker.visibility = View.INVISIBLE
@@ -110,11 +144,13 @@ class PopupColorActivity : AppCompatActivity() {
     fun onClick(v: View) {
         when (v.id) {
             R.id.btnGrid -> {
+                binding.colorPicker.checkColor(mMapColor[imageType] ?: Constant.defaultColor.hexColor)
                 colorPicker.visibility = View.INVISIBLE
                 binding.colorPicker.visibility = View.VISIBLE
                 isGrid = true
             }
             R.id.btnSlider -> {
+                colorPicker.setSwitchView((mMapColor[imageType] ?: Constant.defaultColor.hexColor).toColorInt())
                 colorPicker.visibility = View.VISIBLE
                 binding.colorPicker.visibility = View.INVISIBLE
                 isGrid = false
@@ -126,12 +162,51 @@ class PopupColorActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putBoolean(ConstantKey.KEY_POPUP_COLOR_GRID,isGrid)
         outState.putString(ConstantKey.KEY_POPUP_COLOR_SELECTED,mMapColor[imageType])
+        outState.putSerializable(ConstantKey.KEY_POPUP_COLOR_COLOR_PREFERENCE,mListColor)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         isGrid = savedInstanceState.getBoolean(ConstantKey.KEY_POPUP_COLOR_GRID)
-        mMapColor[imageType] = savedInstanceState.getString(ConstantKey.KEY_POPUP_COLOR_SELECTED) ?: "\"#FFFFFF\""
+        mMapColor[imageType] = savedInstanceState.getString(ConstantKey.KEY_POPUP_COLOR_SELECTED) ?: Constant.defaultColor.hexColor
+        mListColor = savedInstanceState.serializable(ConstantKey.KEY_POPUP_COLOR_COLOR_PREFERENCE) ?: arrayListOf()
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    private fun addChipHexColor(){
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        binding.rlGroup.removeAllViews()
+        if (mListColor.isEmpty()){
+            binding.imgDelete.visibility = View.INVISIBLE
+            binding.imgIconDelete.visibility = View.INVISIBLE
+        }else{
+            binding.imgDelete.visibility = View.VISIBLE
+            binding.imgIconDelete.visibility = View.VISIBLE
+        }
+        mListColor.forEachIndexed { index, s ->
+            val xmlView = inflater.inflate(R.layout.item_chip, null, false)
+            val img = xmlView.findViewById<CircleImageView>(R.id.chip)
+            img.tag = index
+            xmlView.tag = index
+            img.setCircleBackgroundColor(s.hexColor.toColorInt())
+            xmlView.addCircleRipple()
+            xmlView.setOnClickListener {
+                Utils.Log(TAG,"Get position ${it.tag}")
+                mMapColor[imageType] = mListColor[it.tag as Int].hexColor
+                if (isGrid) {
+                    binding.colorPicker.checkColor(mMapColor[imageType] ?:  Constant.defaultColor.hexColor)
+                    binding.imgReviewColor.setBackgroundColor(mMapColor[imageType]?.toColorInt()?:R.color.white)
+                    NewChangeDesignActivity.mResult?.invoke(mMapColor[imageType] ?: Constant.defaultColor.hexColor)
+                }else{
+                    colorPicker.setSwitchView((mMapColor[imageType] ?: Constant.defaultColor.hexColor).toColorInt())
+                }
+            }
+            binding.rlGroup.addView(xmlView)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Utils.setPopupColorPreferenceColor(mListColor)
     }
 
     private fun addSliderColor(){
@@ -149,7 +224,7 @@ class PopupColorActivity : AppCompatActivity() {
         colorPicker.onColorSelected = {
             Utils.Log(TAG,"Hex color $it")
             mMapColor[imageType] = it ?: "#FFFFFF"
-            NewChangeDesignActivity.mResult?.invoke(it ?: "#FFFFFF")
+            NewChangeDesignActivity.mResult?.invoke(it ?: Constant.defaultColor.hexColor)
         }
         colorPicker.onColorSelectedProgressing = {
             binding.imgReviewColor.setBackgroundColor(it?.toColorInt() ?: R.color.colorAccent)

@@ -8,14 +8,23 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.doOnLayout
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.CoroutineContext
 
 class ColorPickerView : RelativeLayout {
@@ -26,7 +35,12 @@ class ColorPickerView : RelativeLayout {
         const val defaultColorModelSwitch = true
         const val defaultActionOk = android.R.string.ok
         const val defaultActionCancel = android.R.string.cancel
+        const val TAG = "ColorPickerView"
     }
+
+    lateinit var hexColor : AppCompatEditText
+
+    var onSwitchView : (()->Unit)?  = null
 
     @ColorInt
     var currentColor: Int
@@ -89,7 +103,6 @@ class ColorPickerView : RelativeLayout {
         val colorView: View = findViewById(R.id.color_view)
         colorView.setBackgroundColor(currentColor)
 
-
         val textColor = context.themeColor(android.R.attr.textColorSecondary)
         val thumbColor = ColorUtils.compositeColors(
             context.themeColor(android.R.attr.textColorPrimary),
@@ -101,10 +114,46 @@ class ColorPickerView : RelativeLayout {
             ChannelView(context, it, currentColor, textColor, thumbColor, rippleColor)
         }
 
+        hexColor = findViewById(R.id.edtHexColor)
+        val mHexColor = currentColor.hexColor.replaceFirst("#","")
+        hexColor.setText(mHexColor)
+        hexColor.setSelection(mHexColor.length)
+        hexColor.textInputAsFlow()
+            .map {
+                val searchBarIsEmpty: Boolean = it.isNullOrBlank()
+                return@map it
+            }
+            .debounce(200) // delay to prevent searching immediately on every character input
+            .onEach {
+                if (!it.isNullOrEmpty()){
+                    try {
+                        val mColor = Color.parseColor("#$it")
+                        currentColor = mColor
+                        onColorSelected?.invoke(currentColor.hexColor)
+                        "#$it".getRgbFromHex().forEachIndexed { position, value ->
+                            channelViews[position].setProgress(value)
+                        }
+                    }catch (e : Exception){
+                        e.printStackTrace()
+                    }
+                }
+                Log.d(TAG,"${it?.trim()}")
+            }
+            .launchIn(MainScope())
+
+        onSwitchView = {
+            currentColor.hexColor.getRgbFromHex().forEachIndexed { position, value ->
+                channelViews[position].setProgress(value)
+            }
+        }
+
         val seekbarChangeListener: () -> Unit = {
             currentColor = colorModel.evaluateColor(channelViews.map { it.channel })
             colorView.background = ColorDrawable(currentColor)
             onColorSelectedProgressing?.invoke(currentColor.hexColor)
+            val mHexColorCurrent = currentColor.hexColor.replaceFirst("#","")
+            hexColor.setText(mHexColorCurrent)
+            hexColor.setSelection(mHexColorCurrent.length)
             when (colorModel) {
                 ColorModel.HSV -> {
                     channelViews.forEach {
@@ -191,9 +240,7 @@ class ColorPickerView : RelativeLayout {
             }
         }
 
-
         val channelContainer = findViewById<ViewGroup>(R.id.channel_container)
-      
         channelViews.forEach {
             val lp = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -268,6 +315,11 @@ class ColorPickerView : RelativeLayout {
     internal interface ButtonBarListener {
         fun onPositiveButtonClick(color: Int)
         fun onNegativeButtonClick()
+    }
+
+    fun setSwitchView(color: Int){
+        this.currentColor = color
+        onSwitchView?.invoke()
     }
 
     internal fun enableButtonBar(listener: ButtonBarListener) {

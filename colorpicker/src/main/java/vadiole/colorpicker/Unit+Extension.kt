@@ -1,8 +1,13 @@
 package vadiole.colorpicker
 
+import android.text.TextWatcher
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.widget.doOnTextChanged
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -49,4 +54,11 @@ fun <T> debounce(delayMs: Long = 500L,
             }
         }
     }
+}
+
+fun AppCompatEditText.textInputAsFlow() = callbackFlow {
+    val watcher: TextWatcher = doOnTextChanged { textInput: CharSequence?, _, _, _ ->
+        this.trySend(textInput).isSuccess
+    }
+    awaitClose { this@textInputAsFlow.removeTextChangedListener(watcher) }
 }

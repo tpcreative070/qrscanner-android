@@ -111,6 +111,65 @@
                                     android:layout_marginEnd="@dimen/margin_10"
                                     android:layout_marginBottom="@dimen/margin_10"
                                     android:background="@color/colorAccent" />
+                                <HorizontalScrollView
+                                    android:scrollbars="none"
+                                    android:id="@+id/horizontalScrollView"
+                                    android:layout_toEndOf="@+id/imgReviewColor"
+                                    android:layout_marginStart="@dimen/margin_10"
+                                    android:layout_marginTop="@dimen/margin_10"
+                                    android:layout_marginEnd="@dimen/margin_10"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/icon_size_40">
+                                    <LinearLayout
+                                        android:orientation="horizontal"
+                                        android:id="@+id/rlGroup"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="@dimen/icon_size_40">
+                                    </LinearLayout>
+                                </HorizontalScrollView>
+                                <RelativeLayout
+                                    android:layout_toEndOf="@+id/imgReviewColor"
+                                    android:layout_below="@+id/horizontalScrollView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/icon_size_40">
+                                    <tpcreative.co.qrscanner.common.view.CircleImageView
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_marginStart="@dimen/margin_10"
+                                        android:layout_marginEnd="@dimen/margin_10"
+                                        android:id="@+id/imgAdd"
+                                        android:layout_width="@dimen/margin_30"
+                                        android:layout_height="@dimen/margin_30"/>
+
+                                    <tpcreative.co.qrscanner.common.view.CircleImageView
+                                        android:id="@+id/imgIconAdd"
+                                        android:src="@drawable/ic_add"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_marginStart="@dimen/margin_10"
+                                        android:layout_marginEnd="@dimen/margin_10"
+                                        android:padding="@dimen/margin_7"
+                                        android:layout_width="@dimen/margin_30"
+                                        android:layout_height="@dimen/margin_30"/>
+
+                                    <tpcreative.co.qrscanner.common.view.CircleImageView
+                                        android:layout_toEndOf="@+id/imgAdd"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_marginStart="@dimen/margin_10"
+                                        android:layout_marginEnd="@dimen/margin_10"
+                                        android:id="@+id/imgDelete"
+                                        android:layout_width="@dimen/margin_30"
+                                        android:layout_height="@dimen/margin_30"/>
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:id="@+id/imgIconDelete"
+                                        android:src="@drawable/ic_close"
+                                        android:layout_toEndOf="@+id/imgAdd"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_marginStart="@dimen/margin_10"
+                                        android:layout_marginEnd="@dimen/margin_10"
+                                        android:padding="@dimen/margin_7"
+                                        android:layout_width="@dimen/margin_30"
+                                        android:layout_height="@dimen/margin_30"/>
+                                </RelativeLayout>
                             </RelativeLayout>
                         </RelativeLayout>
                 </RelativeLayout>
