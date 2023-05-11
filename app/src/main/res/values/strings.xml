@@ -556,4 +556,6 @@
     <string name="watch_item_ads">Watch %1$s ads</string>
     <string name="unlock_for_free">Unlock for free:</string>
     <string name="add_your_own_logo">Add your own logo(Photo)</string>
+    <string name="grid">Grid</string>
+    <string name="slider">Slider</string>
 </resources>
