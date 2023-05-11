@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
@@ -102,10 +103,18 @@ class TemplateAdapter (inflater: LayoutInflater,val loadedSet: MutableSet<String
 
     private inner class ItemHolderNone(itemView: View) : BaseHolder<TemplateModel>(itemView) {
         private val rlRoot: RelativeLayout = itemView.findViewById(R.id.rlRoot)
+        private val imgDisplay: ImageView = itemView.findViewById(R.id.imgNone)
         override fun bind(data: TemplateModel, position: Int) {
             super.bind(data, position)
+            if (data.enumChangeDesignType == EnumChangeDesignType.MORE){
+                imgDisplay.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_more))
+            }
             rlRoot.setOnClickListener {
-                itemSelectedListener?.onClickItem(position)
+                if (data.enumChangeDesignType == EnumChangeDesignType.NONE){
+                    itemSelectedListener?.onClickItem(position)
+                }else{
+                    Utils.Log(TAG,"Navigation to new screen")
+                }
             }
         }
     }

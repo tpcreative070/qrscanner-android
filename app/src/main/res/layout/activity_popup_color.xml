@@ -24,8 +24,7 @@
                     android:id="@+id/card"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_card_primary_color"
-                    android:orientation="vertical">
+                    android:background="@drawable/bg_card_primary_color">
                     <RelativeLayout
                         android:id="@+id/rlDragToClose"
                         android:layout_width="match_parent"

@@ -35,7 +35,7 @@ class TemplateViewModel(private val changeDesignViewModel: ChangeDesignViewModel
         changeDesignViewModel.initializedTemplateData()
         mTemplateList.clear()
         var mModel = ChangeDesignModel()
-        mTemplateList.add(TemplateModel("0",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NONE,mModel))
+        mTemplateList.add(TemplateModel("0",EnumShape.SQUARE,EnumIcon.ic_help,EnumChangeDesignType.NONE,mModel))
 
         mModel = ChangeDesignModel()
         mModel.logo = changeDesignViewModel.mLogoList.getOrNull(2)
@@ -111,6 +111,9 @@ class TemplateViewModel(private val changeDesignViewModel: ChangeDesignViewModel
         mModel.color = mColor
         mModel.color?.mapColor = mMapColor
         mTemplateList.add(TemplateModel("5",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.VIP,mModel))
+
+        mModel = ChangeDesignModel()
+        mTemplateList.add(TemplateModel("6",EnumShape.SQUARE,EnumIcon.ic_more,EnumChangeDesignType.MORE,mModel))
     }
 
     val content : Context get()  = QRScannerApplication.getInstance()

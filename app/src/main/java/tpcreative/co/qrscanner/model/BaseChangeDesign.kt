@@ -5,5 +5,5 @@ open class BaseChangeDesign() : java.io.Serializable {
 }
 
 enum class EnumChangeDesignType {
-    VIP,NORMAL,NONE
+    VIP,NORMAL,NONE,MORE
 }

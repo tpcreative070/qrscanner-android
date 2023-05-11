@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.davidmiguel.dragtoclose.DragToClose
+            android:layout_marginTop="@dimen/margin_150"
+            android:id="@+id/drag_to_close"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:dragtoclose_draggableContainer="@+id/card"
+            app:dragtoclose_draggableView="@+id/rlDragToClose"
+            app:dragtoclose_finishActivity="true"
+            tools:context="com.davidmiguel.sample.Card1Activity">
+
+            <RelativeLayout
+                android:id="@+id/card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_card_primary_color">
+                <RelativeLayout
+                    android:id="@+id/rlDragToClose"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icon_size_60">
+                    <ImageView
+                        android:padding="@dimen/margin_15"
+                        android:id="@+id/imgEdit"
+                        android:src="@drawable/ic_edit"
+                        android:layout_width="@dimen/icon_size_60"
+                        android:layout_height="@dimen/icon_size_60"/>
+                    <ImageView
+                        android:layout_alignParentEnd="true"
+                        android:padding="@dimen/margin_15"
+                        android:id="@+id/imgClose"
+                        android:src="@drawable/ic_close"
+                        android:layout_width="@dimen/icon_size_60"
+                        android:layout_height="@dimen/icon_size_60"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_below="@+id/rlDragToClose"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </RelativeLayout>
+            </RelativeLayout>
+        </com.davidmiguel.dragtoclose.DragToClose>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

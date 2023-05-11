@@ -27,6 +27,7 @@
                 android:layout_width="@dimen/icon_size_100"
                 android:layout_height="@dimen/icon_size_100"/>
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgNone"
                 android:tint="@color/black"
                 android:src="@drawable/ic_help"
                 android:layout_centerInParent="true"
