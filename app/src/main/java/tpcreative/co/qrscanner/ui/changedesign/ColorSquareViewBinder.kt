@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.drakeet.multitype.ItemViewBinder
@@ -49,7 +50,12 @@ class ColorSquareViewBinder(val selectedSet: MutableSet<ColorModel>, val context
       val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
       Utils.Log("TAG", "Color result hex $mHex")
       MyDrawableCompat.setColorFilter(holder.squareView.drawable, mHex)
-      holder.selectedView.visibility = if (item.isSelected) View.VISIBLE else View.INVISIBLE
+      if (item.isSelected){
+        holder.rootView.visibility = View.GONE
+      }else{
+        holder.rootView.visibility = View.VISIBLE
+      }
+      //holder.selectedView.visibility = if (item.isSelected) View.VISIBLE else View.INVISIBLE
       holder.layoutVip.visibility = View.GONE
       holder.layoutNormal.visibility = View.VISIBLE
     }else{
@@ -57,7 +63,12 @@ class ColorSquareViewBinder(val selectedSet: MutableSet<ColorModel>, val context
       val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
       Utils.Log("TAG", "Color result hex $mHex")
       MyDrawableCompat.setColorFilter(holder.squareVipView.drawable, mHex)
-      holder.selectedViewVip.visibility = if (item.isSelected) View.VISIBLE else View.INVISIBLE
+      if (item.isSelected){
+        holder.rootViewVip.visibility = View.GONE
+      }else{
+        holder.rootViewVip.visibility = View.VISIBLE
+      }
+      //holder.selectedViewVip.visibility = if (item.isSelected) View.VISIBLE else View.INVISIBLE
       holder.imgCircleCodeStatus.setImageResource(R.color.black)
       holder.layoutVip.visibility = View.VISIBLE
       holder.layoutNormal.visibility = View.GONE
@@ -65,6 +76,8 @@ class ColorSquareViewBinder(val selectedSet: MutableSet<ColorModel>, val context
   }
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val rootView : RelativeLayout = itemView.findViewById(R.id.rlRoot)
+    val rootViewVip: RelativeLayout = itemView.findViewById(R.id.rlRootVip)
     val squareView: ImageView = itemView.findViewById(R.id.imgIcon)
     val squareVipView: ImageView = itemView.findViewById(R.id.imgIconVip)
     val selectedView: View = itemView.findViewById(R.id.viewSelected)

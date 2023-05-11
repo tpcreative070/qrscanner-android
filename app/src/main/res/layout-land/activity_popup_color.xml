@@ -127,7 +127,6 @@
                                 android:scrollbars="none"
                                 android:id="@+id/horizontalScrollView"
                                 android:layout_toEndOf="@+id/imgReviewColor"
-                                android:layout_marginStart="@dimen/margin_10"
                                 android:layout_marginTop="@dimen/margin_10"
                                 android:layout_marginEnd="@dimen/margin_10"
                                 android:layout_width="match_parent"
