@@ -4,6 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="image_size_custom_60">60dp</dimen>
+    <dimen name="icon_size_5">5dp</dimen>
     <dimen name="icon_size_15">15dp</dimen>
     <dimen name="icon_size_18">18dp</dimen>
     <dimen name="icon_size_20">20dp</dimen>

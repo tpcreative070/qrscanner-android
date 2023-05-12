@@ -28,6 +28,8 @@ val Int.hexColor get() = String.format("#%06X", 0xFFFFFF and this)
 
 val Int.hexWithAlphaColor get() = java.lang.String.format("#%08X", -0x1 and this)
 
+val Int.fromColorIntRes  get() = ContextCompat.getColor(QRScannerApplication.getInstance(),this)
+
 fun Int.toColorLong() : Long{
     return try {
         this.toColorLong()

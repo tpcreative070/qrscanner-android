@@ -13,15 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/rlRootClose"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_size_5"/>
         <com.davidmiguel.dragtoclose.DragToClose
-            android:layout_marginTop="@dimen/margin_5"
+            android:layout_below="@+id/rlRootClose"
             xmlns:drag="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/drag_to_close"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             drag:dragtoclose_draggableContainer="@+id/card"
-            drag:dragtoclose_draggableView="@+id/rlDragToClose"
+            drag:dragtoclose_draggableView="@+id/includeDragToClose"
             drag:dragtoclose_finishActivity="true"
             tools:context="com.davidmiguel.sample.Card1Activity">
 
@@ -94,26 +98,13 @@
                         android:layout_weight="1.1"
                         android:layout_width="0dp"
                         android:layout_height="match_parent">
-                        <RelativeLayout
-                            android:id="@+id/rlDragToClose"
+                        <include
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/icon_size_60">
-                            <ImageView
-                                android:padding="@dimen/margin_15"
-                                android:id="@+id/imgEdit"
-                                android:src="@drawable/ic_edit"
-                                android:layout_width="@dimen/icon_size_60"
-                                android:layout_height="@dimen/icon_size_60"/>
-                            <ImageView
-                                android:layout_alignParentEnd="true"
-                                android:padding="@dimen/margin_15"
-                                android:id="@+id/imgClose"
-                                android:src="@drawable/ic_close"
-                                android:layout_width="@dimen/icon_size_60"
-                                android:layout_height="@dimen/icon_size_60"/>
-                        </RelativeLayout>
+                            android:layout_height="@dimen/icon_size_60"
+                            android:id="@+id/includeDragToClose"
+                            layout="@layout/popup_header" />
                         <RelativeLayout
-                            android:layout_below="@+id/rlDragToClose"
+                            android:layout_below="@+id/includeDragToClose"
                             android:id="@+id/rlReview"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/icon_size_200">
@@ -128,7 +119,6 @@
                                 android:id="@+id/horizontalScrollView"
                                 android:layout_toEndOf="@+id/imgReviewColor"
                                 android:layout_marginTop="@dimen/margin_10"
-                                android:layout_marginEnd="@dimen/margin_10"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/icon_size_40">
                                 <LinearLayout

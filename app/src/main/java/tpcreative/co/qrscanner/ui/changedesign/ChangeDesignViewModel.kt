@@ -15,6 +15,7 @@ import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumIcon
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
@@ -52,6 +53,9 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
     var isEmptyChangeDesignLogo : Boolean = true
     var isEmptyChangeDesignPositionMarker : Boolean = true
     var isEmptyChangeDesignBody : Boolean = true
+
+    /*Text area*/
+    var mTextList = mutableListOf<TextModel>()
 
     /*Position marker*/
     var mPositionMarkerList  = mutableListOf<PositionMarkerModel>()
@@ -146,6 +150,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
             }
             initializedLogoData()
             initializedColorData()
+            initializedTextData()
             initializedPositionMarkerData()
             initializedBodyData()
         }
@@ -165,6 +170,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         isEmptyChangeDesignBody = true
         initializedLogoData()
         initializedColorData()
+        initializedTextData()
         initializedPositionMarkerData()
         initializedBodyData()
     }
@@ -350,6 +356,12 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         mColorList.add(ColorModel(R.drawable.ic_qr_ball,R.color.transparent.stringHex,EnumImage.QR_BALL,EnumChangeDesignType.NORMAL,false,defaultColorMap()))
         mColorList.add(ColorModel(R.drawable.ic_qr_background_icon,R.color.transparent.stringHex,EnumImage.QR_BACKGROUND_ICON,EnumChangeDesignType.NORMAL,true,defaultColorMap()))
         mColorList.add(ColorModel(R.drawable.ic_qr_foreground_icon,R.color.transparent.stringHex,EnumImage.QR_FOREGROUND_ICON,EnumChangeDesignType.NORMAL,true,defaultColorMap()))
+    }
+
+    private fun initializedTextData(){
+        mTextList.clear()
+        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT,EnumChangeDesignType.NORMAL))
+        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT,EnumChangeDesignType.NORMAL))
     }
 
     private fun initializedPositionMarkerData(){

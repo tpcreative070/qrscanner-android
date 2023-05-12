@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.blue
 import androidx.core.graphics.toColorInt
 import com.davidmiguel.dragtoclose.DragListener
 import com.davidmiguel.dragtoclose.DragToClose
@@ -43,7 +44,17 @@ class PopupColorActivity : AppCompatActivity() {
         imageType = EnumImage.valueOf(bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_TYPE) ?:"")
         Utils.Log(TAG,"Map result ${mMapColor.toJson()}")
         Utils.Log(TAG,"Map result image ${imageType.name}")
-        binding.imgClose.setOnClickListener {
+
+        binding.rlRootClose.setOnClickListener {
+            finish()
+            overridePendingTransition(R.anim.no_animation,R.anim.slide_down)
+        }
+
+        binding.includeDragToClose.imgEdit.setOnClickListener {
+
+        }
+
+        binding.includeDragToClose.imgClose.setOnClickListener {
             finish()
             overridePendingTransition(R.anim.no_animation,R.anim.slide_down)
         }
@@ -90,8 +101,8 @@ class PopupColorActivity : AppCompatActivity() {
             binding.imgReviewColor.setBackgroundColor(mHexColorWithoutTransparent.toColorInt())
             NewChangeDesignActivity.mResult?.invoke(mHexColorWithoutTransparent)
         }
-        binding.imgClose.addCircleRipple()
-        binding.imgEdit.addCircleRipple()
+        binding.includeDragToClose.imgClose.addCircleRipple()
+        binding.includeDragToClose.imgEdit.addCircleRipple()
         binding.imgAdd.addCircleRipple()
         binding.imgDelete.addCircleRipple()
 

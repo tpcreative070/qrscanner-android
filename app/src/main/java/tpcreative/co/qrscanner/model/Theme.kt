@@ -45,6 +45,14 @@ class Theme : Serializable {
         return primaryDarkColor
     }
 
+    fun getPrimaryColor() : Int{
+        return primaryColor
+    }
+
+    fun getAccentColor() : Int{
+        return primaryColor
+    }
+
     fun getThemeInfo(): Theme {
         try {
             val value: Int = Utils.getQRCodeThemePosition()

@@ -36,6 +36,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
     private lateinit var selectedSetColor: TreeSet<ColorModel>
     private lateinit var selectedSetPositionMarker: TreeSet<PositionMarkerModel>
     private lateinit var selectedSetBody: TreeSet<BodyModel>
+    private lateinit var selectedSetText : TreeSet<TextModel>
     private var previousLogoPosition : Int = -1
     private var previousLogoCancelPosition : Int = -1
     private var previousPositionMarkerPosition : Int = -1
@@ -95,6 +96,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         }
         selectedSetLogo = TreeSet()
         selectedSetColor = TreeSet()
+        selectedSetText = TreeSet()
         selectedSetPositionMarker = TreeSet()
         selectedSetBody = TreeSet()
         selectedPreviousSetLogo = TreeSet()
@@ -139,6 +141,14 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                         onGenerateQRReview()
                     }
                 }
+            }
+        }))
+
+        /*Text register*/
+        adapter.register(TextSquareViewBinder(selectedSetText,this,object :TextSquareViewBinder.ItemSelectedListener{
+            override fun onClickItem(position: Int) {
+                textForResult.launch(Navigator.onChangeDesignText(this@NewChangeDesignActivity,ChangeDesignTextActivity::class.java))
+                overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
             }
         }))
 
@@ -205,11 +215,14 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         val spacialCategory2 = Category("2. ${getString(R.string.color)}")
         items.add(spacialCategory2)
         items.addAll(viewModel.mColorList)
-        val spacialCategory3 = Category("3. ${getString(R.string.position_marker)}")
+        val spacialCategory3 = Category("3. ${getString(R.string.text)}")
         items.add(spacialCategory3)
-        items.addAll(viewModel.mPositionMarkerList)
-        val spacialCategory4 = Category("4. ${getString(R.string.body)}")
+        items.addAll(viewModel.mTextList)
+        val spacialCategory4 = Category("4. ${getString(R.string.position_marker)}")
         items.add(spacialCategory4)
+        items.addAll(viewModel.mPositionMarkerList)
+        val spacialCategory5 = Category("5. ${getString(R.string.body)}")
+        items.add(spacialCategory5)
         items.addAll(viewModel.mBodyList)
         items.forEachIndexed { index, it ->
             if (it is LogoModel){
@@ -507,6 +520,12 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         if (result.resultCode == Activity.RESULT_OK) {
         }
     }
+
+    private val textForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+        }
+    }
+
 
     private val premiumPopupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {

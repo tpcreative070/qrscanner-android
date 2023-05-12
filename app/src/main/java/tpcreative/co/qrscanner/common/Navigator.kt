@@ -96,6 +96,13 @@ object Navigator {
         return  intent
     }
 
+    fun <T> onChangeDesignText(context: Activity, clazz: Class<T>) : Intent {
+        val intent = Intent(context, clazz)
+        val bundle = Bundle()
+        intent.putExtras(bundle)
+        return  intent
+    }
+
     fun <T> onPremiumPopupView(context: Activity?,mData : ChangeDesignModel,typeShape: EnumShape, clazz: Class<T>) : Intent {
         val intent = Intent(context, clazz)
         val bundle = Bundle()

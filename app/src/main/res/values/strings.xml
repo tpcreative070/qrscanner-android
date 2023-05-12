@@ -559,4 +559,6 @@
     <string name="add_your_own_logo">Add your own logo(Photo)</string>
     <string name="grid">Grid</string>
     <string name="slider">Slider</string>
+    <string name="font">Font</string>
+    <string name="enter_a_text">Enter a text</string>
 </resources>

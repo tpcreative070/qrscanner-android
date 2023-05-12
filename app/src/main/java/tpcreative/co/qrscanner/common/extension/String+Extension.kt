@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EnumImage
+import vadiole.colorpicker.hexColor
 import java.io.File
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -83,6 +84,8 @@ fun String.findImageName(enum: EnumImage) : File?{
 }
 
 val String.changedDesignColor : String get() = Utils.getChangedDesignColor() ?: ""
+
+val String.hexWithoutTransparent : String get() =  this.toColorInt().hexColor
 
 val String.putChangedDesignColor: Unit
     get() = Utils.setChangedDesignColor(this)
