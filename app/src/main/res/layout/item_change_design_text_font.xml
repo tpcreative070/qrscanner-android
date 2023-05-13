@@ -31,5 +31,14 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/icon_size_60"/>
 
+        <include
+            android:id="@+id/includeFont"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/vip"
+            />
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

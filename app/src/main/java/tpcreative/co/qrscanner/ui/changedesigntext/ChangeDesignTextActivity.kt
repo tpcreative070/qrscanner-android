@@ -12,13 +12,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.toColor
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
 import com.davidmiguel.dragtoclose.DragListener
-import com.davidmiguel.dragtoclose.DragToClose
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.debounce
@@ -141,7 +139,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             ThemeUtil.getThemeList().forEach { mTheme ->
                 mListColor.add(ColorPreferenceModel(mTheme.getPrimaryDarkColor().fromColorIntRes.hexColor,System.currentTimeMillis()))
             }
-            val mResult = mListColor.distinctBy { Pair(it.hexColor, it.hexColor) }
+            val mResult = mListColor.distinctBy { Pair(it.hexColor.lowercase(), it.hexColor.lowercase()) }
             mListColor.clear()
             mListColor.addAll(mResult)
             addChipHexColor()
@@ -198,10 +196,14 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         mListFont.forEachIndexed { index, s ->
             val xmlView = inflater.inflate(R.layout.item_change_design_text_font, null, false)
             val tvFont = xmlView.findViewById<AppCompatTextView>(R.id.tvFont)
+            val include = xmlView.findViewById<ConstraintLayout>(R.id.includeFont)
             tvFont.tag = index
             xmlView.tag = index
             tvFont.text = s.fontName
             tvFont.typeface = s.enumFont.font.typeface
+            if (s.enumChangeDesignType != EnumChangeDesignType.VIP){
+                include.visibility = View.GONE
+            }
             xmlView.addCircleRipple()
             xmlView.setOnClickListener {
                 Utils.Log(TAG,"Get position ${it.tag}")
@@ -223,9 +225,13 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             val xmlView = inflater.inflate(R.layout.item_change_design_text_font_size, null, false)
             val tvFontSize = xmlView.findViewById<AppCompatTextView>(R.id.tvFontSize)
             val imgIcon = xmlView.findViewById<AppCompatImageView>(R.id.imgIcon)
+            val include = xmlView.findViewById<ConstraintLayout>(R.id.includeFontSize)
             tvFontSize.tag = index
             xmlView.tag = index
             tvFontSize.text = s.name
+            if (s.enumChangeDesignType != EnumChangeDesignType.VIP){
+                include.visibility = View.GONE
+            }
             imgIcon.visibility = View.VISIBLE
             when(s.enumFontSize){
                 EnumFontSize.FREEDOM_INCREASE ->{
@@ -274,8 +280,8 @@ class ChangeDesignTextActivity : AppCompatActivity() {
 
     private fun addFont(){
         mListFont.clear()
-        mListFont.add(FontModel(name = EnumFont.brandon_bold.name, enumFont = EnumFont.brandon_bold, fontName = "Brandon bold"))
-        mListFont.add(FontModel(name = EnumFont.brandon_regular.name,enumFont = EnumFont.brandon_regular,fontName ="Brandon regular"))
+        mListFont.add(FontModel(name = EnumFont.brandon_bold.name, enumFont = EnumFont.brandon_bold, fontName = "Brandon bold",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mListFont.add(FontModel(name = EnumFont.brandon_regular.name,enumFont = EnumFont.brandon_regular,fontName ="Brandon regular",enumChangeDesignType = EnumChangeDesignType.VIP))
         mListFont.add(FontModel(name = EnumFont.roboto_bold.name,enumFont = EnumFont.roboto_bold,fontName ="Roboto bold"))
         mListFont.add(FontModel(name = EnumFont.roboto_light.name,enumFont = EnumFont.roboto_light,fontName ="Roboto light"))
         mListFont.add(FontModel(name = EnumFont.roboto_medium.name,enumFont = EnumFont.roboto_medium,fontName ="Roboto medium"))
@@ -287,8 +293,8 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         mListFontSize.add(FontModel(enumFontSize = EnumFontSize.SMALL,name = R.string.small.toText(), fontSize = 70))
         mListFontSize.add(FontModel(enumFontSize = EnumFontSize.MEDIUM,name = R.string.medium.toText(),fontSize = 90))
         mListFontSize.add(FontModel(enumFontSize = EnumFontSize.LARGE,name = R.string.large.toText(),fontSize = 110))
-        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90))
-        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90))
+        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
+        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
     }
 
     fun onClick(v: View) {

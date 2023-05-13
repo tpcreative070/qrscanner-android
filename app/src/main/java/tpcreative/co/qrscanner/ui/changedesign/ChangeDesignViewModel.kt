@@ -782,7 +782,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         mMap[EnumImage.QR_FOREGROUND] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_FRAME] = R.color.black_color_picker.stringHexNoTransparency
         mMap[EnumImage.QR_BALL] = R.color.black_color_picker.stringHexNoTransparency
-        mMap[EnumImage.QR_BACKGROUND_ICON] = R.color.transparent.stringHex
+        mMap[EnumImage.QR_BACKGROUND_ICON] = R.color.white.stringHexNoTransparency
         mMap[EnumImage.QR_FOREGROUND_ICON] = R.color.black_color_picker.stringHexNoTransparency
         return mMap
     }
