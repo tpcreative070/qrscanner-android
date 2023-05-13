@@ -82,6 +82,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="onClick"
+                            android:textAllCaps="false"
                             android:text="@string/color"/>
 
                         <com.google.android.material.button.MaterialButton
@@ -90,6 +91,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="onClick"
+                            android:textAllCaps="false"
                             android:text="@string/font"/>
 
                         <com.google.android.material.button.MaterialButton
@@ -98,6 +100,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="onClick"
+                            android:textAllCaps="false"
                             android:text="@string/font_size"/>
 
                     </com.google.android.material.button.MaterialButtonToggleGroup>

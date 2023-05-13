@@ -21,6 +21,7 @@
     <dimen name="icon_size_42">42dp</dimen>
     <dimen name="icon_size_45">45dp</dimen>
     <dimen name="icon_size_50">50dp</dimen>
+    <dimen name="icon_size_51">51dp</dimen>
     <dimen name="icon_size_55">55dp</dimen>
     <dimen name="icon_size_60">60dp</dimen>
     <dimen name="icon_size_61">61dp</dimen>

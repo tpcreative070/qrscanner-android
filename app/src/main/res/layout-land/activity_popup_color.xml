@@ -60,6 +60,7 @@
                                     android:layout_width="@dimen/icon_size_100"
                                     android:layout_height="wrap_content"
                                     android:onClick="onClick"
+                                    android:textAllCaps="false"
                                     android:text="@string/grid"/>
 
                                 <com.google.android.material.button.MaterialButton
@@ -68,6 +69,7 @@
                                     android:layout_width="@dimen/icon_size_100"
                                     android:layout_height="wrap_content"
                                     android:onClick="onClick"
+                                    android:textAllCaps="false"
                                     android:text="@string/slider"/>
 
                             </com.google.android.material.button.MaterialButtonToggleGroup>

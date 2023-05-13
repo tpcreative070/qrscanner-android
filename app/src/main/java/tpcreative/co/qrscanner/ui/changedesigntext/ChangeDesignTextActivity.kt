@@ -1,7 +1,6 @@
 package tpcreative.co.qrscanner.ui.changedesigntext
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
@@ -41,17 +40,20 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChangeDesignTextBinding
     val TAG = this::class.java
     private var enumGroup : EnumGroup = EnumGroup.TEXT_COLOR
-    private var mListColor : ArrayList<ColorPreferenceModel> = arrayListOf()
-    private var mListFont : ArrayList<FontModel>  = arrayListOf()
-    private var mListFontSize : ArrayList<FontModel> = arrayListOf()
+    private var mColorList : ArrayList<ColorPreferenceModel> = arrayListOf()
+    private var mFontList : ArrayList<FontModel>  = arrayListOf()
+    private var mFontSizeList : ArrayList<FontModel> = arrayListOf()
     private lateinit var bitMap : Bitmap
     private lateinit var enumImage: EnumImage
-    private var currentColor : Int = Color.parseColor("#000000")
+    private var currentColor :String =  Constant.defaultColor.hexColor
     private var currentFont : Typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
     private var currentBackgroundColor : String = Constant.defaultColor.hexColor
     private var mapColor : HashMap<EnumImage,String> = hashMapOf()
     private var currentText : String = ""
     private var currentFontSize : Int = 90
+    private var mapColorTag : HashMap<String,Int>  = hashMapOf()
+    private var mapFontTag : HashMap<String,Int>  = hashMapOf()
+    private var mapFontSizeTag : HashMap<String,Int>  = hashMapOf()
     private val maxFontSize = 180
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,27 +131,30 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         addFont()
         addFontSize()
         Utils.getPopupColorPreferenceColor()?.let { it ->
-            mListColor.clear()
-            mListColor.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
+            mColorList.clear()
+            mColorList.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
             mapColor.forEach {
-                mListColor.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
+                mColorList.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
             }
-            mListColor.addAll(it)
+            mColorList.addAll(it)
 
             ThemeUtil.getThemeList().forEach { mTheme ->
-                mListColor.add(ColorPreferenceModel(mTheme.getPrimaryDarkColor().fromColorIntRes.hexColor,System.currentTimeMillis()))
+                mColorList.add(ColorPreferenceModel(mTheme.getPrimaryDarkColor().fromColorIntRes.hexColor,System.currentTimeMillis()))
             }
-            val mResult = mListColor.distinctBy { Pair(it.hexColor.lowercase(), it.hexColor.lowercase()) }
-            mListColor.clear()
-            mListColor.addAll(mResult)
+            val mResult = mColorList.distinctBy { Pair(it.hexColor.lowercase(), it.hexColor.lowercase()) }
+            mColorList.clear()
+            mColorList.addAll(mResult)
             addChipHexColor()
-            Utils.Log(TAG,"Size list ${mListColor.size}")
+            Utils.Log(TAG,"Size list ${mColorList.size}")
         }
         binding.includeDragToClose.imgClose.addCircleRipple()
         binding.includeDragToClose.imgEdit.addCircleRipple()
     }
 
     private suspend fun onDrawBitmap(){
+        if (!isAllow()){
+            return
+        }
         val mBitmap = Bitmap.createBitmap(bitMap)
         mBitmap.onDrawOnBitmap(currentText,enumImage, currentFont,currentFontSize,currentColor,currentBackgroundColor) { bm->
             lifecycleScope.launch(Dispatchers.Main){
@@ -163,19 +168,27 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private fun addChipHexColor(){
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding.llGroup.removeAllViews()
-        mListColor.forEachIndexed { index, s ->
+        mColorList.forEachIndexed { index, s ->
             val xmlView = inflater.inflate(R.layout.item_change_design_text_color, null, false)
             val img = xmlView.findViewById<CircleImageView>(R.id.chip)
+            val imgSelected = xmlView.findViewById<AppCompatImageView>(R.id.imgSelected)
             img.tag = index
             xmlView.tag = index
+            imgSelected.visibility = if (mapColorTag[ConstantKey.KEY_COLOR] == index)  View.VISIBLE  else View.GONE
             img.setCircleBackgroundColor(s.hexColor.toColorInt())
             xmlView.addCircleRipple()
             xmlView.setOnClickListener {
                 Utils.Log(TAG,"Get position ${it.tag}")
-                Utils.Log(TAG,"Hex color ${mListColor.get(it.tag as Int).hexColor}")
-                currentColor = mListColor.get(it.tag as Int).hexColor.toColorInt()
+                Utils.Log(TAG,"Hex color ${mColorList.get(it.tag as Int).hexColor}")
+                mapColorTag[ConstantKey.KEY_COLOR] = index
+                val mObject = mColorList[it.tag as Int]
+                mObject.isSelected = !mObject.isSelected
+                currentColor = mObject.hexColor
                 lifecycleScope.launch(Dispatchers.IO){
                     onDrawBitmap()
+                }
+                runOnUiThread {
+                    addChipHexColor()
                 }
             }
             binding.llGroup.addView(xmlView)
@@ -193,12 +206,17 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private fun addChipFont(){
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding.llGroup.removeAllViews()
-        mListFont.forEachIndexed { index, s ->
+        mFontList.forEachIndexed { index, s ->
             val xmlView = inflater.inflate(R.layout.item_change_design_text_font, null, false)
             val tvFont = xmlView.findViewById<AppCompatTextView>(R.id.tvFont)
             val include = xmlView.findViewById<ConstraintLayout>(R.id.includeFont)
             tvFont.tag = index
             xmlView.tag = index
+            if (mapFontTag[ConstantKey.KEY_FONT] == index) {
+                tvFont.background  = ContextCompat.getDrawable(this, R.drawable.bg_selected_highlight)
+            }else{
+                tvFont.background  = null
+            }
             tvFont.text = s.fontName
             tvFont.typeface = s.enumFont.font.typeface
             if (s.enumChangeDesignType != EnumChangeDesignType.VIP){
@@ -207,10 +225,17 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             xmlView.addCircleRipple()
             xmlView.setOnClickListener {
                 Utils.Log(TAG,"Get position ${it.tag}")
-                mListFont[it.tag as Int].enumFont.font.typeface?.let {
+                mapFontTag[ConstantKey.KEY_FONT] = index
+                val mObject = mFontList[it.tag as Int]
+                mObject.isSelected = !mObject.isSelected
+                mObject.enumFont.font.typeface?.let {
                     currentFont = it
                     lifecycleScope.launch(Dispatchers.IO){
                         onDrawBitmap()
+                    }
+
+                    runOnUiThread {
+                        addChipFont()
                     }
                 }
             }
@@ -221,34 +246,40 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private fun addChipFontSize(){
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding.llGroup.removeAllViews()
-        mListFontSize.forEachIndexed { index, s ->
+        mFontSizeList.forEachIndexed { index, s ->
             val xmlView = inflater.inflate(R.layout.item_change_design_text_font_size, null, false)
             val tvFontSize = xmlView.findViewById<AppCompatTextView>(R.id.tvFontSize)
-            val imgIcon = xmlView.findViewById<AppCompatImageView>(R.id.imgIcon)
             val include = xmlView.findViewById<ConstraintLayout>(R.id.includeFontSize)
             tvFontSize.tag = index
             xmlView.tag = index
+            if (mapFontSizeTag[ConstantKey.KEY_FONT_SIZE] == index) {
+                tvFontSize.background  = ContextCompat.getDrawable(this, R.drawable.bg_selected_highlight)
+            }else{
+                tvFontSize.background  = null
+            }
             tvFontSize.text = s.name
             if (s.enumChangeDesignType != EnumChangeDesignType.VIP){
                 include.visibility = View.GONE
             }
-            imgIcon.visibility = View.VISIBLE
             when(s.enumFontSize){
                 EnumFontSize.FREEDOM_INCREASE ->{
-                    imgIcon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_increase))
+                    tvFontSize.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_increase_left, 0, 0, 0);
                 }
                 EnumFontSize.FREEDOM_DECREASE ->{
-                    imgIcon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_decrease))
+                    tvFontSize.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_decrease_left, 0, 0, 0);
                 }
                 else -> {
-                    imgIcon.visibility = View.GONE
+                    tvFontSize.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
             }
             tvFontSize.typeface = EnumFont.roboto_regular.font.typeface
             xmlView.addCircleRipple()
             xmlView.setOnClickListener {
                 Utils.Log(TAG,"Get position ${it.tag}")
-                mListFontSize[it.tag as Int].let { mFont->
+                mapFontSizeTag[ConstantKey.KEY_FONT_SIZE] = index
+                val mObject = mFontSizeList[it.tag as Int]
+                mObject.isSelected = !mObject.isSelected
+                mObject.let { mFont->
                     when(mFont.enumFontSize) {
                         EnumFontSize.FREEDOM_INCREASE ->{
                             if (currentFontSize >= maxFontSize){
@@ -272,6 +303,9 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                     lifecycleScope.launch(Dispatchers.IO){
                         onDrawBitmap()
                     }
+                    runOnUiThread {
+                        addChipFontSize()
+                    }
                 }
             }
             binding.llGroup.addView(xmlView)
@@ -279,22 +313,22 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     }
 
     private fun addFont(){
-        mListFont.clear()
-        mListFont.add(FontModel(name = EnumFont.brandon_bold.name, enumFont = EnumFont.brandon_bold, fontName = "Brandon bold",enumChangeDesignType = EnumChangeDesignType.VIP))
-        mListFont.add(FontModel(name = EnumFont.brandon_regular.name,enumFont = EnumFont.brandon_regular,fontName ="Brandon regular",enumChangeDesignType = EnumChangeDesignType.VIP))
-        mListFont.add(FontModel(name = EnumFont.roboto_bold.name,enumFont = EnumFont.roboto_bold,fontName ="Roboto bold"))
-        mListFont.add(FontModel(name = EnumFont.roboto_light.name,enumFont = EnumFont.roboto_light,fontName ="Roboto light"))
-        mListFont.add(FontModel(name = EnumFont.roboto_medium.name,enumFont = EnumFont.roboto_medium,fontName ="Roboto medium"))
-        mListFont.add(FontModel(name = EnumFont.roboto_regular.name,enumFont = EnumFont.roboto_regular,fontName ="Roboto regular"))
+        mFontList.clear()
+        mFontList.add(FontModel(name = EnumFont.brandon_bold.name, enumFont = EnumFont.brandon_bold, fontName = "Brandon bold",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontList.add(FontModel(name = EnumFont.brandon_regular.name,enumFont = EnumFont.brandon_regular,fontName ="Brandon regular",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontList.add(FontModel(name = EnumFont.roboto_bold.name,enumFont = EnumFont.roboto_bold,fontName ="Roboto bold"))
+        mFontList.add(FontModel(name = EnumFont.roboto_light.name,enumFont = EnumFont.roboto_light,fontName ="Roboto light"))
+        mFontList.add(FontModel(name = EnumFont.roboto_medium.name,enumFont = EnumFont.roboto_medium,fontName ="Roboto medium"))
+        mFontList.add(FontModel(name = EnumFont.roboto_regular.name,enumFont = EnumFont.roboto_regular,fontName ="Roboto regular"))
     }
 
     private fun addFontSize(){
-        mListFontSize.clear()
-        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.SMALL,name = R.string.small.toText(), fontSize = 70))
-        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.MEDIUM,name = R.string.medium.toText(),fontSize = 90))
-        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.LARGE,name = R.string.large.toText(),fontSize = 110))
-        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
-        mListFontSize.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontSizeList.clear()
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.SMALL,name = R.string.small.toText(), fontSize = 70))
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.MEDIUM,name = R.string.medium.toText(),fontSize = 90))
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.LARGE,name = R.string.large.toText(),fontSize = 110))
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
     }
 
     fun onClick(v: View) {
@@ -312,6 +346,13 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                 addChipFontSize()
             }
         }
+    }
+
+    private fun isAllow(): Boolean {
+        if (currentText.isEmpty()){
+            return false
+        }
+        return true
     }
 
     companion object {

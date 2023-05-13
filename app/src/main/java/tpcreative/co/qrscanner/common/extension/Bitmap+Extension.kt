@@ -122,7 +122,7 @@ fun Bitmap.toCircular(context: Context, newCornerRadius: Float, isCircle :Boolea
     }
 }
 
-suspend fun Bitmap.onDrawOnBitmap(text : String, enumImage: EnumImage,typeface : Typeface,fontSize : Int = 70,color : Int,backgroundColor : String,callback :((Bitmap?)->Unit)) = withContext(
+suspend fun Bitmap.onDrawOnBitmap(text : String, enumImage: EnumImage,typeface : Typeface,fontSize : Int = 70,color : String,backgroundColor : String,callback :((Bitmap?)->Unit)) = withContext(
     Dispatchers.IO){
     var mBm: Bitmap?
     this@onDrawOnBitmap.let {data ->
@@ -144,7 +144,7 @@ suspend fun Bitmap.onDrawOnBitmap(text : String, enumImage: EnumImage,typeface :
             paint.textAlign = Paint.Align.CENTER
             paint.typeface = typeface
             //paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
-            paint.color = color
+            paint.color = color.toColorInt()
             paint.textSize = fontSize.toFloat() // Text Size
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
             val mRectF = RectF(0F, 0F, it.width.toFloat(),it.height.toFloat())

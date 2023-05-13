@@ -16,18 +16,12 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:background="@drawable/bg_selected_highlight"
             android:gravity="center"
             android:id="@+id/tvFont"
             android:paddingEnd="@dimen/margin_10"
             android:paddingStart="@dimen/margin_10"
             android:textSize="@dimen/medium_18"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/icon_size_60"/>
-
-        <View
-            android:layout_centerInParent="true"
-            android:id="@+id/viewSelected"
-            android:background="@drawable/bg_selected_highlight"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/icon_size_60"/>
 
@@ -37,8 +31,12 @@
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/vip"
-            />
-
+            layout="@layout/vip"/>
+        <View
+            android:layout_centerInParent="true"
+            android:id="@+id/viewSelected"
+            android:background="@drawable/bg_selected_highlight"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/icon_size_60"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

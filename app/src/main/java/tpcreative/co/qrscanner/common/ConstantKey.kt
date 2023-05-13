@@ -1,5 +1,13 @@
 package tpcreative.co.qrscanner.common
 
+import android.graphics.Bitmap
+import android.graphics.Typeface
+import tpcreative.co.qrscanner.model.ColorPreferenceModel
+import tpcreative.co.qrscanner.model.EnumGroup
+import tpcreative.co.qrscanner.model.EnumImage
+import tpcreative.co.qrscanner.model.FontModel
+import vadiole.colorpicker.hexColor
+
 class ConstantKey {
     companion object {
         const val LAT = "lat"
@@ -53,6 +61,25 @@ class ConstantKey {
         const val KEY_POPUP_COLOR_COLOR_PREFERENCE = "key_popup_color_color_preference"
         const val KEY_POPUP_TEXT_TEXT_TYPE = "key_popup_text_text_type"
         const val KEY_POPUP_TEXT_TEXT_BACKGROUD_COLOR = "key_popup_text_text_background_color"
+        const val KEY_COLOR = "key_color"
+        const val KEY_FONT = "key_font"
+        const val KEY_FONT_SIZE = "key_font_size"
+
+        const val KEY_CHANGE_DESIGN_TEXT_ENUM_GROUP = "key_change_design_text_key_enum_group"
+        const val KEY_CHANGE_DESIGN_TEXT_COLOR_LIST = "key_change_design_text_color_list"
+        const val KEY_CHANGE_DESIGN_TEXT_FONT_LIST = "key_change_design_text_font_list"
+        const val KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST = "key_change_design_text_font_size_list"
+        const val KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE = "key_change_design_text_enum_image"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR = "key_change_design_text_current_color"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT = "key_change_design_text_current_font"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR = "key_change_design_text_current_background_color"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_COLOR = "key_change_design_text_map_color"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT = "key_change_design_text_current_text"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE = "key_change_design_text_current_font_size"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG = "key_change_design_text_map_color_tag"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG = "key_change_design_text_map_font_tag"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG = "key_change_design_text_map_font_size_tag"
+
 
         const val TITLE  = "title"
         const val LOCATION = "location"
