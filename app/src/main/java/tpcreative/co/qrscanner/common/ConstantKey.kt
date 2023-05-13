@@ -51,6 +51,8 @@ class ConstantKey {
         const val KEY_POPUP_COLOR_GRID = "key_popup_color_grid"
         const val KEY_POPUP_COLOR_SELECTED = "key_popup_color_selected"
         const val KEY_POPUP_COLOR_COLOR_PREFERENCE = "key_popup_color_color_preference"
+        const val KEY_POPUP_TEXT_TEXT_TYPE = "key_popup_text_text_type"
+        const val KEY_POPUP_TEXT_TEXT_BACKGROUD_COLOR = "key_popup_text_text_background_color"
 
         const val TITLE  = "title"
         const val LOCATION = "location"

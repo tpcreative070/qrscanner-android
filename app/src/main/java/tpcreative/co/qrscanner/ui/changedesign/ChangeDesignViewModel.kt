@@ -360,8 +360,8 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedTextData(){
         mTextList.clear()
-        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT,EnumChangeDesignType.NORMAL))
-        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT,EnumChangeDesignType.NORMAL))
+        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT_BOTTOM,EnumChangeDesignType.NORMAL))
+        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT_TOP,EnumChangeDesignType.NORMAL))
     }
 
     private fun initializedPositionMarkerData(){

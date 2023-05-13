@@ -96,9 +96,11 @@ object Navigator {
         return  intent
     }
 
-    fun <T> onChangeDesignText(context: Activity, clazz: Class<T>) : Intent {
+    fun <T> onChangeDesignText(context: Activity, clazz: Class<T>, enumImage: EnumImage,mMap : HashMap<EnumImage,String>) : Intent {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
+        bundle.putString(ConstantKey.KEY_POPUP_TEXT_TEXT_TYPE,enumImage.name)
+        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP, mMap)
         intent.putExtras(bundle)
         return  intent
     }

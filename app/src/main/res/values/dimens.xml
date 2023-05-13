@@ -23,6 +23,7 @@
     <dimen name="icon_size_50">50dp</dimen>
     <dimen name="icon_size_55">55dp</dimen>
     <dimen name="icon_size_60">60dp</dimen>
+    <dimen name="icon_size_61">61dp</dimen>
     <dimen name="icon_size_65">65dp</dimen>
     <dimen name="icon_size_67">67dp</dimen>
     <dimen name="icon_size_68">68dp</dimen>

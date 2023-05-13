@@ -561,4 +561,10 @@
     <string name="slider">Slider</string>
     <string name="font">Font</string>
     <string name="enter_a_text">Enter a text</string>
+    <string name="font_size">Font-size</string>
+    <string name="size">Size</string>
+    <string name="small">Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+    <string name="freedom">Freedom</string>
 </resources>

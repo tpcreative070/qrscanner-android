@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/icon_size_60">
             <ImageView
+                app:tint="@color/material_gray_900"
                 android:visibility="invisible"
                 android:padding="@dimen/margin_15"
                 android:id="@+id/imgEdit"
@@ -21,6 +22,7 @@
                 android:layout_width="@dimen/icon_size_60"
                 android:layout_height="@dimen/icon_size_60"/>
             <ImageView
+                app:tint="@color/material_gray_900"
                 android:layout_alignParentEnd="true"
                 android:padding="@dimen/margin_15"
                 android:id="@+id/imgClose"

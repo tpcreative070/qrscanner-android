@@ -2,6 +2,7 @@ package tpcreative.co.qrscanner.common.extension
 
 import android.content.res.Resources
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorLong
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -29,6 +30,8 @@ val Int.hexColor get() = String.format("#%06X", 0xFFFFFF and this)
 val Int.hexWithAlphaColor get() = java.lang.String.format("#%08X", -0x1 and this)
 
 val Int.fromColorIntRes  get() = ContextCompat.getColor(QRScannerApplication.getInstance(),this)
+
+val Int.typeface get()  = ResourcesCompat.getFont(QRScannerApplication.getInstance(),this)
 
 fun Int.toColorLong() : Long{
     return try {

@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/transparent"
+    android:background="@color/overlay_popup"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -55,7 +55,6 @@
                                 android:layout_height="0dp"
                                 android:layout_width="0dp">
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:background="@color/colorAccent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +91,7 @@
                             <com.google.android.material.button.MaterialButton
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:id="@+id/btnColor"
-                                android:layout_width="@dimen/icon_size_100"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:onClick="onClick"
                                 android:text="@string/color"/>
@@ -100,10 +99,18 @@
                             <com.google.android.material.button.MaterialButton
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:id="@+id/btnFont"
-                                android:layout_width="@dimen/icon_size_100"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:onClick="onClick"
                                 android:text="@string/font"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                style="?attr/materialButtonOutlinedStyle"
+                                android:id="@+id/btnFontSize"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:onClick="onClick"
+                                android:text="@string/font_size"/>
 
                         </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -138,8 +145,11 @@
                             android:layout_height="wrap_content">
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/edtText"
-                                android:textColorHint="@color/white"
+                                android:backgroundTint="@color/colorAccent"
+                                android:textColor="@color/material_gray_700"
+                                android:textColorHint="@color/material_gray_700"
                                 android:hint="@string/enter_a_text"
+                                android:inputType="textCapCharacters"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
                         </RelativeLayout>

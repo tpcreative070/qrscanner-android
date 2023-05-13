@@ -2,17 +2,19 @@ package tpcreative.co.qrscanner.ui.changedesign
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
 import com.drakeet.multitype.MultiTypeAdapter
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
@@ -21,6 +23,7 @@ import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityNewChangeDesignBinding
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.changedesigntext.ChangeDesignTextActivity
 import tpcreative.co.qrscanner.ui.premiumpopup.PremiumPopupActivity
 import java.io.File
 import java.util.*
@@ -147,10 +150,17 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Text register*/
         adapter.register(TextSquareViewBinder(selectedSetText,this,object :TextSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
-                textForResult.launch(Navigator.onChangeDesignText(this@NewChangeDesignActivity,ChangeDesignTextActivity::class.java))
+                val mapColor = viewModel.indexColor.mapColor
+                Utils.Log(TAG,"background color $mapColor")
+                textForResult.launch(Navigator.onChangeDesignText(this@NewChangeDesignActivity,
+                    ChangeDesignTextActivity::class.java,selectedSetText.firstOrNull()?.type ?: EnumImage.QR_TEXT_BOTTOM,mapColor))
                 overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
             }
         }))
+
+        mRequestBitmap = {
+            ChangeDesignTextActivity.mRequestBitmap?.invoke(viewModel.onGenerateQR {  }.toBitmap(1024,1024,Bitmap.Config.ARGB_8888))
+        }
 
         /*Position marker register*/
         adapter.register(PositionMarkerSquareViewBinder(selectedSetPositionMarker,this,object :PositionMarkerSquareViewBinder.ItemSelectedListener{
@@ -599,5 +609,6 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         private const val SPAN_COUNT = 5
         var mResult : ((value : String) -> Unit?)? = null
         var mResultTemplate : ((value : TemplateModel) ->Unit?)? = null
+        var mRequestBitmap : (() -> Unit?)? = null
     }
 }

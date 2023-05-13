@@ -49,7 +49,7 @@
         </activity>
 
         <activity
-            android:name=".ui.changedesign.ChangeDesignTextActivity"
+            android:name=".ui.changedesigntext.ChangeDesignTextActivity"
             android:label="@string/text"
             android:theme="@style/TransparentCompat"
             android:exported="false">

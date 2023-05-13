@@ -30,6 +30,15 @@ class Constant {
 
         const val defaultColor = R.color.white
 
+        val mFontList = mutableMapOf<String,Int>().apply {
+            put(EnumFont.brandon_bold.name,R.font.brandon_bold)
+            put(EnumFont.brandon_regular.name,R.font.brandon_regular)
+            put(EnumFont.roboto_bold.name,R.font.roboto_bold)
+            put(EnumFont.roboto_light.name,R.font.roboto_light)
+            put(EnumFont.roboto_medium.name,R.font.roboto_medium)
+            put(EnumFont.roboto_regular.name,R.font.roboto_regular)
+        }
+
         val  mList = mutableMapOf<String,Int>().apply {
             put(EnumIcon.ic_youtube_png.name,R.drawable.ic_youtube_png)
             put(EnumIcon.ic_twitter.name,R.drawable.ic_twitter)
@@ -102,6 +111,15 @@ enum class EnumIcon {
     companion object {
         fun fromValue(enumIcon: EnumIcon): Int {
             return Constant.mList[enumIcon.name] ?: R.drawable.icon
+        }
+    }
+}
+
+enum class EnumFont {
+    brandon_bold,brandon_regular,roboto_bold,roboto_light,roboto_medium,roboto_regular;
+    companion object {
+        fun fromValue(enumFont: EnumFont): Int {
+            return Constant.mFontList[enumFont.name] ?: R.font.roboto_regular
         }
     }
 }
