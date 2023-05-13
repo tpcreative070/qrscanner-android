@@ -46,7 +46,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private lateinit var bitMap : Bitmap
     private lateinit var enumImage: EnumImage
     private var currentColor :String =  Constant.defaultColor.hexColor
-    private var currentFont : Typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
+    private var currentFont : String = EnumFont.roboto_regular.name
     private var currentBackgroundColor : String = Constant.defaultColor.hexColor
     private var mapColor : HashMap<EnumImage,String> = hashMapOf()
     private var currentText : String = ""
@@ -65,6 +65,65 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         mapColor = bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP) ?: hashMapOf()
         currentBackgroundColor = mapColor[EnumImage.QR_BACKGROUND] ?: Constant.defaultColor.hexColor
         Utils.Log(TAG,"Background color intent $currentBackgroundColor")
+        if (savedInstanceState!=null){
+            enumGroup = EnumGroup.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_GROUP) ?: EnumGroup.FONT_SIZE.name)
+            mColorList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_COLOR_LIST) ?: arrayListOf()
+            mFontList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST) ?: arrayListOf()
+            mFontSizeList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST) ?: arrayListOf()
+            enumImage = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE) ?: EnumImage.QR_TEXT_BOTTOM.name)
+            currentColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR) ?: Constant.defaultColor.hexColor
+            currentFont = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT) ?: EnumFont.roboto_regular.name
+            currentBackgroundColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR) ?: Constant.defaultColor.hexColor
+            mapColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR) ?: hashMapOf()
+            currentText = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT) ?: ""
+            currentFontSize = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE)
+            mapColorTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG) ?: hashMapOf()
+            mapFontTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG) ?: hashMapOf()
+            mapFontSizeTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG) ?: hashMapOf()
+            mRequestBitmap = {
+                onHandleBitmap(it)
+            }
+            NewChangeDesignActivity.mRequestBitmap?.invoke()
+            when(enumGroup){
+                EnumGroup.TEXT_COLOR ->{
+                    addChipHexColor()
+                }
+                EnumGroup.FONT ->{
+                    addChipFont()
+                }
+                EnumGroup.FONT_SIZE->{
+                    addChipFontSize()
+                }
+                else -> {}
+            }
+            lifecycleScope.launch(Dispatchers.Main){
+                onDrawBitmap()
+            }
+            binding.edtText.setText(currentText)
+            binding.edtText.setSelection(currentText.length)
+            Utils.Log(TAG,"Font size ${mFontList.size}")
+            Utils.Log(TAG,"currentText ${currentText}")
+        }else{
+            addFont()
+            addFontSize()
+            Utils.getPopupColorPreferenceColor()?.let { it ->
+                mColorList.clear()
+                mColorList.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
+                mapColor.forEach {
+                    mColorList.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
+                }
+                mColorList.addAll(it)
+
+                ThemeUtil.getThemeList().forEach { mTheme ->
+                    mColorList.add(ColorPreferenceModel(mTheme.getPrimaryDarkColor().fromColorIntRes.hexColor,System.currentTimeMillis()))
+                }
+                val mResult = mColorList.distinctBy { Pair(it.hexColor.lowercase(), it.hexColor.lowercase()) }
+                mColorList.clear()
+                mColorList.addAll(mResult)
+                addChipHexColor()
+                Utils.Log(TAG,"Size list ${mColorList.size}")
+            }
+        }
         binding.rlRootClose.setOnClickListener {
             finish()
             overridePendingTransition(R.anim.no_animation,R.anim.slide_down)
@@ -127,26 +186,6 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                 }
             }
             .launchIn(MainScope())
-
-        addFont()
-        addFontSize()
-        Utils.getPopupColorPreferenceColor()?.let { it ->
-            mColorList.clear()
-            mColorList.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
-            mapColor.forEach {
-                mColorList.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
-            }
-            mColorList.addAll(it)
-
-            ThemeUtil.getThemeList().forEach { mTheme ->
-                mColorList.add(ColorPreferenceModel(mTheme.getPrimaryDarkColor().fromColorIntRes.hexColor,System.currentTimeMillis()))
-            }
-            val mResult = mColorList.distinctBy { Pair(it.hexColor.lowercase(), it.hexColor.lowercase()) }
-            mColorList.clear()
-            mColorList.addAll(mResult)
-            addChipHexColor()
-            Utils.Log(TAG,"Size list ${mColorList.size}")
-        }
         binding.includeDragToClose.imgClose.addCircleRipple()
         binding.includeDragToClose.imgEdit.addCircleRipple()
     }
@@ -228,15 +267,13 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                 mapFontTag[ConstantKey.KEY_FONT] = index
                 val mObject = mFontList[it.tag as Int]
                 mObject.isSelected = !mObject.isSelected
-                mObject.enumFont.font.typeface?.let {
-                    currentFont = it
-                    lifecycleScope.launch(Dispatchers.IO){
-                        onDrawBitmap()
-                    }
+                currentFont = mObject.enumFont.name
+                lifecycleScope.launch(Dispatchers.IO){
+                    onDrawBitmap()
+                }
 
-                    runOnUiThread {
-                        addChipFont()
-                    }
+                runOnUiThread {
+                    addChipFont()
                 }
             }
             binding.llGroup.addView(xmlView)
@@ -353,6 +390,43 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             return false
         }
         return true
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        enumGroup = EnumGroup.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_GROUP) ?: EnumGroup.FONT_SIZE.name)
+        mColorList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_COLOR_LIST) ?: arrayListOf()
+        mFontList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST) ?: arrayListOf()
+        mFontSizeList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST) ?: arrayListOf()
+        enumImage = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE) ?: EnumImage.QR_TEXT_BOTTOM.name)
+        currentColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR) ?: Constant.defaultColor.hexColor
+        currentFont = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT) ?: EnumFont.roboto_regular.name
+        currentBackgroundColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR) ?: Constant.defaultColor.hexColor
+        mapColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST) ?: hashMapOf()
+        currentText = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT) ?: ""
+        currentFontSize = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE)
+        mapColorTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG) ?: hashMapOf()
+        mapFontTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG) ?: hashMapOf()
+        mapFontSizeTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG) ?: hashMapOf()
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_GROUP,enumGroup.name)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_COLOR_LIST,mColorList)
+        Utils.Log(TAG,"Font size ${mFontList.size}")
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST,mFontList)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST,mFontSizeList)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE,enumImage.name)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR,currentColor)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT,currentFont)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR,currentBackgroundColor)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR,mapColor)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT,currentText)
+        outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE,currentFontSize)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG,mapColorTag)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG,mapFontTag)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG,mapFontSizeTag)
     }
 
     companion object {

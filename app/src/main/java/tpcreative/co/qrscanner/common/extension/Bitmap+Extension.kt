@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.EnumFont
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EnumImage
@@ -122,7 +123,7 @@ fun Bitmap.toCircular(context: Context, newCornerRadius: Float, isCircle :Boolea
     }
 }
 
-suspend fun Bitmap.onDrawOnBitmap(text : String, enumImage: EnumImage,typeface : Typeface,fontSize : Int = 70,color : String,backgroundColor : String,callback :((Bitmap?)->Unit)) = withContext(
+suspend fun Bitmap.onDrawOnBitmap(text : String, enumImage: EnumImage,fontName : String,fontSize : Int = 70,color : String,backgroundColor : String,callback :((Bitmap?)->Unit)) = withContext(
     Dispatchers.IO){
     var mBm: Bitmap?
     this@onDrawOnBitmap.let {data ->
@@ -142,7 +143,8 @@ suspend fun Bitmap.onDrawOnBitmap(text : String, enumImage: EnumImage,typeface :
             paint.isAntiAlias = true
             paint.isLinearText = true
             paint.textAlign = Paint.Align.CENTER
-            paint.typeface = typeface
+            val mEumFont = EnumFont.valueOf(fontName)
+            paint.typeface = mEumFont.font.typeface
             //paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
             paint.color = color.toColorInt()
             paint.textSize = fontSize.toFloat() // Text Size
