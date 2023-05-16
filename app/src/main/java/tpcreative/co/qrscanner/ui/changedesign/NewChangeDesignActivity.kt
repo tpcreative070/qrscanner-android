@@ -203,6 +203,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             handleText(it)
         }
 
+        mResultProgressing = {
+            binding.imgQRCode.setImageBitmap(it)
+        }
+
         if (items.isEmpty()){
             loadData()
         }else{
@@ -233,7 +237,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         viewModel.selectedIndexOnReview()
         viewModel.selectedIndexOnSave()
         Utils.Log(TAG,"Handle text ${data.toJson()}")
-        onGenerateQRReview()
+        //onGenerateQRReview()
     }
 
     private fun loadData(){
@@ -642,5 +646,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         var mResultTemplate : ((value : TemplateModel) ->Unit?)? = null
         var mResultText : ((value : HashMap<EnumImage,TextModel>) -> Unit?)? = null
         var mRequestBitmap : (() -> Unit?)? = null
+        var mResultProgressing : ((Bitmap?)->Unit?)? = null
+
     }
 }

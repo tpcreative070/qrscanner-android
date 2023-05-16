@@ -239,6 +239,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.Main){
                 binding.imgReview.setImageBitmap(null)
                 binding.imgReview.setImageBitmap(bm)
+                NewChangeDesignActivity.mResultProgressing?.invoke(bm)
                 Utils.Log(TAG,"Bitmap width: ${bm?.width} height: ${bm?.height}")
             }
         }
