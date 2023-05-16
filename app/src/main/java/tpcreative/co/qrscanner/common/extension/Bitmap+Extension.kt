@@ -5,6 +5,7 @@ import android.graphics.*
 import android.net.Uri
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -117,25 +118,31 @@ fun Bitmap.toCircular(context: Context, newCornerRadius: Float, isCircle :Boolea
     }
 }
 
-suspend fun Bitmap.onDrawOnBitmap(map : HashMap<EnumImage,TextModel>,callback :((Bitmap?)->Unit)) = withContext(
-    Dispatchers.IO){
+val Bitmap.toDrawable get() = this.toDrawable(QRScannerApplication.getInstance().resources)
+
+fun Bitmap.onDrawOnBitmap(map : HashMap<EnumImage,TextModel>,callback :((Bitmap?)->Unit)) {
+    if (map.size==0){
+        callback.invoke(this@onDrawOnBitmap)
+    }
     var mBm: Bitmap? = null
     this@onDrawOnBitmap.let {data ->
+        val mCountTop : Int = if (map[EnumImage.QR_TEXT_TOP]?.data?.currentText?.isNotEmpty() == true) 150 else 0
+        val mCountBottom : Int = if (map[EnumImage.QR_TEXT_BOTTOM]?.data?.currentText?.isNotEmpty() == true) 150 else 0
         if(map.size>1){
             val mTop = map[EnumImage.QR_TEXT_TOP]?.data
             val mBottom = map[EnumImage.QR_TEXT_BOTTOM]?.data
-            mBm = data.addPaddingTopForBitmap(150,mTop?.currentBackgroundColor ?: Constant.defaultColor.hexColor)
-            mBm = mBm?.addPaddingBottomForBitmap(150,mBottom?.currentBackgroundColor ?: Constant.defaultColor.hexColor)
+            mBm = data.addPaddingTopForBitmap(mCountTop,mTop?.currentBackgroundColor ?: Constant.defaultColor.hexColor)
+            mBm = mBm?.addPaddingBottomForBitmap(mCountBottom,mBottom?.currentBackgroundColor ?: Constant.defaultColor.hexColor)
         }else{
             map.forEach {
                 val mData = it.value.data
                 mBm = if (it.key == EnumImage.QR_TEXT_BOTTOM){
                     //mBm = data.addPaddingLeftForBitmap(50)
                     //mBm = mBm?.addPaddingRightForBitmap(50)
-                    data.addPaddingBottomForBitmap(150, mData.currentBackgroundColor)
+                    data.addPaddingBottomForBitmap(mCountBottom, mData.currentBackgroundColor)
                 }else{
                     //mBm = data.addPaddingLeftForBitmap(50)
-                    data.addPaddingTopForBitmap(150,mData.currentBackgroundColor)
+                    data.addPaddingTopForBitmap(mCountTop,mData.currentBackgroundColor)
                     //mBm = mBm?.addPaddingRightForBitmap(50)
                 }
             }

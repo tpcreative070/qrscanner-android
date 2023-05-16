@@ -158,13 +158,13 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 val mapColor = viewModel.indexColor.mapColor
                 Utils.Log(TAG,"Index text ${viewModel.indexText.toJson()}")
                 textForResult.launch(Navigator.onChangeDesignText(this@NewChangeDesignActivity,
-                    ChangeDesignTextActivity::class.java,selectedSetText.firstOrNull()?.type ?: EnumImage.QR_TEXT_BOTTOM,mapColor,viewModel.indexText))
+                    ChangeDesignTextActivity::class.java,selectedSetText.firstOrNull()?.type ?: EnumImage.QR_TEXT_BOTTOM,mapColor,viewModel.indexText,viewModel.changeDesignReview))
                 overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
             }
         }))
 
         mRequestBitmap = {
-            ChangeDesignTextActivity.mRequestBitmap?.invoke(viewModel.onGenerateQR {  }.toBitmap(1024,1024,Bitmap.Config.ARGB_8888))
+            ChangeDesignTextActivity.mRequestBitmap?.invoke()
         }
 
         /*Position marker register*/
@@ -488,7 +488,6 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 binding.imgQRCode.setImageURI(mFile.toUri())
                 Utils.Log(TAG,"No change review data")
             }else{
-                binding.imgQRCode.setImageDrawable(mData)
                 onDraw(mData)
             }
         }
@@ -496,12 +495,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
 
     private fun onDraw(mDrawable : Drawable){
         val mBitmap = mDrawable.toBitmap(1024,1024)
-        if (viewModel.indexText.size>0){
-            lifecycleScope.launch(Dispatchers.Main){
-                mBitmap.onDrawOnBitmap(viewModel.indexText) {
-                    lifecycleScope.launch(Dispatchers.Main){
-                        binding.imgQRCode.setImageBitmap(it)
-                    }
+        lifecycleScope.launch(Dispatchers.Main){
+            mBitmap.onDrawOnBitmap(viewModel.indexText) {
+                lifecycleScope.launch(Dispatchers.Main){
+                    binding.imgQRCode.setImageBitmap(it)
                 }
             }
         }

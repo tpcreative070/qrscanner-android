@@ -8,6 +8,9 @@ import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
 
 fun ChangeDesignTextActivity.initUI(){
     setupViewModel()
+    viewModel.getIntent(this){
+
+    }
 }
 private fun ChangeDesignTextActivity.setupViewModel() {
     viewModel = ViewModelProvider(

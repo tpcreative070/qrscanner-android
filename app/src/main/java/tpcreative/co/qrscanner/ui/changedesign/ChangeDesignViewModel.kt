@@ -15,7 +15,9 @@ import com.github.alexzhirkevich.customqrgenerator.QrData
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumIcon
@@ -497,13 +499,6 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         return drawable
     }
 
-    suspend fun onDraw(bitmap: Bitmap?, callback: (result: Bitmap?) -> Unit){
-//        defaultText().forEach {
-//            bitmap?.onDrawOnBitmap(it.value.data.currentText,EnumImage.valueOf(it.key),it.value.data.currentFont,it.value.data.currentFontSize,it.value.data.currentColor,it.value.data.currentBackgroundColor){
-//                callback.invoke(it)
-//            }
-//        }
-    }
 
     @SuppressLint("ResourceAsColor")
     @ColorInt
@@ -872,6 +867,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         mData.body = indexBody
         mData.color= indexColor
         mData.positionMarker = indexPositionMarker
+        mData.text = indexText
         if (any is LogoModel){
             mData.logo = any
         }
@@ -886,8 +882,6 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         }
         return mData
     }
-
-    //private fun
 
     val context = QRScannerApplication.getInstance()
 }

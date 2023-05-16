@@ -1,11 +1,16 @@
 package tpcreative.co.qrscanner.ui.premiumpopup
 import android.view.View
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Configuration
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.extension.addCircleRipple
+import tpcreative.co.qrscanner.common.extension.onDrawOnBitmap
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignViewModel
 import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
@@ -22,7 +27,7 @@ fun PremiumPopupActivity.initUI(){
     binding.rlClose.addCircleRipple()
     setupViewModel()
     viewModel.getIntent(this){
-        binding.imgQRCode.setImageDrawable(it)
+        binding.imgQRCode.setImageBitmap(it)
     }
     hiddenView(true)
 }

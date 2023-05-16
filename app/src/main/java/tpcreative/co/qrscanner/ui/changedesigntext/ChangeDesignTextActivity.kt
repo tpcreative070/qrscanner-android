@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
 import com.davidmiguel.dragtoclose.DragListener
@@ -41,12 +42,9 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private var mFontList : ArrayList<FontModel>  = arrayListOf()
     private var mFontSizeList : ArrayList<FontModel> = arrayListOf()
     private lateinit var bitMap : Bitmap
-    private lateinit var enumImage: EnumImage
     private var currentColor :String =  Constant.defaultColor.hexColor
     private var currentFont : String = EnumFont.roboto_regular.name
     private var currentBackgroundColor : String = Constant.defaultColor.hexColor
-    private var mapColor : HashMap<EnumImage,String> = hashMapOf()
-    private var mapText : HashMap<EnumImage,TextModel> = hashMapOf()
     private var currentText : String = ""
     private var currentFontSize : Int = 90
     private var mapColorTag : HashMap<String,Int>  = hashMapOf()
@@ -60,11 +58,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         binding = ActivityChangeDesignTextBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initUI()
-        val bundle: Bundle? = intent?.extras
-        enumImage = EnumImage.valueOf(bundle?.getString(ConstantKey.KEY_POPUP_TEXT_TEXT_TYPE) ?: EnumImage.QR_TEXT_BOTTOM.name)
-        mapColor = bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP) ?: hashMapOf()
-        mapText = bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_TEXT) ?: hashMapOf()
-        currentBackgroundColor = mapColor[EnumImage.QR_BACKGROUND] ?: Constant.defaultColor.hexColor
+        currentBackgroundColor = viewModel.mapColor[EnumImage.QR_BACKGROUND] ?: Constant.defaultColor.hexColor
         Utils.Log(TAG,"While color ${Constant.defaultColor.hexColor}")
         Utils.Log(TAG,"Background color intent $currentBackgroundColor")
         if (savedInstanceState!=null){
@@ -72,11 +66,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             mColorList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_COLOR_LIST) ?: arrayListOf()
             mFontList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST) ?: arrayListOf()
             mFontSizeList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST) ?: arrayListOf()
-            enumImage = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE) ?: EnumImage.QR_TEXT_BOTTOM.name)
+            viewModel.enumImage = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE) ?: EnumImage.QR_TEXT_BOTTOM.name)
             currentColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR) ?: Constant.defaultColor.hexColor
             currentFont = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT) ?: EnumFont.roboto_regular.name
             currentBackgroundColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR) ?: Constant.defaultColor.hexColor
-            mapColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR) ?: hashMapOf()
+            viewModel.mapColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR) ?: hashMapOf()
             currentText = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT) ?: ""
             currentFontSize = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE)
             mapColorTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG) ?: hashMapOf()
@@ -97,7 +91,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             binding.edtText.setText(currentText)
             binding.edtText.setSelection(currentText.length)
             mRequestBitmap = {
-                onChangedRotation(it)
+                onChangedRotation()
             }
             NewChangeDesignActivity.mRequestBitmap?.invoke()
             Utils.Log(TAG,"Font size ${mFontList.size}")
@@ -105,7 +99,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         }else{
             addFont()
             addFontSize()
-            val mCurrentMap = mapText[enumImage]
+            val mCurrentMap = viewModel.mapText[viewModel.enumImage]
             currentColor = mCurrentMap?.data?.currentColor ?: currentColor
             currentFont = mCurrentMap?.data?.currentFont ?: EnumFont.roboto_regular.name
             currentBackgroundColor = mCurrentMap?.data?.currentBackgroundColor ?: currentBackgroundColor
@@ -116,7 +110,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             Utils.getPopupColorPreferenceColor()?.let { it ->
                 mColorList.clear()
                 mColorList.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
-                mapColor.forEach {
+                viewModel.mapColor.forEach {
                     mColorList.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
                 }
                 mColorList.addAll(it)
@@ -146,7 +140,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         }
 
         mRequestBitmap = {
-           onHandleBitmap(it)
+           onHandleBitmap()
         }
         NewChangeDesignActivity.mRequestBitmap?.invoke()
 
@@ -195,41 +189,40 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     }
 
     private fun onSave(){
-        if (mapText[enumImage] == null){
+        if (viewModel.mapText[viewModel.enumImage] == null){
             val it = TextModel()
-            mapText[enumImage] = TextModel(it.enumIcon,it.type,it.enumChangeDesignType,TextDataModel(currentColor,currentFont,currentBackgroundColor,currentText,currentFontSize))
-            mapText[EnumImage.QR_TEXT_TOP]?.data?.currentText?.isBlank().apply {
+            viewModel.mapText[viewModel.enumImage] = TextModel(it.enumIcon,it.type,it.enumChangeDesignType,TextDataModel(currentColor,currentFont,currentBackgroundColor,currentText,currentFontSize))
+            viewModel.mapText[EnumImage.QR_TEXT_TOP]?.data?.currentText?.isBlank().apply {
                 if (this==true){
-                    mapText.remove(EnumImage.QR_TEXT_TOP)
+                    viewModel.mapText.remove(EnumImage.QR_TEXT_TOP)
                 }
             }
-            mapText[EnumImage.QR_TEXT_BOTTOM]?.data?.currentText?.isBlank().apply {
+            viewModel.mapText[EnumImage.QR_TEXT_BOTTOM]?.data?.currentText?.isBlank().apply {
                 if (this==true){
-                    mapText.remove(EnumImage.QR_TEXT_BOTTOM)
+                    viewModel.mapText.remove(EnumImage.QR_TEXT_BOTTOM)
                 }
             }
-            NewChangeDesignActivity.mResultText?.invoke(mapText)
+            NewChangeDesignActivity.mResultText?.invoke(viewModel.mapText)
         }else{
-            mapText[enumImage]?.let {
-                mapText[enumImage] = TextModel(it.enumIcon,it.type,it.enumChangeDesignType,TextDataModel(currentColor,currentFont,currentBackgroundColor,currentText,currentFontSize))
-                mapText[EnumImage.QR_TEXT_TOP]?.data?.currentText?.isBlank().apply {
+            viewModel.mapText[viewModel.enumImage]?.let {
+                viewModel.mapText[viewModel.enumImage] = TextModel(it.enumIcon,it.type,it.enumChangeDesignType,TextDataModel(currentColor,currentFont,currentBackgroundColor,currentText,currentFontSize))
+                viewModel.mapText[EnumImage.QR_TEXT_TOP]?.data?.currentText?.isBlank().apply {
                     if (this==true){
-                        mapText.remove(EnumImage.QR_TEXT_TOP)
+                        viewModel.mapText.remove(EnumImage.QR_TEXT_TOP)
                     }
                 }
-                mapText[EnumImage.QR_TEXT_BOTTOM]?.data?.currentText?.isBlank().apply {
+                viewModel.mapText[EnumImage.QR_TEXT_BOTTOM]?.data?.currentText?.isBlank().apply {
                     if (this==true){
-                        mapText.remove(EnumImage.QR_TEXT_BOTTOM)
+                        viewModel.mapText.remove(EnumImage.QR_TEXT_BOTTOM)
                     }
                 }
-                NewChangeDesignActivity.mResultText?.invoke(mapText)
+                NewChangeDesignActivity.mResultText?.invoke(viewModel.mapText)
             }
         }
     }
 
-    private fun onChangedRotation(bm : Bitmap){
+    private fun onChangedRotation(){
         lifecycleScope.launch(Dispatchers.Main){
-            bitMap = Bitmap.createBitmap(bm)
             onDrawBitmap()
         }
     }
@@ -239,10 +232,10 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         onSave()
     }
 
-    private suspend fun onDrawBitmap(){
+    private fun onDrawBitmap(){
         val mBitmap = Bitmap.createBitmap(bitMap)
-        mapText[enumImage] = TextModel(EnumIcon.ic_qr_background,enumImage,EnumChangeDesignType.NORMAL, TextDataModel(currentColor,currentFont,currentBackgroundColor,currentText, currentFontSize))
-        mBitmap.onDrawOnBitmap(mapText) { bm->
+        viewModel.mapText[viewModel.enumImage] = TextModel(EnumIcon.ic_qr_background,viewModel.enumImage,EnumChangeDesignType.NORMAL, TextDataModel(currentColor,currentFont,currentBackgroundColor,currentText, currentFontSize))
+        mBitmap.onDrawOnBitmap(viewModel.mapText) { bm->
             lifecycleScope.launch(Dispatchers.Main){
                 binding.imgReview.setImageBitmap(null)
                 binding.imgReview.setImageBitmap(bm)
@@ -281,15 +274,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         }
     }
 
-    private fun onHandleBitmap(bm : Bitmap){
-        this.bitMap = Bitmap.createBitmap(bm)
-        lifecycleScope.launch(Dispatchers.Main){
-            if (mapText.size>0){
-                bitMap.onDrawOnBitmap(mapText){
-                    binding.imgReview.setImageBitmap(it)
-                }
-            }else{
-                binding.imgReview.setImageBitmap(bitMap)
+    private fun onHandleBitmap(){
+        viewModel.onDrawable() {
+            bitMap = it.toBitmap(1024,1024)
+            bitMap.onDrawOnBitmap(viewModel.mapText){
+                binding.imgReview.setImageBitmap(it)
             }
         }
         Utils.Log(TAG,"Callback bitmap here")
@@ -439,7 +428,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     }
 
     private fun isAllow(): Boolean {
-        if (currentText.isEmpty() && mapText.size<=1){
+        if (currentText.isEmpty() && viewModel.mapText.size<=1){
             return false
         }
         return true
@@ -450,11 +439,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         mColorList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_COLOR_LIST) ?: arrayListOf()
         mFontList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST) ?: arrayListOf()
         mFontSizeList = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST) ?: arrayListOf()
-        enumImage = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE) ?: EnumImage.QR_TEXT_BOTTOM.name)
+        viewModel.enumImage = EnumImage.valueOf(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE) ?: EnumImage.QR_TEXT_BOTTOM.name)
         currentColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR) ?: Constant.defaultColor.hexColor
         currentFont = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT) ?: EnumFont.roboto_regular.name
         currentBackgroundColor = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR) ?: Constant.defaultColor.hexColor
-        mapColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST) ?: hashMapOf()
+        viewModel.mapColor = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST) ?: hashMapOf()
         currentText = savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT) ?: ""
         currentFontSize = savedInstanceState.getInt(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE)
         mapColorTag = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG) ?: hashMapOf()
@@ -470,11 +459,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         Utils.Log(TAG,"Font size ${mFontList.size}")
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_LIST,mFontList)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST,mFontSizeList)
-        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE,enumImage.name)
+        outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE,viewModel.enumImage.name)
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR,currentColor)
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT,currentFont)
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR,currentBackgroundColor)
-        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR,mapColor)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR,viewModel.mapColor)
         outState.putString(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT,currentText)
         outState.putInt(ConstantKey.KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE,currentFontSize)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG,mapColorTag)
@@ -483,6 +472,6 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     }
 
     companion object {
-        var mRequestBitmap : ((bitmap : Bitmap) -> Unit?)? = null
+        var mRequestBitmap : (() -> Unit?)? = null
     }
 }
