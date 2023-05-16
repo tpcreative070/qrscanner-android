@@ -9,11 +9,13 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.github.alexzhirkevich.customqrgenerator.QrData
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.*
+import kotlinx.coroutines.coroutineScope
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumIcon
@@ -25,6 +27,7 @@ import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
@@ -56,6 +59,8 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
 
     /*Text area*/
     var mTextList = mutableListOf<TextModel>()
+    lateinit var indexText : HashMap<EnumImage,TextModel>
+    var isEmptyChangeDesignText : Boolean = true
 
     /*Position marker*/
     var mPositionMarkerList  = mutableListOf<PositionMarkerModel>()
@@ -125,6 +130,17 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                             indexBody = defaultBody()
                             isEmptyChangeDesignBody = true
                         }
+
+                        /*Text*/
+                        mReview.text?.let {
+                            indexText = it
+                            isEmptyChangeDesignText = false
+                        }
+                        if (mReview.text == null){
+                            indexText = defaultText()
+                            isEmptyChangeDesignText = true
+                        }
+                        Utils.Log(TAG,"Index test ${indexText.toJson()}")
                     }catch (e : Exception){
                         e.printStackTrace()
                     }
@@ -137,6 +153,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                     indexPositionMarker.isSelected = true
                     indexBody = defaultBody()
                     indexBody.isSelected = true
+                    indexText = defaultText()
                     changeDesignSave = ChangeDesignModel()
                     changeDesignReview =  ChangeDesignModel()
                     changeDesignOriginal = ChangeDesignModel()
@@ -161,6 +178,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         indexColor = defaultColor()
         indexPositionMarker = defaultPositionMarker()
         indexBody = defaultBody()
+        indexText = defaultText()
         changeDesignSave = ChangeDesignModel()
         changeDesignReview =  ChangeDesignModel()
         changeDesignOriginal = ChangeDesignModel()
@@ -191,10 +209,12 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         indexColor.isSelected = !isEmptyChangeDesignLogo
         indexPositionMarker.isSelected = !isEmptyChangeDesignLogo
         indexBody.isSelected = !isEmptyChangeDesignBody
+        indexText = mData.text ?: defaultText()
         mapSetView.add(EnumView.LOGO)
         mapSetView.add(EnumView.COLOR)
         mapSetView.add(EnumView.POSITION_MARKER)
         mapSetView.add(EnumView.BODY)
+        mapSetView.add(EnumView.TEXT)
         callback.invoke(true)
     }
 
@@ -360,8 +380,8 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedTextData(){
         mTextList.clear()
-        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT_BOTTOM,EnumChangeDesignType.NORMAL))
-        mTextList.add(TextModel("",Constant.defaultColor.hexColor,"","","",EnumIcon.ic_qr_background,EnumImage.QR_TEXT_TOP,EnumChangeDesignType.NORMAL))
+        mTextList.add(TextModel(EnumIcon.ic_qr_background,EnumImage.QR_TEXT_BOTTOM,EnumChangeDesignType.NORMAL,TextDataModel()))
+        mTextList.add(TextModel(EnumIcon.ic_qr_background,EnumImage.QR_TEXT_TOP,EnumChangeDesignType.NORMAL,TextDataModel()))
     }
 
     private fun initializedPositionMarkerData(){
@@ -477,6 +497,14 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         return drawable
     }
 
+    suspend fun onDraw(bitmap: Bitmap?, callback: (result: Bitmap?) -> Unit){
+//        defaultText().forEach {
+//            bitmap?.onDrawOnBitmap(it.value.data.currentText,EnumImage.valueOf(it.key),it.value.data.currentFont,it.value.data.currentFontSize,it.value.data.currentColor,it.value.data.currentBackgroundColor){
+//                callback.invoke(it)
+//            }
+//        }
+    }
+
     @SuppressLint("ResourceAsColor")
     @ColorInt
     private fun tintBGColor(mDataResult: LogoModel) : Int{
@@ -507,6 +535,13 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                EnumView.COLOR ->{
                    Utils.Log(TAG,"data value result original ${changeDesignOriginal.color?.mapColor?.toJson()}")
                    changeDesignReview.color = indexColor
+
+                   /*Update background for text*/
+                   val bg = indexColor.mapColor[EnumImage.QR_BACKGROUND] ?: Constant.defaultColor.stringHexNoTransparency
+                   indexText.forEach {
+                      indexText[it.key] = TextModel(it.value.enumIcon,it.value.type,it.value.enumChangeDesignType,TextDataModel(it.value.data.currentColor,it.value.data.currentFont,bg,it.value.data.currentText,it.value.data.currentFontSize))
+                   }
+
                    Utils.Log(TAG,"data value result review ${changeDesignReview.color?.mapColor?.toJson()}")
                    Utils.Log(TAG,"data value result after original ${changeDesignOriginal.color?.mapColor?.toJson()}")
                }
@@ -520,7 +555,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                    changeDesignReview.body = indexBody
                }
                EnumView.TEXT ->{
-
+                   changeDesignReview.text = indexText
                }
                else -> {}
            }
@@ -572,8 +607,21 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                         val mIndex = defaultColor()
                         mIndex.mapColor = mHashMap
                         changeDesignSave.color = mIndex
+
+                        /*Update background for text*/
+                        val bg = mHashMap[EnumImage.QR_BACKGROUND] ?: Constant.defaultColor.stringHexNoTransparency
+                        indexText.forEach {
+                            indexText[it.key] = TextModel(it.value.enumIcon,it.value.type,it.value.enumChangeDesignType,TextDataModel(it.value.data.currentColor,it.value.data.currentFont,bg,it.value.data.currentText,it.value.data.currentFontSize))
+                        }
+
                     }else{
                         changeDesignSave.color?.mapColor = mHashMap
+
+                        /*Update background for text*/
+                        val bg = mHashMap[EnumImage.QR_BACKGROUND] ?: Constant.defaultColor.stringHexNoTransparency
+                        indexText.forEach {
+                            indexText[it.key] = TextModel(it.value.enumIcon,it.value.type,it.value.enumChangeDesignType,TextDataModel(it.value.data.currentColor,it.value.data.currentFont,bg,it.value.data.currentText,it.value.data.currentFontSize))
+                        }
                     }
                     Utils.Log(TAG,"SelectedIndexOnSave ${indexColor.mapColor.toJson()}")
                 }
@@ -588,7 +636,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                     changeDesignSave.body = indexBody
                 }
                 EnumView.TEXT ->{
-
+                    changeDesignSave.text = indexText
                 }
                 else -> {}
             }
@@ -619,6 +667,13 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
 
     fun defaultBody() : BodyModel {
         return BodyModel(EnumIcon.ic_dark_default,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumBody.DEFAULT)
+    }
+
+    fun defaultText() : HashMap<EnumImage,TextModel> {
+        val mHash : HashMap<EnumImage,TextModel> = hashMapOf()
+//        mHash[EnumImage.QR_TEXT_TOP] = TextModel()
+//        mHash[EnumImage.QR_TEXT_BOTTOM] = TextModel()
+        return mHash
     }
 
     private fun qrShapes() : QrVectorShapes{
@@ -736,6 +791,11 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                         return true
                     }
                 }
+                EnumView.TEXT ->{
+                    if (mChanged || indexText.toJson() != changeDesignOriginal.text?.toJson()){
+                        return true
+                    }
+                }
                 else -> {}
             }
         }
@@ -767,6 +827,11 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                 }
                 EnumView.BODY ->{
                     if (mChanged || indexBody.toJson() != changeDesignOriginal.body?.toJson()){
+                        return true
+                    }
+                }
+                EnumView.TEXT ->{
+                    if (mChanged || indexText.toJson() != changeDesignOriginal.text?.toJson()){
                         return true
                     }
                 }

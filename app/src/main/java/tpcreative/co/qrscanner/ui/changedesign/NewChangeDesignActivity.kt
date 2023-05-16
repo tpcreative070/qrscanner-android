@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -11,10 +12,12 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.drakeet.multitype.MultiTypeAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
@@ -28,6 +31,7 @@ import tpcreative.co.qrscanner.ui.premiumpopup.PremiumPopupActivity
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class NewChangeDesignActivity : BaseActivitySlide(){
@@ -60,6 +64,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
             viewModel.indexPositionMarker = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER) ?: viewModel.defaultPositionMarker()
             viewModel.indexBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_BODY) ?: viewModel.defaultBody()
+            viewModel.indexText = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT) ?: viewModel.defaultText()
             viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
             viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
             val mUri = Uri.parse(savedInstanceState.getString(ConstantKey.KEY_CHANGE_DESIGN_URI))
@@ -151,9 +156,9 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         adapter.register(TextSquareViewBinder(selectedSetText,this,object :TextSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
                 val mapColor = viewModel.indexColor.mapColor
-                Utils.Log(TAG,"background color $mapColor")
+                Utils.Log(TAG,"Index text ${viewModel.indexText.toJson()}")
                 textForResult.launch(Navigator.onChangeDesignText(this@NewChangeDesignActivity,
-                    ChangeDesignTextActivity::class.java,selectedSetText.firstOrNull()?.type ?: EnumImage.QR_TEXT_BOTTOM,mapColor))
+                    ChangeDesignTextActivity::class.java,selectedSetText.firstOrNull()?.type ?: EnumImage.QR_TEXT_BOTTOM,mapColor,viewModel.indexText))
                 overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
             }
         }))
@@ -194,6 +199,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             }
         }
 
+        mResultText = {
+            handleText(it)
+        }
+
         if (items.isEmpty()){
             loadData()
         }else{
@@ -216,6 +225,15 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 }
             }
         }
+    }
+
+    private fun handleText(data : HashMap<EnumImage,TextModel>){
+        viewModel.mapSetView.add(EnumView.TEXT)
+        viewModel.indexText = data
+        viewModel.selectedIndexOnReview()
+        viewModel.selectedIndexOnSave()
+        Utils.Log(TAG,"Handle text ${data.toJson()}")
+        onGenerateQRReview()
     }
 
     private fun loadData(){
@@ -471,6 +489,20 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 Utils.Log(TAG,"No change review data")
             }else{
                 binding.imgQRCode.setImageDrawable(mData)
+                onDraw(mData)
+            }
+        }
+    }
+
+    private fun onDraw(mDrawable : Drawable){
+        val mBitmap = mDrawable.toBitmap(1024,1024)
+        if (viewModel.indexText.size>0){
+            lifecycleScope.launch(Dispatchers.Main){
+                mBitmap.onDrawOnBitmap(viewModel.indexText) {
+                    lifecycleScope.launch(Dispatchers.Main){
+                        binding.imgQRCode.setImageBitmap(it)
+                    }
+                }
             }
         }
     }
@@ -552,6 +584,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO,viewModel.indexLogo)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER,viewModel.indexPositionMarker)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_BODY,viewModel.indexBody)
+        outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT,viewModel.indexText)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignSave)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW,viewModel.changeDesignReview)
         outState.putBoolean(ConstantKey.KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER,viewModel.isOpenColorPicker)
@@ -579,6 +612,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         viewModel.indexLogo = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_LOGO) ?: viewModel.defaultLogo()
         viewModel.indexPositionMarker = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_POSITION_MARKER) ?: viewModel.defaultPositionMarker()
         viewModel.indexBody = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_BODY) ?: viewModel.defaultBody()
+        viewModel.indexText = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT) ?: viewModel.defaultText()
         viewModel.changeDesignSave = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_SAVE) ?: viewModel.changeDesignSave
         viewModel.changeDesignReview = savedInstanceState.serializable(ConstantKey.KEY_CHANGE_DESIGN_REVIEW) ?: viewModel.changeDesignReview
         viewModel.isOpenColorPicker = savedInstanceState.getBoolean(ConstantKey.KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER)
@@ -609,6 +643,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         private const val SPAN_COUNT = 5
         var mResult : ((value : String) -> Unit?)? = null
         var mResultTemplate : ((value : TemplateModel) ->Unit?)? = null
+        var mResultText : ((value : HashMap<EnumImage,TextModel>) -> Unit?)? = null
         var mRequestBitmap : (() -> Unit?)? = null
     }
 }

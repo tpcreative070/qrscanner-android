@@ -40,7 +40,8 @@ fun NewChangeDesignActivity.initUI(){
     }
 
     binding.doneCancelBar.tvSave.setOnClickListener {
-        val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,1024, Bitmap.Config.ARGB_8888)
+        val mHeight = viewModel.indexText.size * 150 + 1024
+        val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,mHeight, Bitmap.Config.ARGB_8888)
         val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"",EnumImage.QR_CODE).apply {
             if (viewModel.indexLogo.typeIcon == EnumTypeIcon.BITMAP){
                 viewModel.bitmap?.storeBitmap(viewModel.create.uuId?:"",EnumImage.LOGO)

@@ -1,25 +1,19 @@
 package tpcreative.co.qrscanner.common.extension
 
-import android.R.attr
 import android.content.Context
 import android.graphics.*
 import android.net.Uri
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.toColorInt
-import com.google.zxing.BarcodeFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumFont
-import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.model.EnumImage
-import tpcreative.co.qrscanner.ui.review.ReviewActivity
-import tpcreative.co.qrscanner.ui.review.onPhotoPrint
+import tpcreative.co.qrscanner.model.TextModel
+import vadiole.colorpicker.hexColor
 import java.io.File
 
 
@@ -123,37 +117,61 @@ fun Bitmap.toCircular(context: Context, newCornerRadius: Float, isCircle :Boolea
     }
 }
 
-suspend fun Bitmap.onDrawOnBitmap(text : String, enumImage: EnumImage,fontName : String,fontSize : Int = 70,color : String,backgroundColor : String,callback :((Bitmap?)->Unit)) = withContext(
+suspend fun Bitmap.onDrawOnBitmap(map : HashMap<EnumImage,TextModel>,callback :((Bitmap?)->Unit)) = withContext(
     Dispatchers.IO){
-    var mBm: Bitmap?
+    var mBm: Bitmap? = null
     this@onDrawOnBitmap.let {data ->
-        if (enumImage == EnumImage.QR_TEXT_BOTTOM){
-            //mBm = data.addPaddingLeftForBitmap(50)
-            //mBm = mBm?.addPaddingRightForBitmap(50)
-            mBm = data.addPaddingBottomForBitmap(150, backgroundColor)
+        if(map.size>1){
+            val mTop = map[EnumImage.QR_TEXT_TOP]?.data
+            val mBottom = map[EnumImage.QR_TEXT_BOTTOM]?.data
+            mBm = data.addPaddingTopForBitmap(150,mTop?.currentBackgroundColor ?: Constant.defaultColor.hexColor)
+            mBm = mBm?.addPaddingBottomForBitmap(150,mBottom?.currentBackgroundColor ?: Constant.defaultColor.hexColor)
         }else{
-            //mBm = data.addPaddingLeftForBitmap(50)
-            mBm = data.addPaddingTopForBitmap(150,backgroundColor)
-            //mBm = mBm?.addPaddingRightForBitmap(50)
+            map.forEach {
+                val mData = it.value.data
+                mBm = if (it.key == EnumImage.QR_TEXT_BOTTOM){
+                    //mBm = data.addPaddingLeftForBitmap(50)
+                    //mBm = mBm?.addPaddingRightForBitmap(50)
+                    data.addPaddingBottomForBitmap(150, mData.currentBackgroundColor)
+                }else{
+                    //mBm = data.addPaddingLeftForBitmap(50)
+                    data.addPaddingTopForBitmap(150,mData.currentBackgroundColor)
+                    //mBm = mBm?.addPaddingRightForBitmap(50)
+                }
+            }
         }
         mBm?.let {
             val canvas = Canvas(it)
-            val paint = Paint()
-            paint.style = Paint.Style.FILL
-            paint.isAntiAlias = true
-            paint.isLinearText = true
-            paint.textAlign = Paint.Align.CENTER
-            val mEumFont = EnumFont.valueOf(fontName)
-            paint.typeface = mEumFont.font.typeface
-            //paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
-            paint.color = color.toColorInt()
-            paint.textSize = fontSize.toFloat() // Text Size
-            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
+            val paintBottom = Paint()
+            val paintTop = Paint()
             val mRectF = RectF(0F, 0F, it.width.toFloat(),it.height.toFloat())
-            if (enumImage == EnumImage.QR_TEXT_BOTTOM){
-                canvas.drawText(text, (canvas.width /2).toFloat(), mRectF.bottom - 90 , paint)
-            }else{
-                canvas.drawText(text, (canvas.width /2).toFloat(), mRectF.top + 180 , paint)
+            map.forEach {
+                val mData = it.value.data
+                if (it.key == EnumImage.QR_TEXT_BOTTOM){
+                    paintBottom.style = Paint.Style.FILL
+                    paintBottom.isAntiAlias = true
+                    paintBottom.isLinearText = true
+                    paintBottom.textAlign = Paint.Align.CENTER
+                    val mEumFont = EnumFont.valueOf(mData.currentFont)
+                    paintBottom.typeface = mEumFont.font.typeface
+                    //paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
+                    paintBottom.color = mData.currentColor.toColorInt()
+                    paintBottom.textSize = mData.currentFontSize.toFloat() // Text Size
+                    paintBottom.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
+                    canvas.drawText(mData.currentText, (canvas.width /2).toFloat(), mRectF.bottom - 90 , paintBottom)
+                }else{
+                    paintTop.style = Paint.Style.FILL
+                    paintTop.isAntiAlias = true
+                    paintTop.isLinearText = true
+                    paintTop.textAlign = Paint.Align.CENTER
+                    val mEumFont = EnumFont.valueOf(mData.currentFont)
+                    paintTop.typeface = mEumFont.font.typeface
+                    //paint.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
+                    paintTop.color = mData.currentColor.toColorInt()
+                    paintTop.textSize = mData.currentFontSize.toFloat() // Text Size
+                    paintTop.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
+                    canvas.drawText(mData.currentText, (canvas.width /2).toFloat(), mRectF.top + 180 , paintTop)
+                }
             }
             callback.invoke(mBm)
         }

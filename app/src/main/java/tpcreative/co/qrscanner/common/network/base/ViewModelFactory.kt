@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import tpcreative.co.qrscanner.ui.backup.BackupViewModel
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignViewModel
 import tpcreative.co.qrscanner.ui.changedesign.TemplateViewModel
+import tpcreative.co.qrscanner.ui.changedesigntext.ChangeDesignTextViewModel
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 import tpcreative.co.qrscanner.ui.help.HelpViewModel
 import tpcreative.co.qrscanner.ui.history.HistoryViewModel
@@ -66,6 +67,9 @@ class ViewModelFactory() : ViewModelProvider.Factory{
         }
         else if(modelClass.isAssignableFrom(PremiumPopupViewModel::class.java)){
             return PremiumPopupViewModel(ChangeDesignViewModel()) as T
+        }
+        else if (modelClass.isAssignableFrom(ChangeDesignTextViewModel::class.java)){
+            return ChangeDesignTextViewModel(ChangeDesignViewModel()) as T
         }
         throw IllegalArgumentException("Unknown class name")
     }

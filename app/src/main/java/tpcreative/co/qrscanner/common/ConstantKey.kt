@@ -33,6 +33,7 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_LOGO = "key_change_design_logo"
         const val KEY_CHANGE_DESIGN_POSITION_MARKER = "key_change_design_position_marker"
         const val KEY_CHANGE_DESIGN_BODY = "key_change_design_body"
+        const val KEY_CHANGE_DESIGN_TEXT = "key_change_design_text"
         const val KEY_CHANGE_DESIGN_INDEX = "key_change_design_index"
         const val KEY_CHANGE_DESIGN_URI = "key_change_design_uri"
         const val KEY_CHANGE_DESIGN_SHAPE = "key_change_design_shape"
@@ -79,6 +80,7 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG = "key_change_design_text_map_color_tag"
         const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG = "key_change_design_text_map_font_tag"
         const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG = "key_change_design_text_map_font_size_tag"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_TEXT = "key_change_design_text_map_text"
 
 
         const val TITLE  = "title"

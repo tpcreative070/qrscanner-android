@@ -1,6 +1,10 @@
 package tpcreative.co.qrscanner.common
 
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.extension.stringHexNoTransparency
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 class Constant {
     companion object {
@@ -28,7 +32,7 @@ class Constant {
         const val youtube_id = "eNhq6s1kmhw"
         const val LOG_TAKE_TIME = "LOG_TAKE_TIME"
 
-        const val defaultColor = R.color.white
+        val defaultColor  = ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.white)
 
         val mFontList = mutableMapOf<String,Int>().apply {
             put(EnumFont.brandon_bold.name,R.font.brandon_bold)
