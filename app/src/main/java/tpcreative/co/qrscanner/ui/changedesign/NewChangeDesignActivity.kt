@@ -53,6 +53,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
     private lateinit var selectedPreviousSetLogo: TreeSet<LogoModel>
     private lateinit var selectedPreviousSetPositionMarker: TreeSet<PositionMarkerModel>
     private lateinit var selectedPreviousSetBody: TreeSet<BodyModel>
+    private var isNavigation : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +118,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Logo register*/
         adapter.register(LogoSquareViewBinder(selectedSetLogo,this,object  : LogoSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
+                if (isNavigation){
+                    return
+                }
+                isNavigation = true
                 Utils.Log(TAG,"Clicked position $position")
                 Utils.Log(TAG,"Logo ${selectedSetLogo.toJson()}")
                 Utils.Log(TAG,"Data list ${items.toJson()}")
@@ -132,6 +137,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Color register*/
         adapter.register(ColorSquareViewBinder(selectedSetColor,this,object  : ColorSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position : Int) {
+                if (isNavigation){
+                    return
+                }
+                isNavigation = true
                 Utils.Log(TAG,"Color ${selectedSetColor.toJson()}")
                 Utils.Log(TAG,"Color current ${viewModel.indexColor.toJson()}")
                 Utils.Log(TAG,"Clicked position $position")
@@ -155,6 +164,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Text register*/
         adapter.register(TextSquareViewBinder(selectedSetText,this,object :TextSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
+                if (isNavigation){
+                    return
+                }
+                isNavigation = true
                 val mapColor = viewModel.indexColor.mapColor
                 Utils.Log(TAG,"Index text ${viewModel.indexText.toJson()}")
                 textForResult.launch(Navigator.onChangeDesignText(this@NewChangeDesignActivity,
@@ -170,6 +183,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Position marker register*/
         adapter.register(PositionMarkerSquareViewBinder(selectedSetPositionMarker,this,object :PositionMarkerSquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
+                if (isNavigation){
+                    return
+                }
+                isNavigation = true
                 val mData = selectedSetPositionMarker.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
                     premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
@@ -182,6 +199,10 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         /*Body register*/
         adapter.register(BodySquareViewBinder(selectedSetBody,this,object :BodySquareViewBinder.ItemSelectedListener{
             override fun onClickItem(position: Int) {
+                if (isNavigation){
+                    return
+                }
+                isNavigation = true
                 val mData = selectedSetBody.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
                     premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
@@ -365,7 +386,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
             viewModel.selectedIndexOnSave()
             onGenerateQRReview()
         }
-        Utils.Log(TAG,"IndexLogo ${viewModel.indexLogo.toJson()}")
+        isNavigation = false
     }
 
     private fun changeLogoItemCancel(position : Int){
@@ -389,7 +410,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         viewModel.selectedIndexOnReview()
         viewModel.selectedIndexOnSave()
         onGenerateQRReview()
-        Utils.Log(TAG,"IndexLogo ${viewModel.indexLogo.toJson()}")
+        isNavigation = false
     }
 
     private fun changePositionMarkerItem(position : Int){
@@ -413,17 +434,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         viewModel.selectedIndexOnReview()
         viewModel.selectedIndexOnSave()
         onGenerateQRReview()
-
-//        if (index?.enumChangeDesignType ==EnumChangeDesignType.VIP){
-//            onGetGallery()
-//        }else{
-//            selectedPreviousSetLogo.clear()
-//            selectedPreviousSetLogo.addAll(selectedSetLogo)
-//            viewModel.selectedIndexOnReview()
-//            viewModel.selectedIndexOnSave()
-//            onGenerateQRReview()
-//        }
-        Utils.Log(TAG,"IndexLogo ${viewModel.indexLogo.toJson()}")
+        isNavigation = false
     }
 
     private fun changeBodyItem(position : Int){
@@ -447,17 +458,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         viewModel.selectedIndexOnReview()
         viewModel.selectedIndexOnSave()
         onGenerateQRReview()
-
-//        if (index?.enumChangeDesignType ==EnumChangeDesignType.VIP){
-//            onGetGallery()
-//        }else{
-//            selectedPreviousSetLogo.clear()
-//            selectedPreviousSetLogo.addAll(selectedSetLogo)
-//            viewModel.selectedIndexOnReview()
-//            viewModel.selectedIndexOnSave()
-//            onGenerateQRReview()
-//        }
-        Utils.Log(TAG,"IndexLogo ${viewModel.indexLogo.toJson()}")
+        isNavigation = false
     }
 
     fun changeLogoShapeItem(){
@@ -483,6 +484,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 else -> {  Utils.Log(TAG,"Enum view response $it")}
             }
         }
+        isNavigation = false
     }
 
     fun onGenerateQRReview(){
@@ -638,6 +640,11 @@ class NewChangeDesignActivity : BaseActivitySlide(){
         Utils.Log(TAG,"State instance restore ${viewModel.indexLogo.toJson()}")
         Utils.Log(TAG,"State instance restore index ${viewModel.index}")
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isNavigation = false
     }
 
     companion object {

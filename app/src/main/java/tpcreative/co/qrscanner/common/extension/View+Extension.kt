@@ -17,6 +17,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 
@@ -135,4 +136,11 @@ fun View.debounceClick(debounceTime: Long = 1000L, action: () -> Unit) {
             }
         }
     }
+}
+
+fun View.clicks(): Flow<Unit> = callbackFlow {
+    setOnClickListener {
+        trySend(Unit).isSuccess
+    }
+    awaitClose { setOnClickListener(null) }
 }
