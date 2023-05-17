@@ -42,7 +42,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private var mFontList : ArrayList<FontModel>  = arrayListOf()
     private var mFontSizeList : ArrayList<FontModel> = arrayListOf()
     private lateinit var bitMap : Bitmap
-    private var currentColor :String =  Constant.defaultColor.hexColor
+    private var currentColor :String =  R.color.black.stringHexNoTransparency
     private var currentFont : String = EnumFont.roboto_regular.name
     private var currentBackgroundColor : String = Constant.defaultColor.hexColor
     private var currentText : String = ""

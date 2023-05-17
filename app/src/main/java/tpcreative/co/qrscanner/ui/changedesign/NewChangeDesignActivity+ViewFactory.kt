@@ -42,12 +42,12 @@ fun NewChangeDesignActivity.initUI(){
     binding.doneCancelBar.tvSave.setOnClickListener {
         val mHeight = viewModel.indexText.size * 150 + 1024
         val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,mHeight, Bitmap.Config.ARGB_8888)
-        val mUri = mBitmap.storeBitmap(viewModel.create.uuId?:"",EnumImage.QR_CODE).apply {
+        val mUri = mBitmap.storeBitmap(viewModel.uuId,EnumImage.QR_CODE).apply {
             if (viewModel.indexLogo.typeIcon == EnumTypeIcon.BITMAP){
-                viewModel.bitmap?.storeBitmap(viewModel.create.uuId?:"",EnumImage.LOGO)
+                viewModel.bitmap?.storeBitmap(viewModel.uuId,EnumImage.LOGO)
             }else{
                 /*Delete none icon*/
-                viewModel.create.uuId?.findImageName(EnumImage.LOGO)?.delete()
+                viewModel.uuId.findImageName(EnumImage.LOGO)?.delete()
             }
         }
         if (mUri != null) {

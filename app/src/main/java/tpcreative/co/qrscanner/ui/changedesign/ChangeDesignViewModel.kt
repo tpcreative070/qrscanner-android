@@ -35,7 +35,6 @@ import kotlin.collections.HashMap
 class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
     val TAG = this::class.java.name
     var mList: MutableList<ChangeDesignCategoryModel> = mutableListOf()
-    var create: GeneralModel = GeneralModel()
     var index  : Int = -1
 
     /*Logo area*/
@@ -72,10 +71,15 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
     var mBodyList  = mutableListOf<BodyModel>()
     lateinit var indexBody : BodyModel
 
+    lateinit var dataCode : String
+    lateinit var uuId : String
+
 
     fun getIntent(activity: Activity?, callback: (result: Boolean) -> Unit)  {
         val bundle: Bundle? = activity?.intent?.extras
         val action = activity?.intent?.action
+        dataCode = ""
+        uuId = ""
         if (action != Intent.ACTION_SEND ){
             Utils.Log(TAG,"type $bundle")
             val data  = activity?.intent?.serializable(
@@ -83,7 +87,8 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                     R.string.key_data), GeneralModel::class.java)
             if (data != null) {
                 Utils.Log(TAG,"Data intent ${data.toJson()}")
-                create = data
+                dataCode = data.code ?: ""
+                uuId = data.uuId ?: ""
                 indexLogo = defaultLogo()
                 indexColor = defaultColor()
                 val mDataStore = SQLiteHelper.getDesignQR(data.uuId)
@@ -106,7 +111,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                             isEmptyChangeDesignLogo = true
                         }
                         shape = mReview.logo?.enumShape ?: EnumShape.ORIGINAL
-                        bitmap = create.uuId?.findImageName(EnumImage.LOGO)?.toBitmap
+                        bitmap = data.uuId?.findImageName(EnumImage.LOGO)?.toBitmap
                         Utils.Log(TAG,"Data logo ${indexLogo.toJson()}")
 
                         /*Color area*/
@@ -164,7 +169,6 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                     isEmptyChangeDesignPositionMarker = false
                     isEmptyChangeDesignBody = false
                 }
-                Utils.Log(TAG,"Data change design ${create.toJson()}")
                 callback.invoke(true)
             }
             initializedLogoData()
@@ -188,6 +192,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         isEmptyChangeDesignLogo = true
         isEmptyChangeDesignPositionMarker = true
         isEmptyChangeDesignBody = true
+        dataCode = "QR"
         initializedLogoData()
         initializedColorData()
         initializedTextData()
@@ -382,8 +387,8 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
 
     private fun initializedTextData(){
         mTextList.clear()
-        mTextList.add(TextModel(EnumIcon.ic_qr_background,EnumImage.QR_TEXT_BOTTOM,EnumChangeDesignType.NORMAL,TextDataModel()))
-        mTextList.add(TextModel(EnumIcon.ic_qr_background,EnumImage.QR_TEXT_TOP,EnumChangeDesignType.NORMAL,TextDataModel()))
+        mTextList.add(TextModel(EnumIcon.ic_qr_text_bottom,EnumImage.QR_TEXT_BOTTOM,EnumChangeDesignType.NORMAL,TextDataModel()))
+        mTextList.add(TextModel(EnumIcon.ic_qr_text_top,EnumImage.QR_TEXT_TOP,EnumChangeDesignType.NORMAL,TextDataModel()))
     }
 
     private fun initializedPositionMarkerData(){
@@ -493,7 +498,8 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                 Utils.Log(TAG,"Nothing for icon")
             }
         }
-        val mData = QrData.Text(create.code?:"")
+        val mData = QrData.Text(dataCode?:"")
+        Utils.Log(TAG,"Data code $dataCode")
         val drawable : Drawable = QrCodeDrawable(mData, options.build(), Charsets.UTF_8)
         callback.invoke(drawable)
         return drawable
@@ -557,39 +563,6 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
        }
     }
 
-    fun selectedIndexRestore(){
-        val mData = ChangeDesignModel(changeDesignSave)
-        Utils.Log(TAG,"Show data restore ${mData.toJson()}")
-        mapSetView.forEach {
-            when(it){
-                EnumView.TEMPLATE ->{
-
-                }
-                EnumView.COLOR ->{
-                    val mHashMap = HashMap(mData.color?.mapColor ?: defaultColorMap())
-                    val mColor = mHashMap[enumType]
-                    mColor?.putChangedDesignColor
-                    changeDesignReview.color?.mapColor = mHashMap
-                    indexColor.mapColor = mHashMap
-                }
-                EnumView.BODY ->{
-
-                }
-                EnumView.POSITION_MARKER->{
-
-                }
-                EnumView.LOGO ->{
-                    changeDesignReview = mData
-                    indexLogo = mData.logo ?: defaultLogo()
-                }
-                EnumView.TEXT ->{
-
-                }
-                else -> {}
-            }
-        }
-    }
-
     fun selectedIndexOnSave(){
         mapSetView.forEach {
             when(it){
@@ -640,7 +613,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
 
     fun onSaveToDB(){
         val mData =  DesignQRModel()
-        mData.uuIdQR = create.uuId
+        mData.uuIdQR = uuId
         mData.codeDesign = changeDesignSave.toJson()
         Utils.Log(TAG,"Preparing data store into db ${changeDesignSave.toJson()}")
         Utils.Log(TAG,"Preparing data model store ${mData.toJson()}")

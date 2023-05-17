@@ -127,7 +127,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 Utils.Log(TAG,"Data list ${items.toJson()}")
                 val mData = selectedSetLogo.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
-                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId))
                 }else{
                     changeLogoItem(position)
                 }
@@ -147,7 +147,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 val mResultSelected = selectedSetColor.first()
                 if (viewModel.isAllowNavigation(mResultSelected)){
                     viewModel.enumType = mResultSelected.type
-                    popupForResult.launch(  Navigator.onPopupView(this@NewChangeDesignActivity,viewModel.indexColor.mapColor,viewModel.enumType,PopupColorActivity::class.java))
+                    popupForResult.launch(Navigator.onPopupView(this@NewChangeDesignActivity,viewModel.indexColor.mapColor,viewModel.enumType,PopupColorActivity::class.java))
                     overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
                     mResult = {
                         Utils.Log(TAG,"Result value color $it")
@@ -171,7 +171,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 val mapColor = viewModel.indexColor.mapColor
                 Utils.Log(TAG,"Index text ${viewModel.indexText.toJson()}")
                 textForResult.launch(Navigator.onChangeDesignText(this@NewChangeDesignActivity,
-                    ChangeDesignTextActivity::class.java,selectedSetText.firstOrNull()?.type ?: EnumImage.QR_TEXT_BOTTOM,mapColor,viewModel.indexText,viewModel.changeDesignReview))
+                    ChangeDesignTextActivity::class.java,selectedSetText.firstOrNull()?.type ?: EnumImage.QR_TEXT_BOTTOM,mapColor,viewModel.indexText,viewModel.changeDesignReview,viewModel.dataCode,viewModel.uuId))
                 overridePendingTransition(R.anim.slide_up,  R.anim.no_animation);
             }
         }))
@@ -189,7 +189,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 isNavigation = true
                 val mData = selectedSetPositionMarker.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
-                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId))
                 }else{
                     changePositionMarkerItem(position)
                 }
@@ -205,7 +205,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 isNavigation = true
                 val mData = selectedSetBody.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
-                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,))
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId))
                 }else{
                     changeBodyItem(position)
                 }
@@ -489,7 +489,7 @@ class NewChangeDesignActivity : BaseActivitySlide(){
 
     fun onGenerateQRReview(){
         viewModel.onGenerateQR {mData->
-            val mFile = viewModel.create.uuId?.findImageName(EnumImage.QR_CODE)
+            val mFile = viewModel.uuId.findImageName(EnumImage.QR_CODE)
             if (mFile!=null && viewModel.bitmap == null && !viewModel.isChangedReview()){
                 binding.imgQRCode.setImageURI(mFile.toUri())
                 Utils.Log(TAG,"No change review data")

@@ -65,6 +65,8 @@ class ConstantKey {
         const val KEY_COLOR = "key_color"
         const val KEY_FONT = "key_font"
         const val KEY_FONT_SIZE = "key_font_size"
+        const val KEY_DATA_CODE = "key_data_code"
+        const val KEY_DATA_UUID = "key_data_uuid"
 
         const val KEY_CHANGE_DESIGN_TEXT_ENUM_GROUP = "key_change_design_text_key_enum_group"
         const val KEY_CHANGE_DESIGN_TEXT_COLOR_LIST = "key_change_design_text_color_list"
