@@ -853,6 +853,12 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         else if (any is PositionMarkerModel){
             mData.positionMarker = any
         }
+        else if (any is HashMap<*, *>){
+            mData.text = any as HashMap<EnumImage, TextModel>
+        }
+        else if (any is TemplateModel){
+            return any.changeDesign
+        }
         return mData
     }
 

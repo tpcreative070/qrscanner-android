@@ -12,7 +12,7 @@ import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignViewModel
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
-class ChangeDesignTextViewModel(private val viewModel: ChangeDesignViewModel)  : BaseViewModel<ItemNavigation>() {
+class ChangeDesignTextViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<ItemNavigation>() {
 
     val TAG = this::class.java.simpleName
     var mapColor : HashMap<EnumImage,String> = hashMapOf()

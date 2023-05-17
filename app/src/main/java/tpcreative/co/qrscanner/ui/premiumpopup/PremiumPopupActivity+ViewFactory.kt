@@ -42,7 +42,12 @@ private fun PremiumPopupActivity.hiddenView(isShowAds : Boolean){
     if (viewModel.isBitMap()){
         binding.imgQRCode.visibility = View.GONE
         redesignLayout()
-    }else{
+    }
+    else if (viewModel.getText() !=null){
+        binding.imgQRCode.visibility = View.GONE
+        binding.tvOwnLogo.text = viewModel.getText()
+    }
+    else{
         binding.tvOwnLogo.visibility = View.GONE
     }
 }

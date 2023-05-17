@@ -1,5 +1,6 @@
 package tpcreative.co.qrscanner.ui.changedesigntext
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -7,6 +8,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
@@ -30,6 +33,7 @@ import tpcreative.co.qrscanner.common.view.CircleImageView
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignTextBinding
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
+import tpcreative.co.qrscanner.ui.premiumpopup.PremiumPopupActivity
 import vadiole.colorpicker.hexColor
 import vadiole.colorpicker.textInputAsFlow
 
@@ -52,6 +56,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
     private var mapFontSizeTag : HashMap<String,Int>  = hashMapOf()
     private val maxFontSize = 180
     lateinit var viewModel : ChangeDesignTextViewModel
+    private var isNavigation : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = Color.TRANSPARENT
@@ -305,18 +310,33 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                 include.visibility = View.GONE
             }
             xmlView.addCircleRipple()
-            xmlView.setOnClickListener {
-                Utils.Log(TAG,"Get position ${it.tag}")
-                mapFontTag[ConstantKey.KEY_FONT] = index
+            xmlView.setOnClickListener { it ->
                 val mObject = mFontList[it.tag as Int]
-                mObject.isSelected = !mObject.isSelected
-                currentFont = mObject.enumFont.name
-                lifecycleScope.launch(Dispatchers.IO){
-                    onDrawBitmap()
-                }
-
-                runOnUiThread {
-                    addChipFont()
+                if (mObject.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
+                    if (isNavigation){
+                        return@setOnClickListener
+                    }
+                    isNavigation = true
+                    val mIndex = HashMap<EnumImage,TextModel>()
+                    viewModel.mapText.forEach {
+                        mIndex.put(it.key,it.value)
+                    }
+                    mIndex.forEach {
+                        mIndex[it.key] = TextModel(it.value.enumIcon,it.value.type,it.value.enumChangeDesignType, TextDataModel(it.value.data.currentColor,mObject.enumFont.name,it.value.data.currentBackgroundColor,it.value.data.currentText, it.value.data.currentFontSize))
+                    }
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this,viewModel.viewModel.getChangeDataReviewToPremiumPopup(mIndex),viewModel.viewModel.shape,
+                        PremiumPopupActivity::class.java,viewModel.viewModel.dataCode,viewModel.viewModel.uuId))
+                }else{
+                    Utils.Log(TAG,"Get position ${it.tag}")
+                    mapFontTag[ConstantKey.KEY_FONT] = index
+                    mObject.isSelected = !mObject.isSelected
+                    currentFont = mObject.enumFont.name
+                    lifecycleScope.launch(Dispatchers.IO){
+                        onDrawBitmap()
+                    }
+                    runOnUiThread {
+                        addChipFont()
+                    }
                 }
             }
             binding.llGroup.addView(xmlView)
@@ -355,36 +375,51 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             tvFontSize.typeface = EnumFont.roboto_regular.font.typeface
             xmlView.addCircleRipple()
             xmlView.setOnClickListener {
-                Utils.Log(TAG,"Get position ${it.tag}")
-                mapFontSizeTag[ConstantKey.KEY_FONT_SIZE] = index
                 val mObject = mFontSizeList[it.tag as Int]
-                mObject.isSelected = !mObject.isSelected
-                mObject.let { mFont->
-                    when(mFont.enumFontSize) {
-                        EnumFontSize.FREEDOM_INCREASE ->{
-                            if (currentFontSize >= maxFontSize){
-                                return@setOnClickListener
+                if (mObject.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
+                    if (isNavigation){
+                        return@setOnClickListener
+                    }
+                    isNavigation = true
+                    val mIndex = HashMap<EnumImage,TextModel>()
+                    viewModel.mapText.forEach {
+                        mIndex.put(it.key,it.value)
+                    }
+                    mIndex.forEach {
+                        mIndex[it.key] = TextModel(it.value.enumIcon,it.value.type,it.value.enumChangeDesignType, TextDataModel(it.value.data.currentColor,mObject.enumFont.name,it.value.data.currentBackgroundColor,it.value.data.currentText, it.value.data.currentFontSize))
+                    }
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this,viewModel.viewModel.getChangeDataReviewToPremiumPopup(mIndex),viewModel.viewModel.shape,
+                        PremiumPopupActivity::class.java,viewModel.viewModel.dataCode,viewModel.viewModel.uuId,mObject.enumFontSize))
+                }else{
+                    mapFontSizeTag[ConstantKey.KEY_FONT_SIZE] = index
+                    mObject.isSelected = !mObject.isSelected
+                    mObject.let { mFont->
+                        when(mFont.enumFontSize) {
+                            EnumFontSize.FREEDOM_INCREASE ->{
+                                if (currentFontSize >= maxFontSize){
+                                    return@setOnClickListener
+                                }
+                                val mCount = currentFontSize + 5
+                                currentFontSize  = mCount
+                                Utils.Log(TAG,"Increase clicked $currentFontSize")
                             }
-                            val mCount = currentFontSize + 5
-                            currentFontSize  = mCount
-                            Utils.Log(TAG,"Increase clicked $currentFontSize")
-                        }
-                        EnumFontSize.FREEDOM_DECREASE ->{
-                            if (currentFontSize <= 70){
-                                return@setOnClickListener
-                            }
-                            val mCount = currentFontSize - 5
-                            currentFontSize  = mCount
-                            Utils.Log(TAG,"Decrease clicked $currentFontSize")
-                        }else ->{
+                            EnumFontSize.FREEDOM_DECREASE ->{
+                                if (currentFontSize <= 70){
+                                    return@setOnClickListener
+                                }
+                                val mCount = currentFontSize - 5
+                                currentFontSize  = mCount
+                                Utils.Log(TAG,"Decrease clicked $currentFontSize")
+                            }else ->{
                             currentFontSize = mFont.fontSize
                         }
-                    }
-                    lifecycleScope.launch(Dispatchers.IO){
-                        onDrawBitmap()
-                    }
-                    runOnUiThread {
-                        addChipFontSize()
+                        }
+                        lifecycleScope.launch(Dispatchers.IO){
+                            onDrawBitmap()
+                        }
+                        runOnUiThread {
+                            addChipFontSize()
+                        }
                     }
                 }
             }
@@ -428,11 +463,9 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         }
     }
 
-    private fun isAllow(): Boolean {
-        if (currentText.isEmpty() && viewModel.mapText.size<=1){
-            return false
-        }
-        return true
+    override fun onResume() {
+        super.onResume()
+        isNavigation = false
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -471,6 +504,12 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG,mapFontTag)
         outState.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG,mapFontSizeTag)
     }
+
+    private val premiumPopupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+        }
+    }
+
 
     companion object {
         var mRequestBitmap : (() -> Unit?)? = null

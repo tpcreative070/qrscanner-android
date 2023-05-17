@@ -567,4 +567,6 @@
     <string name="medium">Medium</string>
     <string name="large">Large</string>
     <string name="freedom">Freedom</string>
+    <string name="freedom_increase_font_size">Freedom increase font-size</string>
+    <string name="freedom_decrease_font_size">Freedom decrease font-size</string>
 </resources>
