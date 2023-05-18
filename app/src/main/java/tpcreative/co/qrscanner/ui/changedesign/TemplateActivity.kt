@@ -46,6 +46,10 @@ class TemplateActivity  : BaseActivity(), TemplateAdapter.ItemSelectedListener{
         isNavigation = false
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Utils.setReloadTemplate(true)
+    }
 
     private val premiumPopupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {

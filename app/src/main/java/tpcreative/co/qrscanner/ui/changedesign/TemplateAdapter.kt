@@ -183,6 +183,10 @@ class TemplateAdapter (inflater: LayoutInflater,val loadedSet: MutableSet<String
     private fun delete(id : String){
         if (BuildConfig.DEBUG){
             id.findImageName(EnumImage.QR_TEMPLATE)?.delete()
+        }else{
+            if (!Utils.isReloadTemplate()){
+                id.findImageName(EnumImage.QR_TEMPLATE)?.delete()
+            }
         }
     }
 }

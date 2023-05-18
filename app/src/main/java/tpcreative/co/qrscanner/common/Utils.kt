@@ -203,6 +203,14 @@ object Utils {
         PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), code)
     }
 
+    fun isReloadTemplate() : Boolean {
+        return PrefsController.getBoolean(R.string.key_reload_template.toText(), false)
+    }
+
+    fun setReloadTemplate(value :Boolean){
+        PrefsController.putBoolean(R.string.key_reload_template.toText(), value)
+    }
+
     fun setCurrentListThemeColor(value :  MutableList<Theme>){
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list), Gson().toJson(value))
     }
@@ -222,6 +230,17 @@ object Utils {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun isNewVersion() : Boolean{
+        val currentCodeVersion: Int = getCurrentCodeVersion()
+        return if (currentCodeVersion == BuildConfig.VERSION_CODE) {
+            Log(TAG, "Already install this version")
+            false
+        } else {
+            Log(TAG, "New install this version")
+            true
         }
     }
 

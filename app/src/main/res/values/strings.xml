@@ -172,6 +172,7 @@
     <string name="key_popup_color_color_preference">key_popup_color_color_preference</string>
     <string name="key_clicked_change_design_review">key_clicked_change_design_review</string>
     <string name="key_clicked_change_design_scanner_result">key_clicked_change_design_scanner_result</string>
+    <string name="key_reload_template">key_reload_template</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>

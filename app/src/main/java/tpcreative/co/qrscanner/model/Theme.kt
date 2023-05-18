@@ -78,6 +78,7 @@ class Theme : Serializable {
                 Utils.setCurrentListThemeColor(mList)
                 Utils.setCurrentCodeVersion(BuildConfig.VERSION_CODE)
                 Utils.setMillisecondsUpdatedApp(System.currentTimeMillis())
+                Utils.setReloadTemplate(false)
                 Utils.Log(TAG, "New install this version")
                 mList
             }
