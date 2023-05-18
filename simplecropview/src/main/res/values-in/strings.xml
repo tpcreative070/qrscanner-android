@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="scanner_workload">Beban kerja pemindai:</string>
+    <string name="ideal_for">Ideal untuk</string>
+    <string name="barcodes">barcodes.</string>
+    <string name="zoom_is_adjusted">Zoom disesuaikan dengan slider bawah.</string>
+    <string name="do_not_hold_the_device">Jangan pegang perangkat terlalu dekat dengan kode.</string>
+    <string name="workload">beban kerja</string>
+    <string name="workload_too_long">beban kerja terlalu lama</string>
+    <string name="too_long">terlalu panjang</string>
+    <string name="workload_rectangle">persegi panjang beban kerja</string>
+    <string name="rectangle">persegi panjang</string>
+    <string name="workload_tiny">beban kerja kecil</string>
+    <string name="small_sized">berukuran kecil</string>
+    <string name="medium_sized">ukuran sedang</string>
+    <string name="workload_medium">media beban kerja</string>
+    <string name="complex_large">kompleks, besar</string>
+</resources>

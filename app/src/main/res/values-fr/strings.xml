@@ -380,4 +380,24 @@
     <string name="opacity">Opacité</string>
     <string name="body">Corps</string>
     <string name="position_marker">Marqueur de position</string>
+    <string name="unlock_design">Déverrouiller la conception</string>
+    <string name="unlock_all_features_and_remove_ads">Débloquez toutes les fonctionnalités et supprimez les publicités.</string>
+    <string name="watch_item_ads">Regarder %1$s annonces</string>
+    <string name="unlock_for_free">Débloquez gratuitement :</string>
+    <string name="add_your_own_logo">Ajoutez votre propre logo (Photo)</string>
+    <string name="grid">Grille</string>
+    <string name="slider">Glissière</string>
+    <string name="font">Police de caractère</string>
+    <string name="enter_a_text">Saisir un texte</string>
+    <string name="font_size">Taille de police</string>
+    <string name="size">Taille</string>
+    <string name="small">Petite</string>
+    <string name="medium">Moyen</string>
+    <string name="large">Grande</string>
+    <string name="freedom">Liberté</string>
+    <string name="freedom_increase_font_size">Liberté d\'augmenter la taille de la police</string>
+    <string name="freedom_decrease_font_size">Liberté de diminuer la taille de la police</string>
+    <string name="click_to_change_design_qr_code">Cliquez pour changer le code QR de conception</string>
+    <string name="click_to_change_the_logo_shape">Cliquez pour changer la forme du logo</string>
+    <string name="click_to_view_code">Cliquez pour voir le code</string>
 </resources>

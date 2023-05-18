@@ -189,7 +189,7 @@
     <string name="tap_here_to_discover_how_to_scan_description">এই টিপগুলি আপনাকে এই অ্যাপটি আরও দক্ষতার সাথে ব্যবহার করতে সহায়তা করবে।</string>
     <string name="warning_fake_checkout">অসুবিধার জন্য দুঃখিত। এটি মনে হচ্ছে নকল অর্ডার। care@tpcreative.co এর মাধ্যমে আমাদের সাথে যোগাযোগ করুন।</string>
     <string name="cancel">বাতিল করুন</string>
-    <string name="importing">আমদানি করা হচ্ছে...</string>
+    <string name="importing">আমদানি করা হচ্ছে…</string>
     <string name="no_items_found">কোন আইটেম পাওয়া যায় নি</string>
     <string name="scan_code_via_Camera">ক্যামেরা দ্বারা বারকোড এবং কিউআরকোড স্ক্যান করুন।</string>
     <string name="scan_code_via_Gallery">গ্যালারি থেকে বারকোড এবং কিউআর কোড স্ক্যান করুন।</string>
@@ -344,4 +344,24 @@
     <string name="opacity">অস্বচ্ছতা</string>
     <string name="body">শরীর</string>
     <string name="position_marker">অবস্থান মার্কার</string>
+    <string name="unlock_design">আনলক ডিজাইন</string>
+    <string name="unlock_all_features_and_remove_ads">সমস্ত বৈশিষ্ট্য আনলক এবং বিজ্ঞাপন সরান.</string>
+    <string name="watch_item_ads">%1$s বিজ্ঞাপন দেখুন</string>
+    <string name="unlock_for_free">বিনামূল্যে আনলক করুন:</string>
+    <string name="add_your_own_logo">আপনার নিজস্ব লোগো যোগ করুন (ছবি)</string>
+    <string name="grid">গ্রিড</string>
+    <string name="slider">স্লাইডার</string>
+    <string name="font">হরফ</string>
+    <string name="enter_a_text">একটি টেক্সট লিখুন</string>
+    <string name="font_size">অক্ষরের আকার</string>
+    <string name="size">আকার</string>
+    <string name="small">ছোট</string>
+    <string name="medium">মধ্যম</string>
+    <string name="large">বড়</string>
+    <string name="freedom">স্বাধীনতা</string>
+    <string name="freedom_increase_font_size">স্বাধীনতা ফন্ট সাইজ বৃদ্ধি</string>
+    <string name="freedom_decrease_font_size">স্বাধীনতা ফন্ট সাইজ হ্রাস</string>
+    <string name="click_to_change_design_qr_code">নকশা QR কোড পরিবর্তন করতে ক্লিক করুন</string>
+    <string name="click_to_change_the_logo_shape">লোগো আকৃতি পরিবর্তন করতে ক্লিক করুন</string>
+    <string name="click_to_view_code">কোড দেখতে ক্লিক করুন</string>
 </resources>

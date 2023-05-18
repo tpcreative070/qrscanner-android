@@ -29,7 +29,7 @@ fun PremiumPopupActivity.initUI(){
     viewModel.getIntent(this){
         binding.imgQRCode.setImageBitmap(it)
     }
-    hiddenView(false)
+    hiddenView(true)
 }
 
 private fun PremiumPopupActivity.hiddenView(isShowAds : Boolean){
@@ -46,6 +46,7 @@ private fun PremiumPopupActivity.hiddenView(isShowAds : Boolean){
     else if (viewModel.getText() !=null){
         binding.imgQRCode.visibility = View.GONE
         binding.tvOwnLogo.text = viewModel.getText()
+        redesignLayout()
     }
     else{
         binding.tvOwnLogo.visibility = View.GONE

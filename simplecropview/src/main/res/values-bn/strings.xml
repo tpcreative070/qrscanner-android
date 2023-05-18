@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="scanner_workload">স্ক্যানার কাজের চাপ:</string>
+    <string name="ideal_for">জন্য আদর্শ</string>
+    <string name="barcodes">barcodes.</string>
+    <string name="zoom_is_adjusted">জুম স্লাইডার নীচের সঙ্গে সমন্বয় করা হয়.</string>
+    <string name="do_not_hold_the_device">ডিভাইসটিকে কোডের খুব কাছাকাছি রাখবেন না।</string>
+    <string name="workload">কাজের চাপ</string>
+    <string name="workload_too_long">কাজের চাপ খুব দীর্ঘ</string>
+    <string name="too_long">অতিদীর্ঘ</string>
+    <string name="workload_rectangle">কাজের চাপ আয়তক্ষেত্র</string>
+    <string name="rectangle">আয়তক্ষেত্র</string>
+    <string name="workload_tiny">কাজের চাপ ক্ষুদ্র</string>
+    <string name="small_sized">ছোট আকারের</string>
+    <string name="medium_sized">মধ্যম আকার</string>
+    <string name="workload_medium">কাজের চাপের মাধ্যম</string>
+    <string name="complex_large">জটিল, বড়</string>
+</resources>

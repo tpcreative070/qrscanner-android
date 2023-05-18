@@ -23,10 +23,10 @@ class PremiumPopupActivity : BaseActivity() {
     }
 
     fun redesignLayout(){
-        if (viewModel.isBitMap()){
+        if (viewModel.isBitMap() || viewModel.getText() !=null){
             val params = RelativeLayout.LayoutParams(
                 400f.px,
-                320f.px
+                300f.px
             ).apply {
                 topMargin = 20
                 marginEnd = 20

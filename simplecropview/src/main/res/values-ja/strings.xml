@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="scanner_workload">スキャナーのワークロード:</string>
+    <string name="ideal_for">理想的な</string>
+    <string name="barcodes">barcodes.</string>
+    <string name="zoom_is_adjusted">ズームはスライダー下部で調整します。</string>
+    <string name="do_not_hold_the_device">デバイスをコードに近づけすぎないでください。</string>
+    <string name="workload">仕事量</string>
+    <string name="workload_too_long">workload too long</string>
+    <string name="too_long">長すぎる</string>
+    <string name="workload_rectangle">ワークロードの四角形</string>
+    <string name="rectangle">矩形</string>
+    <string name="workload_tiny">ワークロードが小さい</string>
+    <string name="small_sized">小型の</string>
+    <string name="medium_sized">中型</string>
+    <string name="workload_medium">ワークロード中</string>
+    <string name="complex_large">複雑な、大きい</string>
+</resources>

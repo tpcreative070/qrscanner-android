@@ -252,7 +252,7 @@
     <string name="smart_export_csv">スマートに列を検出：CSVへのエクスポート</string>
     <string name="upgrade_to_pro_version">プロバージョンにアップグレード</string>
     <string name="pro_version">プロバージョン</string>
-    <string name="loading">読み込み中...</string>
+    <string name="loading">読み込み中…</string>
     <string name="SeeYouSoon">またね！</string>
     <string name="alert">アラート</string>
     <string name="found_items_duplicates">%1$s個のアイテムが見つかりました。削除しますか？</string>
@@ -261,7 +261,7 @@
     <string name="synced_data"><![CDATA[<b>保存されたシンク: <font color=#e19704>%1$s</font></b><br\>]]> <![CDATA[<b>履歴のシンク: <font color=#e19704>%2$s</font></b>]]></string>
     <string name="synced_innovation_data"><![CDATA[<b>履歴のシンク: <font color=#e19704>%1$s</font></b>]]></string>
     <string name="synced_data_last_time_updated"><![CDATA[<b>最後に更新された時間: <font color=#757575>%1$s</font>]]></string>
-    <string name="syncing_data">データ同期中...</string>
+    <string name="syncing_data">データ同期中…</string>
     <string name="enable_sync_data">同期データを有効にする</string>
     <string name="switch_account">アカウントを切り替える</string>
     <string name="selected">選択された</string>
@@ -387,4 +387,24 @@
     <string name="opacity">不透明度</string>
     <string name="body">ボディ</string>
     <string name="position_marker">位置マーカー</string>
+    <string name="unlock_design">デザインのロックを解除する</string>
+    <string name="unlock_all_features_and_remove_ads">すべての機能のロックを解除し、広告を削除します。</string>
+    <string name="watch_item_ads">%1$s の広告を見る</string>
+    <string name="unlock_for_free">無料でロックを解除:</string>
+    <string name="add_your_own_logo">独自のロゴを追加します(写真)</string>
+    <string name="grid">グリッド</string>
+    <string name="slider">スライダー</string>
+    <string name="font">フォント</string>
+    <string name="enter_a_text">テキストを入力してください</string>
+    <string name="font_size">フォントサイズ</string>
+    <string name="size">サイズ</string>
+    <string name="small">小さい</string>
+    <string name="medium">中くらい</string>
+    <string name="large">大きい</string>
+    <string name="freedom">フリーダム</string>
+    <string name="freedom_increase_font_size">フォントサイズを自由に大きくできる</string>
+    <string name="freedom_decrease_font_size">フォントサイズを自由に小さくできる</string>
+    <string name="click_to_change_design_qr_code">クリックするとQRコードのデザインが変更されます</string>
+    <string name="click_to_change_the_logo_shape">クリックしてロゴの形状を変更します</string>
+    <string name="click_to_view_code">クリックしてコードを表示します</string>
 </resources>

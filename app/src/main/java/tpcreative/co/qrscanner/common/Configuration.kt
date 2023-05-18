@@ -55,8 +55,8 @@ class Configuration {
         const val hiddenScannerResultLargeAds = false
         const val hiddenReviewSmallAds = false
         const val hiddenReviewLargeAds = false
-        const val hiddenRemoveSmallAds = false
-        const val hiddenRemoveLargeAds = false
+        const val hiddenRemoveSmallAds = true
+        const val hiddenRemoveLargeAds = true
 
         const val hiddenFreeReleaseAds = false
         const val hiddenFreeInnovationAds = false

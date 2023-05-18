@@ -378,4 +378,24 @@
     <string name="opacity">Độ mờ</string>
     <string name="body">Body</string>
     <string name="position_marker">Position Marker</string>
+    <string name="unlock_design">Mở khoá</string>
+    <string name="unlock_all_features_and_remove_ads">Mở khóa tất cả các tính năng và loại bỏ quảng cáo.</string>
+    <string name="watch_item_ads">Xem quảng cáo %1$s</string>
+    <string name="unlock_for_free">Mở khóa miễn phí:</string>
+    <string name="add_your_own_logo">Thêm logo của riêng bạn (Ảnh)</string>
+    <string name="grid">Lưới</string>
+    <string name="slider">Thanh trượt</string>
+    <string name="font">Nét chữ</string>
+    <string name="enter_a_text">Nhập văn bản</string>
+    <string name="font_size">Cỡ chữ</string>
+    <string name="size">Kích cỡ</string>
+    <string name="small">Bé nhỏ</string>
+    <string name="medium">Trung bình</string>
+    <string name="large">Lớn</string>
+    <string name="freedom">Tự do</string>
+    <string name="freedom_increase_font_size">Tự do tăng cỡ chữ</string>
+    <string name="freedom_decrease_font_size">Tự do giảm cỡ chữ</string>
+    <string name="click_to_change_design_qr_code">Nhấp để thay đổi mã QR Code thiết kế</string>
+    <string name="click_to_change_the_logo_shape">Nhấp để thay đổi hình dạng logo</string>
+    <string name="click_to_view_code">Nhấp để xem mã</string>
 </resources>

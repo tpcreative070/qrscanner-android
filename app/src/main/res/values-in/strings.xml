@@ -385,4 +385,24 @@
     <string name="opacity">Keburaman</string>
     <string name="body">Tubuh</string>
     <string name="position_marker">Tanda Posisi</string>
+    <string name="unlock_design">Desain buka kunci</string>
+    <string name="unlock_all_features_and_remove_ads">Buka kunci semua fitur dan hapus iklan.</string>
+    <string name="watch_item_ads">Tonton %1$s iklan</string>
+    <string name="unlock_for_free">Buka kunci gratis:</string>
+    <string name="add_your_own_logo">Tambahkan logo Anda sendiri (Foto)</string>
+    <string name="grid">Kotak</string>
+    <string name="slider">Penggeser</string>
+    <string name="font">Fon</string>
+    <string name="enter_a_text">Masukkan teks</string>
+    <string name="font_size">Ukuran huruf</string>
+    <string name="size">Ukuran</string>
+    <string name="small">Kecil</string>
+    <string name="medium">Sedang</string>
+    <string name="large">Besar</string>
+    <string name="freedom">Kebebasan</string>
+    <string name="freedom_increase_font_size">Kebebasan untuk meningkatkan ukuran font</string>
+    <string name="freedom_decrease_font_size">Kebebasan untuk mengurangi ukuran font</string>
+    <string name="click_to_change_design_qr_code">Klik untuk mengubah kode QR desain</string>
+    <string name="click_to_change_the_logo_shape">Klik untuk mengubah bentuk logo</string>
+    <string name="click_to_view_code">Klik untuk melihat kode</string>
 </resources>

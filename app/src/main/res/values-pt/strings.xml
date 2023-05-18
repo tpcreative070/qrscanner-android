@@ -381,4 +381,24 @@
     <string name="opacity">Opacidade</string>
     <string name="body">Corpo</string>
     <string name="position_marker">Marcador de posição</string>
+    <string name="unlock_design">Desbloquear design</string>
+    <string name="unlock_all_features_and_remove_ads">Desbloqueie todos os recursos e remova os anúncios.</string>
+    <string name="watch_item_ads">Assistir %1$s anúncios</string>
+    <string name="unlock_for_free">Desbloqueie gratuitamente:</string>
+    <string name="add_your_own_logo">Adicione seu próprio logotipo (foto)</string>
+    <string name="grid">Grade</string>
+    <string name="slider">Controle deslizante</string>
+    <string name="font">Fonte</string>
+    <string name="enter_a_text">Digite um texto</string>
+    <string name="font_size">Tamanho da fonte</string>
+    <string name="size">Tamanho</string>
+    <string name="small">Small</string>
+    <string name="medium">Média</string>
+    <string name="large">Grande</string>
+    <string name="freedom">Liberdade</string>
+    <string name="freedom_increase_font_size">Liberdade para aumentar o tamanho da fonte</string>
+    <string name="freedom_decrease_font_size">Liberdade para diminuir o tamanho da fonte</string>
+    <string name="click_to_change_design_qr_code">Clique para alterar o design QR Code</string>
+    <string name="click_to_change_the_logo_shape">Clique para alterar a forma do logotipo</string>
+    <string name="click_to_view_code">Clique para ver o código</string>
 </resources>

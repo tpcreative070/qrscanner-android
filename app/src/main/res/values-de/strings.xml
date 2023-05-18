@@ -381,4 +381,24 @@
     <string name="opacity">Opazität</string>
     <string name="body">Inhalt</string>
     <string name="position_marker">Positionsmarkierung</string>
+    <string name="unlock_design">Design freischalten</string>
+    <string name="unlock_all_features_and_remove_ads">Schalten Sie alle Funktionen frei und entfernen Sie Werbung.</string>
+    <string name="watch_item_ads">Sehen Sie sich %1$s Anzeigen an</string>
+    <string name="unlock_for_free">Kostenlos freischalten:</string>
+    <string name="add_your_own_logo">Fügen Sie Ihr eigenes Logo hinzu (Foto)</string>
+    <string name="grid">Netz</string>
+    <string name="slider">Schieberegler</string>
+    <string name="font">Schriftart</string>
+    <string name="enter_a_text">Geben Sie einen Text ein</string>
+    <string name="font_size">Schriftgröße</string>
+    <string name="size">Größe</string>
+    <string name="small">Klein</string>
+    <string name="medium">Mittel</string>
+    <string name="large">Groß</string>
+    <string name="freedom">Freiheit</string>
+    <string name="freedom_increase_font_size">Freiheit, Schriftgröße erhöhen</string>
+    <string name="freedom_decrease_font_size">Freiheit, die Schriftgröße zu verringern</string>
+    <string name="click_to_change_design_qr_code">Klicken Sie hier, um den Design-QR-Code zu ändern</string>
+    <string name="click_to_change_the_logo_shape">Klicken Sie, um die Logoform zu ändern</string>
+    <string name="click_to_view_code">Klicken Sie hier, um den Code anzuzeigen</string>
 </resources>
