@@ -7,21 +7,26 @@ import android.graphics.*
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.Style
 import android.graphics.Shader.TileMode.REPEAT
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT
 import android.graphics.drawable.RippleDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import vadiole.colorpicker.ColorModel.GradientBackground.*
+
 
 @SuppressLint("ViewConstructor")
 internal class ChannelView(
@@ -170,8 +175,16 @@ internal class ChannelView(
                 }
             )
         }
+        seekbar?.thumb?.setColorFilter(Color.parseColor("#e19704"))
     }
 
+    fun Drawable.setColorFilter(@ColorInt color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            this.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+        } else {
+            this.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        }
+    }
     fun setTintHSV(hue: Int, saturation: Int, value: Int) {
         if (channel.background == SATURATION || channel.background == VALUE) {
             if (saturation > 0) lastSaturation = saturation / 100f
