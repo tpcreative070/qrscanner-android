@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.print.PrintHelper
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
@@ -29,6 +30,8 @@ import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
+import tpcreative.co.qrscanner.common.view.showcase.BubbleShowCase
+import tpcreative.co.qrscanner.common.view.showcase.BubbleShowCaseBuilder
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import java.io.File
@@ -62,6 +65,7 @@ fun ReviewActivity.initUI(){
         }
     }
     onHandlerIntent()
+    onShowGuide(binding.llChangeDesign,EnumActivity.REVIEW_ACTIVITY)
 }
 
 fun ReviewActivity.loadAds(){

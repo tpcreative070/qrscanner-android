@@ -852,6 +852,23 @@ object Utils {
     fun isRealCheckedOut(orderId: String?): Boolean {
         return orderId?.contains("GPA") == true
     }
+    
+    fun isShowGuideReview() : Boolean{
+        return PrefsController.getBoolean(R.string.key_clicked_change_design_review.toText(),false)
+    }
+
+    fun putShowGuideReview(value : Boolean){
+        PrefsController.putBoolean(R.string.key_clicked_change_design_review.toText(),value)
+    }
+
+    fun isShowGuideScannerResult() : Boolean{
+        return PrefsController.getBoolean(R.string.key_clicked_change_design_scanner_result.toText(),false)
+    }
+
+    fun putShowGuideScannerResult(value : Boolean){
+        PrefsController.putBoolean(R.string.key_clicked_change_design_scanner_result.toText(),value)
+    }
+
 
     fun getPositionTheme(): Int {
         return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_position_theme), 0)

@@ -794,7 +794,8 @@
         <item>@color/deep_orange_500</item>
     </array>
 
-
+    <color name="transparent_grey">#77000000</color>
+    <color name="blue_default">#3F51B5</color>
     <color name="gray">#eeeeeeee</color>
     <color name="overlay_popup">#45000000</color>
     <color name="bg_popup">#f5f5f5</color>
