@@ -173,6 +173,7 @@
     <string name="key_clicked_change_design_review">key_clicked_change_design_review</string>
     <string name="key_clicked_change_design_scanner_result">key_clicked_change_design_scanner_result</string>
     <string name="key_reload_template">key_reload_template</string>
+    <string name="key_clicked_change_design_icon">key_clicked_change_design_icon</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -573,4 +574,6 @@
     <string name="freedom_increase_font_size">Freedom increase font-size</string>
     <string name="freedom_decrease_font_size">Freedom decrease font-size</string>
     <string name="click_to_change_design_qr_code">Click to change the design QR Code</string>
+    <string name="click_to_change_the_logo_shape">Click to change the logo shape</string>
+    <string name="click_to_view_code">Click to view code</string>
 </resources>

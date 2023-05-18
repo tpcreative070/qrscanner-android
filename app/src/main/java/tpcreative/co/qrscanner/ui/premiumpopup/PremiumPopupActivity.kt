@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivity
 import tpcreative.co.qrscanner.common.extension.px
 import tpcreative.co.qrscanner.databinding.ActivityPremiumPopupBinding
@@ -34,6 +35,13 @@ class PremiumPopupActivity : BaseActivity() {
                 addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
             }
             binding.rlRoot.layoutParams = params
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Utils.isPremium()){
+            finish()
         }
     }
 }

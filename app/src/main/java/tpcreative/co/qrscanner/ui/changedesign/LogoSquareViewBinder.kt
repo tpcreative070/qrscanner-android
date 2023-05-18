@@ -41,7 +41,7 @@ class LogoSquareViewBinder(val selectedSet: MutableSet<LogoModel>,val context : 
   }
 
   override fun onBindViewHolder(holder: ViewHolder, item: LogoModel) {
-    if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL){
+    if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL || Utils.isPremium()){
       holder.square = item
       holder.squareView.setImageDrawable(ContextCompat.getDrawable(context,item.enumIcon.icon))
       try {

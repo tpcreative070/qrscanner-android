@@ -44,7 +44,11 @@ class TemplateAdapter (inflater: LayoutInflater,val loadedSet: MutableSet<String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder<TemplateModel> {
         if (VIP == viewType){
-            return  ItemHolderStandardVip(inflater!!.inflate(R.layout.template_item_vip, parent, false))
+            return if (Utils.isPremium()){
+                ItemHolderStandard(inflater!!.inflate(R.layout.template_item, parent, false))
+            }else{
+                ItemHolderStandardVip(inflater!!.inflate(R.layout.template_item_vip, parent, false))
+            }
         }else if (NORMAL == viewType){
             return ItemHolderStandard(inflater!!.inflate(R.layout.template_item, parent, false))
         }

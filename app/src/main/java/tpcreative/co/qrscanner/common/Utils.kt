@@ -880,6 +880,14 @@ object Utils {
         PrefsController.putBoolean(R.string.key_clicked_change_design_review.toText(),value)
     }
 
+    fun isShowChangeDesignIcon() : Boolean{
+        return PrefsController.getBoolean(R.string.key_clicked_change_design_icon.toText(),false)
+    }
+
+    fun putShowChangeDesignIcon(value : Boolean){
+        PrefsController.putBoolean(R.string.key_clicked_change_design_icon.toText(),value)
+    }
+
     fun isShowGuideScannerResult() : Boolean{
         return PrefsController.getBoolean(R.string.key_clicked_change_design_scanner_result.toText(),false)
     }

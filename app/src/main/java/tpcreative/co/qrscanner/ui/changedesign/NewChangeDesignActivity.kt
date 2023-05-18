@@ -24,6 +24,7 @@ import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivitySlide
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.view.crop.Crop
+import tpcreative.co.qrscanner.common.view.showcase.BubbleShowCase
 import tpcreative.co.qrscanner.databinding.ActivityNewChangeDesignBinding
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesigntext.ChangeDesignTextActivity
@@ -145,6 +146,9 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 Utils.Log(TAG,"Color current ${viewModel.indexColor.toJson()}")
                 Utils.Log(TAG,"Clicked position $position")
                 val mResultSelected = selectedSetColor.first()
+                if (mResultSelected.type == EnumImage.QR_BACKGROUND_ICON){
+                    onShowGuide(binding.imgQRCode,R.string.click_to_change_the_logo_shape.toText(),EnumActivity.CHANGE_DESIGN,R.drawable.ic_skype_template,BubbleShowCase.ArrowPosition.TOP)
+                }
                 if (viewModel.isAllowNavigation(mResultSelected)){
                     viewModel.enumType = mResultSelected.type
                     popupForResult.launch(Navigator.onPopupView(this@NewChangeDesignActivity,viewModel.indexColor.mapColor,viewModel.enumType,PopupColorActivity::class.java))

@@ -12,6 +12,7 @@ import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
+import tpcreative.co.qrscanner.model.EnumActivity
 import tpcreative.co.qrscanner.model.EnumImage
 import tpcreative.co.qrscanner.model.EnumTypeIcon
 

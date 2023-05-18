@@ -28,6 +28,7 @@ import co.tpcreative.supersafe.common.adapter.BaseHolder
 import com.drakeet.multitype.ItemViewBinder
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
+import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.icon
 import tpcreative.co.qrscanner.common.extension.toColorIntThrowDefaultColor
 import tpcreative.co.qrscanner.common.view.MyDrawableCompat
@@ -41,7 +42,7 @@ class PositionMarkerSquareViewBinder(val selectedSet: MutableSet<PositionMarkerM
   }
 
   override fun onBindViewHolder(holder: ViewHolder, item: PositionMarkerModel) {
-    if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL){
+    if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL || Utils.isPremium()){
       holder.square = item
       holder.squareView.setImageDrawable(ContextCompat.getDrawable(context,item.enumIcon.icon))
       MyDrawableCompat.setColorFilter(holder.squareView.drawable,item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor)

@@ -306,7 +306,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             }
             tvFont.text = s.fontName
             tvFont.typeface = s.enumFont.font.typeface
-            if (s.enumChangeDesignType != EnumChangeDesignType.VIP){
+            if (s.enumChangeDesignType != EnumChangeDesignType.VIP || Utils.isPremium()){
                 include.visibility = View.GONE
             }
             xmlView.addCircleRipple()
@@ -358,7 +358,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                 tvFontSize.background  = null
             }
             tvFontSize.text = s.name
-            if (s.enumChangeDesignType != EnumChangeDesignType.VIP){
+            if (s.enumChangeDesignType != EnumChangeDesignType.VIP || Utils.isPremium()){
                 include.visibility = View.GONE
             }
             when(s.enumFontSize){

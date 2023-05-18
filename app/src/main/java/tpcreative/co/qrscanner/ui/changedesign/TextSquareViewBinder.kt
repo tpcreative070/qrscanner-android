@@ -47,18 +47,12 @@ class TextSquareViewBinder(val selectedSet: MutableSet<TextModel>, val context :
 
   override fun onBindViewHolder(holder: ViewHolder, item: TextModel) {
     holder.square = item
-    if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL) {
+    if (item.enumChangeDesignType == EnumChangeDesignType.NORMAL || Utils.isPremium()) {
       holder.squareView.setImageDrawable(ContextCompat.getDrawable(context, item.enumIcon.icon))
-//      val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
-//      Utils.Log("TAG", "Color result hex $mHex")
-//      MyDrawableCompat.setColorFilter(holder.squareView.drawable, mHex)
       holder.layoutVip.visibility = View.GONE
       holder.layoutNormal.visibility = View.VISIBLE
     }else{
       holder.squareVipView.setImageDrawable(ContextCompat.getDrawable(context, item.enumIcon.icon))
-//      val mHex = item.tintColorHex?.toColorIntThrowDefaultColor() ?: Constant.defaultColor
-//      Utils.Log("TAG", "Color result hex $mHex")
-//      MyDrawableCompat.setColorFilter(holder.squareVipView.drawable, mHex)
       holder.imgCircleCodeStatus.setImageResource(R.color.black)
       holder.layoutVip.visibility = View.VISIBLE
       holder.layoutNormal.visibility = View.GONE
