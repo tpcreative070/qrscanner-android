@@ -24,6 +24,7 @@ class HelpActivity : BaseActivitySlide(), HelpAdapter.ItemSelectedListener {
         super.onCreate(savedInstanceState)
         binding = ActivityHelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.HELP_FEEDBACK_SMALL,this)
         initUI()
     }
 

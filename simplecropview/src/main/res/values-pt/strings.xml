@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="scanner_workload">Carga de trabalho do scanner:</string>
+    <string name="ideal_for">Ideal para</string>
+    <string name="barcodes">barcodes.</string>
+    <string name="zoom_is_adjusted">O zoom é ajustado com a parte inferior do controle deslizante.</string>
+    <string name="do_not_hold_the_device">Não segure o dispositivo muito perto do código.</string>
+    <string name="workload">carga de trabalho</string>
+    <string name="workload_too_long">carga de trabalho muito longa</string>
+    <string name="too_long">demasiado longo</string>
+    <string name="workload_rectangle">retângulo de carga de trabalho</string>
+    <string name="rectangle">retângulo</string>
+    <string name="workload_tiny">carga de trabalho minúscula</string>
+    <string name="small_sized">pequeno porte</string>
+    <string name="medium_sized">tamanho médio</string>
+    <string name="workload_medium">meio de carga de trabalho</string>
+    <string name="complex_large">complexo, grande</string>
+</resources>

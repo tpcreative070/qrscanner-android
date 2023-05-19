@@ -1,11 +1,19 @@
 package tpcreative.co.qrscanner.common.extension
 
 import android.content.Context
+import android.graphics.Color
 import android.view.Surface
 import android.view.WindowManager
+import androidx.core.graphics.toColorInt
 import com.google.gson.Gson
+import tpcreative.co.qrscanner.R
+import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.services.QRScannerApplication
+import tpcreative.co.qrscanner.model.EnumImage
+import vadiole.colorpicker.hexColor
+import java.io.File
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -54,4 +62,46 @@ fun String.isSpecialCharacters() : Boolean{
     val p: Pattern = Pattern.compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE)
     val m: Matcher = p.matcher(this)
     return m.find()
+}
+
+fun String.createFolder(){
+    File(this).mkdirs()
+}
+
+fun String.findImageName(enum: EnumImage) : File?{
+    val imageFolder = QRScannerApplication.getInstance().getPathFolder()?.let { File(it) }
+    var mFile = File(imageFolder, "$this shared_design_qr_code.png")
+    if (enum == EnumImage.LOGO){
+        mFile = File(imageFolder, "$this shared_design_logo_code.png")
+    }
+    if (enum == EnumImage.QR_TEMPLATE){
+        mFile = File(imageFolder, "$this shared_design_template_code.png")
+    }
+    if (mFile.exists()){
+        return mFile
+    }
+    return null
+}
+
+val String.changedDesignColor : String get() = Utils.getChangedDesignColor() ?: ""
+
+val String.hexWithoutTransparent : String get() =  this.toColorInt().hexColor
+
+val String.putChangedDesignColor: Unit
+    get() = Utils.setChangedDesignColor(this)
+
+
+fun String.toColorIntThrowDefaultColor() : Int{
+    return try {
+        if (this.isEmpty()){
+            Utils.Log("TAG","Color result 1")
+            return Constant.defaultColor
+        }
+        Utils.Log("TAG","Color result 2 $this")
+        this.toColorInt()
+    }
+    catch (e: Exception){
+        Utils.Log("TAG","Color result 3 $this")
+        Constant.defaultColor
+    }
 }

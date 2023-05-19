@@ -3,9 +3,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tpcreative.co.qrscanner.ui.backup.BackupViewModel
 import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignViewModel
+import tpcreative.co.qrscanner.ui.changedesign.TemplateViewModel
+import tpcreative.co.qrscanner.ui.changedesigntext.ChangeDesignTextViewModel
 import tpcreative.co.qrscanner.ui.filecolor.ChangeFileColorViewModel
 import tpcreative.co.qrscanner.ui.help.HelpViewModel
+import tpcreative.co.qrscanner.ui.history.HistoryViewModel
+import tpcreative.co.qrscanner.ui.premiumpopup.PremiumPopupViewModel
 import tpcreative.co.qrscanner.ui.review.ReviewViewModel
+import tpcreative.co.qrscanner.ui.save.SaveViewModel
+import tpcreative.co.qrscanner.ui.scanner.ScannerViewModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultViewModel
 import tpcreative.co.qrscanner.ui.supportedcode.SupportedCodeViewModel
 import tpcreative.co.qrscanner.ui.tipsscanning.TipsScanningViewModel
@@ -55,6 +61,15 @@ class ViewModelFactory() : ViewModelProvider.Factory{
         }
         else if (modelClass.isAssignableFrom(ChangeDesignViewModel::class.java)){
             return ChangeDesignViewModel() as T
+        }
+        else if(modelClass.isAssignableFrom(TemplateViewModel::class.java)){
+            return TemplateViewModel(ChangeDesignViewModel()) as T
+        }
+        else if(modelClass.isAssignableFrom(PremiumPopupViewModel::class.java)){
+            return PremiumPopupViewModel(ChangeDesignViewModel()) as T
+        }
+        else if (modelClass.isAssignableFrom(ChangeDesignTextViewModel::class.java)){
+            return ChangeDesignTextViewModel(ChangeDesignViewModel()) as T
         }
         throw IllegalArgumentException("Unknown class name")
     }

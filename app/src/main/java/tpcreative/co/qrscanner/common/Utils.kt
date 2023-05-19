@@ -38,6 +38,7 @@ import java.net.URLEncoder
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 
@@ -202,6 +203,14 @@ object Utils {
         PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), code)
     }
 
+    fun isReloadTemplate() : Boolean {
+        return PrefsController.getBoolean(R.string.key_reload_template.toText(), false)
+    }
+
+    fun setReloadTemplate(value :Boolean){
+        PrefsController.putBoolean(R.string.key_reload_template.toText(), value)
+    }
+
     fun setCurrentListThemeColor(value :  MutableList<Theme>){
         PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_theme_list), Gson().toJson(value))
     }
@@ -221,6 +230,17 @@ object Utils {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun isNewVersion() : Boolean{
+        val currentCodeVersion: Int = getCurrentCodeVersion()
+        return if (currentCodeVersion == BuildConfig.VERSION_CODE) {
+            Log(TAG, "Already install this version")
+            false
+        } else {
+            Log(TAG, "New install this version")
+            true
         }
     }
 
@@ -708,6 +728,14 @@ object Utils {
         return file
     }
 
+    fun setChangedDesignColor(value: String?) {
+        PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_changed_design_color), value)
+    }
+
+    fun getChangedDesignColor(): String? {
+        return PrefsController.getString(QRScannerApplication.getInstance().getString(R.string.key_changed_design_color), "")
+    }
+
     fun setLastTimeSynced(value: String?) {
         PrefsController.putString(QRScannerApplication.Companion.getInstance().getString(R.string.key_last_time_synced), value)
     }
@@ -806,6 +834,16 @@ object Utils {
         return PrefsController.getInt(R.string.key_count_continue_scan.toText(),0)
     }
 
+    fun setPopupColorPreferenceColor(mList : ArrayList<ColorPreferenceModel>){
+        PrefsController.putString(R.string.key_popup_color_color_preference.toText(),mList.toJson())
+    }
+
+    fun getPopupColorPreferenceColor() : ArrayList<ColorPreferenceModel>?{
+        val json =  PrefsController.getString(R.string.key_popup_color_color_preference.toText(),null)
+        val itemType = object : TypeToken<ArrayList<ColorPreferenceModel>>() {}.type
+        return Gson().fromJson<ArrayList<ColorPreferenceModel>>(json, itemType)
+    }
+
 //    fun getFramePortraitSize() : Size? {
 //        val mRect = getFrameRectPortrait()
 //        mRect?.let { node ->
@@ -833,6 +871,39 @@ object Utils {
     fun isRealCheckedOut(orderId: String?): Boolean {
         return orderId?.contains("GPA") == true
     }
+    
+    fun isShowGuideReview() : Boolean{
+        return PrefsController.getBoolean(R.string.key_clicked_change_design_review.toText(),false)
+    }
+
+    fun putShowGuideReview(value : Boolean){
+        PrefsController.putBoolean(R.string.key_clicked_change_design_review.toText(),value)
+    }
+
+    fun isShowChangeDesignIcon() : Boolean{
+        return PrefsController.getBoolean(R.string.key_clicked_change_design_icon.toText(),false)
+    }
+
+    fun putShowChangeDesignIcon(value : Boolean){
+        PrefsController.putBoolean(R.string.key_clicked_change_design_icon.toText(),value)
+    }
+
+    fun isShowChangeDesignText() : Boolean{
+        return PrefsController.getBoolean(R.string.key_clicked_change_design_text.toText(),false)
+    }
+
+    fun putShowChangeDesignText(value : Boolean){
+        PrefsController.putBoolean(R.string.key_clicked_change_design_text.toText(),value)
+    }
+
+    fun isShowGuideScannerResult() : Boolean{
+        return PrefsController.getBoolean(R.string.key_clicked_change_design_scanner_result.toText(),false)
+    }
+
+    fun putShowGuideScannerResult(value : Boolean){
+        PrefsController.putBoolean(R.string.key_clicked_change_design_scanner_result.toText(),value)
+    }
+
 
     fun getPositionTheme(): Int {
         return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_position_theme), 0)
@@ -864,17 +935,14 @@ object Utils {
         return isAlreadyCheckout()
     }
 
-    private fun isRequestRemoteDebugApp(): Boolean{
-        if (BuildConfig.DEBUG && !Configuration.request_remote_debug_app){
+    fun isRequestRemoteDebugApp(): Boolean{
+        if (BuildConfig.DEBUG && Configuration.request_remote_debug_app){
            return true
         }
         return false
     }
 
     fun isHiddenAds(enumScreens: EnumScreens) : Boolean{
-        if (isRequestRemoteDebugApp()){
-            ServiceManager.getInstance().mVersion = Version()
-        }
         if (isTestTab()){
             return true
         }
@@ -885,84 +953,84 @@ object Utils {
         }
         when(enumScreens){
             EnumScreens.HELP_FEEDBACK_SMALL ->{
-                if (Configuration.hiddenHelpFeedbackSmallAds || ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackSmallAds == true){
                     return true
                 }
             }
             EnumScreens.HELP_FEEDBACK_LARGE ->{
-                if (Configuration.hiddenHelpFeedbackLargeAds || ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenHelpFeedbackLargeAds == true){
                     return true
                 }
             }
             EnumScreens.MAIN_SMALL ->{
-                if (Configuration.hiddenMainSmallAds || ServiceManager.getInstance().mVersion?.hiddenMainSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenMainSmallAds == true){
                    return true
                 }
             }
             EnumScreens.MAIN_LARGE ->{
-                if (Configuration.hiddenMainLargeAds || ServiceManager.getInstance().mVersion?.hiddenMainLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenMainLargeAds == true){
                     return true
                 }
             }
             EnumScreens.CREATE_SMALL ->{
-                if (Configuration.hiddenCreateSmallAds || ServiceManager.getInstance().mVersion?.hiddenCreateSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenCreateSmallAds == true){
                     return true
                 }
             }
             EnumScreens.CREATE_LARGE ->{
-                if (Configuration.hiddenCreateLargeAds || ServiceManager.getInstance().mVersion?.hiddenCreateLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenCreateLargeAds == true){
                     return true
                 }
             }
             EnumScreens.SCANNER_RESULT_SMALL ->{
-                if (Configuration.hiddenScannerResultSmallAds || ServiceManager.getInstance().mVersion?.hiddenScannerResultSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenScannerResultSmallAds == true){
                     return true
                 }
             }
             EnumScreens.SCANNER_RESULT_LARGE ->{
-                if (Configuration.hiddenScannerResultLargeAds || ServiceManager.getInstance().mVersion?.hiddenScannerResultLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenScannerResultLargeAds == true){
                     return true
                 }
             }
             EnumScreens.REVIEW_SMALL->{
-                if (Configuration.hiddenReviewSmallAds || ServiceManager.getInstance().mVersion?.hiddenReviewSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenReviewSmallAds == true){
                     return true
                 }
             }
             EnumScreens.REVIEW_LARGE->{
-                if (Configuration.hiddenReviewLargeAds || ServiceManager.getInstance().mVersion?.hiddenReviewLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenReviewLargeAds == true){
                     return true
                 }
             }
             EnumScreens.CHANGE_COLOR_SMALL ->{
-                if (Configuration.hiddenChangeColorSmallAds || ServiceManager.getInstance().mVersion?.hiddenChangeColorSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenChangeColorSmallAds == true){
                     return true
                 }
             }
             EnumScreens.CHANGE_COLOR_LARGE ->{
-                if (Configuration.hiddenChangeColorLargeAds || ServiceManager.getInstance().mVersion?.hiddenChangeColorLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenChangeColorLargeAds == true){
                     return true
                 }
             }
             EnumScreens.BACKUP_SMALL ->{
-                if (Configuration.hiddenBackupSmallAds || ServiceManager.getInstance().mVersion?.hiddenBackupSmallAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenBackupSmallAds == true){
                     return true
                 }
             }
             EnumScreens.BACKUP_LARGE ->{
-                if (Configuration.hiddenBackupLargeAds || ServiceManager.getInstance().mVersion?.hiddenBackupLargeAds == true){
+                if (ServiceManager.getInstance().mVersion?.hiddenBackupLargeAds == true){
                     return true
                 }
             }
             else -> {}
         }
         return if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_release.toText()){
-            (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+            (QRScannerApplication.getInstance().isHiddenFreeReleaseAds() || ServiceManager.getInstance().mVersion?.hiddenFreeReleaseAds == true || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         } else if (BuildConfig.APPLICATION_ID == R.string.qrscanner_free_innovation.toText()){
-            (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+            (QRScannerApplication.getInstance().isHiddenFreeInnovationAds() || ServiceManager.getInstance().mVersion?.hiddenFreeInnovationAds == true || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         }
         else if (BuildConfig.APPLICATION_ID == R.string.super_qrscanner_free_innovation.toText()){
-            (QRScannerApplication.getInstance().isHiddenSuperFreeInnovationAds() || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
+            (QRScannerApplication.getInstance().isHiddenSuperFreeInnovationAds() || ServiceManager.getInstance().mVersion?.hiddenSuperFreeInnovationAds == true || isPremium()) || !QRScannerApplication.getInstance().isLiveExpiredTimeForNewUser()
         }
         else{
             isPremium()
@@ -1230,6 +1298,9 @@ object Utils {
             return false
         }
         if (mData?.app_id.isNullOrEmpty()){
+            return true
+        }
+        if (!QRScannerApplication.getInstance().getAuthorized()){
             return true
         }
         if ((mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)) && ((mData.version_code?:0) >= BuildConfig.VERSION_CODE)){

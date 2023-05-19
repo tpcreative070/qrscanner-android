@@ -299,7 +299,7 @@ class BarcodeActivity : BaseActivitySlide(), GenerateSingleton.SingletonGenerate
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        //finish()
+        finish()
     }
 
     fun onSetView() {

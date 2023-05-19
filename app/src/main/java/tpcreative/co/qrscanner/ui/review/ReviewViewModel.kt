@@ -7,13 +7,13 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.findImageName
 import tpcreative.co.qrscanner.common.extension.serializable
+import tpcreative.co.qrscanner.common.extension.toJson
+import tpcreative.co.qrscanner.common.extension.toObject
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.helper.SQLiteHelper
-import tpcreative.co.qrscanner.model.GeneralModel
-import tpcreative.co.qrscanner.model.EnumFragmentType
-import tpcreative.co.qrscanner.model.EnumScreens
-import tpcreative.co.qrscanner.model.ItemNavigation
+import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.viewmodel.BaseViewModel
 
 class ReviewViewModel : BaseViewModel<ItemNavigation>() {
@@ -59,5 +59,13 @@ class ReviewViewModel : BaseViewModel<ItemNavigation>() {
             create.noted = ""
             create.id = mModel?.id ?: 0
         }
+    }
+
+    fun onDeleteChangeDesign(data : GeneralModel?){
+        data?.uuId?.findImageName(EnumImage.QR_CODE)?.delete()
+        data?.uuId?.findImageName(EnumImage.LOGO)?.delete()
+        val mData = SQLiteHelper.getDesignQR(data?.uuId)
+        Utils.Log(TAG,"Data change design requesting delete ${mData?.toJson()}")
+        SQLiteHelper.onDelete(mData)
     }
 }

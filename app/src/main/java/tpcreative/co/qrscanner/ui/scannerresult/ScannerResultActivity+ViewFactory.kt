@@ -16,7 +16,6 @@ import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
-//import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant

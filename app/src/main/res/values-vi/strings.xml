@@ -298,6 +298,7 @@
     <string name="crop__done">XONG</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">HUỶ</string>
     <string name="drag_the_orange_markers_to_detect_barcode">Kéo các điểm đánh dấu màu cam để phát hiện mã vạch hoặc mã QR</string>
+    <string name="drag_the_orange_markers_to_crop_picture">Kéo các điểm đánh dấu màu cam để cắt ảnh</string>
     <string name="add_note">Thêm ghi chú</string>
     <string name="take_note">Ghi chú</string>
     <string name="add_favorite">Thêm yêu thích</string>
@@ -352,6 +353,7 @@
     <string name="scanning_using_the_camera_will_require_permission_to_access_the_camera">Quét bằng máy ảnh sẽ yêu cầu quyền truy cập vào máy ảnh.</string>
     <string name="using_the_current_location_as_geo">Sử dụng GPS để xác định vị trí hiện tại làm tọa độ GEO khi có quyền truy cập vào vị trí hiện tại trên Google Map.</string>
     <string name="waiting_for_delete">Đang xử lý xoá</string>
+    <string name="waiting_for_save">Đang xử lý lưu</string>
     <string name="waiting_for_export">Đang xử lý xuất tập tin</string>
     <string name="delete_entire_history">Xoá toàn bộ lịch sử?</string>
     <string name="delete_entire_save">Xoá toàn bộ tạo mới?</string>
@@ -361,4 +363,39 @@
     <string name="remove_ads">Bỏ quảng cáo</string>
     <string name="one_time_purchase_no_subscription">Mua một lần(sử dụng trọn đời)</string>
     <string name="change_design">Thay đổi QR</string>
+    <string name="template">Bản mẫu</string>
+    <string name="color">Màu sắc</string>
+    <string name="dots">Dấu chấm</string>
+    <string name="eyes">Mã mắt</string>
+    <string name="logo">Logo</string>
+    <string name="asking_exit_qr">Mã QR của bạn không được lưu. Bạn có chắc chắn để thoát?</string>
+    <string name="exit">Thoát</string>
+    <string name="not_exit">Không thoát</string>
+    <string name="original">Nguyên mẫu</string>
+    <string name="square">Vuông</string>
+    <string name="circle">Tròn</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="opacity">Độ mờ</string>
+    <string name="body">Body</string>
+    <string name="position_marker">Position Marker</string>
+    <string name="unlock_design">Mở khoá</string>
+    <string name="unlock_all_features_and_remove_ads">Mở khóa tất cả các tính năng và loại bỏ quảng cáo.</string>
+    <string name="watch_item_ads">Xem quảng cáo %1$s</string>
+    <string name="unlock_for_free">Mở khóa miễn phí:</string>
+    <string name="add_your_own_logo">Thêm logo của riêng bạn (Ảnh)</string>
+    <string name="grid">Lưới</string>
+    <string name="slider">Thanh trượt</string>
+    <string name="font">Nét chữ</string>
+    <string name="enter_a_text">Nhập văn bản</string>
+    <string name="font_size">Cỡ chữ</string>
+    <string name="size">Kích cỡ</string>
+    <string name="small">Bé nhỏ</string>
+    <string name="medium">Trung bình</string>
+    <string name="large">Lớn</string>
+    <string name="freedom">Tự do</string>
+    <string name="freedom_increase_font_size">Tự do tăng cỡ chữ</string>
+    <string name="freedom_decrease_font_size">Tự do giảm cỡ chữ</string>
+    <string name="click_to_change_design_qr_code">Nhấp để thay đổi mã QR Code thiết kế</string>
+    <string name="click_to_change_the_logo_shape">Nhấp để thay đổi hình dạng logo</string>
+    <string name="click_to_view_code">Nhấp để xem mã</string>
 </resources>

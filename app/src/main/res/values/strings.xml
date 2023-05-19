@@ -166,8 +166,15 @@
     <string name="key_keep_ads_refresh_latest_time">key_keep_ads_refresh_latest_time</string>
     <string name="key_current_time_update_app">key_current_time_update_app</string>
     <string name="key_new_users_for_current_time">key_new_users_for_current_time</string>
+    <string name="key_changed_design_color">key_changed_design_color</string>
     <integer name="zxing_viewfinder_border_width">5</integer>
     <integer name="zxing_viewfinder_border_length">60</integer>
+    <string name="key_popup_color_color_preference">key_popup_color_color_preference</string>
+    <string name="key_clicked_change_design_review">key_clicked_change_design_review</string>
+    <string name="key_clicked_change_design_scanner_result">key_clicked_change_design_scanner_result</string>
+    <string name="key_reload_template">key_reload_template</string>
+    <string name="key_clicked_change_design_icon">key_clicked_change_design_icon</string>
+    <string name="key_clicked_change_design_text">key_clicked_change_design_text</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -469,6 +476,7 @@
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
     <string name="drag_the_orange_markers_to_detect_barcode">Drag the orange markers to detect barcode or QR-code</string>
+    <string name="drag_the_orange_markers_to_crop_picture">Drag the orange markers to crop the picture</string>
     <string name="add_note">Add note</string>
     <string name="take_note">Take Note</string>
     <string name="add_favorite">Add to favorites</string>
@@ -523,11 +531,12 @@
     <string name="scanning_using_the_camera_will_require_permission_to_access_the_camera">Scanning using the camera will require permission to access the camera.</string>
     <string name="using_the_current_location_as_geo">Using the current location as GEO coordinates is only possible with permission to access the current location.</string>
     <string name="waiting_for_delete">Waiting for delete</string>
+    <string name="waiting_for_save">Waiting for save</string>
     <string name="waiting_for_export">Waiting for export</string>
     <string name="delete_entire_history">Delete entire history?</string>
     <string name="delete_entire_save">Delete entire save?</string>
     <string name="processing">Processing</string>
-    <string name="scan_image">Scan image</string>
+    <string name="scan_image">Scan image from phone</string>
     <string name="qr_code_or_barcode_not_found">QR code or Barcode not found</string>
     <string name="remove_ads">Remove ads</string>
     <string name="ad">Ad</string>
@@ -538,4 +547,34 @@
     <string name="dots">Dots</string>
     <string name="eyes">Eyes</string>
     <string name="logo">Logo</string>
+    <string name="asking_exit_qr">Your QR code is not saved. Are you sure to exit?</string>
+    <string name="exit">Exit</string>
+    <string name="not_exit">Not Exit</string>
+    <string name="original">Original</string>
+    <string name="square">Square</string>
+    <string name="circle">Circle</string>
+    <string name="confirm">Confirm</string>
+    <string name="opacity">Opacity</string>
+    <string name="body">Body</string>
+    <string name="position_marker">Position Marker</string>
+    <string name="unlock_design">Unlock design</string>
+    <string name="unlock_all_features_and_remove_ads">Unlock all features and remove ads.</string>
+    <string name="watch_item_ads">Watch %1$s ads</string>
+    <string name="unlock_for_free">Unlock for free:</string>
+    <string name="add_your_own_logo">Add your own logo(Photo)</string>
+    <string name="grid">Grid</string>
+    <string name="slider">Slider</string>
+    <string name="font">Font</string>
+    <string name="enter_a_text">Enter a text</string>
+    <string name="font_size">Font-size</string>
+    <string name="size">Size</string>
+    <string name="small">Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+    <string name="freedom">Freedom</string>
+    <string name="freedom_increase_font_size">Freedom to increase font-size</string>
+    <string name="freedom_decrease_font_size">Freedom to decrease font-size</string>
+    <string name="click_to_change_design_qr_code">Click to change the design QR Code</string>
+    <string name="click_to_change_the_logo_shape">Click to change the logo shape</string>
+    <string name="click_to_view_code">Click to view the code</string>
 </resources>

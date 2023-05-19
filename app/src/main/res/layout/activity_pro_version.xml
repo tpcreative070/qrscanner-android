@@ -189,6 +189,31 @@
 
                 <LinearLayout
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="23dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_skype_template"
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_25"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textSize="@dimen/medium_16"
+                        style="@style/brandonRegularTextView"
+                        android:text="@string/change_design"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"

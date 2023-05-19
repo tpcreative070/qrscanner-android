@@ -4,18 +4,16 @@ import android.content.ClipData
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
-import android.os.Build
 import android.os.Parcelable
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.print.PrintHelper
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.result.ParsedResultType
@@ -26,17 +24,16 @@ import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
-import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
+import tpcreative.co.qrscanner.common.view.showcase.BubbleShowCase
+import tpcreative.co.qrscanner.common.view.showcase.BubbleShowCaseBuilder
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
-import tpcreative.co.qrscanner.ui.changedesign.ChangeDesignActivity
-import tpcreative.co.qrscanner.ui.scannerresult.initUI
 import java.io.File
 import java.io.FileOutputStream
 
@@ -48,37 +45,30 @@ fun ReviewActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     binding.scrollView.smoothScrollTo(0, 0)
     binding.imgStandardCircle.setImageResource(R.color.colorAccent)
+    getIntentData()
     loadAds()
     /*Press back button*/
-    if (Build.VERSION.SDK_INT >= 33) {
-        onBackInvokedDispatcher.registerOnBackInvokedCallback(
-            OnBackInvokedDispatcher.PRIORITY_DEFAULT
-        ) {
-            showAds()
-        }
-    } else {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    showAds()
-                }
-            })
-    }
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showAds()
+            }
+        })
 
     binding.llChangeDesign.setOnClickListener {
-        Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+        onOpenChangeDesign()
     }
     binding.imgResult.setOnClickListener {
         if (!isBarCode()){
-            //Navigator.onGenerateView(this, create, ChangeDesignActivity::class.java)
+            onOpenChangeDesign()
         }
     }
     onHandlerIntent()
+    onShowGuide(binding.llChangeDesign,R.string.click_to_change_design_qr_code.toText(),EnumActivity.REVIEW_ACTIVITY,R.drawable.ic_skype_template)
 }
 
 fun ReviewActivity.loadAds(){
-    getIntentData()
     if (!Utils.isPremium()){
         viewAds = AdsView(this)
     }
@@ -145,7 +135,7 @@ private fun ReviewActivity.onHandlerIntent() {
 
 private fun ReviewActivity.beginCrop(source: Uri?) {
     val destination = Uri.fromFile(File(cacheDir, "cropped"))
-    cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start((this)))
+    cropForResult.launch(Crop.of(source, destination)?.asSquare()?.start((this),false))
 }
 
 private fun ReviewActivity.setupViewModel() {
@@ -292,6 +282,7 @@ fun ReviewActivity.onSaveFromTextOrCVFToQRCode(enumAction: EnumAction,text : Str
     val time = Utils.getCurrentDateTimeSort()
     history.createDatetime = time
     history.updatedDateTime = time
+    uuId = history.uuId
     SQLiteHelper.onInsert(history)
     viewModel.updateId(history.uuId)
     CoroutineScope(Dispatchers.Main).launch {
@@ -311,6 +302,7 @@ fun ReviewActivity.checkingShowAds(){
 fun ReviewActivity.getIntentData(){
     viewModel.getIntent(this) {
         if (it){
+            Utils.Log(TAG,"Response data call intent")
             setView()
         }else{
             onCatch()
@@ -320,6 +312,11 @@ fun ReviewActivity.getIntentData(){
 
 suspend fun ReviewActivity.onDrawOnBitmap(mValue  :String,mType : String,format: BarcodeFormat) = withContext(Dispatchers.IO){
     var mBm: Bitmap?
+    mergeUUID()
+    if (create?.uuId?.findImageName(EnumImage.QR_CODE)?.isFile==true){
+        processDrawnDone = true
+        return@withContext
+    }
     bitmap?.let {data ->
          if (BarcodeFormat.QR_CODE != format && !viewModel.isSharedIntent){
              mBm = data.addPaddingLeftForBitmap(50)

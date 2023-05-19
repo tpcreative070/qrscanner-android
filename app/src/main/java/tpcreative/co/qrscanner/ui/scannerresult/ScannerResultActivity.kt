@@ -50,6 +50,7 @@ class ScannerResultActivity : BaseActivitySlide(), ScannerResultActivityAdapter.
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.SCANNER_RESULT_SMALL,this)
         initUI()
     }
 

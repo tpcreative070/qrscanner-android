@@ -1,6 +1,7 @@
 package com.github.alexzhirkevich.customqrgenerator.vector.style
 
 import android.graphics.Path
+import android.graphics.Rect
 import android.graphics.RectF
 import androidx.annotation.FloatRange
 import androidx.core.graphics.*
@@ -24,6 +25,23 @@ internal class CircleVectorShape(
         addCircle(size/2f, size/2f, size/2 * this@CircleVectorShape.size.coerceIn(0f,1f), Path.Direction.CW)
     }
 }
+
+internal class SquareVectorShape(
+    @FloatRange(from = 0.0, to = 1.0) val size: Float
+) : QrVectorShapeModifier {
+
+    val corners = floatArrayOf(
+        15f, 15f,   // Top left radius in px
+        15f, 15f,   // Top right radius in px
+        15f, 15f,     // Bottom right radius in px
+        15f, 15f      // Bottom left radius in px
+    )
+    override fun createPath(size: Float, neighbors: Neighbors): Path = Path().apply {
+        addRoundRect(
+            RectF(0f, 0f, size, size),corners, Path.Direction.CW)
+    }
+}
+
 
 internal class RoundCornersVectorShape(
     @FloatRange(from = 0.0, to = 0.5)

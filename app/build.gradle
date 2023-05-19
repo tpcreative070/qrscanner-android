@@ -145,11 +145,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson"
     implementation "com.google.zxing:core:$zxingCore"
     implementation "com.karumi:dexter:$dexter"
-    /*Simple recyclerview*/
-    implementation project(':simplerecyclerview')
-    /*Validation input*/
     implementation "com.basgeekball:awesome-validation:$awesomeValidation"
-    /*Google map*/
     implementation "com.google.android.gms:play-services-maps:$playServicesMaps"
     implementation "androidx.room:room-runtime:$roomVersion"
     // To use Kotlin annotation processing tool (kapt)
@@ -159,14 +155,6 @@ dependencies {
     testImplementation "junit:junit:$junit"
     androidTestImplementation "com.android.support.test:runner:$testRnner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoCore"
-    /*DateTime picker*/
-    implementation project(':switchdatetime')
-    /*Zxing*/
-    //implementation project(':zxing-android-embedded')
-    /*CropView*/
-    implementation project(':simplecropview')
-    /*Flagkit*/
-    implementation project(':flagkit')
     implementation "commons-validator:commons-validator:$commonsValidator"
     /*Google admod*/
     implementation "com.google.android.gms:play-services-ads:$playServicesAds"
@@ -215,13 +203,22 @@ dependencies {
     implementation "com.github.AppIntro:AppIntro:$appIntro"
     implementation "com.anjlab.android.iab.v3:library:$billingInApp"
     implementation "androidx.window:window:$window"
+    implementation project(':simplerecyclerview')
+    implementation project(':switchdatetime')
+    implementation project(':simplecropview')
+    implementation project(':flagkit')
     implementation project(':compressor')
     implementation project(':custom_qr_generator')
+    implementation project(':gridcolor')
+    implementation project(':dragtoclose')
+    implementation project(':multipletype')
+    implementation project(':colorpicker')
     implementation files('libs/zxingcpp-release.aar')
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
     implementation "androidx.camera:camera-view:$camerax_version"
+    implementation "com.github.javiersantos:PiracyChecker:$PiracyChecker"
 }
 
 apply plugin: 'com.google.gms.google-services'

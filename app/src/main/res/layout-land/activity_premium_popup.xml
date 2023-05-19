@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/colorDisableButton"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlRoot"
+            android:layout_margin="@dimen/margin_20"
+            android:background="@drawable/bg_white_30"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/icon_size_400"
+            android:layout_height="@dimen/icon_size_400">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:gravity="center"
+                style="@style/brandonBoldTextInputLayout"
+                android:text="@string/unlock_design"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:id="@+id/rlClose"
+                android:layout_margin="@dimen/margin_10"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="@dimen/icon_size_40"
+                android:layout_height="@dimen/icon_size_40">
+                <tpcreative.co.qrscanner.common.view.CircleImageView
+                    android:layout_centerInParent="true"
+                    android:id="@+id/imgCircleCodeStatus"
+                    android:layout_width="@dimen/icon_size_30"
+                    android:layout_height="@dimen/icon_size_30"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    app:srcCompat="@drawable/ic_close"
+                    android:tint="@color/material_gray_800"
+                    android:layout_centerInParent="true"
+                    android:layout_width="@dimen/icon_size_20"
+                    android:layout_height="@dimen/icon_size_20"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rlProVersion"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icon_size_80"
+                android:layout_below="@+id/rlClose"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_0"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_20"
+                android:background="@drawable/bg_button_rounded_20_degree">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgCrown"
+                    android:tint="@color/white"
+                    android:src="@drawable/ic_crown_5"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_width="@dimen/icon_size_30"
+                    android:layout_height="@dimen/icon_size_30"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textSize="@dimen/text_size_16"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:textColor="@color/white"
+                    android:text="@string/pro_version"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_toEndOf="@+id/imgCrown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textSize="@dimen/text_size_16"
+                    android:layout_toStartOf="@+id/rlNext"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:textColor="@color/white"
+                    android:text="@string/unlock_all_features_and_remove_ads"
+                    android:layout_below="@+id/imgCrown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:id="@+id/rlNext"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_width="@dimen/icon_size_80"
+                    android:layout_height="@dimen/icon_size_60">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imgNext"
+                        android:tint="@color/white"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_next"
+                        android:layout_width="@dimen/icon_size_30"
+                        android:layout_height="@dimen/icon_size_30"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:background="@drawable/bg_border_20"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_20"
+                android:id="@+id/rlQRDisplay"
+                android:layout_below="@+id/rlProVersion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_toStartOf="@+id/rlNextAds"
+                    android:id="@+id/rlWatchAds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imgWatch"
+                        android:src="@drawable/ic_video"
+                        android:layout_width="@dimen/icon_size_30"
+                        android:layout_height="@dimen/icon_size_30"
+                        android:layout_marginStart="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginEnd="@dimen/margin_10"
+                        android:layout_marginBottom="@dimen/margin_10" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/brandonBoldTextInputLayout"
+                        android:id="@+id/tvWatchAds"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_16"
+                        android:layout_marginStart="@dimen/margin_10"
+                        android:text="@string/watch_item_ads"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_toEndOf="@+id/imgWatch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textColor="@color/material_gray_900"
+                        android:textSize="@dimen/text_size_16"
+                        android:layout_marginStart="@dimen/margin_10"
+                        android:text="@string/unlock_for_free"
+                        android:layout_below="@+id/imgWatch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:id="@+id/rlNextAds"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_width="@dimen/icon_size_60"
+                    android:layout_height="@dimen/icon_size_60">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imgNextAds"
+                        android:tint="@color/black"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_next"
+                        android:layout_width="@dimen/icon_size_30"
+                        android:layout_height="@dimen/icon_size_30"/>
+                </RelativeLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_below="@+id/rlWatchAds"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_margin="@dimen/margin_5"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:id="@+id/imgQRCode"
+                        android:layout_centerInParent="true"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textColor="@color/material_gray_900"
+                        android:id="@+id/tvOwnLogo"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_16"
+                        android:layout_marginStart="@dimen/margin_10"
+                        android:text="@string/add_your_own_logo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

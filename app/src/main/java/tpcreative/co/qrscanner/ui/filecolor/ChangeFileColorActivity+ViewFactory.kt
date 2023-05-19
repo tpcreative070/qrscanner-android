@@ -24,21 +24,13 @@ fun ChangeFileColorActivity.initUI(){
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     initRecycleView(layoutInflater)
     getData()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        onBackInvokedDispatcher.registerOnBackInvokedCallback(
-            OnBackInvokedDispatcher.PRIORITY_DEFAULT
-        ) {
-            showAds()
-        }
-    } else {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    showAds()
-                }
-            })
-    }
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showAds()
+            }
+        })
     loadAds()
 }
 

@@ -86,4 +86,38 @@ object Navigator {
         val intent = Intent(context, clazz)
         context?.startActivity(intent)
     }
+
+    fun <T> onPopupView(context: Activity?, mMap : HashMap<EnumImage,String>, image : EnumImage, clazz: Class<T>) : Intent {
+        val intent = Intent(context, clazz)
+        val bundle = Bundle()
+        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP, mMap)
+        bundle.putString(ConstantKey.KEY_CHANGE_DESIGN_COLOR_TYPE,image.name)
+        intent.putExtras(bundle)
+        return  intent
+    }
+
+    fun <T> onChangeDesignText(context: Activity, clazz: Class<T>, enumImage: EnumImage,mMap : HashMap<EnumImage,String>,mapText : HashMap<EnumImage,TextModel>, changeDesign : ChangeDesignModel,dataCode : String,uuId :String) : Intent {
+        val intent = Intent(context, clazz)
+        val bundle = Bundle()
+        bundle.putString(ConstantKey.KEY_POPUP_TEXT_TEXT_TYPE,enumImage.name)
+        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_COLOR_MAP, mMap)
+        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_MAP_TEXT,mapText)
+        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT,changeDesign)
+        bundle.putString(ConstantKey.KEY_DATA_CODE, dataCode)
+        bundle.putString(ConstantKey.KEY_DATA_UUID,uuId)
+        intent.putExtras(bundle)
+        return  intent
+    }
+
+    fun <T> onPremiumPopupView(context: Activity?,mData : ChangeDesignModel,typeShape: EnumShape, clazz: Class<T>,dataCode : String,uuId :String,enumFontSize: EnumFontSize = EnumFontSize.NONE) : Intent {
+        val intent = Intent(context, clazz)
+        val bundle = Bundle()
+        bundle.putSerializable(ConstantKey.KEY_PREMIUM_POPUP, mData)
+        bundle.putString(ConstantKey.KEY_PREMIUM_POPUP_TYPE_SHAPE,typeShape.name)
+        bundle.putString(ConstantKey.KEY_DATA_CODE, dataCode)
+        bundle.putString(ConstantKey.KEY_DATA_UUID,uuId)
+        bundle.putString(ConstantKey.KEY_PREMIUM_POPUP_ENUM_FONT_SIZE,enumFontSize.name)
+        intent.putExtras(bundle)
+        return  intent
+    }
 }

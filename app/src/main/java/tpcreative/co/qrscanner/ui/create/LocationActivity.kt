@@ -238,7 +238,7 @@ class LocationActivity : BaseActivitySlide(), OnMyLocationButtonClickListener, O
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        //finish()
+        finish()
     }
 
     override fun onMapReady(p0: GoogleMap) {

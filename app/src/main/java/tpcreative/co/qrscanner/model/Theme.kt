@@ -45,6 +45,14 @@ class Theme : Serializable {
         return primaryDarkColor
     }
 
+    fun getPrimaryColor() : Int{
+        return primaryColor
+    }
+
+    fun getAccentColor() : Int{
+        return primaryColor
+    }
+
     fun getThemeInfo(): Theme {
         try {
             val value: Int = Utils.getQRCodeThemePosition()
@@ -70,6 +78,7 @@ class Theme : Serializable {
                 Utils.setCurrentListThemeColor(mList)
                 Utils.setCurrentCodeVersion(BuildConfig.VERSION_CODE)
                 Utils.setMillisecondsUpdatedApp(System.currentTimeMillis())
+                Utils.setReloadTemplate(false)
                 Utils.Log(TAG, "New install this version")
                 mList
             }

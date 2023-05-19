@@ -126,7 +126,7 @@ class MessageActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorA
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        //finish()
+        finish()
     }
 
     companion object {

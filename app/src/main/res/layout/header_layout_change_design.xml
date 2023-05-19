@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/icon_size_55">
+
+        <RelativeLayout
+            android:layout_gravity="center"
+            android:id="@+id/rlCancel"
+            android:layout_weight="0.6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_marginStart="@dimen/margin_13"
+                android:id="@+id/imgCancel"
+                android:layout_width="@dimen/icon_size_35"
+                android:layout_height="@dimen/icon_size_35"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/margin_5"
+                android:src="@drawable/ic_baseline_arrow_back_24" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCancel"
+                style="@style/brandonRegularTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_toEndOf="@+id/imgCancel"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/cancel"
+                android:textColor="@color/white"
+                android:textSize="@dimen/medium_18" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:visibility="invisible"
+                android:id="@+id/tvTemplate"
+                style="@style/brandonRegularTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/margin_10"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/template"
+                android:textColor="@color/white"
+                android:textSize="@dimen/medium_18" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_gravity="center"
+            android:id="@+id/rlDone"
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_marginEnd="@dimen/margin_13"
+                android:id="@+id/imgDone"
+                android:layout_width="@dimen/icon_size_35"
+                android:layout_height="@dimen/icon_size_35"
+                android:layout_centerInParent="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_done"
+                app:tint="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/margin_10"
+                android:background="@null"
+                android:text="@string/done"
+                android:textColor="@color/white"
+                android:textSize="@dimen/medium_18" />
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

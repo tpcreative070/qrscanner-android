@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModelProvider
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.SaveModel
-import tpcreative.co.qrscanner.viewmodel.SaveViewModel
 
 fun SaveFragment.initUI(){
     setupViewModel()

@@ -1,5 +1,13 @@
 package tpcreative.co.qrscanner.common
 
+import android.graphics.Bitmap
+import android.graphics.Typeface
+import tpcreative.co.qrscanner.model.ColorPreferenceModel
+import tpcreative.co.qrscanner.model.EnumGroup
+import tpcreative.co.qrscanner.model.EnumImage
+import tpcreative.co.qrscanner.model.FontModel
+import vadiole.colorpicker.hexColor
+
 class ConstantKey {
     companion object {
         const val LAT = "lat"
@@ -19,7 +27,64 @@ class ConstantKey {
         const val NOTE = "note"
         const val BIRTHDAY = "birthday"
         const val key_saved = "key_saved"
-        const val key_logo_is_selected = "key_logo_is_selected"
+        const val KEY_CHANGE_DESIGN_VIEW = "key_change_design_view"
+        const val KEY_CHANGE_DESIGN_SAVE = "key_change_design_save"
+        const val KEY_CHANGE_DESIGN_REVIEW = "key_change_design_review"
+        const val KEY_CHANGE_DESIGN_LOGO = "key_change_design_logo"
+        const val KEY_CHANGE_DESIGN_POSITION_MARKER = "key_change_design_position_marker"
+        const val KEY_CHANGE_DESIGN_BODY = "key_change_design_body"
+        const val KEY_CHANGE_DESIGN_TEXT = "key_change_design_text"
+        const val KEY_CHANGE_DESIGN_INDEX = "key_change_design_index"
+        const val KEY_CHANGE_DESIGN_URI = "key_change_design_uri"
+        const val KEY_CHANGE_DESIGN_SHAPE = "key_change_design_shape"
+        const val KEY_CHANGE_DESIGN_COLOR_OPEN_PICKER = "key_change_design_color_open_picker"
+        const val KEY_CHANGE_DESIGN_COLOR_INDEX = "key_change_design_color_index"
+        const val KEY_CHANGE_DESIGN_COLOR = "key_change_design_color"
+        const val KEY_CHANGE_DESIGN_SELECTED_VIEW = "key_change_design_selected_view"
+        const val KEY_SET_RESULT_OKEY = "key_set_result_okey"
+        const val KEY_CHANGE_DESIGN_MULTIPLE_TYPE = "key_change_design_multiple_type"
+        const val KEY_CHANGE_DESIGN_LOGO_PREVIOUS_POSITION = "key_change_design_logo_previous_position"
+        const val KEY_CHANGE_DESIGN_LOGO_PREVIOUS_CANCEL_POSITION = "key_change_design_logo_previous_cancel_position"
+        const val KEY_CHANGE_DESIGN_LOGO_PREVIOUS_SELECTED = "key_change_design_logo_previous_selected"
+        const val KEY_CHANGE_DESIGN_COLOR_MAP = "key_change_design_color_map"
+        const val KEY_CHANGE_DESIGN_COLOR_TYPE = "key_change_design_color_type"
+        const val KEY_CHANGE_DESIGN_COLOR_SELECTED_MAP = "key_change_design_color_selected_map"
+        const val KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_POSITION = "key_change_design_position_marker_previous_position"
+        const val KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_CANCEL_POSITION = "key_change_design_position_marker_previous_cancel_position"
+        const val KEY_CHANGE_DESIGN_POSITION_MARKER_PREVIOUS_SELECTED = "key_change_design_position_marker_previous_selected"
+        const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_POSITION = "key_change_design_body_previous_position"
+        const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_CANCEL_POSITION = "key_change_design_body_previous_cancel_position"
+        const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_SELECTED = "key_change_design_body_previous_selected"
+        const val KEY_PREMIUM_POPUP = "key_premium_popup"
+        const val KEY_PREMIUM_POPUP_TYPE_SHAPE = "key_premium_popup_type_shape"
+        const val KEY_PREMIUM_POPUP_ENUM_FONT_SIZE = "key_premium_popup_enum_font_size"
+        const val KEY_POPUP_COLOR_GRID = "key_popup_color_grid"
+        const val KEY_POPUP_COLOR_SELECTED = "key_popup_color_selected"
+        const val KEY_POPUP_COLOR_COLOR_PREFERENCE = "key_popup_color_color_preference"
+        const val KEY_POPUP_TEXT_TEXT_TYPE = "key_popup_text_text_type"
+        const val KEY_POPUP_TEXT_TEXT_BACKGROUD_COLOR = "key_popup_text_text_background_color"
+        const val KEY_COLOR = "key_color"
+        const val KEY_FONT = "key_font"
+        const val KEY_FONT_SIZE = "key_font_size"
+        const val KEY_DATA_CODE = "key_data_code"
+        const val KEY_DATA_UUID = "key_data_uuid"
+
+        const val KEY_CHANGE_DESIGN_TEXT_ENUM_GROUP = "key_change_design_text_key_enum_group"
+        const val KEY_CHANGE_DESIGN_TEXT_COLOR_LIST = "key_change_design_text_color_list"
+        const val KEY_CHANGE_DESIGN_TEXT_FONT_LIST = "key_change_design_text_font_list"
+        const val KEY_CHANGE_DESIGN_TEXT_FONT_SIZE_LIST = "key_change_design_text_font_size_list"
+        const val KEY_CHANGE_DESIGN_TEXT_ENUM_IMAGE = "key_change_design_text_enum_image"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_COLOR = "key_change_design_text_current_color"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT = "key_change_design_text_current_font"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_BACKGROUND_COLOR = "key_change_design_text_current_background_color"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_COLOR = "key_change_design_text_map_color"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_TEXT = "key_change_design_text_current_text"
+        const val KEY_CHANGE_DESIGN_TEXT_CURRENT_FONT_SIZE = "key_change_design_text_current_font_size"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_COLOR_TAG = "key_change_design_text_map_color_tag"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG = "key_change_design_text_map_font_tag"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG = "key_change_design_text_map_font_size_tag"
+        const val KEY_CHANGE_DESIGN_TEXT_MAP_TEXT = "key_change_design_text_map_text"
+
 
         const val TITLE  = "title"
         const val LOCATION = "location"

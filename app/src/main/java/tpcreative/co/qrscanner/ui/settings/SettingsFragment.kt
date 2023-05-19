@@ -386,6 +386,7 @@ class SettingsFragment : BaseFragment() {
                     onUpdateQRCode()
                 }
             })
+            myPreferenceFileColor?.isVisible = false
 
             /*Multiple scan*/myPreferenceMultipleScan = findPreference(getString(R.string.key_multiple_scan)) as MySwitchPreference?
             myPreferenceMultipleScan?.onPreferenceClickListener = createActionPreferenceClickListener()

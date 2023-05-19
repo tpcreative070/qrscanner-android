@@ -45,23 +45,14 @@ fun MainActivity.initUI(){
         binding.rlAdsRoot.visibility = View.GONE
     }
 
-    if (Build.VERSION.SDK_INT >= 33) {
-        onBackInvokedDispatcher.registerOnBackInvokedCallback(
-            OnBackInvokedDispatcher.PRIORITY_DEFAULT
-        ) {
-            //showAds()
-            finish()
-        }
-    } else {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    //showAds()
-                    finish()
-                }
-            })
-    }
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                //showAds()
+                finish()
+            }
+        })
 }
 
 private fun MainActivity.setupViewModel() {

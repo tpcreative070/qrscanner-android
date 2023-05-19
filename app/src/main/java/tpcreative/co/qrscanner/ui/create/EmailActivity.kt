@@ -130,7 +130,7 @@ class EmailActivity : BaseActivitySlide(), SingletonGenerateListener,OnEditorAct
     override fun onCompletedGenerate() {
         SaveSingleton.getInstance()?.reloadData()
         Utils.Log(TAG, "Finish...........")
-        //finish()
+        finish()
     }
 
     companion object {

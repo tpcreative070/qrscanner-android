@@ -17,7 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.hardware.display.DisplayManagerCompat
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import androidx.window.layout.WindowMetricsCalculator
+import com.github.javiersantos.piracychecker.*
+import com.github.javiersantos.piracychecker.enums.InstallerID
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -42,11 +43,12 @@ import tpcreative.co.qrscanner.model.EnumScreens
 import tpcreative.co.qrscanner.model.EnumThemeMode
 import tpcreative.co.qrscanner.model.EnumTypeServices
 import tpcreative.co.qrscanner.ui.main.MainActivity
+import java.io.File
 import java.util.*
 
 
 class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
-    private var pathFolder: String? = null
+    private var qrPath: String? = null
     private var isLive = false
     private var activity: MainActivity? = null
     private var mWithAd : Int = 0
@@ -98,10 +100,24 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     private var allowRequestFailureBackupLarge  = 0
     private var allowRequestFailureViewCode  = 0
     private var allowRequestFailureAnywhere = 0
+    private var isScannerResultLoadedAdsPortrait : Boolean = true
+    private var isReviewLoadedAdsPortrait : Boolean = true
+    private var isCreateLoadedAdsPortrait : Boolean = true
+    private var isHelpAndFeedbackLoadedAdsPortrait : Boolean = true
+    private var isChangeColorAdsPortrait : Boolean = true
+    private var isBackupLoadedAdsPortrait : Boolean = true
+    private var isAuthorized : Boolean = false
     override fun onCreate() {
         super.onCreate()
         mInstance = this
         isLive = true
+        qrPath = getExternalFilesDir(null)?.absolutePath + "/QRScanner/"
+        if (qrPath?.let { File(it).exists() } == true){
+            Utils.Log(TAG,"Folder already created $qrPath")
+        }else{
+            Utils.Log(TAG,"Requesting create folder")
+            qrPath?.createFolder()
+        }
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         serverAPI = RetrofitBuilder.getService(typeService = EnumTypeServices.SYSTEM)
         serverDriveApi = RetrofitBuilder.getService(getString(R.string.url_google), typeService = EnumTypeServices.GOOGLE_DRIVE)
@@ -129,6 +145,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         requiredScopesString?.add(DriveScopes.DRIVE_APPDATA)
         requiredScopesString?.add(DriveScopes.DRIVE_FILE)
         EnumThemeMode.byPosition(Utils.getPositionTheme())?.let { ThemeHelper.applyTheme(it) }
+        verifyUnauthorizedApps()
     }
 
     fun getGoogleSignInOptions(account: Account?): GoogleSignInOptions? {
@@ -197,7 +214,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
     override fun onActivityDestroyed(activity: Activity) {}
     fun getPathFolder(): String? {
-        return pathFolder
+        return qrPath
     }
 
     fun setConnectivityListener(listener: QRScannerReceiver.ConnectivityReceiverListener?) {
@@ -257,6 +274,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adResultSmallView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isResultSmallView = false
+                isScannerResultLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -302,6 +320,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adResultLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isResultLargeView = false
+                isScannerResultLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -348,6 +367,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adReviewSmallView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isReviewSmallView = false
+                isReviewLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -394,6 +414,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adReviewLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isReviewLargeView = false
+                isReviewLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -441,6 +462,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adHelpFeedbackSmallView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isHelpFeedbackSmallView = false
+                isHelpAndFeedbackLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -486,6 +508,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adHelpFeedbackLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isHelpFeedbackLargeView = false
+                isHelpAndFeedbackLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -533,6 +556,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adChangeColorSmallView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isChangeColorSmallView = false
+                isChangeColorAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -578,6 +602,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adChangeColorLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isChangeColorLargeView = false
+                isChangeColorAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -625,6 +650,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adBackupSmallView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isBackupSmallView = false
+                isBackupLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -670,6 +696,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adBackupLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isBackupLargeView = false
+                isBackupLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -716,6 +743,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adCreateSmallView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isCreateSmallView = false
+                isCreateLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -761,6 +789,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         adCreateLargeView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isCreateLargeView = false
+                isCreateLoadedAdsPortrait = context.isPortrait()
                 Utils.Log(TAG, "Ads successful")
             }
 
@@ -1431,6 +1460,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
             }else{
                90F.px
             }
+            val mVersion = ServiceManager.getInstance().mVersion
+            if (mVersion?.hiddenRemoveSmallAds==true){
+                mMaximumHeight -= 25f.px
+            }
         } else {
             val outMetrics = DisplayMetrics()
             @Suppress("DEPRECATION")
@@ -1445,6 +1478,10 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
                 105F.px
             }else{
                 90F.px
+            }
+            val mVersion = ServiceManager.getInstance().mVersion
+            if (mVersion?.hiddenRemoveSmallAds==true){
+                mMaximumHeight -= 30f.px
             }
         }
 
@@ -1604,6 +1641,161 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
         allowRequestFailureBackupLarge  = 0
         allowRequestFailureViewCode  = 0
         allowRequestFailureAnywhere  = 0
+    }
+
+    fun onCheckRequestAdsWhenRotation(enum : EnumScreens,context: Context){
+        when(enum){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                if (context.isPortrait() != isScannerResultLoadedAdsPortrait){
+                    isResultSmallView = true
+                    allowRequestFailureResultSmall  = 0
+                }
+            }
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                if (context.isPortrait() != isScannerResultLoadedAdsPortrait){
+                    isResultLargeView = true
+                    allowRequestFailureResultLarge  = 0
+                }
+            }
+            EnumScreens.REVIEW_SMALL ->{
+                if (context.isPortrait() != isReviewLoadedAdsPortrait){
+                    isResultSmallView = true
+                    allowRequestFailureReviewSmall = 0
+                }
+            }
+            EnumScreens.REVIEW_LARGE ->{
+                if (context.isPortrait() != isReviewLoadedAdsPortrait){
+                    isReviewLargeView = true
+                    allowRequestFailureReviewLarge = 0
+                }
+            }
+            EnumScreens.CREATE_SMALL ->{
+                if (context.isPortrait() != isCreateLoadedAdsPortrait){
+                    isCreateSmallView = true
+                    allowRequestFailureCreateSmall= 0
+                }
+            }
+            EnumScreens.CREATE_LARGE ->{
+                if (context.isPortrait() != isCreateLoadedAdsPortrait){
+                    isCreateLargeView = true
+                    allowRequestFailureCreateLarge = 0
+                }
+            }
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                if (context.isPortrait() != isHelpAndFeedbackLoadedAdsPortrait){
+                    isHelpFeedbackSmallView = true
+                    allowRequestFailureHelpFeedbackSmall = 0
+                }
+            }
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                if (context.isPortrait() != isHelpAndFeedbackLoadedAdsPortrait){
+                    isHelpFeedbackLargeView = true
+                    allowRequestFailureHelpFeedbackLarge = 0
+                }
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                if (context.isPortrait() != isChangeColorAdsPortrait){
+                    isChangeColorSmallView = true
+                    allowRequestFailureChangeColorSmall = 0
+                }
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                if (context.isPortrait() != isChangeColorAdsPortrait){
+                    isChangeColorLargeView = true
+                    allowRequestFailureChangeColorLarge = 0
+                }
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                if (context.isPortrait() != isBackupLoadedAdsPortrait){
+                    isBackupSmallView = true
+                    allowRequestFailureBackupSmall = 0
+                }
+
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                if (context.isPortrait() != isBackupLoadedAdsPortrait){
+                    isBackupLargeView = true
+                    allowRequestFailureBackupLarge = 0
+                }
+            }
+            else -> {}
+        }
+    }
+
+    fun onDestroyAds(enum : EnumScreens){
+        when(enum){
+            EnumScreens.SCANNER_RESULT_SMALL ->{
+                isResultSmallView = true
+                allowRequestFailureResultSmall  = 0
+            }
+            EnumScreens.SCANNER_RESULT_LARGE ->{
+                isResultLargeView = true
+                allowRequestFailureResultLarge  = 0
+            }
+            EnumScreens.REVIEW_SMALL ->{
+                isResultSmallView = true
+                allowRequestFailureReviewSmall = 0
+            }
+            EnumScreens.REVIEW_LARGE ->{
+                isReviewLargeView = true
+                allowRequestFailureReviewLarge = 0
+            }
+            EnumScreens.CREATE_SMALL ->{
+                isCreateSmallView = true
+                allowRequestFailureCreateSmall= 0
+            }
+            EnumScreens.CREATE_LARGE ->{
+                isCreateLargeView = true
+                allowRequestFailureCreateLarge = 0
+            }
+            EnumScreens.HELP_FEEDBACK_SMALL ->{
+                isHelpFeedbackSmallView = true
+                allowRequestFailureHelpFeedbackSmall = 0
+            }
+            EnumScreens.HELP_FEEDBACK_LARGE ->{
+                isHelpFeedbackLargeView = true
+                allowRequestFailureHelpFeedbackLarge = 0
+            }
+            EnumScreens.CHANGE_COLOR_SMALL ->{
+                isChangeColorSmallView = true
+                allowRequestFailureChangeColorSmall = 0
+            }
+            EnumScreens.CHANGE_COLOR_LARGE ->{
+                isChangeColorLargeView = true
+                allowRequestFailureChangeColorLarge = 0
+            }
+            EnumScreens.BACKUP_SMALL ->{
+                isBackupSmallView = true
+                allowRequestFailureBackupSmall = 0
+            }
+            EnumScreens.BACKUP_LARGE ->{
+                isBackupLargeView = true
+                allowRequestFailureBackupLarge = 0
+            }
+            else -> {}
+        }
+    }
+
+
+    private fun verifyUnauthorizedApps() {
+        piracyChecker {
+            enableInstallerId(InstallerID.GOOGLE_PLAY)
+            callback {
+                allow {
+                    isAuthorized = true
+                }
+                doNotAllow { piracyCheckerError, pirateApp ->
+                    isAuthorized = false
+                }
+                onError {
+                    isAuthorized = false
+                }
+            }
+        }.start()
+    }
+
+    fun getAuthorized() : Boolean{
+        return isAuthorized
     }
 
     companion object {

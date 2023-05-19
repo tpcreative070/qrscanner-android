@@ -16,6 +16,9 @@ import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 
 val View.screenLocation get(): IntArray {
@@ -116,4 +119,28 @@ fun View.changeHeight(height : Int){
 
 fun View.change(width : Int,height : Int){
     this.layoutParams = LinearLayout.LayoutParams(width, height)
+}
+
+fun View.onClicked() = callbackFlow<Unit> {
+    setOnClickListener { trySend(Unit).isSuccess }
+    awaitClose { setOnClickListener(null) }
+}
+
+fun View.debounceClick(debounceTime: Long = 1000L, action: () -> Unit) {
+    setOnClickListener {
+        when {
+            tag != null && (tag as Long) > System.currentTimeMillis() -> return@setOnClickListener
+            else -> {
+                tag = System.currentTimeMillis() + debounceTime
+                action()
+            }
+        }
+    }
+}
+
+fun View.clicks(): Flow<Unit> = callbackFlow {
+    setOnClickListener {
+        trySend(Unit).isSuccess
+    }
+    awaitClose { setOnClickListener(null) }
 }
