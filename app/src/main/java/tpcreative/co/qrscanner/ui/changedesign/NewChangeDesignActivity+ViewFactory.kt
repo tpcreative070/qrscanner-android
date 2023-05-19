@@ -41,6 +41,10 @@ fun NewChangeDesignActivity.initUI(){
     }
 
     binding.doneCancelBar.tvSave.setOnClickListener {
+        if (viewModel.isNullData()){
+            finish()
+            return@setOnClickListener
+        }
         val mHeight = viewModel.indexText.size * 150 + 1024
         val mBitmap =  binding.imgQRCode.drawable.toBitmap(1024,mHeight, Bitmap.Config.ARGB_8888)
         val mUri = mBitmap.storeBitmap(viewModel.uuId,EnumImage.QR_CODE).apply {

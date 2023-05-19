@@ -93,6 +93,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                 indexColor = defaultColor()
                 val mDataStore = SQLiteHelper.getDesignQR(data.uuId)
                 if (mDataStore!=null){
+                    Utils.Log(TAG,"mData gson ${mDataStore.toJson()}")
                     try {
                         val mReview = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
                         val mOriginal = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
@@ -733,6 +734,9 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         Utils.Log(TAG,"Data value review ${changeDesignReview.toJson()}")
         val mChanged = changeDesignOriginal.toJson() != changeDesignSave.toJson()
         Utils.Log(TAG,"Data value changed $mChanged")
+        if (isNullData()){
+            return false
+        }
         mapSetView.forEach {
             when(it){
                 EnumView.COLOR ->{
@@ -776,6 +780,9 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         Utils.Log(TAG,"Data value review ${changeDesignReview.toJson()}")
         val mChanged = changeDesignOriginal.toJson() != changeDesignReview.toJson()
         Utils.Log(TAG,"Data value isChanged ${mChanged}")
+        if (isNullData()){
+            return false
+        }
         mapSetView.forEach {
             when(it){
                 EnumView.COLOR ->{
@@ -830,6 +837,16 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
             if (selected.type == EnumImage.QR_BACKGROUND || selected.type == EnumImage.QR_FOREGROUND || selected.type == EnumImage.QR_FRAME || selected.type == EnumImage.QR_BALL){
                 return true
             }
+        }
+        return false
+    }
+
+    fun isNullData() : Boolean{
+        Utils.Log(TAG,"call null data")
+        val mIsSave = changeDesignSave.positionMarker == null && changeDesignSave.color == null && changeDesignSave.body == null && changeDesignSave.logo == null && changeDesignSave.text == null
+        val mIsOriginal = changeDesignOriginal.positionMarker == null && changeDesignOriginal.color == null && changeDesignOriginal.body == null && changeDesignOriginal.logo == null && changeDesignOriginal.text == null
+        if (mIsSave && mIsOriginal){
+            return true
         }
         return false
     }
