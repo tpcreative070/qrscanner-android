@@ -92,7 +92,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                 indexLogo = defaultLogo()
                 indexColor = defaultColor()
                 val mDataStore = SQLiteHelper.getDesignQR(data.uuId)
-                if (mDataStore!=null){
+                if (mDataStore?.codeDesign != null){
                     Utils.Log(TAG,"mData gson ${mDataStore.toJson()}")
                     try {
                         val mReview = mDataStore.codeDesign?.toObject(ChangeDesignModel::class.java) ?:  ChangeDesignModel()
@@ -616,6 +616,9 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         val mData =  DesignQRModel()
         mData.uuIdQR = uuId
         mData.codeDesign = changeDesignSave.toJson()
+        if (isSaveDataIsNull()){
+            mData.codeDesign = null
+        }
         Utils.Log(TAG,"Preparing data store into db ${changeDesignSave.toJson()}")
         Utils.Log(TAG,"Preparing data model store ${mData.toJson()}")
         SQLiteHelper.onInsert(mData)
@@ -846,6 +849,15 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         val mIsSave = changeDesignSave.positionMarker == null && changeDesignSave.color == null && changeDesignSave.body == null && changeDesignSave.logo == null && changeDesignSave.text == null
         val mIsOriginal = changeDesignOriginal.positionMarker == null && changeDesignOriginal.color == null && changeDesignOriginal.body == null && changeDesignOriginal.logo == null && changeDesignOriginal.text == null
         if (mIsSave && mIsOriginal){
+            return true
+        }
+        return false
+    }
+
+    fun isSaveDataIsNull() : Boolean{
+        Utils.Log(TAG,"call null data")
+        val mIsSave = changeDesignSave.positionMarker == null && changeDesignSave.color == null && changeDesignSave.body == null && changeDesignSave.logo == null && changeDesignSave.text == null
+        if (mIsSave){
             return true
         }
         return false
