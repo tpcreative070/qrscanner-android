@@ -106,6 +106,7 @@ class SaveViewModel  : BaseViewModel<TypeCategories>(){
                 if (index.isDeleted()) {
                     if (index.isChecked()) {
                         SQLiteHelper.onDelete(index)
+                        onDeleteChangeDesign(index)
                     }
                 }
             }

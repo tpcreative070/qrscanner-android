@@ -99,7 +99,7 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
 
 
         mModel = ChangeDesignModel()
-        mModel.logo = viewModel.mLogoList.getOrNull(3)
+        mModel.logo = viewModel.mLogoList.getOrNull(4)
         mModel.body = viewModel.mBodyList.getOrNull(1)
         mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(4)
         mMapColor = viewModel.defaultColorMap()

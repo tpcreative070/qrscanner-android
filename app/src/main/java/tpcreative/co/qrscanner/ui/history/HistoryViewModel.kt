@@ -110,6 +110,7 @@ class HistoryViewModel : BaseViewModel<HistoryModel>() {
                     if (index.isChecked()) {
                         Utils.Log(TAG,"deleteItem 2")
                         SQLiteHelper.onDelete(index)
+                        onDeleteChangeDesign(index)
                     }
                 }
             }
