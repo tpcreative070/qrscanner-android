@@ -30,6 +30,7 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.extension.*
 import tpcreative.co.qrscanner.common.view.CircleImageView
+import tpcreative.co.qrscanner.common.view.showcase.BubbleShowCase
 import tpcreative.co.qrscanner.databinding.ActivityChangeDesignTextBinding
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
@@ -191,6 +192,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             .launchIn(MainScope())
         binding.includeDragToClose.imgClose.addCircleRipple()
         binding.includeDragToClose.imgEdit.addCircleRipple()
+        if (viewModel.enumImage == EnumImage.QR_TEXT_TOP){
+            onShowGuide(binding.edtText,R.string.enter_a_text.toText(),EnumActivity.TEXT_ACTIVITY,R.drawable.ic_qr_text_top,BubbleShowCase.ArrowPosition.TOP)
+        }else{
+            onShowGuide(binding.edtText,R.string.enter_a_text.toText(),EnumActivity.TEXT_ACTIVITY,R.drawable.ic_qr_text_bottom,BubbleShowCase.ArrowPosition.TOP)
+        }
     }
 
     private fun onSave(){

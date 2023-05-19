@@ -174,6 +174,7 @@
     <string name="key_clicked_change_design_scanner_result">key_clicked_change_design_scanner_result</string>
     <string name="key_reload_template">key_reload_template</string>
     <string name="key_clicked_change_design_icon">key_clicked_change_design_icon</string>
+    <string name="key_clicked_change_design_text">key_clicked_change_design_text</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>

@@ -40,6 +40,11 @@ fun AppCompatActivity.onShowGuide(view : View,message :String,enumActivity: Enum
                 return
             }
         }
+        EnumActivity.TEXT_ACTIVITY ->{
+            if (Utils.isShowChangeDesignText()){
+                return
+            }
+        }
         else -> {}
     }
     ContextCompat.getDrawable(this, icon)?.let {
@@ -83,6 +88,9 @@ fun AppCompatActivity.onUpdate(enumActivity: EnumActivity){
         }
         EnumActivity.CHANGE_DESIGN -> {
             Utils.putShowChangeDesignIcon(true)
+        }
+        EnumActivity.TEXT_ACTIVITY ->{
+            Utils.putShowChangeDesignText(true)
         }
         else -> {}
     }

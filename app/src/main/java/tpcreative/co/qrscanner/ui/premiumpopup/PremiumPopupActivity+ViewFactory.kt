@@ -29,7 +29,7 @@ fun PremiumPopupActivity.initUI(){
     viewModel.getIntent(this){
         binding.imgQRCode.setImageBitmap(it)
     }
-    hiddenView(true)
+    hiddenView(false)
 }
 
 private fun PremiumPopupActivity.hiddenView(isShowAds : Boolean){
