@@ -13,6 +13,7 @@ import co.tpcreative.supersafe.common.adapter.BaseAdapter
 import co.tpcreative.supersafe.common.adapter.BaseHolder
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.isQRCode
 import tpcreative.co.qrscanner.common.extension.onBarCodeId
 import tpcreative.co.qrscanner.common.extension.onShowGuide
 import tpcreative.co.qrscanner.common.extension.toText
@@ -58,7 +59,9 @@ class ScannerResultActivityAdapter(inflater: LayoutInflater, private val context
                 }else{
                     imgMarkFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_unfavorite_24))
                 }
-                context.onShowGuide(rlAdvance,R.string.click_to_view_code.toText(),EnumActivity.SCANNER_RESULT_ACTIVITY,R.drawable.ic_qrcode_bg)
+                if (Utils.isQRCode(data.barcodeFormat)){
+                    context.onShowGuide(rlAdvance,R.string.click_to_view_code.toText(),EnumActivity.SCANNER_RESULT_ACTIVITY,R.drawable.ic_qrcode_bg)
+                }
             }else{
                 rlAdvance.visibility = View.GONE
                 rlBasic.visibility = View.VISIBLE

@@ -1521,6 +1521,28 @@ fun Utils.onBarCodeId(format: String?) : Drawable?{
     return mDraw
 }
 
+fun Utils.isQRCode(format: String?) : Boolean{
+    if (format.isNullOrEmpty()){
+       return true
+    }else{
+        when(BarcodeFormat.valueOf(format)){
+            BarcodeFormat.QR_CODE ->{
+                return true
+            }
+            BarcodeFormat.DATA_MATRIX->{
+                return true
+            }
+            BarcodeFormat.AZTEC->{
+                return true
+            }
+            else ->{
+                return false
+            }
+        }
+    }
+}
+
+
 fun Utils.setDisplayLatTimeSyncedCompletely(){
     PrefsController.putString(QRScannerApplication.getInstance().getString(R.string.key_last_time_synced_completely),
         getCurrentDateTimeSort()

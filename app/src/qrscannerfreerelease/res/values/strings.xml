@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">QR Scanner</string>
-    <string name="admob_app_id">ca-app-pub-9183774280414773~7519164617</string>
-    <string name="banner_result_small">ca-app-pub-9183774280414773/1679718419</string>
-    <string name="banner_result_large">ca-app-pub-9183774280414773/1895340830</string>
-    <string name="banner_review_small">ca-app-pub-9183774280414773/9582259161</string>
-    <string name="banner_review_large">ca-app-pub-9183774280414773/8265270072</string>
-    <string name="banner_create_small">ca-app-pub-9183774280414773/1608362380</string>
-    <string name="banner_create_large">ca-app-pub-9183774280414773/7271752602</string>
-    <string name="banner_backup_small">ca-app-pub-9183774280414773/3814927166</string>
-    <string name="banner_backup_large">ca-app-pub-9183774280414773/3332507597</string>
-    <string name="banner_change_color_small">ca-app-pub-9183774280414773/3016850812</string>
-    <string name="banner_change_color_large">ca-app-pub-9183774280414773/4042954031</string>
-    <string name="banner_help_feedback_small">ca-app-pub-9183774280414773/9103709020</string>
-    <string name="banner_help_feedback_large">ca-app-pub-9183774280414773/6740473407</string>
+    <string name="admob_app_id">ca-app-pub-7348025552719093~1670873301</string>
+    <string name="banner_result_small">ca-app-pub-7348025552719093/8944542879</string>
+    <string name="banner_result_large">ca-app-pub-7348025552719093/3789732190</string>
+    <string name="banner_review_small">ca-app-pub-7348025552719093/7631461204</string>
+    <string name="banner_review_large">ca-app-pub-7348025552719093/5714060092</string>
+    <string name="banner_create_small">ca-app-pub-7348025552719093/4949457546</string>
+    <string name="banner_create_large">ca-app-pub-7348025552719093/1944020257</string>
+    <string name="banner_backup_small">ca-app-pub-7348025552719093/8448034648</string>
+    <string name="banner_backup_large">ca-app-pub-7348025552719093/9461733417</string>
+    <string name="banner_change_color_small">ca-app-pub-7348025552719093/7739272417</string>
+    <string name="banner_change_color_large">ca-app-pub-7348025552719093/5490698812</string>
+    <string name="banner_help_feedback_small">ca-app-pub-7348025552719093/2323294208</string>
+    <string name="banner_help_feedback_large">ca-app-pub-7348025552719093/1010212532</string>
     <string name="interstitial_anywhere">ca-app-pub-8104576505804989/6053208150</string>
     <string name="interstitial_view_code">ca-app-pub-8104576505804989/3984366440</string>
 </resources>

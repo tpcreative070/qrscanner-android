@@ -65,7 +65,9 @@ fun ReviewActivity.initUI(){
         }
     }
     onHandlerIntent()
-    onShowGuide(binding.llChangeDesign,R.string.click_to_change_design_qr_code.toText(),EnumActivity.REVIEW_ACTIVITY,R.drawable.ic_skype_template)
+    if (Utils.isQRCode(viewModel.create.barcodeFormat)){
+        onShowGuide(binding.llChangeDesign,R.string.click_to_change_design_qr_code.toText(),EnumActivity.REVIEW_ACTIVITY,R.drawable.ic_skype_template)
+    }
 }
 
 fun ReviewActivity.loadAds(){
