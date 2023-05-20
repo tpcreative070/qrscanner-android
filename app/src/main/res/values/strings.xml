@@ -574,7 +574,7 @@
     <string name="freedom">Freedom</string>
     <string name="freedom_increase_font_size">Freedom to increase font-size</string>
     <string name="freedom_decrease_font_size">Freedom to decrease font-size</string>
-    <string name="click_to_change_design_qr_code">Click to change the design QR Code</string>
+    <string name="click_to_change_design_qr_code">Click to change the design of the QR Code</string>
     <string name="click_to_change_the_logo_shape">Click to change the logo shape</string>
     <string name="click_to_view_code">Click to view the code</string>
 </resources>
