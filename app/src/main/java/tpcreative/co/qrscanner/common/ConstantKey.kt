@@ -84,6 +84,9 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_TAG = "key_change_design_text_map_font_tag"
         const val KEY_CHANGE_DESIGN_TEXT_MAP_FONT_SIZE_TAG = "key_change_design_text_map_font_size_tag"
         const val KEY_CHANGE_DESIGN_TEXT_MAP_TEXT = "key_change_design_text_map_text"
+        const val KEY_REVIEW_CREATE = "key_review_create"
+        const val KEY_REVIEW_SAVE = "key_review_save"
+        const val KEY_REVIEW_UUID = "key_review_uuid"
 
 
         const val TITLE  = "title"

@@ -36,6 +36,7 @@ import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
+import vadiole.colorpicker.hexColor
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -68,12 +69,18 @@ class ReviewActivity : BaseActivitySlide() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(ConstantKey.key_saved, isAlreadySaved)
+        outState.putSerializable(ConstantKey.KEY_REVIEW_CREATE,create)
+        outState.putSerializable(ConstantKey.KEY_REVIEW_SAVE,save)
+        outState.putString(ConstantKey.KEY_REVIEW_UUID,uuId)
         Utils.Log(TAG,"State saved")
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         isAlreadySaved = savedInstanceState.getBoolean(ConstantKey.key_saved)
+        create = savedInstanceState.serializable(ConstantKey.KEY_REVIEW_CREATE)
+        save = savedInstanceState.serializable(ConstantKey.KEY_REVIEW_SAVE) ?: SaveModel()
+        uuId = savedInstanceState.getString(ConstantKey.KEY_DATA_UUID)
         Utils.Log(TAG,"State restore")
     }
 
@@ -400,6 +407,7 @@ class ReviewActivity : BaseActivitySlide() {
     }
 
     fun mergeUUID() {
+        Utils.Log(TAG,"Review on uuId ${create?.uuId}")
         if (create?.enumImplement == EnumImplement.CREATE){
             create?.uuId = save.uuId
         }
