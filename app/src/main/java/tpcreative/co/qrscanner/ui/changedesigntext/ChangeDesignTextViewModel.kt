@@ -31,6 +31,7 @@ class ChangeDesignTextViewModel(val viewModel: ChangeDesignViewModel)  : BaseVie
             ConstantKey.KEY_CHANGE_DESIGN_TEXT,
             ChangeDesignModel::class.java
         )
+        Utils.Log(TAG,"Map color ${mapColor.toJson()}")
         val mShape: EnumShape = EnumShape.valueOf(
             activity?.intent?.serializable(
                 ConstantKey.KEY_PREMIUM_POPUP_TYPE_SHAPE,
