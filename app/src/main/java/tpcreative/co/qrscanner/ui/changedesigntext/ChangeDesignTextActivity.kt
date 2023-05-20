@@ -113,23 +113,22 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             currentFontSize = mCurrentMap?.data?.currentFontSize ?: 90
             binding.edtText.setText(currentText)
             binding.edtText.setSelection(currentText.length)
-            Utils.getPopupColorPreferenceColor()?.let { it ->
-                mColorList.clear()
-                mColorList.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
-                viewModel.mapColor.forEach {
-                    mColorList.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
-                }
-                mColorList.addAll(it)
-
-                ThemeUtil.getThemeList().forEach { mTheme ->
-                    mColorList.add(ColorPreferenceModel(mTheme.getPrimaryDarkColor().fromColorIntRes.hexColor,System.currentTimeMillis()))
-                }
-                val mResult = mColorList.distinctBy { Pair(it.hexColor.lowercase(), it.hexColor.lowercase()) }
-                mColorList.clear()
-                mColorList.addAll(mResult)
-                addChipHexColor()
-                Utils.Log(TAG,"Size list ${mColorList.size}")
+            mColorList.clear()
+            mColorList.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
+            viewModel.mapColor.forEach {
+                mColorList.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
             }
+            Utils.getPopupColorPreferenceColor()?.let {
+                mColorList.addAll(it)
+            }
+            ThemeUtil.getThemeList().forEach { mTheme ->
+                mColorList.add(ColorPreferenceModel(mTheme.getPrimaryDarkColor().fromColorIntRes.hexColor,System.currentTimeMillis()))
+            }
+            val mResult = mColorList.distinctBy { Pair(it.hexColor.lowercase(), it.hexColor.lowercase()) }
+            mColorList.clear()
+            mColorList.addAll(mResult)
+            addChipHexColor()
+            Utils.Log(TAG,"List data ${mColorList.toJson()}")
         }
         binding.rlRootClose.setOnClickListener {
             finish()
@@ -193,9 +192,9 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         binding.includeDragToClose.imgClose.addCircleRipple()
         binding.includeDragToClose.imgEdit.addCircleRipple()
         if (viewModel.enumImage == EnumImage.QR_TEXT_TOP){
-            onShowGuide(binding.edtText,R.string.enter_a_text.toText(),EnumActivity.TEXT_ACTIVITY,R.drawable.ic_qr_text_top,BubbleShowCase.ArrowPosition.TOP)
+            onShowGuide(binding.edtText,R.string.enter_a_text.toText(),EnumActivity.TEXT_ACTIVITY,R.drawable.ic_qr_text_top,BubbleShowCase.ArrowPosition.BOTTOM)
         }else{
-            onShowGuide(binding.edtText,R.string.enter_a_text.toText(),EnumActivity.TEXT_ACTIVITY,R.drawable.ic_qr_text_bottom,BubbleShowCase.ArrowPosition.TOP)
+            onShowGuide(binding.edtText,R.string.enter_a_text.toText(),EnumActivity.TEXT_ACTIVITY,R.drawable.ic_qr_text_bottom,BubbleShowCase.ArrowPosition.BOTTOM)
         }
     }
 
