@@ -506,7 +506,7 @@
     <string name="favorite">Favorite</string>
     <string name="todo">todo</string>
     <string name="guides">Guides</string>
-    <string name="scan_qr_code_and_barcode">Scan QR Code and Barcodes</string>
+    <string name="scan_qr_code_and_barcode">Scan QR Code and Barcodes/</string>
     <string name="avoid_scan">Read the apps help to avoid common mistakes when scanning barcodes.</string>
     <string name="supported_codes">Supported codes</string>
     <string name="tips_for_scanning">Tips for scanning</string>
@@ -577,4 +577,5 @@
     <string name="click_to_change_design_qr_code">Click to change the design of the QR Code</string>
     <string name="click_to_change_the_logo_shape">Click to change the logo shape</string>
     <string name="click_to_view_code">Click to view the code</string>
+    <string name="customize_the_qr_code_according_to_your_style">Customize the QR code according to your style.</string>
 </resources>

@@ -45,23 +45,25 @@
                 android:layout_below="@+id/rlButton"
                 android:orientation="vertical">
                 <LinearLayout
+                    android:background="@color/bg_popup"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_gravity="center"
                         android:id="@+id/imgResult"
-                        android:layout_width="@dimen/icon_size_300"
-                        android:layout_height="@dimen/icon_size_300"
+                        android:layout_width="@dimen/icon_size_250"
+                        android:layout_height="@dimen/icon_size_250"
+                        android:layout_marginBottom="@dimen/margin_10"
                         android:layout_marginTop="@dimen/margin_10"/>
                 </LinearLayout>
                 <LinearLayout
                     android:visibility="visible"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:background="@color/material_gray_100"
+                    android:background="@color/material_gray_300"
                     android:id="@+id/llChangeDesign"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/margin_7"
+                    android:layout_marginTop="@dimen/margin_0"
                     android:layout_marginEnd="@dimen/margin_0"
                     android:paddingTop="@dimen/margin_2"
                     android:paddingBottom="@dimen/margin_2"

@@ -335,7 +335,7 @@
     <string name="favorite">お気に入り</string>
     <string name="todo">やることリスト</string>
     <string name="guides">ガイド</string>
-    <string name="scan_qr_code_and_barcode">QRコードとバーコードをスキャン</string>
+    <string name="scan_qr_code_and_barcode">QRコードとバーコードをスキャン.</string>
     <string name="avoid_scan">バーコードをスキャンする際の一般的なミスを回避するために、アプリのヘルプを読んでください。</string>
     <string name="supported_codes">サポートされているコード</string>
     <string name="tips_for_scanning">スキャンのヒント</string>
@@ -407,4 +407,5 @@
     <string name="click_to_change_design_qr_code">クリックするとQRコードのデザインが変更されます</string>
     <string name="click_to_change_the_logo_shape">クリックしてロゴの形状を変更します</string>
     <string name="click_to_view_code">クリックしてコードを表示します</string>
+    <string name="customize_the_qr_code_according_to_your_style">自分のスタイルに合わせてQRコードをカスタマイズしてください。</string>
 </resources>

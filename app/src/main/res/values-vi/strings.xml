@@ -328,7 +328,7 @@
     <string name="favorite">Yêu thích</string>
     <string name="todo">todo</string>
     <string name="guides">Hướng dẫn</string>
-    <string name="scan_qr_code_and_barcode">Quét mã QR và mã vạch</string>
+    <string name="scan_qr_code_and_barcode">Quét mã QR và mã vạch.</string>
     <string name="avoid_scan">Đọc mục trợ giúp của ứng dụng để tránh những sai lầm phổ biến khi quét mã vạch.</string>
     <string name="supported_codes">Hỗ trợ mã</string>
     <string name="tips_for_scanning">Mẹo quét</string>
@@ -398,4 +398,5 @@
     <string name="click_to_change_design_qr_code">Nhấp để thay đổi mã QR Code thiết kế</string>
     <string name="click_to_change_the_logo_shape">Nhấp để thay đổi hình dạng logo</string>
     <string name="click_to_view_code">Nhấp để xem mã</string>
+    <string name="customize_the_qr_code_according_to_your_style">Tùy chỉnh mã QR theo phong cách của bạn.</string>
 </resources>

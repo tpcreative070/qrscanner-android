@@ -302,7 +302,7 @@
     <string name="ok">OK</string> <string name="err_the_password_contains_unsupported_characters">La password contiene caratteri non supportati.</string>
     <string name="header">Intestazione</string> <string name="please_enable_wifi">Si prega di attivare il WI-FI</string>
     <string name="search">Cerca</string> <string name="favorite">Preferito</string> <string name="todo">Da fare</string>
-    <string name="guides">Guide</string> <string name="scan_qr_code_and_barcode">Scansiona codici QR e a barre</string>
+    <string name="guides">Guide</string> <string name="scan_qr_code_and_barcode">Scansiona codici QR e a barre.</string>
     <string name="avoid_scan">Leggi l\'aiuto dell\'app per evitare gli errori comuni durante la scansione dei codici a barre.</string>
     <string name="supported_codes">Codici supportati</string> <string name="tips_for_scanning">Suggerimenti per la scansione</string>
     <string name="help_feedback">Aiuto e feedback</string>
@@ -370,4 +370,5 @@
     <string name="click_to_change_design_qr_code">Fare clic per modificare il codice QR del design</string>
     <string name="click_to_change_the_logo_shape">Fare clic per modificare la forma del logo</string>
     <string name="click_to_view_code">Clicca per visualizzare il codice</string>
+    <string name="customize_the_qr_code_according_to_your_style">Personalizza il codice QR in base al tuo stile.</string>
 </resources>
