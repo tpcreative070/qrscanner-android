@@ -12,6 +12,7 @@ class IntroActivity  : AppIntro2() {
         super.onCreate(savedInstanceState)
         addSlide(AppIntroCustomLayoutFragment.newInstance(R.layout.activity_intro_1))
         addSlide(AppIntroCustomLayoutFragment.newInstance(R.layout.activity_intro_2))
+        addSlide(AppIntroCustomLayoutFragment.newInstance(R.layout.activity_intro_3))
         Utils.onIntro(true)
     }
 

@@ -334,7 +334,7 @@
     <string name="favorite">Favorit</string>
     <string name="todo">yang harus dilakukan</string>
     <string name="guides">Panduan</string>
-    <string name="scan_qr_code_and_barcode">Pindai Kode QR dan Barcode</string>
+    <string name="scan_qr_code_and_barcode">Pindai Kode QR dan Barcode.</string>
     <string name="avoid_scan">Baca bantuan aplikasi untuk menghindari kesalahan umum saat memindai barcode.</string>
     <string name="supported_codes">Kode yang didukung</string>
     <string name="tips_for_scanning">Tips untuk memindai</string>
@@ -405,4 +405,5 @@
     <string name="click_to_change_design_qr_code">Klik untuk mengubah kode QR desain</string>
     <string name="click_to_change_the_logo_shape">Klik untuk mengubah bentuk logo</string>
     <string name="click_to_view_code">Klik untuk melihat kode</string>
+    <string name="customize_the_qr_code_according_to_your_style">Sesuaikan kode QR sesuai dengan gaya Anda.</string>
 </resources>

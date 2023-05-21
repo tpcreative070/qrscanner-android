@@ -284,7 +284,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         )
         mLogoList.add(
             LogoModel(
-                EnumIcon.ic_paypal,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+                EnumIcon.ic_paypal,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(
