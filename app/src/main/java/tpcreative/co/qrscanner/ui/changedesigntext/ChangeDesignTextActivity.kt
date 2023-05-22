@@ -449,11 +449,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
 
     private fun addFontSize(){
         mFontSizeList.clear()
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
         mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.SMALL,name = R.string.small.toText(), fontSize = 70))
         mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.MEDIUM,name = R.string.medium.toText(),fontSize = 90))
         mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.LARGE,name = R.string.large.toText(),fontSize = 110))
-        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
-        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
     }
 
     fun onClick(v: View) {
