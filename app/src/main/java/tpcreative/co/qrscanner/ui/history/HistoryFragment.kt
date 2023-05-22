@@ -23,11 +23,13 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.extension.isQRCode
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.databinding.FragmentHistoryBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import java.io.File
 import java.util.*
@@ -222,9 +224,25 @@ class HistoryFragment : BaseFragment(), HistoryCell.ItemSelectedListener, Histor
         viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
     }
 
+    override fun onClickItemImage(position: Int) {
+        val history: HistoryModel = viewModel.mList[position]
+        if (actionMode != null  || !Utils.isQRCode(history.barcodeFormat)) {
+            return
+        }
+        val create = GeneralModel(history,EnumFragmentType.HISTORY,EnumImplement.VIEW)
+        viewForChangeDesignResult.launch(Navigator.onResultView(requireActivity(),create, NewChangeDesignActivity::class.java))
+    }
+
     private val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             Utils.Log(TAG,"${result.resultCode}")
+        }
+    }
+
+    private val viewForChangeDesignResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG,"${result.resultCode}")
+            HistorySingleton.getInstance()?.reloadDataChangeDesign()
         }
     }
 

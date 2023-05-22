@@ -398,6 +398,8 @@ class ReviewActivity : BaseActivitySlide() {
                 bitmap = BitmapFactory.decodeFile(mFile.absolutePath)
                 binding.imgResult.setImageURI(null)
                 binding.imgResult.setImageURI(mFile.toUri())
+                SaveSingleton.getInstance()?.reloadDataChangeDesign()
+                HistorySingleton.getInstance()?.reloadDataChangeDesign()
             }
         }
     }

@@ -15,8 +15,15 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgQRReview"
             android:layout_marginStart="@dimen/margin_10"
+            android:layout_gravity="top"
+            android:layout_width="@dimen/icon_size_50"
+            android:layout_height="@dimen/icon_size_50"/>
+        <LinearLayout
+            android:layout_gravity="top"
+            android:layout_marginStart="@dimen/margin_5"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="0.7"

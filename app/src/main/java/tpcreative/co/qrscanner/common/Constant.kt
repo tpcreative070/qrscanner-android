@@ -37,10 +37,16 @@ class Constant {
         val mFontList = mutableMapOf<String,Int>().apply {
             put(EnumFont.brandon_bold.name,R.font.brandon_bold)
             put(EnumFont.brandon_regular.name,R.font.brandon_regular)
+            put(EnumFont.acrotray_regular.name,R.font.acrotray_regular)
+            put(EnumFont.sprots_medium_regular.name,R.font.sprots_medium_regular)
+            put(EnumFont.thespeciment_regular.name,R.font.thespeciment_regular)
+            put(EnumFont.nature_beauty_personal.name,R.font.nature_beauty_personal)
+            put(EnumFont.wedding_day_personal_regular.name,R.font.wedding_day_personal_regular)
             put(EnumFont.roboto_bold.name,R.font.roboto_bold)
             put(EnumFont.roboto_light.name,R.font.roboto_light)
             put(EnumFont.roboto_medium.name,R.font.roboto_medium)
             put(EnumFont.roboto_regular.name,R.font.roboto_regular)
+
         }
 
         val  mList = mutableMapOf<String,Int>().apply {
@@ -102,6 +108,12 @@ class Constant {
             put(EnumIcon.ic_master_card.name,R.drawable.ic_master_card)
             put(EnumIcon.ic_snapchat.name,R.drawable.ic_snapchat)
             put(EnumIcon.ic_we_chat.name,R.drawable.ic_we_chat)
+            put(EnumIcon.ic_reddit.name,R.drawable.ic_reddit)
+            put(EnumIcon.ic_amazon.name,R.drawable.ic_amazon)
+            put(EnumIcon.ic_ebay.name,R.drawable.ic_ebay)
+            put(EnumIcon.ic_telegram.name,R.drawable.ic_telegram)
+            put(EnumIcon.ic_dog.name,R.drawable.ic_dog)
+            put(EnumIcon.ic_cat.name,R.drawable.ic_cat)
         }
     }
 }
@@ -110,7 +122,7 @@ enum class EnumIcon {
     ic_youtube_png, ic_twitter,ic_template,ic_paint,ic_dots,ic_eyes,ic_registered,ic_design_text,bg_white,ic_wifi,ic_whatapp,ic_instagram,ic_paypal,ic_email,ic_more,ic_help,
     ic_message,ic_location,ic_calender,ic_contact,ic_phone,ic_text,ic_network,ic_gallery,ic_dark_corner_0_5,ic_frame_ball_corner_top_right_bottom_left_25px,ic_frame_ball_default,ic_dark_default,ic_frame_ball_corner_10px,ic_frame_ball_corner_25px,
     ic_frame_ball_corner_top_left_bottom_right_25px,ic_facebook,ic_facebook_messenger,ic_tiktok,ic_line,ic_linkedin,ic_skype,ic_restaurant,ic_heart,ic_card,ic_gift,ic_viber,ic_birthday,ic_visa,ic_master_card,ic_snapchat,ic_we_chat,
-    ic_frame_ball_corner_top_left_top_right_bottom_left_25px,ic_qr_background,ic_qr_text_bottom,ic_qr_text_top,
+    ic_frame_ball_corner_top_left_top_right_bottom_left_25px,ic_qr_background,ic_qr_text_bottom,ic_qr_text_top,ic_reddit,ic_amazon,ic_ebay,ic_telegram,ic_dog,ic_cat,
     ic_frame_ball_circle,
     ic_dark_circle,
     ic_dark_star;
@@ -122,7 +134,7 @@ enum class EnumIcon {
 }
 
 enum class EnumFont {
-    brandon_bold,brandon_regular,roboto_bold,roboto_light,roboto_medium,roboto_regular;
+    brandon_bold,brandon_regular,roboto_bold,roboto_light,roboto_medium,roboto_regular,acrotray_regular,sprots_medium_regular,thespeciment_regular,nature_beauty_personal,wedding_day_personal_regular;
     companion object {
         fun fromValue(enumFont: EnumFont): Int {
             return Constant.mFontList[enumFont.name] ?: R.font.roboto_regular

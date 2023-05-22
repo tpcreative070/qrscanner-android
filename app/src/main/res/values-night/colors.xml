@@ -39,4 +39,9 @@
     <color name="material_green_a700">#16713C</color>
     <color name="red_dark">#8A1B1B</color>
     <color name="color_bg_tips_scanning">#FFFFFF</color>
+    <color name="material_gray_change_design">#251E1E</color>
+    <color name="bg_popup">#323131</color>
+    <color name="bg_selected">#A5A5A5</color>
+    <color name="view_selected">#FFFFFF</color>
+    <color name="view_close">#FFFFFF</color>
 </resources>

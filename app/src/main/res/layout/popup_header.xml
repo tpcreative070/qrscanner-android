@@ -22,7 +22,7 @@
                 android:layout_width="@dimen/icon_size_60"
                 android:layout_height="@dimen/icon_size_60"/>
             <androidx.appcompat.widget.AppCompatImageView
-                app:tint="@color/material_gray_900"
+                app:tint="@color/view_close"
                 android:layout_alignParentEnd="true"
                 android:padding="@dimen/margin_15"
                 android:id="@+id/imgClose"

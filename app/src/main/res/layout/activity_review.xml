@@ -60,7 +60,7 @@
                 <LinearLayout
                     android:visibility="visible"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:background="@color/material_gray_300"
+                    android:background="@color/material_gray_change_design"
                     android:id="@+id/llChangeDesign"
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/margin_0"

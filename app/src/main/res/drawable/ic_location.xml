@@ -3,6 +3,11 @@
     android:height="100dp"
     android:viewportWidth="32"
     android:viewportHeight="32">
+  <group
+      android:scaleX="0.9"
+      android:scaleY="0.9"
+      android:pivotX="16"
+      android:pivotY="16">
   <path
       android:pathData="M16,11m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"
       android:strokeLineJoin="round"
@@ -17,4 +22,5 @@
       android:fillColor="#00000000"
       android:strokeColor="@color/white"
       android:strokeLineCap="round"/>
+  </group>
 </vector>
