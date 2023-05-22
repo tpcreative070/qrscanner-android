@@ -55,6 +55,7 @@ fun AppCompatActivity.onShowGuide(view : View,message :String,enumActivity: Enum
             .image(it)
             .title(message) //Any title for the bubble view
             .targetView(view) //View to point out
+            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE)
             .listener(object : BubbleShowCaseListener { //Listener for user actions
                 override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
                     onUpdate(enumActivity)

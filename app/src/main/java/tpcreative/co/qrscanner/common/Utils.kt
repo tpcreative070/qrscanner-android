@@ -203,6 +203,14 @@ object Utils {
         PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_current_code_version), code)
     }
 
+    fun getCurrentChangeDesignCodeVersion() : Int {
+        return PrefsController.getInt(QRScannerApplication.getInstance().getString(R.string.key_change_design_new_version), 0)
+    }
+
+    fun setCurrentChangeDesignCodeVersion(code : Int){
+        PrefsController.putInt(QRScannerApplication.getInstance().getString(R.string.key_change_design_new_version), code)
+    }
+
     fun isReloadTemplate() : Boolean {
         return PrefsController.getBoolean(R.string.key_reload_template.toText(), false)
     }
@@ -234,7 +242,7 @@ object Utils {
     }
 
     fun isNewVersion() : Boolean{
-        val currentCodeVersion: Int = getCurrentCodeVersion()
+        val currentCodeVersion: Int = getCurrentChangeDesignCodeVersion()
         return if (currentCodeVersion == BuildConfig.VERSION_CODE) {
             Log(TAG, "Already install this version")
             false
@@ -931,6 +939,9 @@ object Utils {
     fun isPremium() : Boolean{
         if (BuildConfig.APPLICATION_ID == R.string.qrscanner_pro_release.toText()){
             return true
+        }
+        if (BuildConfig.DEBUG){
+            return Configuration.debug_premium_features
         }
         return isAlreadyCheckout()
     }

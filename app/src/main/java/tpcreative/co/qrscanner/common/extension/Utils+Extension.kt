@@ -1525,18 +1525,18 @@ fun Utils.isQRCode(format: String?) : Boolean{
     if (format.isNullOrEmpty()){
        return true
     }else{
-        when(BarcodeFormat.valueOf(format)){
+        return when(BarcodeFormat.valueOf(format)){
             BarcodeFormat.QR_CODE ->{
-                return true
+                true
             }
             BarcodeFormat.DATA_MATRIX->{
-                return true
+                true
             }
             BarcodeFormat.AZTEC->{
-                return true
+                true
             }
             else ->{
-                return false
+                false
             }
         }
     }

@@ -175,6 +175,7 @@
     <string name="key_reload_template">key_reload_template</string>
     <string name="key_clicked_change_design_icon">key_clicked_change_design_icon</string>
     <string name="key_clicked_change_design_text">key_clicked_change_design_text</string>
+    <string name="key_change_design_new_version">key_change_design_new_version</string>
     <!--Do not use this code end for multiple languages -->
 
     <string name="app_name">QR Scanner</string>
@@ -578,4 +579,5 @@
     <string name="click_to_change_the_logo_shape">Click to change the logo shape</string>
     <string name="click_to_view_code">Click to view the code</string>
     <string name="customize_the_qr_code_according_to_your_style">Customize the QR code according to your style.</string>
+    <string name="save_to">Saved to</string>
 </resources>

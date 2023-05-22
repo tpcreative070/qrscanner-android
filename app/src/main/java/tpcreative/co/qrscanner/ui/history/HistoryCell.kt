@@ -5,11 +5,14 @@ import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.jaychang.srv.SimpleCell
 import com.jaychang.srv.SimpleViewHolder
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.addCircleRipple
+import tpcreative.co.qrscanner.common.extension.loadBitmap
 import tpcreative.co.qrscanner.model.HistoryModel
 
 /**
@@ -71,6 +74,18 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
             }
             false
         })
+        viewHolder.imgQRReview.setOnClickListener {
+            if (listener != null) {
+                if (listener?.isDeleted() == true) {
+                    viewHolder.ckDelete.isChecked = !item.isChecked()
+                    listener?.onClickItem(i, !item.isChecked())
+                } else {
+                    listener?.onClickItemImage(i)
+                }
+            }
+        }
+        viewHolder.imgQRReview.addCircleRipple()
+        viewHolder.imgQRReview.loadBitmap(data.uuId,data.barcodeFormat)
         viewHolder.tvTime.text = Utils.getCurrentDateDisplay(data.updatedDateTime)
         viewHolder.tvContent.text = data.getDisplay()
     }
@@ -82,6 +97,7 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
      */
     class ViewHolder(itemView: View) : SimpleViewHolder(itemView) {
         val tvTime: AppCompatTextView = itemView.findViewById(R.id.tvDate)
+        val imgQRReview : AppCompatImageView = itemView.findViewById(R.id.imgQRReview)
         val tvContent: AppCompatTextView = itemView.findViewById(R.id.tvContent)
         val ckDelete: AppCompatCheckBox = itemView.findViewById(R.id.ckDelete)
         val lItem: LinearLayout = itemView.findViewById(R.id.lItem)
@@ -91,6 +107,7 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
     interface ItemSelectedListener {
         fun onClickItem(position: Int, isChecked: Boolean)
         fun onClickItem(position: Int)
+        fun onClickItemImage(position : Int)
         fun onLongClickItem(position: Int)
         fun isDeleted(): Boolean
     }

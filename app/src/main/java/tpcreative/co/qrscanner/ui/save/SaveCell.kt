@@ -11,6 +11,8 @@ import com.jaychang.srv.SimpleCell
 import com.jaychang.srv.SimpleViewHolder
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.extension.addCircleRipple
+import tpcreative.co.qrscanner.common.extension.loadBitmap
 import tpcreative.co.qrscanner.model.SaveModel
 
 class SaveCell(item: SaveModel) : SimpleCell<SaveModel, SaveCell.ViewHolder>(item) {
@@ -74,13 +76,25 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel, SaveCell.ViewHolder>(ite
             }
             false
         })
-        viewHolder.tvTime.text = Utils.getCurrentDateDisplay(data.updatedDateTime)
-        viewHolder.tvContent.text = data.getDisplay()
+        viewHolder.imgQRReview.setOnClickListener {
+            if (listener != null) {
+                if (listener?.isDeleted() == true) {
+                    viewHolder.ckDelete.isChecked = !item.isChecked()
+                    listener?.onClickItem(i, !item.isChecked())
+                } else {
+                    listener?.onClickItemImage(i)
+                }
+            }
+        }
         viewHolder.imgEdit.setOnClickListener(View.OnClickListener {
             if (listener != null) {
                 listener?.onClickEdit(i)
             }
         })
+        viewHolder.imgQRReview.addCircleRipple()
+        viewHolder.imgQRReview.loadBitmap(data.uuId,data.barcodeFormat)
+        viewHolder.tvTime.text = Utils.getCurrentDateDisplay(data.updatedDateTime)
+        viewHolder.tvContent.text = data.getDisplay()
     }
 
     /**
@@ -91,6 +105,7 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel, SaveCell.ViewHolder>(ite
     class ViewHolder(itemView: View) : SimpleViewHolder(itemView) {
         val tvTime: AppCompatTextView = itemView.findViewById(R.id.tvDate)
         val tvContent: AppCompatTextView = itemView.findViewById(R.id.tvContent)
+        val imgQRReview : AppCompatImageView = itemView.findViewById(R.id.imgQRReview)
         val ckDelete: AppCompatCheckBox = itemView.findViewById(R.id.ckDelete)
         val imgEdit: AppCompatImageView = itemView.findViewById(R.id.imgEdit)
         val lItem: LinearLayout = itemView.findViewById(R.id.lItem)
@@ -100,6 +115,7 @@ class SaveCell(item: SaveModel) : SimpleCell<SaveModel, SaveCell.ViewHolder>(ite
     interface ItemSelectedListener {
         fun onClickItem(position: Int, isChecked: Boolean)
         fun onClickItem(position: Int)
+        fun onClickItemImage(position : Int)
         fun onLongClickItem(position: Int)
         fun onClickEdit(position: Int)
         fun isDeleted(): Boolean

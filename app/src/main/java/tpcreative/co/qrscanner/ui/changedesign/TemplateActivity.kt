@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.common.Navigator
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.activity.BaseActivity
@@ -49,6 +50,7 @@ class TemplateActivity  : BaseActivity(), TemplateAdapter.ItemSelectedListener{
     override fun onDestroy() {
         super.onDestroy()
         Utils.setReloadTemplate(true)
+        Utils.setCurrentChangeDesignCodeVersion(BuildConfig.VERSION_CODE)
     }
 
     private val premiumPopupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->

@@ -15,6 +15,12 @@ class HistorySingleton {
         }
     }
 
+    fun reloadDataChangeDesign() {
+        if (listener != null) {
+            listener?.reloadData()
+        }
+    }
+
     interface SingletonHistoryListener {
         fun reloadData()
     }

@@ -25,11 +25,14 @@ import tpcreative.co.qrscanner.BuildConfig
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
 import tpcreative.co.qrscanner.common.controller.ServiceManager
+import tpcreative.co.qrscanner.common.extension.isQRCode
+import tpcreative.co.qrscanner.common.extension.onBarCodeId
 import tpcreative.co.qrscanner.common.extension.toText
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.databinding.FragmentSaverBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
+import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
 import tpcreative.co.qrscanner.ui.create.*
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
 import java.io.File
@@ -223,6 +226,22 @@ class SaveFragment : BaseFragment(), SaveCell.ItemSelectedListener, SaveSingleto
         val saver: SaveModel = viewModel.mList[position]
         val create = GeneralModel(saver,EnumFragmentType.SAVER,EnumImplement.VIEW)
         viewForResult.launch(Navigator.onResultView(activity, create, ScannerResultActivity::class.java))
+    }
+
+    override fun onClickItemImage(position: Int) {
+        val save: SaveModel = viewModel.mList[position]
+        if (actionMode != null || !Utils.isQRCode(save.barcodeFormat)) {
+            return
+        }
+        val create = GeneralModel(save,EnumFragmentType.SAVER,EnumImplement.VIEW)
+        viewForChangeDesignResult.launch(Navigator.onResultView(requireActivity(),create, NewChangeDesignActivity::class.java))
+    }
+
+    private val viewForChangeDesignResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Utils.Log(TAG,"${result.resultCode}")
+            SaveSingleton.getInstance()?.reloadDataChangeDesign()
+        }
     }
 
     private val viewForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->

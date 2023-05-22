@@ -35,9 +35,11 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
 
     private fun initializedTemplateDate(){
         viewModel.initializedTemplateData()
+        var count = 0
         mTemplateList.clear()
         var mModel = ChangeDesignModel()
-        mTemplateList.add(TemplateModel("0",EnumShape.SQUARE,EnumIcon.ic_help,EnumChangeDesignType.NONE,mModel))
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_help,EnumChangeDesignType.NONE,mModel))
+        count+=1
 
         mModel = ChangeDesignModel()
         mModel.logo = viewModel.mLogoList.getOrNull(2)
@@ -50,7 +52,8 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
         var mColor = viewModel.defaultColor()
         mModel.color = mColor
         mModel.color?.mapColor = mMapColor
-        mTemplateList.add(TemplateModel("1",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
 
         mModel = ChangeDesignModel()
         mModel.logo = viewModel.mLogoList.getOrNull(8)
@@ -64,7 +67,8 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
         mColor = viewModel.defaultColor()
         mModel.color = mColor
         mModel.color?.mapColor = mMapColor
-        mTemplateList.add(TemplateModel("2",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.VIP,mModel))
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.VIP,mModel))
+        count+=1
 
         mModel = ChangeDesignModel()
         mModel.logo = viewModel.mLogoList.getOrNull(11)
@@ -78,7 +82,8 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
         mColor = viewModel.defaultColor()
         mModel.color = mColor
         mModel.color?.mapColor = mMapColor
-        mTemplateList.add(TemplateModel("3",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
 
 
         mModel = ChangeDesignModel()
@@ -95,8 +100,8 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
         mColor = viewModel.defaultColor()
         mModel.color = mColor
         mModel.color?.mapColor = mMapColor
-        mTemplateList.add(TemplateModel("4",EnumShape.CIRCLE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
-
+        mTemplateList.add(TemplateModel("$count",EnumShape.CIRCLE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
 
         mModel = ChangeDesignModel()
         mModel.logo = viewModel.mLogoList.getOrNull(4)
@@ -112,7 +117,216 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
         mColor = viewModel.defaultColor()
         mModel.color = mColor
         mModel.color?.mapColor = mMapColor
-        mTemplateList.add(TemplateModel("5",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.VIP,mModel))
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.VIP,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_dog }
+        mModel.body = viewModel.mBodyList.firstOrNull { it.enumBody == EnumBody.STAR }
+        mModel.positionMarker = viewModel.mPositionMarkerList.firstOrNull { it.enumPositionMarker == EnumPositionMarker.CORNER_25PX}
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorBrown.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.transparent.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorBrown.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorBrown.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.CIRCLE,EnumIcon.ic_restaurant,EnumChangeDesignType.VIP,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_restaurant }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.firstOrNull { it.enumPositionMarker == EnumPositionMarker.DEFAULT}
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.inbox_primary_dark.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.colorAccent.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.inbox_primary_dark.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.inbox_primary_dark.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_contact }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker =viewModel.mPositionMarkerList.firstOrNull { it.enumPositionMarker == EnumPositionMarker.DEFAULT}
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.colorPrimaryDark.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.primaryColorBrown.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.colorPrimaryDark.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.colorPrimaryDark.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_heart }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorPink.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.colorRed.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorPink.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorPink.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_message }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorPurple.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.colorAccent.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorPurple.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorPurple.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_location }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorDeepPurple.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.secondaryColorLightGreen.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorDeepPurple.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorDeepPurple.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_contact }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorCyan.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.primaryColorPink.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorCyan.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorCyan.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_calender }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorTeal.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.primaryColorLightGreen.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorTeal.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorTeal.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_phone }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorLightGreen.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.primaryColorAmber.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorLightGreen.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorLightGreen.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_text }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorLimeStrong.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.primaryColorBrown.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorLimeStrong.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorLimeStrong.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_birthday }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorAmberStrong.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.primaryColorPink.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorAmberStrong.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorAmberStrong.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
+
+        mModel = ChangeDesignModel()
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_network }
+        mModel.body = viewModel.mBodyList.getOrNull(1)
+        mModel.positionMarker = viewModel.mPositionMarkerList.getOrNull(2)
+        mMapColor = viewModel.defaultColorMap()
+        mMapColor[EnumImage.QR_BACKGROUND] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND] = R.color.primaryDarkColorBrown.stringHex
+        mMapColor[EnumImage.QR_BACKGROUND_ICON] = R.color.colorPrimary.stringHex
+        mMapColor[EnumImage.QR_FOREGROUND_ICON] = R.color.white.stringHex
+        mMapColor[EnumImage.QR_FRAME] = R.color.primaryDarkColorBrown.stringHex
+        mMapColor[EnumImage.QR_BALL] = R.color.primaryDarkColorBrown.stringHex
+        mColor = viewModel.defaultColor()
+        mModel.color = mColor
+        mModel.color?.mapColor = mMapColor
+        mTemplateList.add(TemplateModel("$count",EnumShape.CIRCLE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        count+=1
 
 //        mModel = ChangeDesignModel()
 //        mTemplateList.add(TemplateModel("6",EnumShape.SQUARE,EnumIcon.ic_more,EnumChangeDesignType.MORE,mModel))

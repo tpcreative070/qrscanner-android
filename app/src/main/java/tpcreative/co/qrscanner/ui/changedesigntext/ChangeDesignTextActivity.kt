@@ -116,7 +116,7 @@ class ChangeDesignTextActivity : AppCompatActivity() {
             mColorList.clear()
             mColorList.add(ColorPreferenceModel(R.color.white.fromColorIntRes.hexColor,System.currentTimeMillis()))
             viewModel.mapColor.forEach {
-                mColorList.add(ColorPreferenceModel(it.value,System.currentTimeMillis()))
+                mColorList.add(ColorPreferenceModel(it.value.hexWithoutTransparent,System.currentTimeMillis()))
             }
             Utils.getPopupColorPreferenceColor()?.let {
                 mColorList.addAll(it)
@@ -436,6 +436,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
         mFontList.clear()
         mFontList.add(FontModel(name = EnumFont.brandon_bold.name, enumFont = EnumFont.brandon_bold, fontName = "Brandon bold",enumChangeDesignType = EnumChangeDesignType.VIP))
         mFontList.add(FontModel(name = EnumFont.brandon_regular.name,enumFont = EnumFont.brandon_regular,fontName ="Brandon regular",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontList.add(FontModel(name = EnumFont.acrotray_regular.name, enumFont = EnumFont.acrotray_regular, fontName = "Protract regular",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontList.add(FontModel(name = EnumFont.sprots_medium_regular.name,enumFont = EnumFont.sprots_medium_regular,fontName ="Sports medium regular",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontList.add(FontModel(name = EnumFont.thespeciment_regular.name, enumFont = EnumFont.thespeciment_regular, fontName = "Specimen regular",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontList.add(FontModel(name = EnumFont.nature_beauty_personal.name,enumFont = EnumFont.nature_beauty_personal,fontName ="Nature beauty",enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontList.add(FontModel(name = EnumFont.wedding_day_personal_regular.name, enumFont = EnumFont.wedding_day_personal_regular, fontName = "Wedding day",enumChangeDesignType = EnumChangeDesignType.VIP))
         mFontList.add(FontModel(name = EnumFont.roboto_bold.name,enumFont = EnumFont.roboto_bold,fontName ="Roboto bold"))
         mFontList.add(FontModel(name = EnumFont.roboto_light.name,enumFont = EnumFont.roboto_light,fontName ="Roboto light"))
         mFontList.add(FontModel(name = EnumFont.roboto_medium.name,enumFont = EnumFont.roboto_medium,fontName ="Roboto medium"))
@@ -444,11 +449,11 @@ class ChangeDesignTextActivity : AppCompatActivity() {
 
     private fun addFontSize(){
         mFontSizeList.clear()
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
+        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
         mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.SMALL,name = R.string.small.toText(), fontSize = 70))
         mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.MEDIUM,name = R.string.medium.toText(),fontSize = 90))
         mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.LARGE,name = R.string.large.toText(),fontSize = 110))
-        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_DECREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
-        mFontSizeList.add(FontModel(enumFontSize = EnumFontSize.FREEDOM_INCREASE,name = R.string.freedom.toText(),fontSize = 90,enumChangeDesignType = EnumChangeDesignType.VIP))
     }
 
     fun onClick(v: View) {

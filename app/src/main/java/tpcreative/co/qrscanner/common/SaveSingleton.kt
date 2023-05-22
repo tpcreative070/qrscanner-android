@@ -14,6 +14,12 @@ class SaveSingleton {
         }
     }
 
+    fun reloadDataChangeDesign() {
+        if (listener != null) {
+            listener?.reloadData()
+        }
+    }
+
     interface SingletonSaveListener {
         fun reloadData()
     }

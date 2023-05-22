@@ -364,11 +364,18 @@ class BubbleShowCase(builder: BubbleShowCaseBuilder){
         if (targetView.width == 0 || targetView.height == 0) {
             return null
         }
-        val rootView = getViewRoot(mActivity.get()!!)
-        val currentScreenView = rootView.getChildAt(0)
-        var bitmap = currentScreenView.drawToBitmap(Bitmap.Config.ARGB_8888)
-        bitmap = Bitmap.createBitmap(bitmap, getXposition(targetView), getYposition(targetView), targetView.width, targetView.height)
-        return bitmap
+        return try {
+            val rootView = getViewRoot(mActivity.get()!!)
+            val currentScreenView = rootView.getChildAt(0)
+            var bitmap = currentScreenView.drawToBitmap(Bitmap.Config.ARGB_8888)
+            bitmap = Bitmap.createBitmap(bitmap, getXposition(targetView), getYposition(targetView), targetView.width, targetView.height)
+            bitmap
+        } catch (e: Exception) {
+            val rootView = mActivity.get()?.let { getViewRoot(it) }
+            val currentScreenView = rootView?.getChildAt(0)
+            val bitmap = currentScreenView?.drawToBitmap(Bitmap.Config.ARGB_8888)
+            bitmap?.let { Bitmap.createBitmap(it, 0, 0, targetView.width, targetView.height) }
+        }
     }
 
     private fun takeScreenshotOfSurfaceView(targetView: View): Bitmap? {
