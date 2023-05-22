@@ -31,6 +31,7 @@ class Constant {
         const val files_folder = "files"
         const val youtube_id = "eNhq6s1kmhw"
         const val LOG_TAKE_TIME = "LOG_TAKE_TIME"
+        const val QR_FOLDER = "QRChangeDesign"
 
         val defaultColor  = ContextCompat.getColor(QRScannerApplication.getInstance(),R.color.white)
 

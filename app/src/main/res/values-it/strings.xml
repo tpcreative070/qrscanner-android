@@ -371,4 +371,5 @@
     <string name="click_to_change_the_logo_shape">Fare clic per modificare la forma del logo</string>
     <string name="click_to_view_code">Clicca per visualizzare il codice</string>
     <string name="customize_the_qr_code_according_to_your_style">Personalizza il codice QR in base al tuo stile.</string>
+    <string name="save_to">Salvato in</string>
 </resources>

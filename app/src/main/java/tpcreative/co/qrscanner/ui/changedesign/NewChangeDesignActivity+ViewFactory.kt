@@ -55,6 +55,7 @@ fun NewChangeDesignActivity.initUI(){
             //Utils.onShareImage(this,mUri)
             Utils.Log(TAG,"Response data sender $mUri")
             viewModel.onSaveToDB()
+            mBitmap.saveMediaToStorage(this,Utils.getCurrentDateDisplay(null))
             setResult(Activity.RESULT_OK)
             finish()
         }

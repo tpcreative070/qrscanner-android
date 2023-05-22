@@ -1,14 +1,22 @@
 package tpcreative.co.qrscanner.common.extension
 
+import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.*
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import android.view.View
+import android.widget.Toast
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumFont
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
@@ -16,6 +24,8 @@ import tpcreative.co.qrscanner.model.EnumImage
 import tpcreative.co.qrscanner.model.TextModel
 import vadiole.colorpicker.hexColor
 import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 
 fun Bitmap.addPaddingTopForBitmap(paddingTop: Int,bg: String = Constant.defaultColor.hexColor): Bitmap? {
@@ -133,6 +143,79 @@ fun Bitmap.toResizeBitmap(maxSize: Int): Bitmap? {
 }
 
 val Bitmap.toDrawable get() = this.toDrawable(QRScannerApplication.getInstance().resources)
+
+fun Bitmap.saveMediaToStorage(context: Context, name : String?) {
+    //Generating a file name
+    val filename = "${name}.png"
+
+    //Output stream
+    var fos: OutputStream? = null
+
+    //For devices running android >= Q
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        //getting the contentResolver
+        context.contentResolver?.also { resolver ->
+            //Content resolver will process the contentvalues
+            val contentValues = ContentValues().apply {
+                //putting file information in content values
+                put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES +"/${Constant.QR_FOLDER}/")
+            }
+            //Inserting the contentValues to contentResolver and getting the Uri
+            val imageUri: Uri? =
+                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+            //Opening an outputstream with the Uri that we got
+            fos = imageUri?.let { resolver.openOutputStream(it) }
+        }
+    } else {
+        //These for devices running on android < Q
+        //So I don't think an explanation is needed here
+        try {
+            val imagesDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + "/${Constant.QR_FOLDER}/"
+            val image = File(imagesDir, filename)
+            fos = FileOutputStream(image)
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+    }
+
+    fos?.use {
+        //Finally writing the bitmap to the output stream that we opened
+        this.compress(Bitmap.CompressFormat.PNG, 100, it)
+        context.toast("${R.string.save_to.toText()} Pictures/QRChangeDesign")
+    }
+}
+
+fun View.visible(isVisible: Boolean) {
+    visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
+fun View.enable(isEnabled: Boolean) {
+    setEnabled(isEnabled)
+    alpha = if (isEnabled) 1f else 0.5f
+}
+
+fun Context.toast(text: String?) {
+    Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+}
+
+fun Context.showPermissionRequestDialog(
+    title: String,
+    body: String,
+    callback: () -> Unit
+) {
+    AlertDialog.Builder(this).also {
+        it.setTitle(title)
+        it.setMessage(body)
+        it.setPositiveButton("Ok") { _, _ ->
+            callback()
+        }
+    }.create().show()
+}
+
 
 fun Bitmap.onDrawOnBitmap(map : HashMap<EnumImage,TextModel>,callback :((Bitmap?)->Unit)) {
     if (map.size==0){
