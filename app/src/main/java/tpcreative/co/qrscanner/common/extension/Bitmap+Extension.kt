@@ -185,7 +185,7 @@ fun Bitmap.saveMediaToStorage(context: Context, name : String?) {
     fos?.use {
         //Finally writing the bitmap to the output stream that we opened
         this.compress(Bitmap.CompressFormat.PNG, 100, it)
-        context.toast("${R.string.save_to.toText()} Pictures/QRChangeDesign")
+        context.toast("${R.string.save_to.toText()} Pictures/${Constant.QR_FOLDER}")
     }
 }
 
