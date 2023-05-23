@@ -794,6 +794,7 @@
         <item>@color/deep_orange_500</item>
     </array>
 
+    <color name="change_design_image">#000000</color>
     <color name="view_close">#212121</color>
     <color name="view_selected">#19a7a7</color>
     <color name="bg_selected">#FFFFFF</color>

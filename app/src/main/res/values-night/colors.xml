@@ -44,4 +44,5 @@
     <color name="bg_selected">#A5A5A5</color>
     <color name="view_selected">#FFFFFF</color>
     <color name="view_close">#FFFFFF</color>
+    <color name="change_design_image">#FFFFFF</color>
 </resources>
