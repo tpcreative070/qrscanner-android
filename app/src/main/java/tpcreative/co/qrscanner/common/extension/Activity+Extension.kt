@@ -26,14 +26,16 @@ fun Activity.isPortrait() : Boolean{
 fun AppCompatActivity.onShowGuide(view : View,message :String,enumActivity: EnumActivity,icon : Int, position : BubbleShowCase.ArrowPosition = BubbleShowCase.ArrowPosition.BOTTOM){
     when(enumActivity){
         EnumActivity.REVIEW_ACTIVITY ->{
-           if (Utils.isShowGuideReview()){
-               return
-           }
+//           if (Utils.isShowGuideReview()){
+//               return
+//           }
+            return
         }
         EnumActivity.SCANNER_RESULT_ACTIVITY ->{
-            if (Utils.isShowGuideScannerResult()){
-                return
-            }
+//            if (Utils.isShowGuideScannerResult()){
+//                return
+//            }
+            return
         }
         EnumActivity.CHANGE_DESIGN ->{
             if (Utils.isShowChangeDesignIcon()){

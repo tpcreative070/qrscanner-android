@@ -73,7 +73,7 @@ class MainActivity : BaseActivity(), SingleTonResponseListener {
     private fun callRateApp(){
         val mCountRating = Utils.onGetCountRating()
         Utils.Log(TAG,"Count $mCountRating")
-        if (mCountRating >= Constant.countLimitHistorySave && isScanner || isCreate) {
+        if (mCountRating >= Constant.countLimitHistorySaveChangeDesign && isScanner || isCreate) {
             showEncourage()
             Utils.Log(TAG, "rating.......")
             Utils.onSetCountRating(0)

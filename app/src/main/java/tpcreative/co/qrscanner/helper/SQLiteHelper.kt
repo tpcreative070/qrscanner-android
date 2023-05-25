@@ -297,6 +297,7 @@ object SQLiteHelper {
                 return
             }
             val mData = DesignQREntityModel(data)
+            Utils.onSetCountRating(Utils.onGetCountRating() + 1)
             getInstance()?.onInsert(mData)
         } catch (e: Exception) {
             Utils.Log(TAG,"${e.message}")
