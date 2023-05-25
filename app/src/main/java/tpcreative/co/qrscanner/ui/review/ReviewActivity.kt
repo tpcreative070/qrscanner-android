@@ -16,6 +16,9 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import com.google.android.gms.tasks.Task
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManagerFactory
 import tpcreative.co.qrscanner.ui.scanner.cpp.BarcodeEncoder
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -33,11 +36,9 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
-import tpcreative.co.qrscanner.databinding.LayoutTemplateBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
-import vadiole.colorpicker.hexColor
 import java.util.*
 
 class ReviewActivity : BaseActivitySlide() {
@@ -58,6 +59,7 @@ class ReviewActivity : BaseActivitySlide() {
     lateinit var binding : ActivityReviewBinding
     private var isLoaded : Boolean = false
     var uuId : String? = null
+    var countRating = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
@@ -404,7 +406,34 @@ class ReviewActivity : BaseActivitySlide() {
                 binding.imgResult.setImageURI(mFile.toUri())
                 SaveSingleton.getInstance()?.reloadDataChangeDesign()
                 HistorySingleton.getInstance()?.reloadDataChangeDesign()
+                /*Asking rating when it's done changed design*/
+                callRateApp()
             }
+        }
+    }
+
+    private fun callRateApp(){
+        val mCountRating = Utils.onGetCountRating()
+        Utils.Log(TAG,"Count $mCountRating")
+        if (mCountRating >= Constant.countLimitHistorySaveChangeDesign) {
+            showEncourage()
+            Utils.Log(TAG, "rating.......")
+            Utils.onSetCountRating(0)
+        }
+    }
+
+    private fun showEncourage() {
+        val manager = ReviewManagerFactory.create(this)
+        val request = manager.requestReviewFlow()
+        Utils.Log(TAG,"Review info of request")
+        request.addOnCompleteListener { task: Task<ReviewInfo?>? ->
+            if (task?.isSuccessful == true) {
+                // We can get the ReviewInfo object
+                val reviewInfo = task.result
+                val flow = reviewInfo?.let { manager.launchReviewFlow(this, it) }
+                flow?.addOnCompleteListener { tasks: Task<Void?>? -> }
+            }
+            //Utils.Log(TAG,"Review info ${task?.toJson()}")
         }
     }
 

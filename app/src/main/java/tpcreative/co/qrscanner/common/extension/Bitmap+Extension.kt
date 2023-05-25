@@ -14,8 +14,6 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.EnumFont
@@ -199,7 +197,7 @@ fun View.enable(isEnabled: Boolean) {
 }
 
 fun Context.toast(text: String?) {
-    Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
 fun Context.showPermissionRequestDialog(

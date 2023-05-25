@@ -25,7 +25,7 @@ class Constant {
         const val QRCodeViewWidth = 250
         const val QRCodeViewHeight = 250
         const val images_folder = "images"
-        const val countLimitHistorySave = 3
+        const val countLimitHistorySaveChangeDesign = 3
         const val files_folder = "files"
         const val youtube_id = "eNhq6s1kmhw"
         const val LOG_TAKE_TIME = "LOG_TAKE_TIME"
@@ -41,6 +41,11 @@ class Constant {
             put(EnumFont.thespeciment_regular.name,R.font.thespeciment_regular)
             put(EnumFont.nature_beauty_personal.name,R.font.nature_beauty_personal)
             put(EnumFont.wedding_day_personal_regular.name,R.font.wedding_day_personal_regular)
+            put(EnumFont.fugazone_regular.name,R.font.fugazone_regular)
+            put(EnumFont.lobster_regular.name,R.font.lobster_regular)
+            put(EnumFont.oleoscriptswashcaps_bold.name,R.font.oleoscriptswashcaps_bold)
+            put(EnumFont.oleoscriptswashcaps_regular.name,R.font.oleoscriptswashcaps_regular)
+            put(EnumFont.wendyone_regular.name,R.font.wendyone_regular)
             put(EnumFont.roboto_bold.name,R.font.roboto_bold)
             put(EnumFont.roboto_light.name,R.font.roboto_light)
             put(EnumFont.roboto_medium.name,R.font.roboto_medium)
@@ -80,6 +85,7 @@ class Constant {
             put(EnumIcon.ic_gallery.name,R.drawable.ic_gallery)
             put(EnumIcon.ic_more.name,R.drawable.ic_more)
             put(EnumIcon.ic_help.name,R.drawable.ic_help)
+            put(EnumIcon.ic_book.name,R.drawable.ic_book)
             put(EnumIcon.ic_frame_ball_default.name,R.drawable.ic_frame_ball_default)
             put(EnumIcon.ic_frame_ball_corner_10px.name,R.drawable.ic_frame_ball_corner_10px)
             put(EnumIcon.ic_frame_ball_corner_25px.name,R.drawable.ic_frame_ball_corner_25px)
@@ -100,6 +106,8 @@ class Constant {
             put(EnumIcon.ic_line.name,R.drawable.ic_line)
             put(EnumIcon.ic_linkedin.name,R.drawable.ic_linkedin)
             put(EnumIcon.ic_skype.name,R.drawable.ic_skype)
+            put(EnumIcon.ic_google_play.name,R.drawable.ic_google_play)
+            put(EnumIcon.ic_apple.name,R.drawable.ic_apple)
             put(EnumIcon.ic_restaurant.name,R.drawable.ic_restaurant)
             put(EnumIcon.ic_heart.name,R.drawable.ic_heart)
             put(EnumIcon.ic_card.name,R.drawable.ic_card)
@@ -130,7 +138,10 @@ enum class EnumIcon {
     ic_dark_star,
     ic_rhombus,
     ic_round_corners_vertical,
-    ic_round_corners_horizonal;
+    ic_round_corners_horizonal,
+    ic_google_play,
+    ic_apple,
+    ic_book;
     companion object {
         fun fromValue(enumIcon: EnumIcon): Int {
             return Constant.mList[enumIcon.name] ?: R.drawable.icon
@@ -139,7 +150,8 @@ enum class EnumIcon {
 }
 
 enum class EnumFont {
-    brandon_bold,brandon_regular,roboto_bold,roboto_light,roboto_medium,roboto_regular,acrotray_regular,sprots_medium_regular,thespeciment_regular,nature_beauty_personal,wedding_day_personal_regular;
+    brandon_bold,brandon_regular,roboto_bold,roboto_light,roboto_medium,roboto_regular,acrotray_regular,sprots_medium_regular,thespeciment_regular,nature_beauty_personal,wedding_day_personal_regular,
+    fugazone_regular,lobster_regular,oleoscriptswashcaps_bold,oleoscriptswashcaps_regular,wendyone_regular;
     companion object {
         fun fromValue(enumFont: EnumFont): Int {
             return Constant.mFontList[enumFont.name] ?: R.font.roboto_regular

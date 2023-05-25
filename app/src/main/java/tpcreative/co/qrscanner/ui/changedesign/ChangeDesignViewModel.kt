@@ -316,6 +316,14 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         )
         mLogoList.add(
             LogoModel(
+                EnumIcon.ic_apple,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_google_play,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
                 EnumIcon.ic_we_chat,false,true,false,R.color.transparent.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.VIP,EnumShape.ORIGINAL)
         )
         mLogoList.add(
@@ -393,6 +401,10 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         mLogoList.add(
             LogoModel(
                 EnumIcon.ic_text,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
+        )
+        mLogoList.add(
+            LogoModel(
+                EnumIcon.ic_book,false,true,true,R.color.black_color_picker.stringHex,EnumTypeIcon.RES,EnumChangeDesignType.NORMAL,EnumShape.ORIGINAL)
         )
         mLogoList.add(
             LogoModel(

@@ -12,6 +12,7 @@ import com.jaychang.srv.SimpleViewHolder
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Utils
 import tpcreative.co.qrscanner.common.extension.addCircleRipple
+import tpcreative.co.qrscanner.common.extension.isQRCode
 import tpcreative.co.qrscanner.common.extension.loadBitmap
 import tpcreative.co.qrscanner.model.HistoryModel
 
@@ -80,7 +81,12 @@ class HistoryCell(item: HistoryModel) : SimpleCell<HistoryModel, HistoryCell.Vie
                     viewHolder.ckDelete.isChecked = !item.isChecked()
                     listener?.onClickItem(i, !item.isChecked())
                 } else {
-                    listener?.onClickItemImage(i)
+                    val mQRCode = Utils.isQRCode(data.barcodeFormat)
+                    if (mQRCode){
+                        listener?.onClickItemImage(i)
+                    }else{
+                        listener?.onClickItem(i)
+                    }
                 }
             }
         }
