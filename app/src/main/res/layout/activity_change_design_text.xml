@@ -78,6 +78,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             style="?attr/materialButtonOutlinedStyle"
+                            android:theme="@style/ThemeOverlay.Custom.Button"
                             android:id="@+id/btnColor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -87,6 +88,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             style="?attr/materialButtonOutlinedStyle"
+                            android:theme="@style/ThemeOverlay.Custom.Button"
                             android:id="@+id/btnFont"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -96,6 +98,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             style="?attr/materialButtonOutlinedStyle"
+                            android:theme="@style/ThemeOverlay.Custom.Button"
                             android:id="@+id/btnFontSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

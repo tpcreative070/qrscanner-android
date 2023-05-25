@@ -33,6 +33,7 @@ import tpcreative.co.qrscanner.common.services.QRScannerApplication
 import tpcreative.co.qrscanner.common.view.ads.AdsView
 import tpcreative.co.qrscanner.common.view.crop.Crop
 import tpcreative.co.qrscanner.databinding.ActivityReviewBinding
+import tpcreative.co.qrscanner.databinding.LayoutTemplateBinding
 import tpcreative.co.qrscanner.helper.SQLiteHelper
 import tpcreative.co.qrscanner.model.*
 import tpcreative.co.qrscanner.ui.changedesign.NewChangeDesignActivity
@@ -64,6 +65,9 @@ class ReviewActivity : BaseActivitySlide() {
         QRScannerApplication.getInstance().onCheckRequestAdsWhenRotation(EnumScreens.REVIEW_SMALL,this)
         initUI()
         dialog = ProgressDialog.progressDialog(this,R.string.waiting_for_export.toText())
+//        val template = LayoutTemplateBinding.inflate(layoutInflater)
+//        val mBitmap  = template.rlRoot.loadBitmapFromView()
+//        mBitmap?.saveMediaToStorage(this,"Template")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
