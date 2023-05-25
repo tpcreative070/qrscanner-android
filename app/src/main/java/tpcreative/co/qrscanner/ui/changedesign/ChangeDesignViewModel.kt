@@ -433,6 +433,9 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
         mBodyList.add(BodyModel(EnumIcon.ic_dark_corner_0_5,false,R.color.transparent.stringHex,EnumChangeDesignType.NORMAL,EnumBody.CORNER_5PX))
         mBodyList.add(BodyModel(EnumIcon.ic_dark_circle,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.CIRCLE))
         mBodyList.add(BodyModel(EnumIcon.ic_dark_star,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.STAR))
+        mBodyList.add(BodyModel(EnumIcon.ic_rhombus,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.RHOMBUS))
+        mBodyList.add(BodyModel(EnumIcon.ic_round_corners_vertical,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.ROUND_CORNERS_VERTICAL))
+        mBodyList.add(BodyModel(EnumIcon.ic_round_corners_horizonal,false,R.color.transparent.stringHex,EnumChangeDesignType.VIP,EnumBody.ROUND_CORNERS_HORIZONTAL))
     }
 
     fun onGenerateQR(callback: (result: Drawable) -> Unit) : Drawable{
@@ -728,6 +731,18 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                 EnumBody.CIRCLE ->{
                     body = QrVectorPixelShape
                         .Circle()
+                }
+                EnumBody.RHOMBUS ->{
+                    body = QrVectorPixelShape
+                        .Rhombus()
+                }
+                EnumBody.ROUND_CORNERS_VERTICAL ->{
+                    body = QrVectorPixelShape
+                        .RoundCornersVertical()
+                }
+                EnumBody.ROUND_CORNERS_HORIZONTAL ->{
+                    body = QrVectorPixelShape
+                        .RoundCornersHorizontal()
                 }
                 else -> {
                     body = QrVectorPixelShape

@@ -45,6 +45,10 @@
 <!--        <item name="colorPrimaryDark">@color/colorPrimary</item>-->
     </style>
 
+    <style name="ThemeOverlay.Custom.Button" parent="">
+        <item name="colorPrimary">@color/colorAccent</item>
+    </style>
+
     <style name="ChipGroup" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
     </style>

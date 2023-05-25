@@ -1,9 +1,7 @@
 package tpcreative.co.qrscanner.common
 
-import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import tpcreative.co.qrscanner.R
-import tpcreative.co.qrscanner.common.extension.stringHexNoTransparency
 import tpcreative.co.qrscanner.common.services.QRScannerApplication
 
 class Constant {
@@ -93,6 +91,9 @@ class Constant {
             put(EnumIcon.ic_dark_corner_0_5.name,R.drawable.ic_dark_corner_0_5px)
             put(EnumIcon.ic_dark_circle.name,R.drawable.ic_dark_circle)
             put(EnumIcon.ic_dark_star.name,R.drawable.ic_dark_star)
+            put(EnumIcon.ic_rhombus.name,R.drawable.ic_rhombus)
+            put(EnumIcon.ic_round_corners_vertical.name,R.drawable.ic_round_corners_vertical)
+            put(EnumIcon.ic_round_corners_horizonal.name,R.drawable.ic_round_corners_horizontal)
             put(EnumIcon.ic_facebook.name,R.drawable.ic_facebook)
             put(EnumIcon.ic_facebook_messenger.name,R.drawable.ic_facebook_messenger)
             put(EnumIcon.ic_tiktok.name,R.drawable.ic_tiktok)
@@ -126,7 +127,10 @@ enum class EnumIcon {
     ic_frame_ball_corner_top_left_top_right_bottom_left_25px,ic_qr_background,ic_qr_text_bottom,ic_qr_text_top,ic_reddit,ic_amazon,ic_ebay,ic_telegram,ic_dog,ic_cat,
     ic_frame_ball_circle,
     ic_dark_circle,
-    ic_dark_star;
+    ic_dark_star,
+    ic_rhombus,
+    ic_round_corners_vertical,
+    ic_round_corners_horizonal;
     companion object {
         fun fromValue(enumIcon: EnumIcon): Int {
             return Constant.mList[enumIcon.name] ?: R.drawable.icon

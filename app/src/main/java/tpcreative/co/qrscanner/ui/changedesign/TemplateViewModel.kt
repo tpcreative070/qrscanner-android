@@ -155,7 +155,7 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
         count+=1
 
         mModel = ChangeDesignModel()
-        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_contact }
+        mModel.logo = viewModel.mLogoList.firstOrNull { it.enumIcon == EnumIcon.ic_wifi }
         mModel.body = viewModel.mBodyList.getOrNull(1)
         mModel.positionMarker =viewModel.mPositionMarkerList.firstOrNull { it.enumPositionMarker == EnumPositionMarker.DEFAULT}
         mMapColor = viewModel.defaultColorMap()
@@ -291,7 +291,7 @@ class TemplateViewModel(val viewModel: ChangeDesignViewModel)  : BaseViewModel<I
         mColor = viewModel.defaultColor()
         mModel.color = mColor
         mModel.color?.mapColor = mMapColor
-        mTemplateList.add(TemplateModel("$count",EnumShape.SQUARE,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
+        mTemplateList.add(TemplateModel("$count",EnumShape.ORIGINAL,EnumIcon.ic_restaurant,EnumChangeDesignType.NORMAL,mModel))
         count+=1
 
         mModel = ChangeDesignModel()

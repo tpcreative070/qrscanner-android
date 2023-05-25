@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.channels.awaitClose
@@ -92,6 +93,29 @@ fun View.layout(@LayoutRes id : Int) :View{
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val v = inflater.inflate(id, null)
     return v
+}
+
+fun View.loadBitmapFromView(): Bitmap? {
+    val view = this
+    view.layoutParams = ConstraintLayout.LayoutParams(
+        ConstraintLayout.LayoutParams.MATCH_PARENT,
+        ConstraintLayout.LayoutParams.MATCH_PARENT
+    )
+    val dm = context.resources.displayMetrics
+    view.measure(
+        View.MeasureSpec.makeMeasureSpec(dm.widthPixels, View.MeasureSpec.EXACTLY),
+        View.MeasureSpec.makeMeasureSpec(dm.heightPixels, View.MeasureSpec.EXACTLY)
+    )
+    view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+    val bitmap = Bitmap.createBitmap(
+        view.measuredWidth,
+        view.measuredHeight,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    view.layout(view.left, view.top, view.right, view.bottom)
+    view.draw(canvas)
+    return bitmap
 }
 
 inline fun View.afterMeasured(crossinline block: () -> Unit) {

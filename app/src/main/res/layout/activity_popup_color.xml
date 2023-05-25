@@ -49,6 +49,7 @@
 
                                 <com.google.android.material.button.MaterialButton
                                     style="?attr/materialButtonOutlinedStyle"
+                                    android:theme="@style/ThemeOverlay.Custom.Button"
                                     android:id="@+id/btnGrid"
                                     android:layout_width="@dimen/icon_size_100"
                                     android:layout_height="wrap_content"
@@ -58,6 +59,7 @@
 
                                 <com.google.android.material.button.MaterialButton
                                     style="?attr/materialButtonOutlinedStyle"
+                                    android:theme="@style/ThemeOverlay.Custom.Button"
                                     android:id="@+id/btnSlider"
                                     android:layout_width="@dimen/icon_size_100"
                                     android:layout_height="wrap_content"
