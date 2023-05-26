@@ -1320,6 +1320,18 @@ object Utils {
         return true
     }
 
+    fun isShowReward(): Boolean{
+        val mData = ServiceManager.getInstance().mVersion
+        if (BuildConfig.DEBUG){
+            return mData?.hiddenChangeDesignRewarded ?: false
+        }else{
+            if ((mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)) && mData.hiddenChangeDesignRewarded == false && !isPremium()){
+                return true
+            }
+            return false
+        }
+    }
+
     private fun isTestTab() : Boolean{
         val testLabSetting = Settings.System.getString(QRScannerApplication.getInstance().contentResolver, "firebase.test.lab")
         if ("true" == testLabSetting) {

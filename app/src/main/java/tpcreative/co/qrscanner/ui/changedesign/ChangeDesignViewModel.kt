@@ -768,6 +768,7 @@ class ChangeDesignViewModel()  : BaseViewModel<ItemNavigation>(){
                 frame = frame
             )
         }catch (e : Exception){
+            e.printStackTrace()
             return QrVectorShapes(
                 darkPixel = QrVectorPixelShape
                     .Default,

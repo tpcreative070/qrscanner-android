@@ -9,6 +9,8 @@ import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Configuration
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.Navigator
+import tpcreative.co.qrscanner.common.Utils
+import tpcreative.co.qrscanner.common.controller.ServiceManager
 import tpcreative.co.qrscanner.common.extension.addCircleRipple
 import tpcreative.co.qrscanner.common.extension.onDrawOnBitmap
 import tpcreative.co.qrscanner.common.network.base.ViewModelFactory
@@ -28,16 +30,21 @@ fun PremiumPopupActivity.initUI(){
     setupViewModel()
     viewModel.getIntent(this){
         binding.imgQRCode.setImageBitmap(it)
-        hiddenView(false)
+        val mIsShow = Utils.isShowReward()
+        hiddenView(mIsShow)
+    }
+    binding.rlQRDisplay.setOnClickListener {
+        showAds()
     }
 }
 
 private fun PremiumPopupActivity.hiddenView(isShowAds : Boolean){
-    if (!isShowAds){
+    if (isShowAds){
+        binding.tvWatchAds.text = String.format(getString(R.string.watch_item_ads),countRewarded)
+        loadingRewardAds()
+    }else{
         binding.rlNextAds.visibility = View.GONE
         binding.rlWatchAds.visibility = View.GONE
-    }else{
-        binding.tvWatchAds.text = String.format(getString(R.string.watch_item_ads),Configuration.WATCH_ADS)
     }
     if (viewModel.isBitMap()){
         binding.imgQRCode.visibility = View.GONE

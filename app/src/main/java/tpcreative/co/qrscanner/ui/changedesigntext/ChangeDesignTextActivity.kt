@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
+import com.afollestad.materialdialogs.MaterialDialog
 import com.davidmiguel.dragtoclose.DragListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -329,22 +330,26 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                     mIndex.forEach {
                         mIndex[it.key] = TextModel(it.value.enumIcon,it.value.type,it.value.enumChangeDesignType, TextDataModel(it.value.data.currentColor,mObject.enumFont.name,it.value.data.currentBackgroundColor,it.value.data.currentText, it.value.data.currentFontSize))
                     }
+                    val mEnumView = EnumView.TEXT_FONT
                     premiumPopupForResult.launch(Navigator.onPremiumPopupView(this,viewModel.viewModel.getChangeDataReviewToPremiumPopup(mIndex),viewModel.viewModel.shape,
-                        PremiumPopupActivity::class.java,viewModel.viewModel.dataCode,viewModel.viewModel.uuId))
+                        PremiumPopupActivity::class.java,viewModel.viewModel.dataCode,viewModel.viewModel.uuId, fontModel = mObject, enumView = mEnumView,index = index))
                 }else{
-                    Utils.Log(TAG,"Get position ${it.tag}")
-                    mapFontTag[ConstantKey.KEY_FONT] = index
-                    mObject.isSelected = !mObject.isSelected
-                    currentFont = mObject.enumFont.name
-                    lifecycleScope.launch(Dispatchers.IO){
-                        onDrawBitmap()
-                    }
-                    runOnUiThread {
-                        addChipFont()
-                    }
+                    changeFontPosition(mObject,index)
                 }
             }
             binding.llGroup.addView(xmlView)
+        }
+    }
+
+    private fun changeFontPosition(mObject :FontModel, index : Int){
+        mapFontTag[ConstantKey.KEY_FONT] = index
+        mObject.isSelected = !mObject.isSelected
+        currentFont = mObject.enumFont.name
+        lifecycleScope.launch(Dispatchers.IO){
+            onDrawBitmap()
+        }
+        runOnUiThread {
+            addChipFont()
         }
     }
 
@@ -393,42 +398,47 @@ class ChangeDesignTextActivity : AppCompatActivity() {
                     mIndex.forEach {
                         mIndex[it.key] = TextModel(it.value.enumIcon,it.value.type,it.value.enumChangeDesignType, TextDataModel(it.value.data.currentColor,mObject.enumFont.name,it.value.data.currentBackgroundColor,it.value.data.currentText, it.value.data.currentFontSize))
                     }
+                    val mEnumView = EnumView.TEXT_FONT_SIZE
                     premiumPopupForResult.launch(Navigator.onPremiumPopupView(this,viewModel.viewModel.getChangeDataReviewToPremiumPopup(mIndex),viewModel.viewModel.shape,
-                        PremiumPopupActivity::class.java,viewModel.viewModel.dataCode,viewModel.viewModel.uuId,mObject.enumFontSize))
+                        PremiumPopupActivity::class.java,viewModel.viewModel.dataCode,viewModel.viewModel.uuId,mObject.enumFontSize, fontModel = mObject, enumView = mEnumView,index = index))
                 }else{
-                    mapFontSizeTag[ConstantKey.KEY_FONT_SIZE] = index
-                    mObject.isSelected = !mObject.isSelected
-                    mObject.let { mFont->
-                        when(mFont.enumFontSize) {
-                            EnumFontSize.FREEDOM_INCREASE ->{
-                                if (currentFontSize >= maxFontSize){
-                                    return@setOnClickListener
-                                }
-                                val mCount = currentFontSize + 5
-                                currentFontSize  = mCount
-                                Utils.Log(TAG,"Increase clicked $currentFontSize")
-                            }
-                            EnumFontSize.FREEDOM_DECREASE ->{
-                                if (currentFontSize <= 70){
-                                    return@setOnClickListener
-                                }
-                                val mCount = currentFontSize - 5
-                                currentFontSize  = mCount
-                                Utils.Log(TAG,"Decrease clicked $currentFontSize")
-                            }else ->{
-                            currentFontSize = mFont.fontSize
-                        }
-                        }
-                        lifecycleScope.launch(Dispatchers.IO){
-                            onDrawBitmap()
-                        }
-                        runOnUiThread {
-                            addChipFontSize()
-                        }
-                    }
+                    changeFontSizePosition(mObject,index)
                 }
             }
             binding.llGroup.addView(xmlView)
+        }
+    }
+
+    private fun changeFontSizePosition(mObject :FontModel, index : Int){
+        mapFontSizeTag[ConstantKey.KEY_FONT_SIZE] = index
+        mObject.isSelected = !mObject.isSelected
+        mObject.let { mFont->
+            when(mFont.enumFontSize) {
+                EnumFontSize.FREEDOM_INCREASE ->{
+                    if (currentFontSize >= maxFontSize){
+                        return
+                    }
+                    val mCount = currentFontSize + 5
+                    currentFontSize  = mCount
+                    Utils.Log(TAG,"Increase clicked $currentFontSize")
+                }
+                EnumFontSize.FREEDOM_DECREASE ->{
+                    if (currentFontSize <= 70){
+                        return
+                    }
+                    val mCount = currentFontSize - 5
+                    currentFontSize  = mCount
+                    Utils.Log(TAG,"Decrease clicked $currentFontSize")
+                }else ->{
+                currentFontSize = mFont.fontSize
+            }
+            }
+            lifecycleScope.launch(Dispatchers.IO){
+                onDrawBitmap()
+            }
+            runOnUiThread {
+                addChipFontSize()
+            }
         }
     }
 
@@ -522,7 +532,29 @@ class ChangeDesignTextActivity : AppCompatActivity() {
 
     private val premiumPopupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
+            val index = result.data?.getIntExtra(ConstantKey.KEY_CHANGE_DESIGN_INDEX,0) ?: 0
+            val enumView = EnumView.valueOf(result.data?.getStringExtra(ConstantKey.KEY_CHANGE_DESIGN_CURRENT_VIEW) ?: EnumView.LOGO.name)
+            val mObject : FontModel = result.data?.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_OBJECT)  ?: FontModel()
+            showChangedDesign(mObject,enumView,index)
         }
+    }
+
+    private fun showChangedDesign(mObject : FontModel,enumView: EnumView,index : Int){
+        val dialog = MaterialDialog(this)
+            .title(R.string.alert)
+            .message(R.string.new_design_unlocked)
+            .negativeButton(res = R.string.ok){
+                when(enumView){
+                    EnumView.TEXT_FONT ->{
+                        changeFontPosition(mObject,index)
+                    }
+                    EnumView.TEXT_FONT_SIZE ->{
+                        changeFontSizePosition(mObject,index)
+                    }
+                    else -> {}
+                }
+            }
+        dialog.show()
     }
 
 
