@@ -1325,7 +1325,7 @@ object Utils {
         if (BuildConfig.DEBUG){
             return mData?.hiddenChangeDesignRewarded ?: false
         }else{
-            if ((mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)) && mData.hiddenChangeDesignRewarded == false && !isPremium()){
+            if ((mData?.app_id == QRScannerApplication.getInstance().getString(R.string.admob_app_id)) && mData.hiddenChangeDesignRewarded == false && !isPremium() && ((mData.version_code?:0) >= BuildConfig.VERSION_CODE)){
                 return true
             }
             return false
