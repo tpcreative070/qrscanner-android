@@ -20,11 +20,17 @@ class PremiumPopupViewModel(val viewModel: ChangeDesignViewModel) : BaseViewMode
     private lateinit var dataCode : String
     private lateinit var uuId : String
     private lateinit var enumFontSize : EnumFontSize
+    var enumView : EnumView = EnumView.LOGO
+    var index : Int = 0
+    var font : FontModel = FontModel()
     fun getIntent(activity: AppCompatActivity?, callback: (result: Bitmap?) -> Unit){
         val bundle: Bundle? = activity?.intent?.extras
         val mChangeDesignData :ChangeDesignModel? = bundle?.serializable(ConstantKey.KEY_PREMIUM_POPUP)
         val mShape: EnumShape = EnumShape.valueOf(bundle?.getString(ConstantKey.KEY_PREMIUM_POPUP_TYPE_SHAPE) ?: EnumShape.SQUARE.name)
         enumFontSize  = EnumFontSize.valueOf(bundle?.getString(ConstantKey.KEY_PREMIUM_POPUP_ENUM_FONT_SIZE) ?: EnumFontSize.NONE.name)
+        enumView = EnumView.valueOf(bundle?.getString(ConstantKey.KEY_CHANGE_DESIGN_CURRENT_VIEW) ?: EnumView.LOGO.name)
+        index = bundle?.getInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX) ?: 0
+        font  = bundle?.serializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_OBJECT) ?: FontModel()
 
         dataCode = bundle?.getString(ConstantKey.KEY_DATA_CODE) ?: ""
         uuId = bundle?.getString(ConstantKey.KEY_DATA_UUID) ?: ""

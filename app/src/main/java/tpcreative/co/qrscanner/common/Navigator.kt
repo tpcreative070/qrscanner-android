@@ -109,7 +109,7 @@ object Navigator {
         return  intent
     }
 
-    fun <T> onPremiumPopupView(context: Activity?,mData : ChangeDesignModel,typeShape: EnumShape, clazz: Class<T>,dataCode : String,uuId :String,enumFontSize: EnumFontSize = EnumFontSize.NONE) : Intent {
+    fun <T> onPremiumPopupView(context: Activity?, mData : ChangeDesignModel, typeShape: EnumShape, clazz: Class<T>, dataCode : String, uuId :String, enumFontSize: EnumFontSize = EnumFontSize.NONE, fontModel: FontModel = FontModel(), enumView: EnumView = EnumView.LOGO, index :Int = 0) : Intent {
         val intent = Intent(context, clazz)
         val bundle = Bundle()
         bundle.putSerializable(ConstantKey.KEY_PREMIUM_POPUP, mData)
@@ -117,6 +117,9 @@ object Navigator {
         bundle.putString(ConstantKey.KEY_DATA_CODE, dataCode)
         bundle.putString(ConstantKey.KEY_DATA_UUID,uuId)
         bundle.putString(ConstantKey.KEY_PREMIUM_POPUP_ENUM_FONT_SIZE,enumFontSize.name)
+        bundle.putString(ConstantKey.KEY_CHANGE_DESIGN_CURRENT_VIEW,enumView.name)
+        bundle.putInt(ConstantKey.KEY_CHANGE_DESIGN_INDEX,index)
+        bundle.putSerializable(ConstantKey.KEY_CHANGE_DESIGN_TEXT_OBJECT,fontModel)
         intent.putExtras(bundle)
         return  intent
     }

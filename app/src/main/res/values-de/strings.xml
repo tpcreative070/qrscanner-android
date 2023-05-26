@@ -403,4 +403,5 @@
     <string name="click_to_view_code">Klicken Sie hier, um den Code anzuzeigen</string>
     <string name="customize_the_qr_code_according_to_your_style">Passen Sie den QR-Code an Ihren Stil an.</string>
     <string name="save_to">Gespeichert in</string>
+    <string name="new_design_unlocked">Das neue Design ist freigeschaltet!</string>
 </resources>

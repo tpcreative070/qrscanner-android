@@ -31,8 +31,10 @@
     <string name="banner_help_feedback_large">ca-app-pub-1338847113684939/9795863261</string>
     <string name="interstitial_anywhere">ca-app-pub-1338847113684939/7656769170</string>
     <string name="interstitial_view_code">ca-app-pub-1338847113684939/2959261671</string>
+    <string name="rewarded_change_design">ca-app-pub-6797409620142531/2204934194</string>
     <string name="interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_home_footer_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="reward_test">ca-app-pub-3940256099942544/5224354917</string>
     <string name="url_google">https://www.googleapis.com/</string>
     <string name="freedevelop">freedevelop</string>
     <string name="freerelease">freerelease</string>
@@ -580,4 +582,5 @@
     <string name="click_to_view_code">Click to view the code</string>
     <string name="customize_the_qr_code_according_to_your_style">Customize the QR code according to your style.</string>
     <string name="save_to">Saved to</string>
+    <string name="new_design_unlocked">The new design is unlocked!</string>
 </resources>

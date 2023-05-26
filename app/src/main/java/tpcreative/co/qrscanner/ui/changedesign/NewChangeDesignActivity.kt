@@ -14,6 +14,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.drakeet.multitype.MultiTypeAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -128,7 +129,8 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 Utils.Log(TAG,"Data list ${items.toJson()}")
                 val mData = selectedSetLogo.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
-                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId))
+                    val mEnumView = EnumView.LOGO
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId, enumView = mEnumView, index = position))
                 }else{
                     changeLogoItem(position)
                 }
@@ -193,7 +195,8 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 isNavigation = true
                 val mData = selectedSetPositionMarker.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
-                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId))
+                    val mEnumView = EnumView.POSITION_MARKER
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId, enumView = mEnumView, index = position))
                 }else{
                     changePositionMarkerItem(position)
                 }
@@ -209,7 +212,8 @@ class NewChangeDesignActivity : BaseActivitySlide(){
                 isNavigation = true
                 val mData = selectedSetBody.firstOrNull()
                 if (mData?.enumChangeDesignType == EnumChangeDesignType.VIP && !Utils.isPremium()){
-                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId))
+                    val mEnumView = EnumView.BODY
+                    premiumPopupForResult.launch(Navigator.onPremiumPopupView(this@NewChangeDesignActivity,viewModel.getChangeDataReviewToPremiumPopup(mData),viewModel.shape,PremiumPopupActivity::class.java,viewModel.dataCode,viewModel.uuId,enumView = mEnumView, index = position))
                 }else{
                     changeBodyItem(position)
                 }
@@ -578,7 +582,31 @@ class NewChangeDesignActivity : BaseActivitySlide(){
 
     private val premiumPopupForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
+            val index = result.data?.getIntExtra(ConstantKey.KEY_CHANGE_DESIGN_INDEX,0) ?: 0
+            val enumView = EnumView.valueOf(result.data?.getStringExtra(ConstantKey.KEY_CHANGE_DESIGN_CURRENT_VIEW) ?: EnumView.LOGO.name)
+            showChangedDesign(enumView,index)
         }
+    }
+
+    private fun showChangedDesign(enumView: EnumView,index :Int){
+        val dialog = MaterialDialog(this)
+            .title(R.string.alert)
+            .message(R.string.new_design_unlocked)
+            .negativeButton(res = R.string.ok){
+                when(enumView){
+                    EnumView.LOGO ->{
+                        changeLogoItem(index)
+                    }
+                    EnumView.POSITION_MARKER ->{
+                        changePositionMarkerItem(index)
+                    }
+                    EnumView.BODY ->{
+                        changeBodyItem(index)
+                    }
+                    else -> {}
+                }
+            }
+        dialog.show()
     }
 
     private fun onGetGallery() {

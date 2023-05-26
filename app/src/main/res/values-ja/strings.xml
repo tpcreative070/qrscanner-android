@@ -409,4 +409,5 @@
     <string name="click_to_view_code">クリックしてコードを表示します</string>
     <string name="customize_the_qr_code_according_to_your_style">自分のスタイルに合わせてQRコードをカスタマイズしてください。</string>
     <string name="save_to">保存先</string>
+    <string name="new_design_unlocked">新しいデザインが解禁されました！</string>
 </resources>

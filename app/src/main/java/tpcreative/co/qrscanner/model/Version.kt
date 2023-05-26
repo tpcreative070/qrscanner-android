@@ -28,6 +28,7 @@ class Version() : Serializable {
     var hiddenScannerResultLargeAds: Boolean? = true
     var hiddenReviewSmallAds: Boolean? = true
     var hiddenReviewLargeAds: Boolean? = true
+    var hiddenChangeDesignRewarded : Boolean? = true
     var hiddenFreeReleaseAds: Boolean? = false
     var hiddenFreeInnovationAds: Boolean? = false
     var hiddenSuperFreeInnovationAds: Boolean? = true
@@ -52,6 +53,7 @@ class Version() : Serializable {
         hiddenScannerResultLargeAds = Configuration.hiddenScannerResultLargeAds
         hiddenReviewSmallAds = Configuration.hiddenReviewSmallAds
         hiddenReviewLargeAds = Configuration.hiddenReviewLargeAds
+        hiddenChangeDesignRewarded = Configuration.hiddenChangeDesignRewarded
         hiddenRemoveSmallAds = Configuration.hiddenRemoveSmallAds
         hiddenRemoveLargeAds = Configuration.hiddenRemoveLargeAds
 

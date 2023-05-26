@@ -34,6 +34,7 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_POSITION_MARKER = "key_change_design_position_marker"
         const val KEY_CHANGE_DESIGN_BODY = "key_change_design_body"
         const val KEY_CHANGE_DESIGN_TEXT = "key_change_design_text"
+        const val KEY_CHANGE_DESIGN_TEXT_OBJECT = "key_change_design_text_object"
         const val KEY_CHANGE_DESIGN_INDEX = "key_change_design_index"
         const val KEY_CHANGE_DESIGN_URI = "key_change_design_uri"
         const val KEY_CHANGE_DESIGN_SHAPE = "key_change_design_shape"
@@ -55,6 +56,7 @@ class ConstantKey {
         const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_POSITION = "key_change_design_body_previous_position"
         const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_CANCEL_POSITION = "key_change_design_body_previous_cancel_position"
         const val KEY_CHANGE_DESIGN_BODY_PREVIOUS_SELECTED = "key_change_design_body_previous_selected"
+        const val KEY_CHANGE_DESIGN_CURRENT_VIEW = "key_change_design_current_view"
         const val KEY_PREMIUM_POPUP = "key_premium_popup"
         const val KEY_PREMIUM_POPUP_TYPE_SHAPE = "key_premium_popup_type_shape"
         const val KEY_PREMIUM_POPUP_ENUM_FONT_SIZE = "key_premium_popup_enum_font_size"
@@ -87,7 +89,7 @@ class ConstantKey {
         const val KEY_REVIEW_CREATE = "key_review_create"
         const val KEY_REVIEW_SAVE = "key_review_save"
         const val KEY_REVIEW_UUID = "key_review_uuid"
-
+        const val KEY_PREMIUM_POPUP_COUNT_REWARDED = "key_premium_popup_count_rewarded"
 
         const val TITLE  = "title"
         const val LOCATION = "location"
