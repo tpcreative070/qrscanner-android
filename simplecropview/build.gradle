@@ -5,8 +5,8 @@ dependencies {
 }
 
 android {
-  compileSdkVersion appCompileSdkVersion
-  buildToolsVersion appBuildToolsVersion
+  compileSdk appCompileSdkVersion
+  buildToolsVersion =  appBuildToolsVersion
   defaultConfig {
     minSdkVersion appMinSdkVersion
     targetSdkVersion appTargetSdkVersion

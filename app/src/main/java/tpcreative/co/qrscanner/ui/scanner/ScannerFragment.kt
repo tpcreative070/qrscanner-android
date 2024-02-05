@@ -23,7 +23,6 @@ import androidx.window.layout.WindowMetricsCalculator
 import com.google.gson.Gson
 import com.google.zxing.*
 import com.google.zxing.client.result.ResultParser
-import com.zxingcpp.BarcodeReader
 import kotlinx.coroutines.*
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.*
@@ -40,6 +39,7 @@ import tpcreative.co.qrscanner.model.EnumImplement
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.ui.scanner.cpp.BeepManager
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
+import zxingcpp.BarcodeReader
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
@@ -477,66 +477,68 @@ class ScannerFragment : BaseFragment(), SingletonScannerListener {
                     formats = setOf(),
                     tryHarder = true,
                     tryRotate = true,
-                    tryInvert = false,
+                    tryInvert = true,
                     tryDownscale = false
                 )
-
+                image.setCropRect(crop(image))
                 resultText = try {
-                    image.setCropRect(crop(image))
-                    val result = readerCpp.read(image)
-                    //RSS-14
-                    Utils.Log(TAG,"Result text first ${result?.text}")
-                    Utils.Log(TAG,"Result format type first ${result?.format?.name}")
-                    resultPoints = result?.position?.let {
-                        listOf(
-                            it.topLeft,
-                            it.topRight,
-                            it.bottomRight,
-                            it.bottomLeft
-                        ).map { p ->
-                            p.toPointF()
-                        }
-                    }
-                    (result?.let {
-                        val mResultPoint = Array(1) { i ->
-                            ResultPoint(
-                                (resultPoints?.get(0)?.x ?: 0).toFloat(),
-                                (resultPoints?.get(0)?.y ?: 0).toFloat()
-                            )
-                        }
-                        val mResult = Result(
-                            it.text,
-                            it.bytes,
-                            mResultPoint,
-                            it.format.cppFormatToJavaFormat()
-                        )
+                    image.use {
+                        readerCpp.read(image).joinToString("\n") { result ->
+                            //RSS-14
+                            "Result text first ${result.text}".toLogConsole()
+                            "Result format type first ${result.format.name}".toLogConsole()
+                            resultPoints = result.position.let {
+                                listOf(
+                                    it.topLeft,
+                                    it.topRight,
+                                    it.bottomRight,
+                                    it.bottomLeft
+                                ).map { p ->
+                                    p.toPointF()
+                                }
+                            }
+                            (result.let {
+                                val mResultPoint = Array(1) { i ->
+                                    ResultPoint(
+                                        (resultPoints?.get(0)?.x ?: 0).toFloat(),
+                                        (resultPoints?.get(0)?.y ?: 0).toFloat()
+                                    )
+                                }
+                                val mResult = Result(
+                                    it.text,
+                                    it.bytes,
+                                    mResultPoint,
+                                    it.format.cppFormatToJavaFormat()
+                                )
 
-                        val parsedResult = ResultParser.parseResult(mResult)
-                        Utils.Log(TAG,"Parse result 3 ${parsedResult.type}")
-                        if (parsedResult != null) {
-                            val create = Utils.onGeneralParse(mResult, GeneralModel::class)
-                            create.fragmentType = EnumFragmentType.SCANNER
-                            create.enumImplement = EnumImplement.VIEW
-                            create.barcodeFormat = BarcodeFormat.QR_CODE.name
-                            if (mResult.barcodeFormat != null) {
-                                create.barcodeFormat = mResult.barcodeFormat.name
+                                val parsedResult = ResultParser.parseResult(mResult)
+                                "Parse result 3 ${parsedResult.type}".toLogConsole()
+                                if (parsedResult != null) {
+                                    val create = Utils.onGeneralParse(mResult, GeneralModel::class)
+                                    create.fragmentType = EnumFragmentType.SCANNER
+                                    create.enumImplement = EnumImplement.VIEW
+                                    create.barcodeFormat = BarcodeFormat.QR_CODE.name
+                                    if (mResult.barcodeFormat != null) {
+                                        create.barcodeFormat = mResult.barcodeFormat.name
+                                    }
+                                    if (!isStop && !isCropViewFinder){
+                                        showResult("", resultPoints, image)
+                                        doNavigation(create)
+                                        beepManager?.playBeepSoundAndVibrate()
+                                        isStop = true
+                                    }
+                                    Utils.Log(TAG, "Type result ${parsedResult.type}")
+                                }
+                                "${it.format} (${it.contentType}): " +
+                                        "${
+                                            if (it.contentType != BarcodeReader.ContentType.BINARY) it.text else it.bytes!!.joinToString(
+                                                separator = ""
+                                            ) { v -> "%02x".format(v) }
+                                        }"
                             }
-                            if (!isStop && !isCropViewFinder){
-                                showResult("", resultPoints, image)
-                                doNavigation(create)
-                                beepManager?.playBeepSoundAndVibrate()
-                                isStop = true
-                            }
-                            Utils.Log(TAG, "Type result ${parsedResult.type}")
+                                ?: "")
                         }
-                        "${it.format} (${it.contentType}): " +
-                                "${
-                                    if (it.contentType != BarcodeReader.ContentType.BINARY) it.text else it.bytes!!.joinToString(
-                                        separator = ""
-                                    ) { v -> "%02x".format(v) }
-                                }"
                     }
-                        ?: "")
                 } catch (e: Throwable) {
                     e.message ?: "Error"
                 }

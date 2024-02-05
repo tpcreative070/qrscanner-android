@@ -5,8 +5,8 @@ plugins {
 
 android {
     namespace 'com.panshen.gridcolorpicker'
-    compileSdkVersion appCompileSdkVersion
-    buildToolsVersion appBuildToolsVersion
+    compileSdk appCompileSdkVersion
+    buildToolsVersion =  appBuildToolsVersion
     defaultConfig {
         minSdkVersion appMinSdkVersion
         targetSdkVersion appTargetSdkVersion
@@ -31,6 +31,14 @@ android {
         freeinnovation {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
     }
 }
 

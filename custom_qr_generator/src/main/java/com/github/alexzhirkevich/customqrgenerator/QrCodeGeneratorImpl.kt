@@ -84,7 +84,9 @@ internal class QrCodeGeneratorImpl(
             val bgBitmapPixels = if (bgBitmap != null)
                 IntArray(width * height) else null
 
-            bgBitmap?.getPixels(bgBitmapPixels, 0,width,0,0,width, height)
+            if (bgBitmapPixels != null) {
+                bgBitmap?.getPixels(bgBitmapPixels, 0,width,0,0,width, height)
+            }
 
             val offsetX = (paddingX * (1+ options.offset.x.coerceIn(-1f,1f))).roundToInt()
             val offsetY = (paddingY * (1+ options.offset.y.coerceIn(-1f,1f))).roundToInt()

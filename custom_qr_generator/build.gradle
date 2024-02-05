@@ -1,14 +1,13 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
     id 'kotlin-kapt'
 }
 
 android {
 
-    compileSdkVersion appCompileSdkVersion
-    buildToolsVersion appBuildToolsVersion
+    compileSdk appCompileSdkVersion
+    buildToolsVersion =  appBuildToolsVersion
     defaultConfig {
         minSdkVersion appMinSdkVersion
         targetSdkVersion appTargetSdkVersion
@@ -33,6 +32,13 @@ android {
         freeinnovation {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
     }
 }
 

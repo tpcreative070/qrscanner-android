@@ -83,7 +83,7 @@ class CircleImageView : AppCompatImageView {
     }
 
     @SuppressLint("CanvasSize")
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         if (mDisableCircularTransformation) {
             super.onDraw(canvas)
             return
