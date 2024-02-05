@@ -14,7 +14,7 @@ import tpcreative.co.qrscanner.viewmodel.MainViewModel
 fun MainActivity.initUI(){
     TAG = this::class.java.simpleName
     setupViewModel()
-    if (QRScannerApplication.getInstance().getDeviceId() == "66801ac00252fe84") {
+    if (QRScannerApplication.getInstance().getDeviceId_() == "66801ac00252fe84") {
         finish()
     }
     setSupportActionBar(binding.toolbar)

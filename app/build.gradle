@@ -5,8 +5,9 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion appCompileSdkVersion
-    flavorDimensions("default")
+    compileSdk appCompileSdkVersion
+    flavorDimensions += "default"
+
     productFlavors {
         qrscanner {
             applicationId "tpcreative.co.qrscanner"
@@ -110,8 +111,8 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     packagingOptions {
@@ -126,7 +127,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
         freeCompilerArgs = ["-Xallow-result-return-type"]
     }
 }
@@ -144,6 +145,7 @@ dependencies {
     implementation "androidx.multidex:multidex:$appMultidex"
     implementation "com.google.code.gson:gson:$gson"
     implementation "com.google.zxing:core:$zxingCore"
+    implementation "io.github.zxing-cpp:android:2.2.0"
     implementation "com.karumi:dexter:$dexter"
     implementation "com.basgeekball:awesome-validation:$awesomeValidation"
     implementation "com.google.android.gms:play-services-maps:$playServicesMaps"
@@ -213,7 +215,6 @@ dependencies {
     implementation project(':dragtoclose')
     implementation project(':multipletype')
     implementation project(':colorpicker')
-    implementation files('libs/zxingcpp-release.aar')
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
     implementation "androidx.camera:camera-lifecycle:$camerax_version"

@@ -1,12 +1,15 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.7.20"
-    ext.kotlin_core_version = "1.9.0"
+    ext.kotlin_version = "1.9.0"
+    ext.kotlin_core_version = "1.10.1"
     repositories {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven {
+            url = uri("https://storage.googleapis.com/r8-releases/raw")
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
@@ -14,6 +17,7 @@ buildscript {
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.guardsquare:proguard-gradle:7.1.0'
+        classpath("com.android.tools:r8:8.2.24")
     }
 
 
@@ -42,6 +46,7 @@ buildscript {
         }
     }
 
+
 }
 
 task clean(type: Delete) {
@@ -49,15 +54,15 @@ task clean(type: Delete) {
 }
 
 subprojects {
-    ext.appVersionCode = 370
-    ext.appVersionName = "3.7.0"
+    ext.appVersionCode = 372
+    ext.appVersionName = "3.7.2"
     ext.appMinSdkVersion = 23
     ext.appSupportVersion = "1.6.1"
     ext.appRetrofit = "2.9.0"
-    ext.appCompileSdkVersion = 33
-    ext.appTargetSdkVersion = 33
+    ext.appCompileSdkVersion = 34
+    ext.appTargetSdkVersion = 34
     ext.appBuildToolsVersion = "32.0.0"
-    ext.build_versions_java_version = 1.8
+    ext.build_versions_java_version = 17
     ext.appGoogleMaterial = "1.8.0"
     ext.apppreferenceV14 = "1.0.0"
     ext.appCardView = "1.0.0"
@@ -107,7 +112,7 @@ subprojects {
     ext.zxingCore = "3.5.1"
     ext.appIntro  = "6.2.0"
     ext.playReview = "2.0.1"
-    ext.billingInApp = "2.0.3"
+    ext.billingInApp = "2.1.0"
     ext.compressor = "3.0.1"
     ext.lifecycle = "2.6.1"
     ext.window = "1.0.0"

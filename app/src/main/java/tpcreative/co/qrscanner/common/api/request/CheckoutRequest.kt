@@ -25,7 +25,7 @@ class CheckoutRequest : Serializable {
         this.orderId = orderId
         this.state = state
         this.token = token
-        device_id = QRScannerApplication.getInstance().getDeviceId()
+        device_id = "${QRScannerApplication.getInstance().getDeviceId_()}"
         device_type = QRScannerApplication.getInstance().getString(R.string.device_type)
         manufacturer = QRScannerApplication.getInstance().getManufacturer()
         name_model = QRScannerApplication.getInstance().getModel()
@@ -41,7 +41,7 @@ class CheckoutRequest : Serializable {
         orderId = "Pro version"
         state = "Pro version"
         token = "Pro version"
-        device_id = QRScannerApplication.getInstance().getDeviceId()
+        device_id = "${QRScannerApplication.getInstance().getDeviceId_()}"
         device_type = QRScannerApplication.getInstance().getString(R.string.device_type)
         manufacturer = QRScannerApplication.getInstance().getManufacturer()
         name_model = QRScannerApplication.getInstance().getModel()

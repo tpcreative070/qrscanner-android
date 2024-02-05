@@ -6,6 +6,7 @@ import android.view.Surface
 import android.view.WindowManager
 import androidx.core.graphics.toColorInt
 import com.google.gson.Gson
+import com.panshen.gridcolorpicker.LogUtil
 import tpcreative.co.qrscanner.R
 import tpcreative.co.qrscanner.common.Constant
 import tpcreative.co.qrscanner.common.ConstantKey
@@ -104,4 +105,9 @@ fun String.toColorIntThrowDefaultColor() : Int{
         Utils.Log("TAG","Color result 3 $this")
         Constant.defaultColor
     }
+}
+
+
+fun String.toLogConsole(tag: String? = null){
+    LogUtil.d(tag ?: "TAG_LOG",this)
 }

@@ -5,29 +5,23 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Window
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.graphics.drawable.toIcon
 import androidx.core.graphics.toPointF
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.zxing.*
 import com.google.zxing.client.result.ResultParser
-import com.google.zxing.common.HybridBinarizer
 import com.isseiaoki.simplecropview.callback.CropCallback
 import com.isseiaoki.simplecropview.callback.LoadCallback
 import com.isseiaoki.simplecropview.callback.MoveUpCallback
-import com.zxingcpp.BarcodeReader
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.*
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +41,7 @@ import tpcreative.co.qrscanner.model.EnumFragmentType
 import tpcreative.co.qrscanner.model.EnumImplement
 import tpcreative.co.qrscanner.model.GeneralModel
 import tpcreative.co.qrscanner.ui.scannerresult.ScannerResultActivity
+import zxingcpp.BarcodeReader
 import java.io.File
 import java.util.*
 
@@ -257,110 +252,6 @@ class CropImageActivity : BaseActivitySlide(){
     }
 
 
-    private fun onRenderCode(bm: Bitmap?) {
-        var bitmap = bm
-        Utils.Log(TAG,"Requesting....")
-        try {
-            Utils.Log(TAG,"onRenderCode")
-            bitmap?.let {
-                var intArray = IntArray(it.width * it.height)
-                it.getPixels(intArray, 0, it.width, 0, 0, it.width, it.height)
-                var source: LuminanceSource = RGBLuminanceSource(it.width, it.height, intArray)
-                var mBitmap = BinaryBitmap(HybridBinarizer(source))
-                Utils.Log(TAG,"width ${it.width} height ${it.height}")
-                val reader: Reader = MultiFormatReader()
-                try {
-                    var mResult : Result? = null
-                    try {
-                        mResult = reader.decode(mBitmap)
-                    }catch (e : Exception){
-                        e.printStackTrace()
-                        Utils.Log(TAG,"Reader again...1")
-                        try {
-                            mResult = reader.decode(mBitmap,addHint())
-                        }catch (e: Exception){
-                            e.printStackTrace()
-                            Utils.Log(TAG,"Reader again...2")
-                        }
-                    }
-
-                    try {
-                        if (mResult==null){
-                            bitmap  = createBlackAndWhite(it)
-                            bitmap?.let { bitmapResult ->
-                                intArray = IntArray(bitmapResult.width * bitmapResult.height)
-                                bitmapResult.getPixels(intArray, 0, bitmapResult.width, 0, 0, bitmapResult.width, bitmapResult.height)
-                                source = RGBLuminanceSource(bitmapResult.width, bitmapResult.height, intArray)
-                                mBitmap = BinaryBitmap(HybridBinarizer(source))
-                                Utils.Log(TAG,"Reader again...3")
-                                mResult = reader.decode(mBitmap)
-                            }
-                        }
-                    }catch (e : Exception){
-                        e.printStackTrace()
-                        Utils.Log(TAG,"Reader again...4")
-                    }
-
-                    try {
-                        if (mResult==null){
-                            bitmap = it.rotate(90F)
-                            Utils.Log(TAG,"Reader again 5")
-                            bitmap?.let { bitmapResult ->
-                                intArray = IntArray(bitmapResult.width * bitmapResult.height)
-                                bitmapResult.getPixels(intArray, 0, bitmapResult.width, 0, 0, bitmapResult.width, bitmapResult.height)
-                                source = RGBLuminanceSource(bitmapResult.width, bitmapResult.height, intArray)
-                                mBitmap = BinaryBitmap(HybridBinarizer(source))
-                                mResult = reader.decode(mBitmap)
-                                Utils.Log(TAG,"Reader again 6")
-                            }
-                        }
-                    }catch (e: Exception){
-                        e.printStackTrace()
-                        Utils.Log(TAG,"Reader again 7")
-                    }
-                    if (mResult != null) {
-                        lifecycleScope.launch(Dispatchers.Main){
-                            binding.doneCancelBar.btnDone.isEnabled = true
-                            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
-                            setResultEncode(mResult)
-                            onParseData(mResult)
-                        }
-                    } else {
-                        lifecycleScope.launch(Dispatchers.Main){
-                            binding.doneCancelBar.btnDone.isEnabled = false
-                            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
-                            binding.tvFormatType.text = ""
-                        }
-                    }
-                } catch (e: NotFoundException) {
-                    e.printStackTrace()
-                    Utils.Log(TAG, "Do not recognize qrcode type ${e.message}")
-                    lifecycleScope.launch(Dispatchers.Main){
-                        binding.doneCancelBar.btnDone.isEnabled = false
-                        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
-                    }
-                } catch (e: ChecksumException) {
-                    e.printStackTrace()
-                    Utils.Log(TAG, "Do not recognize qrcode type ChecksumException")
-                    lifecycleScope.launch(Dispatchers.Main){
-                        binding.doneCancelBar.btnDone.isEnabled = false
-                        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
-                    }
-                }
-            }
-        } catch (e: FormatException) {
-            e.printStackTrace()
-            Utils.Log(TAG, "Do not recognize qrcode type FormatException")
-            lifecycleScope.launch(Dispatchers.Main){
-                binding.doneCancelBar.btnDone.isEnabled = false
-                binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
-            }
-        }
-        finally {
-            bitmap?.recycle()
-        }
-    }
-
     private fun addHint() : MutableMap<DecodeHintType, Any>{
         val tmpHintsMap: MutableMap<DecodeHintType, Any> = EnumMap(
             DecodeHintType::class.java
@@ -400,126 +291,121 @@ class CropImageActivity : BaseActivitySlide(){
         }
     }
 
-    private fun handleScan(cropped: Bitmap){
+    private fun handleScan(cropped: Bitmap) {
         val resultText: String
         var resultPoints: List<PointF>? = null
         readerCpp.options = BarcodeReader.Options(
             formats = setOf(),
             tryHarder = true,
             tryRotate = true,
-            tryInvert = false,
-            tryDownscale = false
+            tryInvert = true,
+            tryDownscale = true,
+            maxNumberOfSymbols = 255
         )
-        var mBitmap : Bitmap? = null
         try {
-            mBitmap = createBlackAndWhite(cropped)
-            mBitmap?.let { mBmFilter ->
-                var mResultData = readerCpp.read(mBmFilter,Rect(0, 0, mBmFilter.width, mBmFilter.height))
-                if (mResultData==null){
-                    mBitmap = Bitmap.createScaledBitmap(cropped,800,800,true)
-                    mBitmap?.let { mBmScale ->
-                        mResultData = readerCpp.read(mBmScale,Rect(0, 0, mBmScale.width, mBmScale.height))
-                        if (mResultData!=null){
-                            Utils.Log(TAG,"Found data...")
-                        }else{
-                            Utils.Log(TAG,"Not found data...")
+            var mResultData = detectQR(cropped, 0f)
+            if (mResultData == null) {
+                mResultData = detectQR(cropped, 45f)
+            }
+            if (mResultData == null) {
+                mResultData = detectQR(cropped, 90f)
+            }
+            if (mResultData == null) {
+                mResultData = detectQR(cropped, 180f)
+            }
+            if (mResultData == null) {
+                mResultData = detectQR(cropped, 270f)
+            }
+            if (mResultData == null) {
+                mResultData = detectQR(cropped, 360f)
+            }
+            if (mResultData != null) {
+                resultText = try {
+                    resultPoints = mResultData.position.let {
+                        listOf(
+                            it.topLeft,
+                            it.topRight,
+                            it.bottomRight,
+                            it.bottomLeft
+                        ).map { p ->
+                            p.toPointF()
                         }
                     }
-                }
-                if (mResultData!=null){
-                    resultText = try {
-                        resultPoints = mResultData?.position?.let {
-                            listOf(
-                                it.topLeft,
-                                it.topRight,
-                                it.bottomRight,
-                                it.bottomLeft
-                            ).map { p ->
-                                p.toPointF()
-                            }
-                        }
-                        (mResultData?.let {
-                            val mResultPoint = Array(1) { i ->
-                                ResultPoint(
-                                    (resultPoints?.get(0)?.x ?: 0).toFloat(),
-                                    (resultPoints?.get(0)?.y ?: 0).toFloat()
-                                )
-                            }
-                            val mResult = Result(
-                                it.text,
-                                it.bytes,
-                                mResultPoint,
-                                it.format.cppFormatToJavaFormat()
+                    (mResultData.let {
+                        val mResultPoint = Array(1) { i ->
+                            ResultPoint(
+                                resultPoints[0].x,
+                                resultPoints[0].y
                             )
+                        }
+                        val mResult = Result(
+                            it.text,
+                            it.bytes,
+                            mResultPoint,
+                            it.format.cppFormatToJavaFormat()
+                        )
 
-                            val parsedResult = ResultParser.parseResult(mResult)
-                            if (parsedResult != null) {
-                                lifecycleScope.launch(Dispatchers.Main){
-                                    binding.doneCancelBar.btnDone.isEnabled = true
-                                    binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
-                                    setResultEncode(mResult)
-                                    onParseData(mResult)
-                                }
+                        val parsedResult = ResultParser.parseResult(mResult)
+                        if (parsedResult != null) {
+                            lifecycleScope.launch(Dispatchers.Main){
+                                binding.doneCancelBar.btnDone.isEnabled = true
+                                binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorPrimary))
+                                setResultEncode(mResult)
+                                onParseData(mResult)
                             }
-                            "${it.format} (${it.contentType}): " +
-                                    "${
-                                        if (it.contentType != BarcodeReader.ContentType.BINARY) it.text else it.bytes!!.joinToString(
-                                            separator = ""
-                                        ) { v -> "%02x".format(v) }
-                                    }"
                         }
-                            ?: "")
-                    } catch (e: Throwable) {
-                        lifecycleScope.launch(Dispatchers.Main){
-                            binding.doneCancelBar.btnDone.isEnabled = false
-                            binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
-                            binding.tvFormatType.text = ""
-                        }
-                        e.message ?: "Error"
+                        "${it.format} (${it.contentType}): " +
+                                "${
+                                    if (it.contentType != BarcodeReader.ContentType.BINARY) it.text else it.bytes!!.joinToString(
+                                        separator = ""
+                                    ) { v -> "%02x".format(v) }
+                                }"
                     }
-                    Utils.Log(TAG,"Result text $resultText")
-                }else{
-                    lifecycleScope.launch(Dispatchers.Main){
+                        ?: "")
+                } catch (e: Throwable) {
+                    lifecycleScope.launch(Dispatchers.Main) {
                         binding.doneCancelBar.btnDone.isEnabled = false
-                        binding.doneCancelBar.btnDone.setBackgroundColor(ContextCompat.getColor(this@CropImageActivity, R.color.colorAccent))
+                        binding.doneCancelBar.btnDone.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@CropImageActivity,
+                                R.color.colorAccent
+                            )
+                        )
                         binding.tvFormatType.text = ""
                     }
+                    e.message ?: "Error"
+                }
+                Utils.Log(TAG, "Result text $resultText")
+            } else {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    binding.doneCancelBar.btnDone.isEnabled = false
+                    binding.doneCancelBar.btnDone.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@CropImageActivity,
+                            R.color.colorAccent
+                        )
+                    )
+                    binding.tvFormatType.text = ""
                 }
             }
         }catch (e : Exception){
             e.printStackTrace()
         }
         finally {
-            mBitmap?.recycle()
             cropped.recycle()
         }
     }
-    private fun createBlackAndWhite(src: Bitmap): Bitmap? {
-        val width = src.width
-        val height = src.height
-        val bmOut = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val factor = 255f
-        val redBri = 0.2126f
-        val greenBri = 0.2126f
-        val blueBri = 0.0722f
-        val length = width * height
-        val mInPixels = IntArray(length)
-        val mOutPixels = IntArray(length)
-        src.getPixels(mInPixels, 0, width, 0, 0, width, height)
-        for ((point, pix) in mInPixels.withIndex()) {
-            val mR = pix shr 16 and 0xFF
-            val mG = pix shr 8 and 0xFF
-            val mB = pix and 0xFF
-            val lum = redBri * mR / factor + greenBri * mG / factor + blueBri * mB / factor
-            if (lum > 0.4) {
-                mOutPixels[point] = -0x1
-            } else {
-                mOutPixels[point] = -0x1000000
-            }
+
+    private fun detectQR(bitmap: Bitmap, rotation :Float) : BarcodeReader.Result?{
+        var mRotateBitmap = bitmap
+        if (rotation>0){
+            mRotateBitmap = bitmap.rotate(rotation)
         }
-        bmOut.setPixels(mOutPixels, 0, width, 0, 0, width, height)
-        return bmOut
+        return readerCpp.read(mRotateBitmap,
+            Rect(0, 0, mRotateBitmap.width, mRotateBitmap.height)
+        ).firstOrNull()
     }
+
 
     private val mMoveUpCallback: MoveUpCallback
         get() = object : MoveUpCallback {

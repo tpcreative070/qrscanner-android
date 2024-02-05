@@ -1,7 +1,7 @@
 package tpcreative.co.qrscanner.common.extension
 
 import com.google.zxing.BarcodeFormat
-import com.zxingcpp.BarcodeReader
+import zxingcpp.BarcodeReader
 
 
 fun BarcodeReader.Format.cppFormatToJavaFormat() : BarcodeFormat {

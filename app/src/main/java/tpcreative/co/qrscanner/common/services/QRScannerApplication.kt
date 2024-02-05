@@ -231,7 +231,7 @@ class QRScannerApplication : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     @SuppressLint("HardwareIds")
-    fun getDeviceId(): String? {
+    fun getDeviceId_(): String? {
         return Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
